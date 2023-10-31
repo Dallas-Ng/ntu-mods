@@ -1,13 +1,15 @@
+"use client"
+
 import Link from "next/link"
 
-import { NavItem } from "@/types/nav"
 import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 import { ThemeToggle } from "@/components/theme-toggle"
 
-export function SiteHeader() {
+import { NavigationItems } from "./navigation-items"
+
+const NavigationBar = () => {
   return (
     <header className="bg-background sticky top-0 z-40 w-full border-b">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
@@ -16,24 +18,8 @@ export function SiteHeader() {
             <Icons.logo className="h-6 w-6" />
             <span className="inline-block font-bold">{siteConfig.name}</span>
           </Link>
-          {siteConfig.mainNav?.length ? (
-            <nav className="flex gap-6">
-              {(siteConfig.mainNav as NavItem[])?.map(
-                (item, index) =>
-                  item.href && (
-                    <Link
-                      key={index}
-                      href={item.href}
-                      className={cn(
-                        "flex items-center text-sm font-medium text-muted-foreground",
-                        item.disabled && "cursor-not-allowed opacity-80"
-                      )}>
-                      {item.title}
-                    </Link>
-                  )
-              )}
-            </nav>
-          ) : null}
+
+          <NavigationItems />
         </div>
 
         <div className="flex flex-1 items-center justify-end space-x-4">
@@ -59,3 +45,5 @@ export function SiteHeader() {
     </header>
   )
 }
+
+export default NavigationBar

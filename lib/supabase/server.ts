@@ -1,8 +1,10 @@
 import { cookies } from "next/headers"
 import { createServerClient, type CookieOptions } from "@supabase/ssr"
 
+import { Database } from "@/types/supabase"
+
 export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
-  return createServerClient(
+  return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -14,6 +16,7 @@ export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
           try {
             cookieStore.set({ name, value, ...options })
           } catch (error) {
+            console.warn(error)
             // The `set` method was called from a Server Component.
             // This can be ignored if you have middleware refreshing
             // user sessions.
@@ -23,6 +26,7 @@ export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
           try {
             cookieStore.delete({ name, ...options })
           } catch (error) {
+            console.warn(error)
             // The `delete` method was called from a Server Component.
             // This can be ignored if you have middleware refreshing
             // user sessions.
@@ -31,15 +35,4 @@ export const createClient = (cookieStore: ReturnType<typeof cookies>) => {
       }
     }
   )
-}
-
-export const isSupabaseConnected = () => {
-  const cookieStore = cookies()
-
-  try {
-    createClient(cookieStore)
-    return true
-  } catch (e) {
-    return false
-  }
 }

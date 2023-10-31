@@ -1,4 +1,5 @@
-import { createBrowserClient } from '@supabase/ssr'
+import { cookies } from "next/headers"
+import { createBrowserClient } from "@supabase/ssr"
 
 export const createClient = () =>
   createBrowserClient(

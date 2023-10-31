@@ -16,14 +16,12 @@ export function SiteHeader() {
             <Link
               href={siteConfig.links.github}
               target="_blank"
-              rel="noreferrer"
-            >
+              rel="noreferrer">
               <div
                 className={buttonVariants({
                   size: "icon",
-                  variant: "ghost",
-                })}
-              >
+                  variant: "ghost"
+                })}>
                 <Icons.gitHub className="h-5 w-5" />
                 <span className="sr-only">GitHub</span>
               </div>
@@ -31,14 +29,12 @@ export function SiteHeader() {
             <Link
               href={siteConfig.links.twitter}
               target="_blank"
-              rel="noreferrer"
-            >
+              rel="noreferrer">
               <div
                 className={buttonVariants({
                   size: "icon",
-                  variant: "ghost",
-                })}
-              >
+                  variant: "ghost"
+                })}>
                 <Icons.twitter className="h-5 w-5 fill-current" />
                 <span className="sr-only">Twitter</span>
               </div>

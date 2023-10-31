@@ -4,7 +4,8 @@ module.exports = {
   semi: false,
   singleQuote: false,
   tabWidth: 2,
-  trailingComma: "es5",
+  trailingComma: "none",
+  bracketSameLine: true,
   importOrder: [
     "^(react/(.*)$)|^(react$)",
     "^(next/(.*)$)|^(next$)",

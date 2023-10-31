@@ -5,8 +5,8 @@ export async function middleware(request: NextRequest) {
   // Create an unmodified response
   let response = NextResponse.next({
     request: {
-      headers: request.headers,
-    },
+      headers: request.headers
+    }
   })
 
   try {
@@ -24,36 +24,36 @@ export async function middleware(request: NextRequest) {
             request.cookies.set({
               name,
               value,
-              ...options,
+              ...options
             })
             response = NextResponse.next({
               request: {
-                headers: request.headers,
-              },
+                headers: request.headers
+              }
             })
             response.cookies.set({
               name,
               value,
-              ...options,
+              ...options
             })
           },
           remove(name, options) {
             // If the cookie is removed, update the cookies for the request and response
             request.cookies.delete({
               name,
-              ...options,
+              ...options
             })
             response = NextResponse.next({
               request: {
-                headers: request.headers,
-              },
+                headers: request.headers
+              }
             })
             response.cookies.delete({
               name,
-              ...options,
+              ...options
             })
-          },
-        },
+          }
+        }
       }
     )
 

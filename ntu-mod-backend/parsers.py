@@ -64,6 +64,9 @@ def course_schedules_parser():
         for table in tables:
             rows = table.find_all("tr")
 
+            prereq_flag = False
+            remarks_flag = False
+
             for row in rows:
                 cells = row.find_all("td")
                 row_text = [cell.get_text(strip=True) for cell in cells]
@@ -74,12 +77,32 @@ def course_schedules_parser():
                         "title": row_text[1],
                         "au": row_text[2],
                         "indexes": [],
+                        "prerequisites": "",
+                        "remarks": "",
                     }
                     data.append(course)
 
                 if len(row_text) == 2:
+                    # catches alternatives
                     if not (row_text[0] == "" and row_text[1] == ""):
-                        course[f"{row_text[0]}"] = row_text[1]
+                        if "prerequisites" in row_text[0]:
+                            prereq_flag = True
+                            remarks_flag = False
+                            course["prerequisites"] = row_text[1]
+                            continue
+
+                        if "remarks" in row_text[0]:
+                            remarks_flag = True
+                            prereq_flag = False
+                            course["remarks"] = row_text[1]
+                            continue
+
+                    if row_text[0] == "" and row_text[1] != "":
+                        if prereq_flag:
+                            course["prerequisites"] += f"\n{row_text[1]}"
+
+                        if remarks_flag:
+                            course["remarks"] += f"\n{row_text[1]}"
 
                 elif len(row_text) == 7 and course is not None:
                     course["indexes"].append(
@@ -90,7 +113,7 @@ def course_schedules_parser():
                             "day": row_text[3],
                             "time": row_text[4],
                             "venue": row_text[5],
-                            "remark": row_text[6],
+                            "remarks": row_text[6],
                         }
                     )
 
@@ -99,5 +122,5 @@ def course_schedules_parser():
 
 
 if __name__ == "__main__":
-    # acad_year_parser()
+    course_schedules_parser()
     pass

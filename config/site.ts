@@ -8,11 +8,17 @@ export const siteConfig = {
     {
       title: "Home",
       href: "/"
+    },
+    {
+      title: "Courses",
+      href: "/"
+    },
+    {
+      title: "Help",
+      href: "/"
     }
   ],
   links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
-    docs: "https://ui.shadcn.com"
+    github: "https://github.com/dallas-ng"
   }
 }

@@ -32,7 +32,7 @@ export function NavigationItems() {
   return (
     <NavigationMenu>
       <NavigationMenuList>
-        <NavigationMenuItem>
+        {/* <NavigationMenuItem>
           <NavigationMenuTrigger>Catalogue</NavigationMenuTrigger>
 
           <NavigationMenuContent>
@@ -67,9 +67,17 @@ export function NavigationItems() {
               </ListItem>
             </ul>
           </NavigationMenuContent>
-        </NavigationMenuItem>
+        </NavigationMenuItem> */}
 
         <NavigationMenuItem>
+          <Link href="#" legacyBehavior passHref>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Stars
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+
+        {/* <NavigationMenuItem>
           <NavigationMenuTrigger>My Mods</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[500px] ">
@@ -83,7 +91,7 @@ export function NavigationItems() {
               ))}
             </ul>
           </NavigationMenuContent>
-        </NavigationMenuItem>
+        </NavigationMenuItem> */}
 
         <NavigationMenuItem>
           <Link href="#" legacyBehavior passHref>

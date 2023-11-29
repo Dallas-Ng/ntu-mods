@@ -1,12 +1,20 @@
-import useDB from "@/lib/db"
+import { NextPage } from "next"
+import Link from "next/link"
 
-export default async function Index() {
-  const data = await useDB().getAcademicYears()
-
+const IndexPage: NextPage = () => {
   return (
     <div>
-      test
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+      <h1>Home Page</h1>
+
+      <p>
+        <Link href="/stars">Stars</Link>
+      </p>
+
+      <p>
+        <Link href="/help">Help</Link>
+      </p>
     </div>
   )
 }
+
+export default IndexPage

@@ -70,7 +70,7 @@ export function NavigationItems() {
         </NavigationMenuItem> */}
 
         <NavigationMenuItem>
-          <Link href="#" legacyBehavior passHref>
+          <Link href="/stars" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Stars
             </NavigationMenuLink>
@@ -94,7 +94,7 @@ export function NavigationItems() {
         </NavigationMenuItem> */}
 
         <NavigationMenuItem>
-          <Link href="#" legacyBehavior passHref>
+          <Link href="/help" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Help
             </NavigationMenuLink>

@@ -45,12 +45,23 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="relative flex min-h-screen flex-col">
+              <div className="text-[14px] text-center py-2 bg-emerald-500 dark:bg-emerald-700 text-white">
+                The website is still in <u>beta</u> which means you might
+                encounter some errors... Report any bugs and let us know how to
+                improve!
+              </div>
+
               <NavigationBar />
 
               <div className="flex-1">
-                <div className="container py-5">{children}</div>
+                <main className="container py-5">{children}</main>
               </div>
+
+              <footer className="py-2">
+                <p className="text-sm text-center">Dallas &copy; 2024</p>
+              </footer>
             </div>
+
             <TailwindIndicator />
           </ThemeProvider>
         </body>

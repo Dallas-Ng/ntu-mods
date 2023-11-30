@@ -44,7 +44,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontSans.variable
           )}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="relative flex min-h-screen flex-col">
+            <div
+              className="relative flex min-h-screen flex-col"
+              style={{ background: "rgb(233 240 245)" }}>
               <div className="text-[14px] text-center py-2 bg-emerald-500 dark:bg-emerald-700 text-white">
                 The website is still in <u>beta</u> which means you might
                 encounter some errors... Report any bugs and let us know how to
@@ -53,9 +55,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
               <NavigationBar />
 
-              <div className="flex-1">
-                <main className="container py-5">{children}</main>
-              </div>
+              <div className="flex-1">{children}</div>
 
               <footer className="py-2">
                 <p className="text-sm text-center">Dallas &copy; 2024</p>

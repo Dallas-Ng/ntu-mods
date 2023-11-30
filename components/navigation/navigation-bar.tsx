@@ -11,7 +11,7 @@ import { NavigationItems } from "./navigation-items"
 
 const NavigationBar = () => {
   return (
-    <header className="bg-background sticky top-0 z-40 w-full border-b">
+    <header className="bg-background sticky top-0 z-40 w-full border-b shadow-lg">
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">

@@ -34,8 +34,8 @@ const generateTable = (): React.ReactNode => {
   // Populates the array with timeslot and day 1-6 (mon-sat)
   STARS_CALENDAR_TIMESLOTS.forEach((timeslot) =>
     toReturn.push([
-      <TableCell className={`${tdps}`}>
-        {timeslot.start} to {timeslot.end}
+      <TableCell className={cn(tdps)}>
+        {timeslot.start} to <br className="md:hidden" /> {timeslot.end}
       </TableCell>,
       <TableCell className={cn(tdps)}></TableCell>, // monday
       <TableCell className={cn(tdps)}></TableCell>,
@@ -92,7 +92,7 @@ const generateTable = (): React.ReactNode => {
 }
 
 const StarsPage: NextPage = () => (
-  <div className="bg-white dark:bg-slate-950 rounded-lg p-1">
+  <div className="bg-white dark:bg-slate-950 rounded-2xl p-1">
     <h1 className="p-4 text-4xl font-bold bg-gradient-to-br from-indigo-900 to-blue-700 bg-clip-text text-transparent">
       Stars* Planner
     </h1>
@@ -100,7 +100,7 @@ const StarsPage: NextPage = () => (
     <Table className="table-fixed border-collapse text-xs">
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[120px]">Time Slot</TableHead>
+          <TableHead className="md:w-[120px]">Time Slot</TableHead>
           <TableHead>Mon</TableHead>
           <TableHead>Tue</TableHead>
           <TableHead>Wed</TableHead>

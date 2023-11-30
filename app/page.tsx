@@ -1,10 +1,14 @@
 import { NextPage } from "next"
 import Link from "next/link"
 
+import { Icons } from "@/components/icons"
+
 const IndexPage: NextPage = () => {
   return (
     <div>
       <h1>Home Page</h1>
+
+      <Icons.logo className="h-60 w-60" />
 
       <p>
         <Link href="/stars">Stars</Link>

@@ -15,7 +15,7 @@ const NavigationBar = () => {
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <div className="flex gap-6 md:gap-10">
           <Link href="/" className="flex items-center space-x-2">
-            <Icons.logo className="h-6 w-6" />
+            <Icons.logo className="h-10 w-10" />
             <span className="inline-block font-bold">{siteConfig.name}</span>
           </Link>
 

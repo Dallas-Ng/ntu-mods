@@ -14,21 +14,13 @@ import {
   TableRow
 } from "@/components/ui/table"
 
-const TABLE_DATA_PADDING_SIZE = "p-1"
-const tdps = TABLE_DATA_PADDING_SIZE
+const tdps = "p-1" // TABLE_DATA_PADDING_SIZE
 
-const getModuleColor = (moduleCode: string): string => {
-  if (moduleCode.includes("PH")) {
-    return `yellow-500`
-  } else if (moduleCode.includes("SC")) {
-    return `emerald-500`
-  } else if (moduleCode.includes("MH")) {
-    return `blue-500`
-  } else if (moduleCode.includes("CC")) {
-    return `red-500`
-  }
-
-  return `gray-500`
+const modules = {
+  cc: { borderLeft: "border-l-red-500", text: "text-red-600" },
+  sc: { borderLeft: "border-l-emerald-500", text: "text-emerald-600" },
+  ph: { borderLeft: "border-l-yellow-500", text: "text-yellow-600" },
+  mh: { borderLeft: "border-l-blue-500", text: "text-blue-600" }
 }
 
 /**
@@ -60,6 +52,10 @@ const generateTable = (): React.ReactNode => {
     )
 
     for (let i = 0; i < data.rowSpan; i++) {
+      const coursePrefix = data.courseCode
+        .slice(0, 2)
+        .toLowerCase() as keyof typeof modules
+
       if (i === 0) {
         toReturn[tsIndex][data.day] = (
           <TableCell
@@ -68,15 +64,11 @@ const generateTable = (): React.ReactNode => {
             className={cn(
               tdps,
               "border",
-              `border-l-${getModuleColor(data.courseCode)}`,
-              "border-l-4"
+              "border-l-4",
+              modules[coursePrefix].borderLeft
             )}>
             <p>
-              <span
-                className={cn(
-                  "font-bold",
-                  `text-${getModuleColor(data.courseCode)}`
-                )}>
+              <span className={cn("font-bold", modules[coursePrefix].text)}>
                 {data.courseCode}{" "}
               </span>
 
@@ -100,21 +92,27 @@ const generateTable = (): React.ReactNode => {
 }
 
 const StarsPage: NextPage = () => (
-  <Table className="table-fixed border-collapse text-xs">
-    <TableHeader>
-      <TableRow>
-        <TableHead className="w-[120px]">Time Slot</TableHead>
-        <TableHead>Mon</TableHead>
-        <TableHead>Tue</TableHead>
-        <TableHead>Wed</TableHead>
-        <TableHead>Thu</TableHead>
-        <TableHead>Fri</TableHead>
-        <TableHead>Sat</TableHead>
-      </TableRow>
-    </TableHeader>
+  <div className="bg-white rounded-lg p-1">
+    <h1 className="p-4 text-4xl font-bold bg-gradient-to-br from-indigo-900 to-blue-700 bg-clip-text text-transparent">
+      Stars* Planner
+    </h1>
 
-    <TableBody>{generateTable()}</TableBody>
-  </Table>
+    <Table className="table-fixed border-collapse text-xs">
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[120px]">Time Slot</TableHead>
+          <TableHead>Mon</TableHead>
+          <TableHead>Tue</TableHead>
+          <TableHead>Wed</TableHead>
+          <TableHead>Thu</TableHead>
+          <TableHead>Fri</TableHead>
+          <TableHead>Sat</TableHead>
+        </TableRow>
+      </TableHeader>
+
+      <TableBody>{generateTable()}</TableBody>
+    </Table>
+  </div>
 )
 
 export default StarsPage

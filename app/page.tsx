@@ -5,7 +5,7 @@ import { Icons } from "@/components/icons"
 
 const IndexPage: NextPage = () => {
   return (
-    <div>
+    <div className="container p-5">
       <h1>Home Page</h1>
 
       <Icons.logo className="h-60 w-60" />

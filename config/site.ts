@@ -19,6 +19,6 @@ export const siteConfig = {
     }
   ],
   links: {
-    github: "https://github.com/dallas-ng"
+    github: "https://github.com/Dallas-Ng/ntu-dabao"
   }
 }

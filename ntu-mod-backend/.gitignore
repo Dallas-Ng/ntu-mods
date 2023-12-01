@@ -1,7 +1,5 @@
 data/
-output.txt
-db_output.txt
-keys.txt
+*.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

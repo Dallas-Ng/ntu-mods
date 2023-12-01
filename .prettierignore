@@ -10,4 +10,4 @@ node_modules
 .next
 build
 .contentlayer
-ntu-mod-backend
+backend

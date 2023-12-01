@@ -1,5 +1,6 @@
+from datetime import datetime
 from common import clear_invalid_items, jsonify, unpickle_this
-import os
+import os, math
 
 
 def acad_year_parser():
@@ -105,6 +106,17 @@ def course_schedules_parser():
                             course["remarks"] += f"\n{row_text[1]}"
 
                 elif len(row_text) == 7 and course is not None:
+                    time_split = row_text[4].split("-")
+                    half_hours_difference = 0
+
+                    if len(time_split) == 2:
+                        l_time = datetime.strptime(time_split[0], "%H%M")
+                        r_time = datetime.strptime(time_split[1], "%H%M")
+                        td = r_time - l_time
+
+                        # Convert total minutes difference to half-hours
+                        half_hours_difference = td.total_seconds() / 1800
+
                     course["indexes"].append(
                         {
                             "index": row_text[0],
@@ -114,6 +126,7 @@ def course_schedules_parser():
                             "time": row_text[4],
                             "venue": row_text[5],
                             "remarks": row_text[6],
+                            "half_hour_difference": math.floor(half_hours_difference),
                         }
                     )
 

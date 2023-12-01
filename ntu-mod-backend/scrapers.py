@@ -35,9 +35,9 @@ def scraper_acad_year_courses():
 def scraper_course_schedules():
     files = [
         item.name
-        for item in os.scandir("data/acad-year-courses") 
+        for item in os.scandir("data/acad-year-courses")
         if item.is_file()
-    ][::-1] # Piroritise recent years
+    ][::-1] # Prioritise recent years
 
     logging.info(f"DETECTED {len(files)} different academic years")
     for filename in files:
@@ -46,7 +46,7 @@ def scraper_course_schedules():
             continue
 
         json_data = read_json(f"data/acad-year-courses/{filename}")
-     
+
 
         for course in json_data["data"]:
             payload = {
@@ -60,7 +60,7 @@ def scraper_course_schedules():
 
             response = post_response(URL_SCHEDULE_DISPLAY1, payload=payload)
             soup = BeautifulSoup(response.text, "html.parser")
-            
+
             course_code = course["value"]
             course_code = course_code.replace(";;", ";_;")
             course_code = course_code.replace(";", "-")
@@ -72,5 +72,5 @@ def scraper_course_schedules():
 if __name__ == "__main__":
     # scraper_acad_year()
     # scraper_acad_year_courses()
-    scraper_course_schedules()
+    # scraper_course_schedules()
     pass

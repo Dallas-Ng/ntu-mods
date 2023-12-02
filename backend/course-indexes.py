@@ -177,11 +177,11 @@ def parser_course_schedules(soup):
                 # If index number is empty, happens when there multiple location, time, venue for a certain index
                 index_code = row_text[0]
 
-                if index_code == "00015":
-                    print(row_text)
-                    print(course)
-                    print(data)
-                    quit()
+                # if index_code == "00015":
+                #     print(row_text)
+                #     print(course)
+                #     print(data)
+                #     quit()
 
                 index_data = {
                     "type": row_text[1],

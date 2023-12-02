@@ -49,15 +49,15 @@ def consolidate_course_data(filepaths):
                     combined_data[key] = course_data
 
                 for k, v in course_data["indexes"].items():
-                    for j in v:
-                        j["title"] = course_data["title"]
+                    # for j in v:
+                    # j["title"] = course_data["title"]
                     combined_indexes[k] = v
 
     with open(f"backend/data/combined-{academic_year}.json", "w") as output:
-        json.dump(combined_data, output, indent=2)
+        json.dump(combined_data, output)
 
     with open(f"backend/data/combined-{academic_year}-indexes.json", "w") as output:
-        json.dump(combined_indexes, output, indent=2)
+        json.dump(combined_indexes, output)
 
 
 directories = [dir.path for dir in os.scandir("backend/data/courses")]

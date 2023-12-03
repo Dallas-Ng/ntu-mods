@@ -5,16 +5,7 @@ module.exports = {
   darkMode: ["class"],
   content: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
   theme: {
-    container: {
-      center: true,
-      padding: {
-        DEFAULT: "1rem",
-        md: "2rem"
-      },
-      screens: {
-        "2xl": "1400px"
-      }
-    },
+    container: { center: true },
     extend: {
       colors: {
         border: "hsl(var(--border))",

@@ -2,9 +2,9 @@ import { NextPage } from "next"
 
 const HelpPage: NextPage = () => {
   return (
-    <div className="container p-5">
-      <h1>Help Page</h1>
-    </div>
+    <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-500 to-emerald-900 bg-clip-text text-transparent pl-4 pt-3">
+      Help
+    </h1>
   )
 }
 

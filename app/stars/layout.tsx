@@ -1,4 +1,3 @@
-import "@/styles/globals.css"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -11,12 +10,12 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <div className="relative">
+    <>
       <div className="absolute bg-gradient-to-r from-blue-800 to-indigo-900 top-0 h-[50%] w-full z-0" />
 
-      <div className="relative container z-10 py-10">
+      <div className="relative container z-10 md:py-10">
         <>{children}</>
       </div>
-    </div>
+    </>
   )
 }

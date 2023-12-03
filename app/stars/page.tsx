@@ -63,8 +63,7 @@ const generateTable = (): React.ReactNode => {
             rowSpan={data.rowSpan}
             className={cn(
               tdps,
-              "border",
-              "border-l-4",
+              "border border-l-4 break-words",
               modules[coursePrefix].borderLeft
             )}>
             <p>

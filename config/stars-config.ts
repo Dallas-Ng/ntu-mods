@@ -48,9 +48,9 @@ export const STARS_FAKE_DATA = [
     rowSpan: 2,
     day: 1,
     courseCode: "SC1003",
-    courseTitle: "Computing",
-    location: "LEC/STU LT19A",
-    time: "Every Week"
+    courseTitle: "Python and C",
+    location: "LEC/STU SCL1 Online",
+    time: "Wk2-13"
   },
   {
     start: "1130",
@@ -59,8 +59,8 @@ export const STARS_FAKE_DATA = [
     day: 1,
     courseCode: "MH1812",
     courseTitle: "Discrete",
-    location: "LEC/STU LT19A",
-    time: "Every Week"
+    location: "TUT FCSX TR16",
+    time: "Wk2-13"
   },
 
   {
@@ -70,27 +70,127 @@ export const STARS_FAKE_DATA = [
     day: 1,
     courseCode: "CC0003",
     courseTitle: "Ethics",
-    location: "LEC/STU LT19A",
+    location: "TUT T10 LHN TR+06",
+    time: "Wk2,4,6,8,10,12"
+  },
+  {
+    start: "0830",
+    end: "1030",
+    rowSpan: 4,
+    day: 2,
+    courseCode: "SC1013",
+    courseTitle: "Physics",
+    location: "LEC/STU SCL1 Online",
     time: "Every Week"
   },
   {
-    start: "0900",
+    start: "1030",
+    end: "1230",
+    rowSpan: 4,
+    day: 2,
+    courseCode: "SC1005",
+    courseTitle: "LAB",
+    location: "LAB FCEX HWLAB3",
+    time: "Wk1,3,5,7,9,11,13"
+  },
+  {
+    start: "1230",
+    end: "1430",
+    rowSpan: 4,
+    day: 2,
+    courseCode: "SC1013",
+    courseTitle: "LAB",
+    location: "LAB FCSX HPL",
+    time: "Wk2,4,6,8,10,12"
+  },
+  {
+    start: "0930",
     end: "1030",
-    rowSpan: 3,
+    rowSpan: 2,
     day: 3,
     courseCode: "MH1810",
-    courseTitle: "Mathemathics",
-    location: "LEC/STU LT19A",
+    courseTitle: "LAB",
+    location: "TUT C15 TR+107",
+    time: "Wk2-13"
+  },
+  {
+    start: "1030",
+    end: "1120",
+    rowSpan: 2,
+    day: 3,
+    courseCode: "SC1005",
+    courseTitle: "LAB",
+    location: "TUT FCEX TR+18",
+    time: "Wk2-13"
+  },
+  {
+    start: "1230",
+    end: "1430",
+    rowSpan: 4,
+    day: 3,
+    courseCode: "CC0005",
+    courseTitle: "LAB",
+    location: "TUT T46 LHS-TR+7",
     time: "Every Week"
   },
   {
-    start: "1130",
-    end: "1200",
+    start: "1430",
+    end: "1530",
     rowSpan: 2,
-    day: 1,
-    courseCode: "PH1012",
-    courseTitle: "Physics",
-    location: "LEC/STU LT19A",
+    day: 3,
+    courseCode: "SC1003",
+    courseTitle: "LAB",
+    location: "TUT FECDA SWLAB1",
+    time: "Every Week"
+  },
+  {
+    start: "1530",
+    end: "1630",
+    rowSpan: 2,
+    day: 3,
+    courseCode: "SC1003",
+    courseTitle: "LAB",
+    location: "LAB FECDA SWLAB1",
+    time: "Every Week"
+  },
+  {
+    start: "0830",
+    end: "0930",
+    rowSpan: 2,
+    day: 4,
+    courseCode: "SC1013",
+    courseTitle: "LAB",
+    location: "LEC/STU SCL1 Online",
+    time: "Every Week"
+  },
+  {
+    start: "1630",
+    end: "1730",
+    rowSpan: 2,
+    day: 4,
+    courseCode: "SC1005",
+    courseTitle: "LAB",
+    location: "LEC/STU SCL1 LT2A",
+    time: "Every Week"
+  },
+  {
+    start: "1730",
+    end: "1830",
+    rowSpan: 2,
+    day: 4,
+    courseCode: "SC1003",
+    courseTitle: "LAB",
+    location: "LEC/STU SCL1 LT22",
+    time: "Every Week"
+  },
+  {
+    start: "0830",
+    end: "1020",
+    rowSpan: 4,
+    day: 5,
+    courseCode: "MH1812",
+    courseTitle: "LAB",
+    location: "LEC/STU LE2 LKC-LT",
     time: "Every Week"
   }
 ]

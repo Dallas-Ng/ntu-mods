@@ -41,8 +41,8 @@ const generateTable = (): React.ReactNode => {
       <TableCell className={cn(tdps)}></TableCell>,
       <TableCell className={cn(tdps)}></TableCell>,
       <TableCell className={cn(tdps)}></TableCell>,
-      <TableCell className={cn(tdps)}></TableCell>,
-      <TableCell className={cn(tdps)}></TableCell> // saturday
+      <TableCell className={cn(tdps)}></TableCell>
+      // <TableCell className={cn(tdps)}></TableCell> // saturday
     ])
   )
 
@@ -105,7 +105,7 @@ const StarsPage: NextPage = () => (
           <TableHead>Wed</TableHead>
           <TableHead>Thu</TableHead>
           <TableHead>Fri</TableHead>
-          <TableHead>Sat</TableHead>
+          {/* <TableHead>Sat</TableHead> */}
         </TableRow>
       </TableHeader>
 

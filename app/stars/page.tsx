@@ -63,7 +63,7 @@ const generateTable = (): React.ReactNode => {
             rowSpan={data.rowSpan}
             className={cn(
               tdps,
-              "border border-l-4 break-words",
+              "border border-l-4 border-slate-300 dark:border-r-slate-800 dark:border-y-slate-800 break-words ",
               modules[coursePrefix].borderLeft
             )}>
             <p>
@@ -87,11 +87,15 @@ const generateTable = (): React.ReactNode => {
     }
   })
 
-  return toReturn.map((x, i) => <TableRow key={i}>{x}</TableRow>)
+  return toReturn.map((x, i) => (
+    <TableRow key={i} className="border-slate-150 dark:border-slate-900">
+      {x}
+    </TableRow>
+  ))
 }
 
 const StarsPage: NextPage = () => (
-  <div className="bg-white dark:bg-slate-950 md:rounded-2xl border p-1">
+  <div className="bg-white dark:bg-slate-950 sm:rounded-2xl border p-1">
     <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-800 to-indigo-900 bg-clip-text text-transparent pl-4 pt-3">
       Stars* Planner
     </h1>
@@ -99,12 +103,12 @@ const StarsPage: NextPage = () => (
     <Table className="table-fixed border-collapse text-xs">
       <TableHeader>
         <TableRow>
-          <TableHead className="text-center md:w-[95px]">Time Slot</TableHead>
-          <TableHead>Mon</TableHead>
-          <TableHead>Tue</TableHead>
-          <TableHead>Wed</TableHead>
-          <TableHead>Thu</TableHead>
-          <TableHead>Fri</TableHead>
+          <TableHead className="text-center md:w-[95px]">Time</TableHead>
+          <TableHead className="text-center">Mon</TableHead>
+          <TableHead className="text-center">Tue</TableHead>
+          <TableHead className="text-center">Wed</TableHead>
+          <TableHead className="text-center">Thu</TableHead>
+          <TableHead className="text-center">Fri</TableHead>
           {/* <TableHead>Sat</TableHead> */}
         </TableRow>
       </TableHeader>

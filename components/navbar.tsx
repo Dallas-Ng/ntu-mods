@@ -48,21 +48,21 @@ export default function NavigationBar() {
         scrolled && "shadow"
       )}>
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-        <div className="flex gap-6 md:gap-10 flex-row">
+        <div className="flex gap-3">
           <Link href="/" className="flex items-center space-x-2">
             <Icons.logo className="h-10 w-10" />
             <span
               className={cn(
-                "inline-block font-bold",
+                "inline-block font-bold hover:text-slate-950 dark:hover:text-slate-100",
                 pathname === "/"
                   ? "text-slate-950 dark:text-slate-100"
-                  : "text-slate-600 dark:text-slate-400"
+                  : "text-slate-500 dark:text-slate-400"
               )}>
               {siteConfig.name}
             </span>
           </Link>
 
-          <NavigationMenu>
+          <NavigationMenu className="flex items-center">
             <NavigationMenuList>
               <NavigationMenuItem>
                 {links.map((link) => (
@@ -73,11 +73,11 @@ export default function NavigationBar() {
                     passHref>
                     <NavigationMenuLink
                       className={cn(
-                        navigationMenuTriggerStyle(),
-                        "font-bold",
+                        // navigationMenuTriggerStyle(),
+                        "font-semibold text-sm p-1 mr-1 hover:text-slate-950 dark:hover:text-slate-100",
                         pathname === link.route
                           ? "text-slate-950 dark:text-slate-100"
-                          : "text-slate-600 dark:text-slate-400"
+                          : "text-slate-500 dark:text-slate-400"
                       )}>
                       {link.label}
                     </NavigationMenuLink>
@@ -89,7 +89,7 @@ export default function NavigationBar() {
         </div>
 
         <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-1">
+          <nav className="flex items-center space-x-1 pr-1 sm:pr-0">
             <Link
               href={siteConfig.links.github}
               target="_blank"

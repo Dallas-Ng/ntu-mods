@@ -4,8 +4,8 @@ import { Metadata, Viewport } from "next"
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
-import BetaHeader from "@/components/beta-header"
 import NavigationBar from "@/components/navigation/navigation-bar"
+import { NotificationBanner } from "@/components/notification-banner"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -44,7 +44,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontSans.variable
           )}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <BetaHeader />
+            <NotificationBanner.inBeta />
 
             <NavigationBar />
 

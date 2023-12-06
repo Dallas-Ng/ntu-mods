@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import CONSOLIDATED_DATA from "@/public/consolidated-2023-2.json"
+import CONSOLIDATED_DATA from "@/data/consolidated-2023-2.json"
 import { Check, ChevronsUpDown } from "lucide-react"
 
 import { DEF_SCROLLBAR, cn } from "@/lib/utils"

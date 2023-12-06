@@ -1,3 +1,4 @@
+import React from "react"
 import { NextPage } from "next"
 
 import {
@@ -59,7 +60,6 @@ const generateTable = (): React.ReactNode => {
       if (i === 0) {
         toReturn[tsIndex][data.day] = (
           <TableCell
-            key={i}
             rowSpan={data.rowSpan}
             className={cn(
               tdps,
@@ -89,7 +89,9 @@ const generateTable = (): React.ReactNode => {
 
   return toReturn.map((x, i) => (
     <TableRow key={i} className="border-slate-150 dark:border-slate-900">
-      {x}
+      {x.map((cell, j) => (
+        <React.Fragment key={j}>{cell}</React.Fragment>
+      ))}
     </TableRow>
   ))
 }

@@ -4,8 +4,8 @@ interface SkeletonProps {
 
 function Skeleton(props: SkeletonProps) {
   return (
-    <div className="flex items-center justify-center bg-gray-100 dark:bg-slate-900 p-1 z-50 relative">
-      <p className="text-sm leading-6 text-slate-950 dark:text-white text-center">
+    <div className="relative z-50 flex items-center justify-center bg-gray-100 p-1 dark:bg-slate-900">
+      <p className="text-center text-sm leading-6 text-slate-950 dark:text-white">
         {props.children}
       </p>
     </div>

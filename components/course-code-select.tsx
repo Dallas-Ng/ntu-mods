@@ -78,7 +78,7 @@ export function CourseCodeSelect() {
           <CommandGroup
             className={cn(
               courseCodes.length > 0 ? "block" : "hidden",
-              "overflow-auto max-h-[400px]",
+              "max-h-[400px] overflow-auto",
               DEF_SCROLLBAR
             )}>
             {courseCodes.map((courseCode) => (

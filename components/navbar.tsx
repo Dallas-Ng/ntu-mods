@@ -44,7 +44,7 @@ export default function NavigationBar() {
   return (
     <header
       className={cn(
-        "bg-background sticky top-0 z-40 w-full",
+        "sticky top-0 z-40 w-full bg-background",
         scrolled && "shadow"
       )}>
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
@@ -74,7 +74,7 @@ export default function NavigationBar() {
                     <NavigationMenuLink
                       className={cn(
                         // navigationMenuTriggerStyle(),
-                        "font-semibold text-sm p-1 mr-1 hover:text-slate-950 dark:hover:text-slate-100",
+                        "mr-1 p-1 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100",
                         pathname === link.route
                           ? "text-slate-950 dark:text-slate-100"
                           : "text-slate-500 dark:text-slate-400"

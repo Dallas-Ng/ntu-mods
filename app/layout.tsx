@@ -40,7 +40,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <html lang="en" suppressHydrationWarning>
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased flex flex-col",
+            "flex min-h-screen flex-col bg-background font-sans antialiased",
             fontSans.variable
           )}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
@@ -51,7 +51,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <div className="flex-1">{children}</div>
 
             <footer className="py-2">
-              <p className="text-sm text-center">Dallas &copy; 2024</p>
+              <p className="text-center text-sm">Dallas &copy; 2024</p>
             </footer>
 
             <TailwindIndicator />

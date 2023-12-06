@@ -74,7 +74,7 @@ export default function NavigationBar() {
                     <NavigationMenuLink
                       className={cn(
                         // navigationMenuTriggerStyle(),
-                        "mr-1 p-1 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100",
+                        "mr-1 p-3 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100",
                         pathname === link.route
                           ? "text-slate-950 dark:text-slate-100"
                           : "text-slate-500 dark:text-slate-400"

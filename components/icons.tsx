@@ -1,20 +1,13 @@
-import {
-  LucideProps,
-  Moon,
-  SunMedium,
-  Twitter,
-  type Icon as LucideIcon
-} from "lucide-react"
+import { LucideProps, Moon, Sun, type Icon as LucideIcon } from "lucide-react"
 
 export type Icon = LucideIcon
 
 export const Icons = {
-  sun: SunMedium,
-  moon: Moon,
-  twitter: Twitter,
   logo: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
-    <img {...props} src="/dabao-icon.png" width="100%" height="100%" />
+    <img {...props} src="/logo.png" width="100%" height="100%" />
   ),
+  sun: Sun,
+  moon: Moon,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path

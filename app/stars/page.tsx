@@ -63,7 +63,7 @@ const generateTable = (): React.ReactNode => {
             rowSpan={data.rowSpan}
             className={cn(
               tdps,
-              "border border-l-4 border-slate-300 dark:border-r-slate-800 dark:border-y-slate-800 break-words ",
+              "break-words border border-l-4 border-slate-300 dark:border-y-slate-800 dark:border-r-slate-800 ",
               modules[coursePrefix].borderLeft
             )}>
             <p>
@@ -97,8 +97,8 @@ const generateTable = (): React.ReactNode => {
 }
 
 const StarsPage: NextPage = () => (
-  <div className="bg-white dark:bg-slate-950 sm:rounded-2xl sm:border p-1">
-    <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-800 to-indigo-900 bg-clip-text text-transparent pl-4 pt-3">
+  <div className="bg-white p-1 dark:bg-slate-950 sm:rounded-2xl sm:border">
+    <h1 className="bg-gradient-to-r from-blue-800 to-indigo-900 bg-clip-text pl-4 pt-3 text-3xl font-bold text-transparent">
       Stars* Planner
     </h1>
 

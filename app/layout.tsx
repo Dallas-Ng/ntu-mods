@@ -4,8 +4,8 @@ import { Metadata, Viewport } from "next"
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
-import BetaHeader from "@/components/beta-header"
-import NavigationBar from "@/components/navigation/navigation-bar"
+import NavigationBar from "@/components/navbar"
+import { NotificationBanner } from "@/components/notification-banner"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -40,18 +40,18 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <html lang="en" suppressHydrationWarning>
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased flex flex-col",
+            "flex min-h-screen flex-col bg-background font-sans antialiased",
             fontSans.variable
           )}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <BetaHeader />
+            <NotificationBanner.inBeta />
 
             <NavigationBar />
 
             <div className="flex-1">{children}</div>
 
             <footer className="py-2">
-              <p className="text-sm text-center">Dallas &copy; 2024</p>
+              <p className="text-center text-sm">Dallas &copy; 2024</p>
             </footer>
 
             <TailwindIndicator />

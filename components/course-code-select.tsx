@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react"
 import CONSOLIDATED_DATA from "@/public/consolidated-2023-2.json"
-import { useDebounce } from "@uidotdev/usehooks"
 import { Check, ChevronsUpDown } from "lucide-react"
 
 import { DEF_SCROLLBAR, cn } from "@/lib/utils"
+import { useDebounce } from "@/hooks/use-debounce"
 import { Button } from "@/components/ui/button"
 import {
   Command,

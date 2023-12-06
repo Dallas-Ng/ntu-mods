@@ -11,9 +11,9 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
-      <div className="absolute bg-gradient-to-r from-blue-800 to-indigo-900 top-0 h-[50%] w-full z-0" />
+      <div className="absolute top-0 z-0 h-[50%] w-full bg-gradient-to-r from-blue-800 to-indigo-900" />
 
-      <div className="relative container z-10 sm:py-10">
+      <div className="container relative z-10 sm:py-10">
         <>{children}</>
       </div>
     </>

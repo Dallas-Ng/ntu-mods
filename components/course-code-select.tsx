@@ -1,11 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import CONSOLIDATED_DATA from "@/public/consolidated-2023-2.json"
-import { useDebounce } from "@uidotdev/usehooks"
+import CONSOLIDATED_DATA from "@/data/consolidated-2023-2.json"
 import { Check, ChevronsUpDown } from "lucide-react"
 
 import { DEF_SCROLLBAR, cn } from "@/lib/utils"
+import { useDebounce } from "@/hooks/use-debounce"
 import { Button } from "@/components/ui/button"
 import {
   Command,
@@ -78,7 +78,7 @@ export function CourseCodeSelect() {
           <CommandGroup
             className={cn(
               courseCodes.length > 0 ? "block" : "hidden",
-              "overflow-auto max-h-[400px]",
+              "max-h-[400px] overflow-auto",
               DEF_SCROLLBAR
             )}>
             {courseCodes.map((courseCode) => (

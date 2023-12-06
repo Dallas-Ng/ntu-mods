@@ -4,12 +4,12 @@ import { Icons } from "@/components/icons"
 
 const IndexPage: NextPage = () => (
   <div className="container p-3">
-    <div className="flex justify-center align-middle items-center md:h-72">
+    <div className="flex items-center justify-center align-middle md:h-72">
       <div className="max-w-[800px]">
-        <div className="flex justify-center items-center mb-5 flex-col md:flex-row text-center md:text-left">
-          <Icons.logo className="w-32 h-32" />
+        <div className="mb-5 flex flex-col items-center justify-center text-center md:flex-row md:text-left">
+          <Icons.logo className="h-32 w-32" />
 
-          <h1 className="font-bold text-5xl md:text-6xl bg-gradient-to-l from-blue-700 to-blue-800 bg-clip-text text-transparent">
+          <h1 className="bg-gradient-to-l from-blue-700 to-blue-800 bg-clip-text text-5xl font-bold text-transparent md:text-6xl">
             Dabao your <br />
             mods better
           </h1>
@@ -24,8 +24,8 @@ const IndexPage: NextPage = () => (
       </div>
     </div>
 
-    <div className="hidden w-full h-full rounded-xl overflow-hidden md:flex justify-center mt-5">
-      <img src="/product-screenshot.png" className="w-full h-full" />
+    <div className="mt-5 hidden h-full w-full justify-center overflow-hidden rounded-xl md:flex">
+      <img src="/product-screenshot.png" className="h-full w-full" />
     </div>
   </div>
 )

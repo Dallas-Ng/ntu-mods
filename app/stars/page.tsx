@@ -95,7 +95,7 @@ const generateTable = (): React.ReactNode => {
 }
 
 const StarsPage: NextPage = () => (
-  <div className="bg-white dark:bg-slate-950 sm:rounded-2xl border p-1">
+  <div className="bg-white dark:bg-slate-950 sm:rounded-2xl sm:border p-1">
     <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-800 to-indigo-900 bg-clip-text text-transparent pl-4 pt-3">
       Stars* Planner
     </h1>

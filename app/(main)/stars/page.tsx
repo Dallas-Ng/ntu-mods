@@ -1,5 +1,4 @@
 import React from "react"
-import { NextPage } from "next"
 
 import {
   STARS_CALENDAR_TIMESLOTS,
@@ -96,28 +95,28 @@ const generateTable = (): React.ReactNode => {
   ))
 }
 
-const StarsPage: NextPage = () => (
-  <div className="bg-white p-1 dark:bg-slate-950 sm:rounded-2xl sm:border">
-    <h1 className="bg-gradient-to-r from-blue-800 to-indigo-900 bg-clip-text pl-4 pt-3 text-3xl font-bold text-transparent">
-      Stars* Planner
-    </h1>
+export default function StarsPage() {
+  return (
+    <div className="bg-white p-1 dark:bg-slate-950 sm:rounded-2xl sm:border">
+      <h1 className="bg-gradient-to-r from-blue-800 to-indigo-900 bg-clip-text pl-4 pt-3 text-3xl font-bold text-transparent">
+        Stars* Planner
+      </h1>
 
-    <Table className="table-fixed border-collapse text-xs">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="text-center md:w-[95px]">Time</TableHead>
-          <TableHead className="text-center">Mon</TableHead>
-          <TableHead className="text-center">Tue</TableHead>
-          <TableHead className="text-center">Wed</TableHead>
-          <TableHead className="text-center">Thu</TableHead>
-          <TableHead className="text-center">Fri</TableHead>
-          {/* <TableHead>Sat</TableHead> */}
-        </TableRow>
-      </TableHeader>
+      <Table className="table-fixed border-collapse text-xs">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-center md:w-[95px]">Time</TableHead>
+            <TableHead className="text-center">Mon</TableHead>
+            <TableHead className="text-center">Tue</TableHead>
+            <TableHead className="text-center">Wed</TableHead>
+            <TableHead className="text-center">Thu</TableHead>
+            <TableHead className="text-center">Fri</TableHead>
+            {/* <TableHead>Sat</TableHead> */}
+          </TableRow>
+        </TableHeader>
 
-      <TableBody>{generateTable()}</TableBody>
-    </Table>
-  </div>
-)
-
-export default StarsPage
+        <TableBody>{generateTable()}</TableBody>
+      </Table>
+    </div>
+  )
+}

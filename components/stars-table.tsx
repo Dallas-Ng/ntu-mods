@@ -1,9 +1,10 @@
 import React from "react"
 
 import {
-  STARS_CALENDAR_TIMESLOTS,
-  STARS_FAKE_DATA
-} from "@/config/stars-config"
+  DEFAULT_DAYS_TO_SHOW,
+  STARS_FAKE_DATA,
+  STARS_TIMESLOTS
+} from "@/config/stars"
 import {
   Table,
   TableBody,
@@ -25,7 +26,7 @@ const generateTable = (numberOfDays: number): React.ReactNode => {
   const toReturn: React.ReactNode[][] = []
 
   // Populates the array with timeslot and days
-  STARS_CALENDAR_TIMESLOTS.forEach((timeslot) => {
+  STARS_TIMESLOTS.forEach((timeslot) => {
     // append each day the user wants to show
     const daysArray = daysOfWeek
       .slice(0, numberOfDays)
@@ -40,9 +41,7 @@ const generateTable = (numberOfDays: number): React.ReactNode => {
   })
 
   STARS_FAKE_DATA.forEach((data) => {
-    const tsIndex = STARS_CALENDAR_TIMESLOTS.findIndex(
-      (ts) => ts.start === data.start
-    )
+    const tsIndex = STARS_TIMESLOTS.findIndex((ts) => ts.start === data.start)
 
     for (let i = 0; i < data.rowSpan; i++) {
       if (i === 0) {
@@ -73,7 +72,7 @@ interface StarsTableProps {
 }
 
 export default function StarsTable(props: StarsTableProps) {
-  const { numberOfDays = 6 } = props
+  const { numberOfDays = DEFAULT_DAYS_TO_SHOW } = props
 
   return (
     <Table className="table-fixed border-collapse text-xs">

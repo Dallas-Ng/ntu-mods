@@ -1,5 +1,7 @@
+export const DEFAULT_DAYS_TO_SHOW = 5
+
 // Default timeslots taken from STARS
-export const STARS_CALENDAR_TIMESLOTS = [
+export const STARS_TIMESLOTS = [
   { start: "0830", end: "0900" },
   { start: "0900", end: "0930" },
   { start: "0930", end: "1000" },

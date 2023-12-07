@@ -1,99 +1,6 @@
 import React from "react"
 
-import {
-  STARS_CALENDAR_TIMESLOTS,
-  STARS_FAKE_DATA
-} from "@/config/stars-config"
-import { cn } from "@/lib/utils"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from "@/components/ui/table"
-
-const tdps = "p-1" // TABLE_DATA_PADDING_SIZE
-
-const modules = {
-  cc: { borderLeft: "border-l-red-500", text: "text-red-600" },
-  sc: { borderLeft: "border-l-emerald-500", text: "text-emerald-600" },
-  ph: { borderLeft: "border-l-yellow-500", text: "text-yellow-600" },
-  mh: { borderLeft: "border-l-blue-500", text: "text-blue-600" }
-}
-
-/**
- * Generates a React table structure representing a timetable based on provided timeslots and timetable data.
- *
- * @returns React.ReactNode - A nested array of React elements representing the table rows and cells.
- */
-const generateTable = (): React.ReactNode => {
-  const toReturn: React.ReactNode[][] = []
-
-  // Populates the array with timeslot and day 1-6 (mon-sat)
-  STARS_CALENDAR_TIMESLOTS.forEach((timeslot) =>
-    toReturn.push([
-      <TableCell className={cn(tdps, "text-center")}>
-        {timeslot.start} to <br className="md:hidden" /> {timeslot.end}
-      </TableCell>,
-      <TableCell className={cn(tdps)}></TableCell>, // monday
-      <TableCell className={cn(tdps)}></TableCell>,
-      <TableCell className={cn(tdps)}></TableCell>,
-      <TableCell className={cn(tdps)}></TableCell>,
-      <TableCell className={cn(tdps)}></TableCell>
-      // <TableCell className={cn(tdps)}></TableCell> // saturday
-    ])
-  )
-
-  STARS_FAKE_DATA.forEach((data) => {
-    const tsIndex = STARS_CALENDAR_TIMESLOTS.findIndex(
-      (ts) => ts.start === data.start
-    )
-
-    for (let i = 0; i < data.rowSpan; i++) {
-      const coursePrefix = data.courseCode
-        .slice(0, 2)
-        .toLowerCase() as keyof typeof modules
-
-      if (i === 0) {
-        toReturn[tsIndex][data.day] = (
-          <TableCell
-            rowSpan={data.rowSpan}
-            className={cn(
-              tdps,
-              "break-words border border-l-4 border-slate-300 dark:border-y-slate-800 dark:border-r-slate-800 ",
-              modules[coursePrefix].borderLeft
-            )}>
-            <p>
-              <span className={cn("font-bold", modules[coursePrefix].text)}>
-                {data.courseCode}{" "}
-              </span>
-
-              {data.location}
-            </p>
-
-            <p>{data.time}</p>
-          </TableCell>
-        )
-      } else {
-        /**
-         * This will override table cell to create a null element, this is needed as adding another
-         * table cell will push columns out of the max days of the week.
-         */
-        toReturn[tsIndex + i][data.day] = <></>
-      }
-    }
-  })
-
-  return toReturn.map((x, i) => (
-    <TableRow key={i} className="border-slate-150 dark:border-slate-900">
-      {x.map((cell, j) => (
-        <React.Fragment key={j}>{cell}</React.Fragment>
-      ))}
-    </TableRow>
-  ))
-}
+import StarsTable from "@/components/stars-table"
 
 export default function StarsPage() {
   return (
@@ -102,21 +9,7 @@ export default function StarsPage() {
         Stars* Planner
       </h1>
 
-      <Table className="table-fixed border-collapse text-xs">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="text-center md:w-[95px]">Time</TableHead>
-            <TableHead className="text-center">Mon</TableHead>
-            <TableHead className="text-center">Tue</TableHead>
-            <TableHead className="text-center">Wed</TableHead>
-            <TableHead className="text-center">Thu</TableHead>
-            <TableHead className="text-center">Fri</TableHead>
-            {/* <TableHead>Sat</TableHead> */}
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>{generateTable()}</TableBody>
-      </Table>
+      <StarsTable />
     </div>
   )
 }

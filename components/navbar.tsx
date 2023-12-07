@@ -13,7 +13,6 @@ import {
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu"
 import { Icons } from "@/components/icons"
 import { ThemeToggle } from "@/components/theme-toggle"
 
@@ -73,7 +72,6 @@ export default function NavigationBar() {
                     passHref>
                     <NavigationMenuLink
                       className={cn(
-                        // navigationMenuTriggerStyle(),
                         "mr-1 p-3 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100",
                         pathname === link.route
                           ? "text-slate-950 dark:text-slate-100"

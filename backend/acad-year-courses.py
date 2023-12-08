@@ -4,7 +4,7 @@ from utils import jsonify, unpickle_this, read_json, pickle_this, clear_invalid_
 from config import URL_SCHEDULE_DISPLAY
 
 def update_acad_year_courses():
-    scraper_acad_year_courses()
+    # scraper_acad_year_courses()
     parser_acad_year_courses()
 
 def scraper_acad_year_courses():
@@ -53,7 +53,7 @@ def parser_acad_year_courses():
 
             {
               "ACC;;1;F": {
-                "courseId":"ACC;;1;F",
+                "key":"ACC;;1;F",
                 "courseName":"Accountancy Year 1",
                 "code":"ACC",
                 "specialisation":"ACC",
@@ -64,7 +64,7 @@ def parser_acad_year_courses():
             """
 
             json_data[f"{course_id}"] = {
-                "courseId": course_id,
+                "key": course_id,
                 "courseName": course_name,
                 "code": course_id_split[0],
                 "specialisation": course_id_split[1],

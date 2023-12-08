@@ -67,9 +67,11 @@ def update_course_indexes():
             continue
 
         academic_year = json_file[:6]
-        if int(academic_year[:4]) <= datetime.now().year - MAX_YEARS_TO_SCRAPE:
-            logging.warning(f"NOT SCRAPPING {json_file}")
+        if academic_year != "2023-2":
             continue
+        # if int(academic_year[:4]) <= datetime.now().year - MAX_YEARS_TO_SCRAPE:
+        #     logging.warning(f"NOT SCRAPPING {json_file}")
+        #     continue
 
         logging.info(f"SCRAPPING {json_file}")
 
@@ -131,14 +133,14 @@ def parser_course_schedules(soup):
 
             if len(row_text) == 3:
                 course = {
-                    "code": row_text[0],
+                    "key": row_text[0],
                     "title": row_text[1],
                     "au": row_text[2],
                     "indexes": {},
                     "prerequisites": "",
                     "remarks": "",
                 }
-                data[course["code"]] = course
+                data[course["key"]] = course
 
             if len(row_text) == 2:
                 # catches alternatives
@@ -184,6 +186,7 @@ def parser_course_schedules(soup):
                 #     quit()
 
                 index_data = {
+                    "key": index_code,
                     "type": row_text[1],
                     "group": row_text[2],
                     "day": row_text[3],
@@ -213,5 +216,5 @@ def parser_course_schedules(soup):
 if __name__ == "__main__":
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
-    # update_course_indexes()
-    solo_function()
+    update_course_indexes()
+    # solo_function()

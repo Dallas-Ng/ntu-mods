@@ -21,6 +21,9 @@ def consolidate_course_data(filepaths):
         filepath_split = filepath.split("\\")
         academic_year = filepath_split[1]
 
+        if academic_year != "2023-2":
+            continue
+
         with open(filepath, "r") as file:
             print(filepath)
             data = json.load(file)

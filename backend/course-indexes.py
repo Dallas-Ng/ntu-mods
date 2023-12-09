@@ -35,7 +35,7 @@ def solo_function():
 def process_key_solo(key, data, academic_year):
     payload = {
         "acadsem": academic_year,
-        "r_course_yr": data["courseId"],
+        "r_course_yr": data["key"],
         "r_subj_code": "Enter Keywords or Course Code",
         "r_search_type": "F",
         "boption": "CLoad",
@@ -93,7 +93,7 @@ def update_course_indexes():
 def process_key(key, data, academic_year):
     payload = {
         "acadsem": academic_year,
-        "r_course_yr": data["courseId"],
+        "r_course_yr": data["key"],
         "r_subj_code": "Enter Keywords or Course Code",
         "r_search_type": "F",
         "boption": "CLoad",
@@ -179,17 +179,28 @@ def parser_course_schedules(soup):
                 # If index number is empty, happens when there multiple location, time, venue for a certain index
                 index_code = row_text[0]
 
-                # if index_code == "00015":
-                #     print(row_text)
-                #     print(course)
-                #     print(data)
-                #     quit()
+                # Change day to number
+                day_no = 0
+                if row_text[3] == "MON":
+                    day_no = 1
+                if row_text[3] == "TUE":
+                    day_no = 2
+                if row_text[3] == "WED":
+                    day_no = 3
+                if row_text[3] == "THU":
+                    day_no = 4
+                if row_text[3] == "FRI":
+                    day_no = 5
+                if row_text[3] == "SAT":
+                    day_no = 6
+                if row_text[3] == "SUN":
+                    day_no = 7
 
                 index_data = {
                     "key": index_code,
                     "type": row_text[1],
                     "group": row_text[2],
-                    "day": row_text[3],
+                    "day": day_no,
                     "time": row_text[4],
                     "venue": row_text[5],
                     "remarks": row_text[6],

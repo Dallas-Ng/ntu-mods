@@ -1,38 +1,57 @@
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from bs4 import BeautifulSoup
-from utils import jsonify, post_response, read_json
+from utils import (
+    jsonify,
+    load_logger,
+    pickle_this,
+    post_response,
+    read_json,
+    unpickle_this,
+)
 import os, math
-from config import MAX_YEARS_TO_SCRAPE, URL_SCHEDULE_DISPLAY1
+from settings import (
+    MAX_YEARS_TO_SCRAPE,
+    URL_SCHEDULE_DISPLAY1,
+    FILE_BASE_URL,
+    MAX_WORKERS,
+    FLAG_FETCH_NEW_DATA,
+)
 import logging
 import threading
 
-MAX_WORKERS = 16  # Adjust this number based on your system and task characteristics
+MAIN_URL = FILE_BASE_URL + "acad-year-courses/"
 
 
-def solo_function():
-    json_files = [item.name for item in os.scandir("backend/data") if item.is_file()][
+def load_files() -> tuple[any, str]:
+    """
+    Loads JSON files, processes academic year, and returns acad-year-courses data along with the academic year.
+    """
+    json_files = [item.name for item in os.scandir(f"{MAIN_URL}") if item.is_file()][
         ::-1
     ]
 
     for json_file in json_files:
-        if not (str(json_file[:4]).isdigit()):  # skip irrelevant files
-            continue
-
         academic_year = json_file[:6]
-        if int(academic_year[:4]) <= datetime.now().year - MAX_YEARS_TO_SCRAPE:
+
+        if int(academic_year[:4]) < datetime.now().year - MAX_YEARS_TO_SCRAPE:
             logging.warning(f"NOT SCRAPPING {json_file}")
             continue
 
+        # C urrently only store 2023, S2
+        if academic_year[5:6] != "2":
+            continue
+
         logging.info(f"SCRAPPING {json_file}")
 
-        json_data = read_json(f"backend/data/{json_file}")
-
-        for key in json_data.keys():
-            process_key_solo(key, json_data[key], academic_year)
+        json_data = read_json(f"{MAIN_URL}{json_file}")
+        return json_data, academic_year
 
 
-def process_key_solo(key, data, academic_year):
+def process_key(key, data, academic_year) -> None:
+    """
+    Main processer for keys and saves data
+    """
     payload = {
         "acadsem": academic_year,
         "r_course_yr": data["key"],
@@ -41,81 +60,77 @@ def process_key_solo(key, data, academic_year):
         "boption": "CLoad",
         "staff_access": "false",
     }
-    response = post_response(URL_SCHEDULE_DISPLAY1, payload=payload)
-    soup = BeautifulSoup(response.text, "html.parser")
 
-    processed_data = parser_course_schedules(soup)
+    course_code = key.replace(";;", ";_;").replace(";", "-")
 
-    course_code = key
-    course_code = course_code.replace(";;", ";_;")
-    course_code = course_code.replace(";", "-")
+    soup = None
+    pickle_file_path = f"backend/data/pickles/courses/{academic_year}/{course_code}"
 
-    logging.info(f"SAVING {key} - Solo Function")
-    jsonify(
-        f"backend/data/courses/{academic_year}/{course_code}.json",
-        processed_data,
-    )
+    if FLAG_FETCH_NEW_DATA:
+        response = post_response(URL_SCHEDULE_DISPLAY1, payload=payload)
+        soup = BeautifulSoup(response.text, "html.parser")
+        # Pickle files that are newly scrapped
+        pickle_this(f"{pickle_file_path}.pkl", soup)
+    else:
+        soup = unpickle_this(f"{pickle_file_path}.pkl")
 
+    if not soup:
+        # This should not happen.
+        raise RuntimeError(f"No BS4 Soup - {pickle_file_path}.pkl")
 
-def update_course_indexes():
-    json_files = [item.name for item in os.scandir("backend/data") if item.is_file()][
-        ::-1
-    ]
+    processed_data = parse_course_schedule(soup)
 
-    for json_file in json_files:
-        if not (str(json_file[:4]).isdigit()):  # skip irrelevant files
-            continue
-
-        academic_year = json_file[:6]
-        if academic_year != "2023-2":
-            continue
-        # if int(academic_year[:4]) <= datetime.now().year - MAX_YEARS_TO_SCRAPE:
-        #     logging.warning(f"NOT SCRAPPING {json_file}")
-        #     continue
-
-        logging.info(f"SCRAPPING {json_file}")
-
-        json_data = read_json(f"backend/data/{json_file}")
-
-        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            futures = {
-                executor.submit(process_key, key, json_data[key], academic_year): key
-                for key in json_data.keys()
-            }
-            for future in futures:
-                key = futures[future]
-                try:
-                    future.result()
-                except Exception as e:
-                    logging.error(f"Error processing key {key}: {e}")
+    jsonify(f"backend/data/courses/{academic_year}/{course_code}.json", processed_data)
 
 
-def process_key(key, data, academic_year):
-    payload = {
-        "acadsem": academic_year,
-        "r_course_yr": data["key"],
-        "r_subj_code": "Enter Keywords or Course Code",
-        "r_search_type": "F",
-        "boption": "CLoad",
-        "staff_access": "false",
-    }
-    response = post_response(URL_SCHEDULE_DISPLAY1, payload=payload)
-    soup = BeautifulSoup(response.text, "html.parser")
+def process_key_solo(key, data, academic_year) -> None:
+    """
+    Processes a course key using a solo worker.
+    """
+    logging.info(f"SAVING {key} - Solo Worker")
+    process_key(key, data, academic_year)
 
-    processed_data = parser_course_schedules(soup)
 
-    course_code = key
-    course_code = course_code.replace(";;", ";_;")
-    course_code = course_code.replace(";", "-")
-
+def process_key_multi(key, data, academic_year) -> None:
+    """
+    Processes a course key using a multi-worker approach.
+    """
     logging.info(f"SAVING {key} - Thread: {threading.current_thread().name}")
-    jsonify(
-        f"backend/data/courses/{academic_year}/{course_code}.json",
-        processed_data,
-    )
+    process_key(key, data, academic_year)
 
 
-def parser_course_schedules(soup):
+def solo_worker_course_indexer() -> None:
+    """
+    Solo worker for course indexing, processes each course key sequentially.
+    """
+    json_data, academic_year = load_files()
+
+    for key in json_data.keys():
+        process_key_solo(key, json_data[key], academic_year)
+
+
+def multi_worker_course_indexer() -> None:
+    """
+    Multi-worker for course indexing, processes each course key concurrently.
+    """
+    json_data, academic_year = load_files()
+
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        futures = {
+            executor.submit(process_key_multi, key, json_data[key], academic_year): key
+            for key in json_data.keys()
+        }
+
+        for future in futures:
+            key = futures[future]
+
+            try:
+                future.result()
+            except Exception as e:
+                logging.error(f"Error processing key {key}: {e}")
+
+
+def parse_course_schedule(soup):
     tables = soup.find_all("table")
 
     data = {}
@@ -133,7 +148,7 @@ def parser_course_schedules(soup):
 
             if len(row_text) == 3:
                 course = {
-                    "key": row_text[0],
+                    "key": row_text[0],  # used as dictionary key in front-end
                     "title": row_text[1],
                     "au": row_text[2],
                     "indexes": {},
@@ -225,7 +240,6 @@ def parser_course_schedules(soup):
 
 
 if __name__ == "__main__":
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
-    update_course_indexes()
-    # solo_function()
+    load_logger()
+    # multi_worker_course_indexer()
+    solo_worker_course_indexer()

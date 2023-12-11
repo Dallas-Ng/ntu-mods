@@ -2,6 +2,11 @@ import json, pickle, requests, logging, os
 from typing import Any, List
 
 
+def load_logger():
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+
+
 """
 Response Handling
 """
@@ -73,7 +78,7 @@ def pickle_this(filename: str, data: Any) -> None:
     Returns:
         None
     """
-    if not filename.endswith(".pkl"):
+    if not filename.endswith(".pkl") or ".pkl" not in filename:
         raise RuntimeError("Invalid filename")
 
     os.makedirs(os.path.dirname(filename), exist_ok=True)
@@ -94,7 +99,7 @@ def unpickle_this(filename: str) -> Any:
     Returns:
         Any: Unpickled data.
     """
-    if not filename.endswith(".pkl"):
+    if not filename.endswith(".pkl") or ".pkl" not in filename:
         raise RuntimeError("Invalid filename")
 
     with open(filename, "rb") as file:

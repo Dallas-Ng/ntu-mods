@@ -206,4 +206,10 @@ def day_str_to_num(day_str: str) -> int:
     if lower_day_str in days_mapping:
         return days_mapping[lower_day_str]
     else:
-        raise RuntimeError(f"No mapping found for this day_str: {day_str}")
+        logging.warning(f"No mapping found for this day_str: {day_str}")
+        """
+        Example:
+        GC0001 SUSTAINABILITY: SEEING THROUGH THE HAZE
+        This module does not have any day or time as its onlin
+        """
+        return 0  # ctrl-f day": 0

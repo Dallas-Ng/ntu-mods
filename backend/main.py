@@ -1,10 +1,10 @@
-from acad_year import fetch_acad_year
-from acad_year_courses import fetch_acad_year_courses
-from utils import load_logger
-from course_indexes import (
+from s_acad_year import fetch_acad_year
+from s_acad_year_courses import fetch_acad_year_courses
+from s_course_indexes import (
     multi_worker_course_indexer,
     solo_worker_course_indexer,
 )
+from utils import load_logger
 
 
 if __name__ == "__main__":

@@ -17,3 +17,16 @@ interface Index {
   remarks: string // pre-reqs, etc
   duration: number // for row span, each unit is 1 hour
 }
+
+type CourseIndex = {
+  [courseKey: string]: {
+    key: string
+    type: string
+    group: string
+    day: number
+    time: string
+    venue: string
+    remarks: string
+    duration: number
+  }[]
+}

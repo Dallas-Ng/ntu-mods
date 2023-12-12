@@ -61,15 +61,23 @@ export function CourseCodeSelect() {
     const value = val.toUpperCase()
 
     // If user clicks on a course in store, we will remove it out
+    const course = getCDataCourse(value)
+    const defaultIndexKey = Object.keys(course.indexes)[0]
+
     if (store.courses.find((x) => x.key === value)) {
       store.removeCourse(value)
+      store.removeCourseToIndex(
+        course.key,
+        course.indexes[defaultIndexKey][0].key
+      )
       setCurrCourse(undefined) // reset placeholder
     } else {
-      store.addCourse(getCDataCourse(value))
+      store.addCourse(course)
+      store.addCourseToIndex(course.key, course.indexes[defaultIndexKey][0].key)
       setCurrCourse(value)
     }
 
-    setWindowOpen(false)
+    // setWindowOpen(false)
   }
 
   return (
@@ -105,8 +113,6 @@ export function CourseCodeSelect() {
                 key={courseCode}
                 value={courseCode}
                 onSelect={handleSelect}>
-                {/* Show the check for selected items only */}
-                {/* TODO: Include ALL checked items - right now only happens for 1 */}
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",

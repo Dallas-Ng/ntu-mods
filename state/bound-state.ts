@@ -14,8 +14,8 @@ export const useBoundState = create(
       ...createCourseSlice(...a)
     }),
     {
-      name: "dabao-store", // name of key in localstorage
-      skipHydration: true // TODO: enable this
+      name: "dabao-store" // name of key in localstorage
+      // skipHydration: true // TODO: enable this
     }
   )
 )

@@ -49,7 +49,7 @@ export default function NavigationBar() {
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
         <div className="flex gap-3">
           <Link href="/" className="flex items-center space-x-2">
-            <Icons.logo className="h-10 w-10" />
+            <Icons.logo width={30} height={30} />
             <span
               className={cn(
                 "inline-block font-bold hover:text-slate-950 dark:hover:text-slate-100",

@@ -1,10 +1,19 @@
+import Image from "next/image"
 import { LucideProps, Moon, Sun, type Icon as LucideIcon } from "lucide-react"
+
+import { cn } from "@/lib/utils"
 
 export type Icon = LucideIcon
 
 export const Icons = {
-  logo: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
-    <img {...props} src="/logo.png" width="100%" height="100%" />
+  logo: (props: { className?: string; width: number; height: number }) => (
+    <Image
+      src="/logo.png"
+      alt="Logo"
+      width={props.width}
+      height={props.height}
+      className={cn(props.className)}
+    />
   ),
   sun: Sun,
   moon: Moon,

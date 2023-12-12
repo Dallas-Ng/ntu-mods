@@ -1,10 +1,6 @@
 import React from "react"
 
-import {
-  DEFAULT_DAYS_TO_SHOW,
-  STARS_FAKE_DATA,
-  STARS_TIMESLOTS
-} from "@/config/stars"
+import { DEFAULT_DAYS_TO_SHOW, STARS_TIMESLOTS } from "@/config/stars"
 import {
   Table,
   TableBody,
@@ -22,57 +18,97 @@ const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
  *
  * @returns React.ReactNode - A nested array of React elements representing the table rows and cells.
  */
-const generateTable = (numberOfDays: number): React.ReactNode => {
-  const toReturn: React.ReactNode[][] = []
+// const generateTable = (
+//   courses: StarsTableCourse[],
+//   numberOfDays: number
+// ): React.ReactNode => {
+//   const toReturn: React.ReactNode[][] = []
 
-  // Populates the array with timeslot and days
-  STARS_TIMESLOTS.forEach((timeslot) => {
-    // append each day the user wants to show
-    const daysArray = daysOfWeek
-      .slice(0, numberOfDays)
-      .map((_v) => <TableCell className="p-1" />)
+//   // Populates the array with timeslot and days
+//   STARS_TIMESLOTS.forEach((timeslot) => {
+//     // append each day the user wants to show
+//     const daysArray = daysOfWeek
+//       .slice(0, numberOfDays)
+//       .map((_v) => <TableCell className="p-1" />)
 
-    return toReturn.push([
-      <TableCell className="p-1 text-center">
-        {timeslot.start} to <br className="md:hidden" /> {timeslot.end}
-      </TableCell>,
-      ...daysArray
-    ])
-  })
+//     return toReturn.push([
+//       <TableCell className="p-1 text-center">
+//         {timeslot.start} to <br className="md:hidden" /> {timeslot.end}
+//       </TableCell>,
+//       ...daysArray
+//     ])
+//   })
 
-  STARS_FAKE_DATA.forEach((data) => {
-    const tsIndex = STARS_TIMESLOTS.findIndex((ts) => ts.start === data.start)
+//   courses.forEach((course) => {
+//     /**
+//      *
+//      */
+//     // A index can have multiple ... TODO: do this
 
-    for (let i = 0; i < data.rowSpan; i++) {
-      if (i === 0) {
-        toReturn[tsIndex][data.day] = (
-          <StarsCell className="p-1" course={data} />
-        )
-      } else {
-        /**
-         * This will override table cell to create a null element, this is needed as adding another
-         * table cell will push columns out of the max days of the week.
-         */
-        toReturn[tsIndex + i][data.day] = <></>
-      }
-    }
-  })
+//     // const allIndexes = []
+//     // Object.keys(course.indexes).forEach(key =>
+//     //     allIndexes.push(course.indexes[key])
 
-  return toReturn.map((x, i) => (
-    <TableRow key={i} className="border-slate-150 dark:border-slate-900">
-      {x.map((cell, j) => (
-        <React.Fragment key={j}>{cell}</React.Fragment>
-      ))}
-    </TableRow>
-  ))
+//     //   )
+
+//     const mainIndex = course.selectedIndex[0]
+//     const tsIndex = STARS_TIMESLOTS.findIndex(
+//       (ts) => ts.start === mainIndex.time.split("-")[0]
+//     )
+
+//     for (let i = 0; i < mainIndex.duration; i++) {
+//       if (i === 0) {
+//         toReturn[tsIndex][mainIndex.day] = (
+//           <StarsCell className="p-1" course={course} />
+//         )
+//       } else {
+//         /**
+//          * This will override table cell to create a null element, this is needed as adding another
+//          * table cell will push columns out of the max days of the week.
+//          */
+//         toReturn[tsIndex + i][mainIndex.day] = <></>
+//       }
+//     }
+//   })
+
+//   return toReturn.map((x, i) => (
+//     <TableRow key={i} className="border-slate-150 dark:border-slate-900">
+//       {x.map((cell, j) => (
+//         <React.Fragment key={j}>{cell}</React.Fragment>
+//       ))}
+//     </TableRow>
+//   ))
+// }
+
+interface StarsTableCourse extends Course {
+  selectedIndex: Index[]
 }
 
 interface StarsTableProps {
+  courses: StarsTableCourse[]
   numberOfDays?: number // 7 means 7 days (mon-sun)
 }
 
 export default function StarsTable(props: StarsTableProps) {
-  const { numberOfDays = DEFAULT_DAYS_TO_SHOW } = props
+  const { courses, numberOfDays = DEFAULT_DAYS_TO_SHOW } = props
+
+  const generateTable = () => {
+    STARS_TIMESLOTS.forEach((timeslot) => {
+      // append each day the user wants to show
+      const daysArray = daysOfWeek
+        .slice(0, numberOfDays)
+        .map((_v) => <TableCell className="p-1" />)
+
+      // return toReturn.push([
+      //   <TableCell className="p-1 text-center">
+      //     {timeslot.start} to <br className="md:hidden" /> {timeslot.end}
+      //   </TableCell>,
+      //   ...daysArray
+      // ])
+    })
+
+    return <div></div>
+  }
 
   return (
     <Table className="table-fixed border-collapse text-xs">
@@ -88,7 +124,8 @@ export default function StarsTable(props: StarsTableProps) {
         </TableRow>
       </TableHeader>
 
-      <TableBody>{generateTable(numberOfDays)}</TableBody>
+      <TableBody>{generateTable()}</TableBody>
+      {/* <TableBody>{generateTable(courses, numberOfDays)}</TableBody> */}
     </Table>
   )
 }

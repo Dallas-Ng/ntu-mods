@@ -10,7 +10,7 @@ import React from "react"
  * @param {number} delay - The delay in milliseconds before updating the debounced value.
  * @returns {any} - The debounced value.
  */
-export function useDebounce(value: any, delay: number) {
+export function useDebounce<T>(value: T, delay: number): T {
   const [debouncedValue, setDebouncedValue] = React.useState(value)
 
   React.useEffect(() => {

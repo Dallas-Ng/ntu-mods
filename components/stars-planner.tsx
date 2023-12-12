@@ -2,6 +2,8 @@
 
 import { useBoundState } from "@/state/bound-state"
 
+import { DEF_SCROLLBAR, cn } from "@/lib/utils"
+
 import { CourseCodeSelect } from "./course-code-select"
 import StarsCourseBadge from "./stars-course-badge"
 import StarsTable from "./stars-table"
@@ -18,14 +20,16 @@ export default function StarsPlanner() {
   // console.log(data)
   return (
     <>
-      <div className="flex flex-row items-center gap-2 py-4 pl-2">
+      <div className="flex items-center gap-2 py-4 pl-2">
         <CourseCodeSelect />
 
-        {courses.map((c, i) => (
-          <StarsCourseBadge key={i} courseKey={c.key}>
-            {c.key}
-          </StarsCourseBadge>
-        ))}
+        <div className={cn("flex  gap-2 overflow-x-auto", DEF_SCROLLBAR)}>
+          {courses.map((c, i) => (
+            <StarsCourseBadge key={i} courseKey={c.key}>
+              {c.key}
+            </StarsCourseBadge>
+          ))}
+        </div>
       </div>
 
       {/* <StarsTable courses={data || []} /> */}

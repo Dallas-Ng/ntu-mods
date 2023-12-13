@@ -76,21 +76,24 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
   return (
     <Popover onOpenChange={(v) => setPopoverOpen(v)}>
       <PopoverTrigger>
-        <Badge
-          className={cn(
-            "flex items-center justify-between gap-1",
-            popoverOpen && "bg-indigo-400 hover:bg-indigo-400"
-          )}>
-          {children}
-          <span
-            onClick={(e) => {
-              e.preventDefault()
-              removeCourse(courseKey)
-            }}
-            className="ml-1">
-            <Icons.xIcon height={20} width={20} />
-          </span>
-        </Badge>
+        <div className="flex h-[40px] items-center md:h-fit">
+          <Badge
+            className={cn(
+              "flex items-center justify-between gap-1 hover:bg-gradient-to-r hover:from-blue-800 hover:to-indigo-900 hover:text-white",
+              popoverOpen &&
+                "bg-gradient-to-r from-blue-800 to-indigo-900 text-white "
+            )}>
+            {children}
+            <span
+              onClick={(e) => {
+                e.preventDefault()
+                removeCourse(courseKey)
+              }}
+              className="ml-1">
+              <Icons.xIcon height={20} width={20} />
+            </span>
+          </Badge>
+        </div>
       </PopoverTrigger>
 
       <PopoverContent className="w-96 p-0">

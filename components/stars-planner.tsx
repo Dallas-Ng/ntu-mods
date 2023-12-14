@@ -2,8 +2,6 @@
 
 import { useBoundState } from "@/state/bound-state"
 
-import { cn } from "@/lib/utils"
-
 import { CourseCodeSelect } from "./course-code-select"
 import StarsCourseBadge from "./stars-course-badge"
 import StarsTable from "./stars-table"

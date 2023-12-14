@@ -76,6 +76,42 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+  }
+}
+
+@layer utilities {
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #000000 #ffffff;
+  }
+
+  /* Other browsers */
+  *::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #f1f5f9;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #94a3b8;
+    border-radius: 10px;
+    border: 2px solid #f1f5f9;
+  }
+
+  .dark *::-webkit-scrollbar-track {
+    background: #0f172a;
+  }
+
+  .dark *::-webkit-scrollbar-thumb {
+    background-color: #1e293b;
+    border-radius: 10px;
+    border: 2px solid #0f172a;
   }
 }

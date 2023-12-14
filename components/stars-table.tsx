@@ -215,7 +215,6 @@ export default function StarsTable(_props: StarsTableProps) {
       })
     })
 
-    console.log(DAY_MAP)
     return toReturn.map((row, i) => (
       <TableRow key={i} className="border-slate-150 dark:border-slate-900">
         {row.map((cell, j) => (

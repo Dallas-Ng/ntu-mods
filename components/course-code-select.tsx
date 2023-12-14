@@ -6,7 +6,7 @@ import { useBoundState } from "@/state/bound-state"
 import { Check, ChevronsUpDown } from "lucide-react"
 
 import { getCDataCourse } from "@/lib/consolidated-data"
-import { DEF_SCROLLBAR, cn } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
 import { Button } from "@/components/ui/button"
 import {
@@ -105,8 +105,7 @@ export function CourseCodeSelect() {
           <CommandGroup
             className={cn(
               courseCodes.length > 0 ? "block" : "hidden",
-              "max-h-[400px] overflow-auto",
-              DEF_SCROLLBAR
+              "max-h-[400px] overflow-auto"
             )}>
             {courseCodes.map((courseCode) => (
               <CommandItem

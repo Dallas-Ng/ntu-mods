@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react"
 import CONSOLIDATED_DATA from "@/data/consolidated-2023-2.json"
+import { useBoundState } from "@/state/bound-state"
 import { Check, ChevronsUpDown } from "lucide-react"
 
+import { getCDataCourse } from "@/lib/consolidated-data"
 import { DEF_SCROLLBAR, cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
 import { Button } from "@/components/ui/button"
@@ -23,12 +25,14 @@ import {
 const STORED_KEYS = Object.keys(CONSOLIDATED_DATA)
 
 export function CourseCodeSelect() {
-  const [searchWindowOpen, setSearchWindowOpen] = useState(false)
-  const [selectedCourse, setSelectedCourse] = useState<string>()
+  const [windowOpen, setWindowOpen] = useState(false)
+  const [currCourse, setCurrCourse] = useState<string>()
   const [inputValue, setInputValue] = useState<string>("")
   const [courseCodes, setCourseCode] = useState<string[]>([])
 
-  const dbSearchTerm = useDebounce(inputValue, 150) // arbitrary delay
+  const store = useBoundState((s) => s)
+
+  const dbSearchTerm = useDebounce(inputValue, 0) // arbitrary delay
 
   useEffect(() => {
     /**
@@ -52,15 +56,39 @@ export function CourseCodeSelect() {
     setCourseCode(courseCodes)
   }, [dbSearchTerm])
 
+  const handleSelect = (val: string) => {
+    // .toUpperCase is needed as courseCode is auto lowercased when passed as prop into CommandItem
+    const value = val.toUpperCase()
+
+    // If user clicks on a course in store, we will remove it out
+    const course = getCDataCourse(value)
+    const defaultIndexKey = Object.keys(course.indexes)[0]
+
+    if (store.courses.find((x) => x.key === value)) {
+      store.removeCourse(value)
+      store.removeCourseToIndex(
+        course.key,
+        course.indexes[defaultIndexKey][0].key
+      )
+      setCurrCourse(undefined) // reset placeholder
+    } else {
+      store.addCourse(course)
+      store.addCourseToIndex(course.key, course.indexes[defaultIndexKey][0].key)
+      setCurrCourse(value)
+    }
+
+    // setWindowOpen(false)
+  }
+
   return (
-    <Popover open={searchWindowOpen} onOpenChange={setSearchWindowOpen}>
+    <Popover open={windowOpen} onOpenChange={setWindowOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
-          aria-expanded={searchWindowOpen}
+          aria-expanded={windowOpen}
           className="w-[200px] justify-between">
-          {selectedCourse ?? "Select course code"}
+          {currCourse ?? "Select course code"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -68,7 +96,6 @@ export function CourseCodeSelect() {
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput
-            separator={courseCodes.length > 0}
             placeholder="Search course code"
             onValueChange={(v) => setInputValue(v)}
           />
@@ -85,18 +112,13 @@ export function CourseCodeSelect() {
               <CommandItem
                 key={courseCode}
                 value={courseCode}
-                onSelect={(currValue) => {
-                  // .toUpperCase is needed as courseCode is auto lowercased when passed as
-                  // prop into CommandItem
-                  setSelectedCourse(currValue.toUpperCase())
-                  setSearchWindowOpen(false)
-                }}>
-                {/* Show the check for selected items only */}
-                {/* TODO: Include ALL checked items - right now only happens for 1 */}
+                onSelect={handleSelect}>
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    selectedCourse === courseCode ? "opacity-100" : "opacity-0"
+                    store.courses.find((x) => x.key === courseCode)
+                      ? "opacity-100"
+                      : "opacity-0"
                   )}
                 />
                 {courseCode}

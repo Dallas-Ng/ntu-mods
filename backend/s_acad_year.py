@@ -1,21 +1,30 @@
 from bs4 import BeautifulSoup
-from config import URL_SCHEDULE
-from utils import jsonify, unpickle_this, get_response, pickle_this, clear_invalid_items
+from settings import URL_SCHEDULE, FLAG_FETCH_NEW_DATA
+from utils import (
+    jsonify,
+    load_logger,
+    unpickle_this,
+    get_response,
+    pickle_this,
+    clear_invalid_items,
+)
 
 
-def update_acad_year():
-    scraper_acad_year()
-    parser_acad_year()
+MAIN_PICKLE_URL = "backend/data/pickles/acad-year.pkl"
 
 
-def scraper_acad_year():
-    response = get_response(URL_SCHEDULE)
-    soup = BeautifulSoup(response.text, "html.parser")
-    pickle_this("backend/data/pickles/acad-year.pkl", soup)
+def fetch_acad_year():
+    if FLAG_FETCH_NEW_DATA:
+        response = get_response(URL_SCHEDULE)
+        soup = BeautifulSoup(response.text, "html.parser")
+        pickle_this(MAIN_PICKLE_URL, soup)
+    else:
+        soup = unpickle_this(MAIN_PICKLE_URL)
 
+    if not soup:
+        # This should not happen.
+        raise RuntimeError(f"No BS4 Soup - {MAIN_PICKLE_URL}")
 
-def parser_acad_year():
-    soup = unpickle_this("backend/data/pickles/acad-year.pkl")
     select_element = soup.find("select", {"name": "acadsem"})
     options = select_element.find_all("option")
     options = clear_invalid_items(options)
@@ -38,4 +47,5 @@ def parser_acad_year():
 
 
 if __name__ == "__main__":
-    update_acad_year()
+    load_logger()
+    fetch_acad_year()

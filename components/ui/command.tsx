@@ -35,19 +35,11 @@ const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
   )
 }
 
-// CommandInput for extension of props
-interface ExtendedCommandInputProps
-  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input> {
-  separator?: boolean
-}
-
 const CommandInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
-  ExtendedCommandInputProps
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
-  <div
-    className={cn("flex items-center px-3", props.separator && "border-b")}
-    cmdk-input-wrapper="">
+  <div className={cn("flex items-center px-3")} cmdk-input-wrapper="">
     <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
     <CommandPrimitive.Input
       ref={ref}

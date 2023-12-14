@@ -2,6 +2,11 @@ import json, pickle, requests, logging, os
 from typing import Any, List
 
 
+def load_logger():
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+
+
 """
 Response Handling
 """
@@ -73,7 +78,7 @@ def pickle_this(filename: str, data: Any) -> None:
     Returns:
         None
     """
-    if not filename.endswith(".pkl"):
+    if not filename.endswith(".pkl") or ".pkl" not in filename:
         raise RuntimeError("Invalid filename")
 
     os.makedirs(os.path.dirname(filename), exist_ok=True)
@@ -94,7 +99,7 @@ def unpickle_this(filename: str) -> Any:
     Returns:
         Any: Unpickled data.
     """
-    if not filename.endswith(".pkl"):
+    if not filename.endswith(".pkl") or ".pkl" not in filename:
         raise RuntimeError("Invalid filename")
 
     with open(filename, "rb") as file:
@@ -171,3 +176,40 @@ def clear_invalid_items(options: List[object]) -> List[dict]:
             valid_items.append(item)
 
     return valid_items
+
+
+def day_str_to_num(day_str: str) -> int:
+    """
+    Converts a day string (e.g., "MON", "TUE") to the corresponding integer representation.
+
+    Args:
+        day_str (str): The input day string.
+
+    Returns:
+        int: The mapped day as an integer (1 for "MON", 2 for "TUE", etc.).
+    """
+    # Define a mapping of days to their integer representations
+    days_mapping = {
+        "mon": 1,
+        "tue": 2,
+        "wed": 3,
+        "thu": 4,
+        "fri": 5,
+        "sat": 6,
+        "sun": 7,
+    }
+
+    # Convert the input day string to lowercase for case-insensitive comparison
+    lower_day_str = day_str.lower()
+
+    # Return the corresponding integer if the day string is found in the mapping
+    if lower_day_str in days_mapping:
+        return days_mapping[lower_day_str]
+    else:
+        logging.warning(f"No mapping found for this day_str: {day_str}")
+        """
+        Example:
+        GC0001 SUSTAINABILITY: SEEING THROUGH THE HAZE
+        This module does not have any day or time as its onlin
+        """
+        return 0  # ctrl-f day": 0

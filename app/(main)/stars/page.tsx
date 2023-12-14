@@ -1,6 +1,10 @@
 import React from "react"
+import dynamic from "next/dynamic"
 
-import StarsTable from "@/components/stars-table"
+const StarsPlanner = dynamic(() => import("@/components/stars-planner"), {
+  ssr: false,
+  loading: () => <div>loading..</div> // update this
+})
 
 export default function StarsPage() {
   return (
@@ -9,7 +13,7 @@ export default function StarsPage() {
         Stars* Planner
       </h1>
 
-      <StarsTable />
+      <StarsPlanner />
     </div>
   )
 }

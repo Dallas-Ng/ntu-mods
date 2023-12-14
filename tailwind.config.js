@@ -65,14 +65,7 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out"
       }
     },
-    variants: {
-      scrollbar: ["rounded"]
-    }
+    variants: {}
   },
-  plugins: [
-    require("tailwindcss-animate"),
-    require("tailwind-scrollbar")({
-      nocompatible: true
-    })
-  ]
+  plugins: [require("tailwindcss-animate")]
 }

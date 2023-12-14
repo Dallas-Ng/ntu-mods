@@ -76,7 +76,7 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
   return (
     <Popover onOpenChange={(v) => setPopoverOpen(v)}>
       <PopoverTrigger>
-        <div className="flex h-[40px] items-center md:h-fit">
+        <div className="flex">
           <Badge
             className={cn(
               "flex items-center justify-between gap-1 hover:bg-gradient-to-r hover:from-blue-800 hover:to-indigo-900 hover:text-white",

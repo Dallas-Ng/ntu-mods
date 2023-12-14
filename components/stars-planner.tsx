@@ -2,7 +2,7 @@
 
 import { useBoundState } from "@/state/bound-state"
 
-import { DEF_SCROLLBAR, cn } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 
 import { CourseCodeSelect } from "./course-code-select"
 import StarsCourseBadge from "./stars-course-badge"
@@ -22,11 +22,7 @@ export default function StarsPlanner() {
 
   return (
     <>
-      <div
-        className={cn(
-          "relative flex w-full gap-2 overflow-auto px-2 py-4 md:gap-4 md:overflow-hidden",
-          easterEggTriggered ? "items-start" : "items-center"
-        )}>
+      <div className="relative flex w-full items-start gap-2 overflow-auto px-2 py-4 md:gap-4 md:overflow-hidden lg:items-center">
         <div className="flex flex-col gap-1">
           <CourseCodeSelect />
 
@@ -40,21 +36,19 @@ export default function StarsPlanner() {
           )}
         </div>
 
-        <div className="flex flex-col justify-center gap-2 overflow-x-auto">
-          <div
-            className={cn(
-              "flex gap-2 overflow-x-auto md:flex-wrap",
-              DEF_SCROLLBAR
-            )}>
+        <div className="flex w-full flex-col justify-center gap-2 overflow-x-auto">
+          <div className="flex gap-1 overflow-x-auto md:flex-wrap">
             {courses.map((c, i) => (
-              <StarsCourseBadge key={i} courseKey={c.key}>
-                {c.key}
-              </StarsCourseBadge>
+              <div className="flex h-[40px] items-center md:h-fit">
+                <StarsCourseBadge key={i} courseKey={c.key}>
+                  {c.key}
+                </StarsCourseBadge>
+              </div>
             ))}
           </div>
 
           {easterEggTriggered && (
-            <span className="hidden w-full pr-5 text-right text-sm md:block">
+            <span className="w-full text-right text-sm md:block md:pr-10 md:text-left">
               {courses.length > EGG_LEVEL_1 &&
                 courses.length < EGG_LEVEL_2 &&
                 "How many courses do you actually attend in a semester..."}

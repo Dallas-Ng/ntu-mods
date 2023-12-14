@@ -157,9 +157,9 @@ export default function StarsTable(_props: StarsTableProps) {
         for (let i = 0; i < freq; i++) {
           cells.push(
             <TableCell key={i}>
-              <span>
+              {/* <span>
                 {DAY_MAP[Number(k)].label[0]}-{i}
-              </span>
+              </span> */}
             </TableCell>
           )
         }

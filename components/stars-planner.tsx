@@ -73,6 +73,8 @@ export default function StarsPlanner() {
           )}
         </div>
       </div>
+
+      <StarsTable />
     </>
   )
 }

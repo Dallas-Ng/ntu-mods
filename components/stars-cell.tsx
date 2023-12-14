@@ -29,18 +29,15 @@ function getCourseStyle(key: string) {
     : { borderLeft: "border-l-gray-500", text: "text-gray-600" } // fallback style
 }
 
-interface StarsTableCourse extends Course {
-  selectedIndex: Index[]
-}
-
 interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
-  course: StarsTableCourse
+  course: Course
+  index: Index
 }
 
 export default function StarsCell(props: StarsCellProp) {
   const course = props.course
   const courseCode = course.key
-  const mainIndex = course.selectedIndex[0]
+  const index = props.index
 
   const coursePrefix = courseCode.replace(/[^a-zA-Z]+/g, "") // used as key
   const courseStyle = getCourseStyle(coursePrefix)
@@ -48,7 +45,7 @@ export default function StarsCell(props: StarsCellProp) {
   return (
     <TableCell
       {...props}
-      rowSpan={mainIndex.duration}
+      rowSpan={index.duration}
       className={cn(
         "break-words border border-l-2 border-slate-300 dark:border-y-slate-800 dark:border-r-slate-800 ",
         courseStyle.borderLeft,
@@ -57,10 +54,10 @@ export default function StarsCell(props: StarsCellProp) {
       <p>
         <span className={cn("font-bold", courseStyle.text)}>{courseCode} </span>
 
-        {mainIndex.venue}
+        {index.venue}
       </p>
 
-      <p>{mainIndex.time}</p>
+      <p>{index.time}</p>
     </TableCell>
   )
 }

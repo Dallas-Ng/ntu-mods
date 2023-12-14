@@ -61,6 +61,10 @@ export default function StarsCell(props: StarsCellProp) {
       <p>
         {index.time} ({index.group})
       </p>
+      {/*
+      <p>
+        {index.key} - {index.day}
+      </p> */}
     </TableCell>
   )
 }

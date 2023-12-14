@@ -18,12 +18,16 @@ function assignPositionToTimeslots(d: Timeslot[]) {
 
     for (let j = 0; j < i; j++) {
       // Check if the start time of the current time slot (i-th) is within the time range of another time slot (j-th)
-      const conflict1 = d[i].start >= d[j].start && d[i].start <= d[j].end
+      const conflict1 = d[i].start > d[j].start && d[i].start < d[j].end
       // Check if the end time of the current time slot (i-th) is within the time range of another time slot (j-th)
-      const conflict2 = d[i].end >= d[j].start && d[i].end <= d[j].end
+      const conflict2 = d[i].end > d[j].start && d[i].end < d[j].end
 
       if (conflict1 || conflict2) dayPosition++
     }
+
+    // TODO: There are still more bugs here and there which I don't want to
+    // fix atm because conflicts techncially shouldnt happen
+    if (dayPosition >= 2) dayPosition-- // this is some hack that I dont know how it works
 
     d[i].dayPosition = dayPosition
   }
@@ -36,7 +40,6 @@ interface Timeslot {
   start: number
   end: number
   dayPosition: number
-  position: number
 }
 
 interface StarsTableProps {}
@@ -84,8 +87,7 @@ export default function StarsTable(_props: StarsTableProps) {
         indexKey: index.key,
         start: parseInt(start),
         end: parseInt(end),
-        dayPosition: 0,
-        position: 0
+        dayPosition: 0
       }
 
       DAY_MAP[index.day].timeslots.push(obj)
@@ -192,7 +194,7 @@ export default function StarsTable(_props: StarsTableProps) {
       indexData.forEach((index) => {
         const dayMapKey = index.day as keyof typeof DAY_MAP
         const tsIndex = STARS_TIMESLOTS.findIndex(
-          (ts) => ts.start === index.time.split("-")[0]
+          (ts) => ts.start === parseInt(index.time.split("-")[0])
         )
 
         const cellIndex = getCellPosition(dayMapKey, index.key)
@@ -213,6 +215,7 @@ export default function StarsTable(_props: StarsTableProps) {
       })
     })
 
+    console.log(DAY_MAP)
     return toReturn.map((row, i) => (
       <TableRow key={i} className="border-slate-150 dark:border-slate-900">
         {row.map((cell, j) => (

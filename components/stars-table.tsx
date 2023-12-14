@@ -12,6 +12,33 @@ import {
 } from "@/components/ui/table"
 import StarsCell from "@/components/stars-cell"
 
+function assignPositionToTimeslots(d: Timeslot[]) {
+  for (let i = 0; i < d.length; i++) {
+    let dayPosition = 0
+
+    for (let j = 0; j < i; j++) {
+      // Check if the start time of the current time slot (i-th) is within the time range of another time slot (j-th)
+      const conflict1 = d[i].start >= d[j].start && d[i].start <= d[j].end
+      // Check if the end time of the current time slot (i-th) is within the time range of another time slot (j-th)
+      const conflict2 = d[i].end >= d[j].start && d[i].end <= d[j].end
+
+      if (conflict1 || conflict2) dayPosition++
+    }
+
+    d[i].dayPosition = dayPosition
+  }
+
+  return d
+}
+
+interface Timeslot {
+  indexKey: string
+  start: number
+  end: number
+  dayPosition: number
+  position: number
+}
+
 interface StarsTableProps {}
 
 export default function StarsTable(_props: StarsTableProps) {
@@ -23,19 +50,22 @@ export default function StarsTable(_props: StarsTableProps) {
    *
    * @typedef {Object} DayMapping
    * @property {string} label - Human-readable string representing the day
-   * @property {number} index - Index used to generate columns for each day
-   * @property {number} freq - Number of columns a day has
+   * @property {number} freq - Number of freq a day has
    */
   const DAY_MAP: {
-    [key: number]: { label: string; index: number; freq: number }
+    [key: number]: {
+      label: string
+      freq: number
+      timeslots: Timeslot[]
+    }
   } = {
-    1: { label: "Mon", index: 0, freq: 0 },
-    2: { label: "Tue", index: 0, freq: 0 },
-    3: { label: "Wed", index: 0, freq: 0 },
-    4: { label: "Thu", index: 0, freq: 0 },
-    5: { label: "Fri", index: 0, freq: 0 },
-    6: { label: "Sat", index: 0, freq: 0 },
-    7: { label: "Sun", index: 0, freq: 0 }
+    1: { label: "Mon", freq: 0, timeslots: [] },
+    2: { label: "Tue", freq: 0, timeslots: [] },
+    3: { label: "Wed", freq: 0, timeslots: [] },
+    4: { label: "Thu", freq: 0, timeslots: [] },
+    5: { label: "Fri", freq: 0, timeslots: [] },
+    6: { label: "Sat", freq: 0, timeslots: [] },
+    7: { label: "Sun", freq: 0, timeslots: [] }
   }
 
   // Remove days that are not selected to be shown in the timetable
@@ -43,34 +73,59 @@ export default function StarsTable(_props: StarsTableProps) {
     delete DAY_MAP[i]
   }
 
-  // Update the frequency of days in DAY_MAP based on the course indexes
+  // Create timeslot objects from indexes for each day
   courses.forEach((course) => {
     const mainIndexKey = coursesToIndex[course.key]
 
     course.indexes[mainIndexKey].forEach((index) => {
-      DAY_MAP[index.day].freq++
+      const [start, end] = index.time.split("-")
+
+      const obj = {
+        indexKey: index.key,
+        start: parseInt(start),
+        end: parseInt(end),
+        dayPosition: 0,
+        position: 0
+      }
+
+      DAY_MAP[index.day].timeslots.push(obj)
     })
   })
 
+  // Update generate freq and timeslot data
+  Object.entries(DAY_MAP).forEach(([k, v]) => {
+    const item = DAY_MAP[Number(k)]
+    const timeslots = item.timeslots
+
+    item.timeslots = assignPositionToTimeslots(timeslots)
+    item.freq = Math.max(
+      ...DAY_MAP[Number(k)].timeslots.map((x) => x.dayPosition + 1)
+    )
+  })
+
   /**
-   * Calculates the cell index for a given day map key in a timetable.
+   * Calculates the cell position for a given day map key and index key in a timetable.
    *
    * @param {number} dayMapKey - The key representing a day unit.
-   * @returns {number} - The calculated cell index.
+   * @param {string} indexKey - The key representing an index in the timetable.
+   * @returns {number} - The calculated cell position.
    */
-  const getCellIndex = (dayMapKey: number): number => {
+  const getCellPosition = (dayMapKey: number, indexKey: string): number => {
     let cellIndex = 1 // The timeslot is the first index
 
-    // Iterate over the entries in DAY_MAP
     Object.entries(DAY_MAP).forEach(([k, v]) => {
+      // Increment cell index based on the frequency of the days before this dayMapKey
       if (Number(k) < dayMapKey) {
-        // Increment cell index based on the frequency of the previous day
         cellIndex += v.freq || 1 // 0 should still increment by 1
       }
 
       if (Number(k) === dayMapKey) {
-        // Add the index for the current day
-        cellIndex += v.index
+        const ts = DAY_MAP[dayMapKey].timeslots.find(
+          (x) => x.indexKey === indexKey
+        )
+
+        // If the timeslot is found, add its dayPosition to the cellIndex
+        if (ts) cellIndex += ts.dayPosition
       }
     })
 
@@ -100,12 +155,13 @@ export default function StarsTable(_props: StarsTableProps) {
         const freq = v.freq || 1
 
         for (let i = 0; i < freq; i++) {
-          cells.push(<TableCell key={i} />)
-
-          // For debugging (don't delete)
-          // <span>
-          //   {DAY_MAP[Number(k)].label[0]}-{i}
-          // </span>
+          cells.push(
+            <TableCell key={i}>
+              <span>
+                {DAY_MAP[Number(k)].label[0]}-{i}
+              </span>
+            </TableCell>
+          )
         }
       })
       return cells
@@ -135,24 +191,22 @@ export default function StarsTable(_props: StarsTableProps) {
 
       indexData.forEach((index) => {
         const dayMapKey = index.day as keyof typeof DAY_MAP
-        const dayMapItem = DAY_MAP[dayMapKey]
-
         const tsIndex = STARS_TIMESLOTS.findIndex(
           (ts) => ts.start === index.time.split("-")[0]
         )
 
-        // bnasically for each time, we want to find the cell pos
-        const cellIndex = getCellIndex(dayMapKey)
-        console.log(index.day, cellIndex, dayMapItem.index)
+        const cellIndex = getCellPosition(dayMapKey, index.key)
 
         toReturn[tsIndex][cellIndex] = (
-          <StarsCell className="p-1" course={course} index={index} />
+          <StarsCell
+            className="p-1"
+            course={course}
+            index={index}
+            hasConflict={false}
+          />
         )
-        // If there is multiple frequencies of the same timeslot and day, increment the index by 1
-        if (dayMapItem.freq > 1) {
-          dayMapItem.index++
-        }
 
+        // Remove cells below the original StarCell (due to rowSpan)
         for (let i = 1; i < index.duration; i++) {
           toReturn[tsIndex + i][cellIndex] = <></>
         }

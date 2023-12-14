@@ -192,6 +192,7 @@ def parse_course_schedule(soup):
 
                     # Convert total minutes difference to half-hours
                     half_hours_difference = td.total_seconds() / 1800
+                    half_hours_difference += 1
 
                 # If index number is empty, happens when there multiple location, time, venue for a certain index
                 index_code = row_text[0]

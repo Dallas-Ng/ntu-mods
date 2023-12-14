@@ -18,9 +18,9 @@ function assignPositionToTimeslots(d: Timeslot[]) {
 
     for (let j = 0; j < i; j++) {
       // Check if the start time of the current time slot (i-th) is within the time range of another time slot (j-th)
-      const conflict1 = d[i].start > d[j].start && d[i].start < d[j].end
+      const conflict1 = d[i].start >= d[j].start && d[i].start <= d[j].end
       // Check if the end time of the current time slot (i-th) is within the time range of another time slot (j-th)
-      const conflict2 = d[i].end > d[j].start && d[i].end < d[j].end
+      const conflict2 = d[i].end >= d[j].start && d[i].end <= d[j].end
 
       if (conflict1 || conflict2) dayPosition++
     }
@@ -214,6 +214,8 @@ export default function StarsTable(_props: StarsTableProps) {
         }
       })
     })
+
+    console.log(DAY_MAP)
 
     return toReturn.map((row, i) => (
       <TableRow key={i} className="border-slate-150 dark:border-slate-900">

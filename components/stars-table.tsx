@@ -84,40 +84,42 @@ export default function StarsTable(_props: StarsTableProps) {
     </TableHead>
   ))
 
-  const generateTableBody = () => {
+  /**
+   * Generates a timetable table body based on the provided courses and DAY_MAP configuration.
+   *
+   * @returns {React.JSX.Element[]} - A matrix representing the table shown in the UI.
+   */
+  const generateTableBody = (): React.JSX.Element[] => {
     const toReturn: React.ReactNode[][] = []
 
-    // Generates table cells for each day based on frequency
-    // Frequency represents the number of indexes with the same day and time slot
-    const TableBodyEmptyCells = () => {
+    // Generate empty cells for each day based on frequency
+    const emptyCellsForRow = () => {
       const cells: React.ReactNode[] = []
 
       Object.entries(DAY_MAP).map(([k, v]) => {
-        const freq = v.freq === 0 ? 1 : v.freq
+        const freq = v.freq || 1
 
         for (let i = 0; i < freq; i++) {
-          cells.push(
-            <TableCell key={i}>
-              {/* <span>
-                {DAY_MAP[Number(k)].label[0]}-{i}
-              </span> */}
-            </TableCell>
-          )
+          cells.push(<TableCell key={i} />)
+
+          // For debugging (don't delete)
+          // <span>
+          //   {DAY_MAP[Number(k)].label[0]}-{i}
+          // </span>
         }
       })
       return cells
     }
 
-    // Build a matrix, it is a representation of the table shown in the UI
-    // [timeslot] [monday cells] [tuesday cells] [...]
-    STARS_TIMESLOTS.forEach((timeslot) => {
-      return toReturn.push([
+    // Iterate over each timeslot and generate rows with empty cells
+    STARS_TIMESLOTS.forEach((timeslot) =>
+      toReturn.push([
         <TableCell className="p-1 text-center" key={timeslot.start}>
           {timeslot.start} to <br className="md:hidden" /> {timeslot.end}
         </TableCell>,
-        ...TableBodyEmptyCells()
+        ...emptyCellsForRow()
       ])
-    })
+    )
 
     // Creating star cells
     courses.forEach((course) => {
@@ -157,9 +159,9 @@ export default function StarsTable(_props: StarsTableProps) {
       })
     })
 
-    return toReturn.map((x, i) => (
+    return toReturn.map((row, i) => (
       <TableRow key={i} className="border-slate-150 dark:border-slate-900">
-        {x.map((cell, j) => (
+        {row.map((cell, j) => (
           <React.Fragment key={j}>{cell}</React.Fragment>
         ))}
       </TableRow>

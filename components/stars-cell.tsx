@@ -35,9 +35,8 @@ interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
 }
 
 export default function StarsCell(props: StarsCellProp) {
-  const course = props.course
+  const { course, index } = props
   const courseCode = course.key
-  const index = props.index
 
   const coursePrefix = courseCode.replace(/[^a-zA-Z]+/g, "") // used as key
   const courseStyle = getCourseStyle(coursePrefix)

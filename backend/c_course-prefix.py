@@ -2,7 +2,7 @@ import json
 import os
 
 
-def consolidate_course_data(filepaths):
+def consolidate_course_prefix(filepaths):
     """
     Consolidates course data from multiple JSON files into two combined JSON files:
     'combined-<academic_year>.json' for course information and
@@ -41,4 +41,4 @@ for directory in directories:
             files.append(os.path.join(directory, item.name))
 
 
-consolidate_course_data(files)
+consolidate_course_prefix(files)

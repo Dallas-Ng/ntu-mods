@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils"
 import { TableCell } from "./ui/table"
 
 const courseMap = {
-  CC: { borderLeft: "border-l-red-500", text: "text-red-600" },
+  CC: { borderLeft: "border-l-orange-500", text: "text-orange-600" },
   SC: { borderLeft: "border-l-emerald-500", text: "text-emerald-600" },
   PH: { borderLeft: "border-l-yellow-500", text: "text-yellow-600" },
   MH: { borderLeft: "border-l-blue-500", text: "text-blue-600" }
@@ -30,20 +30,14 @@ function getCourseStyle(key: string) {
 }
 
 interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
-  course: {
-    start: string
-    end: string
-    rowSpan: number
-    day: number
-    courseCode: string
-    courseTitle: string
-    location: string
-    time: string
-  }
+  course: Course
+  index: Index
+  hasConflict?: boolean
 }
 
 export default function StarsCell(props: StarsCellProp) {
-  const { rowSpan, courseCode, location, time } = props.course
+  const { course, index, hasConflict = false } = props
+  const courseCode = course.key
 
   const coursePrefix = courseCode.replace(/[^a-zA-Z]+/g, "") // used as key
   const courseStyle = getCourseStyle(coursePrefix)
@@ -51,19 +45,26 @@ export default function StarsCell(props: StarsCellProp) {
   return (
     <TableCell
       {...props}
-      rowSpan={rowSpan}
+      rowSpan={index.duration}
       className={cn(
-        "break-words border border-l-2 border-slate-300 dark:border-y-slate-800 dark:border-r-slate-800 ",
+        "break-words border border-l-2 border-slate-300 dark:border-y-slate-800 dark:border-r-slate-800",
+        hasConflict && "border-b-2 border-b-red-600 dark:border-b-red-600",
         courseStyle.borderLeft,
         props.className
       )}>
       <p>
         <span className={cn("font-bold", courseStyle.text)}>{courseCode} </span>
 
-        {location}
+        {index.venue}
       </p>
 
-      <p>{time}</p>
+      <p>
+        {index.time} ({index.group})
+      </p>
+      {/*
+      <p>
+        {index.key} - {index.day}
+      </p> */}
     </TableCell>
   )
 }

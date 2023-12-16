@@ -6,9 +6,9 @@ export interface CourseSlice {
   removeCourse: (courseKey: string) => void
   resetCourses: () => void
   //
-  coursesToIndex: { [courseKey: string]: string } // courseKey: indexKey
-  addCourseToIndex: (courseKey: string, indexKey: string) => void
-  removeCourseToIndex: (courseKey: string, indexKey: string) => void
+  coursesToIndex: { [courseKey: string]: Index[] } // courseKey: indexKey
+  addCourseToIndex: (courseKey: string, indexData: Index[]) => void
+  removeCourseToIndex: (courseKey: string) => void
   resetCourseToIndex: () => void
 }
 
@@ -23,9 +23,9 @@ export const createCourseSlice: StateCreator<CourseSlice> = (set) => ({
   resetCourses: () => set((_state) => ({ courses: [] })),
   //
   coursesToIndex: {},
-  addCourseToIndex: (courseKey: string, indexKey: string) =>
+  addCourseToIndex: (courseKey: string, indexData: Index[]) =>
     set((state) => ({
-      coursesToIndex: { ...state.coursesToIndex, [courseKey]: indexKey }
+      coursesToIndex: { ...state.coursesToIndex, [courseKey]: indexData }
     })),
   removeCourseToIndex: (courseKey: string) =>
     set((state) => {

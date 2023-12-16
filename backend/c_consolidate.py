@@ -46,6 +46,11 @@ def consolidate_course_data(filepaths):
                           Note that 101 will be deleted as we take the latest version of the mod instead of combininng
                             all the indexes
                         """
+                        # for sub index, we assign a index key to it.
+                        # example: SC1005, has lectures, tutorial and lab, but index key is only shown on the FIRST index of the course index
+                        for x in v:
+                            if x["key"] == "":
+                                x["key"] = v[0]["key"]
 
                         combined_data[key]["indexes"][k] = v
                 else:
@@ -56,10 +61,10 @@ def consolidate_course_data(filepaths):
                     # j["title"] = course_data["title"]
                     combined_indexes[k] = v
 
-    with open(f"backend/data/combined-{academic_year}.json", "w") as output:
+    with open(f"backend/data/consolidated-{academic_year}.json", "w") as output:
         json.dump(combined_data, output)
 
-    with open(f"backend/data/combined-{academic_year}-indexes.json", "w") as output:
+    with open(f"backend/data/consolidated-{academic_year}-indexes.json", "w") as output:
         json.dump(combined_indexes, output)
 
 

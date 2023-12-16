@@ -66,14 +66,11 @@ export function CourseCodeSelect() {
 
     if (store.courses.find((x) => x.key === value)) {
       store.removeCourse(value)
-      store.removeCourseToIndex(
-        course.key,
-        course.indexes[defaultIndexKey][0].key
-      )
+      store.removeCourseToIndex(course.key)
       setCurrCourse(undefined) // reset placeholder
     } else {
       store.addCourse(course)
-      store.addCourseToIndex(course.key, course.indexes[defaultIndexKey][0].key)
+      store.addCourseToIndex(course.key, course.indexes[defaultIndexKey])
       setCurrCourse(value)
     }
 

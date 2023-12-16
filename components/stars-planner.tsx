@@ -37,10 +37,8 @@ export default function StarsPlanner() {
         <div className="flex w-full flex-col justify-center gap-2 overflow-x-auto">
           <div className="flex gap-1 overflow-x-auto md:flex-wrap">
             {courses.map((c, i) => (
-              <div className="flex h-[40px] items-center md:h-fit">
-                <StarsCourseBadge key={i} courseKey={c.key}>
-                  {c.key}
-                </StarsCourseBadge>
+              <div key={i} className="flex h-[40px] items-center md:h-fit">
+                <StarsCourseBadge courseKey={c.key}>{c.key}</StarsCourseBadge>
               </div>
             ))}
           </div>

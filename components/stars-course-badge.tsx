@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 import { Check } from "lucide-react"
 
@@ -26,14 +26,25 @@ interface Props {
 export default function StarsCourseBadge({ courseKey, children }: Props) {
   const [popoverOpen, setPopoverOpen] = useState(false)
   const {
+    courses,
     coursesToIndex,
     addCourseToIndex,
     removeCourseToIndex,
     removeCourse
   } = useBoundState()
-  const courseIndexes = getCDataCourseIndexes(courseKey)
+
+  const course = courses.find((x) => x.key === courseKey)
+  const courseIndexes = course ? course.indexes : ([] as unknown as CourseIndex)
   const [filteredIndexes, setFilteredIndexes] =
     useState<CourseIndex>(courseIndexes)
+
+  useEffect(() => {
+    if (!popoverOpen) {
+      handleSearch("")
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [popoverOpen])
 
   /**
    * Search through the course attributes
@@ -67,9 +78,12 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
 
   const handleSelect = (idxKey: string) => {
     if (Object.keys(courseIndexes).includes(courseKey)) {
-      removeCourseToIndex(courseKey, idxKey)
+      removeCourseToIndex(courseKey)
     } else {
-      addCourseToIndex(courseKey, idxKey)
+      addCourseToIndex(
+        courseKey,
+        courseIndexes[idxKey as keyof typeof courseIndexes]
+      )
     }
   }
 
@@ -88,6 +102,7 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
               onClick={(e) => {
                 e.preventDefault()
                 removeCourse(courseKey)
+                removeCourseToIndex(courseKey)
               }}
               className="ml-1">
               <Icons.xIcon height={20} width={20} />
@@ -129,7 +144,10 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
                     <Check
                       className={cn(
                         "mr-2 inline h-4 w-4",
-                        coursesToIndex[courseKey] === idxKey
+                        // coursesToIndex[courseKey] === idxKey
+                        Object.entries(coursesToIndex).find(
+                          ([k, v]) => v[0].key === idxKey
+                        )
                           ? "opacity-100"
                           : "opacity-0"
                       )}
@@ -142,7 +160,8 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
                     {fiValue.map((v, i) => (
                       <div key={i}>
                         <div className="flex w-full justify-between gap-2">
-                          <span>{DAY_MAP[v.day as keyof typeof DAY_MAP]} </span>
+                          <span>{DAY_MAP[v.day as keyof typeof DAY_MAP]}</span>
+
                           <span>
                             {v.type} - {v.group}
                           </span>

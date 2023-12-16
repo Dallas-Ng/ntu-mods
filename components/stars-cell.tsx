@@ -30,21 +30,21 @@ function getCourseStyle(key: string) {
 }
 
 interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
-  course: Course
+  courseKey: string
   index: Index
   hasConflict?: boolean
 }
 
 export default function StarsCell(props: StarsCellProp) {
-  const { course, index, hasConflict = false } = props
-  const courseCode = course.key
+  const { courseKey, index, hasConflict = false } = props
 
-  const coursePrefix = courseCode.replace(/[^a-zA-Z]+/g, "") // used as key
+  const coursePrefix = courseKey.replace(/[^a-zA-Z]+/g, "") // used as key
   const courseStyle = getCourseStyle(coursePrefix)
 
   return (
     <TableCell
-      {...props}
+      // {...props}
+      key={index.key}
       rowSpan={index.duration}
       className={cn(
         "break-words border border-l-2 border-slate-300 dark:border-y-slate-800 dark:border-r-slate-800",
@@ -53,16 +53,16 @@ export default function StarsCell(props: StarsCellProp) {
         props.className
       )}>
       <p>
-        <span className={cn("font-bold", courseStyle.text)}>{courseCode} </span>
-
-        {index.venue}
+        <span className={cn("font-bold", courseStyle.text)}>{courseKey}</span>
       </p>
+
+      <p>{index.venue}</p>
 
       <p>
         {index.time} ({index.group})
       </p>
-      {/*
-      <p>
+
+      {/* <p>
         {index.key} - {index.day}
       </p> */}
     </TableCell>

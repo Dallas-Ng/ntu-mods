@@ -1,7 +1,7 @@
 import React from "react"
 import { useBoundState } from "@/state/bound-state"
 
-import { DEFAULT_DAYS_TO_SHOW, STARS_TIMESLOTS } from "@/config/stars"
+import { STARS_TIMESLOTS } from "@/config/stars"
 import {
   Table,
   TableBody,
@@ -10,224 +10,163 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-import StarsCell from "@/components/stars-cell"
 
-function assignPositionToTimeslots(d: Timeslot[]) {
-  for (let i = 0; i < d.length; i++) {
-    let dayPosition = 0
+import StarsCell from "./stars-cell"
 
-    for (let j = 0; j < i; j++) {
-      // Check if the start time of the current time slot (i-th) is within the time range of another time slot (j-th)
-      const conflict1 = d[i].start >= d[j].start && d[i].start <= d[j].end
-      // Check if the end time of the current time slot (i-th) is within the time range of another time slot (j-th)
-      const conflict2 = d[i].end >= d[j].start && d[i].end <= d[j].end
+/**
+ * Calculates the number of conflicts between a given time slot and previous time slots in a day.
+ *
+ * @param dayMapVal - An array of time slots representing the schedule for a day.
+ * @param currentIndex - The index of the current time slot being checked for conflicts.
+ * @param currentDayIndex - The index of the current day being checked for conflicts. Defaults to 0.
+ * @returns The number of conflicts between the current time slot and previous time slots.
+ */
+const getConflicts = (
+  dayMapVal: Index[],
+  currentIndex: Index,
+  currentDayIndex = 0 // this is used to track how many times to count a unique conflict
+) => {
+  let conflictsCount = 0
 
-      if (conflict1 || conflict2) dayPosition++
+  for (let i = 0; i < currentDayIndex; i++) {
+    const previousSlot = dayMapVal[i]
+    const [currentStart, currentEnd] = currentIndex.time.split("-").map(Number)
+    const [previousStart, previousEnd] = previousSlot.time
+      .split("-")
+      .map(Number)
+
+    // If there is an overlap, increment conflictsCount
+    if (currentStart < previousEnd && currentEnd > previousStart) {
+      conflictsCount++
     }
-
-    // TODO: There are still more bugs here and there which I don't want to
-    // fix atm because conflicts techncially shouldnt happen
-    if (dayPosition >= 2) dayPosition-- // this is some hack that I dont know how it works
-
-    d[i].dayPosition = dayPosition
   }
-
-  return d
-}
-
-interface Timeslot {
-  indexKey: string
-  start: number
-  end: number
-  dayPosition: number
+  return conflictsCount
 }
 
 interface StarsTableProps {}
 
 export default function StarsTable(_props: StarsTableProps) {
-  const { courses, coursesToIndex } = useBoundState()
+  const { coursesToIndex } = useBoundState()
 
-  /**
-   * DAY_MAP is a mapping object used for calendar operations.
-   * Each key represents a day unit (mon - 1, tue - 2)
-   *
-   * @typedef {Object} DayMapping
-   * @property {string} label - Human-readable string representing the day
-   * @property {number} freq - Number of freq a day has
-   */
-  const DAY_MAP: {
-    [key: number]: {
-      label: string
-      freq: number
-      timeslots: Timeslot[]
-    }
-  } = {
-    1: { label: "Mon", freq: 0, timeslots: [] },
-    2: { label: "Tue", freq: 0, timeslots: [] },
-    3: { label: "Wed", freq: 0, timeslots: [] },
-    4: { label: "Thu", freq: 0, timeslots: [] },
-    5: { label: "Fri", freq: 0, timeslots: [] },
-    6: { label: "Sat", freq: 0, timeslots: [] },
-    7: { label: "Sun", freq: 0, timeslots: [] }
+  const DAY_MAP: CourseIndex = {
+    1: [],
+    2: [],
+    3: [],
+    4: [],
+    5: []
+    // 6: [],
+    // 7: []
   }
 
-  // Remove days that are not selected to be shown in the timetable
-  for (let i = 7; i > DEFAULT_DAYS_TO_SHOW; i--) {
-    delete DAY_MAP[i]
+  const DAY_MAP_CONFLICTS = {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0
+    // 6: 0,
+    // 7: 0
   }
 
-  // Create timeslot objects from indexes for each day
-  courses.forEach((course) => {
-    const mainIndexKey = coursesToIndex[course.key]
-
-    course.indexes[mainIndexKey].forEach((index) => {
-      const [start, end] = index.time.split("-")
-
-      const obj = {
-        indexKey: index.key,
-        start: parseInt(start),
-        end: parseInt(end),
-        dayPosition: 0
-      }
-
-      DAY_MAP[index.day].timeslots.push(obj)
+  // Push each day data into DAY_MAP
+  Object.values(coursesToIndex).forEach((entries) => {
+    entries.forEach((entry) => {
+      DAY_MAP[entry.day].push(entry)
     })
   })
 
-  // Update generate freq and timeslot data
-  Object.entries(DAY_MAP).forEach(([k, v]) => {
-    const item = DAY_MAP[Number(k)]
-    const timeslots = item.timeslots
+  /**
+   * Calculates the conflicts for each day in the DAY_MAP object.
+   * Updates the DAY_MAP_CONFLICTS object with the maximum conflicts for each day.
+   */
+  Object.entries(DAY_MAP).forEach(([dayMapKey, dayMapVal]) => {
+    DAY_MAP_CONFLICTS[dayMapKey as unknown as 1 | 2 | 3 | 4 | 5] =
+      dayMapVal.reduce(
+        (max, index, i) => Math.max(max, getConflicts(dayMapVal, index, i + 1)),
+        1
+      )
+  })
 
-    item.timeslots = assignPositionToTimeslots(timeslots)
-    item.freq = Math.max(
-      ...DAY_MAP[Number(k)].timeslots.map((x) => x.dayPosition + 1)
+  const MATRIX_ROWS = STARS_TIMESLOTS.length
+  const MATRIX_COLUMNS = Object.values(DAY_MAP_CONFLICTS).reduce(
+    (acc, v) => acc + v
+  )
+
+  // Create Matrix
+  const STARS_MATRIX = Array.from({ length: MATRIX_ROWS }, (_, i) => {
+    const timeslot = (
+      <TableCell className="p-1 text-center">
+        {STARS_TIMESLOTS[i].start} to {STARS_TIMESLOTS[i].end}
+      </TableCell>
     )
+
+    return [timeslot, ...Array(MATRIX_COLUMNS).fill(null)]
   })
 
   /**
-   * Calculates the cell position for a given day map key and index key in a timetable.
+   * Iterates through the DAY_MAP object and populates the STARS_MATRIX with table cells based on the data.
    *
-   * @param {number} dayMapKey - The key representing a day unit.
-   * @param {string} indexKey - The key representing an index in the timetable.
-   * @returns {number} - The calculated cell position.
+   * The table cells are positioned in the matrix based on the relative position of the index inside the DAY_MAP.
+   * If conflicts exist, the table cells are adjusted accordingly.
    */
-  const getCellPosition = (dayMapKey: number, indexKey: string): number => {
-    let cellIndex = 1 // The timeslot is the first index
+  Object.entries(DAY_MAP).forEach(([dayMapKey, dayMapVal]) => {
+    let currentDayIndex = 0 // this index is used to iterate over the number of available column for each day
 
-    Object.entries(DAY_MAP).forEach(([k, v]) => {
-      // Increment cell index based on the frequency of the days before this dayMapKey
-      if (Number(k) < dayMapKey) {
-        cellIndex += v.freq || 1 // 0 should still increment by 1
-      }
+    // Iterating through each index
+    dayMapVal.forEach((index) => {
+      const tsIndex = STARS_TIMESLOTS.findIndex(
+        (st) => st.start === parseInt(index.time.split("-")[0])
+      )
 
-      if (Number(k) === dayMapKey) {
-        const ts = DAY_MAP[dayMapKey].timeslots.find(
-          (x) => x.indexKey === indexKey
-        )
+      // Get relative position of this index inside the matrix
+      const offsetValue =
+        Object.entries(DAY_MAP_CONFLICTS)
+          .filter(([dmK]) => dmK < dayMapKey)
+          .map(([, v]) => v)
+          .reduce((sum, count) => sum + count, 0) + 1 // default is 1 as 0 is timeslot
 
-        // If the timeslot is found, add its dayPosition to the cellIndex
-        if (ts) cellIndex += ts.dayPosition
+      const conflictsCount = getConflicts(dayMapVal, index, currentDayIndex)
+      const cellPosition = offsetValue + conflictsCount
+
+      currentDayIndex++
+
+      const courseKey = Object.keys(coursesToIndex).find((x) =>
+        coursesToIndex[x].find((y) => y.key === index.key)
+      )
+
+      STARS_MATRIX[tsIndex][cellPosition] = (
+        <StarsCell courseKey={courseKey || ""} index={index} />
+      )
+
+      for (let i = 1; i < index.duration; i++) {
+        STARS_MATRIX[tsIndex + i][cellPosition] = <></>
       }
     })
+  })
 
-    return cellIndex
-  }
-
-  // Create table header items based on the DAY_MAP entries
-  const TableHeadItems = Object.entries(DAY_MAP).map(([k, v]) => (
-    <TableHead key={k} colSpan={v.freq || 1} className="text-center">
-      {v.label}
+  /**
+   * Generation of Table Head and Table Body
+   */
+  const TableHeadItems = Object.entries(DAY_MAP_CONFLICTS).map(([k, v]) => (
+    <TableHead key={k} colSpan={v} className="p-0 text-center">
+      {k}
     </TableHead>
   ))
 
-  /**
-   * Generates a timetable table body based on the provided courses and DAY_MAP configuration.
-   *
-   * @returns {React.JSX.Element[]} - A matrix representing the table shown in the UI.
-   */
-  const generateTableBody = (): React.JSX.Element[] => {
-    const toReturn: React.ReactNode[][] = []
-
-    // Generate empty cells for each day based on frequency
-    const emptyCellsForRow = () => {
-      const cells: React.ReactNode[] = []
-
-      Object.entries(DAY_MAP).map(([k, v]) => {
-        const freq = v.freq || 1
-
-        for (let i = 0; i < freq; i++) {
-          cells.push(
-            <TableCell key={i}>
-              {/* <span>
-                {DAY_MAP[Number(k)].label[0]}-{i}
-              </span> */}
-            </TableCell>
-          )
-        }
-      })
-      return cells
-    }
-
-    // Iterate over each timeslot and generate rows with empty cells
-    STARS_TIMESLOTS.forEach((timeslot) =>
-      toReturn.push([
-        <TableCell className="p-1 text-center" key={timeslot.start}>
-          {timeslot.start} to <br className="md:hidden" /> {timeslot.end}
-        </TableCell>,
-        ...emptyCellsForRow()
-      ])
-    )
-
-    // Creating star cells
-    courses.forEach((course) => {
-      const selectedIndex = coursesToIndex[course.key]
-      const indexData = course.indexes[selectedIndex]
-
-      // TODO: DEBUG THIS
-      if (!indexData) {
-        console.error(`course, selectedIndex`)
-        console.error(course, selectedIndex)
-        return
-      }
-
-      indexData.forEach((index) => {
-        const dayMapKey = index.day as keyof typeof DAY_MAP
-        const tsIndex = STARS_TIMESLOTS.findIndex(
-          (ts) => ts.start === parseInt(index.time.split("-")[0])
+  const TableBodyItems = STARS_MATRIX.map((matrixRow, matrixRowIdx) => (
+    <TableRow key={matrixRowIdx}>
+      {matrixRow.map((matrixCol, matrixColIdx) =>
+        matrixCol ? (
+          <React.Fragment key={matrixColIdx}>{matrixCol}</React.Fragment>
+        ) : (
+          <TableCell className="p-0" key={matrixColIdx} />
         )
-
-        const cellIndex = getCellPosition(dayMapKey, index.key)
-
-        toReturn[tsIndex][cellIndex] = (
-          <StarsCell
-            className="p-1"
-            course={course}
-            index={index}
-            hasConflict={false}
-          />
-        )
-
-        // Remove cells below the original StarCell (due to rowSpan)
-        for (let i = 1; i < index.duration; i++) {
-          toReturn[tsIndex + i][cellIndex] = <></>
-        }
-      })
-    })
-
-    console.log(DAY_MAP)
-
-    return toReturn.map((row, i) => (
-      <TableRow key={i} className="border-slate-150 dark:border-slate-900">
-        {row.map((cell, j) => (
-          <React.Fragment key={j}>{cell}</React.Fragment>
-        ))}
-      </TableRow>
-    ))
-  }
+      )}
+    </TableRow>
+  ))
 
   return (
-    <Table className="table-fixed border-collapse text-xs">
+    <Table className="table-col-border table-fixed border-collapse border-none border-slate-500 text-xs">
       <TableHeader>
         <TableRow>
           <TableHead className="text-center md:w-[95px]">Time</TableHead>
@@ -236,7 +175,7 @@ export default function StarsTable(_props: StarsTableProps) {
         </TableRow>
       </TableHeader>
 
-      <TableBody>{generateTableBody()}</TableBody>
+      <TableBody>{TableBodyItems}</TableBody>
     </Table>
   )
 }

@@ -19,14 +19,5 @@ interface Index {
 }
 
 type CourseIndex = {
-  [courseKey: string]: {
-    key: string
-    type: string
-    group: string
-    day: number
-    time: string
-    venue: string
-    remarks: string
-    duration: number
-  }[]
+  [courseKey: string]: Index[]
 }

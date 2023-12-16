@@ -4,8 +4,7 @@ import { useEffect, useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 import { Check } from "lucide-react"
 
-import { getCDataCourseIndexes } from "@/lib/consolidated-data"
-import { DAY_MAP, DEF_SCROLLBAR, cn } from "@/lib/utils"
+import { DAY_MAPPING, DEF_SCROLLBAR, cn } from "@/lib/utils"
 import {
   Command,
   CommandEmpty,
@@ -64,7 +63,7 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
             ? itemVal.toLowerCase().includes(lSearchTerm)
             : // means itemVal is a number
               itemKey != "duration" && // duration is also a number, so dont use it to filter days
-              DAY_MAP[itemVal as keyof typeof DAY_MAP]
+              DAY_MAPPING[itemVal as keyof typeof DAY_MAPPING]
                 .toLowerCase()
                 .includes(lSearchTerm)
         )
@@ -160,7 +159,9 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
                     {fiValue.map((v, i) => (
                       <div key={i}>
                         <div className="flex w-full justify-between gap-2">
-                          <span>{DAY_MAP[v.day as keyof typeof DAY_MAP]}</span>
+                          <span>
+                            {DAY_MAPPING[v.day as keyof typeof DAY_MAPPING]}
+                          </span>
 
                           <span>
                             {v.type} - {v.group}

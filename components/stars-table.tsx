@@ -2,6 +2,7 @@ import React from "react"
 import { useBoundState } from "@/state/bound-state"
 
 import { STARS_TIMESLOTS } from "@/config/stars"
+import { DAY_MAPPING } from "@/lib/utils"
 import {
   Table,
   TableBody,
@@ -29,6 +30,10 @@ const getConflicts = (
   let conflictsCount = 0
 
   for (let i = 0; i < currentDayIndex; i++) {
+    if (dayMapVal[i].key === currentIndex.key) {
+      continue
+    }
+
     const previousSlot = dayMapVal[i]
     const [currentStart, currentEnd] = currentIndex.time.split("-").map(Number)
     const [previousStart, previousEnd] = previousSlot.time
@@ -96,7 +101,8 @@ export default function StarsTable(_props: StarsTableProps) {
   const STARS_MATRIX = Array.from({ length: MATRIX_ROWS }, (_, i) => {
     const timeslot = (
       <TableCell className="p-1 text-center">
-        {STARS_TIMESLOTS[i].start} to {STARS_TIMESLOTS[i].end}
+        {STARS_TIMESLOTS[i].start} <br className="md:hidden" />
+        to {STARS_TIMESLOTS[i].end}
       </TableCell>
     )
 
@@ -149,7 +155,7 @@ export default function StarsTable(_props: StarsTableProps) {
    */
   const TableHeadItems = Object.entries(DAY_MAP_CONFLICTS).map(([k, v]) => (
     <TableHead key={k} colSpan={v} className="p-0 text-center">
-      {k}
+      {DAY_MAPPING[Number(k) as keyof typeof DAY_MAPPING].slice(0, 3)}
     </TableHead>
   ))
 
@@ -166,7 +172,7 @@ export default function StarsTable(_props: StarsTableProps) {
   ))
 
   return (
-    <Table className="table-col-border table-fixed border-collapse border-none border-slate-500 text-xs">
+    <Table className="table-fixed border-collapse border-none border-slate-500 p-0 text-xs">
       <TableHeader>
         <TableRow>
           <TableHead className="text-center md:w-[95px]">Time</TableHead>

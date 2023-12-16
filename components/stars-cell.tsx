@@ -1,6 +1,7 @@
 /**
  * TODO:
  *  1. Extend courseMap fully
+ *  or do mapping by tutorial, lecture, seminar, etc.
  *
  * Engineering and Technology
  * Computer Science and Related
@@ -11,6 +12,8 @@
  * Social Sciences
  * Miscellaneous:
  */
+
+import { useBoundState } from "@/state/bound-state"
 
 import { cn } from "@/lib/utils"
 
@@ -38,33 +41,63 @@ interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
 export default function StarsCell(props: StarsCellProp) {
   const { courseKey, index, hasConflict = false } = props
 
+  const { coursesToIndex } = useBoundState()
+
   const coursePrefix = courseKey.replace(/[^a-zA-Z]+/g, "") // used as key
   const courseStyle = getCourseStyle(coursePrefix)
 
-  return (
-    <TableCell
-      // {...props}
-      key={index.key}
-      rowSpan={index.duration}
-      className={cn(
-        "break-words border border-l-2 border-slate-300 dark:border-y-slate-800 dark:border-r-slate-800",
-        hasConflict && "border-b-2 border-b-red-600 dark:border-b-red-600",
-        courseStyle.borderLeft,
-        props.className
-      )}>
+  // When a index has multiple variations thats suppose to show in the same cell,
+  // e.g. week 1-7 is at LT4, week 9-13 is at LT5...
+  const variations = coursesToIndex[courseKey].filter(
+    (item) => item.day === index.day && item.time === index.time
+  )
+
+  const StarCellWrapper = ({ children }: { children: React.ReactNode }) => {
+    return (
+      <TableCell
+        // {...props}
+        key={index.key}
+        rowSpan={index.duration}
+        className={cn(
+          "break-words border border-l-2 border-slate-300 dark:border-y-slate-800 dark:border-r-slate-800",
+          hasConflict && "border-b-2 border-b-red-600 dark:border-b-red-600",
+          courseStyle.borderLeft,
+          props.className
+        )}>
+        {children}
+      </TableCell>
+    )
+  }
+
+  const StarCellData = (index: Index) => (
+    <>
       <p>
-        <span className={cn("font-bold", courseStyle.text)}>{courseKey}</span>
+        <span className={cn("font-bold", courseStyle.text)}>{courseKey}</span>{" "}
+        {index.type} ({index.group})
       </p>
+
+      <p>{index.time}</p>
 
       <p>{index.venue}</p>
-
-      <p>
-        {index.time} ({index.group})
-      </p>
 
       {/* <p>
         {index.key} - {index.day}
       </p> */}
-    </TableCell>
+      {index.remarks.replace("Teaching", "")}
+    </>
   )
+
+  if (variations.length > 1) {
+    return (
+      <StarCellWrapper>
+        {variations.map((item, key) => (
+          <div className="mt-1" key={key}>
+            {StarCellData(item)}
+          </div>
+        ))}
+      </StarCellWrapper>
+    )
+  }
+
+  return <StarCellWrapper>{StarCellData(index)}</StarCellWrapper>
 }

@@ -19,6 +19,7 @@ export const Icons = {
       width={props.width}
       height={props.height}
       className={cn(props.className)}
+      priority
     />
   ),
   sun: Sun,

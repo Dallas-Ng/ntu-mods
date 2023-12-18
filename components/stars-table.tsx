@@ -48,10 +48,12 @@ const getConflicts = (
   return conflictsCount
 }
 
-interface StarsTableProps {}
+interface StarsTableProps {
+  coursesToIndex?: { [courseKey: string]: Index[] }
+}
 
-export default function StarsTable(_props: StarsTableProps) {
-  const { coursesToIndex } = useBoundState()
+export default function StarsTable(props: StarsTableProps) {
+  let coursesToIndex = props.coursesToIndex || useBoundState().coursesToIndex
 
   const DAY_MAP: CourseIndex = {
     1: [],
@@ -141,7 +143,11 @@ export default function StarsTable(_props: StarsTableProps) {
       )
 
       STARS_MATRIX[tsIndex][cellPosition] = (
-        <StarsCell courseKey={courseKey || ""} index={index} />
+        <StarsCell
+          courseKey={courseKey || ""}
+          index={index}
+          coursesToIndex={coursesToIndex}
+        />
       )
 
       for (let i = 1; i < index.duration; i++) {

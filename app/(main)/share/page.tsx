@@ -5,12 +5,28 @@ import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import CONSOLIDATED_DATA from "@/data/consolidated-2023-2.json"
 
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { useToast } from "@/components/ui/use-toast"
 import StarsTable from "@/components/stars-table"
 
 export default function StarsPage() {
   const searchParams = useSearchParams()
+
+  function detectMob() {
+    const toMatch = [
+      /Android/i,
+      /webOS/i,
+      /iPhone/i,
+      /iPad/i,
+      /iPod/i,
+      /BlackBerry/i,
+      /Windows Phone/i
+    ]
+
+    return toMatch.some((toMatchItem) => {
+      return navigator.userAgent.match(toMatchItem)
+    })
+  }
 
   const coursesToIndex: CourseIndex = {}
 
@@ -32,7 +48,14 @@ export default function StarsPage() {
         </Link>
       </div>
 
-      <StarsTable coursesToIndex={coursesToIndex} />
+      <div className="overflow-x-auto">
+        <div
+          className={cn(
+            detectMob() ? "w-[calc(100vw*2)] overflow-x-auto" : "w-full"
+          )}>
+          <StarsTable coursesToIndex={coursesToIndex} />
+        </div>
+      </div>
     </div>
   )
 }

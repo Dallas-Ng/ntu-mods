@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 interface SkeletonProps {
   children: React.ReactNode
 }
@@ -14,10 +16,11 @@ function Banner(props: SkeletonProps) {
 
 export const NotificationBanner = {
   inAlpha: () => (
-    <Banner>
-      <strong>ALPHA BUILD</strong> - Let us know if you encounter bugs or have
-      suggestions.
-    </Banner>
+    <Link href="/debug">
+      <Banner>
+        <strong>ALPHA BUILD</strong> - Click here if you get stuck!
+      </Banner>
+    </Link>
   ),
   inBeta: () => (
     <Banner>

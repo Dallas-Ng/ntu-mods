@@ -67,7 +67,11 @@ export default function StarsPlanner() {
 
       <StarsPlannerShareButton />
 
-      <StarsTable />
+      <div className="overflow-x-auto">
+        <div className="w-[calc(100vw*1.5)] overflow-x-auto md:w-full">
+          <StarsTable />
+        </div>
+      </div>
     </>
   )
 }

@@ -30,7 +30,14 @@ export function CourseCodeSelect() {
   const [inputValue, setInputValue] = useState<string>("")
   const [courseCodes, setCourseCode] = useState<string[]>([])
 
-  const store = useBoundState((s) => s)
+  const {
+    courses,
+    coursesToIndex,
+    addCourse,
+    addCourseToIndex,
+    removeCourse,
+    removeCourseToIndex
+  } = useBoundState((s) => s)
 
   const dbSearchTerm = useDebounce(inputValue, 0) // arbitrary delay
 
@@ -62,15 +69,48 @@ export function CourseCodeSelect() {
 
     // If user clicks on a course in store, we will remove it out
     const course = getCDataCourse(value)
-    const defaultIndexKey = Object.keys(course.indexes)[0]
 
-    if (store.courses.find((x) => x.key === value)) {
-      store.removeCourse(value)
-      store.removeCourseToIndex(course.key)
+    if (courses.find((x) => x.key === value)) {
+      removeCourse(value)
+      removeCourseToIndex(course.key)
       setCurrCourse(undefined) // reset placeholder
     } else {
-      store.addCourse(course)
-      store.addCourseToIndex(course.key, course.indexes[defaultIndexKey])
+      /**
+       * Checks for conflicts between the selected course indexes and existing courses.
+       * If a conflict is found, it selects the next available index without conflicts.
+       * If no index is available, it will select the first index.
+       */
+      let selectedIndexes = course.indexes[0]
+
+      Object.values(course.indexes).every((courseIndex) => {
+        let hasConflict = false
+
+        courseIndex.forEach((index) => {
+          Object.values(coursesToIndex).forEach((existingCoursesIndex) => {
+            existingCoursesIndex.forEach((existingIndex) => {
+              const [currentStart, currentEnd] = existingIndex.time
+                .split("-")
+                .map(Number)
+              const [previousStart, previousEnd] = index.time
+                .split("-")
+                .map(Number)
+
+              hasConflict =
+                currentStart < previousEnd && currentEnd > previousStart
+            })
+          })
+        })
+
+        if (!hasConflict) {
+          selectedIndexes = courseIndex
+          return false // Break out of the some loop
+        }
+
+        return true
+      })
+
+      addCourse(course)
+      addCourseToIndex(course.key, selectedIndexes)
       setCurrCourse(value)
     }
 
@@ -112,7 +152,7 @@ export function CourseCodeSelect() {
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    store.courses.find((x) => x.key === courseCode)
+                    courses.find((x) => x.key === courseCode)
                       ? "opacity-100"
                       : "opacity-0"
                   )}

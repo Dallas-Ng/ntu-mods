@@ -110,7 +110,7 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
         </div>
       </PopoverTrigger>
 
-      <PopoverContent className="w-96 p-0">
+      <PopoverContent className="w-screen p-0 md:w-96">
         <Command shouldFilter={false}>
           <CommandInput
             placeholder="Search index, preferred timing or tutorial group"

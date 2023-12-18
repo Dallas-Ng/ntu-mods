@@ -2,8 +2,7 @@ export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
   name: "NTU Dabao",
-  description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+  description: "Why study when you can just dabao your mods?",
   mainNav: [
     {
       title: "Home",

@@ -88,8 +88,8 @@ export default function StarsTable(_props: StarsTableProps) {
     DAY_MAP_CONFLICTS[dayMapKey as unknown as 1 | 2 | 3 | 4 | 5] =
       dayMapVal.reduce(
         (max, index, i) => Math.max(max, getConflicts(dayMapVal, index, i + 1)),
-        1
-      )
+        0
+      ) + 1 // count unique conflicts, + 1 for positioning purposes
   })
 
   const MATRIX_ROWS = STARS_TIMESLOTS.length

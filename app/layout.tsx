@@ -4,6 +4,7 @@ import { Metadata, Viewport } from "next"
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
+import { Toaster } from "@/components/ui/toaster"
 import NavigationBar from "@/components/navbar"
 import { NotificationBanner } from "@/components/notification-banner"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             </footer>
 
             <TailwindIndicator />
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>

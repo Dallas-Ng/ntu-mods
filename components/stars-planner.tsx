@@ -4,6 +4,7 @@ import { useBoundState } from "@/state/bound-state"
 
 import { CourseCodeSelect } from "./course-code-select"
 import StarsCourseBadge from "./stars-course-badge"
+import StarsPlannerShareButton from "./stars-planner-share-button"
 import StarsTable from "./stars-table"
 import { Button } from "./ui/button"
 
@@ -63,6 +64,8 @@ export default function StarsPlanner() {
           )}
         </div>
       </div>
+
+      <StarsPlannerShareButton />
 
       <StarsTable />
     </>

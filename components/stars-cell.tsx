@@ -36,12 +36,11 @@ interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
   courseKey: string
   index: Index
   hasConflict?: boolean
+  coursesToIndex: { [courseKey: string]: Index[] }
 }
 
 export default function StarsCell(props: StarsCellProp) {
-  const { courseKey, index, hasConflict = false } = props
-
-  const { coursesToIndex } = useBoundState()
+  const { courseKey, index, hasConflict = false, coursesToIndex } = props
 
   const coursePrefix = courseKey.replace(/[^a-zA-Z]+/g, "") // used as key
   const courseStyle = getCourseStyle(coursePrefix)

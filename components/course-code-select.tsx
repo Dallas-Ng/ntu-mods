@@ -90,7 +90,7 @@ export function CourseCodeSelect() {
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-screen p-0 md:w-[200px]">
         <Command>
           <CommandInput
             placeholder="Search course code"

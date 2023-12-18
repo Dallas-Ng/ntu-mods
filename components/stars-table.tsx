@@ -53,7 +53,8 @@ interface StarsTableProps {
 }
 
 export default function StarsTable(props: StarsTableProps) {
-  let coursesToIndex = props.coursesToIndex || useBoundState().coursesToIndex
+  const ctI = useBoundState().coursesToIndex
+  let coursesToIndex = props.coursesToIndex || ctI
 
   const DAY_MAP: CourseIndex = {
     1: [],

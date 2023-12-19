@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
 import NavigationBar from "@/components/navbar"
 import { NotificationBanner } from "@/components/notification-banner"
+import StarsManageButton from "@/components/stars-buttons/stars-manage-button"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <p className="text-center text-sm">Dallas &copy; 2024</p>
             </footer>
 
+            <StarsManageButton />
             <TailwindIndicator />
             <Toaster />
           </ThemeProvider>

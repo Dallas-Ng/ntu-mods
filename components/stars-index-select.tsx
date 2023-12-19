@@ -4,7 +4,8 @@ import { useEffect, useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 import { Check } from "lucide-react"
 
-import { DAY_MAPPING, DEF_SCROLLBAR, cn } from "@/lib/utils"
+import { C_DATA } from "@/lib/consolidated-data"
+import { DAY_MAPPING, cn } from "@/lib/utils"
 import {
   Command,
   CommandEmpty,
@@ -13,26 +14,19 @@ import {
   CommandItem
 } from "@/components/ui/command"
 
-import { Icons } from "./icons"
-import { Badge } from "./ui/badge"
+import { Button } from "./ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 interface Props {
   courseKey: string
-  children?: React.ReactNode
 }
 
-export default function StarsCourseBadge({ courseKey, children }: Props) {
+export default function StarsIndexSelect({ courseKey }: Props) {
   const [popoverOpen, setPopoverOpen] = useState(false)
-  const {
-    courses,
-    coursesToIndex,
-    addCourseToIndex,
-    removeCourseToIndex,
-    removeCourse
-  } = useBoundState()
+  const { coursesToIndex, addCourseToIndex, removeCourseToIndex } =
+    useBoundState()
 
-  const course = courses.find((x) => x.key === courseKey)
+  const course: Course = C_DATA[courseKey as keyof typeof C_DATA]
   const courseIndexes = course ? course.indexes : ([] as unknown as CourseIndex)
   const [filteredIndexes, setFilteredIndexes] =
     useState<CourseIndex>(courseIndexes)
@@ -41,7 +35,6 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
     if (!popoverOpen) {
       handleSearch("")
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [popoverOpen])
 
@@ -89,28 +82,12 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
   return (
     <Popover onOpenChange={(v) => setPopoverOpen(v)}>
       <PopoverTrigger>
-        <div className="flex">
-          <Badge
-            className={cn(
-              "flex items-center justify-between gap-1 hover:bg-gradient-to-r hover:from-blue-800 hover:to-indigo-900 hover:text-white",
-              popoverOpen &&
-                "bg-gradient-to-r from-blue-800 to-indigo-900 text-white "
-            )}>
-            {children}
-            <span
-              onClick={(e) => {
-                e.preventDefault()
-                removeCourse(courseKey)
-                removeCourseToIndex(courseKey)
-              }}
-              className="ml-1">
-              <Icons.xIcon height={20} width={20} />
-            </span>
-          </Badge>
-        </div>
+        <Button variant="outline" className="w-full px-6 text-sm">
+          {coursesToIndex[courseKey][0].key}
+        </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-screen p-0 md:w-96">
+      <PopoverContent className="w-[100vw] p-0 md:w-96">
         <Command shouldFilter={false}>
           <CommandInput
             placeholder="Search index, preferred timing or tutorial group"
@@ -119,10 +96,9 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
 
           <CommandEmpty>No indexes code found</CommandEmpty>
 
-          <CommandGroup
-            className={cn("max-h-[400px] overflow-auto", DEF_SCROLLBAR)}>
+          <CommandGroup className="relative max-h-[400px] overflow-auto p-0 px-1">
             {Object.keys(filteredIndexes).length > 0 && (
-              <div className="sticky top-[-4px] z-10 flex w-full items-center bg-popover pb-1 text-xs">
+              <div className="sticky top-[0px] z-[32] flex w-full items-center bg-popover pb-1 text-xs">
                 <span className="w-[200px] text-center">Code</span>
 
                 <span className="w-full">Day / Time</span>
@@ -143,9 +119,8 @@ export default function StarsCourseBadge({ courseKey, children }: Props) {
                     <Check
                       className={cn(
                         "mr-2 inline h-4 w-4",
-                        // coursesToIndex[courseKey] === idxKey
-                        Object.entries(coursesToIndex).find(
-                          ([k, v]) => v[0].key === idxKey
+                        Object.values(coursesToIndex).find(
+                          (v) => v[0].key === idxKey
                         )
                           ? "opacity-100"
                           : "opacity-0"

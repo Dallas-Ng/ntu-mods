@@ -179,16 +179,18 @@ export default function StarsTable(props: StarsTableProps) {
   ))
 
   return (
-    <Table className="table-fixed border-collapse border-none border-slate-500 p-0 text-xs">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="text-center md:w-[95px]">Time</TableHead>
+    <div className="overflow-scroll md:overflow-auto">
+      <Table className="relative w-[calc(100vw*1.5)] table-auto border-slate-500 p-0 text-xs md:w-full">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-center md:w-[95px]">Time</TableHead>
 
-          {TableHeadItems}
-        </TableRow>
-      </TableHeader>
+            {TableHeadItems}
+          </TableRow>
+        </TableHeader>
 
-      <TableBody>{TableBodyItems}</TableBody>
-    </Table>
+        <TableBody>{TableBodyItems}</TableBody>
+      </Table>
+    </div>
   )
 }

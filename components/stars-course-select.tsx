@@ -24,7 +24,12 @@ import {
 
 const STORED_KEYS = Object.keys(CONSOLIDATED_DATA)
 
-export function CourseCodeSelect() {
+interface Props {
+  btnClassName?: React.HtmlHTMLAttributes<HTMLDivElement>["className"]
+  popoverClassName?: React.HtmlHTMLAttributes<HTMLDivElement>["className"]
+}
+
+export default function StarsCourseSelect(props: Props) {
   const [windowOpen, setWindowOpen] = useState(false)
   const [currCourse, setCurrCourse] = useState<string>()
   const [inputValue, setInputValue] = useState<string>("")
@@ -124,20 +129,24 @@ export function CourseCodeSelect() {
           variant="outline"
           role="combobox"
           aria-expanded={windowOpen}
-          className="w-[200px] justify-between">
-          {currCourse ?? "Select course code"}
+          className={cn("w-full", props.btnClassName)}>
+          Select Course Code
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-screen p-0 md:w-[200px]">
+      <PopoverContent className={cn("w-full p-1", props.popoverClassName)}>
         <Command>
           <CommandInput
-            placeholder="Search course code"
+            className="w-full"
+            placeholder="Search Course Code"
+            value={dbSearchTerm}
             onValueChange={(v) => setInputValue(v)}
           />
 
-          <CommandEmpty>No course code found</CommandEmpty>
+          {dbSearchTerm !== "" && (
+            <CommandEmpty>No course code found</CommandEmpty>
+          )}
 
           <CommandGroup
             className={cn(
@@ -148,7 +157,8 @@ export function CourseCodeSelect() {
               <CommandItem
                 key={courseCode}
                 value={courseCode}
-                onSelect={handleSelect}>
+                onSelect={handleSelect}
+                className="cursor-pointer py-3 md:py-2">
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",

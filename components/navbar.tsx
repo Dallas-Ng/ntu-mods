@@ -43,7 +43,7 @@ export default function NavigationBar() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 w-full bg-background",
+        "sticky top-0 z-10 w-full bg-background",
         scrolled && "shadow"
       )}>
       <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">

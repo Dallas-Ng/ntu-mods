@@ -3,6 +3,7 @@ import { useBoundState } from "@/state/bound-state"
 
 import { STARS_TIMESLOTS } from "@/config/stars"
 import { DAY_MAPPING } from "@/lib/utils"
+import { useQueryStringCTI } from "@/hooks/use-qs-CTI"
 import {
   Table,
   TableBody,
@@ -48,13 +49,16 @@ const getConflicts = (
   return conflictsCount
 }
 
-interface StarsTableProps {
-  coursesToIndex?: { [courseKey: string]: Index[] }
-}
+interface StarsTableProps {}
 
-export default function StarsTable(props: StarsTableProps) {
-  const ctI = useBoundState().coursesToIndex
-  let coursesToIndex = props.coursesToIndex || ctI
+export default function StarsTable(_props: StarsTableProps) {
+  const coursesToIndexFromQueryString = useQueryStringCTI()
+  const coursesToIndexFromState = useBoundState().coursesToIndex
+
+  let coursesToIndex =
+    Object.keys(coursesToIndexFromQueryString).length > 0
+      ? coursesToIndexFromQueryString
+      : coursesToIndexFromState
 
   const DAY_MAP: CourseIndex = {
     1: [],

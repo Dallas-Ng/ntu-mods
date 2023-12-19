@@ -14,7 +14,8 @@ import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
-import { ThemeToggle } from "@/components/theme-toggle"
+
+// import { ThemeToggle } from "@/components/theme-toggle"
 
 const links = [
   { label: "Stars", route: "/stars" },
@@ -99,7 +100,7 @@ export default function NavigationBar() {
               </div>
             </Link>
 
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
           </nav>
         </div>
       </div>

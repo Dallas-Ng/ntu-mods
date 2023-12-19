@@ -25,7 +25,7 @@ export default function IndexPage() {
         </div>
       </div>
 
-      <div className="relative z-20 mt-5 hidden h-[700px] w-full justify-center md:block">
+      <div className="relative mt-5 hidden h-[700px] w-full justify-center md:block">
         <Image
           src="/product-screenshot.png"
           alt="product"

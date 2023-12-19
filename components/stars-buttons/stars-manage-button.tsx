@@ -43,13 +43,13 @@ export default function StarsManageButton() {
   return (
     <>
       <div
-        className="fixed bottom-[50px] right-[50px] z-10 rounded-full border border-gray-200 bg-white p-2 shadow-lg transition-colors duration-100 hover:cursor-pointer hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800"
+        className="fixed bottom-[50px] right-[50px] z-[11] rounded-full border border-gray-200 bg-white p-2 shadow-lg transition-colors duration-100 hover:cursor-pointer hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800"
         onClick={() => setOpen(true)}>
         <Plus className="h-7 w-7" />
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="z-30 flex w-[97%] max-w-4xl flex-col justify-start px-2 py-5 md:px-5">
+        <DialogContent className="z-[20] flex w-[97%] max-w-4xl flex-col justify-start px-2 py-5 md:px-5">
           <DialogHeader className="h-fit">
             <DialogTitle>Courses</DialogTitle>
             <DialogDescription>Add your courses</DialogDescription>

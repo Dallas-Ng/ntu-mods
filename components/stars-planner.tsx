@@ -2,7 +2,7 @@
 
 import { useBoundState } from "@/state/bound-state"
 
-import { cn } from "@/lib/utils"
+import { cn, detectMobile } from "@/lib/utils"
 
 import { CourseCodeSelect } from "./course-code-select"
 import StarsCourseBadge from "./stars-course-badge"
@@ -18,22 +18,6 @@ const EGG_LEVEL_4 = 30
 
 export default function StarsPlanner() {
   const { courses, resetCourses } = useBoundState()
-
-  function detectMob() {
-    const toMatch = [
-      /Android/i,
-      /webOS/i,
-      /iPhone/i,
-      /iPad/i,
-      /iPod/i,
-      /BlackBerry/i,
-      /Windows Phone/i
-    ]
-
-    return toMatch.some((toMatchItem) => {
-      return navigator.userAgent.match(toMatchItem)
-    })
-  }
 
   const easterEggTriggered = courses.length > EGG_LEVEL_1
 
@@ -85,14 +69,7 @@ export default function StarsPlanner() {
 
       <StarsPlannerShareButton />
 
-      <div className="overflow-x-auto">
-        <div
-          className={cn(
-            detectMob() ? "w-[calc(100vw*2)] overflow-x-auto" : "w-full"
-          )}>
-          <StarsTable />
-        </div>
-      </div>
+      <StarsTable />
     </>
   )
 }

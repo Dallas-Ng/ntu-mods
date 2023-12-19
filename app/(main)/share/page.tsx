@@ -12,22 +12,6 @@ import StarsTable from "@/components/stars-table"
 export default function StarsPage() {
   const searchParams = useSearchParams()
 
-  function detectMob() {
-    const toMatch = [
-      /Android/i,
-      /webOS/i,
-      /iPhone/i,
-      /iPad/i,
-      /iPod/i,
-      /BlackBerry/i,
-      /Windows Phone/i
-    ]
-
-    return toMatch.some((toMatchItem) => {
-      return navigator.userAgent.match(toMatchItem)
-    })
-  }
-
   const coursesToIndex: CourseIndex = {}
 
   searchParams.forEach((value, key) => {
@@ -48,14 +32,7 @@ export default function StarsPage() {
         </Link>
       </div>
 
-      <div className="overflow-x-auto">
-        <div
-          className={cn(
-            detectMob() ? "w-[calc(100vw*2)] overflow-x-auto" : "w-full"
-          )}>
-          <StarsTable coursesToIndex={coursesToIndex} />
-        </div>
-      </div>
+      <StarsTable />
     </div>
   )
 }

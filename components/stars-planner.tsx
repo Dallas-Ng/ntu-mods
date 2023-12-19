@@ -2,11 +2,9 @@
 
 import { useBoundState } from "@/state/bound-state"
 
-import { cn, detectMobile } from "@/lib/utils"
-
 import { CourseCodeSelect } from "./course-code-select"
+import StarsShareButton from "./stars-buttons/stars-share-button"
 import StarsCourseBadge from "./stars-course-badge"
-import StarsPlannerShareButton from "./stars-planner-share-button"
 import StarsTable from "./stars-table"
 import { Button } from "./ui/button"
 
@@ -67,7 +65,9 @@ export default function StarsPlanner() {
         </div>
       </div>
 
-      <StarsPlannerShareButton />
+      <div className="flex gap-2 px-2 py-4">
+        <StarsShareButton />
+      </div>
 
       <StarsTable />
     </>

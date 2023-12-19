@@ -98,7 +98,7 @@ export default function StarsIndexSelect({ courseKey }: Props) {
 
           <CommandGroup className="relative max-h-[400px] overflow-auto p-0 px-1">
             {Object.keys(filteredIndexes).length > 0 && (
-              <div className="sticky top-[0px] z-[32] flex w-full items-center bg-popover pb-1 text-xs">
+              <div className="sticky top-[0px] z-[20] flex w-full items-center bg-popover pb-1 text-xs">
                 <span className="w-[200px] text-center">Code</span>
 
                 <span className="w-full">Day / Time</span>

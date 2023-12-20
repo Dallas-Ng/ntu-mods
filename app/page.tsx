@@ -17,10 +17,7 @@ export default function IndexPage() {
           </div>
 
           <p className="text-center">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam
-            reiciendis dolorum vitae sed nostrum officiis aspernatur. Odio quam
-            repellat fugit, necessitatibus earum consequuntur placeat, nihil,
-            iusto asperiores modi ipsum alias!
+            Why study when you can just dabao your mods?
           </p>
         </div>
       </div>

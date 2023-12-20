@@ -51,13 +51,13 @@ export default function StarsManageButton() {
   return (
     <>
       <div
-        className="fixed bottom-0 right-0 z-[11] flex h-[50px] w-screen items-center justify-center border border-gray-200 bg-white p-2 shadow-lg transition-colors duration-100 hover:cursor-pointer hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800 md:hidden"
+        className="fixed bottom-0 right-0 z-[11] flex h-[50px] w-screen items-center justify-center border bg-white p-2 shadow-lg transition-colors duration-100 hover:cursor-pointer  dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800 md:hidden"
         onClick={() => setOpen(true)}>
         <span className="text-center">Click to Edit Timetable</span>
       </div>
 
       <div
-        className="fixed bottom-[5%] right-[5%] z-[11] hidden h-[50px] w-fit items-center justify-center rounded-full border border-gray-200 bg-white px-4 py-2 font-semibold text-slate-950 shadow-lg transition-colors duration-100 hover:cursor-pointer hover:bg-slate-200 md:flex"
+        className="fixed bottom-[5%] right-[5%] z-[11] hidden h-[50px] w-fit items-center justify-center rounded-full border bg-white px-4 py-2 font-semibold text-slate-950 shadow-lg transition-colors duration-100 hover:cursor-pointer md:flex"
         onClick={() => setOpen(true)}>
         Add Courses here
         <Plus className="ml-3 h-5 w-5" />
@@ -173,7 +173,7 @@ export default function StarsManageButton() {
             </div>
           </div>
 
-          <DialogFooter className="sm:justify-start">
+          <DialogFooter className="justify-start md:justify-end ">
             <DialogClose asChild>
               <Button type="button" variant="secondary">
                 Close

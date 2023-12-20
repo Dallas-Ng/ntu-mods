@@ -30,7 +30,12 @@ export default function DebugContent() {
         Go Back
       </span>
 
-      <div>
+      <div className="my-5">
+        <p className="mb-2">
+          If you encountered problems, it will delete all your data (including
+          the courses you added)
+        </p>
+
         <Button onClick={resetApplicationState}>
           Click here to reset application state
         </Button>

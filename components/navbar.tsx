@@ -19,7 +19,7 @@ import { Icons } from "@/components/icons"
 
 const links = [
   { label: "Stars", route: "/stars" },
-  { label: "Help", route: "/help" }
+  { label: "Help", route: "/debug" }
 ]
 
 export default function NavigationBar() {

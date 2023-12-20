@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import CONSOLIDATED_DATA from "@/data/consolidated-2023-2.json"
 import { useBoundState } from "@/state/bound-state"
 import { Check, ChevronsUpDown } from "lucide-react"
@@ -31,18 +31,17 @@ interface Props {
 
 export default function StarsCourseSelect(props: Props) {
   const [windowOpen, setWindowOpen] = useState(false)
-  const [currCourse, setCurrCourse] = useState<string>()
   const [inputValue, setInputValue] = useState<string>("")
   const [courseCodes, setCourseCode] = useState<string[]>([])
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const {
     courses,
     coursesToIndex,
     addCourse,
     addCourseToIndex,
-    removeCourse,
     removeCourseToIndex
-  } = useBoundState((s) => s)
+  } = useBoundState()
 
   const dbSearchTerm = useDebounce(inputValue, 0) // arbitrary delay
 
@@ -76,9 +75,7 @@ export default function StarsCourseSelect(props: Props) {
     const course = getCDataCourse(value)
 
     if (courses.find((x) => x.key === value)) {
-      removeCourse(value)
       removeCourseToIndex(course.key)
-      setCurrCourse(undefined) // reset placeholder
     } else {
       /**
        * Checks for conflicts between the selected course indexes and existing courses.
@@ -116,63 +113,66 @@ export default function StarsCourseSelect(props: Props) {
 
       addCourse(course)
       addCourseToIndex(course.key, selectedIndexes)
-      setCurrCourse(value)
     }
 
     // setWindowOpen(false)
   }
 
   return (
-    <Popover open={windowOpen} onOpenChange={setWindowOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={windowOpen}
-          className={cn("w-full", props.btnClassName)}>
-          Select Course Code
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-        </Button>
-      </PopoverTrigger>
+    <div ref={containerRef}>
+      <Popover open={windowOpen} onOpenChange={setWindowOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={windowOpen}
+            className={cn("w-full", props.btnClassName)}>
+            Select Course Code
+            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          </Button>
+        </PopoverTrigger>
 
-      <PopoverContent className={cn("w-full p-1", props.popoverClassName)}>
-        <Command>
-          <CommandInput
-            className="w-full"
-            placeholder="Search Course Code"
-            value={dbSearchTerm}
-            onValueChange={(v) => setInputValue(v)}
-          />
+        <PopoverContent
+          container={containerRef.current}
+          className={cn("z-[33] w-full p-1", props.popoverClassName)}>
+          <Command>
+            <CommandInput
+              className="w-full"
+              placeholder="Search Course Code"
+              value={dbSearchTerm}
+              onValueChange={(v) => setInputValue(v)}
+            />
 
-          {dbSearchTerm !== "" && (
-            <CommandEmpty>No course code found</CommandEmpty>
-          )}
+            {dbSearchTerm !== "" && (
+              <CommandEmpty>No course code found</CommandEmpty>
+            )}
 
-          <CommandGroup
-            className={cn(
-              courseCodes.length > 0 ? "block" : "hidden",
-              "max-h-[400px] overflow-auto"
-            )}>
-            {courseCodes.map((courseCode) => (
-              <CommandItem
-                key={courseCode}
-                value={courseCode}
-                onSelect={handleSelect}
-                className="cursor-pointer py-3 md:py-2">
-                <Check
-                  className={cn(
-                    "mr-2 h-4 w-4",
-                    courses.find((x) => x.key === courseCode)
-                      ? "opacity-100"
-                      : "opacity-0"
-                  )}
-                />
-                {courseCode}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
+            <CommandGroup
+              className={cn(
+                courseCodes.length > 0 ? "block" : "hidden",
+                "max-h-[400px] overflow-auto"
+              )}>
+              {courseCodes.map((courseCode) => (
+                <CommandItem
+                  key={courseCode}
+                  value={courseCode}
+                  onSelect={handleSelect}
+                  className="cursor-pointer py-3 md:py-2">
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      courses.find((x) => x.key === courseCode)
+                        ? "opacity-100"
+                        : "opacity-0"
+                    )}
+                  />
+                  {courseCode}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
   )
 }

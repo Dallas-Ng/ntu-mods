@@ -18,7 +18,8 @@ export const NotificationBanner = {
   inAlpha: () => (
     <Link href="/debug">
       <Banner>
-        <strong>ALPHA BUILD</strong> - Click here if you get stuck!
+        <strong>ALPHA BUILD</strong> - Click here if you get stuck! <br />
+        Optimsed for website, mobile support coming soon!
       </Banner>
     </Link>
   ),
@@ -27,5 +28,8 @@ export const NotificationBanner = {
       We are in <strong className="font-semibold">Beta!</strong> Let us know if
       you encounter bugs or have suggestions.
     </Banner>
+  ),
+  optimisedForWeb: () => (
+    <Banner>Optimsed for website, mobile support coming soon!</Banner>
   )
 }

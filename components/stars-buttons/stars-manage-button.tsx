@@ -41,7 +41,7 @@ const CourseTypeBadge = ({
 }
 
 export default function StarsManageButton() {
-  const { coursesToIndex, removeCourseToIndex, removeCourse } = useBoundState()
+  const { coursesToIndex, removeCourseToIndex } = useBoundState()
   const [open, setOpen] = useState(false)
 
   const pathname = usePathname()
@@ -154,7 +154,6 @@ export default function StarsManageButton() {
                               <Button
                                 variant="ghost"
                                 onClick={() => {
-                                  removeCourse(courseKey)
                                   removeCourseToIndex(courseKey)
                                 }}
                                 className={cn(

@@ -29,7 +29,10 @@ export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
     { media: "(prefers-color-scheme: dark)", color: "black" }
-  ]
+  ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1
 }
 
 interface RootLayoutProps {
@@ -40,11 +43,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
-        />
-
         <body
           className={cn(
             "flex min-h-screen flex-col bg-background font-sans antialiased",

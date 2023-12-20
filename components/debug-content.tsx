@@ -6,7 +6,7 @@ import { useBoundState } from "@/state/bound-state"
 import { Button } from "@/components/ui/button"
 
 export default function DebugContent() {
-  const { coursesToIndex, resetCourses, resetCourseToIndex } = useBoundState()
+  const { coursesToIndex, resetCourseToIndex } = useBoundState()
   const router = useRouter()
 
   function resetApplicationState() {
@@ -15,9 +15,7 @@ export default function DebugContent() {
     )
 
     if (confirmed) {
-      resetCourses()
       resetCourseToIndex()
-
       alert("Application state reset successfully.")
     }
   }

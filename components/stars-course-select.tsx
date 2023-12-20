@@ -35,13 +35,8 @@ export default function StarsCourseSelect(props: Props) {
   const [courseCodes, setCourseCode] = useState<string[]>([])
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const {
-    courses,
-    coursesToIndex,
-    addCourse,
-    addCourseToIndex,
-    removeCourseToIndex
-  } = useBoundState()
+  const { coursesToIndex, addCourseToIndex, removeCourseToIndex } =
+    useBoundState()
 
   const dbSearchTerm = useDebounce(inputValue, 0) // arbitrary delay
 
@@ -74,7 +69,7 @@ export default function StarsCourseSelect(props: Props) {
     // If user clicks on a course in store, we will remove it out
     const course = getCDataCourse(value)
 
-    if (courses.find((x) => x.key === value)) {
+    if (Object.keys(coursesToIndex).includes(val.toUpperCase())) {
       removeCourseToIndex(course.key)
     } else {
       /**
@@ -111,7 +106,6 @@ export default function StarsCourseSelect(props: Props) {
         return true
       })
 
-      addCourse(course)
       addCourseToIndex(course.key, selectedIndexes)
     }
 
@@ -161,7 +155,7 @@ export default function StarsCourseSelect(props: Props) {
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      courses.find((x) => x.key === courseCode)
+                      Object.keys(coursesToIndex).find((x) => x === courseCode)
                         ? "opacity-100"
                         : "opacity-0"
                     )}

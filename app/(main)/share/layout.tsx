@@ -1,7 +1,8 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: `Stars*`
+  title: `Stars* Planner`,
+  description: `Plan your timetable`
 }
 
 interface RootLayoutProps {

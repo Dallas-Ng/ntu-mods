@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 import { Check } from "lucide-react"
 
@@ -25,6 +25,7 @@ export default function StarsIndexSelect({ courseKey }: Props) {
   const [popoverOpen, setPopoverOpen] = useState(false)
   const { coursesToIndex, addCourseToIndex, removeCourseToIndex } =
     useBoundState()
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const course: Course = C_DATA[courseKey as keyof typeof C_DATA]
   const courseIndexes = course ? course.indexes : ([] as unknown as CourseIndex)
@@ -80,82 +81,86 @@ export default function StarsIndexSelect({ courseKey }: Props) {
   }
 
   return (
-    <Popover onOpenChange={(v) => setPopoverOpen(v)}>
-      <PopoverTrigger>
-        <Button variant="outline" className="w-full px-6 text-sm">
-          {coursesToIndex[courseKey][0].key}
-        </Button>
-      </PopoverTrigger>
+    <div ref={containerRef}>
+      <Popover onOpenChange={(v) => setPopoverOpen(v)}>
+        <PopoverTrigger>
+          <Button variant="outline" className="w-full px-6 text-sm">
+            {coursesToIndex[courseKey][0].key}
+          </Button>
+        </PopoverTrigger>
 
-      <PopoverContent className="w-[100vw] p-0 md:w-96">
-        <Command shouldFilter={false}>
-          <CommandInput
-            placeholder="Search index, preferred timing or tutorial group"
-            onValueChange={handleSearch}
-          />
+        <PopoverContent
+          className="w-[100vw] p-0 md:w-96"
+          container={containerRef.current}>
+          <Command shouldFilter={false}>
+            <CommandInput
+              placeholder="Search index, preferred timing or tutorial group"
+              onValueChange={handleSearch}
+            />
 
-          <CommandEmpty>No indexes code found</CommandEmpty>
+            <CommandEmpty>No indexes code found</CommandEmpty>
 
-          <CommandGroup className="relative max-h-[400px] overflow-auto p-0 px-1">
-            {Object.keys(filteredIndexes).length > 0 && (
-              <div className="sticky top-[0px] z-[20] flex w-full items-center bg-popover pb-1 text-xs">
-                <span className="w-[200px] text-center">Code</span>
+            <CommandGroup className="relative max-h-[400px] overflow-auto p-0 px-1">
+              {Object.keys(filteredIndexes).length > 0 && (
+                <div className="sticky top-[0px] z-[20] flex w-full items-center bg-popover pb-1 text-xs">
+                  <span className="w-[200px] text-center">Code</span>
 
-                <span className="w-full">Day / Time</span>
-                <span className="whitespace-nowrap text-end">
-                  Group / Venue
-                </span>
-              </div>
-            )}
-
-            {Object.entries(filteredIndexes).map(([idxKey, fiValue]) => (
-              <CommandItem
-                key={idxKey}
-                value={idxKey}
-                onSelect={handleSelect}
-                className="mb-1 cursor-pointer">
-                <div className="flex w-full justify-between gap-6">
-                  <span className="flex items-center">
-                    <Check
-                      className={cn(
-                        "mr-2 inline h-4 w-4",
-                        Object.values(coursesToIndex).find(
-                          (v) => v[0].key === idxKey
-                        )
-                          ? "opacity-100"
-                          : "opacity-0"
-                      )}
-                    />
-                    {idxKey}
+                  <span className="w-full">Day / Time</span>
+                  <span className="whitespace-nowrap text-end">
+                    Group / Venue
                   </span>
-
-                  {/* Dont remove this flex-col, there can be multiple timeslots for 1 index (e.g. lab, tutorial, lecture) */}
-                  <div className="flex w-full flex-col gap-1">
-                    {fiValue.map((v, i) => (
-                      <div key={i}>
-                        <div className="flex w-full justify-between gap-2">
-                          <span>
-                            {DAY_MAPPING[v.day as keyof typeof DAY_MAPPING]}
-                          </span>
-
-                          <span>
-                            {v.type} - {v.group}
-                          </span>
-                        </div>
-
-                        <div className="flex w-full justify-between gap-2">
-                          <span>{v.time}</span>
-                          <span>{v.venue}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
                 </div>
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </Command>
-      </PopoverContent>
-    </Popover>
+              )}
+
+              {Object.entries(filteredIndexes).map(([idxKey, fiValue]) => (
+                <CommandItem
+                  key={idxKey}
+                  value={idxKey}
+                  onSelect={handleSelect}
+                  className="mb-1 cursor-pointer">
+                  <div className="flex w-full justify-between gap-6">
+                    <span className="flex items-center">
+                      <Check
+                        className={cn(
+                          "mr-2 inline h-4 w-4",
+                          Object.values(coursesToIndex).find(
+                            (v) => v[0].key === idxKey
+                          )
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
+                      {idxKey}
+                    </span>
+
+                    {/* Dont remove this flex-col, there can be multiple timeslots for 1 index (e.g. lab, tutorial, lecture) */}
+                    <div className="flex w-full flex-col gap-1">
+                      {fiValue.map((v, i) => (
+                        <div key={i}>
+                          <div className="flex w-full justify-between gap-2">
+                            <span>
+                              {DAY_MAPPING[v.day as keyof typeof DAY_MAPPING]}
+                            </span>
+
+                            <span>
+                              {v.type} - {v.group}
+                            </span>
+                          </div>
+
+                          <div className="flex w-full justify-between gap-2">
+                            <span>{v.time}</span>
+                            <span>{v.venue}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
   )
 }

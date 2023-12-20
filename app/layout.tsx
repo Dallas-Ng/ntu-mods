@@ -40,6 +40,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+
         <body
           className={cn(
             "flex min-h-screen flex-col bg-background font-sans antialiased",

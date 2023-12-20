@@ -20,8 +20,8 @@ const StarsTable = dynamic(() => import("@/components/stars-table"), {
 export default function StarsPage() {
   return (
     <div className="bg-white dark:bg-slate-950 sm:rounded-2xl sm:border ">
-      <h1 className="bg-gradient-to-r from-blue-800 to-indigo-900 bg-clip-text pl-4 pt-3 text-3xl font-bold text-transparent">
-        Stars* Planner (Sharing)
+      <h1 className="bg-gradient-to-r from-emerald-800 to-green-900 bg-clip-text pl-4 pt-3 text-3xl font-bold text-transparent">
+        Stars* Planner (Shared)
       </h1>
 
       <div className="flex gap-2 px-2 py-4">

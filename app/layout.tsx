@@ -1,7 +1,7 @@
 import "@/styles/globals.css"
 import { Metadata, Viewport } from "next"
+import Script from "next/script"
 import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -45,6 +45,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
+        <Script
+          defer
+          data-domain="dabao.dallasng.me"
+          src="https://plausible.io/js/script.js"
+        />
+
         <body
           className={cn(
             "flex min-h-screen flex-col bg-background font-sans antialiased",
@@ -67,7 +73,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </ThemeProvider>
 
           <Analytics />
-          <SpeedInsights />
         </body>
       </html>
     </>

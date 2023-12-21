@@ -4,7 +4,6 @@ import { Analytics } from "@vercel/analytics/react"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
-import { INIT_GA } from "@/lib/gtag"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
 import NavigationBar from "@/components/navbar"
@@ -42,11 +41,20 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  INIT_GA()
-
   return (
     <>
       <html lang="en" suppressHydrationWarning>
+        {/* <Script src="https://www.googletagmanager.com/gtag/js?id=G-K1FQ9NV2EQ" />
+        <Script id="google-analytics">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag("js", new Date());
+
+          gtag("config", "G-K1FQ9NV2EQ");
+        `}
+        </Script> */}
+
         <body
           className={cn(
             "flex min-h-screen flex-col bg-background font-sans antialiased",

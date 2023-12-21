@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { usePathname } from "next/navigation"
-import { useRouter } from "next/router"
 import { useBoundState } from "@/state/bound-state"
 import { Plus, X } from "lucide-react"
 
@@ -19,8 +18,8 @@ import {
 } from "@/components/ui/dialog"
 
 import StarsCourseSelect from "../stars-course-select"
-import StarsIndexSelect from "../stars-index-select"
 import { Button } from "../ui/button"
+import StarsIndexButton from "./stars-index-button"
 
 const CourseTypeBadge = ({
   type,
@@ -145,7 +144,7 @@ export default function StarsManageButton() {
 
                           <td>
                             <div className="flex w-full items-center justify-center">
-                              <StarsIndexSelect courseKey={courseKey} />
+                              <StarsIndexButton courseKey={courseKey} />
                             </div>
                           </td>
 

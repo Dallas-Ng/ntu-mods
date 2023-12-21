@@ -1,5 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata, Viewport } from "next"
+import { Analytics } from "@vercel/analytics/react"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -63,6 +64,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <TailwindIndicator />
             <Toaster />
           </ThemeProvider>
+
+          <Analytics />
         </body>
       </html>
     </>

@@ -38,3 +38,39 @@ export function detectMobile() {
     return navigator.userAgent.match(toMatchItem)
   })
 }
+
+export function getCourseTypeBorder(type: string) {
+  if (type.includes("LEC"))
+    return {
+      borderLeft: "border-l-orange-500",
+      text: "text-orange-600",
+      background: "bg-orange-200"
+    }
+
+  if (type.includes("LAB"))
+    return {
+      borderLeft: "border-l-emerald-500",
+      text: "text-emerald-600",
+      background: "bg-emerald-200"
+    }
+
+  if (type.includes("SEM"))
+    return {
+      borderLeft: "border-l-yellow-500",
+      text: "text-yellow-600",
+      background: "bg-yellow-200"
+    }
+
+  if (type.includes("TUT"))
+    return {
+      borderLeft: "border-l-blue-500",
+      text: "text-blue-600",
+      background: "bg-blue-200"
+    }
+
+  return {
+    borderLeft: "border-l-gray-500",
+    text: "text-gray-600",
+    background: "bg-gray-200"
+  }
+}

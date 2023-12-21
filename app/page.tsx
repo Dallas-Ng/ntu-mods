@@ -1,5 +1,7 @@
 import Image from "next/image"
+import Link from "next/link"
 
+import { Button } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 
 export default function IndexPage() {
@@ -19,6 +21,12 @@ export default function IndexPage() {
           <p className="text-center">
             Why study when you can just dabao your mods?
           </p>
+
+          <div className="my-4 flex justify-center">
+            <Link href="/stars">
+              <Button>Build My Timetable Now</Button>
+            </Link>
+          </div>
         </div>
       </div>
 

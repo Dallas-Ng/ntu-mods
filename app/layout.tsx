@@ -6,6 +6,7 @@ import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
+import ClarityTag from "@/components/clarity"
 import NavigationBar from "@/components/navbar"
 import { NotificationBanner } from "@/components/notification-banner"
 import StarsManageButton from "@/components/stars-buttons/stars-manage-button"
@@ -44,16 +45,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
-        {/* <Script src="https://www.googletagmanager.com/gtag/js?id=G-K1FQ9NV2EQ" />
-        <Script id="google-analytics">
-          {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag("js", new Date());
-
-          gtag("config", "G-K1FQ9NV2EQ");
-        `}
-        </Script> */}
+        <ClarityTag />
 
         <body
           className={cn(

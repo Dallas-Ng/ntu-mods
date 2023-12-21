@@ -107,9 +107,8 @@ export default function StarsTable(_props: StarsTableProps) {
   // Create Matrix
   const STARS_MATRIX = Array.from({ length: MATRIX_ROWS }, (_, i) => {
     const timeslot = (
-      <TableCell className="p-1 text-center">
-        {STARS_TIMESLOTS[i].start} <br className="md:hidden" />
-        to {STARS_TIMESLOTS[i].end}
+      <TableCell className="w-[50px] p-1 text-center md:w-[95px]">
+        {STARS_TIMESLOTS[i].start} to {STARS_TIMESLOTS[i].end}
       </TableCell>
     )
 
@@ -186,7 +185,9 @@ export default function StarsTable(_props: StarsTableProps) {
     <Table className="table-fixed border-slate-500 p-0 text-[0.6rem] md:text-xs">
       <TableHeader>
         <TableRow>
-          <TableHead className="text-center md:w-[95px]">Time</TableHead>
+          <TableHead className="w-[50px] p-1 text-center md:w-[95px]">
+            Time
+          </TableHead>
 
           {TableHeadItems}
         </TableRow>

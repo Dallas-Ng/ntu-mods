@@ -41,7 +41,7 @@ export default function StarsIndexSheet(props: Props) {
 
       <SheetContent className="flex h-screen w-[90vw] max-w-md flex-col px-2 py-4">
         <SheetHeader>
-          <SheetTitle>Select Your Index</SheetTitle>
+          <SheetTitle>{courseKey} Indexes</SheetTitle>
         </SheetHeader>
 
         <IndexCommand {...props} commandClassName="overflow-auto" />

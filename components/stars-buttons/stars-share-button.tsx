@@ -4,6 +4,7 @@ import { useBoundState } from "@/state/bound-state"
 import { track } from "@vercel/analytics"
 
 import { getQsFromCourseToIndexes } from "@/lib/consolidated-data"
+import { GA_TRACK_EVENT } from "@/lib/gtag"
 import { BASE_URL } from "@/lib/utils"
 
 import { Button } from "../ui/button"
@@ -21,6 +22,7 @@ export default function StarsShareButton() {
     toast({ title: "Copied to clipboard" })
 
     track("share", { link: shareLink })
+    GA_TRACK_EVENT("share", { link: shareLink })
   }
 
   return (

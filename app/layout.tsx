@@ -1,10 +1,10 @@
 import "@/styles/globals.css"
 import { Metadata, Viewport } from "next"
-import Script from "next/script"
 import { Analytics } from "@vercel/analytics/react"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
+import { INIT_GA } from "@/lib/gtag"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
 import NavigationBar from "@/components/navbar"
@@ -42,15 +42,11 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
+  INIT_GA()
+
   return (
     <>
       <html lang="en" suppressHydrationWarning>
-        <Script
-          defer
-          data-domain="dabao.dallasng.me"
-          src="https://plausible.io/js/script.js"
-        />
-
         <body
           className={cn(
             "flex min-h-screen flex-col bg-background font-sans antialiased",

@@ -1,6 +1,7 @@
 "use client"
 
 import { useBoundState } from "@/state/bound-state"
+import { track } from "@vercel/analytics"
 
 import { getQsFromCourseToIndexes } from "@/lib/consolidated-data"
 import { BASE_URL } from "@/lib/utils"
@@ -15,8 +16,11 @@ export default function StarsShareButton() {
   const generateShareLink = () => {
     const qsObject = getQsFromCourseToIndexes(coursesToIndex)
     const urlParams = new URLSearchParams(qsObject)
-    navigator.clipboard.writeText(`${BASE_URL}/share?${urlParams.toString()}`)
+    const shareLink = `${BASE_URL}/share?${urlParams.toString()}`
+    navigator.clipboard.writeText(shareLink)
     toast({ title: "Copied to clipboard" })
+
+    track("share", { link: shareLink })
   }
 
   return (

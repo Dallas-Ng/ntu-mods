@@ -11,7 +11,36 @@ interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
 
 export default function StarsCell(props: StarsCellProp) {
   const { courseKey, index, hasConflict = false, coursesToIndex } = props
-  const courseStyle = getCourseTypeBorder(index.type)
+
+  const courseStyle = index.type.includes("LEC")
+    ? {
+        borderLeft: "border-l-orange-500",
+        text: "text-orange-600",
+        background: "bg-orange-200"
+      }
+    : index.type.includes("LAB")
+      ? {
+          borderLeft: "border-l-emerald-500",
+          text: "text-emerald-600",
+          background: "bg-emerald-200"
+        }
+      : index.type.includes("SEM")
+        ? {
+            borderLeft: "border-l-yellow-500",
+            text: "text-yellow-600",
+            background: "bg-yellow-200"
+          }
+        : index.type.includes("TUT")
+          ? {
+              borderLeft: "border-l-blue-500",
+              text: "text-blue-600",
+              background: "bg-blue-200"
+            }
+          : {
+              borderLeft: "border-l-gray-500",
+              text: "text-gray-600",
+              background: "bg-gray-200"
+            }
 
   // When a index has multiple variations thats suppose to show in the same cell,
   // e.g. week 1-7 is at LT4, week 9-13 is at LT5...

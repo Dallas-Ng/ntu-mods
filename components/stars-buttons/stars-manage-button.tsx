@@ -152,9 +152,7 @@ export default function StarsManageButton() {
                             <div className="flex w-full items-center justify-center">
                               <Button
                                 variant="ghost"
-                                onClick={() => {
-                                  removeCourseToIndex(courseKey)
-                                }}
+                                onClick={() => removeCourseToIndex(courseKey)}
                                 className={cn(
                                   "h-[40px] w-[40px] p-0 text-white transition-colors duration-100 hover:cursor-pointer hover:bg-rose-500"
                                 )}>

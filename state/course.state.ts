@@ -15,8 +15,9 @@ export const createCourseSlice: StateCreator<CourseSlice> = (set) => ({
     })),
   removeCourseToIndex: (courseKey: string) =>
     set((state) => {
-      delete state.coursesToIndex[courseKey]
-      return state
+      const stateCopy = { ...state }
+      delete stateCopy.coursesToIndex[courseKey]
+      return stateCopy
     }),
   resetCourseToIndex: () =>
     set((_state) => ({

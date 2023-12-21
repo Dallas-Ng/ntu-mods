@@ -183,7 +183,7 @@ export default function StarsTable(_props: StarsTableProps) {
   ))
 
   return (
-    <Table className="table-fixed border-slate-500 p-0 text-xs">
+    <Table className="table-fixed border-slate-500 p-0 text-[0.6rem] md:text-xs">
       <TableHeader>
         <TableRow>
           <TableHead className="text-center md:w-[95px]">Time</TableHead>

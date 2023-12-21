@@ -58,7 +58,7 @@ export default function StarsCell(props: StarsCellProp) {
         key={index.key}
         rowSpan={index.duration}
         className={cn(
-          "break-words border border-l-2 border-slate-300 dark:border-y-slate-800 dark:border-r-slate-800",
+          "break-words border border-l-2 border-slate-300 p-1 dark:border-y-slate-800 dark:border-r-slate-800 md:p-2 ",
           hasConflict && "border-b-2 border-b-red-600 dark:border-b-red-600",
           courseStyle.borderLeft,
           props.className

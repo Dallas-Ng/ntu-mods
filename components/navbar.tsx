@@ -19,7 +19,7 @@ import { Icons } from "@/components/icons"
 
 const links = [
   { label: "Stars", route: "/stars" },
-  { label: "Help", route: "/debug" }
+  { label: "Help", route: "/help" }
 ]
 
 export default function NavigationBar() {
@@ -73,7 +73,7 @@ export default function NavigationBar() {
                     passHref>
                     <NavigationMenuLink
                       className={cn(
-                        "mr-1 p-3 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100",
+                        "mr-1 p-3 text-sm font-semibold transition-colors duration-300 hover:text-slate-950 dark:hover:text-slate-100",
                         pathname === link.route
                           ? "text-slate-950 dark:text-slate-100"
                           : "text-slate-500 dark:text-slate-400"

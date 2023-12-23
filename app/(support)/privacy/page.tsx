@@ -186,13 +186,7 @@ export default function HelpPage() {
         Cookies can be &quot;Persistent&quot; or &quot;Session&quot; Cookies.
         Persistent Cookies remain on Your personal computer or mobile device
         when You go offline, while Session Cookies are deleted as soon as You
-        close Your web browser. Learn more about cookies on the{" "}
-        <a
-          href="https://www.freeprivacypolicy.com/blog/sample-privacy-policy-template/#Use_Of_Cookies_And_Tracking"
-          target="_blank">
-          Free Privacy Policy website
-        </a>{" "}
-        article.
+        close Your web browser.
       </p>
 
       <p>

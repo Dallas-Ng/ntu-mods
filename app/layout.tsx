@@ -7,6 +7,7 @@ import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
 import ClarityTag from "@/components/clarity"
+import Footer from "@/components/footer"
 import NavigationBar from "@/components/navbar"
 import { NotificationBanner } from "@/components/notification-banner"
 import StarsManageButton from "@/components/stars-buttons/stars-manage-button"
@@ -47,28 +48,27 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <html lang="en" suppressHydrationWarning>
         <ClarityTag />
 
-        <body className={cn("font-sans antialiased", fontSans.variable)}>
+        <body
+          className={cn(
+            "flex h-screen w-screen flex-col overflow-x-hidden font-sans antialiased",
+            fontSans.variable
+          )}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <div className="flex h-screen w-screen flex-col ">
-              <NotificationBanner.inAlpha />
+            <NotificationBanner.inAlpha />
 
-              <NavigationBar />
+            <NavigationBar />
 
-              <div className="flex-1">
-                <div className="relative z-[1]">{children}</div>
-              </div>
-
-              <footer className="z-[1] py-2">
-                <p className="text-center text-sm">Dallas &copy; 2024</p>
-              </footer>
+            <div className="flex-1">
+              <div className="relative z-[1]">{children}</div>
             </div>
+
+            <Footer className="z-[1] py-2" />
 
             <StarsManageButton />
             <TailwindIndicator />
             <Toaster />
+            <Analytics />
           </ThemeProvider>
-
-          <Analytics />
         </body>
       </html>
     </>

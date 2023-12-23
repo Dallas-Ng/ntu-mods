@@ -1,5 +1,7 @@
 import { Metadata } from "next"
 
+import PageLayout from "@/components/page-layout"
+
 export const metadata: Metadata = {
   title: `Help`
 }
@@ -9,11 +11,5 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  return (
-    <>
-      <div className="container md:py-10">
-        <>{children}</>
-      </div>
-    </>
-  )
+  return <PageLayout>{children}</PageLayout>
 }

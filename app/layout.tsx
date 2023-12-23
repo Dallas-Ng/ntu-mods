@@ -47,21 +47,21 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <html lang="en" suppressHydrationWarning>
         <ClarityTag />
 
-        <body
-          className={cn(
-            "flex min-h-screen flex-col bg-background font-sans antialiased",
-            fontSans.variable
-          )}>
+        <body className={cn("font-sans antialiased", fontSans.variable)}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <NotificationBanner.inAlpha />
+            <div className="flex h-screen w-screen flex-col ">
+              <NotificationBanner.inAlpha />
 
-            <NavigationBar />
+              <NavigationBar />
 
-            <div className="flex-1">{children}</div>
+              <div className="flex-1">
+                <div className="relative z-[1]">{children}</div>
+              </div>
 
-            <footer className="py-2">
-              <p className="text-center text-sm">Dallas &copy; 2024</p>
-            </footer>
+              <footer className="z-[1] py-2">
+                <p className="text-center text-sm">Dallas &copy; 2024</p>
+              </footer>
+            </div>
 
             <StarsManageButton />
             <TailwindIndicator />

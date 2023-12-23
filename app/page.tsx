@@ -7,7 +7,7 @@ import { Icons } from "@/components/icons"
 export default function IndexPage() {
   return (
     <div className="container p-3">
-      <div className="flex items-center justify-center align-middle md:h-72">
+      <div className="flex items-center justify-center align-middle">
         <div className="max-w-[800px]">
           <div className="mb-5 flex flex-col items-center justify-center text-center md:flex-row md:text-left">
             <Icons.logo height={200} width={200} />
@@ -19,7 +19,8 @@ export default function IndexPage() {
           </div>
 
           <p className="text-center">
-            Why study when you can just dabao your mods?
+            Get access to all indexes including ICC modules and plan your
+            timetable with ease.
           </p>
 
           <div className="my-4 flex justify-center">
@@ -30,7 +31,7 @@ export default function IndexPage() {
         </div>
       </div>
 
-      <div className="relative mt-5 hidden h-[700px] w-full justify-center md:block">
+      <div className="relative mt-5 hidden h-[600px] w-full justify-center md:block">
         <Image
           src="/product-screenshot.png"
           alt="product"

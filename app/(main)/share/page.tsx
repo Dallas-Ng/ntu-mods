@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
@@ -12,10 +10,10 @@ const StarsTable = dynamic(() => import("@/components/stars-table"), {
   loading: () => <Loading divClassName="h-[70vh] w-full" /> // update this
 })
 
-// const StarsCopyTimetableButton = dynamic(
-//   () => import("@/components/stars-buttons/stars-copy-timetable-button"),
-//   { ssr: false }
-// )
+const StarsCopyTimetableButton = dynamic(
+  () => import("@/components/stars-buttons/stars-copy-timetable-button"),
+  { ssr: false }
+)
 
 export default function StarsPage() {
   return (
@@ -29,7 +27,7 @@ export default function StarsPage() {
           <Button>Create Your Own</Button>
         </Link>
 
-        {/* <StarsCopyTimetableButton /> */}
+        <StarsCopyTimetableButton />
       </div>
 
       <StarsTable />

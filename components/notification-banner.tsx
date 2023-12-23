@@ -18,8 +18,7 @@ export const NotificationBanner = {
   inAlpha: () => (
     <Link href="/debug">
       <Banner>
-        <strong>ALPHA BUILD</strong> - Click here if you get stuck! <br />
-        Optimsed for website, mobile support coming soon!
+        <strong>ALPHA BUILD</strong> - Click here if you get stuck!
       </Banner>
     </Link>
   ),

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HelpPage() {
   return (
     <div className="mb-[50px] flex flex-col gap-2 ">
@@ -93,12 +95,12 @@ export default function HelpPage() {
 
         <li>
           <strong>Website</strong> refers to dabao, accessible from{" "}
-          <a
+          <Link
             href="https://dabao.dallasng.me"
             rel="external nofollow noopener"
             target="_blank">
             https://dabao.dallasng.me
-          </a>
+          </Link>
         </li>
 
         <li>

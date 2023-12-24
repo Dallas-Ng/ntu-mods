@@ -56,7 +56,7 @@ export default function StarsManageButton() {
       </div>
 
       <div
-        className="fixed bottom-[5%] right-[5%] z-[11] hidden h-[50px] w-fit items-center justify-center rounded-full border bg-white px-4 py-2 font-semibold text-slate-950 shadow-lg transition-colors duration-100 hover:cursor-pointer md:flex"
+        className="fixed bottom-[5%] right-[5%] z-[11] hidden h-[50px] w-fit items-center justify-center rounded-full border bg-white px-4 py-2 font-semibold text-slate-950 shadow-lg transition-colors duration-100 hover:cursor-pointer hover:bg-slate-200 md:flex"
         onClick={() => setOpen(true)}>
         Add Courses here
         <Plus className="ml-3 h-5 w-5" />

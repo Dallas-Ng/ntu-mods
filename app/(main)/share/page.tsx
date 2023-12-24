@@ -4,6 +4,7 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import Loading from "@/components/loading"
+import StarsTableLegend from "@/components/stars-table-legend"
 
 const StarsTable = dynamic(() => import("@/components/stars-table"), {
   ssr: false,
@@ -18,9 +19,13 @@ const StarsCopyTimetableButton = dynamic(
 export default function StarsPage() {
   return (
     <div className="bg-white dark:bg-slate-950 sm:rounded-2xl sm:border ">
-      <h1 className="bg-gradient-to-r from-emerald-800 to-green-900 bg-clip-text pl-4 pt-3 text-3xl font-bold text-transparent">
-        Stars* Planner (Shared)
-      </h1>
+      <div className="flex items-baseline justify-between pl-4 pr-5 pt-3">
+        <h1 className="bg-gradient-to-r from-emerald-800 to-green-900 bg-clip-text  text-3xl font-bold text-transparent">
+          Stars* Planner (Shared)
+        </h1>
+
+        <StarsTableLegend />
+      </div>
 
       <div className="flex gap-2 px-2 py-4">
         <Link href="/stars">

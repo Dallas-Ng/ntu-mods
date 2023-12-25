@@ -3,8 +3,8 @@
 import { useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 
+import { DAY_MAPPING } from "@/config/stars"
 import { C_DATA } from "@/lib/consolidated-data"
-import { DAY_MAPPING } from "@/lib/utils"
 
 import StarsIndexSelect from "./stars-index-select"
 import StarsIndexSheet from "./stars-index-sheet"

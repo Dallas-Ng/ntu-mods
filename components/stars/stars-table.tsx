@@ -3,8 +3,7 @@
 import React from "react"
 import { useBoundState } from "@/state/bound-state"
 
-import { STARS_TIMESLOTS } from "@/config/stars"
-import { DAY_MAPPING } from "@/lib/utils"
+import { DAY_MAPPING, STARS_TIMESLOTS } from "@/config/stars"
 import { useQueryStringCTI } from "@/hooks/use-qs-CTI"
 import {
   Table,

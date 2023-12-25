@@ -1,6 +1,7 @@
 import { useBoundState } from "@/state/bound-state"
 
-import { DAY_MAPPING, cn } from "@/lib/utils"
+import { DAY_MAPPING } from "@/config/stars"
+import { cn } from "@/lib/utils"
 
 import { TableCell } from "../ui/table"
 

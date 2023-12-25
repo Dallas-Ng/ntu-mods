@@ -1,7 +1,8 @@
 import { useBoundState } from "@/state/bound-state"
 import { Check } from "lucide-react"
 
-import { DAY_MAPPING, cn } from "@/lib/utils"
+import { DAY_MAPPING } from "@/config/stars"
+import { cn } from "@/lib/utils"
 import {
   Command,
   CommandEmpty,

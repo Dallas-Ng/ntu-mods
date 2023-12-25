@@ -4,8 +4,8 @@ import { useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 import { RefreshCcw } from "lucide-react"
 
+import { DAY_MAPPING } from "@/config/stars"
 import { C_DATA, getRandomCourseIndex } from "@/lib/consolidated-data"
-import { DAY_MAPPING } from "@/lib/utils"
 
 import StarsCell from "../stars/stars-cell"
 import { Button } from "../ui/button"

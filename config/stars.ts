@@ -33,3 +33,13 @@ export const STARS_TIMESLOTS = [
   { start: 2200, end: 2230 },
   { start: 2230, end: 2300 }
 ]
+
+export const DAY_MAPPING = {
+  1: "Monday",
+  2: "Tuesday",
+  3: "Wednesday",
+  4: "Thursday",
+  5: "Friday",
+  6: "Saturday",
+  7: "Sunday"
+}

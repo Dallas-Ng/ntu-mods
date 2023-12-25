@@ -4,7 +4,7 @@ import { useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 import { RefreshCcw } from "lucide-react"
 
-import { DAY_MAPPING } from "@/config/stars"
+import { DAY_TRUN_MAP } from "@/config/stars"
 import { C_DATA, getRandomCourseIndex } from "@/lib/consolidated-data"
 
 import StarsCell from "../stars/stars-cell"
@@ -95,7 +95,7 @@ export default function TableSettings() {
 
                       {key === "day" &&
                         index[key] > 0 &&
-                        DAY_MAPPING[index[key]].slice(0, 3)}
+                        DAY_TRUN_MAP[index[key]]}
 
                       {key === "remarks" && index[key] === "" && "No Remarks"}
                     </span>

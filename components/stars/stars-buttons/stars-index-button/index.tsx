@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 
-import { DAY_MAPPING } from "@/config/stars"
+import { DAY_MAP } from "@/config/stars"
 import { C_DATA } from "@/lib/consolidated-data"
 
 import StarsIndexSelect from "./stars-index-select"
@@ -39,7 +39,7 @@ export default function StarsIndexButton({ courseKey }: Props) {
             ? itemVal.toLowerCase().includes(lSearchTerm)
             : // means itemVal is a number
               itemKey != "duration" && // duration is also a number, so dont use it to filter days
-              DAY_MAPPING[itemVal].toLowerCase().includes(lSearchTerm)
+              DAY_MAP[itemVal].toLowerCase().includes(lSearchTerm)
         )
       )
 

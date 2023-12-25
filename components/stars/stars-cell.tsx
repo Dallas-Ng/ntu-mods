@@ -1,6 +1,6 @@
 import { useBoundState } from "@/state/bound-state"
 
-import { DAY_MAPPING } from "@/config/stars"
+import { DAY_MAP } from "@/config/stars"
 import { cn } from "@/lib/utils"
 
 import { TableCell } from "../ui/table"
@@ -91,7 +91,7 @@ export default function StarsCell(props: StarsCellProp) {
         {settings.starsCell.time && <>{index.time}</>}
 
         {settings.starsCell.day && index.day > 0 && (
-          <> {DAY_MAPPING[index.day].slice(0, 3)}</>
+          <> {DAY_MAP[index.day].slice(0, 3)}</>
         )}
       </p>
 

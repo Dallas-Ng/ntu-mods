@@ -166,7 +166,7 @@ export default function StarsTable(_props: StarsTableProps) {
    * Generation of Table Head and Table Body
    */
   const TableHeadItems = Object.entries(DAY_MAP_CONFLICTS).map(([k, v]) => (
-    <TableHead key={k} colSpan={v} className="p-0 text-center">
+    <TableHead key={k} colSpan={v} className="h-fit p-0 text-center">
       {DAY_MAPPING[Number(k) as keyof typeof DAY_MAPPING].slice(0, 3)}
     </TableHead>
   ))
@@ -184,18 +184,20 @@ export default function StarsTable(_props: StarsTableProps) {
   ))
 
   return (
-    <Table className="table-fixed border-slate-500 p-0 text-[0.6rem] md:text-xs">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[50px] p-1 text-center md:w-[95px]">
-            Time
-          </TableHead>
+    <div className="rounded-lg border border-slate-700 pb-1">
+      <Table className="table-fixed p-0 text-[0.6rem] md:text-xs">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="h-fit w-[50px] p-1 text-center md:w-[95px]">
+              Time
+            </TableHead>
 
-          {TableHeadItems}
-        </TableRow>
-      </TableHeader>
+            {TableHeadItems}
+          </TableRow>
+        </TableHeader>
 
-      <TableBody>{TableBodyItems}</TableBody>
-    </Table>
+        <TableBody>{TableBodyItems}</TableBody>
+      </Table>
+    </div>
   )
 }

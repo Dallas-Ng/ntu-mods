@@ -49,18 +49,17 @@ export default function StarsManageButton() {
 
   return (
     <>
+      <div className="absolute bottom-0 right-0 h-[200px] w-screen md:hidden"></div>
+
       <div
-        className="fixed bottom-0 right-0 z-[11] flex h-[50px] w-screen items-center justify-center border bg-white p-2 shadow-lg transition-colors duration-100 hover:cursor-pointer  dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800 md:hidden"
+        className="fixed bottom-0 right-0 z-[11] flex h-[50px] w-screen items-center justify-center shadow-lg hover:cursor-pointer dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800 md:hidden"
         onClick={() => setOpen(true)}>
         <span className="text-center">Click to Edit Timetable</span>
       </div>
 
-      <div
-        className="fixed bottom-[5%] right-[5%] z-[11] hidden h-[50px] w-fit items-center justify-center rounded-full border bg-white px-4 py-2 font-semibold text-slate-950 shadow-lg transition-colors duration-100 hover:cursor-pointer hover:bg-slate-200 md:flex"
-        onClick={() => setOpen(true)}>
-        Add Courses here
-        <Plus className="ml-3 h-5 w-5" />
-      </div>
+      <Button onClick={() => setOpen(true)} className="hidden md:block">
+        Add Courses
+      </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="z-[20] flex w-[97%] max-w-4xl flex-col justify-start px-2 py-5 md:px-5">
@@ -96,7 +95,7 @@ export default function StarsManageButton() {
                       const course = C_DATA[courseKey as keyof typeof C_DATA]
 
                       return (
-                        <tr className="h-[50px]">
+                        <tr className="h-[50px]" key={courseKey}>
                           <td className="w-[75px] text-center text-sm">
                             {course.key}
                           </td>

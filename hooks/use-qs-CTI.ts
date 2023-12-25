@@ -2,7 +2,12 @@ import { useSearchParams } from "next/navigation"
 
 import { C_DATA } from "@/lib/consolidated-data"
 
-export function useQueryStringCTI() {
+/**
+ * Hook for extracting and processing course index data from the query string.
+ *
+ * @returns {CourseIndex} An object mapping course codes to their respective indexes.
+ */
+export function useQueryStringCTI(): CourseIndex {
   const searchParams = useSearchParams()
   const coursesToIndex: CourseIndex = {}
 

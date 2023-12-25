@@ -6,15 +6,15 @@ import CONSOLIDATED_DATA from "@/data/consolidated-2023-2.json"
  * TEST: Remove .uppercase function in course-course-select.tsx
  */
 
-export const C_DATA = CONSOLIDATED_DATA
-export const C_INDEXES = CONSOLIDATED_INDEXES
+export const C_DATA = CONSOLIDATED_DATA as Record<string, Course>
+export const C_INDEXES = CONSOLIDATED_INDEXES as Record<string, Index[]>
 
-export function getCDataCourse(courseKey: string): Course {
-  return C_DATA[courseKey as keyof typeof C_DATA] as Course
+export function getCourse(courseKey: string): Course {
+  return C_DATA[courseKey] as Course
 }
 
-export function getCDataCourseIndexes(courseKey: string) {
-  return C_DATA[courseKey as keyof typeof C_DATA].indexes
+export function getCourseIndexes(courseKey: string): Record<string, Index[]> {
+  return C_DATA[courseKey].indexes
 }
 
 export function getQsFromCourseToIndexes(coursesToIndex: CourseIndex) {
@@ -32,7 +32,7 @@ export function getRandomCourseIndex() {
   const randomCourseKey =
     courseKeys[Math.floor(Math.random() * courseKeys.length)]
 
-  const courseIndexes = C_DATA[randomCourseKey as keyof typeof C_DATA].indexes
+  const courseIndexes = C_DATA[randomCourseKey].indexes
 
   const indexKeys = Object.keys(courseIndexes)
   const randomIndex = indexKeys[Math.floor(Math.random() * indexKeys.length)]

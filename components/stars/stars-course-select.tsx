@@ -1,11 +1,10 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import CONSOLIDATED_DATA from "@/data/consolidated-2023-2.json"
 import { useBoundState } from "@/state/bound-state"
 import { Check, ChevronsUpDown } from "lucide-react"
 
-import { getCDataCourse } from "@/lib/consolidated-data"
+import { C_DATA, getCourse } from "@/lib/consolidated-data"
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
 import { Button } from "@/components/ui/button"
@@ -22,7 +21,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 
-const STORED_KEYS = Object.keys(CONSOLIDATED_DATA)
+const STORED_KEYS = Object.keys(C_DATA)
 
 interface Props {
   btnClassName?: React.HtmlHTMLAttributes<HTMLDivElement>["className"]
@@ -67,7 +66,7 @@ export default function StarsCourseSelect(props: Props) {
     const value = val.toUpperCase()
 
     // If user clicks on a course in store, we will remove it out
-    const course = getCDataCourse(value)
+    const course = getCourse(value)
 
     if (Object.keys(coursesToIndex).includes(val.toUpperCase())) {
       removeCourseToIndex(course.key)

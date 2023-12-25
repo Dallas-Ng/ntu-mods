@@ -5,9 +5,8 @@ import { track } from "@vercel/analytics"
 
 import { getQsFromCourseToIndexes } from "@/lib/consolidated-data"
 import { BASE_URL } from "@/lib/utils"
-
-import { Button } from "../ui/button"
-import { useToast } from "../ui/use-toast"
+import { Button } from "@/components/ui/button"
+import { useToast } from "@/components/ui/use-toast"
 
 export default function StarsShareButton() {
   const { coursesToIndex } = useBoundState()

@@ -4,14 +4,14 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import Loading from "@/components/loading"
-import TimetableHeader from "@/components/timetable-header"
+import TimetableHeader from "@/components/stars/timetable-header"
 
 const StarsCopyTimetableButton = dynamic(
-  () => import("@/components/stars-buttons/stars-copy-timetable-button"),
+  () => import("@/components/stars/stars-buttons/stars-copy-timetable-button"),
   { ssr: false }
 )
 
-const StarsTable = dynamic(() => import("@/components/stars-table"), {
+const StarsTable = dynamic(() => import("@/components/stars/stars-table"), {
   ssr: false,
   loading: () => (
     <div className="flex h-[780px] items-center justify-center">

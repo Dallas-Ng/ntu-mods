@@ -1,6 +1,5 @@
 "use client"
 
-import StarsShareButton from "./stars-buttons/stars-share-button"
 import StarsTable from "./stars-table"
 
 export default function StarsPlanner() {

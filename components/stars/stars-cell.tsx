@@ -1,6 +1,6 @@
-import { cn, getCourseTypeBorder } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 
-import { TableCell } from "./ui/table"
+import { TableCell } from "../ui/table"
 
 interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
   courseKey: string

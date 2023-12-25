@@ -1,8 +1,13 @@
 import { useRef, useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 
-import { Button } from "../../ui/button"
-import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover"
+import { Button } from "@/components/ui/button"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "@/components/ui/popover"
+
 import IndexCommand from "./index-command"
 
 interface Props {

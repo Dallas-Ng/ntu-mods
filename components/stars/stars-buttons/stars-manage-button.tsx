@@ -7,6 +7,7 @@ import { Plus, X } from "lucide-react"
 
 import { C_DATA } from "@/lib/consolidated-data"
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogClose,
@@ -18,7 +19,6 @@ import {
 } from "@/components/ui/dialog"
 
 import StarsCourseSelect from "../stars-course-select"
-import { Button } from "../ui/button"
 import StarsIndexButton from "./stars-index-button"
 
 const CourseTypeBadge = ({

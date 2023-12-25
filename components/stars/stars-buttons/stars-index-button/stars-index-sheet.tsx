@@ -1,16 +1,15 @@
 import { useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 
+import { Button } from "@/components/ui/button"
 import {
   Sheet,
   SheetContent,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger
 } from "@/components/ui/sheet"
 
-import { Button } from "../../ui/button"
 import IndexCommand from "./index-command"
 
 interface Props {

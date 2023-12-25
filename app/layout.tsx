@@ -48,7 +48,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
         <body
           className={cn(
-            "relative flex min-h-screen flex-col font-sans antialiased transition-colors duration-300",
+            "relative flex min-h-screen flex-col font-sans antialiased",
             fontSans.variable
           )}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

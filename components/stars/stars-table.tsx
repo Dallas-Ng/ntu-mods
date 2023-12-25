@@ -62,24 +62,40 @@ export default function StarsTable(_props: StarsTableProps) {
       ? coursesToIndexFromQueryString
       : coursesToIndexFromState
 
-  const DAY_MAP: CourseIndex = {
+  const DAY_MAP: { [day: number]: Index[] } = {
     1: [],
     2: [],
     3: [],
     4: [],
     5: []
-    // 6: [],
-    // 7: []
   }
 
-  const DAY_MAP_CONFLICTS = {
+  const DAY_MAP_CONFLICTS: { [day: number]: number } = {
     1: 0,
     2: 0,
     3: 0,
     4: 0,
     5: 0
-    // 6: 0,
-    // 7: 0
+  }
+
+  // Automatically show weekend days if there are any
+  const hasSaturday = Object.values(coursesToIndex).some((entries) =>
+    entries.find((x) => x.day === 6)
+  )
+
+  const hasSunday = Object.values(coursesToIndex).some((entries) =>
+    entries.find((x) => x.day === 7)
+  )
+
+  // Append weekend days to DAY_MAP & Conficts
+  if (hasSunday) {
+    DAY_MAP[6] = []
+    DAY_MAP[7] = []
+    DAY_MAP_CONFLICTS[6] = 0
+    DAY_MAP_CONFLICTS[7] = 0
+  } else if (hasSaturday) {
+    DAY_MAP[6] = []
+    DAY_MAP_CONFLICTS[6] = 0
   }
 
   // Push each day data into DAY_MAP

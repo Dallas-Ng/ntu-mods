@@ -105,7 +105,7 @@ export default function StarsManageButton() {
                               {course.title
                                 .toLowerCase()
                                 .trim()
-                                .replaceAll("~", "")}
+                                .replace(/[^a-zA-Z ]/g, "")}
                             </p>
                           </td>
 

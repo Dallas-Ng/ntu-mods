@@ -1,4 +1,6 @@
-import { cn } from "@/lib/utils"
+import { useBoundState } from "@/state/bound-state"
+
+import { DAY_MAPPING, cn } from "@/lib/utils"
 
 import { TableCell } from "../ui/table"
 
@@ -11,6 +13,15 @@ interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
 
 export default function StarsCell(props: StarsCellProp) {
   const { courseKey, index, hasConflict = false, coursesToIndex } = props
+  const { settings } = useBoundState()
+
+  let remarks: string = index.remarks
+
+  if (index.remarks.includes("2,4,6")) {
+    remarks = "Even Weeks"
+  } else if (index.remarks.includes("1,3,5")) {
+    remarks = "Odd Weeks"
+  }
 
   const courseStyle = index.type.includes("LEC")
     ? {
@@ -68,18 +79,26 @@ export default function StarsCell(props: StarsCellProp) {
   const StarCellData = (index: Index) => (
     <>
       <p>
-        <span className={cn("font-bold", courseStyle.text)}>{courseKey}</span>{" "}
-        {index.type} ({index.group})
+        <span className={cn("font-bold", courseStyle.text)}>{courseKey}</span>
+
+        {settings.starsCell.type && <> {index.type}</>}
+
+        {settings.starsCell.group && <> ({index.group})</>}
       </p>
 
-      <p>{index.time}</p>
+      <p>
+        {settings.starsCell.time && <>{index.time}</>}
 
-      <p>{index.venue}</p>
+        {settings.starsCell.day && index.day > 0 && (
+          <> {DAY_MAPPING[index.day as keyof typeof DAY_MAPPING].slice(0, 3)}</>
+        )}
+      </p>
 
-      {/* <p>
-        {index.key} - {index.day}
-      </p> */}
-      {index.remarks.replace("Teaching", "")}
+      {settings.starsCell.venue && <p>{index.venue}</p>}
+
+      {settings.starsCell.remarks && <p>{remarks}</p>}
+
+      {settings.starsCell.key && <p>{index.key}</p>}
     </>
   )
 

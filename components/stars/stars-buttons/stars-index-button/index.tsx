@@ -16,7 +16,7 @@ interface Props {
 export default function StarsIndexButton({ courseKey }: Props) {
   const { removeCourseToIndex, addCourseToIndex } = useBoundState()
 
-  const course: Course = C_DATA[courseKey as keyof typeof C_DATA]
+  const course = C_DATA[courseKey]
   const courseIndexes = course ? course.indexes : ([] as unknown as CourseIndex)
   const [filteredIndexes, setFilteredIndexes] =
     useState<CourseIndex>(courseIndexes)
@@ -39,9 +39,7 @@ export default function StarsIndexButton({ courseKey }: Props) {
             ? itemVal.toLowerCase().includes(lSearchTerm)
             : // means itemVal is a number
               itemKey != "duration" && // duration is also a number, so dont use it to filter days
-              DAY_MAPPING[itemVal as keyof typeof DAY_MAPPING]
-                .toLowerCase()
-                .includes(lSearchTerm)
+              DAY_MAPPING[itemVal].toLowerCase().includes(lSearchTerm)
         )
       )
 
@@ -55,10 +53,7 @@ export default function StarsIndexButton({ courseKey }: Props) {
     if (Object.keys(courseIndexes).includes(courseKey)) {
       removeCourseToIndex(courseKey)
     } else {
-      addCourseToIndex(
-        courseKey,
-        courseIndexes[idxKey as keyof typeof courseIndexes]
-      )
+      addCourseToIndex(courseKey, courseIndexes[idxKey])
     }
   }
 

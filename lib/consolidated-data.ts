@@ -37,7 +37,7 @@ export function getRandomCourseIndex() {
   const indexKeys = Object.keys(courseIndexes)
   const randomIndex = indexKeys[Math.floor(Math.random() * indexKeys.length)]
 
-  const index = courseIndexes[randomIndex as keyof typeof courseIndexes][0]
+  const index = courseIndexes[randomIndex][0]
 
   return { randomCourseKey, randomIndex: index }
 }

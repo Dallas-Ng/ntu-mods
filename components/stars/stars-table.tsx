@@ -182,7 +182,7 @@ export default function StarsTable(_props: StarsTableProps) {
    */
   const TableHeadItems = Object.entries(DAY_MAP_CONFLICTS).map(([k, v]) => (
     <TableHead key={k} colSpan={v} className="h-fit p-0 text-center">
-      {DAY_MAPPING[Number(k) as keyof typeof DAY_MAPPING].slice(0, 3)}
+      {DAY_MAPPING[Number(k)].slice(0, 3)}
     </TableHead>
   ))
 

@@ -59,9 +59,7 @@ export default function TableSettings() {
 
           <div className="flex w-full items-baseline justify-between">
             <p className="w-full truncate text-xs capitalize text-gray-500">
-              {C_DATA[courseKey as keyof typeof C_DATA].title
-                .toLowerCase()
-                .replace(/[^a-zA-Z ]/g, "")}
+              {C_DATA[courseKey].title.toLowerCase().replace(/[^a-zA-Z ]/g, "")}
             </p>
 
             <Button
@@ -93,13 +91,11 @@ export default function TableSettings() {
 
                     <span className="text-xs text-gray-500">
                       {!["day", "remarks"].includes(key) &&
-                        index[key as keyof typeof RANDOM_C_INDEX]}
+                        index[key as keyof typeof index]}
 
                       {key === "day" &&
                         index[key] > 0 &&
-                        DAY_MAPPING[
-                          index[key] as unknown as keyof typeof DAY_MAPPING
-                        ].slice(0, 3)}
+                        DAY_MAPPING[index[key]].slice(0, 3)}
 
                       {key === "remarks" && index[key] === "" && "No Remarks"}
                     </span>

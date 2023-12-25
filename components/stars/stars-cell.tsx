@@ -91,7 +91,7 @@ export default function StarsCell(props: StarsCellProp) {
         {settings.starsCell.time && <>{index.time}</>}
 
         {settings.starsCell.day && index.day > 0 && (
-          <> {DAY_MAPPING[index.day as keyof typeof DAY_MAPPING].slice(0, 3)}</>
+          <> {DAY_MAPPING[index.day].slice(0, 3)}</>
         )}
       </p>
 

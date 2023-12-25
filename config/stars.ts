@@ -34,7 +34,7 @@ export const STARS_TIMESLOTS = [
   { start: 2230, end: 2300 }
 ]
 
-export const DAY_MAPPING = {
+export const DAY_MAPPING: Record<number, string> = {
   1: "Monday",
   2: "Tuesday",
   3: "Wednesday",

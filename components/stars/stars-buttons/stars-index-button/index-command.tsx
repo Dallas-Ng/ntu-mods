@@ -72,9 +72,7 @@ export default function IndexCommand(props: Props) {
                   {fiValue.map((v, i) => (
                     <div key={i}>
                       <div className="flex w-full justify-between gap-2">
-                        <span>
-                          {DAY_MAPPING[v.day as keyof typeof DAY_MAPPING]}
-                        </span>
+                        <span>{DAY_MAPPING[v.day]}</span>
 
                         <span>
                           {v.type} - {v.group}

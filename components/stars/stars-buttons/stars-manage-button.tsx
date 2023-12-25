@@ -1,9 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { usePathname } from "next/navigation"
 import { useBoundState } from "@/state/bound-state"
-import { Plus, X } from "lucide-react"
+import { X } from "lucide-react"
 
 import { C_DATA } from "@/lib/consolidated-data"
 import { cn } from "@/lib/utils"
@@ -42,10 +41,6 @@ const CourseTypeBadge = ({
 export default function StarsManageButton() {
   const { coursesToIndex, removeCourseToIndex } = useBoundState()
   const [open, setOpen] = useState(false)
-
-  const pathname = usePathname()
-
-  if (!pathname.includes("stars")) return <></>
 
   return (
     <>
@@ -92,7 +87,7 @@ export default function StarsManageButton() {
                 <tbody>
                   {Object.entries(coursesToIndex).map(
                     ([courseKey, courseVal]) => {
-                      const course = C_DATA[courseKey as keyof typeof C_DATA]
+                      const course = C_DATA[courseKey]
 
                       return (
                         <tr className="h-[50px]" key={courseKey}>

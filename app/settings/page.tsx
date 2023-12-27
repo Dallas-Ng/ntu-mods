@@ -3,7 +3,7 @@ import TableSettings from "@/components/settings/table-settings"
 export default function SettingsPage() {
   return (
     <>
-      <div className="flex w-full flex-col justify-center gap-4 overflow-y-auto">
+      <div className="flex h-full w-full flex-col justify-center gap-4">
         <h1 className="text-3xl font-bold">Settings</h1>
 
         <p>We are building more customisability into the page!</p>

@@ -32,8 +32,8 @@ export default function TableSettings() {
   return (
     <>
       <div className="flex items-center gap-2">
-        <div className="relative flex h-[230px] w-[384px] flex-col justify-between rounded-lg border p-3 shadow-md">
-          <div className="flex justify-between gap-2">
+        <div className="relative flex h-[300px] w-[275px] flex-col justify-between rounded-lg border p-3 shadow-md md:h-[230px] md:w-[384px]">
+          <div className="flex flex-col justify-between gap-2 md:flex-row">
             <StarsCell
               className="h-fit w-[250px] text-xs"
               courseKey={courseKey}
@@ -81,6 +81,7 @@ export default function TableSettings() {
                   <Label htmlFor={key} className="capitalize">
                     <span>{key === "key" ? "Index Code" : key} </span>
 
+                    <br className="block md:hidden" />
                     <span className="text-xs text-gray-500">
                       {!["day", "remarks"].includes(key) &&
                         index[key as keyof typeof index]}

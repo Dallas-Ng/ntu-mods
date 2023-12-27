@@ -5,16 +5,18 @@ import { useBoundState } from "@/state/bound-state"
 
 import { DAY_MAP } from "@/config/stars"
 import { C_DATA } from "@/lib/consolidated-data"
+import { Button } from "@/components/ui/button"
+import SheetPopover from "@/components/sheet-popover"
 
-import StarsIndexSelect from "./stars-index-select"
-import StarsIndexSheet from "./stars-index-sheet"
+import IndexCommand from "./index-command"
 
 interface Props {
   courseKey: string
 }
 
 export default function StarsIndexButton({ courseKey }: Props) {
-  const { removeCourseToIndex, addCourseToIndex } = useBoundState()
+  const { removeCourseToIndex, addCourseToIndex, coursesToIndex } =
+    useBoundState()
 
   const course = C_DATA[courseKey]
   const courseIndexes = course ? course.indexes : ([] as unknown as CourseIndex)
@@ -59,23 +61,30 @@ export default function StarsIndexButton({ courseKey }: Props) {
 
   return (
     <>
-      <span className="hidden md:block">
-        <StarsIndexSelect
-          courseKey={courseKey}
-          filteredIndexes={filteredIndexes}
-          handleSearch={handleSearch}
-          handleSelect={handleSelect}
-        />
-      </span>
-
-      <span className="block md:hidden">
-        <StarsIndexSheet
-          courseKey={courseKey}
-          filteredIndexes={filteredIndexes}
-          handleSearch={handleSearch}
-          handleSelect={handleSelect}
-        />
-      </span>
+      <SheetPopover
+        openChange={(open) => (open ? handleSearch("") : {})}
+        triggerComponent={
+          <Button variant="outline" className="w-full px-6 text-sm">
+            {coursesToIndex[courseKey][0].key}
+          </Button>
+        }
+        popoverContent={
+          <IndexCommand
+            filteredIndexes={filteredIndexes}
+            handleSearch={handleSearch}
+            handleSelect={handleSelect}
+            commandClassName="max-h-[450px] overflow-auto"
+          />
+        }
+        sheetContent={
+          <IndexCommand
+            filteredIndexes={filteredIndexes}
+            handleSearch={handleSearch}
+            handleSelect={handleSelect}
+            commandClassName="overflow-auto"
+          />
+        }
+      />
     </>
   )
 }

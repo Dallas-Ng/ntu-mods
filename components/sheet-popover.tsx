@@ -40,17 +40,12 @@ export default function SheetPopover(props: Props) {
   }
 
   return (
-    <div ref={containerRef}>
-      <Popover onOpenChange={handleOpenChange}>
-        <PopoverTrigger>{triggerComponent}</PopoverTrigger>
+    <Popover onOpenChange={handleOpenChange}>
+      <PopoverTrigger>{triggerComponent}</PopoverTrigger>
 
-        <PopoverContent
-          sideOffset={4}
-          className="p-0 md:w-96"
-          container={containerRef.current}>
-          {popoverContent}
-        </PopoverContent>
-      </Popover>
-    </div>
+      <PopoverContent sideOffset={4} className="p-0 md:w-96">
+        {popoverContent}
+      </PopoverContent>
+    </Popover>
   )
 }

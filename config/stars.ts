@@ -51,3 +51,12 @@ export const DAY_TRUN_MAP: Record<number, string> = {
   6: "Sat",
   7: "Sun"
 }
+
+export const COURSE_TYPE = {
+  LEC: "Lecture",
+  LAB: "Laboratory",
+  SEM: "Seminar",
+  TUT: "Tutorial",
+  PRJ: "Project",
+  DES: "Design"
+}

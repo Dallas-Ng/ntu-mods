@@ -5,6 +5,7 @@ import { useBoundState } from "@/state/bound-state"
 import { X } from "lucide-react"
 
 import { C_DATA } from "@/lib/consolidated-data"
+import { formatTitle } from "@/lib/stars.lib"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -97,10 +98,7 @@ export default function StarsManageButton() {
 
                           <td className="hidden md:table-cell">
                             <p className="line-clamp-1 text-sm capitalize">
-                              {course.title
-                                .toLowerCase()
-                                .trim()
-                                .replace(/[^a-zA-Z ]/g, "")}
+                              {formatTitle(course.title)}
                             </p>
                           </td>
 

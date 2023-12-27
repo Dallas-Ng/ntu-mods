@@ -6,20 +6,12 @@ import { RefreshCcw } from "lucide-react"
 
 import { DAY_TRUN_MAP } from "@/config/stars"
 import { C_DATA, getRandomCourseIndex } from "@/lib/consolidated-data"
+import { formatTitle } from "@/lib/stars.lib"
 
 import StarsCell from "../stars/stars-cell"
 import { Button } from "../ui/button"
 import { Label } from "../ui/label"
 import { Switch } from "../ui/switch"
-
-// const COURSE_TYPE = {
-//   LEC: "Lecture",
-//   LAB: "Laboratory",
-//   SEM: "Seminar",
-//   TUT: "Tutorial",
-//   PRJ: "Project",
-//   DES: "Design"
-// }
 
 export default function TableSettings() {
   const { settings, updateSettings } = useBoundState()
@@ -59,7 +51,7 @@ export default function TableSettings() {
 
           <div className="flex w-full items-baseline justify-between">
             <p className="w-full truncate text-xs capitalize text-gray-500">
-              {C_DATA[courseKey].title.toLowerCase().replace(/[^a-zA-Z ]/g, "")}
+              {formatTitle(C_DATA[courseKey].title)}
             </p>
 
             <Button
@@ -97,7 +89,8 @@ export default function TableSettings() {
                         index[key] > 0 &&
                         DAY_TRUN_MAP[index[key]]}
 
-                      {key === "remarks" && index[key] === "" && "No Remarks"}
+                      {key === "remarks" &&
+                        (index[key] === "" ? "No Remarks" : index[key])}
                     </span>
                   </Label>
                 </div>

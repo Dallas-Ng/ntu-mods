@@ -1,6 +1,9 @@
+"use client"
+
 import { useBoundState } from "@/state/bound-state"
 
-import { DAY_MAP } from "@/config/stars"
+import { DAY_TRUN_MAP } from "@/config/stars"
+import { formatRemarks, getIndexTypeStyle } from "@/lib/stars.lib"
 import { cn } from "@/lib/utils"
 
 import { TableCell } from "../ui/table"
@@ -16,43 +19,7 @@ export default function StarsCell(props: StarsCellProp) {
   const { courseKey, index, hasConflict = false, coursesToIndex } = props
   const { settings } = useBoundState()
 
-  let remarks: string = index.remarks
-
-  if (index.remarks.includes("2,4,6")) {
-    remarks = "Even Weeks"
-  } else if (index.remarks.includes("1,3,5")) {
-    remarks = "Odd Weeks"
-  }
-
-  const courseStyle = index.type.includes("LEC")
-    ? {
-        borderLeft: "border-l-orange-500",
-        text: "text-orange-600",
-        background: "bg-orange-200"
-      }
-    : index.type.includes("LAB")
-      ? {
-          borderLeft: "border-l-emerald-500",
-          text: "text-emerald-600",
-          background: "bg-emerald-200"
-        }
-      : index.type.includes("SEM")
-        ? {
-            borderLeft: "border-l-yellow-500",
-            text: "text-yellow-600",
-            background: "bg-yellow-200"
-          }
-        : index.type.includes("TUT")
-          ? {
-              borderLeft: "border-l-blue-500",
-              text: "text-blue-600",
-              background: "bg-blue-200"
-            }
-          : {
-              borderLeft: "border-l-gray-500",
-              text: "text-gray-600",
-              background: "bg-gray-200"
-            }
+  const courseStyle = getIndexTypeStyle(index.type)
 
   // When a index has multiple variations thats suppose to show in the same cell,
   // e.g. week 1-7 is at LT4, week 9-13 is at LT5...
@@ -91,13 +58,13 @@ export default function StarsCell(props: StarsCellProp) {
         {settings.starsCell.time && <>{index.time}</>}
 
         {settings.starsCell.day && index.day > 0 && (
-          <> {DAY_MAP[index.day].slice(0, 3)}</>
+          <> {DAY_TRUN_MAP[index.day]}</>
         )}
       </p>
 
       {settings.starsCell.venue && <p>{index.venue}</p>}
 
-      {settings.starsCell.remarks && <p>{remarks}</p>}
+      {settings.starsCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
 
       {settings.starsCell.key && <p>{index.key}</p>}
     </>

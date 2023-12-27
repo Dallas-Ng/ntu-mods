@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "format:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "deploy:local" : "next build && next start"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.0.5",

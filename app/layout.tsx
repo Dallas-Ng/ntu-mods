@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/sonner"
 import ClarityTag from "@/components/clarity"
 import Footer from "@/components/footer"
 import NavigationBar from "@/components/navbar"
@@ -63,7 +63,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <Footer className="relative z-[1] py-2" />
 
             <TailwindIndicator />
-            <Toaster />
+            <Toaster position="top-center" />
             <Analytics />
           </ThemeProvider>
         </body>

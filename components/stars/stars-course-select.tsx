@@ -76,7 +76,7 @@ export default function StarsCourseSelect(props: Props) {
        * If a conflict is found, it selects the next available index without conflicts.
        * If no index is available, it will select the first index.
        */
-      let selectedIndexes = course.indexes[0]
+      let selectedIndexes = Object.values(course.indexes)[0]
 
       Object.values(course.indexes).every((courseIndex) => {
         let hasConflict = false

@@ -25,9 +25,9 @@ const StarsTable = dynamic(() => import("@/components/stars/stars-table"), {
 export default function StarsPage() {
   return (
     <>
-      <TimetableHeader>
+      <TimetableHeader variant="share">
         <Link href="/stars">
-          <Button>Create Your Own</Button>
+          <Button>Make My Timetable</Button>
         </Link>
 
         <StarsCopyTimetableButton />

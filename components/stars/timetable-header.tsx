@@ -1,15 +1,27 @@
+import { cn } from "@/lib/utils"
+
 import StarsTableLegend from "./stars-table-legend"
 
 interface Props {
   children?: React.ReactNode
+  variant?: "share"
 }
 
-export default function TimetableHeader({ children }: Props) {
+export default function TimetableHeader({ children, variant }: Props) {
   return (
     <>
       <div className="flex w-full items-baseline justify-between">
-        <h1 className="bg-gradient-to-r from-blue-800 to-indigo-900 bg-clip-text text-3xl font-bold text-transparent">
-          Stars* Planner
+        <h1
+          className={cn(
+            "bg-gradient-to-r bg-clip-text text-3xl font-bold text-transparent",
+            variant === "share"
+              ? "from-rose-500 to-red-700 "
+              : "from-blue-800 to-indigo-900 "
+          )}>
+          Stars* Planner{" "}
+          {variant === "share" && (
+            <span className="text-lg">shared by someone</span>
+          )}
         </h1>
 
         <StarsTableLegend />

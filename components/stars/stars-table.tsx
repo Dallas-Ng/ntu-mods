@@ -116,7 +116,27 @@ export default function StarsTable(_props: StarsTableProps) {
       ) + 1 // count unique conflicts, + 1 for positioning purposes
   })
 
-  const MATRIX_ROWS = STARS_TIMESLOTS.length
+  /**
+   * Calculates the MAX timeslots all indexes in the MAP object.
+   */
+  let TIMETABLE_MAX = 800
+  Object.entries(MAP).forEach(([_, dayMapVal]) => {
+    const maxTime = Math.max(
+      ...dayMapVal.map((index) => parseInt(index.time.split("-")[1]))
+    )
+
+    if (TIMETABLE_MAX < maxTime) TIMETABLE_MAX = maxTime
+  })
+
+  const maxTimeSlotToShow = STARS_TIMESLOTS.findIndex(
+    (x) => TIMETABLE_MAX <= x.end
+  )
+  const ROWS_TO_SHOW =
+    STARS_TIMESLOTS.length - (STARS_TIMESLOTS.length - maxTimeSlotToShow - 1) // 1 is equivalent of having 0 buffer row
+
+  // Minimum number of rows to show is 22 - 1930
+  const MATRIX_ROWS = ROWS_TO_SHOW < 22 ? 22 : ROWS_TO_SHOW
+
   const MATRIX_COLUMNS = Object.values(MAP_CONFLICTS).reduce(
     (acc, v) => acc + v
   )

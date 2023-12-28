@@ -37,7 +37,9 @@ export default function TimetableOverview() {
       <tbody>
         {Object.entries(coursesToIndex).map(([course, indexes], courseIdx) =>
           indexes.map((index, idx) => (
-            <tr className={cn(courseIdx % 2 == 1 && "bg-slate-900")}>
+            <tr
+              key={courseIdx + idx}
+              className={cn(courseIdx % 2 == 1 && "bg-slate-900")}>
               {idx === 0 ? (
                 <>
                   <td
@@ -71,6 +73,7 @@ export default function TimetableOverview() {
             </tr>
           ))
         )}
+
         <tr>
           <td colSpan={2} className="p-1 text-left md:p-2">
             Total AUs

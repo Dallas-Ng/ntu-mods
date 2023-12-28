@@ -1,5 +1,3 @@
-export const DEFAULT_DAYS_TO_SHOW = 5
-
 // Default timeslots taken from STARS
 export const STARS_TIMESLOTS = [
   { start: 800, end: 830 },
@@ -33,3 +31,32 @@ export const STARS_TIMESLOTS = [
   { start: 2200, end: 2230 },
   { start: 2230, end: 2300 }
 ]
+
+export const DAY_MAP: Record<number, string> = {
+  1: "Monday",
+  2: "Tuesday",
+  3: "Wednesday",
+  4: "Thursday",
+  5: "Friday",
+  6: "Saturday",
+  7: "Sunday"
+}
+
+export const DAY_TRUN_MAP: Record<number, string> = {
+  1: "Mon",
+  2: "Tue",
+  3: "Wed",
+  4: "Thu",
+  5: "Fri",
+  6: "Sat",
+  7: "Sun"
+}
+
+export const COURSE_TYPE = {
+  LEC: "Lecture",
+  LAB: "Laboratory",
+  SEM: "Seminar",
+  TUT: "Tutorial",
+  PRJ: "Project",
+  DES: "Design"
+}

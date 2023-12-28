@@ -1,15 +1,16 @@
 import { Metadata } from "next"
 
-import PageLayout from "@/components/page-layout"
+import { siteConfig } from "@/config/site"
 
 export const metadata: Metadata = {
-  title: `Help`
+  title: siteConfig.metatags.help.title,
+  description: siteConfig.metatags.help.desc
 }
 
-interface RootLayoutProps {
+interface LayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
-  return <PageLayout>{children}</PageLayout>
+export default function PageLayout({ children }: LayoutProps) {
+  return children
 }

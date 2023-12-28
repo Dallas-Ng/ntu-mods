@@ -1,11 +1,5 @@
 import Image from "next/image"
-import {
-  LucideProps,
-  Moon,
-  Sun,
-  XCircleIcon,
-  type Icon as LucideIcon
-} from "lucide-react"
+import { LucideIcon, LucideProps, Moon, Sun, XCircleIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 

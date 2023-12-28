@@ -15,7 +15,7 @@ export default function TimetableHeader({ children }: Props) {
         <StarsTableLegend />
       </div>
 
-      <div className="my-2 flex gap-2">{children}</div>
+      <div className="my-2 flex items-center gap-2">{children}</div>
     </>
   )
 }

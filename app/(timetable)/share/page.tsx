@@ -4,6 +4,7 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import Loading from "@/components/loading"
+import CollapseContentButton from "@/components/stars/stars-buttons/collapse-content-button"
 import TimetableHeader from "@/components/stars/timetable-header"
 import TimetableOverview from "@/components/stars/timetable-overview"
 
@@ -30,6 +31,10 @@ export default function StarsPage() {
         </Link>
 
         <StarsCopyTimetableButton />
+
+        <div className="ml-auto">
+          <CollapseContentButton />
+        </div>
       </TimetableHeader>
 
       <StarsTable />

@@ -10,7 +10,8 @@ const INIT_SETTINGS: Settings = {
     venue: true,
     remarks: true,
     duration: false
-  }
+  },
+  collapsedView: false
 }
 
 interface Settings {
@@ -24,6 +25,7 @@ interface Settings {
     remarks: boolean
     duration: boolean
   }
+  collapsedView: boolean
 }
 
 export interface SettingsSlice {

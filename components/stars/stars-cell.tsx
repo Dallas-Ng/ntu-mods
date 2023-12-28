@@ -18,6 +18,7 @@ interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
 export default function StarsCell(props: StarsCellProp) {
   const { courseKey, index, hasConflict = false, coursesToIndex } = props
   const { settings } = useBoundState()
+  const { collapsedView, starsCell } = settings
 
   const courseStyle = getIndexTypeStyle(index.type)
 
@@ -49,24 +50,24 @@ export default function StarsCell(props: StarsCellProp) {
       <p>
         <span className={cn("font-bold", courseStyle.text)}>{courseKey}</span>
 
-        {settings.starsCell.type && <> {index.type}</>}
+        {starsCell.type && <> {index.type}</>}
 
-        {settings.starsCell.group && <> ({index.group})</>}
+        {starsCell.group && <> ({index.group})</>}
       </p>
 
       <p>
-        {settings.starsCell.time && <>{index.time}</>}
+        {!collapsedView && starsCell.time && <>{index.time}</>}
 
-        {settings.starsCell.day && index.day > 0 && (
+        {!collapsedView && starsCell.day && index.day > 0 && (
           <> {DAY_TRUN_MAP[index.day]}</>
         )}
       </p>
 
-      {settings.starsCell.venue && <p>{index.venue}</p>}
+      {starsCell.venue && <p>{index.venue}</p>}
 
-      {settings.starsCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
+      {starsCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
 
-      {settings.starsCell.key && <p>{index.key}</p>}
+      {!collapsedView && starsCell.key && <p>{index.key}</p>}
     </>
   )
 

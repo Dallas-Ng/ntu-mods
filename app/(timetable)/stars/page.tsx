@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic"
 
 import Loading from "@/components/loading"
+import CollapseContentButton from "@/components/stars/stars-buttons/collapse-content-button"
 import StarsManageButton from "@/components/stars/stars-buttons/stars-manage-button"
 import StarsShareButton from "@/components/stars/stars-buttons/stars-share-button"
 import TimetableHeader from "@/components/stars/timetable-header"
@@ -22,6 +23,10 @@ export default function StarsPage() {
         <StarsManageButton />
 
         <StarsShareButton />
+
+        <div className="ml-auto">
+          <CollapseContentButton />
+        </div>
       </TimetableHeader>
 
       <StarsTable />

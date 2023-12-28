@@ -20,7 +20,7 @@ export default function TimetableOverview() {
   return (
     <table className="table w-full text-center text-xs">
       <thead>
-        <tr className="text-gray-400">
+        <tr className="border-b text-gray-400">
           <td className="w-[60px] p-1 text-left md:w-[75px] md:p-2">Course</td>
           <td className="text-left">Title</td>
           <td>AU</td>
@@ -74,7 +74,7 @@ export default function TimetableOverview() {
           ))
         )}
 
-        <tr>
+        <tr className="border-t">
           <td colSpan={2} className="p-1 text-left md:p-2">
             Total AUs
           </td>

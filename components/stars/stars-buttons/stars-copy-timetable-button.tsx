@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useBoundState } from "@/state/bound-state"
+import { toast } from "sonner"
 
 import { useQueryStringCTI } from "@/hooks/use-qs-CTI"
 import {
@@ -15,8 +16,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from "@/components/ui/alert-dialog"
-
-import { Button } from "../ui/button"
+import { Button } from "@/components/ui/button"
 
 export default function StarsCopyTimetableButton() {
   const router = useRouter()
@@ -25,6 +25,7 @@ export default function StarsCopyTimetableButton() {
 
   const handleOk = () => {
     replaceCourseToIndex(coursesToIndexFromQueryString)
+    toast("Copied timetable")
     router.push("/stars")
   }
 

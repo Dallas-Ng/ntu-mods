@@ -1,6 +1,12 @@
-import { cn, getCourseTypeBorder } from "@/lib/utils"
+"use client"
 
-import { TableCell } from "./ui/table"
+import { useBoundState } from "@/state/bound-state"
+
+import { DAY_TRUN_MAP } from "@/config/stars"
+import { formatRemarks, getIndexTypeStyle } from "@/lib/stars.lib"
+import { cn } from "@/lib/utils"
+
+import { TableCell } from "../ui/table"
 
 interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
   courseKey: string
@@ -11,36 +17,10 @@ interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
 
 export default function StarsCell(props: StarsCellProp) {
   const { courseKey, index, hasConflict = false, coursesToIndex } = props
+  const { settings } = useBoundState()
+  const { collapsedView, starsCell } = settings
 
-  const courseStyle = index.type.includes("LEC")
-    ? {
-        borderLeft: "border-l-orange-500",
-        text: "text-orange-600",
-        background: "bg-orange-200"
-      }
-    : index.type.includes("LAB")
-      ? {
-          borderLeft: "border-l-emerald-500",
-          text: "text-emerald-600",
-          background: "bg-emerald-200"
-        }
-      : index.type.includes("SEM")
-        ? {
-            borderLeft: "border-l-yellow-500",
-            text: "text-yellow-600",
-            background: "bg-yellow-200"
-          }
-        : index.type.includes("TUT")
-          ? {
-              borderLeft: "border-l-blue-500",
-              text: "text-blue-600",
-              background: "bg-blue-200"
-            }
-          : {
-              borderLeft: "border-l-gray-500",
-              text: "text-gray-600",
-              background: "bg-gray-200"
-            }
+  const courseStyle = getIndexTypeStyle(index.type)
 
   // When a index has multiple variations thats suppose to show in the same cell,
   // e.g. week 1-7 is at LT4, week 9-13 is at LT5...
@@ -68,18 +48,26 @@ export default function StarsCell(props: StarsCellProp) {
   const StarCellData = (index: Index) => (
     <>
       <p>
-        <span className={cn("font-bold", courseStyle.text)}>{courseKey}</span>{" "}
-        {index.type} ({index.group})
+        <span className={cn("font-bold", courseStyle.text)}>{courseKey}</span>
+
+        {starsCell.type && <> {index.type}</>}
+
+        {starsCell.group && <> ({index.group})</>}
       </p>
 
-      <p>{index.time}</p>
+      <p>
+        {!collapsedView && starsCell.time && <>{index.time}</>}
 
-      <p>{index.venue}</p>
+        {!collapsedView && starsCell.day && index.day > 0 && (
+          <> {DAY_TRUN_MAP[index.day]}</>
+        )}
+      </p>
 
-      {/* <p>
-        {index.key} - {index.day}
-      </p> */}
-      {index.remarks.replace("Teaching", "")}
+      {starsCell.venue && <p>{index.venue}</p>}
+
+      {starsCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
+
+      {!collapsedView && starsCell.key && <p>{index.key}</p>}
     </>
   )
 

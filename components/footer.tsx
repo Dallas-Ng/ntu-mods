@@ -8,16 +8,21 @@ interface Props {
 }
 export default function Footer({ className }: Props) {
   return (
-    <footer className={cn("flex justify-center gap-4", className)}>
-      <div className="text-center text-sm text-slate-500 transition-colors duration-300 hover:text-slate-400">
-        <Link href="/privacy">Privacy</Link>
-      </div>
+    <footer
+      className={cn(
+        "flex justify-center gap-4 text-center text-sm text-slate-500 ",
+        className
+      )}>
+      <Link href="/privacy" className="hover:text-slate-400">
+        Privacy
+      </Link>
 
-      <div className="text-center text-sm text-slate-500 transition-colors duration-300 hover:text-slate-400">
-        <Link href={siteConfig.links.github} target="_blank">
-          Dallas &copy; 2024
-        </Link>
-      </div>
+      <Link
+        href={siteConfig.links.github}
+        target="_blank"
+        className="hover:text-slate-400">
+        Dallas &copy; 2024
+      </Link>
     </footer>
   )
 }

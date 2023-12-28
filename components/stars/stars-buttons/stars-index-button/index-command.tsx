@@ -1,7 +1,8 @@
 import { useBoundState } from "@/state/bound-state"
 import { Check } from "lucide-react"
 
-import { DAY_MAPPING, cn } from "@/lib/utils"
+import { DAY_MAP } from "@/config/stars"
+import { cn } from "@/lib/utils"
 import {
   Command,
   CommandEmpty,
@@ -71,9 +72,7 @@ export default function IndexCommand(props: Props) {
                   {fiValue.map((v, i) => (
                     <div key={i}>
                       <div className="flex w-full justify-between gap-2">
-                        <span>
-                          {DAY_MAPPING[v.day as keyof typeof DAY_MAPPING]}
-                        </span>
+                        <span>{DAY_MAP[v.day]}</span>
 
                         <span>
                           {v.type} - {v.group}

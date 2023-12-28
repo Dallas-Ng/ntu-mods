@@ -3,8 +3,7 @@
 import React from "react"
 import { useBoundState } from "@/state/bound-state"
 
-import { STARS_TIMESLOTS } from "@/config/stars"
-import { DAY_MAPPING } from "@/lib/utils"
+import { DAY_TRUN_MAP, STARS_TIMESLOTS } from "@/config/stars"
 import { useQueryStringCTI } from "@/hooks/use-qs-CTI"
 import {
   Table,
@@ -62,47 +61,83 @@ export default function StarsTable(_props: StarsTableProps) {
       ? coursesToIndexFromQueryString
       : coursesToIndexFromState
 
-  const DAY_MAP: CourseIndex = {
+  const MAP: { [day: number]: Index[] } = {
     1: [],
     2: [],
     3: [],
     4: [],
     5: []
-    // 6: [],
-    // 7: []
   }
 
-  const DAY_MAP_CONFLICTS = {
+  const MAP_CONFLICTS: { [day: number]: number } = {
     1: 0,
     2: 0,
     3: 0,
     4: 0,
     5: 0
-    // 6: 0,
-    // 7: 0
   }
 
-  // Push each day data into DAY_MAP
+  // Automatically show weekend days if there are any
+  const hasSaturday = Object.values(coursesToIndex).some((entries) =>
+    entries.find((x) => x.day === 6)
+  )
+
+  const hasSunday = Object.values(coursesToIndex).some((entries) =>
+    entries.find((x) => x.day === 7)
+  )
+
+  // Append weekend days to MAP & Conficts
+  if (hasSunday) {
+    MAP[6] = []
+    MAP[7] = []
+    MAP_CONFLICTS[6] = 0
+    MAP_CONFLICTS[7] = 0
+  } else if (hasSaturday) {
+    MAP[6] = []
+    MAP_CONFLICTS[6] = 0
+  }
+
+  // Push each day data into MAP
   Object.values(coursesToIndex).forEach((entries) => {
     entries.forEach((entry) => {
-      DAY_MAP[entry.day].push(entry)
+      MAP[entry.day].push(entry)
     })
   })
 
   /**
-   * Calculates the conflicts for each day in the DAY_MAP object.
-   * Updates the DAY_MAP_CONFLICTS object with the maximum conflicts for each day.
+   * Calculates the conflicts for each day in the MAP object.
+   * Updates the MAP_CONFLICTS object with the maximum conflicts for each day.
    */
-  Object.entries(DAY_MAP).forEach(([dayMapKey, dayMapVal]) => {
-    DAY_MAP_CONFLICTS[dayMapKey as unknown as 1 | 2 | 3 | 4 | 5] =
+  Object.entries(MAP).forEach(([dayMapKey, dayMapVal]) => {
+    MAP_CONFLICTS[dayMapKey as unknown as 1 | 2 | 3 | 4 | 5] =
       dayMapVal.reduce(
         (max, index, i) => Math.max(max, getConflicts(dayMapVal, index, i + 1)),
         0
       ) + 1 // count unique conflicts, + 1 for positioning purposes
   })
 
-  const MATRIX_ROWS = STARS_TIMESLOTS.length
-  const MATRIX_COLUMNS = Object.values(DAY_MAP_CONFLICTS).reduce(
+  /**
+   * Calculates the MAX timeslots all indexes in the MAP object.
+   */
+  let TIMETABLE_MAX = 800
+  Object.entries(MAP).forEach(([_, dayMapVal]) => {
+    const maxTime = Math.max(
+      ...dayMapVal.map((index) => parseInt(index.time.split("-")[1]))
+    )
+
+    if (TIMETABLE_MAX < maxTime) TIMETABLE_MAX = maxTime
+  })
+
+  const maxTimeSlotToShow = STARS_TIMESLOTS.findIndex(
+    (x) => TIMETABLE_MAX <= x.end
+  )
+  const ROWS_TO_SHOW =
+    STARS_TIMESLOTS.length - (STARS_TIMESLOTS.length - maxTimeSlotToShow - 1) // 1 is equivalent of having 0 buffer row
+
+  // Minimum number of rows to show is 22 - 1930
+  const MATRIX_ROWS = ROWS_TO_SHOW < 22 ? 22 : ROWS_TO_SHOW
+
+  const MATRIX_COLUMNS = Object.values(MAP_CONFLICTS).reduce(
     (acc, v) => acc + v
   )
 
@@ -118,12 +153,12 @@ export default function StarsTable(_props: StarsTableProps) {
   })
 
   /**
-   * Iterates through the DAY_MAP object and populates the STARS_MATRIX with table cells based on the data.
+   * Iterates through the MAP object and populates the STARS_MATRIX with table cells based on the data.
    *
-   * The table cells are positioned in the matrix based on the relative position of the index inside the DAY_MAP.
+   * The table cells are positioned in the matrix based on the relative position of the index inside the MAP.
    * If conflicts exist, the table cells are adjusted accordingly.
    */
-  Object.entries(DAY_MAP).forEach(([dayMapKey, dayMapVal]) => {
+  Object.entries(MAP).forEach(([dayMapKey, dayMapVal]) => {
     let currentDayIndex = 0 // this index is used to iterate over the number of available column for each day
 
     // Iterating through each index
@@ -134,7 +169,7 @@ export default function StarsTable(_props: StarsTableProps) {
 
       // Get relative position of this index inside the matrix
       const offsetValue =
-        Object.entries(DAY_MAP_CONFLICTS)
+        Object.entries(MAP_CONFLICTS)
           .filter(([dmK]) => dmK < dayMapKey)
           .map(([, v]) => v)
           .reduce((sum, count) => sum + count, 0) + 1 // default is 1 as 0 is timeslot
@@ -165,9 +200,9 @@ export default function StarsTable(_props: StarsTableProps) {
   /**
    * Generation of Table Head and Table Body
    */
-  const TableHeadItems = Object.entries(DAY_MAP_CONFLICTS).map(([k, v]) => (
-    <TableHead key={k} colSpan={v} className="p-0 text-center">
-      {DAY_MAPPING[Number(k) as keyof typeof DAY_MAPPING].slice(0, 3)}
+  const TableHeadItems = Object.entries(MAP_CONFLICTS).map(([k, v]) => (
+    <TableHead key={k} colSpan={v} className="h-fit p-0 text-center">
+      {DAY_TRUN_MAP[Number(k)]}
     </TableHead>
   ))
 
@@ -184,18 +219,20 @@ export default function StarsTable(_props: StarsTableProps) {
   ))
 
   return (
-    <Table className="table-fixed border-slate-500 p-0 text-[0.6rem] md:text-xs">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[50px] p-1 text-center md:w-[95px]">
-            Time
-          </TableHead>
+    <div className="rounded-lg border border-slate-700 pb-1">
+      <Table className="table-fixed p-0 text-[0.6rem] md:text-xs">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="h-fit w-[50px] p-1 text-center md:w-[95px]">
+              Time
+            </TableHead>
 
-          {TableHeadItems}
-        </TableRow>
-      </TableHeader>
+            {TableHeadItems}
+          </TableRow>
+        </TableHeader>
 
-      <TableBody>{TableBodyItems}</TableBody>
-    </Table>
+        <TableBody>{TableBodyItems}</TableBody>
+      </Table>
+    </div>
   )
 }

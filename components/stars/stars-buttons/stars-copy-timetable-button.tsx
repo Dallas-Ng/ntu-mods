@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { useBoundState } from "@/state/bound-state"
+import { toast } from "sonner"
 
 import { useQueryStringCTI } from "@/hooks/use-qs-CTI"
 import {
@@ -24,6 +25,7 @@ export default function StarsCopyTimetableButton() {
 
   const handleOk = () => {
     replaceCourseToIndex(coursesToIndexFromQueryString)
+    toast("Copied timetable")
     router.push("/stars")
   }
 

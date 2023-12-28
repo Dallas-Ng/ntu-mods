@@ -4,6 +4,7 @@ import Loading from "@/components/loading"
 import StarsManageButton from "@/components/stars/stars-buttons/stars-manage-button"
 import StarsShareButton from "@/components/stars/stars-buttons/stars-share-button"
 import TimetableHeader from "@/components/stars/timetable-header"
+import TimetableOverview from "@/components/stars/timetable-overview"
 
 const StarsTable = dynamic(() => import("@/components/stars/stars-table"), {
   ssr: false,
@@ -24,6 +25,12 @@ export default function StarsPage() {
       </TimetableHeader>
 
       <StarsTable />
+
+      <p className="mt-[20px] text-lg font-semibold">Overview</p>
+
+      <div className="mb-[50px] mt-2 overflow-hidden rounded-lg border md:w-[50%]">
+        <TimetableOverview />
+      </div>
     </>
   )
 }

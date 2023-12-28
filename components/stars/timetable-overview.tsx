@@ -6,9 +6,16 @@ import { DAY_TRUN_MAP } from "@/config/stars"
 import { C_DATA } from "@/lib/consolidated-data"
 import { formatRemarks, formatTitle } from "@/lib/stars.lib"
 import { cn } from "@/lib/utils"
+import { useQueryStringCTI } from "@/hooks/use-qs-CTI"
 
 export default function TimetableOverview() {
-  const { coursesToIndex } = useBoundState()
+  const coursesToIndexFromQueryString = useQueryStringCTI()
+  const coursesToIndexFromState = useBoundState().coursesToIndex
+
+  let coursesToIndex =
+    Object.keys(coursesToIndexFromQueryString).length > 0
+      ? coursesToIndexFromQueryString
+      : coursesToIndexFromState
 
   return (
     <table className="table w-full text-center text-xs">
@@ -65,7 +72,7 @@ export default function TimetableOverview() {
           ))
         )}
         <tr>
-          <td colSpan={2} className="p-1 md:p-2">
+          <td colSpan={2} className="p-1 text-left md:p-2">
             Total AUs
           </td>
           <td colSpan={2}>

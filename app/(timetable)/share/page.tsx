@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import Loading from "@/components/loading"
 import TimetableHeader from "@/components/stars/timetable-header"
+import TimetableOverview from "@/components/stars/timetable-overview"
 
 const StarsCopyTimetableButton = dynamic(
   () => import("@/components/stars/stars-buttons/stars-copy-timetable-button"),
@@ -32,6 +33,10 @@ export default function StarsPage() {
       </TimetableHeader>
 
       <StarsTable />
+
+      <div className="mb-[50px] mt-2 overflow-hidden rounded-lg border md:w-[50%]">
+        <TimetableOverview />
+      </div>
     </>
   )
 }

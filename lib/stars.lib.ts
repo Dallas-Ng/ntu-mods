@@ -9,6 +9,8 @@ export function formatRemarks(remarks: string) {
     formattedRemarks = "Even Weeks"
   } else if (remarks.includes("1,3,5")) {
     formattedRemarks = "Odd Weeks"
+  } else if (remarks.includes("Teaching")) {
+    formattedRemarks = formattedRemarks.replace("Teaching", "")
   }
 
   return formattedRemarks

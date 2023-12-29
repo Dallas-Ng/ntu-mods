@@ -48,7 +48,7 @@ export default function StarsManageButton() {
       <div className="absolute bottom-0 right-0 h-[200px] w-screen md:hidden"></div>
 
       <div
-        className="fixed bottom-0 right-0 z-[11] flex h-[50px] w-screen items-center justify-center shadow-lg hover:cursor-pointer dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800 md:hidden"
+        className="fixed bottom-0 right-0 z-[11] flex h-[50px] w-screen items-center justify-center bg-white text-slate-950 shadow-lg hover:cursor-pointer first-letter:md:hidden"
         onClick={() => setOpen(true)}>
         <span className="text-center">Click to Edit Timetable</span>
       </div>

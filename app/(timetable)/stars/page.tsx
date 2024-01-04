@@ -38,9 +38,8 @@ export default function StarsPage() {
       <TimetableHeader>
         <StarsManageButton />
 
-        <StarsShareButton />
-
-        <div className="ml-auto">
+        <div className="ml-auto flex gap-1">
+          <StarsShareButton />
           <CollapseContentButton />
         </div>
       </TimetableHeader>

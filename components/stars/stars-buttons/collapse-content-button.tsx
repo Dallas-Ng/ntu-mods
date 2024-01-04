@@ -1,6 +1,7 @@
 "use client"
 
 import { useBoundState } from "@/state/bound-state"
+import { FoldHorizontal, FoldVertical, UnfoldHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 
@@ -11,8 +12,12 @@ export default function CollapseContentButton() {
   const handleClick = () => updateSettings({ collapsedView: !collapsedView })
 
   return (
-    <Button variant="outline" onClick={handleClick}>
-      {collapsedView ? "Show All Details" : "Condense View"}
+    <Button variant="outline" onClick={handleClick} size="icon">
+      {collapsedView ? (
+        <UnfoldHorizontal className="h-5 w-5 rotate-90" />
+      ) : (
+        <FoldHorizontal className="h-5 w-5 rotate-90" />
+      )}
     </Button>
   )
 }

@@ -9,7 +9,7 @@ import { Github } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -91,12 +91,11 @@ export default function NavigationBar() {
         </div>
 
         <div className="flex flex-1 items-center justify-end">
-          <Link href={siteConfig.links.repo} target="_blank" rel="noreferrer">
-            <div className={buttonVariants({ size: "icon", variant: "ghost" })}>
+          <Button asChild size="icon" variant="ghost">
+            <Link href={siteConfig.links.repo} target="_blank" rel="noreferrer">
               <Github className="h-5 w-5" />
-              <span className="sr-only">GitHub</span>
-            </div>
-          </Link>
+            </Link>
+          </Button>
 
           <ThemeToggle />
         </div>

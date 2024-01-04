@@ -30,7 +30,7 @@ export default function SheetPopover(props: Props) {
   if (mobile) {
     return (
       <Sheet onOpenChange={handleOpenChange}>
-        <SheetTrigger>{triggerComponent}</SheetTrigger>
+        <SheetTrigger asChild>{triggerComponent}</SheetTrigger>
 
         <SheetContent className="flex h-screen w-[90vw] max-w-md flex-col px-2 py-4">
           {sheetContent}
@@ -41,7 +41,7 @@ export default function SheetPopover(props: Props) {
 
   return (
     <Popover onOpenChange={handleOpenChange}>
-      <PopoverTrigger>{triggerComponent}</PopoverTrigger>
+      <PopoverTrigger asChild>{triggerComponent}</PopoverTrigger>
 
       <PopoverContent sideOffset={4} className="p-0 md:w-96">
         {popoverContent}

@@ -20,13 +20,14 @@ export default function StarsShareButton() {
     // Top level to trigger before as sharing can lead to disconnects
     track("share", { link: shareLink })
 
-    if (navigator.canShare()) {
+    try {
       navigator.share({
         title: document.title,
         text: "Take a look at my timetable!",
         url: window.location.href
       })
-    } else {
+    } catch {
+      // It means that theres no share functionality
       navigator.clipboard.writeText(shareLink)
       toast("Share link copied to clipboard")
     }

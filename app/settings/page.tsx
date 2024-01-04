@@ -1,39 +1,46 @@
+import AppearanceSettings from "@/components/settings/appearance-settings"
+import Feedback from "@/components/settings/feedback"
 import TableSettings from "@/components/settings/table-settings"
 
 export default function SettingsPage() {
   return (
-    <>
-      <div className="flex h-full w-full flex-col justify-center gap-4">
+    <div className="mx-auto max-w-7xl">
+      <div className="mb-5 flex flex-col gap-3">
         <h1 className="text-3xl font-bold">Settings</h1>
 
         <p>We are building more customisability into the page!</p>
 
         <hr />
+      </div>
 
-        <p>Table Settings</p>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="flex h-full w-full flex-col gap-5">
+          <div>
+            <p>Appearance Settings</p>
 
-        <TableSettings />
+            <p className="text-sm text-gray-500">
+              Customize the appearance of the app. Switch between day and night
+              themes.
+            </p>
+          </div>
 
-        {/* 
-        <div>
-        <div className="flex items-center space-x-2">
-          <Switch
-            id="collapsedView"
-            checked={collapsedView}
-            onCheckedChange={(val) => updateCollapsed(val, "collapsedView")}
-          />
-          <Label htmlFor="collapsedView">Collapsed View For Table</Label>
+          <AppearanceSettings />
+
+          <div>
+            <p className="mt-5">Table Settings</p>
+
+            <p className="text-sm text-gray-500">
+              Customize the appearance of the stars table.
+            </p>
+          </div>
+
+          <TableSettings />
         </div>
 
-        <span className="mt-1 flex items-center gap-1 text-sm text-gray-500">
-          <HelpCircle className="h-[15px] w-[15px]" />
-          Hides some information from the table to reduce the vertical space
-          needed to display the whole table
-        </span>
+        <div>
+          <Feedback />
+        </div>
       </div>
-
-      <hr /> */}
-      </div>
-    </>
+    </div>
   )
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { useBoundState } from "@/state/bound-state"
-import { FoldHorizontal, FoldVertical, UnfoldHorizontal } from "lucide-react"
+import { FoldHorizontal, UnfoldHorizontal } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 

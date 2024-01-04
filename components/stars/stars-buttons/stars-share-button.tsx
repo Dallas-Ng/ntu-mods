@@ -22,7 +22,7 @@ export default function StarsShareButton() {
 
     try {
       navigator.share({
-        title: document.title,
+        title: "NTU Dabao",
         text: "Take a look at my timetable!",
         url: window.location.href
       })

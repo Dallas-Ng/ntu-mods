@@ -3,7 +3,6 @@ import dynamic from "next/dynamic"
 import { Skeleton } from "@/components/ui/skeleton"
 import Loading from "@/components/loading"
 import StarsManageButton from "@/components/stars/stars-buttons/stars-manage-button"
-import StarsShareButton from "@/components/stars/stars-buttons/stars-share-button"
 import TimetableHeader from "@/components/stars/timetable-header"
 
 const StarsTable = dynamic(() => import("@/components/stars/stars-table"), {
@@ -25,6 +24,11 @@ const TimetableOverview = dynamic(
       </div>
     )
   }
+)
+
+const StarsShareButton = dynamic(
+  () => import("@/components/stars/stars-buttons/stars-share-button"),
+  { ssr: false, loading: () => <Skeleton className="h-10 w-10" /> }
 )
 
 const CollapseContentButton = dynamic(

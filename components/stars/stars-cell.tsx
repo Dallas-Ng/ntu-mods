@@ -1,6 +1,5 @@
 "use client"
 
-import { useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 import { PopoverTrigger } from "@radix-ui/react-popover"
 
@@ -26,7 +25,6 @@ export default function StarsCell(props: StarsCellProp) {
   const { collapsedView, starsCell } = settings
 
   const courseStyle = getIndexTypeStyle(index.type)
-
   const indexProps = useIndexLogic({ courseKey })
 
   // When a index has multiple variations thats suppose to show in the same cell,

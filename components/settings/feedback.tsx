@@ -73,7 +73,11 @@ export default function Feedback() {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="my@email.com" {...field} />
+                    <Input
+                      autoComplete="off"
+                      placeholder="my@email.com"
+                      {...field}
+                    />
                   </FormControl>
 
                   <FormDescription>

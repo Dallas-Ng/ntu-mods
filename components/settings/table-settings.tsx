@@ -87,6 +87,7 @@ export default function TableSettings() {
               <Fragment key={key}>
                 <div className="flex items-center space-x-2">
                   <Switch
+                    id={key}
                     checked={starsCell[key as keyof typeof starsCell]}
                     onCheckedChange={(val) =>
                       updateStarsCell(val, key as keyof typeof starsCell)

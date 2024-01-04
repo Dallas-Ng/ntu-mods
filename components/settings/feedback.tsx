@@ -96,9 +96,9 @@ export default function Feedback() {
                   <FormLabel>Feedback</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Feedback..."
+                      placeholder="Your Feedback..."
                       {...field}
-                      className="h-[200px]"
+                      className="h-[100px]"
                     />
                   </FormControl>
 
@@ -107,9 +107,11 @@ export default function Feedback() {
               )}
             />
 
-            <Button type="submit" className="w-[200px]">
-              Submit
-            </Button>
+            <div className="flex justify-end">
+              <Button type="submit" className="self w-full md:w-[200px]">
+                Submit
+              </Button>
+            </div>
           </form>
         </Form>
       </CardContent>

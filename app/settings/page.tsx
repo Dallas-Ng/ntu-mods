@@ -55,7 +55,7 @@ export default function SettingsPage() {
           <TableSettings />
         </div>
 
-        <div>
+        <div className="my-5 md:mt-0">
           <Feedback />
         </div>
       </div>

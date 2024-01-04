@@ -87,6 +87,7 @@ export default function TableSettings() {
 
             return (
               <Toggle
+                key={key}
                 className={cn(
                   "h-fit w-full py-1 lg:w-[110px]",
                   key === "remarks" && "col-span-2 lg:w-full"

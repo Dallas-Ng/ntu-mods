@@ -47,7 +47,7 @@ export default function StarsPage() {
 
       <StarsTable />
 
-      <div className="mb-[50px] mt-2 overflow-hidden rounded-lg border md:w-[50%]">
+      <div className="mb-[50px] mt-2 overflow-hidden rounded-lg border lg:w-[50%]">
         <TimetableOverview />
       </div>
     </>

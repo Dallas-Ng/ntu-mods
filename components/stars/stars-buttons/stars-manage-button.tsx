@@ -31,8 +31,8 @@ const CourseTypeBadge = ({
   return (
     <div
       className={cn(
-        "rounded-md px-2 py-1 text-xs text-white",
-        active && "bg-zinc-800"
+        "rounded-md bg-secondary px-2 py-1 text-xs ",
+        active && "bg-primary text-white"
       )}>
       {type}
     </div>
@@ -45,13 +45,11 @@ export default function StarsManageButton() {
 
   return (
     <>
-      <div className="absolute bottom-0 right-0 h-[200px] w-screen md:hidden"></div>
-
-      <div
-        className="first-letter fixed bottom-0 right-0 z-[11] flex h-[50px] w-screen items-center justify-center bg-white text-slate-950 shadow-lg hover:cursor-pointer md:hidden"
+      <Button
+        className="fixed bottom-0 left-0 z-[11] h-[50px] w-screen rounded-none md:hidden"
         onClick={() => setOpen(true)}>
-        <span className="text-center">Click to Edit Timetable</span>
-      </div>
+        Click to Edit Timetable
+      </Button>
 
       <Button onClick={() => setOpen(true)} className="hidden md:block">
         Add Courses
@@ -71,7 +69,7 @@ export default function StarsManageButton() {
 
             <div className="h-[50vh] w-full gap-1 overflow-auto">
               <table className="w-full">
-                <thead className="sticky top-0 h-[25px] bg-slate-950">
+                <thead className="background sticky top-0 h-[25px]">
                   <tr className="text-xs">
                     <th className="w-[70px]">Code</th>
 

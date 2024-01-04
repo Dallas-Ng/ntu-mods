@@ -39,7 +39,7 @@ export default function TimetableOverview() {
           indexes.map((index, idx) => (
             <tr
               key={courseIdx + idx}
-              className={cn(courseIdx % 2 == 1 && "bg-slate-900")}>
+              className={cn(courseIdx % 2 == 1 && "bg-secondary")}>
               {idx === 0 ? (
                 <>
                   <td
@@ -78,7 +78,7 @@ export default function TimetableOverview() {
           <td colSpan={2} className="p-1 text-left md:p-2">
             Total AUs
           </td>
-          <td colSpan={2}>
+          <td colSpan={2} className="text-left">
             {Object.keys(coursesToIndex).reduce(
               (acc, course) =>
                 acc +

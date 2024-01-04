@@ -23,9 +23,9 @@ export default function HelpPage() {
 
       {HELP_CONFIG.map(({ question, answer }, i) => (
         <div className="mt-6" key={i}>
-          <h2 className="text-xl font-bold text-slate-200">{question}</h2>
+          <h2 className="text-xl font-bold">{question}</h2>
 
-          <p className="mt-2 text-slate-300">{answer}</p>
+          <p className="mt-2">{answer}</p>
         </div>
       ))}
 

@@ -51,7 +51,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             "relative flex min-h-screen flex-col font-sans antialiased",
             fontSans.variable
           )}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
             <NotificationBanner.inBeta />
 
             <NavigationBar />

@@ -17,10 +17,17 @@ interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
   index: Index
   hasConflict?: boolean
   coursesToIndex: { [courseKey: string]: Index[] }
+  mock?: boolean
 }
 
 export default function StarsCell(props: StarsCellProp) {
-  const { courseKey, index, hasConflict = false, coursesToIndex } = props
+  const {
+    courseKey,
+    index,
+    hasConflict = false,
+    coursesToIndex,
+    mock = false
+  } = props
   const { settings } = useBoundState()
   const { collapsedView, starsCell } = settings
 
@@ -51,9 +58,11 @@ export default function StarsCell(props: StarsCellProp) {
           </TableCell>
         </PopoverTrigger>
 
-        <PopoverContent className="max-h-[450px] w-[400px] overflow-auto p-1">
-          <IndexCommand {...indexProps} />
-        </PopoverContent>
+        {!mock && (
+          <PopoverContent className="max-h-[450px] w-[400px] overflow-auto p-1">
+            <IndexCommand {...indexProps} />
+          </PopoverContent>
+        )}
       </Popover>
     )
   }
@@ -69,9 +78,9 @@ export default function StarsCell(props: StarsCellProp) {
       </p>
 
       <p>
-        {!collapsedView && starsCell.time && <>{index.time}</>}
+        {(!collapsedView || mock) && starsCell.time && <>{index.time}</>}
 
-        {!collapsedView && starsCell.day && index.day > 0 && (
+        {(!collapsedView || mock) && starsCell.day && index.day > 0 && (
           <> {DAY_TRUN_MAP[index.day]}</>
         )}
       </p>
@@ -80,7 +89,7 @@ export default function StarsCell(props: StarsCellProp) {
 
       {starsCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
 
-      {!collapsedView && starsCell.key && <p>{index.key}</p>}
+      {(!collapsedView || mock) && starsCell.key && <p>{index.key}</p>}
     </>
   )
 

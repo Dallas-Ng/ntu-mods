@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 import { RefreshCcw } from "lucide-react"
 
@@ -11,6 +11,7 @@ import { formatTitle } from "@/lib/stars.lib"
 import StarsCell from "../stars/stars-cell"
 import { Button } from "../ui/button"
 import { Label } from "../ui/label"
+import { Skeleton } from "../ui/skeleton"
 import { Switch } from "../ui/switch"
 
 export default function TableSettings() {
@@ -34,19 +35,33 @@ export default function TableSettings() {
       <div className="flex items-center gap-2">
         <div className="relative flex h-[300px] w-[275px] flex-col justify-between rounded-lg border p-3 shadow-md md:h-[230px] md:w-[384px]">
           <div className="flex flex-col justify-between gap-2 md:flex-row">
-            <StarsCell
-              className="h-fit w-[250px] text-xs"
-              courseKey={courseKey}
-              coursesToIndex={{ [courseKey]: [] }}
-              index={index}
-            />
+            <table className="h-min">
+              <tbody>
+                <tr>
+                  <StarsCell
+                    mock
+                    className="h-min w-[250px] cursor-default text-xs"
+                    courseKey={courseKey}
+                    coursesToIndex={{ [courseKey]: [] }}
+                    index={index}
+                  />
+                </tr>
+              </tbody>
+            </table>
 
-            <StarsCell
-              className="h-fit w-[100px] text-xs"
-              courseKey={courseKey}
-              coursesToIndex={{ [courseKey]: [] }}
-              index={index}
-            />
+            <table className="h-min">
+              <tbody>
+                <tr>
+                  <StarsCell
+                    mock
+                    className="h-min w-[100px] cursor-default text-xs"
+                    courseKey={courseKey}
+                    coursesToIndex={{ [courseKey]: [] }}
+                    index={index}
+                  />
+                </tr>
+              </tbody>
+            </table>
           </div>
 
           <div className="flex w-full items-baseline justify-between">
@@ -57,7 +72,8 @@ export default function TableSettings() {
             <Button
               onClick={reRollIndex}
               variant="outline"
-              className="ml-2 h-8 w-8 p-0">
+              size="icon"
+              className="ml-2">
               <RefreshCcw className="h-5 w-5" />
             </Button>
           </div>
@@ -68,10 +84,9 @@ export default function TableSettings() {
             if (["duration"].includes(key)) return
 
             return (
-              <>
+              <Fragment key={key}>
                 <div className="flex items-center space-x-2">
                   <Switch
-                    id={key}
                     checked={starsCell[key as keyof typeof starsCell]}
                     onCheckedChange={(val) =>
                       updateStarsCell(val, key as keyof typeof starsCell)
@@ -95,7 +110,7 @@ export default function TableSettings() {
                     </span>
                   </Label>
                 </div>
-              </>
+              </Fragment>
             )
           })}
         </div>
@@ -143,5 +158,21 @@ export default function TableSettings() {
         </div>
       </div> */}
     </>
+  )
+}
+
+export function TableSettingsSkeleton() {
+  return (
+    <div className="relative flex h-[300px] w-[275px] flex-col justify-between rounded-lg border p-3 shadow-md md:h-[230px] md:w-[384px]">
+      <div className="flex flex-col justify-between gap-2 md:flex-row">
+        <Skeleton className="h-[80px] w-[250px]" />
+        <Skeleton className="h-[130px] w-[100px]" />
+      </div>
+
+      <div className="flex w-full items-baseline justify-between">
+        <Skeleton className="h-[16px] w-full" />
+        <Skeleton className="ml-2 h-10 w-10" />
+      </div>
+    </div>
   )
 }

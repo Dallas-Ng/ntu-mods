@@ -1,6 +1,24 @@
-import AppearanceSettings from "@/components/settings/appearance-settings"
+import dynamic from "next/dynamic"
+
+import { AppearanceSettingsSkeleton } from "@/components/settings/appearance-settings"
 import Feedback from "@/components/settings/feedback"
-import TableSettings from "@/components/settings/table-settings"
+import { TableSettingsSkeleton } from "@/components/settings/table-settings"
+
+const AppearanceSettings = dynamic(
+  () => import("@/components/settings/appearance-settings"),
+  {
+    ssr: false,
+    loading: () => <AppearanceSettingsSkeleton />
+  }
+)
+
+const TableSettings = dynamic(
+  () => import("@/components/settings/table-settings"),
+  {
+    ssr: false,
+    loading: () => <TableSettingsSkeleton />
+  }
+)
 
 export default function SettingsPage() {
   return (

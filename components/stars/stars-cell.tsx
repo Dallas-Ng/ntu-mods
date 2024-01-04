@@ -1,12 +1,17 @@
 "use client"
 
+import { useState } from "react"
 import { useBoundState } from "@/state/bound-state"
+import { PopoverTrigger } from "@radix-ui/react-popover"
 
 import { DAY_TRUN_MAP } from "@/config/stars"
 import { formatRemarks, getIndexTypeStyle } from "@/lib/stars.lib"
 import { cn } from "@/lib/utils"
 
+import { Popover, PopoverContent } from "../ui/popover"
 import { TableCell } from "../ui/table"
+import IndexCommand from "./stars-buttons/stars-index-button/index-command"
+import useIndexLogic from "./stars-buttons/stars-index-button/index-logic"
 
 interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
   courseKey: string
@@ -22,6 +27,8 @@ export default function StarsCell(props: StarsCellProp) {
 
   const courseStyle = getIndexTypeStyle(index.type)
 
+  const indexProps = useIndexLogic({ courseKey })
+
   // When a index has multiple variations thats suppose to show in the same cell,
   // e.g. week 1-7 is at LT4, week 9-13 is at LT5...
   const variations = coursesToIndex[courseKey].filter(
@@ -30,18 +37,26 @@ export default function StarsCell(props: StarsCellProp) {
 
   const StarCellWrapper = ({ children }: { children: React.ReactNode }) => {
     return (
-      <TableCell
-        // {...props}
-        key={index.key}
-        rowSpan={index.duration}
-        className={cn(
-          "break-words border border-l-2 border-slate-300 p-1 dark:border-y-slate-800 dark:border-r-slate-800 md:p-2 ",
-          hasConflict && "border-b-2 border-b-red-600 dark:border-b-red-600",
-          courseStyle.borderLeft,
-          props.className
-        )}>
-        {children}
-      </TableCell>
+      <Popover>
+        <PopoverTrigger type={undefined} asChild>
+          <TableCell
+            key={index.key}
+            rowSpan={index.duration}
+            className={cn(
+              "cursor-pointer break-words border border-l-2 border-slate-300 p-1 dark:border-y-slate-800 dark:border-r-slate-800 md:p-2",
+              hasConflict &&
+                "border-b-2 border-b-red-600 dark:border-b-red-600",
+              courseStyle.borderLeft,
+              props.className
+            )}>
+            {children}
+          </TableCell>
+        </PopoverTrigger>
+
+        <PopoverContent className="max-h-[450px] w-[400px] overflow-auto p-1">
+          <IndexCommand {...indexProps} />
+        </PopoverContent>
+      </Popover>
     )
   }
 

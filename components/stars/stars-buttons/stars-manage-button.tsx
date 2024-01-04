@@ -86,6 +86,7 @@ export default function StarsManageButton() {
                 <tbody>
                   {Object.entries(coursesToIndex).map(
                     ([courseKey, courseVal]) => {
+                      console.log(courseKey, courseVal)
                       const course = C_DATA[courseKey]
 
                       return (

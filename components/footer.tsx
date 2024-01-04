@@ -10,7 +10,7 @@ export default function Footer({ className }: Props) {
   return (
     <footer
       className={cn(
-        "flex justify-center gap-4 text-center text-sm text-slate-500 ",
+        "flex justify-center gap-4 text-center text-sm text-slate-500",
         className
       )}>
       <Link href="/privacy" className="hover:text-slate-400">

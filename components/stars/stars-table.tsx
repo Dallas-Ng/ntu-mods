@@ -219,7 +219,7 @@ export default function StarsTable(_props: StarsTableProps) {
   ))
 
   return (
-    <div className="rounded-lg border border-slate-700 pb-1">
+    <div className="rounded-lg border shadow">
       <Table className="table-fixed p-0 text-[0.6rem] md:text-xs">
         <TableHeader>
           <TableRow>

@@ -15,6 +15,8 @@ import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 
+import { ThemeToggle } from "./theme-toggle"
+
 export default function NavigationBar() {
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
@@ -40,13 +42,14 @@ export default function NavigationBar() {
         "sticky top-0 z-10 w-full bg-background",
         scrolled && "shadow"
       )}>
-      <div className="container flex h-16 items-center space-x-4 px-2 sm:justify-between sm:space-x-0 md:px-0">
+      <div className="container flex h-16 items-center space-x-2 px-2 sm:justify-between sm:space-x-0 md:px-0">
         <div className="flex gap-3">
           <Link href="/" className="flex items-center space-x-2">
             <Icons.logo width={30} height={30} />
+
             <span
               className={cn(
-                "inline-block font-bold hover:text-slate-950 dark:hover:text-slate-100",
+                "hidden font-bold hover:text-slate-950 dark:hover:text-slate-100 md:inline-block",
                 pathname === "/"
                   ? "text-slate-950 dark:text-slate-100"
                   : "text-slate-500 dark:text-slate-400"
@@ -66,7 +69,7 @@ export default function NavigationBar() {
                     passHref>
                     <NavigationMenuLink
                       className={cn(
-                        "mr-1 p-3 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100",
+                        "mr-1 p-2 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100 md:p-3",
                         pathname === link.route
                           ? "text-slate-950 dark:text-slate-100"
                           : "text-slate-500 dark:text-slate-400"
@@ -88,7 +91,7 @@ export default function NavigationBar() {
             </div>
           </Link>
 
-          {/* <ThemeToggle /> */}
+          <ThemeToggle />
         </div>
       </div>
     </header>

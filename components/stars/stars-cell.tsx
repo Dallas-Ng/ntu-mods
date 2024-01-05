@@ -18,7 +18,7 @@ interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
   coursesToIndex: { [courseKey: string]: Index[] }
   disablePopup?: boolean
   disableSelect?: boolean
-  noCollapse?: boolean
+  fullCell?: boolean
 }
 
 export default function StarsCell(props: StarsCellProp) {
@@ -29,15 +29,13 @@ export default function StarsCell(props: StarsCellProp) {
     coursesToIndex,
     disablePopup = false,
     disableSelect = false,
-    noCollapse = false
+    fullCell = false
   } = props
   const { settings } = useBoundState()
   const { collapsedView, starsCell } = settings
 
   const courseStyle = getIndexTypeStyle(index.type)
   const indexProps = useIndexLogic({ courseKey, disableSelect })
-
-  const shouldCollapsed = noCollapse ? false : collapsedView
 
   // When a index has multiple variations thats suppose to show in the same cell,
   // e.g. week 1-7 is at LT4, week 9-13 is at LT5...
@@ -56,30 +54,20 @@ export default function StarsCell(props: StarsCellProp) {
       </p>
 
       <p>
-        {shouldCollapsed ? (
-          <></>
-        ) : (
-          (noCollapse || starsCell.time) && <>{index.time}</>
-        )}
+        {(fullCell || (!collapsedView && starsCell.time)) && <>{index.time}</>}
 
-        {shouldCollapsed ? (
-          <></>
-        ) : (
-          (noCollapse || (starsCell.day && index.day)) > 0 && (
-            <> {DAY_TRUN_MAP[index.day]}</>
-          )
+        {(fullCell || (!collapsedView && starsCell.day)) && index.day > 0 && (
+          <> {DAY_TRUN_MAP[index.day]}</>
         )}
       </p>
 
-      {starsCell.venue && <p>{index.venue}</p>}
+      {(fullCell || (!collapsedView && starsCell.venue)) && (
+        <p>{index.venue}</p>
+      )}
 
       {starsCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
 
-      {shouldCollapsed ? (
-        <></>
-      ) : (
-        (noCollapse || starsCell.key) && <p>{index.key}</p>
-      )}
+      {(fullCell || (!collapsedView && starsCell.key)) && <p>{index.key}</p>}
     </>
   )
 

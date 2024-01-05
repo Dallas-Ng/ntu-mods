@@ -1,9 +1,25 @@
 export const siteConfig = {
+  url: "https://dabao.dallasng.me",
   name: "NTU Dabao",
+  ogImage: "https://dabao.dallasng.me/og-image.png",
   metatags: {
     default: {
       title: "NTU Dabao",
-      desc: "Why study when you can just dabao your mods?"
+      desc: "Build your timetable easier with Dabao NTU. Create, customize, and manage your class schedule hassle-free",
+      keywords: [
+        "NTU",
+        "Nanyang Technological University",
+        "stars",
+        "STARS",
+        "ntu mods",
+        "ntu stars"
+      ],
+      authors: [
+        {
+          name: "Dallas Ng",
+          url: "https://github.com/Dallas-Ng"
+        }
+      ]
     },
     stars: {
       title: "Stars* Planner",

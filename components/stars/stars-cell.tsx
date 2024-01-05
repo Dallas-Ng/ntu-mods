@@ -18,7 +18,7 @@ interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
   coursesToIndex: { [courseKey: string]: Index[] }
   disablePopup?: boolean
   disableSelect?: boolean
-  disableCollapse?: boolean
+  noCollapse?: boolean
 }
 
 export default function StarsCell(props: StarsCellProp) {
@@ -29,7 +29,7 @@ export default function StarsCell(props: StarsCellProp) {
     coursesToIndex,
     disablePopup = false,
     disableSelect = false,
-    disableCollapse = false
+    noCollapse = false
   } = props
   const { settings } = useBoundState()
   const { collapsedView, starsCell } = settings
@@ -37,7 +37,7 @@ export default function StarsCell(props: StarsCellProp) {
   const courseStyle = getIndexTypeStyle(index.type)
   const indexProps = useIndexLogic({ courseKey, disableSelect })
 
-  const shouldCollapsed = disableCollapse ? false : collapsedView
+  const shouldCollapsed = noCollapse ? false : collapsedView
 
   // When a index has multiple variations thats suppose to show in the same cell,
   // e.g. week 1-7 is at LT4, week 9-13 is at LT5...
@@ -56,12 +56,18 @@ export default function StarsCell(props: StarsCellProp) {
       </p>
 
       <p>
-        {shouldCollapsed ? <></> : starsCell.time && <>{index.time}</>}
+        {shouldCollapsed ? (
+          <></>
+        ) : (
+          (noCollapse || starsCell.time) && <>{index.time}</>
+        )}
 
         {shouldCollapsed ? (
           <></>
         ) : (
-          starsCell.day && index.day > 0 && <> {DAY_TRUN_MAP[index.day]}</>
+          (noCollapse || (starsCell.day && index.day)) > 0 && (
+            <> {DAY_TRUN_MAP[index.day]}</>
+          )
         )}
       </p>
 
@@ -69,7 +75,11 @@ export default function StarsCell(props: StarsCellProp) {
 
       {starsCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
 
-      {shouldCollapsed ? <></> : starsCell.key && <p>{index.key}</p>}
+      {shouldCollapsed ? (
+        <></>
+      ) : (
+        (noCollapse || starsCell.key) && <p>{index.key}</p>
+      )}
     </>
   )
 

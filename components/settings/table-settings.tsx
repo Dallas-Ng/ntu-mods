@@ -42,6 +42,7 @@ export default function TableSettings() {
                 <tr>
                   <StarsCell
                     disablePopup
+                    disableCollapse
                     className="h-min w-[250px] cursor-default text-xs"
                     courseKey={courseKey}
                     coursesToIndex={{ [courseKey]: [] }}
@@ -56,6 +57,7 @@ export default function TableSettings() {
                 <tr>
                   <StarsCell
                     disablePopup
+                    disableCollapse
                     className="h-min w-[100px] cursor-default text-xs"
                     courseKey={courseKey}
                     coursesToIndex={{ [courseKey]: [] }}

@@ -18,6 +18,7 @@ interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
   coursesToIndex: { [courseKey: string]: Index[] }
   disablePopup?: boolean
   disableSelect?: boolean
+  disableCollapse?: boolean
 }
 
 export default function StarsCell(props: StarsCellProp) {
@@ -27,7 +28,8 @@ export default function StarsCell(props: StarsCellProp) {
     hasConflict = false,
     coursesToIndex,
     disablePopup = false,
-    disableSelect = false
+    disableSelect = false,
+    disableCollapse = false
   } = props
   const { settings } = useBoundState()
   const { collapsedView, starsCell } = settings
@@ -35,43 +37,13 @@ export default function StarsCell(props: StarsCellProp) {
   const courseStyle = getIndexTypeStyle(index.type)
   const indexProps = useIndexLogic({ courseKey, disableSelect })
 
+  const shouldCollapsed = disableCollapse ? false : collapsedView
+
   // When a index has multiple variations thats suppose to show in the same cell,
   // e.g. week 1-7 is at LT4, week 9-13 is at LT5...
   const variations = coursesToIndex[courseKey].filter(
     (item) => item.day === index.day && item.time === index.time
   )
-
-  const StarCellWrapper = ({ children }: { children: React.ReactNode }) => {
-    return (
-      <SheetPopover
-        disablePopup={disablePopup}
-        openChange={(open) => (open ? indexProps.handleSearch("") : {})}
-        triggerComponent={
-          <TableCell
-            key={index.key}
-            rowSpan={index.duration}
-            className={cn(
-              "cursor-pointer break-words border border-l-2 border-slate-300 p-1 dark:border-y-slate-800 dark:border-r-slate-800 md:p-2",
-              hasConflict &&
-                "border-b-2 border-b-red-600 dark:border-b-red-600",
-              courseStyle.borderLeft,
-              props.className
-            )}>
-            {children}
-          </TableCell>
-        }
-        popoverContent={
-          <IndexCommand
-            {...indexProps}
-            commandClassName="max-h-[450px] w-[400px] overflow-auto p-1"
-          />
-        }
-        sheetContent={
-          <IndexCommand {...indexProps} commandClassName="overflow-auto" />
-        }
-      />
-    )
-  }
 
   const StarCellData = (index: Index) => (
     <>
@@ -84,11 +56,9 @@ export default function StarsCell(props: StarsCellProp) {
       </p>
 
       <p>
-        {(!collapsedView || disablePopup) && starsCell.time && (
-          <>{index.time}</>
-        )}
+        {shouldCollapsed && starsCell.time && <>{index.time}</>}
 
-        {(!collapsedView || disablePopup) && starsCell.day && index.day > 0 && (
+        {shouldCollapsed && starsCell.day && index.day > 0 && (
           <> {DAY_TRUN_MAP[index.day]}</>
         )}
       </p>
@@ -97,21 +67,42 @@ export default function StarsCell(props: StarsCellProp) {
 
       {starsCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
 
-      {(!collapsedView || disablePopup) && starsCell.key && <p>{index.key}</p>}
+      {shouldCollapsed && starsCell.key && <p>{index.key}</p>}
     </>
   )
 
-  if (variations.length > 1) {
-    return (
-      <StarCellWrapper>
-        {variations.map((item, key) => (
-          <div className="mt-1" key={key}>
-            {StarCellData(item)}
-          </div>
-        ))}
-      </StarCellWrapper>
-    )
-  }
-
-  return <StarCellWrapper>{StarCellData(index)}</StarCellWrapper>
+  return (
+    <SheetPopover
+      disablePopup={disablePopup}
+      openChange={(open) => (open ? indexProps.handleSearch("") : {})}
+      triggerComponent={
+        <TableCell
+          key={index.key}
+          rowSpan={index.duration}
+          className={cn(
+            "cursor-pointer break-words border border-l-2 border-slate-300 p-1 dark:border-y-slate-800 dark:border-r-slate-800 md:p-2",
+            hasConflict && "border-b-2 border-b-red-600 dark:border-b-red-600",
+            courseStyle.borderLeft,
+            props.className
+          )}>
+          {variations.length > 1
+            ? variations.map((item, key) => (
+                <div className="mt-1" key={key}>
+                  {StarCellData(item)}
+                </div>
+              ))
+            : StarCellData(index)}
+        </TableCell>
+      }
+      popoverContent={
+        <IndexCommand
+          {...indexProps}
+          commandClassName="max-h-[450px] w-[400px] overflow-auto p-1"
+        />
+      }
+      sheetContent={
+        <IndexCommand {...indexProps} commandClassName="overflow-auto" />
+      }
+    />
+  )
 }

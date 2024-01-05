@@ -54,6 +54,7 @@ interface StarsTableProps {
   coursesToIndex?: { [courseKey: string]: Index[] }
   disablePopup?: boolean
   disableSelect?: boolean
+  disableCollapse?: boolean
 }
 
 export default function StarsTable(props: StarsTableProps) {
@@ -196,6 +197,7 @@ export default function StarsTable(props: StarsTableProps) {
 
       STARS_MATRIX[tsIndex][cellPosition] = (
         <StarsCell
+          disableCollapse={props.disableCollapse}
           disablePopup={props.disablePopup}
           disableSelect={props.disableSelect}
           courseKey={courseKey || ""}

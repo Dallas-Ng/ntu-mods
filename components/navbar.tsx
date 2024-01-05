@@ -5,7 +5,7 @@ import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Github } from "lucide-react"
+import { Github, Settings } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -98,6 +98,12 @@ export default function NavigationBar() {
           </Button>
 
           <ThemeToggle />
+
+          <Button asChild size="icon" variant="ghost">
+            <Link href="/settings">
+              <Settings className="h-5 w-5" />
+            </Link>
+          </Button>
         </div>
       </div>
     </header>

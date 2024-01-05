@@ -67,7 +67,7 @@ export default function AppearanceSettings() {
         type="single"
         value={theme}
         onValueChange={(v) => setTheme(v)}
-        className="justify-start">
+        className="justify-center">
         <ToggleGroupItem
           value="light"
           className="h-fit w-[250px] p-2 hover:border-accent">
@@ -86,7 +86,7 @@ export default function AppearanceSettings() {
 
 export function AppearanceSettingsSkeleton() {
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center justify-center gap-1">
       <div className="h-fit w-[250px] p-2 hover:border-accent">
         <LightTheme />
       </div>

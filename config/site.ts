@@ -48,8 +48,7 @@ export const siteConfig = {
   },
   navLinks: [
     { label: "Stars", route: "/stars" },
-    { label: "Help", route: "/help" },
-    { label: "Settings", route: "/settings" }
+    { label: "Help", route: "/help" }
   ],
   links: {
     github: "https://github.com/Dallas-Ng",

@@ -1,5 +1,8 @@
+"use client"
+
 import dynamic from "next/dynamic"
 
+import { Card, CardContent } from "@/components/ui/card"
 import { AppearanceSettingsSkeleton } from "@/components/settings/appearance-settings"
 import Feedback from "@/components/settings/feedback"
 import { TableSettingsSkeleton } from "@/components/settings/table-settings"
@@ -22,43 +25,45 @@ const TableSettings = dynamic(
 
 export default function SettingsPage() {
   return (
-    <div className="mx-auto max-w-7xl">
-      <div className="mb-5 flex flex-col gap-3">
-        <h1 className="text-3xl font-bold">Settings</h1>
+    <div className="mx-auto max-w-2xl p-3">
+      <Card className="p-0">
+        <CardContent className="flex flex-col gap-6 p-3">
+          <div className="space-y-3">
+            <h1 className="text-3xl font-bold">Settings</h1>
 
-        <p>We are building more customisability into the page!</p>
+            <p>We are building more customisability into the page!</p>
 
-        <hr />
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div className="flex h-full w-full flex-col gap-5">
-          <div>
-            <p>Appearance Settings</p>
-
-            <p className="text-sm text-gray-500">
-              Customize the appearance of the app. Switch between day and night
-              themes.
-            </p>
+            <hr />
           </div>
 
-          <AppearanceSettings />
+          <div className="flex flex-col justify-center gap-3">
+            <div>
+              <p>Appearance Settings</p>
 
-          <div>
-            <p className="mt-5">Table Settings</p>
+              <p className="text-sm text-gray-500">
+                Customize the appearance of the app. Switch between day and
+                night themes.
+              </p>
+            </div>
 
-            <p className="text-sm text-gray-500">
-              Customize the appearance of the stars table.
-            </p>
+            <AppearanceSettings />
+
+            <div>
+              <p className="mt-5">Table Settings</p>
+
+              <p className="text-sm text-gray-500">
+                Customize the appearance of the stars table.
+              </p>
+            </div>
+
+            <TableSettings />
           </div>
 
-          <TableSettings />
-        </div>
-
-        <div className="my-5 md:mt-0">
-          <Feedback />
-        </div>
-      </div>
+          <div>
+            <Feedback />
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

@@ -4,11 +4,12 @@ import { NotificationBanner } from "./notification-banner"
 
 interface Props {
   children?: React.ReactNode
+  containerProps?: React.HTMLAttributes<HTMLDivElement>
 }
 
-export default function LayoutDefault({ children }: Props) {
+export default function LayoutDefault({ children, containerProps }: Props) {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col" {...containerProps}>
       <NotificationBanner.inBeta />
 
       <NavigationBar />

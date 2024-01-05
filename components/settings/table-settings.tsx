@@ -41,7 +41,7 @@ export default function TableSettings() {
               <tbody>
                 <tr>
                   <StarsCell
-                    mock
+                    disablePopup
                     className="h-min w-[250px] cursor-default text-xs"
                     courseKey={courseKey}
                     coursesToIndex={{ [courseKey]: [] }}
@@ -55,7 +55,7 @@ export default function TableSettings() {
               <tbody>
                 <tr>
                   <StarsCell
-                    mock
+                    disablePopup
                     className="h-min w-[100px] cursor-default text-xs"
                     courseKey={courseKey}
                     coursesToIndex={{ [courseKey]: [] }}

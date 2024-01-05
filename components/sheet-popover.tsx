@@ -11,7 +11,7 @@ interface Props {
   popoverContent: React.ReactNode
   sheetContent: React.ReactNode
   openChange?: (open: boolean) => void
-  mock?: boolean
+  disablePopup?: boolean
 }
 
 export default function SheetPopover(props: Props) {
@@ -20,7 +20,7 @@ export default function SheetPopover(props: Props) {
     popoverContent,
     sheetContent,
     openChange,
-    mock = false
+    disablePopup = false
   } = props
 
   const mobile = useMediaQuery("(max-width: 768px)")
@@ -33,7 +33,9 @@ export default function SheetPopover(props: Props) {
 
   if (mobile) {
     return (
-      <Sheet onOpenChange={handleOpenChange} open={mock ? false : undefined}>
+      <Sheet
+        onOpenChange={handleOpenChange}
+        open={disablePopup ? false : undefined}>
         <SheetTrigger type={undefined} asChild>
           {triggerComponent}
         </SheetTrigger>
@@ -46,7 +48,9 @@ export default function SheetPopover(props: Props) {
   }
 
   return (
-    <Popover onOpenChange={handleOpenChange} open={mock ? false : undefined}>
+    <Popover
+      onOpenChange={handleOpenChange}
+      open={disablePopup ? false : undefined}>
       <PopoverTrigger asChild type={undefined}>
         {triggerComponent}
       </PopoverTrigger>

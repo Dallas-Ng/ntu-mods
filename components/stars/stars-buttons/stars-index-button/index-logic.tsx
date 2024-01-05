@@ -6,10 +6,11 @@ import { C_DATA } from "@/lib/consolidated-data"
 
 interface Props {
   courseKey: string
+  disableSelect?: boolean
 }
 
 export default function useIndexLogic(props: Props) {
-  const { courseKey } = props
+  const { courseKey, disableSelect = false } = props
   const { addCourseToIndex } = useBoundState()
 
   const course = C_DATA[courseKey]
@@ -46,6 +47,7 @@ export default function useIndexLogic(props: Props) {
   }
 
   const handleSelect = (idxKey: string) => {
+    if (disableSelect) return
     addCourseToIndex(courseKey, courseIndexes[idxKey])
   }
 

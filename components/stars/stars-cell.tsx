@@ -1,14 +1,12 @@
 "use client"
 
 import { useBoundState } from "@/state/bound-state"
-import { PopoverTrigger } from "@radix-ui/react-popover"
 
 import { DAY_TRUN_MAP } from "@/config/stars"
 import { formatRemarks, getIndexTypeStyle } from "@/lib/stars.lib"
 import { cn } from "@/lib/utils"
 
 import SheetPopover from "../sheet-popover"
-import { Popover, PopoverContent } from "../ui/popover"
 import { TableCell } from "../ui/table"
 import IndexCommand from "./stars-buttons/stars-index-button/index-command"
 import useIndexLogic from "./stars-buttons/stars-index-button/index-logic"
@@ -18,7 +16,8 @@ interface StarsCellProp extends React.HTMLAttributes<HTMLTableCellElement> {
   index: Index
   hasConflict?: boolean
   coursesToIndex: { [courseKey: string]: Index[] }
-  mock?: boolean
+  disablePopup?: boolean
+  disableSelect?: boolean
 }
 
 export default function StarsCell(props: StarsCellProp) {
@@ -27,13 +26,14 @@ export default function StarsCell(props: StarsCellProp) {
     index,
     hasConflict = false,
     coursesToIndex,
-    mock = false
+    disablePopup = false,
+    disableSelect = false
   } = props
   const { settings } = useBoundState()
   const { collapsedView, starsCell } = settings
 
   const courseStyle = getIndexTypeStyle(index.type)
-  const indexProps = useIndexLogic({ courseKey })
+  const indexProps = useIndexLogic({ courseKey, disableSelect })
 
   // When a index has multiple variations thats suppose to show in the same cell,
   // e.g. week 1-7 is at LT4, week 9-13 is at LT5...
@@ -44,7 +44,7 @@ export default function StarsCell(props: StarsCellProp) {
   const StarCellWrapper = ({ children }: { children: React.ReactNode }) => {
     return (
       <SheetPopover
-        mock={mock}
+        disablePopup={disablePopup}
         openChange={(open) => (open ? indexProps.handleSearch("") : {})}
         triggerComponent={
           <TableCell
@@ -84,9 +84,11 @@ export default function StarsCell(props: StarsCellProp) {
       </p>
 
       <p>
-        {(!collapsedView || mock) && starsCell.time && <>{index.time}</>}
+        {(!collapsedView || disablePopup) && starsCell.time && (
+          <>{index.time}</>
+        )}
 
-        {(!collapsedView || mock) && starsCell.day && index.day > 0 && (
+        {(!collapsedView || disablePopup) && starsCell.day && index.day > 0 && (
           <> {DAY_TRUN_MAP[index.day]}</>
         )}
       </p>
@@ -95,7 +97,7 @@ export default function StarsCell(props: StarsCellProp) {
 
       {starsCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
 
-      {(!collapsedView || mock) && starsCell.key && <p>{index.key}</p>}
+      {(!collapsedView || disablePopup) && starsCell.key && <p>{index.key}</p>}
     </>
   )
 

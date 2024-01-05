@@ -18,3 +18,4 @@ URL_SCHEDULE_DISPLAY = (
 URL_SCHEDULE_DISPLAY1 = (
     "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1"
 )
+URL_COURSE_OUTLINE = "https://wish.wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"

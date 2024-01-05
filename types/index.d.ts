@@ -21,3 +21,13 @@ interface Index {
 type CourseIndex = {
   [courseKey: string]: Index[]
 }
+
+interface Exam {
+  date: string
+  day: number
+  start_time: string
+  end_time: string
+  key: string
+  name: string
+  duration: string // in 30 min block,
+}

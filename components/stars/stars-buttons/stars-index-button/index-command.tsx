@@ -1,3 +1,4 @@
+import { Fragment } from "react"
 import { useBoundState } from "@/state/bound-state"
 import { Check } from "lucide-react"
 
@@ -44,11 +45,10 @@ export default function IndexCommand(props: Props) {
         )}
 
         {Object.entries(filteredIndexes).map(([idxKey, fiValue], idx) => (
-          <>
+          <Fragment key={idxKey}>
             {idx !== 0 && <CommandSeparator className="mx-2 my-1" />}
 
             <CommandItem
-              key={idxKey}
               value={idxKey}
               onSelect={handleSelect}
               className="mb-1 cursor-pointer">
@@ -88,7 +88,7 @@ export default function IndexCommand(props: Props) {
                 </div>
               </div>
             </CommandItem>
-          </>
+          </Fragment>
         ))}
       </CommandGroup>
     </Command>

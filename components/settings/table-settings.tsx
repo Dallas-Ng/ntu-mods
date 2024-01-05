@@ -1,17 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import { Fragment, useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 import { RefreshCcw } from "lucide-react"
 
 import { DAY_TRUN_MAP } from "@/config/stars"
 import { C_DATA, getRandomCourseIndex } from "@/lib/consolidated-data"
 import { formatTitle } from "@/lib/stars.lib"
+import { cn } from "@/lib/utils"
 
 import StarsCell from "../stars/stars-cell"
 import { Button } from "../ui/button"
 import { Label } from "../ui/label"
+import { Skeleton } from "../ui/skeleton"
 import { Switch } from "../ui/switch"
+import { Toggle } from "../ui/toggle"
 
 export default function TableSettings() {
   const { settings, updateSettings } = useBoundState()
@@ -31,22 +34,38 @@ export default function TableSettings() {
 
   return (
     <>
-      <div className="flex items-center gap-2">
-        <div className="relative flex h-[300px] w-[275px] flex-col justify-between rounded-lg border p-3 shadow-md md:h-[230px] md:w-[384px]">
-          <div className="flex flex-col justify-between gap-2 md:flex-row">
-            <StarsCell
-              className="h-fit w-[250px] text-xs"
-              courseKey={courseKey}
-              coursesToIndex={{ [courseKey]: [] }}
-              index={index}
-            />
+      <div className="flex flex-col items-center justify-center gap-2 lg:flex-row">
+        <div className="relative flex h-[200px] w-10/12 flex-col justify-between rounded-lg border p-3 shadow-lg lg:h-[230px] lg:w-[384px]">
+          <div className="flex justify-between gap-2 lg:flex-row">
+            <table className="h-min">
+              <tbody>
+                <tr>
+                  <StarsCell
+                    disablePopup
+                    noCollapse
+                    className="h-min w-[250px] cursor-default text-xs"
+                    courseKey={courseKey}
+                    coursesToIndex={{ [courseKey]: [] }}
+                    index={index}
+                  />
+                </tr>
+              </tbody>
+            </table>
 
-            <StarsCell
-              className="h-fit w-[100px] text-xs"
-              courseKey={courseKey}
-              coursesToIndex={{ [courseKey]: [] }}
-              index={index}
-            />
+            <table className="h-min">
+              <tbody>
+                <tr>
+                  <StarsCell
+                    disablePopup
+                    noCollapse
+                    className="h-min w-[100px] cursor-default text-xs"
+                    courseKey={courseKey}
+                    coursesToIndex={{ [courseKey]: [] }}
+                    index={index}
+                  />
+                </tr>
+              </tbody>
+            </table>
           </div>
 
           <div className="flex w-full items-baseline justify-between">
@@ -57,91 +76,78 @@ export default function TableSettings() {
             <Button
               onClick={reRollIndex}
               variant="outline"
-              className="ml-2 h-8 w-8 p-0">
+              size="icon"
+              className="ml-2">
               <RefreshCcw className="h-5 w-5" />
             </Button>
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="grid w-full grid-cols-2 gap-1 md:w-10/12 lg:w-fit">
           {Object.keys(starsCell).map((key) => {
             if (["duration"].includes(key)) return
 
             return (
-              <>
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id={key}
-                    checked={starsCell[key as keyof typeof starsCell]}
-                    onCheckedChange={(val) =>
-                      updateStarsCell(val, key as keyof typeof starsCell)
-                    }
-                  />
+              <Toggle
+                key={key}
+                className={cn(
+                  "h-fit w-full py-1 lg:w-[110px]",
+                  key === "remarks" && "col-span-2 lg:w-full"
+                )}
+                pressed={starsCell[key as keyof typeof starsCell]}
+                onPressedChange={(val) =>
+                  updateStarsCell(val, key as keyof typeof starsCell)
+                }>
+                <div>
+                  <p className="capitalize">
+                    {key === "key" ? "Index Code" : key}{" "}
+                  </p>
 
-                  <Label htmlFor={key} className="capitalize">
-                    <span>{key === "key" ? "Index Code" : key} </span>
+                  <span className="text-xs text-gray-500">
+                    {!["day", "remarks"].includes(key) &&
+                      index[key as keyof typeof index]}
 
-                    <br className="block md:hidden" />
-                    <span className="text-xs text-gray-500">
-                      {!["day", "remarks"].includes(key) &&
-                        index[key as keyof typeof index]}
+                    {key === "day" &&
+                      index[key] > 0 &&
+                      DAY_TRUN_MAP[index[key]]}
 
-                      {key === "day" &&
-                        index[key] > 0 &&
-                        DAY_TRUN_MAP[index[key]]}
-
-                      {key === "remarks" &&
-                        (index[key] === "" ? "No Remarks" : index[key])}
-                    </span>
-                  </Label>
+                    {key === "remarks" &&
+                      (index[key] === "" ? "No Remarks" : index[key])}
+                  </span>
                 </div>
-              </>
+              </Toggle>
             )
           })}
         </div>
       </div>
-
-      {/* <div>
-        <div className="flex items-center gap-2">
-          {Object.entries(COURSE_TYPE).map(([key, value]) => {
-            return (
-              <div key={key} className="flex items-center gap-1">
-                <span className="h-[10px] w-[10px] rounded-full bg-orange-500" />
-                <span className="text-xs">{value}</span>
-              </div>
-            )
-          })}
-
-          <div className="flex items-center gap-1">
-            <span className="h-[10px] w-[10px] rounded-full bg-orange-500" />
-            <span className="text-xs">LEC</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="h-[10px] w-[10px] rounded-full bg-emerald-500" />
-            <span className="text-xs">LAB</span>
-          </div>
-
-          <div className="flex items-center gap-1">
-            <span className="h-[10px] w-[10px] rounded-full bg-yellow-500" />
-            <span className="text-xs">SEM</span>
-          </div>
-
-          <div className="flex items-center gap-1">
-            <span className="h-[10px] w-[10px] rounded-full bg-blue-500" />
-            <span className="text-xs">TUT</span>
-          </div>
-
-          <div className="flex items-center gap-1">
-            <span className="h-[10px] w-[10px] rounded-full bg-indigo-500" />
-            <span className="text-xs">PRJ</span>
-          </div>
-
-          <div className="flex items-center gap-1">
-            <span className="h-[10px] w-[10px] rounded-full bg-rose-500" />
-            <span className="text-xs">DES</span>
-          </div>
-        </div>
-      </div> */}
     </>
+  )
+}
+
+export function TableSettingsSkeleton() {
+  return (
+    <div className="flex flex-col items-center justify-center gap-2 lg:flex-row">
+      <div className="relative mx-auto flex h-[200px] w-full flex-col justify-between rounded-lg border p-3 shadow-lg md:w-10/12 lg:mx-0 lg:h-[230px] lg:w-[384px]">
+        <div className="flex justify-between gap-2 lg:flex-row">
+          <Skeleton className="h-[80px] w-[250px]" />
+          <Skeleton className="h-[105px] w-[100px]" />
+        </div>
+
+        <div className="flex w-full items-baseline justify-between">
+          <Skeleton className="h-[16px] w-full" />
+          <Skeleton className="ml-2 h-10 w-10" />
+        </div>
+      </div>
+
+      <div className="grid w-full grid-cols-2 gap-1 md:w-10/12 lg:w-fit">
+        <Skeleton className="h-[48px] w-full md:w-[110px]" />
+        <Skeleton className="h-[48px] w-full md:w-[110px]" />
+        <Skeleton className="h-[48px] w-full md:w-[110px]" />
+        <Skeleton className="h-[48px] w-full md:w-[110px]" />
+        <Skeleton className="h-[48px] w-full md:w-[110px]" />
+        <Skeleton className="h-[48px] w-full md:w-[110px]" />
+        <Skeleton className="col-span-2 h-[48px] w-full" />
+      </div>
+    </div>
   )
 }

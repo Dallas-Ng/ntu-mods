@@ -1,5 +1,6 @@
 import json
 import os
+import collections
 
 
 def consolidate_course_data(filepaths):
@@ -60,6 +61,9 @@ def consolidate_course_data(filepaths):
                     # for j in v:
                     # j["title"] = course_data["title"]
                     combined_indexes[k] = v
+
+    combined_data = collections.OrderedDict(sorted(combined_data.items()))
+    combined_indexes = collections.OrderedDict(sorted(combined_data.items()))
 
     with open(f"backend/data/consolidated-{academic_year}.json", "w") as output:
         json.dump(combined_data, output)

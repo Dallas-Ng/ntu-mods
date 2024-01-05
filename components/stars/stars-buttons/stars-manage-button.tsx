@@ -31,7 +31,7 @@ const CourseTypeBadge = ({
   return (
     <div
       className={cn(
-        "rounded-md bg-secondary px-2 py-1 text-xs ",
+        "rounded-md px-2 py-1 text-xs ",
         active && "bg-primary text-white"
       )}>
       {type}
@@ -89,7 +89,7 @@ export default function StarsManageButton() {
                       const course = C_DATA[courseKey]
 
                       return (
-                        <tr className="h-[50px]" key={courseKey}>
+                        <tr className="h-[50px] border-b" key={courseKey}>
                           <td className="w-[75px] text-center text-sm">
                             {course.key}
                           </td>
@@ -142,9 +142,10 @@ export default function StarsManageButton() {
                             <div className="flex w-full items-center justify-center">
                               <Button
                                 variant="ghost"
+                                size="icon"
                                 onClick={() => removeCourseToIndex(courseKey)}
                                 className={cn(
-                                  "h-[40px] w-[40px] p-0 text-white transition-colors duration-100 hover:cursor-pointer hover:bg-rose-500"
+                                  "text-gray-500 transition-colors duration-100 hover:cursor-pointer"
                                 )}>
                                 <X className="h-5 w-5" />
                               </Button>

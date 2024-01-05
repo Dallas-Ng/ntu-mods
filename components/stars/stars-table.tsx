@@ -50,14 +50,26 @@ const getConflicts = (
   return conflictsCount
 }
 
-interface StarsTableProps {}
+interface StarsTableProps {
+  coursesToIndex?: { [courseKey: string]: Index[] }
+  disablePopup?: boolean
+  disableSelect?: boolean
+  noCollapse?: boolean
+}
 
-export default function StarsTable(_props: StarsTableProps) {
+export default function StarsTable(props: StarsTableProps) {
   const coursesToIndexFromQueryString = useQueryStringCTI()
   const coursesToIndexFromState = useBoundState().coursesToIndex
 
-  let coursesToIndex =
-    Object.keys(coursesToIndexFromQueryString).length > 0
+  /**
+   * Pirority of coursesToIndex:
+   *    1. props.coursesToIndex
+   *    2. coursesToIndexFromQueryString
+   *    3. coursesToIndexFromState
+   */
+  let coursesToIndex = props.coursesToIndex
+    ? props.coursesToIndex
+    : Object.keys(coursesToIndexFromQueryString).length > 0
       ? coursesToIndexFromQueryString
       : coursesToIndexFromState
 
@@ -185,6 +197,9 @@ export default function StarsTable(_props: StarsTableProps) {
 
       STARS_MATRIX[tsIndex][cellPosition] = (
         <StarsCell
+          noCollapse={props.noCollapse}
+          disablePopup={props.disablePopup}
+          disableSelect={props.disableSelect}
           courseKey={courseKey || ""}
           index={index}
           coursesToIndex={coursesToIndex}

@@ -1,21 +1,28 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import dynamic from "next/dynamic"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { Github, Settings } from "lucide-react"
+
+import { siteConfig } from "@/config/site"
+import { cn } from "@/lib/utils"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList
-} from "@radix-ui/react-navigation-menu"
+} from "@/components/ui/navigation-menu"
 
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
+import { Skeleton } from "./ui/skeleton"
 
-import { ThemeToggle } from "./theme-toggle"
+const ThemeToggle = dynamic(() => import("@/components/theme-toggle"), {
+  ssr: false,
+  loading: () => <Skeleton className="h-10 w-10" />
+})
 
 export default function NavigationBar() {
   const [scrolled, setScrolled] = useState(false)
@@ -39,13 +46,13 @@ export default function NavigationBar() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-10 w-full bg-background",
+        "sticky top-0 z-10 w-full backdrop-blur-xl",
         scrolled && "shadow"
       )}>
       <div className="container flex h-16 items-center space-x-2 px-2 sm:justify-between sm:space-x-0 md:px-0">
         <div className="flex gap-3">
           <Link href="/" className="flex items-center space-x-2">
-            <Icons.logo width={30} height={30} />
+            <Image src="/logo.png" alt="Logo" width={30} height={30} priority />
 
             <span
               className={cn(
@@ -84,14 +91,19 @@ export default function NavigationBar() {
         </div>
 
         <div className="flex flex-1 items-center justify-end">
-          <Link href={siteConfig.links.repo} target="_blank" rel="noreferrer">
-            <div className={buttonVariants({ size: "icon", variant: "ghost" })}>
-              <Icons.gitHub className="h-5 w-5" />
-              <span className="sr-only">GitHub</span>
-            </div>
-          </Link>
+          <Button asChild size="icon" variant="ghost">
+            <Link href={siteConfig.links.repo} target="_blank" rel="noreferrer">
+              <Github className="h-5 w-5" />
+            </Link>
+          </Button>
 
           <ThemeToggle />
+
+          <Button asChild size="icon" variant="ghost">
+            <Link href="/settings">
+              <Settings className="h-5 w-5" />
+            </Link>
+          </Button>
         </div>
       </div>
     </header>

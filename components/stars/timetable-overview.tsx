@@ -21,8 +21,8 @@ export default function TimetableOverview() {
     <table className="table w-full text-center text-xs">
       <thead>
         <tr className="border-b text-gray-400">
-          <td className="w-[60px] p-1 text-left md:w-[75px] md:p-2">Course</td>
-          <td className="text-left">Title</td>
+          <td className="w-min p-1 text-left md:w-[75px] md:p-2">Course</td>
+          <td className="hidden text-left md:table-cell">Title</td>
           <td>AU</td>
 
           <td>Index</td>
@@ -44,20 +44,27 @@ export default function TimetableOverview() {
                 <>
                   <td
                     rowSpan={indexes.length}
-                    className="w-[60px] p-1 text-left md:w-[75px] md:p-2">
+                    className="w-min p-1 text-left md:w-[75px] md:p-2">
                     {course}
+
+                    <p className="w-min text-left capitalize md:hidden">
+                      {formatTitle(C_DATA[course].title)}
+                    </p>
                   </td>
 
                   <td
                     rowSpan={indexes.length}
-                    className="w-[100px] p-1 text-left capitalize">
+                    className="hidden p-1 text-left capitalize md:table-cell">
                     {formatTitle(C_DATA[course].title)}
                   </td>
 
-                  <td rowSpan={indexes.length}>
+                  <td rowSpan={indexes.length} className="p-1">
                     {C_DATA[course].au.replace("AU", "")}
                   </td>
-                  <td rowSpan={indexes.length}>{index.key}</td>
+
+                  <td rowSpan={indexes.length} className="p-1">
+                    {index.key}
+                  </td>
                 </>
               ) : (
                 <></>
@@ -66,10 +73,10 @@ export default function TimetableOverview() {
               <td className="p-1">
                 {index.type.includes("LEC") ? "LEC" : index.type}
               </td>
-              <td>{index.group}</td>
-              <td>{DAY_TRUN_MAP[index.day]}</td>
-              <td>{index.time}</td>
-              <td className="w-fit">{formatRemarks(index.remarks)}</td>
+              <td className="p-1">{index.group}</td>
+              <td className="p-1">{DAY_TRUN_MAP[index.day]}</td>
+              <td className="p-1">{index.time}</td>
+              <td className="w-min p-1">{formatRemarks(index.remarks)}</td>
             </tr>
           ))
         )}

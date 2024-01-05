@@ -1,13 +1,15 @@
 import Link from "next/link"
 
+import LayoutDefault from "@/components/layout-default"
+
 export default function NotFound() {
   return (
-    <div>
+    <LayoutDefault>
       <h1 className="mb-2 text-xl">This page does not exists</h1>
 
-      <p className="transition duration-200 hover:text-gray-400">
-        <Link href="/">Click here to return Home</Link>
-      </p>
-    </div>
+      <Link href="/" className="hover:text-gray-300">
+        Click here to return Home
+      </Link>
+    </LayoutDefault>
   )
 }

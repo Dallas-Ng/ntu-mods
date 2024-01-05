@@ -10,10 +10,10 @@ interface Props {
 export default function TimetableHeader({ children, variant }: Props) {
   return (
     <>
-      <div className="flex w-full items-baseline justify-between">
+      <div className="flex w-full items-center justify-between">
         <h1
           className={cn(
-            "bg-gradient-to-r bg-clip-text text-3xl font-bold text-transparent",
+            "bg-gradient-to-r bg-clip-text text-3xl font-bold leading-[1] text-transparent",
             variant === "share"
               ? "from-rose-500 to-red-700 "
               : "from-blue-800 to-indigo-900 "

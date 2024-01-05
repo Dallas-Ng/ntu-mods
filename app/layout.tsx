@@ -7,22 +7,48 @@ import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
 import ClarityTag from "@/components/clarity"
-import Footer from "@/components/footer"
-import NavigationBar from "@/components/navbar"
-import { NotificationBanner } from "@/components/notification-banner"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
 
+const defaults = siteConfig.metatags.default
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: siteConfig.metatags.default.title,
+    default: defaults.title,
     template: `%s - ${siteConfig.name}`
   },
-  description: siteConfig.metatags.default.desc,
+  description: defaults.desc,
+  keywords: defaults.keywords,
+  authors: defaults.authors,
+  creator: "Dallas Ng",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png"
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteConfig.url,
+    title: siteConfig.name,
+    description: defaults.desc,
+    siteName: siteConfig.name,
+    images: [
+      {
+        url: siteConfig.ogImage,
+        width: 1200,
+        height: 630,
+        alt: siteConfig.name
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: defaults.desc,
+    images: [siteConfig.ogImage],
+    creator: "@dallas-ng"
   }
 }
 
@@ -44,24 +70,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
-        <ClarityTag />
-
-        <body
-          className={cn(
-            "relative flex min-h-screen flex-col font-sans antialiased",
-            fontSans.variable
-          )}>
+        <body className={cn("font-sans antialiased", fontSans.variable)}>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <NotificationBanner.inBeta />
+            {children}
 
-            <NavigationBar />
-
-            <div className="container relative z-[2] flex-1 px-2 md:px-0">
-              {children}
-            </div>
-
-            <Footer className="relative z-[1] py-2" />
-
+            {/* Auxillary services */}
+            <ClarityTag />
             <TailwindIndicator />
             <Toaster position="top-center" />
             <Analytics />

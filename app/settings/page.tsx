@@ -1,39 +1,69 @@
-import TableSettings from "@/components/settings/table-settings"
+"use client"
+
+import dynamic from "next/dynamic"
+
+import { Card, CardContent } from "@/components/ui/card"
+import { AppearanceSettingsSkeleton } from "@/components/settings/appearance-settings"
+import Feedback from "@/components/settings/feedback"
+import { TableSettingsSkeleton } from "@/components/settings/table-settings"
+
+const AppearanceSettings = dynamic(
+  () => import("@/components/settings/appearance-settings"),
+  {
+    ssr: false,
+    loading: () => <AppearanceSettingsSkeleton />
+  }
+)
+
+const TableSettings = dynamic(
+  () => import("@/components/settings/table-settings"),
+  {
+    ssr: false,
+    loading: () => <TableSettingsSkeleton />
+  }
+)
 
 export default function SettingsPage() {
   return (
-    <>
-      <div className="flex h-full w-full flex-col justify-center gap-4">
-        <h1 className="text-3xl font-bold">Settings</h1>
+    <div className="mx-auto max-w-2xl p-3">
+      <Card className="p-0">
+        <CardContent className="flex flex-col gap-6 p-3">
+          <div className="space-y-3">
+            <h1 className="text-3xl font-bold">Settings</h1>
 
-        <p>We are building more customisability into the page!</p>
+            <p>We are building more customisability into the page!</p>
 
-        <hr />
+            <hr />
+          </div>
 
-        <p>Table Settings</p>
+          <div className="flex flex-col justify-center gap-3">
+            <div>
+              <p>Appearance Settings</p>
 
-        <TableSettings />
+              <p className="text-sm text-gray-500">
+                Customize the appearance of the app. Switch between day and
+                night themes.
+              </p>
+            </div>
 
-        {/* 
-        <div>
-        <div className="flex items-center space-x-2">
-          <Switch
-            id="collapsedView"
-            checked={collapsedView}
-            onCheckedChange={(val) => updateCollapsed(val, "collapsedView")}
-          />
-          <Label htmlFor="collapsedView">Collapsed View For Table</Label>
-        </div>
+            <AppearanceSettings />
 
-        <span className="mt-1 flex items-center gap-1 text-sm text-gray-500">
-          <HelpCircle className="h-[15px] w-[15px]" />
-          Hides some information from the table to reduce the vertical space
-          needed to display the whole table
-        </span>
-      </div>
+            <div>
+              <p className="mt-5">Table Settings</p>
 
-      <hr /> */}
-      </div>
-    </>
+              <p className="text-sm text-gray-500">
+                Customize the appearance of the stars table.
+              </p>
+            </div>
+
+            <TableSettings />
+          </div>
+
+          <div>
+            <Feedback />
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   )
 }

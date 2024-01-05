@@ -2,6 +2,7 @@ import dynamic from "next/dynamic"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import Loading from "@/components/loading"
+import ExamTimetable from "@/components/stars/exam-timetable"
 import StarsManageButton from "@/components/stars/stars-buttons/stars-manage-button"
 import TimetableHeader from "@/components/stars/timetable-header"
 
@@ -50,8 +51,14 @@ export default function StarsPage() {
 
       <StarsTable />
 
-      <div className="mb-[50px] mt-2 overflow-hidden rounded-lg border lg:w-[50%]">
-        <TimetableOverview />
+      <div className="mb-[50px] mt-2 flex gap-2">
+        <div className="rounded-lg border lg:w-[50%]">
+          <TimetableOverview />
+        </div>
+
+        <div className="h-fit rounded-lg border lg:w-[50%]">
+          <ExamTimetable />
+        </div>
       </div>
     </>
   )

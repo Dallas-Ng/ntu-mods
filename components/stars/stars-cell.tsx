@@ -56,10 +56,12 @@ export default function StarsCell(props: StarsCellProp) {
       </p>
 
       <p>
-        {shouldCollapsed && starsCell.time && <>{index.time}</>}
+        {shouldCollapsed ? <></> : starsCell.time && <>{index.time}</>}
 
-        {shouldCollapsed && starsCell.day && index.day > 0 && (
-          <> {DAY_TRUN_MAP[index.day]}</>
+        {shouldCollapsed ? (
+          <></>
+        ) : (
+          starsCell.day && index.day > 0 && <> {DAY_TRUN_MAP[index.day]}</>
         )}
       </p>
 
@@ -67,7 +69,7 @@ export default function StarsCell(props: StarsCellProp) {
 
       {starsCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
 
-      {shouldCollapsed && starsCell.key && <p>{index.key}</p>}
+      {shouldCollapsed ? <></> : starsCell.key && <p>{index.key}</p>}
     </>
   )
 

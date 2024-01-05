@@ -18,7 +18,6 @@ export const metadata: Metadata = {
     default: defaults.title,
     template: `%s - ${siteConfig.name}`
   },
-
   description: defaults.desc,
   keywords: defaults.keywords,
   authors: defaults.authors,

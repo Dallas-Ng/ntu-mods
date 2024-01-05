@@ -37,7 +37,7 @@ export default function StarsCourseSelect(props: Props) {
   const { coursesToIndex, addCourseToIndex, removeCourseToIndex } =
     useBoundState()
 
-  const dbSearchTerm = useDebounce(inputValue, 0) // arbitrary delay
+  const dbSearchTerm = useDebounce(inputValue, 200) // arbitrary delay - anything lower makes it feel laggy
 
   useEffect(() => {
     /**
@@ -132,7 +132,7 @@ export default function StarsCourseSelect(props: Props) {
             <CommandInput
               className="w-full"
               placeholder="Search Course Code"
-              value={dbSearchTerm}
+              value={inputValue}
               onValueChange={(v) => setInputValue(v)}
             />
 
@@ -145,23 +145,27 @@ export default function StarsCourseSelect(props: Props) {
                 courseCodes.length > 0 ? "block" : "hidden",
                 "max-h-[400px] overflow-auto"
               )}>
-              {courseCodes.map((courseCode) => (
-                <CommandItem
-                  key={courseCode}
-                  value={courseCode}
-                  onSelect={handleSelect}
-                  className="cursor-pointer py-3 md:py-2">
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      Object.keys(coursesToIndex).find((x) => x === courseCode)
-                        ? "opacity-100"
-                        : "opacity-0"
-                    )}
-                  />
-                  {courseCode}
-                </CommandItem>
-              ))}
+              {courseCodes.map((courseCode, idx) => {
+                const isActive = Object.keys(coursesToIndex).find(
+                  (x) => x === courseCode
+                )
+
+                return (
+                  <CommandItem
+                    key={courseCode}
+                    value={courseCode}
+                    onSelect={handleSelect}
+                    className="cursor-pointer py-3 md:py-2">
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        isActive ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {courseCode}
+                  </CommandItem>
+                )
+              })}
             </CommandGroup>
           </Command>
         </PopoverContent>

@@ -1,44 +1,21 @@
-import Image from "next/image"
-import Link from "next/link"
-
-import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
+import CTA from "@/components/landing/landing-cta"
+import Features from "@/components/landing/landing-features"
+import Product from "@/components/landing/landing-product"
+import Roadmap from "@/components/landing/landing-roadmap"
+import LayoutDefault from "@/components/layout-default"
 
 export default function IndexPage() {
   return (
-    <div className="container p-3">
-      <div className="flex items-center justify-center align-middle">
-        <div className="max-w-[800px]">
-          <div className="mb-5 flex flex-col items-center justify-center text-center md:flex-row md:text-left">
-            <Icons.logo height={200} width={200} />
+    <LayoutDefault>
+      <div className="container space-y-10 p-3">
+        <CTA />
 
-            <h1 className="bg-gradient-to-l from-blue-700 to-blue-800 bg-clip-text text-5xl font-bold text-transparent md:text-6xl">
-              Dabao your <br />
-              mods better
-            </h1>
-          </div>
+        <Product />
 
-          <p className="text-center">
-            Get access to all indexes including ICC modules and plan your
-            timetable with ease.
-          </p>
+        <Features />
 
-          <div className="my-4 flex justify-center">
-            <Link href="/stars">
-              <Button>Build My Timetable Now</Button>
-            </Link>
-          </div>
-        </div>
+        <Roadmap />
       </div>
-
-      <div className="relative mt-5 hidden h-[600px] w-full justify-center md:block">
-        <Image
-          src="/product-screenshot.png"
-          alt="product"
-          className="object-contain"
-          fill
-        />
-      </div>
-    </div>
+    </LayoutDefault>
   )
 }

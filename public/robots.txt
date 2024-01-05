@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://dabao.dallasng.me
+
+# Sitemaps
+Sitemap: https://dabao.dallasng.me/sitemap.xml

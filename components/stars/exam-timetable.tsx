@@ -35,7 +35,7 @@ export default function ExamTimetable() {
 
       <tbody>
         {exams.map((exam, idx) => (
-          <tr key={exam.key} className={cn(idx % 2 == 1 && "bg-secondary")}>
+          <tr key={exam.key} className={cn(idx % 2 == 1 && "bg-accent")}>
             <td className="p-2">{exam.key}</td>
             <td className="p-2 capitalize">{formatTitle(exam.name)}</td>
             <td className="p-2">{exam.date}</td>

@@ -39,7 +39,7 @@ export default function TimetableOverview() {
           indexes.map((index, idx) => (
             <tr
               key={courseIdx + idx}
-              className={cn(courseIdx % 2 == 1 && "bg-secondary")}>
+              className={cn(courseIdx % 2 == 1 && "bg-accent")}>
               {idx === 0 ? (
                 <>
                   <td

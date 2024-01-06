@@ -83,9 +83,11 @@ export default function StarsManageButton() {
                 )
               })}
 
-              <p className="w-full p-4 text-center text-sm text-gray-500">
-                Click on a row to choose your index
-              </p>
+              {objCtI.length > 0 && (
+                <p className="w-full p-4 text-center text-sm text-gray-500">
+                  Click on a row to choose your index
+                </p>
+              )}
             </div>
           </>
         }

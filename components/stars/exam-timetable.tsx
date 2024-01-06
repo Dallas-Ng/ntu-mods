@@ -2,6 +2,7 @@
 
 import { useBoundState } from "@/state/bound-state"
 
+import { DAY_TRUN_MAP } from "@/config/stars"
 import { C_EXAMS } from "@/lib/consolidated-data"
 import { formatTitle } from "@/lib/stars.lib"
 import { cn } from "@/lib/utils"
@@ -20,12 +21,24 @@ export default function ExamTimetable() {
     .map((courseKey) => (courseKey in C_EXAMS ? C_EXAMS[courseKey] : null))
     .filter((x) => x) as Exam[]
 
+  const examsSorted =
+    exams.length > 0
+      ? (exams.sort((a, b) => {
+          const dateA = new Date(Date.parse(a.date)).getTime()
+          const dateB = new Date(Date.parse(b.date)).getTime()
+          return dateA - dateB
+        }) as Exam[])
+      : []
+
+  // Remove leading 0 and replace . with :
+  const formatTime = (time: string) => time.replace(/^0/, "").replace(".", ":")
+
   return (
     <table className="table w-full text-center text-xs">
       <thead>
         <tr className="border-b text-secondary">
           <td className="p-1 md:p-2">Course Code</td>
-          <td className="p-1 md:p-2">Name</td>
+          <td className="p-1 text-left md:p-2">Name</td>
           <td className="p-1 md:p-2">Date</td>
           <td className="p-1 md:p-2">Day</td>
           <td className="p-1 md:p-2">Start Time</td>
@@ -34,14 +47,16 @@ export default function ExamTimetable() {
       </thead>
 
       <tbody>
-        {exams.map((exam, idx) => (
+        {examsSorted.map((exam, idx) => (
           <tr key={exam.key} className={cn(idx % 2 == 1 && "bg-accent")}>
             <td className="p-2">{exam.key}</td>
-            <td className="p-2 capitalize">{formatTitle(exam.name)}</td>
+            <td className="p-2 text-left capitalize">
+              {formatTitle(exam.name)}
+            </td>
             <td className="p-2">{exam.date}</td>
-            <td className="p-2">{exam.day}</td>
-            <td className="p-2">{exam.start_time}</td>
-            <td className="p-2">{exam.end_time}</td>
+            <td className="p-2">{DAY_TRUN_MAP[exam.day]}</td>
+            <td className="p-2">{formatTime(exam.start_time)}</td>
+            <td className="p-2">{formatTime(exam.end_time)}</td>
           </tr>
         ))}
       </tbody>

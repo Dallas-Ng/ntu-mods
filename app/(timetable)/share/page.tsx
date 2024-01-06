@@ -56,7 +56,9 @@ export default function StarsPage() {
         <StarsCopyTimetableButton />
       </TimetableHeader>
 
-      <StarsTable />
+      <div className="overflow-hidden rounded-xl border-2">
+        <StarsTable />
+      </div>
 
       <div className="mb-[50px] mt-2 flex flex-col gap-2 md:flex-row">
         <div className="w-full lg:w-[50%]">

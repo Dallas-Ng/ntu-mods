@@ -54,7 +54,9 @@ export default function StarsPage() {
         </div>
       </TimetableHeader>
 
-      <StarsTable />
+      <div className="overflow-hidden rounded-xl border-2">
+        <StarsTable />
+      </div>
 
       <div className="mb-[50px] mt-2 flex flex-col gap-2 md:flex-row">
         <div className="w-full lg:w-[50%]">

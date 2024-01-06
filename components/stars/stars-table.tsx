@@ -234,7 +234,7 @@ export default function StarsTable(props: StarsTableProps) {
   ))
 
   return (
-    <Table className="h-full table-fixed border p-0 text-[0.6rem] md:text-xs">
+    <Table className="h-full table-fixed border-collapse border p-0 text-[0.6rem] md:text-xs">
       <TableHeader>
         <TableRow>
           <TableHead className="h-fit w-[50px] p-1 text-center md:w-[95px]">

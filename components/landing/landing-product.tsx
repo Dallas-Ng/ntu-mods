@@ -171,7 +171,7 @@ const TEMPLATE_COURSES = {
 
 export default function LandingProduct() {
   return (
-    <div className="relative h-[59vh] w-full justify-center overflow-hidden rounded-lg border border-b bg-background dark:bg-slate-950">
+    <div className="relative h-[59vh] w-full justify-center overflow-hidden rounded-lg border-2 bg-background shadow-xl dark:bg-slate-950">
       <StarsTable coursesToIndex={TEMPLATE_COURSES} disableSelect fullCell />
     </div>
   )

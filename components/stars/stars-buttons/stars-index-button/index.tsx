@@ -20,7 +20,7 @@ export default function StarsIndexButton({ courseKey, trigger }: Props) {
   return (
     <>
       <DrawerPopover
-        contentClassName="h-[70vh]"
+        contentClassName="h-[70vh] md:max-h-[450px] md:w-[500px]"
         openChange={(open) => (open ? handleSearch("") : {})}
         trigger={trigger}
         content={

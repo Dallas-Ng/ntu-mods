@@ -17,12 +17,14 @@ interface Props {
   handleSearch: (searchTerm: string) => void
   handleSelect: (idxKey: string) => void
   commandClassName?: React.HtmlHTMLAttributes<HTMLDivElement>["className"]
+  coursesToIndex?: { [courseKey: string]: Index[] }
 }
 
 export default function IndexCommand(props: Props) {
-  const { coursesToIndex } = useBoundState()
   const { handleSearch, filteredIndexes, handleSelect, commandClassName } =
     props
+
+  let coursesToIndex = props.coursesToIndex || useBoundState().coursesToIndex
 
   return (
     <Command shouldFilter={false}>
@@ -46,53 +48,55 @@ export default function IndexCommand(props: Props) {
       )}
 
       <CommandGroup className={commandClassName}>
-        {Object.entries(filteredIndexes).map(([idxKey, fiValue], idx) => (
-          <Fragment key={idxKey}>
-            {idx !== 0 && <hr className="my-1" />}
+        {Object.entries(filteredIndexes).map(([idxKey, fiValue], idx) => {
+          const active = Object.values(coursesToIndex).find(
+            (v) => v[0].key === idxKey
+          )
 
-            <CommandItem
-              value={idxKey}
-              onSelect={handleSelect}
-              className="mb-1 cursor-pointer p-1">
-              <div className="flex w-full justify-between gap-2">
-                <span className="flex items-center gap-1">
-                  <Check
-                    className={cn(
-                      "inline h-4 w-4",
-                      Object.values(coursesToIndex).find(
-                        (v) => v[0].key === idxKey
-                      )
-                        ? "opacity-100"
-                        : "opacity-0"
-                    )}
-                  />
+          return (
+            <Fragment key={idxKey}>
+              {idx !== 0 && <hr className="my-1" />}
 
-                  {idxKey}
-                </span>
+              <CommandItem
+                value={idxKey}
+                onSelect={handleSelect}
+                className={cn("mb-1 cursor-pointer p-1", active && "bg-muted")}>
+                <div className="flex w-full justify-between gap-2">
+                  <span className="flex items-center gap-1">
+                    <Check
+                      className={cn(
+                        "inline h-4 w-4",
+                        active ? "opacity-100" : "opacity-0"
+                      )}
+                    />
 
-                {/* Dont remove this flex-col, there can be multiple timeslots for 1 index (e.g. lab, tutorial, lecture) */}
-                <div className="flex w-full flex-col gap-1">
-                  {fiValue.map((v, i) => (
-                    <div key={i}>
-                      <div className="flex w-full justify-between gap-2">
-                        <span>{DAY_MAP[v.day]}</span>
+                    {idxKey}
+                  </span>
 
-                        <span>
-                          {v.type} - {v.group}
-                        </span>
+                  {/* Dont remove this flex-col, there can be multiple timeslots for 1 index (e.g. lab, tutorial, lecture) */}
+                  <div className="flex w-full flex-col gap-1">
+                    {fiValue.map((v, i) => (
+                      <div key={i}>
+                        <div className="flex w-full justify-between gap-2">
+                          <span>{DAY_MAP[v.day]}</span>
+
+                          <span>
+                            {v.type} - {v.group}
+                          </span>
+                        </div>
+
+                        <div className="flex w-full justify-between gap-2">
+                          <span>{v.time}</span>
+                          <span>{v.venue}</span>
+                        </div>
                       </div>
-
-                      <div className="flex w-full justify-between gap-2">
-                        <span>{v.time}</span>
-                        <span>{v.venue}</span>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </CommandItem>
-          </Fragment>
-        ))}
+              </CommandItem>
+            </Fragment>
+          )
+        })}
       </CommandGroup>
     </Command>
   )

@@ -24,7 +24,8 @@ export default function IndexCommand(props: Props) {
   const { handleSearch, filteredIndexes, handleSelect, commandClassName } =
     props
 
-  let coursesToIndex = props.coursesToIndex || useBoundState().coursesToIndex
+  const state = useBoundState()
+  let coursesToIndex = props.coursesToIndex || state.coursesToIndex
 
   return (
     <Command shouldFilter={false}>

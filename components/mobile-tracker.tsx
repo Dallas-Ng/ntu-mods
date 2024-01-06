@@ -17,7 +17,7 @@ const MobileTracker = React.memo(() => {
 
   useEffect(() => {
     updateInfo({ mobile })
-  }, [mobile])
+  }, [mobile, updateInfo])
 
   return <Fragment />
 })

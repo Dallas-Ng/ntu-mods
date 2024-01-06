@@ -127,7 +127,8 @@ export default function StarsCourseSelect(props: Props) {
 
         <PopoverContent
           container={containerRef.current}
-          className={cn("z-[33] w-full p-1", props.popoverClassName)}>
+          className={cn("z-[33] w-full p-1")}
+          style={{ width: containerRef.current?.clientWidth }}>
           <Command>
             <CommandInput
               className="w-full"

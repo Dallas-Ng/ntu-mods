@@ -7,7 +7,7 @@ export default function LandingFeatures() {
     <div>
       <div className="mb-6 text-center">
         <h2 className="text-4xl font-bold">Features</h2>
-        <p className="text-gray-500">
+        <p className="text-secondary">
           NTU Dabao allows you to build your timetable your own way
         </p>
       </div>
@@ -17,7 +17,7 @@ export default function LandingFeatures() {
           <div className="relative h-[300px] w-full rounded-xl border bg-muted p-3 shadow">
             <div className="absolute left-8 top-12 w-10/12">
               <h3 className="text-2xl font-bold">Filter, Search and Manage</h3>
-              <p className="text-lg text-gray-500">
+              <p className="text-lg text-secondary">
                 Stop spamming each indexes to find the best timeslots and start
                 searching for indexes easier
               </p>
@@ -48,7 +48,7 @@ export default function LandingFeatures() {
           <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
             <div className="absolute left-8 top-12 w-10/12">
               <h3 className="text-2xl font-bold">Built for all devices</h3>
-              <p className="text-lg text-gray-500">
+              <p className="text-lg text-secondary">
                 NTU Dabao supports all devices including mobile! Build your
                 timetable anytime
               </p>
@@ -76,7 +76,7 @@ export default function LandingFeatures() {
 
             <div className="absolute bottom-8 left-8 w-10/12">
               <h3 className="mb-1 text-xl font-semibold">View all Indexes</h3>
-              <p className="text-gray-500">
+              <p className="text-secondary">
                 Including your ICC modules and other special indexes
               </p>
             </div>
@@ -93,7 +93,7 @@ export default function LandingFeatures() {
 
             <div className="absolute bottom-8 left-8 w-10/12">
               <h3 className="mb-1 text-xl font-semibold">Share with Friends</h3>
-              <p className="text-gray-500">
+              <p className="text-secondary">
                 With a simple link, you can share your timetable with anyone
               </p>
             </div>
@@ -108,7 +108,7 @@ export default function LandingFeatures() {
               <h3 className="mb-1 text-xl font-semibold">
                 Customise Your Experience
               </h3>
-              <p className="text-gray-500">
+              <p className="text-secondary">
                 Hide details of indexes and modules in the table, switch themes
                 and more
               </p>

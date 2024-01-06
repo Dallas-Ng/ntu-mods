@@ -71,7 +71,7 @@ export default function StarsManageButton() {
                               e.preventDefault()
                               removeCourseToIndex(courseKey)
                             }}
-                            className="text-gray-500 transition-colors duration-100 hover:cursor-pointer">
+                            className="text-secondary transition-colors duration-100 hover:cursor-pointer">
                             <X className="h-5 w-5" />
                           </Button>
                         </div>
@@ -84,7 +84,7 @@ export default function StarsManageButton() {
               })}
 
               {objCtI.length > 0 && (
-                <p className="w-full p-4 text-center text-sm text-gray-500">
+                <p className="w-full p-4 text-center text-sm text-secondary">
                   Click on a row to choose your index
                 </p>
               )}

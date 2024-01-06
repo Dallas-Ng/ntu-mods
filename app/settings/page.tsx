@@ -40,7 +40,7 @@ export default function SettingsPage() {
             <div>
               <p>Appearance Settings</p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-secondary">
                 Customize the appearance of the app. Switch between day and
                 night themes.
               </p>
@@ -51,7 +51,7 @@ export default function SettingsPage() {
             <div>
               <p className="mt-5">Table Settings</p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-secondary">
                 Customize the appearance of the stars table.
               </p>
             </div>

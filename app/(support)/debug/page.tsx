@@ -14,6 +14,17 @@ export default function DebugPage() {
         Debug Page
       </h1>
 
+      {/* <div className="flex gap-2">
+        <div className="h-[50px] w-[50px] bg-background"></div>
+        <div className="h-[50px] w-[50px] bg-foreground"></div>
+        <div className="h-[50px] w-[50px] bg-primary"></div>
+        <div className="h-[50px] w-[50px] bg-secondary-foreground"></div>
+        <div className="h-[50px] w-[50px] bg-secondary"></div>
+        <div className="h-[50px] w-[50px] bg-muted-foreground"></div>
+        <div className="h-[50px] w-[50px] bg-muted"></div>
+        <div className="h-[50px] w-[50px] bg-accent"></div>
+      </div> */}
+
       <DebugContent />
     </div>
   )

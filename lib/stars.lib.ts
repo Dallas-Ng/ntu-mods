@@ -61,7 +61,7 @@ export function getIndexTypeStyle(courseType: string) {
 
   return {
     borderLeft: "border-l-gray-500",
-    text: "text-gray-600",
-    background: "bg-gray-200"
+    text: "text-secondary",
+    background: "bg-secondary-foreground"
   }
 }

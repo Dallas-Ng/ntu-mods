@@ -23,7 +23,7 @@ export default function ExamTimetable() {
   return (
     <table className="table w-full text-center text-xs">
       <thead>
-        <tr className="border-b text-gray-400">
+        <tr className="border-b text-secondary">
           <td className="p-1 md:p-2">Course Code</td>
           <td className="p-1 md:p-2">Name</td>
           <td className="p-1 md:p-2">Date</td>

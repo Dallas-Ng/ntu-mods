@@ -20,7 +20,7 @@ export default function TimetableOverview() {
   return (
     <table className="table w-full text-center text-xs">
       <thead>
-        <tr className="border-b text-gray-400">
+        <tr className="border-b text-secondary">
           <td className="w-min p-1 text-left md:w-[75px] md:p-2">Course</td>
           <td className="hidden text-left md:table-cell">Title</td>
           <td>AU</td>

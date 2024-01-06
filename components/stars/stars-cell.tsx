@@ -1,10 +1,12 @@
 "use client"
 
+import { useState } from "react"
 import { useBoundState } from "@/state/bound-state"
 
 import { DAY_TRUN_MAP } from "@/config/stars"
+import { C_DATA } from "@/lib/consolidated-data"
 import { formatRemarks, getIndexTypeStyle } from "@/lib/stars.lib"
-import { cn } from "@/lib/utils"
+import { cn, sleep } from "@/lib/utils"
 
 import DrawerPopover from "../drawer-popover"
 import { TableCell } from "../ui/table"
@@ -33,7 +35,6 @@ export default function StarsCell(props: StarsCellProp) {
   } = props
   const { settings } = useBoundState()
   const { starsCell } = settings
-
   const courseStyle = getIndexTypeStyle(index.type)
   const indexProps = useIndexLogic({ courseKey, disableSelect })
 
@@ -42,6 +43,31 @@ export default function StarsCell(props: StarsCellProp) {
   const variations = coursesToIndex[courseKey].filter(
     (item) => item.day === index.day && item.time === index.time
   )
+
+  /**
+   * This function is to allow shallow update of the coursesToIndex state without
+   * setting it into state. When the drawer closes, then we will update the state.
+   */
+  const [copyCtI, setCopyCtI] = useState(coursesToIndex)
+  function handleSelectWithDrawer(idxKey: string) {
+    setCopyCtI((pS) => ({
+      ...pS,
+      // It is safe to assume that the indexKey will always be found
+      [courseKey]: Object.values(C_DATA[courseKey].indexes).find(
+        (x) => x[0].key === idxKey
+      ) as Index[]
+    }))
+  }
+
+  /**
+   * When the drawer is closed, update the coursesToIndex state
+   * This exist because each cell is creating its own drawer, which will
+   * destory itself if the cell timeslot is changed as its position is changed (hence deleted)
+   */
+  async function handleDrawerClose() {
+    await sleep(400)
+    indexProps.handleSelect(copyCtI[courseKey][0].key)
+  }
 
   const StarCellData = (index: Index) => (
     <>
@@ -73,6 +99,7 @@ export default function StarsCell(props: StarsCellProp) {
     <DrawerPopover
       contentClassName="md:w-[350px]"
       openChange={(open) => (open ? indexProps.handleSearch("") : {})}
+      onClose={handleDrawerClose}
       trigger={
         <TableCell
           onClick={(e) => disablePopup && e.preventDefault()}
@@ -95,8 +122,10 @@ export default function StarsCell(props: StarsCellProp) {
       }
       content={
         <IndexCommand
-          {...indexProps}
-          coursesToIndex={coursesToIndex}
+          handleSelect={handleSelectWithDrawer}
+          handleSearch={indexProps.handleSearch}
+          filteredIndexes={indexProps.filteredIndexes}
+          coursesToIndex={copyCtI}
           commandClassName="overflow-y-auto md:max-h-[450px]"
         />
       }

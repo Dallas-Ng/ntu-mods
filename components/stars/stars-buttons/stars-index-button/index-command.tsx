@@ -25,7 +25,7 @@ export default function IndexCommand(props: Props) {
     props
 
   const state = useBoundState()
-  let coursesToIndex = props.coursesToIndex || state.coursesToIndex
+  let coursesToIndex = props.coursesToIndex ?? state.coursesToIndex
 
   return (
     <Command shouldFilter={false}>

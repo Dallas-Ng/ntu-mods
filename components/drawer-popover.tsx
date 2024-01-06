@@ -12,11 +12,12 @@ interface Props {
   trigger: React.ReactNode
   content: React.ReactNode
   openChange?: (open: boolean) => void
+  onClose?: () => void
   contentClassName?: string
 }
 
 export default function DrawerPopover(props: Props) {
-  const { trigger, content, openChange, contentClassName } = props
+  const { trigger, content, openChange, onClose, contentClassName } = props
   const { info } = useBoundState()
 
   const handleOpenChange = (open: boolean) => {
@@ -27,7 +28,10 @@ export default function DrawerPopover(props: Props) {
 
   if (info.mobile) {
     return (
-      <Drawer closeThreshold={0.7} onOpenChange={handleOpenChange}>
+      <Drawer
+        closeThreshold={0.7}
+        onOpenChange={handleOpenChange}
+        onClose={onClose}>
         <DrawerTrigger type={undefined} asChild>
           {trigger}
         </DrawerTrigger>

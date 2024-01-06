@@ -10,7 +10,7 @@ const DebugContent = dynamic(() => import("@/components/debug-content"), {
 export default function DebugPage() {
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="bg-gradient-to-r from-emerald-500 to-emerald-900 bg-clip-text  text-3xl font-bold text-transparent">
+      <h1 className="bg-gradient-to-r from-rose-700 to-red-900 bg-clip-text text-3xl font-bold text-transparent">
         Debug Page
       </h1>
 

@@ -29,7 +29,7 @@ export default function IndexCommand(props: Props) {
   return (
     <Command shouldFilter={false}>
       <CommandInput
-        placeholder="Search index, preferred timing or tutorial group"
+        placeholder="Search index, timing or tutorial group"
         onValueChange={handleSearch}
       />
 

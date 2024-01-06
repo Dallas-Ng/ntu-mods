@@ -33,7 +33,7 @@ export default function StarsCourseSelect(props: Props) {
   const [courseCodes, setCourseCode] = useState<string[]>([])
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const { coursesToIndex, addCourseToIndex, removeCourseToIndex } =
+  const { coursesToIndex, addCourseToIndex, removeCourseToIndex, info } =
     useBoundState()
 
   const dbSearchTerm = useDebounce(inputValue, 200) // arbitrary delay - anything lower makes it feel laggy
@@ -107,7 +107,9 @@ export default function StarsCourseSelect(props: Props) {
       addCourseToIndex(course.key, selectedIndexes)
     }
 
-    // setWindowOpen(false)
+    if (info.mobile) {
+      setWindowOpen(false)
+    }
   }
 
   return (
@@ -117,7 +119,7 @@ export default function StarsCourseSelect(props: Props) {
           <Button
             variant="outline"
             className={cn("w-full", props.btnClassName)}>
-            Select Course Code
+            Click to Add Courses
             <ChevronsUpDown className="ml-1 h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>

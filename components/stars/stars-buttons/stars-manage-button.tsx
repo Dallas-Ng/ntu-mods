@@ -31,7 +31,7 @@ export default function StarsManageButton() {
         content={
           <>
             <div className="mb-4 flex justify-center">
-              <StarsCourseSelect btnClassName="w-[500px] h-50px" />
+              <StarsCourseSelect btnClassName="md:w-[500px] w-[90vw] h-50px" />
             </div>
 
             <div className="flex h-full w-full flex-col items-start overflow-y-auto px-5">

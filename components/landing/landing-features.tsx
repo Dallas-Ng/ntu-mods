@@ -28,15 +28,15 @@ export default function LandingFeatures() {
                 <span className="flex items-center text-neutral-400">
                   Search for
                   <span className="relative ml-1 h-[1em] w-36 overflow-hidden">
-                    <span className="animate-slide absolute h-full w-full -translate-y-full leading-[0.9] text-white">
+                    <span className="absolute h-full w-full -translate-y-full animate-slide leading-[0.9] text-white">
                       Index Code
                     </span>
 
-                    <span className="animate-slide absolute h-full w-full -translate-y-full leading-[0.9] text-white [animation-delay:1.00s]">
+                    <span className="absolute h-full w-full -translate-y-full animate-slide leading-[0.9] text-white [animation-delay:1.00s]">
                       Timeslot or Day
                     </span>
 
-                    <span className="animate-slide absolute h-full w-full -translate-y-full leading-[0.9] text-white [animation-delay:2.00s]">
+                    <span className="absolute h-full w-full -translate-y-full animate-slide leading-[0.9] text-white [animation-delay:2.00s]">
                       Tutorial Group
                     </span>
                   </span>
@@ -59,7 +59,7 @@ export default function LandingFeatures() {
               alt="use on any devices"
               width={200}
               height={110}
-              className="absolute -bottom-[45%]  right-5 w-[70%] transform p-5 md:-bottom-[58%] md:w-[60%]"
+              className="absolute bottom-[-45%] right-5 w-[70%] p-5 md:bottom-[-58%] md:w-[60%]"
             />
           </div>
         </div>
@@ -71,7 +71,7 @@ export default function LandingFeatures() {
               alt="share with your friends"
               width={200}
               height={110}
-              className="absolute -right-5 top-3 transform p-5 md:w-[60%]"
+              className="absolute -right-5 top-3 p-5 md:w-[60%]"
             />
 
             <div className="absolute bottom-8 left-8 w-10/12">
@@ -88,7 +88,7 @@ export default function LandingFeatures() {
               alt="share with your friends"
               width={200}
               height={110}
-              className="absolute left-1/2 top-0 w-[60%] -translate-x-1/2 transform p-5 md:w-[55%]"
+              className="absolute left-1/2 top-0 w-[60%] -translate-x-1/2 p-5 md:w-[55%]"
             />
 
             <div className="absolute bottom-8 left-8 w-10/12">

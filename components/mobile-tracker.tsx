@@ -22,4 +22,6 @@ const MobileTracker = React.memo(() => {
   return <Fragment />
 })
 
+MobileTracker.displayName = "MobileTracker"
+
 export default MobileTracker

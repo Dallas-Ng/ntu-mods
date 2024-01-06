@@ -33,7 +33,7 @@ export default function StarsCopyTimetableButton() {
     <>
       <AlertDialog>
         <AlertDialogTrigger>
-          <Button variant="secondary">Copy Timetable</Button>
+          <Button variant="outline">Copy Timetable</Button>
         </AlertDialogTrigger>
 
         <AlertDialogContent>

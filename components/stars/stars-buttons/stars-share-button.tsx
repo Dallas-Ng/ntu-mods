@@ -24,7 +24,7 @@ export default function StarsShareButton() {
       navigator.share({
         title: "NTU Dabao",
         text: "Take a look at my timetable!",
-        url: window.location.href
+        url: shareLink
       })
     } catch {
       // It means that theres no share functionality

@@ -1,174 +1,97 @@
 "use client"
 
-import { useState } from "react"
+import { Fragment } from "react"
 import { useBoundState } from "@/state/bound-state"
 import { X } from "lucide-react"
 
 import { C_DATA } from "@/lib/consolidated-data"
 import { formatTitle } from "@/lib/stars.lib"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog"
+import { DrawerDialog } from "@/components/drawer-dialog"
 
 import StarsCourseSelect from "../stars-course-select"
 import StarsIndexButton from "./stars-index-button"
 
-const CourseTypeBadge = ({
-  type,
-  active
-}: {
-  type: string
-  active: boolean
-}) => {
-  return (
-    <div
-      className={cn(
-        "rounded-md px-2 py-1 text-xs ",
-        active && "bg-primary text-white"
-      )}>
-      {type}
-    </div>
-  )
-}
-
 export default function StarsManageButton() {
   const { coursesToIndex, removeCourseToIndex } = useBoundState()
-  const [open, setOpen] = useState(false)
+  const objCtI = Object.entries(coursesToIndex)
 
   return (
     <>
-      <Button
-        className="fixed bottom-0 left-0 z-[11] h-[50px] w-screen rounded-none md:hidden"
-        onClick={() => setOpen(true)}>
-        Click to Edit Timetable
-      </Button>
+      <DrawerDialog
+        trigger={
+          <div>
+            <Button className="fixed bottom-0 left-0 z-[11] h-[50px] w-screen rounded-none md:hidden">
+              Click to Edit Timetable
+            </Button>
 
-      <Button onClick={() => setOpen(true)} className="hidden md:block">
-        Add Courses
-      </Button>
-
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="z-[20] flex w-[97%] max-w-4xl flex-col justify-start px-2 py-5 md:px-5">
-          <DialogHeader className="h-fit">
-            <DialogTitle>Courses</DialogTitle>
-            <DialogDescription>Add your courses</DialogDescription>
-          </DialogHeader>
-
-          <div className="flex h-full w-full flex-col items-start">
-            <div className="w-full pb-3 md:w-[300px]">
-              <StarsCourseSelect popoverClassName="w-[calc(100vw-2.3rem)] md:w-[300px]" />
+            <Button className="hidden md:block">Add Courses</Button>
+          </div>
+        }
+        content={
+          <>
+            <div className="mb-4 flex justify-center">
+              <StarsCourseSelect btnClassName="md:w-[500px] w-[90vw] h-50px" />
             </div>
 
-            <div className="h-[50vh] w-full gap-1 overflow-auto">
-              <table className="w-full">
-                <thead className="background sticky top-0 h-[25px]">
-                  <tr className="text-xs">
-                    <th className="w-[70px]">Code</th>
+            <div className="flex h-full w-full flex-col items-start overflow-y-auto px-5">
+              <div className="sticky top-0 z-20 flex w-full items-center justify-between gap-2 bg-background pb-1 text-xs">
+                <div className="w-[75px]">Code</div>
 
-                    <th className="hidden md:block">Name</th>
+                <div className="w-full text-left">Name</div>
 
-                    <th>Type</th>
+                <div className="mr-[52px]">Index</div>
+              </div>
 
-                    <th>Index</th>
+              {objCtI.map(([courseKey]) => {
+                const course = C_DATA[courseKey]
 
-                    <th className="w-[40px]"></th>
-                  </tr>
-                </thead>
+                return (
+                  <Fragment key={courseKey}>
+                    <StarsIndexButton
+                      courseKey={courseKey}
+                      trigger={
+                        <div className="flex w-full cursor-pointer items-center justify-between py-2">
+                          <div className="flex w-full justify-between gap-2 text-sm">
+                            <div className="w-[75px]">{course.key}</div>
 
-                <tbody>
-                  {Object.entries(coursesToIndex).map(
-                    ([courseKey, courseVal]) => {
-                      const course = C_DATA[courseKey]
-
-                      return (
-                        <tr className="h-[50px] border-b" key={courseKey}>
-                          <td className="w-[75px] text-center text-sm">
-                            {course.key}
-                          </td>
-
-                          <td className="hidden md:table-cell">
-                            <p className="line-clamp-1 text-sm capitalize">
+                            <p className="line-clamp-1 w-full text-left text-sm capitalize">
                               {formatTitle(course.title)}
                             </p>
-                          </td>
 
-                          <td>
-                            <div className="flex items-center justify-center gap-1">
-                              <CourseTypeBadge
-                                type="TUT"
-                                active={Object.values(courseVal).some((v) =>
-                                  v.type.includes("TUT")
-                                )}
-                              />
-
-                              <CourseTypeBadge
-                                type="LEC"
-                                active={Object.values(courseVal).some((v) =>
-                                  v.type.includes("LEC")
-                                )}
-                              />
-
-                              <CourseTypeBadge
-                                type="SEM"
-                                active={Object.values(courseVal).some((v) =>
-                                  v.type.includes("SEM")
-                                )}
-                              />
-
-                              <CourseTypeBadge
-                                type="LAB"
-                                active={Object.values(courseVal).some((v) =>
-                                  v.type.includes("LAB")
-                                )}
-                              />
+                            <div className="mr-[12px]">
+                              {coursesToIndex[courseKey][0].key}
                             </div>
-                          </td>
+                          </div>
 
-                          <td>
-                            <div className="flex w-full items-center justify-center">
-                              <StarsIndexButton courseKey={courseKey} />
-                            </div>
-                          </td>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.preventDefault()
+                              removeCourseToIndex(courseKey)
+                            }}
+                            className="text-secondary transition-colors duration-100 hover:cursor-pointer">
+                            <X className="h-5 w-5" />
+                          </Button>
+                        </div>
+                      }
+                    />
 
-                          <td>
-                            <div className="flex w-full items-center justify-center">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => removeCourseToIndex(courseKey)}
-                                className={cn(
-                                  "text-gray-500 transition-colors duration-100 hover:cursor-pointer"
-                                )}>
-                                <X className="h-5 w-5" />
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      )
-                    }
-                  )}
-                </tbody>
-              </table>
+                    <hr className="w-full" />
+                  </Fragment>
+                )
+              })}
+
+              {objCtI.length > 0 && (
+                <p className="w-full p-4 text-center text-sm text-secondary">
+                  Click on a row to choose your index
+                </p>
+              )}
             </div>
-          </div>
-
-          <DialogFooter className="justify-start md:justify-end ">
-            <DialogClose asChild>
-              <Button type="button" variant="secondary">
-                Close
-              </Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </>
+        }
+      />
     </>
   )
 }

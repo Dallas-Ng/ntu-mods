@@ -67,7 +67,7 @@ export default function TableSettings() {
           </div>
 
           <div className="flex w-full items-baseline justify-between">
-            <p className="w-full truncate text-xs capitalize text-gray-500">
+            <p className="w-full truncate text-xs capitalize text-secondary">
               {formatTitle(C_DATA[courseKey].title)}
             </p>
 
@@ -101,7 +101,7 @@ export default function TableSettings() {
                     {key === "key" ? "Index Code" : key}{" "}
                   </p>
 
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-secondary">
                     {!["day", "remarks"].includes(key) &&
                       index[key as keyof typeof index]}
 

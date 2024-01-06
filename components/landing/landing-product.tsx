@@ -130,6 +130,42 @@ const TEMPLATE_COURSES = {
       remarks: "",
       duration: 4
     }
+  ],
+  BA2204: [
+    {
+      key: "00187",
+      type: "SEM",
+      group: "1",
+      day: 3,
+      time: "1100-1500",
+      venue: "ABS LT10",
+      remarks: "",
+      duration: 8
+    }
+  ],
+  IM2073: [
+    {
+      key: "32361",
+      type: "PRJ",
+      group: "EJ03",
+      day: 5,
+      time: "0930-1220",
+      venue: "S2.2-B4-04",
+      remarks: "Teaching Wk1-12",
+      duration: 6
+    }
+  ],
+  EE4208: [
+    {
+      key: "32263",
+      type: "DES",
+      group: "F41",
+      day: 1,
+      time: "1230-1520",
+      venue: "S2-B5C-02",
+      remarks: "Teaching Wk7-13",
+      duration: 6
+    }
   ]
 }
 

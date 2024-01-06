@@ -32,7 +32,7 @@ export default function StarsCell(props: StarsCellProp) {
     fullCell = false
   } = props
   const { settings } = useBoundState()
-  const { collapsedView, starsCell } = settings
+  const { starsCell } = settings
 
   const courseStyle = getIndexTypeStyle(index.type)
   const indexProps = useIndexLogic({ courseKey, disableSelect })
@@ -48,35 +48,34 @@ export default function StarsCell(props: StarsCellProp) {
       <p>
         <span className={cn("font-bold", courseStyle.text)}>{courseKey}</span>
 
-        {starsCell.type && <> {index.type}</>}
+        {(fullCell || starsCell.type) && <> {index.type}</>}
 
-        {starsCell.group && <> ({index.group})</>}
+        {(fullCell || starsCell.group) && <> ({index.group})</>}
       </p>
 
       <p>
-        {(fullCell || (!collapsedView && starsCell.time)) && <>{index.time}</>}
+        {(fullCell || starsCell.time) && <>{index.time}</>}
 
-        {(fullCell || (!collapsedView && starsCell.day)) && index.day > 0 && (
+        {(fullCell || starsCell.day) && index.day > 0 && (
           <> {DAY_TRUN_MAP[index.day]}</>
         )}
       </p>
 
-      {(fullCell || (!collapsedView && starsCell.venue)) && (
-        <p>{index.venue}</p>
-      )}
+      {(fullCell || starsCell.venue) && <p>{index.venue}</p>}
 
-      {starsCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
+      {(fullCell || starsCell.remarks) && <p>{formatRemarks(index.remarks)}</p>}
 
-      {(fullCell || (!collapsedView && starsCell.key)) && <p>{index.key}</p>}
+      {(fullCell || starsCell.key) && <p>{index.key}</p>}
     </>
   )
 
   return (
     <DrawerPopover
-      contentClassName="md:w-[320px]"
+      contentClassName="md:w-[350px]"
       openChange={(open) => (open ? indexProps.handleSearch("") : {})}
       trigger={
         <TableCell
+          onClick={(e) => disablePopup && e.preventDefault()}
           key={index.key}
           rowSpan={index.duration}
           className={cn(
@@ -97,6 +96,7 @@ export default function StarsCell(props: StarsCellProp) {
       content={
         <IndexCommand
           {...indexProps}
+          coursesToIndex={coursesToIndex}
           commandClassName="overflow-y-auto md:max-h-[450px]"
         />
       }

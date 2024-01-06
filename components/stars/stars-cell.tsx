@@ -74,7 +74,12 @@ export default function StarsCell(props: StarsCellProp) {
       <p>
         <span className={cn("font-bold", courseStyle.text)}>{courseKey}</span>
 
-        {(fullCell || starsCell.type) && <> {index.type}</>}
+        {(fullCell || starsCell.type) && (
+          <span className={cn("font-semibold", courseStyle.textAlt)}>
+            {" "}
+            {index.type.includes("LEC") ? "LEC" : index.type}
+          </span>
+        )}
 
         {(fullCell || starsCell.group) && <> ({index.group})</>}
       </p>
@@ -87,9 +92,13 @@ export default function StarsCell(props: StarsCellProp) {
         )}
       </p>
 
-      {(fullCell || starsCell.venue) && <p>{index.venue}</p>}
+      <p>
+        {(fullCell || starsCell.venue) && <>{index.venue}</>}
 
-      {(fullCell || starsCell.remarks) && <p>{formatRemarks(index.remarks)}</p>}
+        {(fullCell || starsCell.remarks) && index.remarks !== "" && (
+          <> - {formatRemarks(index.remarks)}</>
+        )}
+      </p>
 
       {(fullCell || starsCell.key) && <p>{index.key}</p>}
     </>
@@ -106,18 +115,26 @@ export default function StarsCell(props: StarsCellProp) {
           key={index.key}
           rowSpan={index.duration}
           className={cn(
-            "cursor-pointer break-words border border-l-2 border-slate-300 p-1 dark:border-y-slate-800 dark:border-r-slate-800 md:p-2",
-            hasConflict && "border-b-2 border-b-red-600 dark:border-b-red-600",
-            courseStyle.borderLeft,
+            "h-full cursor-pointer break-words p-0",
             props.className
           )}>
-          {variations.length > 1
-            ? variations.map((item, key) => (
-                <div className="mt-1" key={key}>
-                  {StarCellData(item)}
-                </div>
-              ))
-            : StarCellData(index)}
+          <div className="flex h-full w-full p-1">
+            <div
+              className={cn(
+                "flex h-full flex-1 flex-col items-center justify-center rounded-lg p-1 transition-colors md:px-3",
+                courseStyle.background
+              )}>
+              <div className="w-full">
+                {variations.length > 1
+                  ? variations.map((item, key) => (
+                      <div className="mt-1" key={key}>
+                        {StarCellData(item)}
+                      </div>
+                    ))
+                  : StarCellData(index)}
+              </div>
+            </div>
+          </div>
         </TableCell>
       }
       content={

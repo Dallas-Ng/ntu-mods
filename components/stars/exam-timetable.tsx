@@ -38,7 +38,7 @@ export default function ExamTimetable() {
       <thead>
         <tr className="border-b text-secondary">
           <td className="p-1 md:p-2">Course Code</td>
-          <td className="p-1 text-left md:p-2">Name</td>
+          <td className="hidden p-1 text-left md:table-cell md:p-2">Name</td>
           <td className="p-1 md:p-2">Date</td>
           <td className="p-1 md:p-2">Day</td>
           <td className="p-1 md:p-2">Start Time</td>
@@ -50,13 +50,13 @@ export default function ExamTimetable() {
         {examsSorted.map((exam, idx) => (
           <tr key={exam.key} className={cn(idx % 2 == 1 && "bg-accent")}>
             <td className="p-2">{exam.key}</td>
-            <td className="p-2 text-left capitalize">
+            <td className="hidden p-2 text-left capitalize md:table-cell">
               {formatTitle(exam.name)}
             </td>
-            <td className="p-2">{exam.date}</td>
+            <td className="p-2">{exam.date.replace(" 2024", "")}</td>
             <td className="p-2">{DAY_TRUN_MAP[exam.day]}</td>
-            <td className="p-2">{formatTime(exam.start_time)}</td>
-            <td className="p-2">{formatTime(exam.end_time)}</td>
+            <td className="min-w-[70px] p-2">{formatTime(exam.start_time)}</td>
+            <td className="min-w-[70px] p-2">{formatTime(exam.end_time)}</td>
           </tr>
         ))}
       </tbody>

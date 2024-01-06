@@ -234,20 +234,18 @@ export default function StarsTable(props: StarsTableProps) {
   ))
 
   return (
-    <div className="rounded-lg border shadow">
-      <Table className="table-fixed p-0 text-[0.6rem] md:text-xs">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="h-fit w-[50px] p-1 text-center md:w-[95px]">
-              Time
-            </TableHead>
+    <Table className="h-full table-fixed border p-0 text-[0.6rem] md:text-xs">
+      <TableHeader>
+        <TableRow>
+          <TableHead className="h-fit w-[50px] p-1 text-center md:w-[95px]">
+            Time
+          </TableHead>
 
-            {TableHeadItems}
-          </TableRow>
-        </TableHeader>
+          {TableHeadItems}
+        </TableRow>
+      </TableHeader>
 
-        <TableBody>{TableBodyItems}</TableBody>
-      </Table>
-    </div>
+      <TableBody>{TableBodyItems}</TableBody>
+    </Table>
   )
 }

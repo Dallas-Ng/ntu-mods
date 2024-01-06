@@ -21,16 +21,16 @@ export default function TimetableOverview() {
     <table className="table w-full text-center text-xs">
       <thead>
         <tr className="border-b text-secondary">
-          <td className="w-min p-1 text-left md:w-[75px] md:p-2">Course</td>
+          <td className="w-min p-1 md:w-[75px]">Course</td>
           <td className="hidden text-left md:table-cell">Title</td>
           <td>AU</td>
 
-          <td>Index</td>
-          <td>Type</td>
-          <td>Group</td>
-          <td>Day</td>
-          <td>Time</td>
-          <td>Remarks</td>
+          <td className="p-1">Index</td>
+          <td className="p-1">Type</td>
+          <td className="p-1">Group</td>
+          <td className="p-1">Day</td>
+          <td className="p-1">Time</td>
+          <td className="p-1">Remarks</td>
         </tr>
       </thead>
 
@@ -44,17 +44,15 @@ export default function TimetableOverview() {
                 <>
                   <td
                     rowSpan={indexes.length}
-                    className="w-min p-1 text-left md:w-[75px] md:p-2">
+                    className={cn("w-min p-1 md:w-[75px]")}>
                     {course}
-
-                    <p className="w-min text-left capitalize md:hidden">
-                      {formatTitle(C_DATA[course].title)}
-                    </p>
                   </td>
 
                   <td
                     rowSpan={indexes.length}
-                    className="hidden p-1 text-left capitalize md:table-cell">
+                    className={cn(
+                      "hidden p-1 text-left capitalize md:table-cell"
+                    )}>
                     {formatTitle(C_DATA[course].title)}
                   </td>
 
@@ -75,17 +73,19 @@ export default function TimetableOverview() {
               </td>
               <td className="p-1">{index.group}</td>
               <td className="p-1">{DAY_TRUN_MAP[index.day]}</td>
-              <td className="p-1">{index.time}</td>
-              <td className="w-min p-1">{formatRemarks(index.remarks)}</td>
+              <td className="p-1 md:w-[100px]">{index.time}</td>
+              <td className="p-1">{formatRemarks(index.remarks)}</td>
             </tr>
           ))
         )}
 
         <tr className="border-t">
-          <td colSpan={2} className="p-1 text-left md:p-2">
-            Total AUs
-          </td>
-          <td colSpan={2} className="text-left">
+          <td
+            colSpan={2}
+            className="> Total
+            AUs </td>
+          <td
+          colSpan={2} className= p-1">
             {Object.keys(coursesToIndex).reduce(
               (acc, course) =>
                 acc +

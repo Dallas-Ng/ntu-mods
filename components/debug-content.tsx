@@ -2,11 +2,15 @@
 
 import { useRouter } from "next/navigation"
 import { useBoundState } from "@/state/bound-state"
+import { track } from "@vercel/analytics"
+import { ArrowLeft } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 
 export default function DebugContent() {
-  const { coursesToIndex, resetCourseToIndex } = useBoundState()
+  const state = useBoundState()
+  const { coursesToIndex, settings, info, resetCourseToIndex, resetSettings } =
+    state
   const router = useRouter()
 
   function resetApplicationState() {
@@ -15,23 +19,29 @@ export default function DebugContent() {
     )
 
     if (confirmed) {
+      track("reset")
       resetCourseToIndex()
+      resetSettings()
       alert("Application state reset successfully.")
     }
   }
 
   return (
     <>
-      <span
-        className="w-fit cursor-pointer hover:underline"
+      <Button
+        variant="outline"
+        size="sm"
+        className="flex w-fit cursor-pointer items-center gap-1 text-sm hover:underline"
         onClick={() => router.back()}>
+        <ArrowLeft className="h-5 w-5" />
         Go Back
-      </span>
+      </Button>
 
       <div className="my-5">
-        <p className="mb-2">
-          If you encountered problems, it will delete all your data (including
-          the courses you added)
+        <p className="mb-2 text-secondary">
+          If you encountered problems press the button below, it will{" "}
+          <strong className="text-red-600">delete</strong> all your data
+          (including the courses you added)
         </p>
 
         <Button onClick={resetApplicationState}>
@@ -39,7 +49,9 @@ export default function DebugContent() {
         </Button>
       </div>
 
-      <pre>{JSON.stringify(coursesToIndex, null, 2)}</pre>
+      <div className="rounded-lg border p-2 text-sm">
+        <pre>{JSON.stringify({ coursesToIndex, settings, info }, null, 2)}</pre>
+      </div>
     </>
   )
 }

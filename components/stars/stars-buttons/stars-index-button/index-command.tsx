@@ -9,8 +9,7 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandItem,
-  CommandSeparator
+  CommandItem
 } from "@/components/ui/command"
 
 interface Props {
@@ -18,78 +17,87 @@ interface Props {
   handleSearch: (searchTerm: string) => void
   handleSelect: (idxKey: string) => void
   commandClassName?: React.HtmlHTMLAttributes<HTMLDivElement>["className"]
+  coursesToIndex?: { [courseKey: string]: Index[] }
 }
 
 export default function IndexCommand(props: Props) {
-  const { coursesToIndex } = useBoundState()
   const { handleSearch, filteredIndexes, handleSelect, commandClassName } =
     props
+
+  const state = useBoundState()
+  let coursesToIndex = props.coursesToIndex ?? state.coursesToIndex
 
   return (
     <Command shouldFilter={false}>
       <CommandInput
-        placeholder="Search index, preferred timing or tutorial group"
+        placeholder="Search index, timing or tutorial group"
         onValueChange={handleSearch}
       />
 
       <CommandEmpty>No indexes code found</CommandEmpty>
 
-      <CommandGroup className={cn("relative p-0 px-1", commandClassName)}>
-        {Object.keys(filteredIndexes).length > 0 && (
-          <div className="sticky top-[0px] z-[20] flex w-full items-center bg-popover pb-1 text-xs">
-            <span className="w-[200px] text-center">Code</span>
-
-            <span className="w-full">Day / Time</span>
-            <span className="whitespace-nowrap text-end">Group / Venue</span>
+      {Object.keys(filteredIndexes).length > 0 && (
+        <div className="sticky top-0 z-20 flex w-full items-center gap-2 bg-background p-1 text-xs">
+          <div className="flex gap-1">
+            <span className="w-4" />
+            <span className="w-[43px] text-center">Code</span>
           </div>
-        )}
 
-        {Object.entries(filteredIndexes).map(([idxKey, fiValue], idx) => (
-          <Fragment key={idxKey}>
-            {idx !== 0 && <CommandSeparator className="mx-2 my-1" />}
+          <span className="w-full">Day / Time</span>
+          <span className="whitespace-nowrap text-end">Group / Venue</span>
+        </div>
+      )}
 
-            <CommandItem
-              value={idxKey}
-              onSelect={handleSelect}
-              className="mb-1 cursor-pointer">
-              <div className="flex w-full justify-between gap-6">
-                <span className="flex items-center">
-                  <Check
-                    className={cn(
-                      "mr-2 inline h-4 w-4",
-                      Object.values(coursesToIndex).find(
-                        (v) => v[0].key === idxKey
-                      )
-                        ? "opacity-100"
-                        : "opacity-0"
-                    )}
-                  />
-                  {idxKey}
-                </span>
+      <CommandGroup className={commandClassName}>
+        {Object.entries(filteredIndexes).map(([idxKey, fiValue], idx) => {
+          const active = Object.values(coursesToIndex).find(
+            (v) => v[0].key === idxKey
+          )
 
-                {/* Dont remove this flex-col, there can be multiple timeslots for 1 index (e.g. lab, tutorial, lecture) */}
-                <div className="flex w-full flex-col gap-1">
-                  {fiValue.map((v, i) => (
-                    <div key={i}>
-                      <div className="flex w-full justify-between gap-2">
-                        <span>{DAY_MAP[v.day]}</span>
+          return (
+            <Fragment key={idxKey}>
+              {idx !== 0 && <hr className="my-1" />}
 
-                        <span>
-                          {v.type} - {v.group}
-                        </span>
+              <CommandItem
+                value={idxKey}
+                onSelect={handleSelect}
+                className={cn("mb-1 cursor-pointer p-1", active && "bg-muted")}>
+                <div className="flex w-full justify-between gap-2">
+                  <span className="flex items-center gap-1">
+                    <Check
+                      className={cn(
+                        "inline h-4 w-4",
+                        active ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+
+                    {idxKey}
+                  </span>
+
+                  {/* Dont remove this flex-col, there can be multiple timeslots for 1 index (e.g. lab, tutorial, lecture) */}
+                  <div className="flex w-full flex-col gap-1">
+                    {fiValue.map((v, i) => (
+                      <div key={i}>
+                        <div className="flex w-full justify-between gap-2">
+                          <span>{DAY_MAP[v.day]}</span>
+
+                          <span>
+                            {v.type} - {v.group}
+                          </span>
+                        </div>
+
+                        <div className="flex w-full justify-between gap-2">
+                          <span>{v.time}</span>
+                          <span>{v.venue}</span>
+                        </div>
                       </div>
-
-                      <div className="flex w-full justify-between gap-2">
-                        <span>{v.time}</span>
-                        <span>{v.venue}</span>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </CommandItem>
-          </Fragment>
-        ))}
+              </CommandItem>
+            </Fragment>
+          )
+        })}
       </CommandGroup>
     </Command>
   )

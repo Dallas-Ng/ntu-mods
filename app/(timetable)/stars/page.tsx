@@ -43,11 +43,6 @@ const StarsShareButton = dynamic(
   { ssr: false, loading: () => <Skeleton className="h-10 w-10" /> }
 )
 
-const CollapseContentButton = dynamic(
-  () => import("@/components/stars/stars-buttons/collapse-content-button"),
-  { ssr: false, loading: () => <Skeleton className="h-10 w-10" /> }
-)
-
 export default function StarsPage() {
   return (
     <>
@@ -56,11 +51,12 @@ export default function StarsPage() {
 
         <div className="ml-auto flex gap-1">
           <StarsShareButton />
-          <CollapseContentButton />
         </div>
       </TimetableHeader>
 
-      <StarsTable />
+      <div className="overflow-hidden rounded-xl border-2">
+        <StarsTable />
+      </div>
 
       <div className="mb-[50px] mt-2 flex flex-col gap-2 md:flex-row">
         <div className="w-full lg:w-[50%]">

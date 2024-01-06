@@ -6,7 +6,7 @@ interface SkeletonProps {
 
 function Banner(props: SkeletonProps) {
   return (
-    <div className="relative z-10 flex items-center justify-center bg-primary p-1 dark:bg-secondary">
+    <div className="relative z-10 flex items-center justify-center bg-primary p-1 dark:bg-muted">
       <p className="text-center text-sm leading-6 text-white">
         {props.children}
       </p>

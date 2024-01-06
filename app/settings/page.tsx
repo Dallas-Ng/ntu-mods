@@ -1,7 +1,9 @@
 "use client"
 
 import dynamic from "next/dynamic"
+import Link from "next/link"
 
+import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { AppearanceSettingsSkeleton } from "@/components/settings/appearance-settings"
 import Feedback from "@/components/settings/feedback"
@@ -28,19 +30,30 @@ export default function SettingsPage() {
     <div className="mx-auto max-w-2xl p-3">
       <Card className="p-0">
         <CardContent className="flex flex-col gap-6 p-3">
-          <div className="space-y-3">
+          <div className="flex w-full flex-col gap-3">
             <h1 className="text-3xl font-bold">Settings</h1>
 
-            <p>We are building more customisability into the page!</p>
+            <p className="text-secondary">
+              We are building more customisability into the page!
+            </p>
 
             <hr />
+
+            <Link href="/debug">
+              <Button
+                className="text-sm text-secondary"
+                variant="outline"
+                size="sm">
+                Clear my data
+              </Button>
+            </Link>
           </div>
 
           <div className="flex flex-col justify-center gap-3">
             <div>
               <p>Appearance Settings</p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-secondary">
                 Customize the appearance of the app. Switch between day and
                 night themes.
               </p>
@@ -51,7 +64,7 @@ export default function SettingsPage() {
             <div>
               <p className="mt-5">Table Settings</p>
 
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-secondary">
                 Customize the appearance of the stars table.
               </p>
             </div>

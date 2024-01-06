@@ -13,5 +13,9 @@ interface Props {
 }
 
 export default function Layout({ children }: Props) {
-  return <LayoutDefault>{children}</LayoutDefault>
+  return (
+    <div className="bg-slate-100">
+      <LayoutDefault>{children}</LayoutDefault>
+    </div>
+  )
 }

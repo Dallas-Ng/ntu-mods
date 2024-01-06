@@ -25,7 +25,6 @@ const STORED_KEYS = Object.keys(C_DATA)
 
 interface Props {
   btnClassName?: React.HtmlHTMLAttributes<HTMLDivElement>["className"]
-  popoverClassName?: React.HtmlHTMLAttributes<HTMLDivElement>["className"]
 }
 
 export default function StarsCourseSelect(props: Props) {
@@ -112,16 +111,14 @@ export default function StarsCourseSelect(props: Props) {
   }
 
   return (
-    <div ref={containerRef}>
+    <div ref={containerRef} className="h-min w-min">
       <Popover open={windowOpen} onOpenChange={setWindowOpen}>
-        <PopoverTrigger asChild>
+        <PopoverTrigger type={undefined} asChild>
           <Button
             variant="outline"
-            role="combobox"
-            aria-expanded={windowOpen}
             className={cn("w-full", props.btnClassName)}>
             Select Course Code
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            <ChevronsUpDown className="ml-1 h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
 
@@ -146,7 +143,7 @@ export default function StarsCourseSelect(props: Props) {
                 courseCodes.length > 0 ? "block" : "hidden",
                 "max-h-[400px] overflow-auto"
               )}>
-              {courseCodes.map((courseCode, idx) => {
+              {courseCodes.map((courseCode) => {
                 const isActive = Object.keys(coursesToIndex).find(
                   (x) => x === courseCode
                 )

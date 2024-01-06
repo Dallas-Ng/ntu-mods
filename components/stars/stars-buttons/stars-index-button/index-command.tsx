@@ -9,8 +9,7 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandItem,
-  CommandSeparator
+  CommandItem
 } from "@/components/ui/command"
 
 interface Props {
@@ -34,29 +33,32 @@ export default function IndexCommand(props: Props) {
 
       <CommandEmpty>No indexes code found</CommandEmpty>
 
-      <CommandGroup className={cn("relative p-0 px-1", commandClassName)}>
-        {Object.keys(filteredIndexes).length > 0 && (
-          <div className="sticky top-[0px] z-[20] flex w-full items-center bg-popover pb-1 text-xs">
-            <span className="w-[200px] text-center">Code</span>
-
-            <span className="w-full">Day / Time</span>
-            <span className="whitespace-nowrap text-end">Group / Venue</span>
+      {Object.keys(filteredIndexes).length > 0 && (
+        <div className="sticky top-0 z-20 flex w-full items-center gap-2 bg-background p-1 text-xs">
+          <div className="flex gap-1">
+            <span className="w-4" />
+            <span className="w-[43px] text-center">Code</span>
           </div>
-        )}
 
+          <span className="w-full">Day / Time</span>
+          <span className="whitespace-nowrap text-end">Group / Venue</span>
+        </div>
+      )}
+
+      <CommandGroup className={commandClassName}>
         {Object.entries(filteredIndexes).map(([idxKey, fiValue], idx) => (
           <Fragment key={idxKey}>
-            {idx !== 0 && <CommandSeparator className="mx-2 my-1" />}
+            {idx !== 0 && <hr className="my-1" />}
 
             <CommandItem
               value={idxKey}
               onSelect={handleSelect}
-              className="mb-1 cursor-pointer">
-              <div className="flex w-full justify-between gap-6">
-                <span className="flex items-center">
+              className="mb-1 cursor-pointer p-1">
+              <div className="flex w-full justify-between gap-2">
+                <span className="flex items-center gap-1">
                   <Check
                     className={cn(
-                      "mr-2 inline h-4 w-4",
+                      "inline h-4 w-4",
                       Object.values(coursesToIndex).find(
                         (v) => v[0].key === idxKey
                       )
@@ -64,6 +66,7 @@ export default function IndexCommand(props: Props) {
                         : "opacity-0"
                     )}
                   />
+
                   {idxKey}
                 </span>
 

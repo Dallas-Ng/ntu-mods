@@ -6,7 +6,7 @@ import { DAY_TRUN_MAP } from "@/config/stars"
 import { formatRemarks, getIndexTypeStyle } from "@/lib/stars.lib"
 import { cn } from "@/lib/utils"
 
-import SheetPopover from "../sheet-popover"
+import DrawerPopover from "../drawer-popover"
 import { TableCell } from "../ui/table"
 import IndexCommand from "./stars-buttons/stars-index-button/index-command"
 import useIndexLogic from "./stars-buttons/stars-index-button/index-logic"
@@ -72,10 +72,10 @@ export default function StarsCell(props: StarsCellProp) {
   )
 
   return (
-    <SheetPopover
-      disablePopup={disablePopup}
+    <DrawerPopover
+      contentClassName="md:w-[320px]"
       openChange={(open) => (open ? indexProps.handleSearch("") : {})}
-      triggerComponent={
+      trigger={
         <TableCell
           key={index.key}
           rowSpan={index.duration}
@@ -94,14 +94,11 @@ export default function StarsCell(props: StarsCellProp) {
             : StarCellData(index)}
         </TableCell>
       }
-      popoverContent={
+      content={
         <IndexCommand
           {...indexProps}
-          commandClassName="max-h-[450px] w-[400px] overflow-auto p-1"
+          commandClassName="overflow-y-auto md:max-h-[450px]"
         />
-      }
-      sheetContent={
-        <IndexCommand {...indexProps} commandClassName="overflow-auto" />
       }
     />
   )

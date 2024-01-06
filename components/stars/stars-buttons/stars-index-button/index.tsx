@@ -1,39 +1,33 @@
 "use client"
 
-import { useBoundState } from "@/state/bound-state"
-
-import { Button } from "@/components/ui/button"
-import SheetPopover from "@/components/sheet-popover"
+import DrawerPopover from "@/components/drawer-popover"
 
 import IndexCommand from "./index-command"
 import useIndexLogic from "./index-logic"
 
 interface Props {
   courseKey: string
+  trigger: React.ReactNode
 }
 
-export default function StarsIndexButton({ courseKey }: Props) {
-  const { coursesToIndex } = useBoundState()
+export default function StarsIndexButton({ courseKey, trigger }: Props) {
+  /**
+   * This component is needed as if you move useIndexLogic into a loop, it breaks
+   */
   const indexProps = useIndexLogic({ courseKey })
   const { handleSearch } = indexProps
 
   return (
     <>
-      <SheetPopover
+      <DrawerPopover
+        contentClassName="h-[70vh]"
         openChange={(open) => (open ? handleSearch("") : {})}
-        triggerComponent={
-          <Button variant="outline" className="w-full px-6 text-sm">
-            {coursesToIndex[courseKey][0].key}
-          </Button>
-        }
-        popoverContent={
+        trigger={trigger}
+        content={
           <IndexCommand
             {...indexProps}
-            commandClassName="max-h-[450px] overflow-auto"
+            commandClassName="md:max-h-[450px] overflow-auto"
           />
-        }
-        sheetContent={
-          <IndexCommand {...indexProps} commandClassName="overflow-auto" />
         }
       />
     </>

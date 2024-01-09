@@ -67,7 +67,7 @@ for course in courses:
         consolidated_courses[code] = course
 
 
-jsonify(output_file_path, consolidated_courses, minify=False)
+jsonify(output_file_path, consolidated_courses, minify=True)
 
 
 # {

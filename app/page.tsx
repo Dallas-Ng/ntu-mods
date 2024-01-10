@@ -44,7 +44,7 @@ export default function IndexPage() {
         />
       </div>
 
-      <div className="relative mt-10 space-y-10 p-3">
+      <div className="relative z-[3] mt-10 space-y-10 p-3">
         <Features />
 
         <Roadmap />

@@ -6,7 +6,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { AppearanceSettingsSkeleton } from "@/components/settings/appearance-settings"
-import Feedback from "@/components/settings/feedback"
+// import Feedback from "@/components/settings/feedback"
 import { TableSettingsSkeleton } from "@/components/settings/table-settings"
 
 const AppearanceSettings = dynamic(
@@ -72,9 +72,9 @@ export default function SettingsPage() {
             <TableSettings />
           </div>
 
-          <div>
+          {/* <div>
             <Feedback />
-          </div>
+          </div> */}
         </CardContent>
       </Card>
     </div>

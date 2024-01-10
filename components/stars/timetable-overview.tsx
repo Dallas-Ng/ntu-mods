@@ -80,12 +80,8 @@ export default function TimetableOverview() {
         )}
 
         <tr className="border-t">
-          <td
-            colSpan={2}
-            className="> Total
-            AUs </td>
-          <td
-          colSpan={2} className= p-1">
+          <td colSpan={2} className="p-1 pl-4 text-left">
+            Total AUs:{" "}
             {Object.keys(coursesToIndex).reduce(
               (acc, course) =>
                 acc +

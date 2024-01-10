@@ -31,3 +31,20 @@ interface Exam {
   name: string
   duration: string // in 30 min block,
 }
+interface CourseData {
+  code: string
+  au: string
+  title: string
+  description: string
+  searchKeys: string[]
+  maintainingDept?: string
+  notAvailableToAllProgrammeWith?: string
+  notAvailableAsPeToProgramme?: string
+  prerequisite?: string[][]
+  notAvailableToProgramme?: string
+  gradeType?: string
+  notAvailableAsBdeueToProgramme?: string
+  mutuallyExclusiveWith?: string[]
+  notAvailableAsCoreToProgramme?: string
+  notOffered?: string
+}

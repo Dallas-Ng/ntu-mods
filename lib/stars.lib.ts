@@ -2,6 +2,13 @@ export function formatTitle(courseTitle: string) {
   return courseTitle.toLowerCase().replace(/[^a-zA-Z ]/g, "")
 }
 
+export function capitaliseEachWord(input: string): string {
+  return input
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ")
+}
+
 export function formatRemarks(remarks: string) {
   let formattedRemarks = remarks
 

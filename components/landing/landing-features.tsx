@@ -9,7 +9,7 @@ export default function LandingFeatures() {
       <div className="mb-6 text-center">
         <h2 className="text-4xl font-bold">Features</h2>
         <p className="text-secondary">
-          NTU Dabao allows you to build your timetable your own way
+          NTU Mods allows you to build your timetable your own way
         </p>
       </div>
 
@@ -54,7 +54,7 @@ export default function LandingFeatures() {
             <div className="absolute left-8 top-12 w-10/12">
               <h3 className="text-2xl font-bold">Built for all devices</h3>
               <p className="text-lg text-secondary">
-                NTU Dabao supports all devices including mobile! Build your
+                NTU Mods supports all devices including mobile! Build your
                 timetable anytime
               </p>
             </div>

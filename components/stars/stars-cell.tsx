@@ -33,7 +33,7 @@ export default function StarsCell(props: StarsCellProp) {
     disableSelect = false,
     fullCell = false
   } = props
-  const { settings } = useBoundState()
+  const { settings, info } = useBoundState()
   const { starsCell } = settings
   const courseStyle = getIndexTypeStyle(index.type)
   const indexProps = useIndexLogic({ courseKey, disableSelect })
@@ -50,6 +50,10 @@ export default function StarsCell(props: StarsCellProp) {
    */
   const [copyCtI, setCopyCtI] = useState(coursesToIndex)
   function handleSelectWithDrawer(idxKey: string) {
+    if (!info.mobile) {
+      indexProps.handleSelect(idxKey)
+      return
+    }
     setCopyCtI((pS) => ({
       ...pS,
       // It is safe to assume that the indexKey will always be found

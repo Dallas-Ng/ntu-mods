@@ -12,15 +12,19 @@ export default function StarsEmptyCells() {
     Object.values(settings.starsCell).reduce(
       (acc, cur) => acc + (cur ? 0 : 1),
       0
-    ) >= 4
+    ) >= 1
 
   return (
     <div className="mt-5">
       {threshold && (
         <Link href="/settings#table-settings">
-          <div className="flex items-center gap-1 text-sm text-secondary">
-            <InfoIcon className="h-4 w-4" />
-            Hey, you hid some information in your table. Click here to edit.
+          <div className="flex items-start gap-1 text-sm text-secondary hover:underline md:items-center">
+            <span>
+              <InfoIcon className="h-5 w-5" />
+            </span>
+            Some information are hidden in your table.{" "}
+            <br className="block md:hidden" />
+            Click to edit.
           </div>
         </Link>
       )}

@@ -30,5 +30,11 @@ export const NotificationBanner = {
   ),
   optimisedForWeb: () => (
     <Banner>Optimsed for website, mobile support coming soon!</Banner>
+  ),
+  experienceProblems: () => (
+    <Banner>
+      Clicking of courses in the timetable has problems, please use the "Add
+      Mods" button for now
+    </Banner>
   )
 }

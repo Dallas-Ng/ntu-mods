@@ -198,8 +198,8 @@ export default function StarsTable(props: StarsTableProps) {
       STARS_MATRIX[tsIndex][cellPosition] = (
         <StarsCell
           fullCell={props.fullCell}
-          disablePopup={props.disablePopup}
-          disableSelect={props.disableSelect}
+          disablePopup={true}
+          disableSelect={true}
           courseKey={courseKey || ""}
           index={index}
           coursesToIndex={coursesToIndex}

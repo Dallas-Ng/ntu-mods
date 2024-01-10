@@ -119,7 +119,7 @@ export default function StarsCourseSelect(props: Props) {
           <Button
             variant="outline"
             className={cn("w-full", props.btnClassName)}>
-            Click to Add Courses
+            Click to Add Mods
             <ChevronsUpDown className="ml-1 h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>

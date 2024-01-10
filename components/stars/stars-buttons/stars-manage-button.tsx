@@ -25,7 +25,7 @@ export default function StarsManageButton() {
               Click to Edit Timetable
             </Button>
 
-            <Button className="hidden md:block">Add Courses</Button>
+            <Button className="hidden md:block">Add Mods</Button>
           </div>
         }
         content={

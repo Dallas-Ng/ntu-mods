@@ -12,7 +12,7 @@ export default function StarsEmptyCells() {
     Object.values(settings.starsCell).reduce(
       (acc, cur) => acc + (cur ? 0 : 1),
       0
-    ) >= 1
+    ) >= 4
 
   return (
     <div className="mt-5">

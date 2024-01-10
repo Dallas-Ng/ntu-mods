@@ -91,19 +91,19 @@ export default function NavigationBar() {
         </div>
 
         <div className="flex flex-1 items-center justify-end">
-          <Button asChild size="icon" variant="ghost">
-            <Link href={siteConfig.links.repo} target="_blank" rel="noreferrer">
+          <Link href={siteConfig.links.repo} target="_blank" rel="noreferrer">
+            <Button size="icon" variant="ghost">
               <Github className="h-5 w-5" />
-            </Link>
-          </Button>
+            </Button>
+          </Link>
 
           <ThemeToggle />
 
-          <Button asChild size="icon" variant="ghost">
-            <Link href="/settings">
+          <Link href="/settings">
+            <Button size="icon" variant="ghost">
               <Settings className="h-5 w-5" />
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
       </div>
     </header>

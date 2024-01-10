@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 
+import StarsEmptyCells from "./stars-empty-cells"
 import StarsTableLegend from "./stars-table-legend"
 
 interface Props {
@@ -27,6 +28,10 @@ export default function TimetableHeader({ children, variant }: Props) {
         <div className="w-[162px] md:w-fit">
           <StarsTableLegend />
         </div>
+      </div>
+
+      <div className="w-full">
+        <StarsEmptyCells />
       </div>
 
       <div className="my-4 flex items-center gap-2">{children}</div>

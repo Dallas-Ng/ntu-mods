@@ -34,7 +34,9 @@ export default function TableSettings() {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center gap-2 lg:flex-row">
+      <div
+        id="table-settings"
+        className="flex flex-col items-center justify-center gap-2 lg:flex-row">
         <div className="relative flex h-[200px] w-10/12 flex-col justify-between rounded-lg border p-3 shadow-lg lg:h-[230px] lg:w-[384px]">
           <div className="flex justify-between gap-2 lg:flex-row">
             <table className="h-min">

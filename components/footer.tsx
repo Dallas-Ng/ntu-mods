@@ -18,7 +18,7 @@ export default function Footer({ className }: Props) {
       </Link>
 
       <Link
-        href={siteConfig.links.github}
+        href={siteConfig.links.linkedIn}
         target="_blank"
         className="hover:text-slate-400">
         Dallas &copy; 2024

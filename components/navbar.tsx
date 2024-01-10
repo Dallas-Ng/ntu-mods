@@ -5,7 +5,7 @@ import dynamic from "next/dynamic"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Github, Settings } from "lucide-react"
+import { Settings } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -91,11 +91,11 @@ export default function NavigationBar() {
         </div>
 
         <div className="flex flex-1 items-center justify-end">
-          <Link href={siteConfig.links.repo} target="_blank" rel="noreferrer">
+          {/* <Link href={siteConfig.links.repo} target="_blank" rel="noreferrer">
             <Button size="icon" variant="ghost">
               <Github className="h-5 w-5" />
             </Button>
-          </Link>
+          </Link> */}
 
           <ThemeToggle />
 

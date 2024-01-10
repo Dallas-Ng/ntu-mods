@@ -33,8 +33,8 @@ export const NotificationBanner = {
   ),
   experienceProblems: () => (
     <Banner>
-      Clicking of courses in the timetable has problems, please use the "Add
-      Mods" button for now
+      Clicking of courses in the timetable has problems, please use the
+      &quot;Add Mods&quot; button for now
     </Banner>
   )
 }

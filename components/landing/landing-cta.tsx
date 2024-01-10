@@ -5,7 +5,7 @@ import { Button } from "../ui/button"
 
 export default function LandingCTA() {
   return (
-    <div className="flex items-center justify-center align-middle">
+    <div className="z-10 flex items-center justify-center align-middle">
       <div className="max-w-[800px]">
         <div className="mb-5 flex flex-col items-center justify-center text-center md:flex-row md:text-left">
           <Image src="/logo.png" alt="Logo" height={200} width={200} />
@@ -22,9 +22,9 @@ export default function LandingCTA() {
         </p>
 
         <div className="my-4 flex justify-center">
-          <Link href="/stars">
-            <Button>Build My Timetable Now</Button>
-          </Link>
+          <Button>
+            <Link href="/stars">Build My Timetable Now</Link>
+          </Button>
         </div>
       </div>
     </div>

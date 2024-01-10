@@ -15,7 +15,7 @@ export default function LayoutDefault({
 }: Props) {
   return (
     <div className="flex min-h-screen flex-col">
-      <NotificationBanner.inBeta />
+      <NotificationBanner.experienceProblems />
 
       <NavigationBar />
 

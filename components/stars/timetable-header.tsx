@@ -14,7 +14,7 @@ export default function TimetableHeader({ children, variant }: Props) {
       <div className="flex w-full flex-nowrap justify-between gap-2">
         <h1
           className={cn(
-            "flex-1 break-words bg-gradient-to-r bg-clip-text text-3xl font-bold leading-[0.8] text-transparent",
+            "flex-1 break-words bg-gradient-to-r bg-clip-text text-3xl font-bold leading-[1] text-transparent",
             variant === "share"
               ? "from-rose-500 to-red-700 "
               : "from-blue-800 to-indigo-900 "

@@ -22,9 +22,9 @@ export default function LandingCTA() {
         </p>
 
         <div className="my-4 flex justify-center">
-          <Button>
-            <Link href="/stars">Build My Timetable Now</Link>
-          </Button>
+          <Link href="/stars">
+            <Button>Build My Timetable Now</Button>
+          </Link>
         </div>
       </div>
     </div>

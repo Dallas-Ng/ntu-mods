@@ -50,7 +50,7 @@ export default function HelpPage() {
         <li>
           <strong>Company</strong> (referred to as either &quot;the
           Company&quot;, &quot;We&quot;, &quot;Us&quot; or &quot;Our&quot; in
-          this Agreement) refers to dabao.
+          this Agreement) refers to ntumods.
         </li>
 
         <li>
@@ -94,12 +94,12 @@ export default function HelpPage() {
         </li>
 
         <li>
-          <strong>Website</strong> refers to dabao, accessible from{" "}
+          <strong>Website</strong> refers to ntumods, accessible from{" "}
           <Link
-            href="https://dabao.dallasng.me"
+            href="https://ntumods.com"
             rel="external nofollow noopener"
             target="_blank">
-            https://dabao.dallasng.me
+            https://ntumods.com
           </Link>
         </li>
 

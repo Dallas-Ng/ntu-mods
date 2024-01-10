@@ -22,7 +22,7 @@ export default function StarsShareButton() {
 
     try {
       navigator.share({
-        title: "NTU Dabao",
+        title: "NTU Mods",
         text: "Take a look at my timetable!",
         url: shareLink
       })

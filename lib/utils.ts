@@ -5,9 +5,7 @@ export const IS_DEV = process.env.NODE_ENV === "development"
 
 export const IS_PROD = process.env.NODE_ENV === "production"
 
-export const BASE_URL = IS_DEV
-  ? "http://localhost:3000"
-  : "https://dabao.dallasng.me"
+export const BASE_URL = IS_DEV ? "http://localhost:3000" : "https://ntumods.com"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

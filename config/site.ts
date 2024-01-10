@@ -1,11 +1,11 @@
 export const siteConfig = {
-  url: "https://dabao.dallasng.me",
-  name: "NTU Dabao",
-  ogImage: "https://dabao.dallasng.me/og-image.png",
+  url: "https://ntumods.com",
+  name: "NTU Mods",
+  ogImage: "https://ntumods.com/og-image.png",
   metatags: {
     default: {
-      title: "NTU Dabao",
-      desc: "Build your timetable easier with Dabao NTU. Create, customize, and manage your class schedule hassle-free",
+      title: "NTU Mods",
+      desc: "Build your timetable easier with NTU Mods. Create, customize, and manage your class schedule hassle-free",
       keywords: [
         "NTU",
         "Nanyang Technological University",
@@ -27,7 +27,7 @@ export const siteConfig = {
     },
     share: {
       title: "Shared with You",
-      desc: "View my timetable on NTU Dabao!"
+      desc: "View my timetable on NTU Mods!"
     },
     help: {
       title: "Help",
@@ -35,11 +35,11 @@ export const siteConfig = {
     },
     privacy: {
       title: "Privacy",
-      desc: "Learn about how we handle and protect your privacy on the NTU Dabao"
+      desc: "Learn about how we handle and protect your privacy on the NTU Mods"
     },
     settings: {
       title: "Settings",
-      desc: "Configure the NTU Dabao to your liking. Change your theme, table settings, and more"
+      desc: "Configure the NTU Mods to your liking. Change your theme, table settings, and more"
     },
     debug: {
       title: "Debug",

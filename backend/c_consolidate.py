@@ -63,7 +63,7 @@ def consolidate_course_data(filepaths):
                     combined_indexes[k] = v
 
     combined_data = collections.OrderedDict(sorted(combined_data.items()))
-    combined_indexes = collections.OrderedDict(sorted(combined_data.items()))
+    combined_indexes = collections.OrderedDict(sorted(combined_indexes.items()))
 
     with open(f"backend/data/consolidated-{academic_year}.json", "w") as output:
         json.dump(combined_data, output)

@@ -1,6 +1,7 @@
 import EXAM_DATA from "@/data/2023-exams.json"
 import CONSOLIDATED_INDEXES from "@/data/consolidated-2023-2-indexes.json"
 import CONSOLIDATED_DATA from "@/data/consolidated-2023-2.json"
+import CONDLIDATED_COURSE_DATA from "@/data/consolidated-course-content-2023-2.json"
 
 /**
  * TODO: ADD SAFETY CHECKING AND HANDLING
@@ -11,6 +12,10 @@ export const C_DATA = CONSOLIDATED_DATA as Record<string, Course>
 export const C_INDEXES = CONSOLIDATED_INDEXES as unknown as Record<
   string,
   Index[]
+>
+export const C_COURSE_DATA = CONDLIDATED_COURSE_DATA as unknown as Record<
+  string,
+  CourseData
 >
 export const C_EXAMS = EXAM_DATA as unknown as Record<string, Exam>
 

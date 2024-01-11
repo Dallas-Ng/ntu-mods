@@ -4,7 +4,7 @@ from utils import jsonify
 
 
 input_file_path = "backend/data/course_content.json"
-output_file_path = "backend/data/consolidated-course-content-2023-2.json"
+output_file_path = "backend/data/consolidated-course-content-2023-1.json"
 
 with open(input_file_path, "r") as file:
     courses = json.load(file)

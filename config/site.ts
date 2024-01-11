@@ -29,6 +29,10 @@ export const siteConfig = {
       title: "Shared with You",
       desc: "View my timetable on NTU Mods!"
     },
+    mods: {
+      title: "All NTU Modules",
+      desc: "View all the modules offered by NTU. Find out more about the modules you are interested in and plan your timetable with ease"
+    },
     help: {
       title: "Help",
       desc: "Find answers to frequently asked questions and get help using the NTU Timetable Generator. Learn how to optimize your schedule and make the most of our features"
@@ -48,6 +52,7 @@ export const siteConfig = {
   },
   navLinks: [
     { label: "Timetable", route: "/stars" },
+    { label: "Mods", route: "/mods" },
     { label: "Help", route: "/help" }
   ],
   links: {

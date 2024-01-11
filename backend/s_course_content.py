@@ -10,7 +10,7 @@ from utils import (
 )
 
 KEYS = []
-with open("backend/data/courses-keys.txt", "r") as file:
+with open("backend/data/courses-key-2023S1.txt", "r") as file:
     keys = file.readlines()
     KEYS = [key.replace("\n","").strip() for key in keys]
 
@@ -34,46 +34,41 @@ def scrape_course_content():
     if not FLAG_FETCH_NEW_DATA:
         return
 
-    # use option in soup to find all the options
-    # rn using text file for s2 only
-    # missing CN YANG scholar
+    text_file = "backend/data/test.txt"
 
-    json_file_path = "backend/data/test.txt"
-
-    with open(json_file_path, "r") as file:
+    with open(text_file, "r") as file:
         acad_year_courses = file.readlines()
 
 
     for key in acad_year_courses:
         key = key.strip().replace("\n", "")
         payload = {
-            "acadsem": "2023_2",
-            # "r_course_yr": key,
-            "r_course_yr": "CNY;CNY;X",
+            "acadsem": "2023_1",
+            "r_course_yr": key,
             "r_subj_code": "Enter Keywords or Course Code",
             "boption": "CLoad",
             "acad": "2023",
-            "semester": "2",
-            "acadsem": "2023_2",
+            "semester": "1",
+            "acadsem": "2023_1",
         }
 
         response = post_response(URL_COURSE_OUTLINE_DISPLAY, payload)
 
         soup = BeautifulSoup(response.text, "html.parser")
-        pickle_this(f"backend/data/pickles/course_content/2023-2/{key.replace(';','-')}.pkl", soup)
+        pickle_this(f"backend/data/pickles/course_content/2023-1/{key.replace(';','-')}.pkl", soup)
 
 
 
 def parser_course_content():
     files = [
         item.name
-        for item in os.scandir("backend/data/pickles/course_content/2023-2")
+        for item in os.scandir("backend/data/pickles/course_content/2023-1")
         if item.is_file()
     ]
 
     courses = []
     for filename in files:
-      soup = unpickle_this(f"backend/data/pickles/course_content/2023-2/{filename}")
+      soup = unpickle_this(f"backend/data/pickles/course_content/2023-1/{filename}")
       key = filename.replace(".pkl", "").replace("-", ";")
 
       if is_course_special(key):

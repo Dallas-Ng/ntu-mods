@@ -17,6 +17,9 @@ export const theme = {
     height: {
       screen: ["100vh /* fallback for Opera, IE and etc. */", "100dvh"]
     },
+    transitionProperty: {
+      height: "height"
+    },
     colors: {
       border: "hsl(var(--border))",
       input: "hsl(var(--input))",

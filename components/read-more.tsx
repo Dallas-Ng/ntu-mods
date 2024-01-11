@@ -19,7 +19,7 @@ export default function ReadMore({ children }: Props) {
         setShowButton(true)
       }
     }
-  }, [containerRef.current])
+  }, [])
 
   return (
     <>

@@ -7,6 +7,7 @@ import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
 import ClarityTag from "@/components/clarity"
+import GTag from "@/components/gtag"
 import MobileTracker from "@/components/mobile-tracker"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -76,6 +77,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             {children}
 
             {/* Auxillary services */}
+            <GTag />
             <MobileTracker />
             <ClarityTag />
             <TailwindIndicator />

@@ -76,7 +76,9 @@ export function getRelatedModules(moduleKey: string): CourseData[] {
       const courseNumber = +code.slice(2) // Convert to number
 
       return (
-        coursePrefix === keyPrefix && Math.abs(courseNumber - keyNumber) <= 999
+        coursePrefix === keyPrefix &&
+        Math.abs(courseNumber - keyNumber) <= 999 &&
+        moduleKey !== code // Exclude the module itself
       )
     }
     return false

@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import { formatTitle } from "@/lib/stars.lib"
+import { formatTitle } from "@/lib/format"
 import { cn } from "@/lib/utils"
 
 interface Props {

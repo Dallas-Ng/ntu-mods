@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { TRUN_COURSE_CONTENT } from "@/data/truncated-course-content"
 
-import { formatTitle } from "@/lib/stars.lib"
+import { formatTitle } from "@/lib/format"
 import { useDebounce } from "@/hooks/use-debounce"
 import { Input } from "@/components/ui/input"
 

@@ -5,7 +5,7 @@ import { C_DATA } from "@/data/consolidated-2023-2"
 import { useBoundState } from "@/state/bound-state"
 
 import { DAY_TRUN_MAP } from "@/config/stars"
-import { formatRemarks, formatTitle } from "@/lib/stars.lib"
+import { formatRemarks, formatTitle } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { useQueryStringCTI } from "@/hooks/use-qs-CTI"
 

@@ -6,8 +6,8 @@ import { useBoundState } from "@/state/bound-state"
 import { RefreshCcw } from "lucide-react"
 
 import { DAY_TRUN_MAP } from "@/config/stars"
+import { formatTitle } from "@/lib/format"
 import { getRandomCourseIndex } from "@/lib/get-random-course-indexes"
-import { formatTitle } from "@/lib/stars.lib"
 import { cn } from "@/lib/utils"
 
 import StarsCell from "../stars/stars-cell"

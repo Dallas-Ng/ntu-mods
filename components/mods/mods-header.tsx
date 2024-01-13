@@ -1,4 +1,4 @@
-import { formatTitle } from "@/lib/stars.lib"
+import { formatTitle } from "@/lib/format"
 
 import ReadMore from "../read-more"
 

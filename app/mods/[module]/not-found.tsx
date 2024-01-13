@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { ArrowLeft } from "lucide-react"
 
-import { getRelatedModules } from "@/lib/consolidated-data"
+import { getRelatedModules } from "@/lib/get-related-modules"
 import ModuleCard from "@/components/module-card"
 
 interface IProps {

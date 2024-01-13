@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { C_COURSE_DATA } from "@/data/consolidated-course-content-2023"
 
-import { C_COURSE_DATA } from "@/lib/consolidated-data"
 import { useDebounce } from "@/hooks/use-debounce"
 import { Input } from "@/components/ui/input"
 import ModuleCard from "@/components/module-card"

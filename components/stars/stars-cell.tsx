@@ -1,10 +1,10 @@
 "use client"
 
 import { useState } from "react"
+import { C_DATA } from "@/data/consolidated-2023-2"
 import { useBoundState } from "@/state/bound-state"
 
 import { DAY_TRUN_MAP } from "@/config/stars"
-import { C_DATA } from "@/lib/consolidated-data"
 import { formatRemarks, getIndexTypeStyle } from "@/lib/stars.lib"
 import { cn, sleep } from "@/lib/utils"
 

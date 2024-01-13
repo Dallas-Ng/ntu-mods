@@ -1,8 +1,8 @@
 import { useState } from "react"
+import { C_DATA } from "@/data/consolidated-2023-2"
 import { useBoundState } from "@/state/bound-state"
 
 import { DAY_MAP } from "@/config/stars"
-import { C_DATA } from "@/lib/consolidated-data"
 
 interface Props {
   courseKey: string

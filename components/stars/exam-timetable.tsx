@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "next/link"
+import { C_EXAMS } from "@/data/2023-exams"
 import { useBoundState } from "@/state/bound-state"
 
 import { DAY_TRUN_MAP } from "@/config/stars"
-import { C_EXAMS } from "@/lib/consolidated-data"
 import { formatTitle } from "@/lib/stars.lib"
 import { cn } from "@/lib/utils"
 import { useQueryStringCTI } from "@/hooks/use-qs-CTI"

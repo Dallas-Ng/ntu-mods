@@ -26,7 +26,7 @@ export default function ReadMore({ children }: Props) {
       <div
         className={cn(
           "overflow-hidden",
-          showMore ? "max-h-[2000px]" : "max-h-[400px]"
+          showMore ? "max-h-[2000px]" : "max-h-[410px]"
         )}>
         <div ref={containerRef}>{children}</div>
       </div>

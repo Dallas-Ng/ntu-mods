@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react"
+import { Fragment } from "react"
 import { Metadata } from "next"
 import Link from "next/link"
 import { redirect } from "next/navigation"
@@ -228,10 +228,10 @@ export default function Page({
       <div className="mt-10">
         <h2 className="mb-2 text-lg">Available Indexes (Coming Soon)</h2>
 
-        <table className="w-full table-fixed border text-sm ">
+        <table className="w-full table-fixed border text-[0.6rem] md:text-xs">
           <thead>
             <tr>
-              <th className="h-fit w-fit p-1 text-center md:w-[120px]">Time</th>
+              <th className="h-fit w-[40px] p-1 text-center">Time</th>
               {Array.from({ length: 5 }).map((_, i) => (
                 <th key={i} className="p-2">
                   {DAY_TRUN_MAP[i + 1]}
@@ -241,10 +241,16 @@ export default function Page({
           </thead>
 
           <tbody>
-            {STARS_TIMESLOTS.slice(0, 18).map((slot) => (
+            {STARS_TIMESLOTS.slice(0, 18).map((slot, idx) => (
               <tr key={slot.start}>
-                <td className="border p-1 text-center">
-                  {slot.start} to {slot.end}
+                <td className="relative w-[40px] border p-1 text-center">
+                  {idx !== 0 && (
+                    <span className="absolute left-0 top-[-8px] w-full bg-background">
+                      {slot.start}
+                    </span>
+                  )}
+
+                  <div className="min-h-[20px] w-full" />
                 </td>
 
                 {Array.from({ length: 5 }).map((_, i) => {

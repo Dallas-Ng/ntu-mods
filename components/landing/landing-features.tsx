@@ -70,7 +70,7 @@ export default function LandingFeatures() {
         </div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          <Link href="/stars" className="cursor-pointer">
+          <Link href="/mods" className="cursor-pointer">
             <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
               <Image
                 src="/landing/icc-mods.svg"
@@ -81,9 +81,12 @@ export default function LandingFeatures() {
               />
 
               <div className="absolute bottom-8 left-8 w-10/12">
-                <h3 className="mb-1 text-xl font-semibold">View all Indexes</h3>
+                <h3 className="mb-1 text-xl font-semibold">
+                  View all Courses and Indexes
+                </h3>
                 <p className="text-secondary">
-                  Including your ICC modules and other special indexes
+                  Including your ICC modules and other special indexes not shown
+                  on STARS
                 </p>
               </div>
             </div>

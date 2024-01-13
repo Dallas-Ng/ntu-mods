@@ -1,10 +1,11 @@
 "use client"
 
+import Link from "next/link"
+import { C_EXAMS } from "@/data/2023-exams"
 import { useBoundState } from "@/state/bound-state"
 
 import { DAY_TRUN_MAP } from "@/config/stars"
-import { C_EXAMS } from "@/lib/consolidated-data"
-import { formatTitle } from "@/lib/stars.lib"
+import { formatTitle } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { useQueryStringCTI } from "@/hooks/use-qs-CTI"
 
@@ -49,9 +50,19 @@ export default function ExamTimetable() {
       <tbody>
         {examsSorted.map((exam, idx) => (
           <tr key={exam.key} className={cn(idx % 2 == 1 && "bg-accent")}>
-            <td className="p-2">{exam.key}</td>
+            <td className="p-2">
+              <Link
+                href={`/mods/${exam.key}`}
+                className="transition-colors hover:text-secondary-foreground">
+                {exam.key}
+              </Link>
+            </td>
             <td className="hidden p-2 text-left capitalize md:table-cell">
-              {formatTitle(exam.name)}
+              <Link
+                href={`/mods/${exam.key}`}
+                className="transition-colors hover:text-secondary-foreground">
+                {formatTitle(exam.name)}
+              </Link>
             </td>
             <td className="p-2">{exam.date.replace(" 2024", "")}</td>
             <td className="p-2">{DAY_TRUN_MAP[exam.day]}</td>

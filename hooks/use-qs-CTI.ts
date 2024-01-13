@@ -1,6 +1,5 @@
 import { useSearchParams } from "next/navigation"
-
-import { C_DATA } from "@/lib/consolidated-data"
+import { C_DATA } from "@/data/consolidated-2023-2"
 
 /**
  * Hook for extracting and processing course index data from the query string.

@@ -1,10 +1,11 @@
 "use client"
 
+import Link from "next/link"
+import { C_DATA } from "@/data/consolidated-2023-2"
 import { useBoundState } from "@/state/bound-state"
 
 import { DAY_TRUN_MAP } from "@/config/stars"
-import { C_DATA } from "@/lib/consolidated-data"
-import { formatRemarks, formatTitle } from "@/lib/stars.lib"
+import { formatRemarks, formatTitle } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { useQueryStringCTI } from "@/hooks/use-qs-CTI"
 
@@ -45,7 +46,11 @@ export default function TimetableOverview() {
                   <td
                     rowSpan={indexes.length}
                     className={cn("w-min p-1 md:w-[75px]")}>
-                    {course}
+                    <Link
+                      href={`/mods/${course}`}
+                      className="transition-colors hover:text-secondary-foreground">
+                      {course}
+                    </Link>
                   </td>
 
                   <td
@@ -53,7 +58,11 @@ export default function TimetableOverview() {
                     className={cn(
                       "hidden p-1 text-left capitalize md:table-cell"
                     )}>
-                    {formatTitle(C_DATA[course].title)}
+                    <Link
+                      href={`/mods/${course}`}
+                      className="transition-colors hover:text-secondary-foreground">
+                      {formatTitle(C_DATA[course].title)}
+                    </Link>
                   </td>
 
                   <td rowSpan={indexes.length} className="p-1">

@@ -1,4 +1,4 @@
-import { getIndexTypeStyle } from "@/lib/stars.lib"
+import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 import { cn } from "@/lib/utils"
 
 export default function StarsTableLegend() {
@@ -13,6 +13,7 @@ export default function StarsTableLegend() {
         />
         <span className="text-xs">LEC</span>
       </div>
+
       <div className="flex items-center gap-2">
         <span
           className={cn(

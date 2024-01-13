@@ -1,11 +1,11 @@
 "use client"
 
 import { Fragment } from "react"
+import { C_DATA } from "@/data/consolidated-2023-2"
 import { useBoundState } from "@/state/bound-state"
 import { X } from "lucide-react"
 
-import { C_DATA } from "@/lib/consolidated-data"
-import { formatTitle } from "@/lib/stars.lib"
+import { formatTitle } from "@/lib/format"
 import { Button } from "@/components/ui/button"
 import { DrawerDialog } from "@/components/drawer-dialog"
 

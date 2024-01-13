@@ -1,19 +1,18 @@
 "use client"
 
-import { Fragment, useState } from "react"
+import { useState } from "react"
+import { C_DATA } from "@/data/consolidated-2023-2"
 import { useBoundState } from "@/state/bound-state"
 import { RefreshCcw } from "lucide-react"
 
 import { DAY_TRUN_MAP } from "@/config/stars"
-import { C_DATA, getRandomCourseIndex } from "@/lib/consolidated-data"
-import { formatTitle } from "@/lib/stars.lib"
+import { formatTitle } from "@/lib/format"
+import { getRandomCourseIndex } from "@/lib/get-random-course-indexes"
 import { cn } from "@/lib/utils"
 
 import StarsCell from "../stars/stars-cell"
 import { Button } from "../ui/button"
-import { Label } from "../ui/label"
 import { Skeleton } from "../ui/skeleton"
-import { Switch } from "../ui/switch"
 import { Toggle } from "../ui/toggle"
 
 export default function TableSettings() {

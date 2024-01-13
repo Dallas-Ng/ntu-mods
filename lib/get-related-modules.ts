@@ -22,9 +22,13 @@ export function getRelatedModules(moduleKey: string, limit = 0): CourseData[] {
   if (limit > 0) moduleKeys.splice(limit)
 
   if (moduleKeys.length > 0) {
-    relatedModules = moduleKeys
-      .map(([moduleKey]) => getModuleData(moduleKey))
-      .filter((x) => x) as CourseData[]
+    relatedModules = (
+      moduleKeys
+        .map(([moduleKey]) => getModuleData(moduleKey))
+        .filter((x) => x) as CourseData[]
+    )
+      // Sort by ascending course number
+      .sort((a, b) => parseInt(a.code.slice(2)) - parseInt(b.code.slice(2)))
   }
 
   return relatedModules

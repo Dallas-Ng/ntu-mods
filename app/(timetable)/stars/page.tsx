@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic"
 
-import { Skeleton } from "@/components/ui/skeleton"
 import Loading from "@/components/loading"
 import StarsDownloadIcsButton from "@/components/stars/stars-buttons/stars-download-ics-button"
 import StarsManageButton from "@/components/stars/stars-buttons/stars-manage-button"

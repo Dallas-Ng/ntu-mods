@@ -1,8 +1,9 @@
 import dynamic from "next/dynamic"
 
-import { Skeleton } from "@/components/ui/skeleton"
 import Loading from "@/components/loading"
+import StarsDownloadIcsButton from "@/components/stars/stars-buttons/stars-download-ics-button"
 import StarsManageButton from "@/components/stars/stars-buttons/stars-manage-button"
+import StarsShareButton from "@/components/stars/stars-buttons/stars-share-button"
 import TimetableHeader from "@/components/stars/timetable-header"
 
 const ExamTimetable = dynamic(
@@ -38,11 +39,6 @@ const TimetableOverview = dynamic(
   }
 )
 
-const StarsShareButton = dynamic(
-  () => import("@/components/stars/stars-buttons/stars-share-button"),
-  { ssr: false, loading: () => <Skeleton className="h-10 w-10" /> }
-)
-
 export default function StarsPage() {
   return (
     <>
@@ -50,6 +46,7 @@ export default function StarsPage() {
         <StarsManageButton />
 
         <div className="ml-auto flex gap-1">
+          <StarsDownloadIcsButton />
           <StarsShareButton />
         </div>
       </TimetableHeader>

@@ -12,10 +12,10 @@ interface Index {
   type: string // lecture, tutorial
   group: string // e.g. tutorial group
   day: number // 1-7 only
-  time: string
+  time: string // 0830 - 0930
   venue: string
   remarks: string // pre-reqs, etc
-  duration: number // for row span, each unit is 1 hour
+  duration: number // for row span, each unit is 30 minutes
 }
 
 type CourseIndex = {

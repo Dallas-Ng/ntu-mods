@@ -5,6 +5,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import Loading from "@/components/loading"
+import StarsDownloadIcsButton from "@/components/stars/stars-buttons/stars-download-ics-button"
 import TimetableHeader from "@/components/stars/timetable-header"
 
 const ExamTimetable = dynamic(
@@ -54,6 +55,10 @@ export default function StarsPage() {
         </Link>
 
         <StarsCopyTimetableButton />
+
+        <div className="ml-auto flex gap-1">
+          <StarsDownloadIcsButton />
+        </div>
       </TimetableHeader>
 
       <div className="overflow-hidden rounded-xl border-2">

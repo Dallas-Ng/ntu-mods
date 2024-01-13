@@ -24,8 +24,8 @@ export const NotificationBanner = {
   ),
   inBeta: () => (
     <Banner>
-      We are in <strong className="font-semibold">Beta!</strong> Let us know if
-      you encounter bugs or have suggestions.
+      NTU Mods is in <strong className="font-semibold">Beta!</strong> Let us
+      know if you have any suggestions or problems.
     </Banner>
   ),
   optimisedForWeb: () => (

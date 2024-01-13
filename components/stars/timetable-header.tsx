@@ -21,7 +21,10 @@ export default function TimetableHeader({ children, variant }: Props) {
           )}>
           Stars* Planner{" "}
           {variant === "share" && (
-            <span className="text-lg leading-none">shared by someone</span>
+            <span className="text-lg leading-none">
+              <br className="block md:hidden" />
+              (Read Only)
+            </span>
           )}
         </h1>
 
@@ -35,6 +38,14 @@ export default function TimetableHeader({ children, variant }: Props) {
       </div>
 
       <div className="my-4 flex items-center gap-2">{children}</div>
+
+      {variant === "share" && (
+        <div className="my-2 w-full text-center text-sm text-secondary">
+          This timetable is being shared by someone.{" "}
+          <br className="block md:hidden" />
+          Copy the timetable to edit!
+        </div>
+      )}
     </>
   )
 }

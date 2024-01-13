@@ -2,7 +2,6 @@ import Link from "next/link"
 import { ArrowLeft, Mail, ServerCrash } from "lucide-react"
 
 import { HELP_CONFIG } from "@/config/help"
-import { siteConfig } from "@/config/site"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 export default function HelpPage() {
@@ -31,13 +30,6 @@ export default function HelpPage() {
                 Reach out to me <Mail className="h-5 w-5" />
               </span>
             </a>
-            or{" "}
-            <Link
-              href={siteConfig.links.telegram}
-              target="_blank"
-              className="text-primary hover:underline">
-              DM on telegram @dallas_ng
-            </Link>
           </p>
         </div>
 

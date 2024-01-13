@@ -5,20 +5,27 @@ import { cn } from "@/lib/utils"
 
 interface Props {
   module: CourseData
-  type?: "default" | "small"
+  variant?: "default" | "small"
   cardClassName?: string
 }
 
 export default function ModuleCard({
   module,
-  // type = "default",
+  variant = "default",
   cardClassName
 }: Props) {
   return (
     <Link key={module.code} href={`/mods/${module.code}`}>
-      <div className={cn("rounded-lg border p-2", cardClassName)}>
-        <p className="text-sm text-secondary">{module.code}</p>
-        <p className="capitalize">{formatTitle(module.title)}</p>
+      <div
+        className={cn(
+          "rounded-lg border p-2 text-sm text-secondary",
+          cardClassName
+        )}>
+        <p>{module.code}</p>
+
+        <p className="capitalize text-foreground">
+          {formatTitle(module.title)}
+        </p>
       </div>
     </Link>
   )

@@ -1,27 +1,31 @@
-import { C_COURSE_DATA } from "@/data/consolidated-course-content-2023"
+import { TRUN_COURSE_CONTENT } from "@/data/truncated-course-content"
+
+import { getModuleData } from "./get-module-data"
 
 /**
  * Retrieves an array of related modules based on the given module key.
  * A related module is defined as a module with the same course prefix and a course number difference of 999 or less.
  */
-export function getRelatedModules(moduleKey: string): CourseData[] {
+export function getRelatedModules(moduleKey: string, limit = 0): CourseData[] {
+  let relatedModules: CourseData[] = []
   const keyPrefix = moduleKey.slice(0, 2)
-  const keyNumber = +moduleKey.slice(2) // Convert to number
 
-  const relatedModules = Object.values(C_COURSE_DATA).filter((courseData) => {
-    if (courseData.code.length === 6) {
-      const { code } = courseData
-      const coursePrefix = code.slice(0, 2)
-      const courseNumber = +code.slice(2) // Convert to number
+  const moduleKeys = Object.entries(TRUN_COURSE_CONTENT).filter(
+    ([relatedModuleKey]) => {
+      const coursePrefix = relatedModuleKey.slice(0, 2)
 
-      return (
-        coursePrefix === keyPrefix &&
-        Math.abs(courseNumber - keyNumber) <= 999 &&
-        moduleKey !== code // Exclude the module itself
-      )
+      return coursePrefix === keyPrefix && relatedModuleKey !== moduleKey
     }
-    return false
-  })
+  )
+
+  // Limit the number of related modules
+  if (limit > 0) moduleKeys.splice(limit)
+
+  if (moduleKeys.length > 0) {
+    relatedModules = moduleKeys
+      .map(([moduleKey]) => getModuleData(moduleKey))
+      .filter((x) => x) as CourseData[]
+  }
 
   return relatedModules
 }

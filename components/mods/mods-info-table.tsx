@@ -1,5 +1,8 @@
 import { Fragment } from "react"
 import Link from "next/link"
+import { C_EXAMS } from "@/data/2023-exams"
+
+import { cn } from "@/lib/utils"
 
 interface Props {
   module: CourseData
@@ -11,7 +14,7 @@ const testPossibleModuleCode = (str: string) =>
   str.length > 6 ? /^[A-Z]{2}\d{4}$/.test(str.slice(0, 6)) : false
 
 export default function ModsInfoTable({ module }: Props) {
-  const hasPreq = module.prerequisite && module.prerequisite.length > 0
+  const exam = module.code in C_EXAMS ? C_EXAMS[module.code] : undefined
 
   return (
     <table className="table w-full border text-sm text-foreground">
@@ -20,6 +23,23 @@ export default function ModsInfoTable({ module }: Props) {
           <td className="border p-2">AUs</td>
           <td className="border p-2">{module.au} AUs</td>
         </tr>
+
+        <tr>
+          <td
+            className={cn("border p-2", exam && "font-semibold text-rose-800")}>
+            Exam
+          </td>
+          <td className="border p-2">
+            {exam ? (
+              <span className="font-semibold text-rose-800">
+                {exam.date}, {exam.start_time} - {exam.end_time}
+              </span>
+            ) : (
+              <NotAvailable />
+            )}
+          </td>
+        </tr>
+
         <tr>
           <td className="border p-2">Grade Type</td>
           <td className="border p-2">{module.gradeType ?? <NotAvailable />}</td>

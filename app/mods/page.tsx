@@ -2,33 +2,32 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { TRUN_COURSE_CONTENT } from "@/data/truncated-course-content"
 
-import { C_COURSE_DATA } from "@/lib/consolidated-data"
+import { formatTitle } from "@/lib/format"
 import { useDebounce } from "@/hooks/use-debounce"
 import { Input } from "@/components/ui/input"
-import ModuleCard from "@/components/module-card"
 
 export default function ModsPage() {
   const [search, setSearch] = useState("")
 
   const dbSearchTerm = useDebounce(search, 200) // arbitrary delay - anything lower makes it feel laggy
 
-  const filteredModules = Object.values(C_COURSE_DATA).filter((module) => {
-    if (dbSearchTerm === "") return true
-
-    return (
-      module.code.toLowerCase().includes(dbSearchTerm.toLowerCase()) ||
-      module.title.toLowerCase().includes(dbSearchTerm.toLowerCase())
-    )
-  })
+  const filteredModules = Object.entries(TRUN_COURSE_CONTENT).filter(
+    ([moduleCode, title]) =>
+      dbSearchTerm === "" ||
+      moduleCode.toLowerCase().includes(dbSearchTerm.toLowerCase()) ||
+      title.toLowerCase().includes(dbSearchTerm.toLowerCase())
+  )
 
   return (
     <div className="space-y-3">
       <h1 className="text-3xl font-semibold capitalize">NTU Modules</h1>
 
-      {filteredModules.length === Object.keys(C_COURSE_DATA).length ? (
+      {filteredModules.length === Object.keys(TRUN_COURSE_CONTENT).length ? (
         <p className="text-secondary">
-          View all {Object.keys(C_COURSE_DATA).length} modules offered by NTU.
+          View all {Object.keys(TRUN_COURSE_CONTENT).length} modules offered by
+          NTU.
         </p>
       ) : (
         <p className="text-secondary">
@@ -44,9 +43,16 @@ export default function ModsPage() {
       />
 
       <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
-        {filteredModules.map((module) => (
-          <ModuleCard key={module.code} module={module} />
-        ))}
+        {filteredModules.map(([code, title]) => {
+          return (
+            <Link key={code} href={`/mods/${code}`}>
+              <div className={"rounded-lg border p-2"}>
+                <p className="text-sm text-secondary">{code}</p>
+                <p className="capitalize">{formatTitle(title)}</p>
+              </div>
+            </Link>
+          )
+        })}
       </div>
 
       <p className="text-center text-sm text-secondary transition-colors hover:text-secondary-foreground">

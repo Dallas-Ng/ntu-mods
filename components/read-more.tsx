@@ -50,10 +50,7 @@ export default function ReadMore({ children }: Props) {
           </div>
         </div>
       ) : (
-        <div
-          className="h-[20px
-        ]"
-        />
+        <div className="h-[20px]" />
       )}
     </>
   )

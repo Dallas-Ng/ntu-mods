@@ -5,7 +5,7 @@ import { track } from "@vercel/analytics"
 import { Link } from "lucide-react"
 import { toast } from "sonner"
 
-import { getQsFromCourseToIndexes } from "@/lib/consolidated-data"
+import { getQsFromCourseToIndexes } from "@/lib/get-qs-from-course-to-index"
 import { BASE_URL } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 

@@ -34,8 +34,9 @@ export default function StarsShareButton() {
   }
 
   return (
-    <Button onClick={generateShareLink} variant="outline" size="icon">
-      <Link className="h-4 w-4" />
+    <Button onClick={generateShareLink} variant="outline">
+      <span className="hidden md:block">Share</span>
+      <Link className="h-4 w-4 md:ml-1" />
     </Button>
   )
 }

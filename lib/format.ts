@@ -1,5 +1,8 @@
 export function formatTitle(courseTitle: string) {
-  return courseTitle.toLowerCase().replace(/[^a-zA-Z ]/g, "")
+  return courseTitle
+    .toLowerCase()
+    .replace(/[^a-zA-Z ]/g, "")
+    .replace(/\s+/g, " ")
 }
 
 export function formatRemarks(remarks: string) {

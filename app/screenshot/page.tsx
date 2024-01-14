@@ -101,8 +101,8 @@ export default function ScreenshotPage() {
           showTaskbar ? "opacity-100" : "pointer-events-none opacity-0"
         )}>
         <div className="flex flex-col gap-2 rounded-lg border bg-background p-2 shadow">
-          <div className="w-full text-xs text-secondary">
-            <span>Take a screenshot with your phone or snipping tool</span>
+          <div className="w-full text-center text-sm text-secondary">
+            <span>Screenshot or use the snipping tool to save</span>
           </div>
 
           <div className="flex gap-4">

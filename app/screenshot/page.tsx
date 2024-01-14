@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useBoundState } from "@/state/bound-state"
 import {
@@ -13,6 +14,7 @@ import {
   PanelRightOpen,
   PanelTopOpen,
   RefreshCcw,
+  ServerCrash,
   Settings,
   ZoomIn,
   ZoomOut
@@ -20,6 +22,8 @@ import {
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
+import { useQueryStringCTI } from "@/hooks/use-qs-CTI"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 
 const ScreenshotSettingsButton = dynamic(
@@ -43,10 +47,10 @@ type Direction = "increase" | "decrease"
 type Align = "start" | "center" | "end"
 
 const DEFAULT_PADDING = {
-  paddingTop: 10,
-  paddingBottom: 10,
-  paddingLeft: 10,
-  paddingRight: 10
+  paddingTop: 0,
+  paddingBottom: 0,
+  paddingLeft: 0,
+  paddingRight: 0
 }
 
 export default function ScreenshotPage() {
@@ -56,6 +60,20 @@ export default function ScreenshotPage() {
   const [padding, setPadding] = useState(DEFAULT_PADDING)
   const [align, setAlign] = useState<Align>("start")
   const [scale, setScale] = useState(1)
+
+  const coursesToIndexFromQueryString = useQueryStringCTI()
+  const coursesToIndexFromState = useBoundState().coursesToIndex
+
+  /**
+   * Pirority of coursesToIndex:
+   *    1. props.coursesToIndex
+   *    2. coursesToIndexFromQueryString
+   *    3. coursesToIndexFromState
+   */
+  let coursesToIndex =
+    Object.keys(coursesToIndexFromQueryString).length > 0
+      ? coursesToIndexFromQueryString
+      : coursesToIndexFromState
 
   const STEP = info.mobile ? 10 : 50
 
@@ -88,10 +106,26 @@ export default function ScreenshotPage() {
     <div
       className="relative z-[1] min-h-screen w-screen"
       onClick={() => setShowTaskbar((p) => !p)}>
+      {Object.keys(coursesToIndex).length === 0 && (
+        <div className="p-5">
+          <Link href="/stars">
+            <Alert>
+              <ServerCrash className="h-5 w-5" />
+
+              <AlertTitle>Your timetable is empty!</AlertTitle>
+
+              <AlertDescription>
+                Click here to add modules into your timetable
+              </AlertDescription>
+            </Alert>
+          </Link>
+        </div>
+      )}
+
       <div
         className="flex min-h-[100vh] items-center justify-center"
         style={{ ...padding, alignItems: align, scale }}>
-        <StarsTable disablePopup />
+        <StarsTable disablePopup coursesToIndex={coursesToIndex} />
       </div>
 
       <div

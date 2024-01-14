@@ -10,7 +10,7 @@ const C_COURSE_DATA = {
 module.exports = {
   siteUrl: process.env.SITE_URL || "https://ntumods.com",
   generateRobotsTxt: true, // (optional)
-  exclude: ["/debug", "/settings", "/screenshot"],
+  exclude: ["/debug", "/settings"],
   additionalPaths: async (config) => {
     return Object.keys(C_COURSE_DATA).map((key) => ({
       loc: `/mods/${key}`,

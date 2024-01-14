@@ -6,24 +6,38 @@ import { Link } from "lucide-react"
 import { toast } from "sonner"
 
 import { getQsFromCourseToIndexes } from "@/lib/get-qs-from-course-to-index"
-import { BASE_URL } from "@/lib/utils"
+import { BASE_URL, cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
-export default function StarsShareButton() {
-  const { coursesToIndex } = useBoundState()
+interface Props {
+  coursesToIndex?: { [courseKey: string]: Index[] }
+  shareInfo?: {
+    title: string
+    text: string
+  }
+  path?: "share" | "screenshot"
+  hideText?: boolean
+}
+
+export default function StarsShareButton(props: Props) {
+  const {
+    path = "share",
+    shareInfo = { title: "NTU Mods", text: "Take a look at my timetable!" },
+    hideText = true
+  } = props
+  const coursesToIndex = props.coursesToIndex ?? useBoundState().coursesToIndex
 
   const generateShareLink = () => {
     const qsObject = getQsFromCourseToIndexes(coursesToIndex)
     const urlParams = new URLSearchParams(qsObject)
-    const shareLink = `${BASE_URL}/share?${urlParams.toString()}`
+    const shareLink = `${BASE_URL}/${path}?${urlParams.toString()}`
 
     // Top level to trigger before as sharing can lead to disconnects
     track("share", { link: shareLink })
 
     try {
       navigator.share({
-        title: "NTU Mods",
-        text: "Take a look at my timetable!",
+        ...shareInfo,
         url: shareLink
       })
     } catch {
@@ -35,8 +49,8 @@ export default function StarsShareButton() {
 
   return (
     <Button onClick={generateShareLink} variant="outline">
-      <span className="hidden md:block">Share</span>
-      <Link className="h-4 w-4 md:ml-1" />
+      <span className={cn(hideText && "hidden md:block")}>Share</span>
+      <Link className={cn("h-4 w-4 md:ml-1", !hideText && "ml-1")} />
     </Button>
   )
 }

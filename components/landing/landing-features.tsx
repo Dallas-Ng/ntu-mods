@@ -52,10 +52,10 @@ export default function LandingFeatures() {
 
           <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
             <div className="absolute left-8 top-12 w-10/12">
-              <h3 className="text-2xl font-bold">Built for all devices</h3>
+              <h3 className="text-2xl font-bold">Save as Photo or Calendar</h3>
               <p className="text-lg text-secondary">
-                NTU Mods supports all devices including mobile! Build your
-                timetable anytime
+                NTU Mods supports exporting your timetable for your lockscreen
+                photo to your calendar
               </p>
             </div>
 

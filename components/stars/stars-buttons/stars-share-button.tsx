@@ -22,12 +22,14 @@ interface Props {
 export default function StarsShareButton(props: Props) {
   const {
     path = "share",
-    shareInfo = { title: "NTU Mods", text: "Take a look at my timetable!" },
+    shareInfo = {
+      title: "Look at my Timetable from NTU mods",
+      text: "Take a look at my timetable!"
+    },
     hideText = true
   } = props
   const stateCTI = useBoundState().coursesToIndex
   const coursesToIndex = props.coursesToIndex ?? stateCTI
-
 
   const generateShareLink = () => {
     const qsObject = getQsFromCourseToIndexes(coursesToIndex)

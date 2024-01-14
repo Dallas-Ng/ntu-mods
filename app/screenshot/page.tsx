@@ -242,6 +242,11 @@ export default function ScreenshotPage() {
                 <StarsShareButton
                   hideText={false}
                   coursesToIndex={coursesToIndex}
+                  shareInfo={{
+                    title:
+                      "Look at a screenshot editor of my timetable from NTU Mods",
+                    text: "You can customise and export your timetable too!"
+                  }}
                   path="screenshot"
                 />
               </div>

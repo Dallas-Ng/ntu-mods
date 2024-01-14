@@ -10,9 +10,7 @@ interface Props {
   persistQuerystring?: boolean
 }
 
-export default function StarsScreenshotButton({
-  persistQuerystring
-}: Props = {}) {
+export default function StarsScreenshotButton({ persistQuerystring }: Props) {
   let href = `/screenshot`
   const searchParams = useSearchParams()
 

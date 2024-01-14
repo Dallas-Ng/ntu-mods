@@ -241,13 +241,11 @@ export default function ScreenshotPage() {
           </div>
 
           <div>
-            <Button
-              size="sm"
-              className="w-full text-sm"
-              variant="outline"
-              onClick={() => router.back()}>
-              Go Back
-            </Button>
+            <Link href="/stars">
+              <Button size="sm" className="w-full text-sm" variant="outline">
+                Go to Timetable
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

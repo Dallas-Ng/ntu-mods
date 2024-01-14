@@ -64,7 +64,7 @@ export default function ScreenshotPage() {
       () =>
         toast("Click anywhere on the screen to hide the toolbar", {
           id: "screenshot-info",
-          duration: 3000
+          duration: 5000
         }),
       100
     )

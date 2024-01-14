@@ -21,10 +21,12 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 
-import { cn } from "@/lib/utils"
+import { getQsFromCourseToIndexes } from "@/lib/get-qs-from-course-to-index"
+import { BASE_URL, cn } from "@/lib/utils"
 import { useQueryStringCTI } from "@/hooks/use-qs-CTI"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
+import StarsShareButton from "@/components/stars/stars-buttons/stars-share-button"
 
 const ScreenshotSettingsButton = dynamic(
   () => import("@/components/screenshot/settings-button"),
@@ -185,7 +187,7 @@ export default function ScreenshotPage() {
                 />
               </Button>
 
-              <Button
+              {/* <Button
                 variant="outline"
                 size="icon"
                 onClick={() => setAlign("end")}>
@@ -204,25 +206,7 @@ export default function ScreenshotPage() {
                   className="h-5 w-5 rotate-180"
                   onClick={() => setAlign("start")}
                 />
-              </Button>
-
-              <ScreenshotSettingsButton />
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setShowTaskbar(false)
-                }}>
-                <EyeOff className="h-5 w-5" />
-              </Button>
-
-              <Button variant="outline" size="icon" onClick={reset}>
-                <RefreshCcw className="h-5 w-5" />
-              </Button>
+              </Button> */}
 
               <Button
                 variant="outline"
@@ -237,6 +221,32 @@ export default function ScreenshotPage() {
                 onClick={() => setScale((prevScale) => prevScale - 0.1)}>
                 <ZoomOut className="h-5 w-5" />
               </Button>
+
+              {/* <Button
+                variant="outline"
+                size="icon"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setShowTaskbar(false)
+                }}>
+                <EyeOff className="h-5 w-5" />
+              </Button> */}
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              <Button variant="outline" size="icon" onClick={reset}>
+                <RefreshCcw className="h-5 w-5" />
+              </Button>
+
+              <ScreenshotSettingsButton />
+
+              <div className="col-span-2">
+                <StarsShareButton
+                  hideText={false}
+                  coursesToIndex={coursesToIndex}
+                  path="screenshot"
+                />
+              </div>
             </div>
           </div>
 

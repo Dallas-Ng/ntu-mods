@@ -41,6 +41,10 @@ export const siteConfig = {
       title: "Privacy",
       desc: "Learn about how we handle and protect your privacy on the NTU Mods"
     },
+    screenshot: {
+      title: "Timetable Screenshot",
+      desc: "Export a photo of your timetable to share with your friends or put as your lockscreen wallpaper"
+    },
     settings: {
       title: "Settings",
       desc: "Configure the NTU Mods to your liking. Change your theme, table settings, and more"

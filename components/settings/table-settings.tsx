@@ -15,7 +15,11 @@ import { Button } from "../ui/button"
 import { Skeleton } from "../ui/skeleton"
 import { Toggle } from "../ui/toggle"
 
-export default function TableSettings() {
+interface Props {
+  toggleBorder?: boolean
+}
+
+export default function TableSettings({ toggleBorder = false }: Props) {
   const { settings, updateSettings } = useBoundState()
   const { starsCell } = settings
   const [RANDOM_C_INDEX, setRandomCIndex] = useState(getRandomCourseIndex())
@@ -91,7 +95,8 @@ export default function TableSettings() {
                 key={key}
                 className={cn(
                   "h-fit w-full py-1 lg:w-[110px]",
-                  key === "remarks" && "col-span-2 lg:w-full"
+                  key === "remarks" && "col-span-2 lg:w-full",
+                  toggleBorder && "border"
                 )}
                 pressed={starsCell[key as keyof typeof starsCell]}
                 onPressedChange={(val) =>

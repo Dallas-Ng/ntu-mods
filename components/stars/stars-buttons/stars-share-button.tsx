@@ -28,6 +28,7 @@ export default function StarsShareButton(props: Props) {
   const stateCTI = useBoundState().coursesToIndex
   const coursesToIndex = props.coursesToIndex ?? stateCTI
 
+
   const generateShareLink = () => {
     const qsObject = getQsFromCourseToIndexes(coursesToIndex)
     const urlParams = new URLSearchParams(qsObject)

@@ -1,8 +1,10 @@
 import dynamic from "next/dynamic"
+import { ImageDown } from "lucide-react"
 
 import Loading from "@/components/loading"
 import StarsDownloadIcsButton from "@/components/stars/stars-buttons/stars-download-ics-button"
 import StarsManageButton from "@/components/stars/stars-buttons/stars-manage-button"
+import StarsScreenshotButton from "@/components/stars/stars-buttons/stars-screenshot-button"
 import StarsShareButton from "@/components/stars/stars-buttons/stars-share-button"
 import TimetableHeader from "@/components/stars/timetable-header"
 
@@ -46,6 +48,7 @@ export default function StarsPage() {
         <StarsManageButton />
 
         <div className="ml-auto flex gap-1">
+          <StarsScreenshotButton />
           <StarsDownloadIcsButton />
           <StarsShareButton />
         </div>

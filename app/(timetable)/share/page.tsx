@@ -47,7 +47,7 @@ const TimetableOverview = dynamic(
   }
 )
 
-export default function StarsPage() {
+export default function StarsSharePage() {
   return (
     <>
       <TimetableHeader variant="share">
@@ -58,7 +58,7 @@ export default function StarsPage() {
         <StarsCopyTimetableButton />
 
         <div className="ml-auto flex gap-1">
-          <StarsScreenshotButton />
+          <StarsScreenshotButton persistQuerystring />
           <StarsDownloadIcsButton />
         </div>
       </TimetableHeader>

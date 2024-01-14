@@ -25,7 +25,9 @@ export default function StarsShareButton(props: Props) {
     shareInfo = { title: "NTU Mods", text: "Take a look at my timetable!" },
     hideText = true
   } = props
-  const coursesToIndex = props.coursesToIndex ?? useBoundState().coursesToIndex
+  const stateCTI = useBoundState().coursesToIndex
+  const coursesToIndex = props.coursesToIndex ?? stateCTI
+
 
   const generateShareLink = () => {
     const qsObject = getQsFromCourseToIndexes(coursesToIndex)

@@ -3,12 +3,8 @@
 import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useBoundState } from "@/state/bound-state"
 import {
-  EyeOff,
-  GalleryHorizontal,
-  GalleryVerticalEnd,
   PanelBottomOpen,
   PanelLeftOpen,
   PanelRightOpen,
@@ -21,8 +17,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 
-import { getQsFromCourseToIndexes } from "@/lib/get-qs-from-course-to-index"
-import { BASE_URL, cn } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { useQueryStringCTI } from "@/hooks/use-qs-CTI"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
@@ -56,7 +51,6 @@ const DEFAULT_PADDING = {
 }
 
 export default function ScreenshotPage() {
-  const router = useRouter()
   const { info } = useBoundState()
   const [showTaskbar, setShowTaskbar] = useState(true)
   const [padding, setPadding] = useState(DEFAULT_PADDING)
@@ -127,7 +121,11 @@ export default function ScreenshotPage() {
       <div
         className="flex min-h-[100vh] items-center justify-center"
         style={{ ...padding, alignItems: align, scale }}>
-        <StarsTable disablePopup coursesToIndex={coursesToIndex} />
+        <StarsTable
+          disablePopup
+          coursesToIndex={coursesToIndex}
+          minimumRows={2}
+        />
       </div>
 
       <div

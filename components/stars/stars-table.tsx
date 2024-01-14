@@ -55,11 +55,13 @@ interface StarsTableProps {
   disablePopup?: boolean
   disableSelect?: boolean
   fullCell?: boolean
+  minimumRows?: number
 }
 
 export default function StarsTable(props: StarsTableProps) {
   const coursesToIndexFromQueryString = useQueryStringCTI()
   const coursesToIndexFromState = useBoundState().coursesToIndex
+  const minimumRows = props.minimumRows || 22
 
   /**
    * Pirority of coursesToIndex:
@@ -147,7 +149,7 @@ export default function StarsTable(props: StarsTableProps) {
     STARS_TIMESLOTS.length - (STARS_TIMESLOTS.length - maxTimeSlotToShow - 1) // 1 is equivalent of having 0 buffer row
 
   // Minimum number of rows to show is 22 - 1930
-  const MATRIX_ROWS = ROWS_TO_SHOW < 22 ? 22 : ROWS_TO_SHOW
+  const MATRIX_ROWS = ROWS_TO_SHOW < minimumRows ? minimumRows : ROWS_TO_SHOW
 
   const MATRIX_COLUMNS = Object.values(MAP_CONFLICTS).reduce(
     (acc, v) => acc + v

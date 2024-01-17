@@ -1,0 +1,80 @@
+"use client"
+
+import { useState } from "react"
+import { ChevronDown } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+import { useSettings } from "@/hooks/use-settings"
+import { useTimetable } from "@/hooks/use-timetable"
+import { Button } from "@/components/ui/button"
+import { Command, CommandItem } from "@/components/ui/command"
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu"
+
+const TimetablePlanSwitcher = () => {
+  const { timetables, timetableIndex, updateTimetableIndex } = useTimetable()
+  const { isMobile } = useSettings()
+
+  const [isContainerOpen, setIsContainerOpen] = useState(false)
+
+  const handleClick = (index: number) => {
+    updateTimetableIndex(index)
+  }
+
+  const trigger = (
+    <Button variant="outline">
+      Plan {timetableIndex + 1}
+      <ChevronDown
+        className={cn(
+          "ml-1 h-4 w-4 transition-transform",
+          isContainerOpen && "rotate-180"
+        )}
+      />
+    </Button>
+  )
+
+  const items = (
+    <Command shouldFilter={false}>
+      {timetables.map((_, index) => (
+        <CommandItem
+          key={index}
+          onSelect={() => handleClick(index)}
+          className={cn(
+            "cursor-pointer py-3 transition-all hover:bg-muted md:py-1.5",
+            index === timetableIndex && "bg-accent text-accent-foreground "
+          )}>
+          Plan {index + 1}
+        </CommandItem>
+      ))}
+    </Command>
+  )
+
+  if (isMobile) {
+    return (
+      <Drawer onOpenChange={(val) => setIsContainerOpen(val)}>
+        <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+
+        <DrawerContent className="p-2">
+          <span className="w-full text-center text-sm text-secondary">
+            Select a plan to view
+          </span>
+
+          {items}
+        </DrawerContent>
+      </Drawer>
+    )
+  }
+
+  return (
+    <DropdownMenu onOpenChange={(val) => setIsContainerOpen(val)}>
+      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuContent>{items}</DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+export default TimetablePlanSwitcher

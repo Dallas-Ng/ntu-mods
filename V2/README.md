@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# next-template
 
-## Getting Started
+A Next.js 13 template for building apps with Radix UI and Tailwind CSS.
 
-First, run the development server:
+## Usage
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx create-next-app -e https://github.com/shadcn/next-template
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Next.js 13 App Directory
+- Radix UI Primitives
+- Tailwind CSS
+- Icons from [Lucide](https://lucide.dev)
+- Dark mode with `next-themes`
+- Tailwind CSS class sorting, merging and linting.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## License
 
-## Learn More
+Licensed under the [MIT license](https://github.com/shadcn/ui/blob/main/LICENSE.md).
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+build - Changes that affect the build system or external dependencies.
+chore - General maintenance or routine tasks not tied to specific features, fixes, or improvements.
+ci - Changes to the continuous integration configuration and scripts.
+docs - Documentation-related changes.
+feat - Introducing a new feature for the end-user.
+fix - Bug fixes or corrections to existing code.
+perf - Performance improvements or optimizations.
+refactor - Code restructuring or changes that don't affect external behavior.
+revert - Reverting a previous commit.
+style - Changes that do not affect the logic of the code (e.g., formatting).
+test - Adding or modifying tests.

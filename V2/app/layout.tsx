@@ -5,7 +5,10 @@ import "./globals.css"
 
 import { siteConfig } from "@/config/site"
 import { Toaster } from "@/components/ui/sonner"
+import ClarityTag from "@/components/clarity"
+import GTag from "@/components/gtag"
 import MobileTracker from "@/components/mobile-tracker"
+import TailwindIndicator from "@/components/tailwind-indicator"
 import ThemeProvider from "@/components/theme-provider"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -75,6 +78,9 @@ export default function RootLayout({
 
           <MobileTracker />
           <Toaster position="top-center" />
+          <GTag />
+          <ClarityTag />
+          <TailwindIndicator />
         </ThemeProvider>
       </body>
     </html>

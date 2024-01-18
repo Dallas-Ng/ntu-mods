@@ -8,8 +8,8 @@ import { useSettings } from "@/hooks/use-settings"
 const TimetableHiddenContentHelper = () => {
   const { settings } = useSettings()
 
-  const threshold = true
-  // Object.values(settings.tableCell).reduce((a, c) => a + Number(c), 0) >= 4
+  const threshold =
+    Object.values(settings.tableCell).reduce((a, c) => a + Number(c), 0) <= 4
 
   return (
     <>

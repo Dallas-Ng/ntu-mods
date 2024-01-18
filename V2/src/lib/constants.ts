@@ -34,7 +34,8 @@ export const STARS_TIMESLOTS = [
   { start: 2100, end: 2130 },
   { start: 2130, end: 2200 },
   { start: 2200, end: 2230 },
-  { start: 2230, end: 2300 }
+  { start: 2230, end: 2300 },
+  { start: 2330, end: 2359 }
 ]
 
 export const DAY_MAP: Record<number, string> = {

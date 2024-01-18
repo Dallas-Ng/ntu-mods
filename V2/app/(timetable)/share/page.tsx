@@ -2,6 +2,7 @@ import dynamic from "next/dynamic"
 
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
+import { TimetableCopyButtonLoading } from "@/components/timetable/buttons/timetable-copy-button"
 import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button"
 import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button"
 import TimetableLegend from "@/components/timetable/timetable-legend"
@@ -16,6 +17,13 @@ const TimetableOverview = dynamic(
   }
 )
 
+const TimetableCopyButton = dynamic(
+  () => import("@/components/timetable/buttons/timetable-copy-button"),
+  {
+    ssr: false,
+    loading: () => <TimetableCopyButtonLoading />
+  }
+)
 const TimetableScreenshotButton = dynamic(
   () => import("@/components/timetable/buttons/timetable-screenshot-button"),
   {
@@ -43,7 +51,7 @@ const Page = () => {
       <div className="flex justify-between gap-2">
         <div className="flex gap-2">
           <Button>Make New Timetable</Button>
-          <Button variant="outline">Copy Timetable</Button>
+          <TimetableCopyButton />
         </div>
 
         <div className="flex gap-2">

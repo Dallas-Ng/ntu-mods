@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://ntumods.com
+
+# Sitemaps
+Sitemap: https://ntumods.com/sitemap.xml

@@ -1,5 +1,11 @@
 /** @type {import('next-sitemap').IConfig} */
-const M_DATA = require("./src/data/2023/m-data.json")
+const M_DATA_S1 = require("./src/data/2023/m-data-s1.json")
+const M_DATA_S2 = require("./src/data/2023/m-data-s2.json")
+
+const M_DATA = {
+  ...M_DATA_S1,
+  ...M_DATA_S2
+}
 
 module.exports = {
   siteUrl: process.env.SITE_URL || "https://ntumods.com",

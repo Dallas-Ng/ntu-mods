@@ -239,7 +239,7 @@ const TimetableTable = (props: Props) => {
   })
 
   return (
-    <table className="table-border h-full w-full table-fixed border-collapse border p-0 text-[0.6rem] md:text-xs">
+    <table className="table-border size-full table-fixed border-collapse border p-0 text-[0.6rem] md:text-xs">
       <thead>
         <tr>
           <th className="w-[38px]"></th>
@@ -255,7 +255,7 @@ const TimetableTable = (props: Props) => {
 
 export const TimetableTableLoader = () => {
   return (
-    <table className="table-border h-full w-full table-fixed border-collapse border p-0 text-[0.6rem] md:text-xs">
+    <table className="table-border size-full table-fixed border-collapse border p-0 text-[0.6rem] md:text-xs">
       <thead>
         <tr>
           <th className="w-[38px]"></th>

@@ -31,7 +31,7 @@ const ScreenshotSettingsButton = dynamic(
     ssr: false,
     loading: () => (
       <Button variant="outline" size="icon" disabled>
-        <Settings className="h-5 w-5" />
+        <Settings className="size-5" />
       </Button>
     )
   }
@@ -107,7 +107,7 @@ export default function ScreenshotPage() {
         <div className="p-5">
           <Link href="/timetable">
             <Alert>
-              <ServerCrash className="h-5 w-5" />
+              <ServerCrash className="size-5" />
 
               <AlertTitle>Your timetable is empty!</AlertTitle>
 
@@ -139,7 +139,7 @@ export default function ScreenshotPage() {
           <div className="grid h-fit w-full grid-cols-6 gap-2">
             <Button variant="outline" size="icon">
               <PanelRightOpen
-                className="h-5 w-5"
+                className="size-5"
                 onClick={() =>
                   padding.paddingLeft > 0
                     ? changePadding("paddingLeft", "decrease")
@@ -156,12 +156,12 @@ export default function ScreenshotPage() {
                   ? changePadding("paddingBottom", "decrease")
                   : changePadding("paddingTop", "increase")
               }>
-              <PanelTopOpen className="h-5 w-5" />
+              <PanelTopOpen className="size-5" />
             </Button>
 
             <Button variant="outline" size="icon">
               <PanelBottomOpen
-                className="h-5 w-5"
+                className="size-5"
                 onClick={() =>
                   padding.paddingTop > 0
                     ? changePadding("paddingTop", "decrease")
@@ -172,7 +172,7 @@ export default function ScreenshotPage() {
 
             <Button variant="outline" size="icon">
               <PanelLeftOpen
-                className="h-5 w-5"
+                className="size-5"
                 onClick={() => {
                   padding.paddingRight > 0
                     ? changePadding("paddingRight", "decrease")
@@ -182,7 +182,7 @@ export default function ScreenshotPage() {
             </Button>
 
             <Button variant="outline" size="icon" onClick={reset}>
-              <RefreshCcw className="h-5 w-5" />
+              <RefreshCcw className="size-5" />
             </Button>
 
             <ScreenshotSettingsButton />
@@ -191,19 +191,19 @@ export default function ScreenshotPage() {
               variant="outline"
               size="icon"
               onClick={() => setScale((prevScale) => prevScale + 0.05)}>
-              <ZoomIn className="h-5 w-5" />
+              <ZoomIn className="size-5" />
             </Button>
 
             <Button
               variant="outline"
               size="icon"
               onClick={() => setScale((prevScale) => prevScale - 0.05)}>
-              <ZoomOut className="h-5 w-5" />
+              <ZoomOut className="size-5" />
             </Button>
           </div>
 
           <div className="flex gap-2">
-            <div className="h-full w-full">
+            <div className="size-full">
               <Link href="/timetable">
                 <Button className="w-full text-sm" variant="outline">
                   Go to Timetable

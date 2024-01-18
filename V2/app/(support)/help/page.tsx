@@ -8,7 +8,7 @@ interface HelpConfig {
   answer: React.ReactNode
 }
 
-export const HELP_CONFIG: HelpConfig[] = [
+const HELP_CONFIG: HelpConfig[] = [
   {
     question: "What is this website for?",
     answer:
@@ -49,7 +49,7 @@ export default function HelpPage() {
         <Link
           href="/timetable"
           className="flex items-center transition-colors hover:text-secondary-foreground">
-          <ArrowLeft className="h-5 w-5" /> Back to Stars
+          <ArrowLeft className="size-5" /> Back to Stars
         </Link>
       </div>
 
@@ -65,7 +65,7 @@ export default function HelpPage() {
               href="mailto:ngdallas1@gmail.com"
               className="text-primary hover:underline">
               <span className="flex items-center gap-1">
-                Reach out to me <Mail className="h-5 w-5" />
+                Reach out to me <Mail className="size-5" />
               </span>
             </a>
           </p>
@@ -82,7 +82,7 @@ export default function HelpPage() {
 
           <Link href="/debug">
             <Alert>
-              <ServerCrash className="h-5 w-5" />
+              <ServerCrash className="size-5" />
 
               <AlertTitle>Having Problems with the System?</AlertTitle>
 

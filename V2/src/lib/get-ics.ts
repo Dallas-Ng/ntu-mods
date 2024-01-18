@@ -12,7 +12,7 @@ export const getIcs = (timetable: { [moduleKey: string]: string }) => {
   const events: EventAttributes[] = []
 
   for (const [moduleKey, indexKey] of Object.entries(timetable)) {
-    const module = getModule(moduleKey)
+    const moduleData = getModule(moduleKey)
     const indexes = getIndex(indexKey)
 
     for (const index of indexes) {
@@ -52,7 +52,7 @@ export const getIcs = (timetable: { [moduleKey: string]: string }) => {
         title: `[${moduleKey}] ${index.type} (${index.group})`,
         start: format(start, "yyyyMMdd'T'HHmmss"),
         end: format(end, "yyyyMMdd'T'HHmmss"),
-        description: `${module.title}\nLocation: ${index.venue}\nRemarks: ${index.remarks}`,
+        description: `${moduleData.title}\nLocation: ${index.venue}\nRemarks: ${index.remarks}`,
         recurrenceRule: recurrenceRule
       }
       events.push(event)

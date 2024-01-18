@@ -8,7 +8,7 @@ export default function NotFoundModulePage() {
     <div className="space-y-5">
       <Link href="/mods">
         <span className="flex cursor-pointer items-center hover:text-secondary-foreground">
-          <ArrowLeft className="mr-1 h-5 w-5" /> Click view all mods
+          <ArrowLeft className="mr-1 size-5" /> Click view all mods
         </span>
       </Link>
 

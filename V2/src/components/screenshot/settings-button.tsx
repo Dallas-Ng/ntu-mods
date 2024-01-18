@@ -10,7 +10,7 @@ const ScreenshotSettingsButton = () => {
     <Drawer>
       <DrawerTrigger asChild>
         <Button variant="outline" size="icon">
-          <Settings className="h-5 w-5" />
+          <Settings className="size-5" />
         </Button>
       </DrawerTrigger>
 

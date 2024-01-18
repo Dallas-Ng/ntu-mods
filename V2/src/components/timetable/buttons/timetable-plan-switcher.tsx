@@ -30,7 +30,7 @@ const TimetablePlanSwitcher = () => {
       Plan {timetableIndex + 1}
       <ChevronDown
         className={cn(
-          "ml-1 h-4 w-4 transition-transform",
+          "ml-1 size-4 transition-transform",
           isContainerOpen && "rotate-180"
         )}
       />

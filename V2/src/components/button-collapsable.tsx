@@ -13,10 +13,10 @@ const ButtonCollapsable = (props: Props) => {
   return (
     <Button
       variant="outline"
-      className="h-9 w-9 p-0 md:w-fit md:px-4 md:py-2"
+      className="size-9 p-0 md:w-fit md:px-4 md:py-2"
       {...props}>
       <span className="hidden md:mr-1 md:block">{text}</span>
-      <Icon className="h-4 w-4" />
+      <Icon className="size-4" />
     </Button>
   )
 }

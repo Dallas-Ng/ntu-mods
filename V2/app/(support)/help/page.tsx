@@ -47,7 +47,7 @@ export default function HelpPage() {
     <>
       <div className="p-5">
         <Link
-          href="/stars"
+          href="/timetable"
           className="flex items-center transition-colors hover:text-secondary-foreground">
           <ArrowLeft className="h-5 w-5" /> Back to Stars
         </Link>

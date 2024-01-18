@@ -11,7 +11,7 @@ const MobileTimetableModifierButton = () => {
         </div>
       </DrawerTrigger>
 
-      <DrawerContent className="h-[70vh] p-2">
+      <DrawerContent className="h-[90svh] p-2">
         <TimetableModifier />
       </DrawerContent>
     </Drawer>

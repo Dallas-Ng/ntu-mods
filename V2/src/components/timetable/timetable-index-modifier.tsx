@@ -68,10 +68,12 @@ const TimetableIndexModifier = (props: Props) => {
 
   const items = (
     <Command shouldFilter={false} className="border md:rounded-t-none">
-      <CommandInput
-        placeholder="Search for code, timing or tutorial group"
-        onValueChange={handleSearch}
-      />
+      <div className="h-fit w-full border-b">
+        <CommandInput
+          placeholder="Search for code, timing or tutorial group"
+          onValueChange={handleSearch}
+        />
+      </div>
 
       {Object.keys(filteredIndexes).length > 0 && (
         <div className="sticky top-0 z-20 flex w-full items-center gap-2 bg-background p-1 text-xs">
@@ -151,7 +153,7 @@ const TimetableIndexModifier = (props: Props) => {
           open ? onOpenChange(moduleKey) : onOpenChange("")
         }>
         <DrawerTrigger asChild>{props.children}</DrawerTrigger>
-        <DrawerContent className="h-full max-h-[60vh]">{items}</DrawerContent>
+        <DrawerContent className="h-full max-h-[70svh]">{items}</DrawerContent>
       </Drawer>
     )
 

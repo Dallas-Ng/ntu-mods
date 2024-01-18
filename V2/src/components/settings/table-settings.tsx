@@ -57,7 +57,7 @@ export default function TableSettings({ toggleBorder = false }: Props) {
               <tbody>
                 <tr>
                   <TimetableCell
-                    divClassName="h-min w-full  cursor-default text-xs"
+                    divClassName="h-min w-full cursor-default text-xs"
                     moduleKey={moduleKey}
                     index={index}
                   />

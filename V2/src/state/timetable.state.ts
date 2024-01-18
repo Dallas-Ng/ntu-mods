@@ -3,7 +3,7 @@ import { StateCreator } from "zustand"
 export interface TimetableSlice {
   timetables: Timetable[]
   timetableIndex: number
-  addTimetable: (timetable: Timetable) => void
+  migrateTimetable: (timetable: Timetable) => void
   updateTimetable: (timetable: Timetable, timetableIndex: number) => void
   addItemToTimetable: (moduleKey: string, indexKey: string) => void
   updateItemIndex: (moduleKey: string, indexKey: string) => void
@@ -15,9 +15,9 @@ export interface TimetableSlice {
 export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   timetables: [{}, {}, {}, {}, {}],
   timetableIndex: 0,
-  addTimetable: (timetable: Timetable) =>
+  migrateTimetable: (timetable: Timetable) =>
     set((state) => ({
-      timetables: [...state.timetables, timetable]
+      timetables: [{ ...timetable }, {}, {}, {}, {}]
     })),
   updateTimetable: (timetable: Timetable, timetableIndex: number) => {
     set((state) => {

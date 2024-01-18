@@ -11,7 +11,8 @@ export function useTimetable(argTimetable?: Timetable) {
     addItemToTimetable,
     removeItemFromTimetable,
     updateItemIndex,
-    updateTimetableIndex
+    updateTimetableIndex,
+    migrateTimetable
   } = useBoundState()
 
   const qsTimetable = useQsTimetable()
@@ -30,6 +31,7 @@ export function useTimetable(argTimetable?: Timetable) {
     addItemToTimetable,
     removeItemFromTimetable,
     updateItemIndex,
-    updateTimetableIndex
+    updateTimetableIndex,
+    migrateTimetable
   }
 }

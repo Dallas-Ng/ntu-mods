@@ -29,3 +29,7 @@ export default function StarsScreenshotButton({ persistQuerystring }: Props) {
     </Link>
   )
 }
+
+export const StarsScreenshotButtonLoading = () => (
+  <ButtonCollapsable icon={ImageDown} text="Export as Image" disabled />
+)

@@ -105,7 +105,7 @@ export default function ScreenshotPage() {
       onClick={() => setShowTaskbar((p) => !p)}>
       {Object.keys(moduleIndexMap).length === 0 && (
         <div className="p-5">
-          <Link href="/stars">
+          <Link href="/timetable">
             <Alert>
               <ServerCrash className="h-5 w-5" />
 

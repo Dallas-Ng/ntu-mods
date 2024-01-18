@@ -44,10 +44,12 @@ const getConflicts = (
 
 interface Props {
   disableActions?: boolean
+  fullCell?: boolean
+  timetable?: Timetable
 }
 
 const TimetableTable = (props: Props) => {
-  const { timetable } = useTimetable()
+  const { timetable } = useTimetable(props.timetable)
   const moduleIndexMap = getModuleIndexMap(timetable)
 
   const MAP: { [day: number]: Index[] } = {
@@ -190,7 +192,7 @@ const TimetableTable = (props: Props) => {
         <TimetableCell
           moduleKey={moduleKey}
           index={index}
-          disableActions={props.disableActions}
+          fullCell={props.fullCell}
         />
       )
 

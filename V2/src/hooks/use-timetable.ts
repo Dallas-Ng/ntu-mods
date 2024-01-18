@@ -8,6 +8,7 @@ export function useTimetable(argTimetable?: Timetable) {
   const {
     timetables,
     timetableIndex,
+    updateTimetable,
     addItemToTimetable,
     removeItemFromTimetable,
     updateItemIndex,
@@ -31,6 +32,7 @@ export function useTimetable(argTimetable?: Timetable) {
     addItemToTimetable,
     removeItemFromTimetable,
     updateItemIndex,
+    updateTimetable,
     updateTimetableIndex,
     migrateTimetable
   }

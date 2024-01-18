@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
@@ -50,7 +51,10 @@ const Page = () => {
 
       <div className="flex justify-between gap-2">
         <div className="flex gap-2">
-          <Button>Make New Timetable</Button>
+          <Link href="/timetable">
+            <Button>Make My Timetable</Button>
+          </Link>
+
           <TimetableCopyButton />
         </div>
 

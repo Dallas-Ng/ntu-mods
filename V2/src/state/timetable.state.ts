@@ -9,6 +9,7 @@ export interface TimetableSlice {
   updateItemIndex: (moduleKey: string, indexKey: string) => void
   removeItemFromTimetable: (moduleKey: string) => void
   updateTimetableIndex: (timetableIndex: number) => void
+  resetTimetables: () => void
 }
 
 export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
@@ -75,6 +76,6 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
     set((_state) => ({ timetableIndex }))
   },
   resetTimetables: () => {
-    set((_state) => ({ timetables: [], timetableIndex: 0 }))
+    set((_state) => ({ timetables: [{}, {}, {}, {}, {}], timetableIndex: 0 }))
   }
 })

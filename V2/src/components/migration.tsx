@@ -12,7 +12,7 @@ export const Migration = () => {
   const { migrateTimetable } = useTimetable()
 
   useEffect(() => {
-    const oldContent = JSON.parse(localStorage.getItem("dabao-store") || "")
+    const oldContent = JSON.parse(localStorage.getItem("dabao-store") || "{}")
     if (oldContent) {
       if (localStorage.getItem("migrate")) return
 

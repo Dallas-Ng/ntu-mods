@@ -26,7 +26,8 @@ export default function ModsPage() {
 
       {filteredModules.length === Object.keys(TRUN_M_DATA).length ? (
         <p className="text-secondary">
-          View all {Object.keys(TRUN_M_DATA).length} modules offered by NTU.
+          View all {Object.keys(TRUN_M_DATA).length} modules offered by NTU in
+          AY2023/2024.
         </p>
       ) : (
         <p className="text-secondary">

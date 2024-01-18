@@ -1,18 +1,35 @@
-"use client"
-
 import dynamic from "next/dynamic"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import Header from "@/components/header"
 import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile-timetable-modifier-button"
-import TimetableDownloadCalendarButton from "@/components/timetable/buttons/timetable-download-calendar-button"
-import TimetableScreenshotButton from "@/components/timetable/buttons/timetable-screenshot-button"
-import TimetableShareButton from "@/components/timetable/buttons/timetable-share-button"
+import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button"
+import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button"
+import { TimetableShareButtonLoading } from "@/components/timetable/buttons/timetable-share-button"
 import TimetableHiddenContentHelper from "@/components/timetable/timetable-hidden-content-helper"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import { TimetableModifierLoader } from "@/components/timetable/timetable-modifier"
-import { TimtableOverviewLoading } from "@/components/timetable/timetable-overview"
+import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview"
 import { TimetableTableLoader } from "@/components/timetable/timetable-table"
+
+const TimetableScreenshotButton = dynamic(
+  () => import("@/components/timetable/buttons/timetable-screenshot-button"),
+  {
+    ssr: false,
+    loading: () => <StarsScreenshotButtonLoading />
+  }
+)
+
+const TimetableDownloadCalendarButton = dynamic(
+  () =>
+    import("@/components/timetable/buttons/timetable-download-calendar-button"),
+  { ssr: false, loading: () => <TimetableDownloadCalendarButtonLoading /> }
+)
+
+const TimetableShareButton = dynamic(
+  () => import("@/components/timetable/buttons/timetable-share-button"),
+  { ssr: false, loading: () => <TimetableShareButtonLoading /> }
+)
 
 const TimetablePlanSwitcher = dynamic(
   () => import("@/components/timetable/buttons/timetable-plan-switcher"),
@@ -46,7 +63,7 @@ const TimetableOverview = dynamic(
   () => import("@/components/timetable/timetable-overview"),
   {
     ssr: false,
-    loading: () => <TimtableOverviewLoading />
+    loading: () => <TimetableOverviewLoading />
   }
 )
 

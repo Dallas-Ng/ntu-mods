@@ -10,9 +10,10 @@ interface Props {
   link: string
   title: string
   description: string
+  disabled?: boolean
 }
 
-const ShareButton = ({ link, title, description }: Props) => {
+const ShareButton = ({ link, title, description, disabled }: Props) => {
   const handleShare = () => {
     try {
       navigator.share({
@@ -27,7 +28,14 @@ const ShareButton = ({ link, title, description }: Props) => {
     }
   }
 
-  return <ButtonCollapsable onClick={handleShare} icon={Link} text="Share" />
+  return (
+    <ButtonCollapsable
+      onClick={handleShare}
+      icon={Link}
+      text="Share"
+      disabled={disabled}
+    />
+  )
 }
 
 export default ShareButton

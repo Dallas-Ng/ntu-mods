@@ -95,7 +95,7 @@ const TimetableOverview = () => {
   )
 }
 
-export const TimtableOverviewLoading = () => {
+export const TimetableOverviewLoading = () => {
   return (
     <table className="table w-full table-fixed border text-center text-xs">
       <thead>

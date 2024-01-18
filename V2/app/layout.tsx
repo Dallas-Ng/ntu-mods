@@ -7,6 +7,7 @@ import { siteConfig } from "@/config/site"
 import { Toaster } from "@/components/ui/sonner"
 import ClarityTag from "@/components/clarity"
 import GTag from "@/components/gtag"
+import { Migration } from "@/components/migration"
 import MobileTracker from "@/components/mobile-tracker"
 import TailwindIndicator from "@/components/tailwind-indicator"
 import ThemeProvider from "@/components/theme-provider"
@@ -80,6 +81,7 @@ export default function RootLayout({
           <Toaster position="top-center" />
           <GTag />
           <ClarityTag />
+          <Migration />
           <TailwindIndicator />
         </ThemeProvider>
       </body>

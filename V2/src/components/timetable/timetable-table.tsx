@@ -190,7 +190,6 @@ const TimetableTable = (props: Props) => {
 
       STARS_MATRIX[tsIndex][cellPosition] = (
         <TimetableCell
-          indexes={Object.values(moduleIndexMap).flat()}
           moduleKey={moduleKey}
           index={index}
           fullCell={props.fullCell}

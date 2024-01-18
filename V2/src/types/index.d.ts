@@ -6,6 +6,10 @@ type TimetableWithIndex = {
   [moduleKey: string]: Index[]
 }
 
+type Indexes = {
+  [indexKey: string]: Index[]
+}
+
 interface Module {
   code: string
   au: string

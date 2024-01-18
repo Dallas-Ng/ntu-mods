@@ -18,11 +18,17 @@ const TimetableOverview = () => {
     <table className="table w-full table-fixed border text-center text-xs">
       <thead>
         <tr className="border-b">
-          <th className="w-fit p-1 md:w-[100px]">Index</th>
-          <th className="w-fit p-1 md:w-[100px]">Module</th>
-          <th className="hidden text-left md:table-cell">Title</th>
-          <th className="p-1">AU</th>
-          <th className="p-1">Exams</th>
+          <th className="w-fit p-1 font-normal text-secondary md:w-[100px]">
+            Index
+          </th>
+          <th className="w-fit p-1 font-normal text-secondary md:w-[100px]">
+            Module
+          </th>
+          <th className="hidden text-left font-normal text-secondary md:table-cell">
+            Title
+          </th>
+          <th className="p-1 font-normal text-secondary">AU</th>
+          <th className="p-1 font-normal text-secondary">Exams</th>
         </tr>
       </thead>
 
@@ -94,13 +100,28 @@ export const TimtableOverviewLoading = () => {
     <table className="table w-full table-fixed border text-center text-xs">
       <thead>
         <tr className="border-b">
-          <th className="w-fit p-1 md:w-[100px]">Index</th>
-          <th className="w-fit p-1 md:w-[100px]">Module</th>
-          <th className="hidden text-left md:table-cell">Title</th>
-          <th className="p-1">AU</th>
-          <th className="p-1">Exams</th>
+          <th className="w-fit p-1 font-normal text-secondary md:w-[100px]">
+            Index
+          </th>
+          <th className="w-fit p-1 font-normal text-secondary md:w-[100px]">
+            Module
+          </th>
+          <th className="hidden text-left font-normal text-secondary md:table-cell">
+            Title
+          </th>
+          <th className="p-1 font-normal text-secondary">AU</th>
+          <th className="p-1 font-normal text-secondary">Exams</th>
         </tr>
       </thead>
+
+      <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td className="hidden md:table-cell"></td>
+          <td className="p-1">0.0 AUs</td>
+        </tr>
+      </tbody>
     </table>
   )
 }

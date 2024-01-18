@@ -10,6 +10,7 @@ export function useTimetable(argTimetable?: Timetable) {
     timetableIndex,
     addItemToTimetable,
     removeItemFromTimetable,
+    updateItemIndex,
     updateTimetableIndex
   } = useBoundState()
 
@@ -28,6 +29,7 @@ export function useTimetable(argTimetable?: Timetable) {
     qsTimetable,
     addItemToTimetable,
     removeItemFromTimetable,
+    updateItemIndex,
     updateTimetableIndex
   }
 }

@@ -4,6 +4,7 @@ import dynamic from "next/dynamic"
 
 import { Skeleton } from "@/components/ui/skeleton"
 import Header from "@/components/header"
+import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile-timetable-modifier-button"
 import TimetableDownloadCalendarButton from "@/components/timetable/buttons/timetable-download-calendar-button"
 import TimetableScreenshotButton from "@/components/timetable/buttons/timetable-screenshot-button"
 import TimetableShareButton from "@/components/timetable/buttons/timetable-share-button"
@@ -11,6 +12,7 @@ import TimetableHiddenContentHelper from "@/components/timetable/timetable-hidde
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import { TimetableModifierLoader } from "@/components/timetable/timetable-modifier"
 import { TimtableOverviewLoading } from "@/components/timetable/timetable-overview"
+import { TimetableTableLoader } from "@/components/timetable/timetable-table"
 
 const TimetablePlanSwitcher = dynamic(
   () => import("@/components/timetable/buttons/timetable-plan-switcher"),
@@ -36,7 +38,7 @@ const TimetableTable = dynamic(
   () => import("@/components/timetable/timetable-table"),
   {
     ssr: false,
-    loading: () => <div className="m-0 h-20 w-full border p-0"></div>
+    loading: () => <TimetableTableLoader />
   }
 )
 
@@ -50,42 +52,50 @@ const TimetableOverview = dynamic(
 
 const Page = () => {
   return (
-    <div className="space-y-4">
-      <Header title="Timetable" />
+    <>
+      <div className="space-y-4">
+        <Header title="Timetable" />
 
-      <div className="flex justify-between gap-2">
-        <TimetablePlanSwitcher />
+        <div className="flex justify-between gap-2">
+          <TimetablePlanSwitcher />
 
-        <div className="flex gap-2">
-          <TimetableScreenshotButton />
-          <TimetableDownloadCalendarButton />
-          <TimetableShareButton />
-        </div>
-      </div>
-
-      <div className="flex h-full items-start justify-between gap-2">
-        <div className="h-full w-full space-y-4 md:w-[70%]">
-          {/* Needs these divs to make space-y-4 work in loading time */}
-          <div>
-            <TimetableTable />
-          </div>
-
-          <div>
-            <TimetableOverview />
+          <div className="flex gap-2">
+            <TimetableScreenshotButton />
+            <TimetableDownloadCalendarButton />
+            <TimetableShareButton />
           </div>
         </div>
 
-        <div className="hidden md:block md:w-[30%]">
-          <TimetableModifier />
+        <div className="flex h-full items-start justify-between gap-4">
+          <div className="h-full w-full space-y-4 md:w-[70%]">
+            {/* Needs these divs to make space-y-4 work in loading time */}
+            <div>
+              <TimetableTable />
+            </div>
+
+            <div>
+              <TimetableOverview />
+            </div>
+          </div>
+
+          <div className="hidden md:block md:w-[30%]">
+            <TimetableModifier />
+          </div>
+        </div>
+
+        <div className="flex w-full flex-col gap-2">
+          <div className="w-fit">
+            <TimetableLegend />
+          </div>
+
+          <TimetableHiddenContentHelper />
         </div>
       </div>
 
-      <div className="flex flex-col justify-between gap-2 md:flex-row">
-        <TimetableLegend />
-
-        <TimetableHiddenContentHelper />
+      <div className="fixed bottom-0 left-0 h-16 w-full bg-background shadow hover:cursor-pointer dark:border-t-2 md:hidden">
+        <MobileTimetableModifierButton />
       </div>
-    </div>
+    </>
   )
 }
 

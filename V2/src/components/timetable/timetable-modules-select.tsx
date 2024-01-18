@@ -1,34 +1,38 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { M_INDEXES } from "@/data/2023/m-indexes"
 import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
-import { Check, ChevronsUpDown } from "lucide-react"
+import { Check } from "lucide-react"
 
+import { getModuleIndexes } from "@/lib/get-module-indexes"
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
+import { useOutsideClick } from "@/hooks/use-outside-click"
 import { useTimetable } from "@/hooks/use-timetable"
 import {
   Command,
-  CommandEmpty,
   CommandInput,
   CommandItem,
   CommandList
 } from "@/components/ui/command"
-
-import { Button } from "../ui/button"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 
 const STORED_KEYS = Object.keys(TRUN_M_DATA)
 
 const TimetableModulesSelect = () => {
   const [inputValue, setInputValue] = useState("")
   const [moduleCodes, setModuleCodes] = useState<string[]>([])
-  const [windowOpen, setWindowOpen] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const { timetable, addItemToTimetable } = useTimetable()
+  const { timetable, addItemToTimetable, removeItemFromTimetable } =
+    useTimetable()
+  const ref = useRef<HTMLDivElement>(null)
 
-  const dbSearchTerm = useDebounce(inputValue, 200) // arbitrary delay - anything lower makes it feel laggy
+  const dbSearchTerm = useDebounce(inputValue, 0)
+
+  useOutsideClick(ref, () => {
+    /**
+     * Clear input value when user clicks outside
+     */
+    setInputValue("")
+  })
 
   useEffect(() => {
     /**
@@ -56,62 +60,77 @@ const TimetableModulesSelect = () => {
     // .toUpperCase is needed as courseCode is auto lowercased when passed as prop into CommandItem
     const moduleKey = val.toUpperCase()
 
-    const indexes = M_INDEXES[moduleKey]
-    const firstIndexKey = Object.keys(indexes)[0]
+    // If module is already in timetable, remove it
+    if (Object.keys(timetable).find((x) => x === moduleKey)) {
+      removeItemFromTimetable(moduleKey)
+      return
+    }
 
-    //CHeck for conlifct here
+    const indexes = getModuleIndexes(moduleKey)
+    let selectedIndex = indexes[Object.keys(indexes)[0]]
 
-    addItemToTimetable(moduleKey, firstIndexKey)
+    // TODO: Fix conflict detection
+
+    // Object.values(indexes).every((moduleIndex) => {
+    //   let hasConflict = false
+
+    //   moduleIndex.forEach((index) => {
+    //     Object.values(moduleIndexMap).forEach((existingCoursesIndex) => {
+    //       existingCoursesIndex.forEach((existingIndex) => {
+    //         const { startTime: previousStart, endTime: previousEnd } =
+    //           parseTime(existingIndex)
+    //         const { startTime: currentStart, endTime: currentEnd } =
+    //           parseTime(index)
+
+    //         if (currentStart < previousEnd && currentEnd > previousStart) {
+    //           hasConflict = true
+    //         }
+    //       })
+    //     })
+
+    //     if (!hasConflict) {
+    //       selectedIndex = moduleIndex
+    //       return false // Break out of the every loop
+    //     }
+    //   })
+
+    //   return true // Continue the every loop
+    // })
+
+    addItemToTimetable(moduleKey, selectedIndex[0].key)
   }
 
   return (
-    <div ref={containerRef} className="h-min w-full">
-      <Popover open={windowOpen} onOpenChange={setWindowOpen}>
-        <PopoverTrigger type={undefined} asChild>
-          <Button variant="outline" className="w-full">
-            Click to Add Mods
-            <ChevronsUpDown className="ml-1 h-4 w-4 opacity-50" />
-          </Button>
-        </PopoverTrigger>
+    <div ref={ref} className="rounded-md border">
+      <Command shouldFilter={false} className="bg-background">
+        <CommandInput
+          placeholder="Search for Module"
+          value={inputValue}
+          onValueChange={(val) => setInputValue(val)}
+        />
 
-        <PopoverContent
-          container={containerRef.current}
-          className="w-full p-1"
-          style={{ width: containerRef.current?.clientWidth }}>
-          <Command shouldFilter={false}>
-            <CommandInput
-              placeholder="Search for a module.."
-              value={inputValue}
-              onValueChange={(v) => setInputValue(v)}
-            />
-            <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
+        <CommandList className={cn(moduleCodes.length > 0 && "border-t")}>
+          {moduleCodes.map((moduleKey) => {
+            const isActive = Object.keys(timetable).find((x) => x === moduleKey)
 
-              {moduleCodes.map((moduleKey) => {
-                const isActive = Object.keys(timetable).find(
-                  (x) => x === moduleKey
-                )
-
-                return (
-                  <CommandItem
-                    key={moduleKey}
-                    value={moduleKey}
-                    onSelect={handleSelect}
-                    className="cursor-pointer py-3 md:py-2">
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        isActive ? "opacity-100" : "opacity-0"
-                      )}
-                    />
-                    {moduleKey}
-                  </CommandItem>
-                )
-              })}
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
+            return (
+              <CommandItem
+                key={moduleKey}
+                value={moduleKey}
+                onSelect={handleSelect}
+                className="cursor-pointer py-3 transition-colors hover:bg-accent md:py-2">
+                <Check
+                  className={cn(
+                    "mr-2 h-4 w-4",
+                    isActive ? "opacity-100" : "opacity-0"
+                  )}
+                />
+                {moduleKey}
+              </CommandItem>
+            )
+          })}
+        </CommandList>
+      </Command>
     </div>
   )
 }

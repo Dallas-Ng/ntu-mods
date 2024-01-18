@@ -121,7 +121,7 @@ const TimetableModulesSelect = () => {
                 className="cursor-pointer py-3 transition-colors hover:bg-accent md:py-2">
                 <Check
                   className={cn(
-                    "mr-2 h-4 w-4",
+                    "mr-2 size-4",
                     isActive ? "opacity-100" : "opacity-0"
                   )}
                 />

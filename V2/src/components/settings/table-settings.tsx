@@ -76,7 +76,7 @@ export default function TableSettings({ toggleBorder = false }: Props) {
               variant="outline"
               size="icon"
               className="ml-2">
-              <RefreshCcw className="h-5 w-5" />
+              <RefreshCcw className="size-5" />
             </Button>
           </div>
         </div>
@@ -132,7 +132,7 @@ export function TableSettingsSkeleton() {
 
         <div className="flex w-full items-baseline justify-between">
           <Skeleton className="h-[16px] w-full" />
-          <Skeleton className="ml-2 h-10 w-10" />
+          <Skeleton className="ml-2 size-10" />
         </div>
       </div>
 

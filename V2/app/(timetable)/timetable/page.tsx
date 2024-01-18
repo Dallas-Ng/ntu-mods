@@ -20,7 +20,7 @@ const TimetablePlanSwitcher = dynamic(
     ssr: false,
     loading: () => (
       <div className="h-[36px] w-[95px] rounded-md border p-2">
-        <Skeleton className="h-full w-full" />
+        <Skeleton className="size-full" />
       </div>
     )
   }
@@ -67,7 +67,7 @@ const Page = () => {
         </div>
 
         <div className="flex h-full items-start justify-between gap-4">
-          <div className="h-full w-full space-y-4 md:w-[70%]">
+          <div className="size-full space-y-4 md:w-[70%]">
             {/* Needs these divs to make space-y-4 work in loading time */}
             <div>
               <TimetableTable />

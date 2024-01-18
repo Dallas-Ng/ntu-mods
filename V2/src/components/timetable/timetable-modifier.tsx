@@ -46,7 +46,7 @@ const TimetableModifier = () => {
 
                 <div>
                   <TrashIcon
-                    className="h-4 w-4 text-secondary hover:text-foreground"
+                    className="size-4 text-secondary hover:text-foreground"
                     onClick={(e) => {
                       e.stopPropagation()
                       removeItemFromTimetable(moduleKey)

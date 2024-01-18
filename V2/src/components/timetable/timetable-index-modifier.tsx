@@ -98,7 +98,7 @@ const TimetableIndexModifier = (props: Props) => {
                   <span className="flex items-center gap-1">
                     <Check
                       className={cn(
-                        "inline h-4 w-4",
+                        "inline size-4",
                         active ? "opacity-100" : "opacity-0"
                       )}
                     />

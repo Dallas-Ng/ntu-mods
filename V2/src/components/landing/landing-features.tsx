@@ -32,15 +32,15 @@ export default function LandingFeatures() {
                   <span className="flex items-center text-neutral-400">
                     Search for
                     <span className="relative ml-1 h-[1em] w-36 overflow-hidden">
-                      <span className="animate-slide absolute h-full w-full -translate-y-full leading-[0.9] text-white">
+                      <span className="animate-slide absolute size-full -translate-y-full leading-[0.9] text-white">
                         Index Code
                       </span>
 
-                      <span className="animate-slide absolute h-full w-full -translate-y-full leading-[0.9] text-white [animation-delay:1.00s]">
+                      <span className="animate-slide absolute size-full -translate-y-full leading-[0.9] text-white [animation-delay:1.00s]">
                         Timeslot or Day
                       </span>
 
-                      <span className="animate-slide absolute h-full w-full -translate-y-full leading-[0.9] text-white [animation-delay:2.00s]">
+                      <span className="animate-slide absolute size-full -translate-y-full leading-[0.9] text-white [animation-delay:2.00s]">
                         Tutorial Group
                       </span>
                     </span>

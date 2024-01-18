@@ -30,7 +30,7 @@ const Navbar = () => {
               alt="Logo"
               width={30}
               height={30}
-              className="h-[30px] w-[30px] object-contain"
+              className="size-[30px] object-contain"
               priority
             />
 
@@ -75,7 +75,7 @@ const Navbar = () => {
 
           <Link href="/settings">
             <Button size="icon" variant="ghost">
-              <Settings className="h-5 w-5" />
+              <Settings className="size-5" />
             </Button>
           </Link>
         </div>

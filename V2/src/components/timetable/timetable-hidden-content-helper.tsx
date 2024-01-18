@@ -17,7 +17,7 @@ const TimetableHiddenContentHelper = () => {
         <Link href="/settings#table-settings">
           <div className="flex items-start gap-1 text-sm text-secondary hover:underline md:items-center">
             <span>
-              <InfoIcon className="h-5 w-5" />
+              <InfoIcon className="size-5" />
             </span>
             Some information are hidden in your table. Click to edit.
           </div>

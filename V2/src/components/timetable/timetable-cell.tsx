@@ -39,8 +39,6 @@ const TimetableCell = (props: Props) => {
   const variations = indexes.filter(
     (item) => item.day === index.day && item.time === index.time
   )
-  console.log(variations)
-
   const hasDifferenceInRemarks = variations.some(
     (v) => v.remarks !== index.remarks && v.remarks !== ""
   )

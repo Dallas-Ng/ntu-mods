@@ -204,7 +204,10 @@ const TimetableTable = (props: Props) => {
    * Generation of Table Head and Table Body
    */
   const TableHeadItems = Object.entries(MAP_CONFLICTS).map(([k, v]) => (
-    <th key={k} colSpan={v} className="h-fit p-0 text-center">
+    <th
+      key={k}
+      colSpan={v}
+      className="h-fit p-0 text-center font-normal text-secondary">
       {TRUN_DAY_MAP[Number(k)]}
     </th>
   ))
@@ -244,6 +247,54 @@ const TimetableTable = (props: Props) => {
       </thead>
 
       <tbody>{TableBodyItems}</tbody>
+    </table>
+  )
+}
+
+export const TimetableTableLoader = () => {
+  return (
+    <table className="table-border h-full w-full table-fixed border-collapse border p-0 text-[0.6rem] md:text-xs">
+      <thead>
+        <tr>
+          <th className="w-[38px]"></th>
+          <th className="h-fit p-0 text-center font-normal text-secondary">
+            Mon
+          </th>
+          <th className="h-fit p-0 text-center font-normal text-secondary">
+            Tue
+          </th>
+          <th className="h-fit p-0 text-center font-normal text-secondary">
+            Wed
+          </th>
+          <th className="h-fit p-0 text-center font-normal text-secondary">
+            Thu
+          </th>
+          <th className="h-fit p-0 text-center font-normal text-secondary">
+            Fri
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {STARS_TIMESLOTS.map((x, i) => (
+          <tr key={i}>
+            <td className="relative p-1 text-center">
+              {i !== 0 && (
+                <span className="absolute left-0 top-[-8px] w-full bg-background">
+                  {x.start}
+                </span>
+              )}
+
+              <div className="min-h-[20px] w-full" />
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        ))}
+      </tbody>
     </table>
   )
 }

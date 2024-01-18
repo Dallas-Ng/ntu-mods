@@ -6,6 +6,7 @@ export interface TimetableSlice {
   addTimetable: (timetable: Timetable) => void
   updateTimetable: (timetable: Timetable, timetableIndex: number) => void
   addItemToTimetable: (moduleKey: string, indexKey: string) => void
+  updateItemIndex: (moduleKey: string, indexKey: string) => void
   removeItemFromTimetable: (moduleKey: string) => void
   updateTimetableIndex: (timetableIndex: number) => void
 }
@@ -52,6 +53,18 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
       const updatedTimetable = { ...updatedTimetables[state.timetableIndex] } // Create a shallow copy of the specific timetable
 
       delete updatedTimetable[moduleKey]
+
+      updatedTimetables[state.timetableIndex] = updatedTimetable
+
+      return { ...state, timetables: updatedTimetables }
+    })
+  },
+  updateItemIndex: (moduleKey: string, indexKey: string) => {
+    set((state) => {
+      const updatedTimetables = [...state.timetables]
+      const updatedTimetable = { ...updatedTimetables[state.timetableIndex] }
+
+      updatedTimetable[moduleKey] = indexKey
 
       updatedTimetables[state.timetableIndex] = updatedTimetable
 

@@ -19,8 +19,8 @@ export const dynamic = "auto"
 export const dynamicParams = true
 
 export default function Page({ params }: { params: { module: string } }) {
-  const moduleCode = params.module
-  const moduleData = getModule(moduleCode)
+  const moduleKey = params.module
+  const moduleData = getModule(moduleKey)
 
   /**
    * Handles improper page slugs
@@ -31,7 +31,7 @@ export default function Page({ params }: { params: { module: string } }) {
      *    e.g. /mods/ma1000 -> /mods/MA1000
      */
     const lowerCaseMod = Object.keys(TRUN_M_DATA).find(
-      (k) => k.toLowerCase() === moduleCode
+      (k) => k.toLowerCase() === moduleKey
     )
 
     if (lowerCaseMod) {
@@ -54,16 +54,16 @@ export default function Page({ params }: { params: { module: string } }) {
       </div>
 
       <div className="mt-10">
-        <h2 className="mb-2 text-lg">Available Indexes (Coming Soon)</h2>
+        <h2 className="mb-2 text-lg">Available Indexes</h2>
 
-        <ModsIndexTable />
+        <ModsIndexTable moduleKey={moduleKey} />
 
         <div className="mt-10">
           <h2 className="mb-2 text-lg">Other Relevant Mods</h2>
 
           <RelatedModules
             limit={3}
-            moduleKey={moduleCode}
+            moduleKey={moduleKey}
             emptyContent={
               <Link
                 href="/mods"

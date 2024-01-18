@@ -18,7 +18,7 @@ const ModuleCard = ({ module, variant = "default", cardClassName }: Props) => {
         )}>
         <p>{module.code}</p>
 
-        <p className="capitalize text-foreground">{module.title}</p>
+        <p className="text-foreground">{module.title}</p>
       </div>
     </Link>
   )

@@ -1,5 +1,3 @@
-"use client"
-
 import { Fragment } from "react"
 
 import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"

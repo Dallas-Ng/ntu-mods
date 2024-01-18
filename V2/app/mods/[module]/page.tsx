@@ -12,11 +12,15 @@ import RelatedModules from "@/components/related-modules"
 // Change the dynamic behavior of a layout or page to fully static or fully dynamic.
 // 'auto' | 'force-dynamic' | 'error' | 'force-static'
 // @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
-export const dynamic = "auto"
+export const dynamic = "force-static"
 
 // Disable dynamic routes
 // @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamicparams
 export const dynamicParams = true
+
+// No revalidation
+// @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
+export const revalidate = Infinity
 
 export default function Page({ params }: { params: { module: string } }) {
   const moduleKey = params.module

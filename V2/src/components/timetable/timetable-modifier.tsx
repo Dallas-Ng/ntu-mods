@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronsUpDown, TrashIcon } from "lucide-react"
+import { TrashIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { useTimetable } from "@/hooks/use-timetable"

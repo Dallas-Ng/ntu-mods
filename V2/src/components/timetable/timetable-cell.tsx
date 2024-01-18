@@ -39,8 +39,10 @@ const TimetableCell = (props: Props) => {
   const variations = indexes.filter(
     (item) => item.day === index.day && item.time === index.time
   )
+  console.log(variations)
+
   const hasDifferenceInRemarks = variations.some(
-    (v) => v.remarks !== index.remarks
+    (v) => v.remarks !== index.remarks && v.remarks !== ""
   )
   const hasDifferenceInVenue = variations.some((v) => v.venue !== index.venue)
 
@@ -101,10 +103,10 @@ const TimetableCell = (props: Props) => {
               {(fullCell || tableCell.remarks) && (
                 <>
                   {variations.length === 0 ? (
-                    <>{index.remarks}</>
+                    <>{formatRemarks(index.remarks)}</>
                   ) : (
                     hasDifferenceInRemarks &&
-                    variations.map((x) => x.remarks).join(", ")
+                    variations.map((x) => formatRemarks(x.remarks)).join(", ")
                   )}
                 </>
               )}

@@ -1,18 +1,33 @@
 "use client"
 
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { M_DATA } from "@/data/2023/m-data"
 import { M_DATA_S1 } from "@/data/2023/m-data-s1"
 import { M_DATA_S2 } from "@/data/2023/m-data-s2"
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
 import { RefreshCcw } from "lucide-react"
 
 import { MODULE_CATEGORY, MODULE_FACULTY } from "@/lib/constants"
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
+import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
+import { Button } from "@/components/ui/button"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem
+} from "@/components/ui/command"
 import { Input } from "@/components/ui/input"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "@/components/ui/popover"
 import {
   Select,
   SelectContent,
@@ -32,6 +47,8 @@ export default function ModsPage() {
   const [moduleType, setModuleType] = useState<SearchModuleType>("all")
   const [moduleFaculty, setModuleFaculty] = useState<SearchModuleFaculty>("all")
   const [filteredModules, setFilteredModules] = useState<[string, Module][]>([])
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [openFacultyPopover, setOpenFacultyPopover] = useState(false)
 
   const router = useRouter()
   const pathname = usePathname()
@@ -143,28 +160,90 @@ export default function ModsPage() {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        <Select
-          defaultValue="all"
-          value={moduleFaculty ?? undefined}
-          onValueChange={(val: ModuleFaculty) => setModuleFaculty(val)}>
-          <SelectTrigger className="md:w-[200px] lg:w-[350px]">
-            <SelectValue placeholder="Faculty" />
-          </SelectTrigger>
+        <div ref={containerRef} className="md:w-[200px] lg:w-[350px]">
+          <Popover
+            open={openFacultyPopover}
+            onOpenChange={setOpenFacultyPopover}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                className="w-full justify-between md:w-[200px] lg:w-[350px]">
+                {moduleFaculty === "all"
+                  ? "All Faculty"
+                  : MODULE_FACULTY[moduleFaculty]}
+                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
 
-          <SelectContent>
-            <SelectItem key="all" value="all">
-              All Faculties
-            </SelectItem>
-            {Object.entries(MODULE_FACULTY).map(([facultyKey, facultyName]) => (
-              <SelectItem key={facultyKey} value={facultyKey}>
-                {facultyName}{" "}
-                <span className="text-xs text-muted-foreground">
-                  {facultyKey}
-                </span>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+            <PopoverContent
+              onOpenAutoFocus={(e) => e.preventDefault()}
+              className="p-0"
+              container={containerRef.current}
+              style={{
+                width: containerRef.current?.clientWidth
+                  ? containerRef.current.clientWidth + 4 // border width
+                  : "auto"
+              }}>
+              <Command>
+                <CommandInput placeholder="Search faculty..." />
+
+                <CommandEmpty>No faculty found.</CommandEmpty>
+
+                <CommandGroup className="max-h-96 overflow-y-auto">
+                  <CommandItem
+                    className="cursor-pointer hover:bg-accent"
+                    onSelect={() => {
+                      setModuleFaculty("all")
+                      setOpenFacultyPopover(false)
+                    }}>
+                    <div className="flex items-baseline gap-2">
+                      <CheckIcon
+                        className={cn(
+                          "ml-auto h-4 w-4",
+                          moduleFaculty === "all" ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                      <div className="flex items-baseline gap-2">
+                        All Faculty
+                      </div>
+                    </div>
+                  </CommandItem>
+
+                  {Object.entries(MODULE_FACULTY).map(
+                    ([facultyKey, facultyName]) => (
+                      <CommandItem
+                        key={facultyKey}
+                        value={facultyKey}
+                        className="cursor-pointer md:hover:bg-accent"
+                        onSelect={() => {
+                          setModuleFaculty(facultyKey as ModuleFaculty)
+                          setOpenFacultyPopover(false)
+                        }}>
+                        <div className="flex items-baseline gap-2">
+                          <CheckIcon
+                            className={cn(
+                              "ml-auto h-4 w-4",
+                              moduleFaculty === facultyKey
+                                ? "opacity-100"
+                                : "opacity-0"
+                            )}
+                          />
+                          <div className="flex items-baseline gap-2">
+                            {facultyName}{" "}
+                            <span className="text-xs text-muted-foreground">
+                              {facultyKey}
+                            </span>
+                          </div>
+                        </div>
+                      </CommandItem>
+                    )
+                  )}
+                </CommandGroup>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
 
         <div className="flex gap-2">
           <Select

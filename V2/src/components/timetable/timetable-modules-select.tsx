@@ -24,6 +24,7 @@ const TimetableModulesSelect = () => {
   const { timetable, addItemToTimetable, removeItemFromTimetable } =
     useTimetable()
   const ref = useRef<HTMLDivElement>(null)
+  const [disabled, setDisabled] = useState(false)
 
   const dbSearchTerm = useDebounce(inputValue, 0)
 
@@ -57,12 +58,14 @@ const TimetableModulesSelect = () => {
   }, [dbSearchTerm])
 
   const handleSelect = (val: string) => {
+    setDisabled(true)
     // .toUpperCase is needed as courseCode is auto lowercased when passed as prop into CommandItem
     const moduleKey = val.toUpperCase()
 
     // If module is already in timetable, remove it
     if (Object.keys(timetable).find((x) => x === moduleKey)) {
       removeItemFromTimetable(moduleKey)
+      setDisabled(false)
       return
     }
 
@@ -98,6 +101,7 @@ const TimetableModulesSelect = () => {
     // })
 
     addItemToTimetable(moduleKey, selectedIndex[0].key)
+    setDisabled(false)
   }
 
   return (
@@ -117,11 +121,12 @@ const TimetableModulesSelect = () => {
               <CommandItem
                 key={moduleKey}
                 value={moduleKey}
-                onSelect={handleSelect}
+                disabled={disabled}
+                onSelect={() => (disabled ? null : handleSelect(moduleKey))}
                 className="cursor-pointer py-3 transition-colors hover:bg-accent md:py-2">
                 <Check
                   className={cn(
-                    "mr-2 size-4",
+                    "mr-2 size-4 transition-opacity",
                     isActive ? "opacity-100" : "opacity-0"
                   )}
                 />

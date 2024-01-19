@@ -25,14 +25,18 @@ interface Props {
 
 const TimetableCell = (props: Props) => {
   const {
+    // Required Props
     moduleKey,
     index,
+    // Customization
     divClassName,
     tdClassName,
     fullCell = false,
     hideTimeDate = false,
     overrideIndex = null,
+    // Variations Chekcing
     indexes = [],
+    // Dimming Effects
     onMouseOver = undefined,
     onMouseOut = undefined,
     dimmed = false
@@ -61,10 +65,10 @@ const TimetableCell = (props: Props) => {
       onMouseOver={onMouseOver}>
       <div
         className={cn(
-          "flex h-full cursor-pointer items-center break-words rounded-lg p-1  md:px-3",
+          "flex h-full cursor-pointer items-center break-words rounded-lg p-1 md:px-3",
           indexStyle.background,
           divClassName,
-          dimmed && "opacity-40 dark:opacity-20"
+          dimmed && "opacity-30 dark:opacity-20"
         )}>
         <div className="w-full">
           <>

@@ -17,11 +17,11 @@ const ModsInfoTable = ({ module }: Props) => {
   const exam = module.code in M_EXAMS ? M_EXAMS[module.code] : undefined
 
   return (
-    <table className="table w-full border text-sm text-foreground">
+    <table className="bg-background text-sm">
       <tbody>
         <tr>
-          <td className="border p-2">AUs</td>
-          <td className="border p-2">{module.au} AUs</td>
+          <td>AUs</td>
+          <td>{module.au} AUs</td>
         </tr>
 
         <tr>
@@ -29,7 +29,7 @@ const ModsInfoTable = ({ module }: Props) => {
             className={cn("border p-2", exam && "font-semibold text-rose-800")}>
             Exam
           </td>
-          <td className="border p-2">
+          <td>
             {exam ? (
               <span className="font-semibold text-rose-800">
                 {exam.date}, {exam.start_time} - {exam.end_time}
@@ -41,20 +41,18 @@ const ModsInfoTable = ({ module }: Props) => {
         </tr>
 
         <tr>
-          <td className="border p-2">Grade Type</td>
-          <td className="border p-2">{module.gradeType ?? <NotAvailable />}</td>
+          <td>Grade Type</td>
+          <td>{module.gradeType ?? <NotAvailable />}</td>
         </tr>
 
         <tr>
           <td className="w-[200px] border p-2">Maintaining Dept</td>
-          <td className="border p-2">
-            {module.maintainingDept ?? <NotAvailable />}
-          </td>
+          <td>{module.maintainingDept ?? <NotAvailable />}</td>
         </tr>
 
         <tr>
-          <td className="border p-2">Prerequisites</td>
-          <td className="border p-2">
+          <td>Prerequisites</td>
+          <td>
             {module.prerequisite &&
               module.prerequisite.map((preqGrp, preqGrpIdx) => (
                 // Preq group
@@ -94,8 +92,8 @@ const ModsInfoTable = ({ module }: Props) => {
         </tr>
 
         <tr>
-          <td className="border p-2">Mutually Exclusive With</td>
-          <td className="border p-2">
+          <td>Mutually Exclusive With</td>
+          <td>
             {module.mutuallyExclusiveWith &&
               module.mutuallyExclusiveWith.map((mew, mewIdx) => {
                 return (
@@ -121,57 +119,45 @@ const ModsInfoTable = ({ module }: Props) => {
         </tr>
 
         <tr>
-          <td className="border p-2">Not Available To Programme</td>
-          <td className="border p-2">
-            {module.notAvailableToProgramme ?? <NotAvailable />}
-          </td>
+          <td>Not Available To Programme</td>
+          <td>{module.notAvailableToProgramme ?? <NotAvailable />}</td>
         </tr>
 
         <tr>
-          <td className="border p-2">Not Available To All Programme With</td>
-          <td className="border p-2">
-            {module.notAvailableToAllProgrammeWith ?? <NotAvailable />}
-          </td>
+          <td>Not Available To All Programme With</td>
+          <td>{module.notAvailableToAllProgrammeWith ?? <NotAvailable />}</td>
         </tr>
 
         <tr>
-          <td className="border p-2">
+          <td>
             Not available as Core
             <br />
             for programmes
           </td>
-          <td className="border p-2">
-            {module.notAvailableAsCoreToProgramme ?? <NotAvailable />}
-          </td>
+          <td>{module.notAvailableAsCoreToProgramme ?? <NotAvailable />}</td>
         </tr>
 
         <tr>
-          <td className="border p-2">
+          <td>
             Not Available as PE
             <br />
             for programmes
           </td>
-          <td className="border p-2">
-            {module.notAvailableAsPeToProgramme ?? <NotAvailable />}
-          </td>
+          <td>{module.notAvailableAsPeToProgramme ?? <NotAvailable />}</td>
         </tr>
 
         <tr>
-          <td className="border p-2">
+          <td>
             Not Available as BDE/UEs
             <br />
             for programmes
           </td>
-          <td className="border p-2">
-            {module.notAvailableAsBdeueToProgramme ?? <NotAvailable />}
-          </td>
+          <td>{module.notAvailableAsBdeueToProgramme ?? <NotAvailable />}</td>
         </tr>
 
         <tr>
-          <td className="border p-2">Not Offered To</td>
-          <td className="border p-2">
-            {module.notOffered ?? <NotAvailable />}
-          </td>
+          <td>Not Offered To</td>
+          <td>{module.notOffered ?? <NotAvailable />}</td>
         </tr>
       </tbody>
     </table>

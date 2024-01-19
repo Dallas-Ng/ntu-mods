@@ -6,7 +6,7 @@ const MobileTimetableModifierButton = () => {
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <div className="flex size-full items-center justify-center bg-primary">
+        <div className="flex size-full items-center justify-center bg-primary text-primary-foreground">
           Click to Edit Modules
         </div>
       </DrawerTrigger>

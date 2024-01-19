@@ -159,14 +159,14 @@ const TimetableTable = ({ moduleKey }: Props) => {
 
   const STARS_MATRIX = Array.from({ length: MATRIX_ROWS }, (_, i) => {
     const timeslot = (
-      <td className="relative w-full max-w-[20px] md:max-w-[40px]">
+      <td className="relative w-full max-w-[28px] md:max-w-[40px]">
         {i !== 0 && (
-          <span className="absolute left-0 top-[-8px] w-full bg-white text-center">
+          <span className="absolute left-0 top-[-8px] w-full bg-card text-center">
             {STARS_TIMESLOTS[i].start}
           </span>
         )}
 
-        <div className="min-h-[20px] w-[20px] md:w-[40px]" />
+        <div className="min-h-[20px] w-[28px] md:w-[40px]" />
       </td>
     )
 
@@ -271,18 +271,17 @@ const TimetableTable = ({ moduleKey }: Props) => {
     )
   }
 
-  const TABLE_OVERFLOW_THRESHOLD = MAX_LENGTH_MATRIX > 15
-
+  const TABLE_OVERFLOW_THRESHOLD = MAX_LENGTH_MATRIX > 9
   return (
     <div className={cn(TABLE_OVERFLOW_THRESHOLD && "overflow-x-auto")}>
       <table
         className={cn(
           "w-full text-[0.6rem] md:text-xs",
-          TABLE_OVERFLOW_THRESHOLD ? "md:table-auto" : "md:table-fixed"
+          TABLE_OVERFLOW_THRESHOLD ? "table-auto" : "table-fixed"
         )}>
         <thead>
           <tr>
-            <th className="w-[20px] md:w-[40px]"></th>
+            <th className="w-[28px] md:w-[40px]"></th>
 
             {TableHeadItems}
           </tr>

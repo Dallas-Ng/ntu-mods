@@ -239,6 +239,14 @@ const TimetableTable = (props: Props) => {
       }
     }
 
+    // Default appearance of table
+    if (Object.keys(moduleIndexMap).length === 0) {
+      // 0930 to 1800
+      if (matrixRowIdx < 3 || matrixRowIdx > 20) {
+        return null
+      }
+    }
+
     return (
       <tr key={matrixRowIdx}>
         {matrixRow.map((matrixCol, matrixColIdx) =>
@@ -275,52 +283,37 @@ const TimetableTable = (props: Props) => {
   )
 }
 
-export const TimetableTableLoader = () => {
-  return (
-    <table className="table-fixed border-collapse border p-0 text-[0.6rem] md:text-xs">
-      <thead>
-        <tr>
-          <th className="w-[38px]"></th>
-          <th className="h-fit p-0 text-center font-normal text-muted-foreground">
-            Mon
-          </th>
-          <th className="h-fit p-0 text-center font-normal text-muted-foreground">
-            Tue
-          </th>
-          <th className="h-fit p-0 text-center font-normal text-muted-foreground">
-            Wed
-          </th>
-          <th className="h-fit p-0 text-center font-normal text-muted-foreground">
-            Thu
-          </th>
-          <th className="h-fit p-0 text-center font-normal text-muted-foreground">
-            Fri
-          </th>
+export const TimetableTableLoader = () => (
+  <table className="table-fixed text-[0.6rem] md:text-xs">
+    <thead>
+      <tr>
+        <th className="w-[28px] md:w-[40px]"></th>
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {STARS_TIMESLOTS.slice(3, 21).map((x, i) => (
+        <tr key={i}>
+          <td className="relative w-full max-w-[28px] md:max-w-[40px]">
+            <span className="absolute left-0 top-[-8px] w-full bg-card text-center">
+              {x.start}
+            </span>
+
+            <div className="min-h-[20px] w-[28px] md:w-[40px]" />
+          </td>
+
+          {Array.from({ length: 5 }, (_, i) => (
+            <td key={i} />
+          ))}
         </tr>
-      </thead>
-
-      <tbody>
-        {STARS_TIMESLOTS.map((x, i) => (
-          <tr key={i}>
-            <td className="relative p-1 text-center">
-              {i !== 0 && (
-                <span className="absolute left-0 top-[-8px] w-full bg-background">
-                  {x.start}
-                </span>
-              )}
-
-              <div className="min-h-[20px] w-full" />
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )
-}
+      ))}
+    </tbody>
+  </table>
+)
 
 export default TimetableTable

@@ -20,8 +20,8 @@ const ModsInfoTable = ({ module }: Props) => {
     <table className="bg-background text-sm">
       <tbody>
         <tr>
-          <td>AUs</td>
-          <td>{module.au} AUs</td>
+          <td className="p-2">AUs</td>
+          <td className="p-2">{module.au} AUs</td>
         </tr>
 
         <tr>
@@ -29,7 +29,7 @@ const ModsInfoTable = ({ module }: Props) => {
             className={cn("border p-2", exam && "font-semibold text-rose-800")}>
             Exam
           </td>
-          <td>
+          <td className="p-2">
             {exam ? (
               <span className="font-semibold text-rose-800">
                 {exam.date}, {exam.start_time} - {exam.end_time}
@@ -41,18 +41,18 @@ const ModsInfoTable = ({ module }: Props) => {
         </tr>
 
         <tr>
-          <td>Grade Type</td>
-          <td>{module.gradeType ?? <NotAvailable />}</td>
+          <td className="p-2">Grade Type</td>
+          <td className="p-2">{module.gradeType ?? <NotAvailable />}</td>
         </tr>
 
         <tr>
           <td className="w-[200px] border p-2">Maintaining Dept</td>
-          <td>{module.maintainingDept ?? <NotAvailable />}</td>
+          <td className="p-2">{module.maintainingDept ?? <NotAvailable />}</td>
         </tr>
 
         <tr>
-          <td>Prerequisites</td>
-          <td>
+          <td className="p-2">Prerequisites</td>
+          <td className="p-2">
             {module.prerequisite &&
               module.prerequisite.map((preqGrp, preqGrpIdx) => (
                 // Preq group
@@ -92,8 +92,8 @@ const ModsInfoTable = ({ module }: Props) => {
         </tr>
 
         <tr>
-          <td>Mutually Exclusive With</td>
-          <td>
+          <td className="p-2">Mutually Exclusive With</td>
+          <td className="p-2">
             {module.mutuallyExclusiveWith &&
               module.mutuallyExclusiveWith.map((mew, mewIdx) => {
                 return (
@@ -119,45 +119,55 @@ const ModsInfoTable = ({ module }: Props) => {
         </tr>
 
         <tr>
-          <td>Not Available To Programme</td>
-          <td>{module.notAvailableToProgramme ?? <NotAvailable />}</td>
+          <td className="p-2">Not Available To Programme</td>
+          <td className="p-2">
+            {module.notAvailableToProgramme ?? <NotAvailable />}
+          </td>
         </tr>
 
         <tr>
-          <td>Not Available To All Programme With</td>
-          <td>{module.notAvailableToAllProgrammeWith ?? <NotAvailable />}</td>
+          <td className="p-2">Not Available To All Programme With</td>
+          <td className="p-2">
+            {module.notAvailableToAllProgrammeWith ?? <NotAvailable />}
+          </td>
         </tr>
 
         <tr>
-          <td>
+          <td className="p-2">
             Not available as Core
             <br />
             for programmes
           </td>
-          <td>{module.notAvailableAsCoreToProgramme ?? <NotAvailable />}</td>
+          <td className="p-2">
+            {module.notAvailableAsCoreToProgramme ?? <NotAvailable />}
+          </td>
         </tr>
 
         <tr>
-          <td>
+          <td className="p-2">
             Not Available as PE
             <br />
             for programmes
           </td>
-          <td>{module.notAvailableAsPeToProgramme ?? <NotAvailable />}</td>
+          <td className="p-2">
+            {module.notAvailableAsPeToProgramme ?? <NotAvailable />}
+          </td>
         </tr>
 
         <tr>
-          <td>
+          <td className="p-2">
             Not Available as BDE/UEs
             <br />
             for programmes
           </td>
-          <td>{module.notAvailableAsBdeueToProgramme ?? <NotAvailable />}</td>
+          <td className="p-2">
+            {module.notAvailableAsBdeueToProgramme ?? <NotAvailable />}
+          </td>
         </tr>
 
         <tr>
-          <td>Not Offered To</td>
-          <td>{module.notOffered ?? <NotAvailable />}</td>
+          <td className="p-2">Not Offered To</td>
+          <td className="p-2">{module.notOffered ?? <NotAvailable />}</td>
         </tr>
       </tbody>
     </table>

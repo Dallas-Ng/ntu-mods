@@ -81,7 +81,7 @@ export const TimetableModifierLoader = () => (
   <div className="space-y-4">
     <Skeleton className="h-[40px]" />
 
-    <div className="relative max-h-[50vh] min-h-10 w-full overflow-y-auto rounded-lg border">
+    <div className="relative max-h-[50vh] min-h-10 w-full overflow-y-auto rounded-lg border-2">
       <div className="p-2 text-center text-xs text-muted-foreground">
         Registered Modules
       </div>

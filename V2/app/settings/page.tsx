@@ -1,17 +1,15 @@
-"use client"
-
 import dynamic from "next/dynamic"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
-import { AppearanceSettingsSkeleton } from "@/components/settings/appearance-settings"
-import { TableSettingsSkeleton } from "@/components/settings/table-settings"
+import { AppearanceSettingsLoading } from "@/components/settings/appearance-settings"
+import { TableSettingsLoading } from "@/components/settings/table-settings"
 
 const AppearanceSettings = dynamic(
   () => import("@/components/settings/appearance-settings"),
   {
     ssr: false,
-    loading: () => <AppearanceSettingsSkeleton />
+    loading: () => <AppearanceSettingsLoading />
   }
 )
 
@@ -19,7 +17,7 @@ const TableSettings = dynamic(
   () => import("@/components/settings/table-settings"),
   {
     ssr: false,
-    loading: () => <TableSettingsSkeleton />
+    loading: () => <TableSettingsLoading />
   }
 )
 

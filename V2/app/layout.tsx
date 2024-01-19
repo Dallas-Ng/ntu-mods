@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 
 import { siteConfig } from "@/config/site"
+import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
 import ClarityTag from "@/components/clarity"
 import GTag from "@/components/gtag"
@@ -72,7 +73,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={cn(inter.className, "antialiased ")}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           {children}
 

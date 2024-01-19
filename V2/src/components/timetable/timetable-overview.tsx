@@ -96,7 +96,7 @@ const TimetableOverview = () => {
 
 export const TimetableOverviewLoading = () => {
   return (
-    <table className="table w-full table-fixed border text-center text-xs">
+    <table className="table table-fixed text-xs">
       <thead>
         <tr className="border-b">
           <th className="w-fit md:w-[100px]">Index</th>
@@ -112,7 +112,7 @@ export const TimetableOverviewLoading = () => {
           <td></td>
           <td></td>
           <td className="hidden md:table-cell"></td>
-          <td>0.0 AUs</td>
+          <td className="text-center">0.0 AUs</td>
         </tr>
       </tbody>
     </table>

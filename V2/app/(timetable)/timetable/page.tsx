@@ -1,9 +1,9 @@
 import dynamic from "next/dynamic"
 
-import { Skeleton } from "@/components/ui/skeleton"
 import Header from "@/components/header"
 import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile-timetable-modifier-button"
 import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button"
+import { TimetablePlanSwitcherLoading } from "@/components/timetable/buttons/timetable-plan-switcher"
 import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button"
 import { TimetableShareButtonLoading } from "@/components/timetable/buttons/timetable-share-button"
 import TimetableHiddenContentHelper from "@/components/timetable/timetable-hidden-content-helper"
@@ -35,11 +35,7 @@ const TimetablePlanSwitcher = dynamic(
   () => import("@/components/timetable/buttons/timetable-plan-switcher"),
   {
     ssr: false,
-    loading: () => (
-      <div className="h-[36px] w-[95px] rounded-md border p-2">
-        <Skeleton className="size-full" />
-      </div>
-    )
+    loading: () => <TimetablePlanSwitcherLoading />
   }
 )
 
@@ -112,6 +108,9 @@ const Page = () => {
       <div className="fixed bottom-0 left-0 h-16 w-full bg-background shadow hover:cursor-pointer dark:border-t-2 md:hidden">
         <MobileTimetableModifierButton />
       </div>
+
+      {/* Buffer for button */}
+      <div className="block h-16 md:hidden" />
     </>
   )
 }

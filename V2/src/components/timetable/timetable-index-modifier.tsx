@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useEffect, useRef, useState } from "react"
+import { Fragment, useRef, useState } from "react"
 import { Check } from "lucide-react"
 
 import { DAY_MAP } from "@/lib/constants"

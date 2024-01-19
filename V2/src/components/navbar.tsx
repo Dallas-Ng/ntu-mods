@@ -78,7 +78,7 @@ const Navbar = () => {
                     <NavigationMenuLink
                       className={cn(
                         "mr-1 p-1 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100 md:p-3",
-                        pathname === link.route
+                        pathname.includes(link.route)
                           ? "text-slate-950 dark:text-slate-100"
                           : "text-slate-500 dark:text-slate-400"
                       )}>

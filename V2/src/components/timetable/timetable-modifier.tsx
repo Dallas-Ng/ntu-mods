@@ -15,50 +15,52 @@ const TimetableModifier = () => {
   const [activeKey, setActiveKey] = useState<string | null>(null)
 
   return (
-    <div className="relative space-y-4">
+    <div className="flex size-full flex-col space-y-4">
       <div className="relative z-[2] h-[40px] w-full rounded-lg">
         <div className="absolute left-0 top-0 w-full">
           <TimetableModulesSelect />
         </div>
       </div>
 
-      <div className="relative min-h-10 w-full overflow-y-auto rounded-lg border-2 md:max-h-[50vh]">
+      <div className="rounded-lg border-2">
         <div className="p-2 text-center text-xs text-secondary-foreground">
           Registered Modules
         </div>
+
         <hr />
 
-        {Object.entries(timetable).map(([moduleKey, indexKey]) => (
-          <TimetableIndexModifier
-            key={moduleKey}
-            moduleKey={moduleKey}
-            onOpenChange={(moduleKey) => setActiveKey(moduleKey)}>
-            <div
-              className={cn(
-                "cursor-pointer px-4 py-2.5 text-sm transition-colors hover:bg-accent",
-                activeKey === moduleKey && "bg-accent"
-              )}>
-              <div className="flex w-full justify-between">
-                <div className="flex gap-1">
-                  <div className="w-[60px]">{moduleKey}</div>
-                  <div className="text-sm text-secondary-foreground">
-                    {indexKey}
+        <div className="max-h-[55vh] overflow-y-auto">
+          {Object.entries(timetable).map(([moduleKey, indexKey]) => (
+            <TimetableIndexModifier
+              key={moduleKey}
+              moduleKey={moduleKey}
+              onOpenChange={(moduleKey) => setActiveKey(moduleKey)}>
+              <div
+                className={cn(
+                  "cursor-pointer pl-4 pr-1 text-sm transition-colors hover:bg-accent",
+                  activeKey === moduleKey && "bg-accent"
+                )}>
+                <div className="flex w-full items-center justify-between">
+                  <div className="flex gap-1">
+                    <div className="w-[60px]">{moduleKey}</div>
+                    <div className="text-sm text-secondary-foreground">
+                      {indexKey}
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <TrashIcon
-                    className="size-4 text-secondary-foreground hover:text-foreground"
+                  <div
+                    className="flex size-10 cursor-pointer items-center justify-center p-1"
                     onClick={(e) => {
                       e.stopPropagation()
                       removeItemFromTimetable(moduleKey)
-                    }}
-                  />
+                    }}>
+                    <TrashIcon className="size-4 text-secondary-foreground hover:text-foreground" />
+                  </div>
                 </div>
               </div>
-            </div>
-          </TimetableIndexModifier>
-        ))}
+            </TimetableIndexModifier>
+          ))}
+        </div>
 
         {Object.entries(timetable).length === 0 && (
           <>

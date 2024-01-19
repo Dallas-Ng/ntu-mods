@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useRef, useState } from "react"
+import { Fragment, useEffect, useRef, useState } from "react"
 import { Check } from "lucide-react"
 
 import { DAY_MAP } from "@/lib/constants"
@@ -21,6 +21,27 @@ import {
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 
+const IndexCommandItem = ({ index }: { index: Index }) => {
+  const indexStyle = getIndexTypeStyle(index.type)
+
+  return (
+    <div>
+      <div className="flex w-full justify-between gap-2 ">
+        <span>{DAY_MAP[index.day]}</span>
+
+        <span className={cn(indexStyle.textAlt, "font-semibold")}>
+          {getIndexType(index.type)} - {index.group}
+        </span>
+      </div>
+
+      <div className="flex w-full justify-between gap-2 text-xs text-secondary-foreground">
+        <span>{index.time}</span>
+        <span>{index.venue}</span>
+      </div>
+    </div>
+  )
+}
+
 interface Props {
   moduleKey: string
   children: React.ReactNode
@@ -33,8 +54,25 @@ const TimetableIndexModifier = (props: Props) => {
   const { isMobile } = useSettings()
   const { timetable, updateItemIndex } = useTimetable()
   const containerRef = useRef<HTMLDivElement>(null)
-
   const [filteredIndexes, setFilteredIndexes] = useState(indexes)
+
+  const randomLecture =
+    Object.values(indexes)
+      .find((index) => index.some((item) => getIndexType(item.type) === "LEC"))
+      ?.filter((x) => getIndexType(x.type) === "LEC") || []
+
+  const moduleLectures = Object.values(indexes)
+    .flat()
+    .filter((index) => getIndexType(index.type) === "LEC")
+
+  const hasCommonLecture =
+    moduleLectures.length > 0 && randomLecture.length > 0
+      ? moduleLectures.every(
+          (item) =>
+            randomLecture.some((x) => x.day === item.day) &&
+            randomLecture.some((x) => x.time === item.time)
+        )
+      : false
 
   const handleSearch = (val: string) => {
     const searchTerm = val.toLowerCase()
@@ -64,8 +102,6 @@ const TimetableIndexModifier = (props: Props) => {
     updateItemIndex(moduleKey, val)
   }
 
-  // TODO: show common and scroll only differences
-
   const items = (
     <Command shouldFilter={false} className="border md:rounded-t-none">
       <div className="h-fit w-full border-b">
@@ -75,8 +111,20 @@ const TimetableIndexModifier = (props: Props) => {
         />
       </div>
 
+      {hasCommonLecture && (
+        <div className="w-full space-y-2 border-b px-4 py-2 text-sm md:py-4">
+          <p className="text-center text-xs text-muted-foreground">
+            Common Lecture for Indexes
+          </p>
+
+          {randomLecture.map((index, idx) => (
+            <IndexCommandItem key={idx} index={index} />
+          ))}
+        </div>
+      )}
+
       {Object.keys(filteredIndexes).length > 0 && (
-        <div className="sticky top-0 z-20 flex w-full items-center gap-2 bg-background p-1 text-xs">
+        <div className="sticky top-0 z-20 flex w-full items-center gap-2 border-b bg-background p-1 text-xs">
           <div className="flex gap-1">
             <span className="w-4" />
             <span className="w-[43px] text-center">Code</span>
@@ -89,14 +137,17 @@ const TimetableIndexModifier = (props: Props) => {
 
       <CommandEmpty>No indexes code found</CommandEmpty>
 
-      <CommandList className="h-full max-h-full">
+      <CommandList className="max-h-full md:max-h-[28rem]">
         {Object.entries(filteredIndexes).map(([indexKey, indexes]) => {
           const active = timetable[moduleKey] === indexKey
 
           return (
             <Fragment key={indexKey}>
-              <CommandItem value={indexKey} onSelect={handleSelect}>
-                <div className="flex w-full justify-between gap-2 text-sm transition-colors hover:cursor-pointer hover:bg-accent">
+              <CommandItem
+                value={indexKey}
+                onSelect={handleSelect}
+                className="rounded-none transition-colors hover:cursor-pointer hover:bg-accent">
+                <div className="flex w-full justify-between gap-2 text-sm ">
                   <span className="flex items-center gap-1">
                     <Check
                       className={cn(
@@ -110,29 +161,14 @@ const TimetableIndexModifier = (props: Props) => {
 
                   {/* Dont remove this flex-col, there can be multiple timeslots for 1 index (e.g. lab, tutorial, lecture) */}
                   <div className="flex w-full flex-col gap-1 ">
-                    {indexes.map((v, i) => {
-                      const indexStyle = getIndexTypeStyle(v.type)
-
-                      return (
-                        <div key={i}>
-                          <div className="flex w-full justify-between gap-2 ">
-                            <span>{DAY_MAP[v.day]}</span>
-
-                            <span
-                              className={cn(
-                                indexStyle.textAlt,
-                                "font-semibold"
-                              )}>
-                              {getIndexType(v.type)} - {v.group}
-                            </span>
-                          </div>
-
-                          <div className="flex w-full justify-between gap-2 text-xs text-secondary-foreground">
-                            <span>{v.time}</span>
-                            <span>{v.venue}</span>
-                          </div>
-                        </div>
+                    {indexes.map((index, i) => {
+                      if (
+                        hasCommonLecture &&
+                        getIndexType(index.type) === "LEC"
                       )
+                        return null
+
+                      return <IndexCommandItem key={i} index={index} />
                     })}
                   </div>
                 </div>
@@ -153,12 +189,15 @@ const TimetableIndexModifier = (props: Props) => {
           open ? onOpenChange(moduleKey) : onOpenChange("")
         }>
         <DrawerTrigger asChild>{props.children}</DrawerTrigger>
-        <DrawerContent className="h-full max-h-[70svh]">{items}</DrawerContent>
+
+        <DrawerContent className="h-full max-h-[85svh] p-2">
+          {items}
+        </DrawerContent>
       </Drawer>
     )
 
   return (
-    <div ref={containerRef} className="">
+    <div ref={containerRef}>
       <Popover
         onOpenChange={(open) =>
           open ? onOpenChange(moduleKey) : onOpenChange("")
@@ -169,11 +208,11 @@ const TimetableIndexModifier = (props: Props) => {
 
         <PopoverContent
           container={containerRef.current}
-          className="h-[540px] border-none"
+          className="border-none"
           sideOffset={0}
           style={{
             width: containerRef.current?.clientWidth
-              ? containerRef.current.clientWidth + 2 // border width
+              ? containerRef.current.clientWidth + 4 // border width
               : "auto"
           }}>
           {items}

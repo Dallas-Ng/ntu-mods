@@ -8,7 +8,7 @@ interface IconProps {
   label?: boolean
 }
 
-export function LightThemeIcon(props: IconProps) {
+export const LightThemeIcon = (props: IconProps) => {
   return (
     <div className="w-full">
       <div className="items-center rounded-md p-1">
@@ -37,7 +37,7 @@ export function LightThemeIcon(props: IconProps) {
   )
 }
 
-export function DarkThemeIcon(props: IconProps) {
+export const DarkThemeIcon = (props: IconProps) => {
   return (
     <div className="dark w-full">
       <div className="items-center rounded-md bg-popover p-1">
@@ -66,7 +66,7 @@ export function DarkThemeIcon(props: IconProps) {
   )
 }
 
-export default function AppearanceSettings() {
+const AppearanceSettings = () => {
   const { setTheme, theme } = useTheme()
 
   return (
@@ -92,7 +92,7 @@ export default function AppearanceSettings() {
   )
 }
 
-export function AppearanceSettingsSkeleton() {
+export const AppearanceSettingsSkeleton = () => {
   return (
     <div className="flex items-center justify-center gap-1">
       <div className="h-fit w-[250px] p-2 hover:border-accent">
@@ -105,3 +105,5 @@ export function AppearanceSettingsSkeleton() {
     </div>
   )
 }
+
+export default AppearanceSettings

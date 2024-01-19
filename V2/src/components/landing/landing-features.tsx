@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import { DarkThemeIcon, LightThemeIcon } from "../settings/appearance-settings"
 
-export default function LandingFeatures() {
+const LandingFeatures = () => {
   return (
     <div>
       <div className="mb-6 text-center">
@@ -135,3 +135,5 @@ export default function LandingFeatures() {
     </div>
   )
 }
+
+export default LandingFeatures

@@ -1,11 +1,11 @@
-export function formatTitle(courseTitle: string) {
+export const formatTitle = (courseTitle: string) => {
   return courseTitle
     .toLowerCase()
     .replace(/[^a-zA-Z ]/g, "")
     .replace(/\s+/g, " ")
 }
 
-export function formatRemarks(remarks: string) {
+export const formatRemarks = (remarks: string) => {
   let formattedRemarks = remarks
 
   if (remarks.includes("2,4,6")) {

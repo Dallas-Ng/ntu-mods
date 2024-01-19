@@ -18,7 +18,7 @@ interface Props {
   toggleBorder?: boolean
 }
 
-export default function TableSettings({ toggleBorder = false }: Props) {
+const TableSettings = ({ toggleBorder = false }: Props) => {
   const { settings, updateSettings } = useSettings()
   const { tableCell } = settings
   const [RANDOM_C_INDEX, setRandomCIndex] = useState(getRandomModuleIndex())
@@ -26,11 +26,11 @@ export default function TableSettings({ toggleBorder = false }: Props) {
   const moduleKey = RANDOM_C_INDEX.randomModuleKey
   const index = RANDOM_C_INDEX.randomIndex
 
-  function reRollIndex() {
+  const reRollIndex = () => {
     setRandomCIndex(getRandomModuleIndex())
   }
 
-  function updateTableCell(checked: boolean, key: keyof typeof tableCell) {
+  const updateTableCell = (checked: boolean, key: keyof typeof tableCell) => {
     updateSettings({ ...settings, tableCell: { ...tableCell, [key]: checked } })
   }
 
@@ -123,7 +123,7 @@ export default function TableSettings({ toggleBorder = false }: Props) {
   )
 }
 
-export function TableSettingsSkeleton() {
+export const TableSettingsSkeleton = () => {
   return (
     <div className="flex flex-col items-center justify-center gap-2 lg:flex-row">
       <div className="relative mx-auto flex h-[200px] w-full flex-col justify-between rounded-lg border p-3 shadow-lg md:w-10/12 lg:mx-0 lg:h-[230px] lg:w-[384px]">
@@ -150,3 +150,5 @@ export function TableSettingsSkeleton() {
     </div>
   )
 }
+
+export default TableSettings

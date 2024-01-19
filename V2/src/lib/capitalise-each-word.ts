@@ -1,4 +1,4 @@
-export function capitaliseEachWord(input: string): string {
+export const capitaliseEachWord = (input: string): string => {
   return input
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

@@ -1,6 +1,6 @@
 import { getIndexType } from "./get-index-type"
 
-export function getIndexTypeStyle(indexType: string) {
+export const getIndexTypeStyle = (indexType: string) => {
   const type = getIndexType(indexType)
 
   switch (type) {

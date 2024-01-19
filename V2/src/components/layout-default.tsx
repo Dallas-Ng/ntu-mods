@@ -22,7 +22,10 @@ const LayoutDefault = ({
       {breadcrumbs && <Breadcrumbs />}
 
       <main
-        className={cn("container relative flex-1 px-5", containerClassName)}>
+        className={cn(
+          "container relative flex-1 px-3  md:px-5",
+          containerClassName
+        )}>
         {children}
       </main>
 

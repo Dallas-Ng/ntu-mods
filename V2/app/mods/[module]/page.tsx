@@ -64,7 +64,6 @@ export default function Page({ params }: { params: { module: string } }) {
 
         <div className="mt-10">
           <h2 className="mb-2 text-lg">Other Relevant Mods</h2>
-
           <RelatedModules
             limit={3}
             moduleKey={moduleKey}

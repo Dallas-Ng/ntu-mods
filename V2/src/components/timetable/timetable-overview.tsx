@@ -15,7 +15,7 @@ const TimetableOverview = () => {
   const formatTime = (time: string) => time.replace(" ", "")
 
   return (
-    <table className="table w-full table-fixed border text-center text-xs">
+    <table className="table w-full table-fixed border-2 text-center text-xs">
       <thead>
         <tr className="border-b">
           <th className="w-fit p-1 font-normal text-secondary md:w-[100px]">
@@ -75,7 +75,7 @@ const TimetableOverview = () => {
           )
         })}
 
-        <tr>
+        <tr className="border-t">
           <td></td>
           <td></td>
           <td className="hidden md:table-cell"></td>

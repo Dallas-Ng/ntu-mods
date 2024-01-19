@@ -29,7 +29,7 @@ const TimetableModifier = () => {
 
         <hr />
 
-        <div className="max-h-[55vh] overflow-y-auto">
+        <div className="max-h-[40vh] overflow-y-auto">
           {Object.entries(timetable).map(([moduleKey, indexKey]) => (
             <TimetableIndexModifier
               key={moduleKey}

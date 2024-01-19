@@ -7,7 +7,7 @@ import ShareButton from "@/components/share-button"
 const TimetableShareButton = () => {
   const { timetable } = useTimetable()
   const urlParams = new URLSearchParams(timetable)
-  const link = `${BASE_URL}/timetable?${urlParams.toString()}`
+  const link = `${BASE_URL}/share?${urlParams.toString()}`
 
   return (
     <ShareButton

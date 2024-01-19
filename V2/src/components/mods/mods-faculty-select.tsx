@@ -6,22 +6,23 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { MODULE_FACULTY } from "@/lib/constants"
 import CustomSelect from "@/components/select"
 
-type SearchModuleFaculty = ModuleFaculty | "all"
+export type SearchModuleFaculty = ModuleFaculty | "all"
 
 interface Props {
   defaultValue?: SearchModuleFaculty
 }
 
-const ModsFacultySelect = ({ defaultValue = "all" }: Props) => {
+export const ModsFacultySelect = ({ defaultValue = "all" }: Props) => {
   const [moduleFaculty, setModuleFaculty] =
     useState<SearchModuleFaculty>(defaultValue)
-
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams)
+    if (params.get("moduleFaculty") === null && moduleFaculty === "all") return
+
     params.set("moduleFaculty", moduleFaculty)
     replace(`${pathname}?${params.toString()}`, { scroll: false })
   }, [moduleFaculty])
@@ -30,17 +31,23 @@ const ModsFacultySelect = ({ defaultValue = "all" }: Props) => {
     { value: "all", label: "All Faculty" },
     ...Object.entries(MODULE_FACULTY).map(([categoryKey, categoryName]) => ({
       value: categoryKey,
-      label: categoryName
+      label: (
+        <div className="flex items-baseline gap-1">
+          {categoryName}
+
+          <span className="text-xs text-muted-foreground">({categoryKey})</span>
+        </div>
+      )
     }))
   ]
+
   return (
     <CustomSelect
+      closeOnSelect
       defaultValue="all"
       selectItems={selectItems}
       onChange={(value) => setModuleFaculty(value as SearchModuleFaculty)}
-      divClassName="md:max-w-[300px]"
+      divClassName="w-full md:max-w-[350px]"
     />
   )
 }
-
-export default ModsFacultySelect

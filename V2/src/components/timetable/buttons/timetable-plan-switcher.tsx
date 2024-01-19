@@ -61,7 +61,7 @@ const TimetablePlanSwitcher = () => {
 
         <DrawerContent className="p-2">
           <span className="w-full text-center text-sm text-muted-foreground">
-            Select a plan to view
+            Select a plan to switch
           </span>
 
           {items}

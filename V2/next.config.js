@@ -10,6 +10,11 @@ const nextConfig = {
         source: "/stars",
         destination: "/timetable",
         permanent: true
+      },
+      {
+        source: "/mod",
+        destination: "/mods",
+        permanent: true
       }
     ]
   }

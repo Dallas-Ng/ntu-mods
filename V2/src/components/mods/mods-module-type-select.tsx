@@ -6,24 +6,23 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { MODULE_CATEGORY } from "@/lib/constants"
 import CustomSelect from "@/components/select"
 
-type SearchModuleType = ModuleType | "all"
+export type SearchModuleType = ModuleType | "all"
 
 interface Props {
   defaultValue?: SearchModuleType
 }
 
-const ModsModuleTypeSelect = ({ defaultValue = "all" }: Props) => {
+export const ModsModuleTypeSelect = ({ defaultValue = "all" }: Props) => {
   const [moduleType, setModuleType] = useState<SearchModuleType>(defaultValue)
-
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace } = useRouter()
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams)
+    if (params.get("moduleType") === null && moduleType === "all") return
 
     params.set("moduleType", moduleType)
-
     replace(`${pathname}?${params.toString()}`, { scroll: false })
   }, [moduleType])
 
@@ -39,12 +38,11 @@ const ModsModuleTypeSelect = ({ defaultValue = "all" }: Props) => {
 
   return (
     <CustomSelect
+      closeOnSelect
       defaultValue="all"
       selectItems={selectItems}
       onChange={(value) => setModuleType(value as SearchModuleType)}
-      divClassName="w-50% md:w-[200px]"
+      divClassName="basis-3/5 md:w-[200px]"
     />
   )
 }
-
-export default ModsModuleTypeSelect

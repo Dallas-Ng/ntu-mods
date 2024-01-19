@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { DarkThemeIcon, LightThemeIcon } from "../settings/appearance-settings"
+import { Input } from "../ui/input"
 
 const LandingFeatures = () => {
   return (
@@ -13,10 +14,10 @@ const LandingFeatures = () => {
         </p>
       </div>
 
-      <div className="mx-auto flex max-w-7xl flex-col gap-5 ">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <Link href="/timetable" className="cursor-pointer">
-            <div className="relative h-[300px] w-full rounded-xl border bg-muted p-3 shadow">
+            <div className="relative h-[300px] w-full rounded-xl border p-3 shadow">
               <div className="absolute left-8 top-12 w-10/12">
                 <h3 className="text-2xl font-bold">
                   Filter, Search and Manage
@@ -26,26 +27,12 @@ const LandingFeatures = () => {
                   start searching for indexes easier
                 </p>
               </div>
+
               <div className="absolute bottom-8 left-8 w-10/12">
-                {/* Input Style */}
-                <div className="flex h-10 w-full rounded-md border border-input bg-background px-5 py-4 text-sm ring-offset-background">
-                  <span className="flex items-center text-neutral-400">
-                    Search for
-                    <span className="relative ml-1 h-[1em] w-36 overflow-hidden">
-                      <span className="animate-slide absolute size-full -translate-y-full leading-[0.9] text-white">
-                        Index Code
-                      </span>
-
-                      <span className="animate-slide absolute size-full -translate-y-full leading-[0.9] text-white [animation-delay:1.00s]">
-                        Timeslot or Day
-                      </span>
-
-                      <span className="animate-slide absolute size-full -translate-y-full leading-[0.9] text-white [animation-delay:2.00s]">
-                        Tutorial Group
-                      </span>
-                    </span>
-                  </span>
-                </div>
+                <Input
+                  className="w-full"
+                  placeholder="Search for Indexes, Modules and more"
+                />
               </div>
             </div>
           </Link>
@@ -75,9 +62,9 @@ const LandingFeatures = () => {
               <Image
                 src="/landing/icc-mods.svg"
                 alt="share with your friends"
-                width={200}
+                width={400}
                 height={110}
-                className="absolute -right-5 top-3 p-5 md:w-[60%]"
+                className="absolute bottom-[-20%] right-[10%] w-[70%] -rotate-45 p-5 invert dark:invert-0"
               />
 
               <div className="absolute bottom-8 left-8 w-10/12">
@@ -115,7 +102,7 @@ const LandingFeatures = () => {
 
           <Link href="/settings" className="cursor-pointer">
             <div className="relative h-[300px] w-full overflow-hidden rounded-xl border bg-muted p-3 shadow">
-              <div className="flex w-[500px] gap-1">
+              <div className="flex w-[500px]  gap-1">
                 <DarkThemeIcon label={false} /> <LightThemeIcon label={false} />
               </div>
 

@@ -6,14 +6,19 @@ import { M_DATA_S2 } from "@/data/2023/m-data-s2"
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
-import ModsFacultySelect from "@/components/mods/mods-faculty-select"
-import ModsModuleTypeSelect from "@/components/mods/mods-module-type-select"
+import {
+  ModsFacultySelect,
+  SearchModuleFaculty
+} from "@/components/mods/mods-faculty-select"
+import {
+  ModsModuleTypeSelect,
+  SearchModuleType
+} from "@/components/mods/mods-module-type-select"
 import ModsSearchInput from "@/components/mods/mods-search-input"
-import ModsSemesterSelect from "@/components/mods/mods-semester-select"
-
-type Semester = "s1" | "s2" | "all"
-type SearchModuleType = ModuleType | "all"
-type SearchModuleFaculty = ModuleFaculty | "all"
+import {
+  ModsSemesterSelect,
+  Semester
+} from "@/components/mods/mods-semester-select"
 
 interface Props {
   searchParams: {
@@ -54,7 +59,6 @@ const TestPage = ({ searchParams }: Props) => {
   // Filter by module faculty
   filteredModules = filteredModules.filter(([_, moduleData]) => {
     if (moduleFaculty === "all") return true
-
     return getModuleFaculty(moduleData.searchKeys) === moduleFaculty
   })
 
@@ -70,16 +74,9 @@ const TestPage = ({ searchParams }: Props) => {
     <div className="relative space-y-3">
       <h1 className="text-3xl font-semibold capitalize">NTU Modules</h1>
 
-      {filteredModules.length === 0 ? (
-        <p className="text-muted-foreground">
-          View all {Object.keys(MODULE_DATA).length} modules offered by NTU in
-          AY2023/2024.
-        </p>
-      ) : (
-        <p className="text-muted-foreground">
-          Filtered down to {filteredModules.length} modules.
-        </p>
-      )}
+      <p className="text-muted-foreground">
+        Filtered down to {filteredModules.length} modules.
+      </p>
 
       <div className="flex w-full flex-col gap-2 md:flex-row">
         <ModsSearchInput defaultValue={dbSearchTerm} />

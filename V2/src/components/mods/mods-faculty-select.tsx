@@ -1,0 +1,46 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
+
+import { MODULE_FACULTY } from "@/lib/constants"
+import CustomSelect from "@/components/select"
+
+type SearchModuleFaculty = ModuleFaculty | "all"
+
+interface Props {
+  defaultValue?: SearchModuleFaculty
+}
+
+const ModsFacultySelect = ({ defaultValue = "all" }: Props) => {
+  const [moduleFaculty, setModuleFaculty] =
+    useState<SearchModuleFaculty>(defaultValue)
+
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const { replace } = useRouter()
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams)
+    params.set("moduleFaculty", moduleFaculty)
+    replace(`${pathname}?${params.toString()}`, { scroll: false })
+  }, [moduleFaculty])
+
+  const selectItems = [
+    { value: "all", label: "All Faculty" },
+    ...Object.entries(MODULE_FACULTY).map(([categoryKey, categoryName]) => ({
+      value: categoryKey,
+      label: categoryName
+    }))
+  ]
+  return (
+    <CustomSelect
+      defaultValue="all"
+      selectItems={selectItems}
+      onChange={(value) => setModuleFaculty(value as SearchModuleFaculty)}
+      divClassName="md:max-w-[300px]"
+    />
+  )
+}
+
+export default ModsFacultySelect

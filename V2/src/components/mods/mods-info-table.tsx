@@ -63,14 +63,14 @@ const ModsInfoTable = ({ module }: Props) => {
                       {preq.length === 6 ? (
                         <Link
                           href={`/mods/${preq}`}
-                          className="hover:text-hover-primary transition-colors">
+                          className="transition-colors hover:text-primary-alt">
                           {preq}
                         </Link>
                       ) : // Test if the first 6 characters are a valid module code
                       testPossibleModuleCode(preq) ? (
                         <Link
                           href={`/mods/${preq.slice(0, 6)}`}
-                          className="hover:text-hover-primary transition-colors">
+                          className="transition-colors hover:text-primary-alt">
                           {preq.slice(0, 6)} {preq.slice(6)}
                         </Link>
                       ) : (
@@ -100,7 +100,7 @@ const ModsInfoTable = ({ module }: Props) => {
                   <Fragment key={mewIdx}>
                     <Link
                       href={`/mods/${mew}`}
-                      className="hover:text-hover-primary transition-colors">
+                      className="transition-colors hover:text-primary-alt">
                       {mew}
                     </Link>
 

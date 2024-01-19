@@ -42,7 +42,7 @@ const TimetableOverview = () => {
                   <td className="w-fit md:w-[100px]">
                     <Link
                       href={`/mods/${module}`}
-                      className="hover:text-hover-primary transition-colors">
+                      className="transition-colors hover:text-primary-alt">
                       {module}
                     </Link>
                   </td>
@@ -50,7 +50,7 @@ const TimetableOverview = () => {
                   <td className="hidden  text-left md:table-cell">
                     <Link
                       href={`/mods/${module}`}
-                      className="hover:text-hover-primary transition-colors">
+                      className="transition-colors hover:text-primary-alt">
                       {moduleData.title}
                     </Link>
                   </td>

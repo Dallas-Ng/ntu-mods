@@ -70,7 +70,7 @@ export default function Page({ params }: { params: { module: string } }) {
             emptyContent={
               <Link
                 href="/mods"
-                className="hover:text-hover-primary text-sm text-muted-foreground transition-colors">
+                className="text-sm text-muted-foreground transition-colors hover:text-primary-alt">
                 No Mods Found. Click here to see all Mods
               </Link>
             }

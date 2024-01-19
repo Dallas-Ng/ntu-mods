@@ -15,6 +15,10 @@ export const getModuleIndexes = (moduleKey: string) => {
    * '70903'
    * '05000'
    */
+  if (!moduleIndexes) {
+    return sanitisedModuleIndexes
+  }
+
   Object.entries(moduleIndexes).forEach(([indexKey, index]) => {
     sanitisedModuleIndexes[indexKey] = index.filter((index) => index.day !== 0)
   })

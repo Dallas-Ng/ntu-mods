@@ -66,3 +66,51 @@ export const COURSE_TYPE = {
   PRJ: "Project",
   DES: "Design"
 }
+
+export const MODULE_CATEGORY = {
+  CORE: "Core",
+  GLOAD: "BDE",
+  MLOAD: "Minors",
+  GERP: "General Education",
+  CNY: "C N Yang Scholars",
+  USP: "C N Yang Scholars"
+}
+
+export const MODULE_FACULTY = {
+  ACC: "Accountancy",
+  ADM: "Art, Design & Media",
+  BMS: "Biomedical Sciences",
+  BS: "Biological Sciences",
+  BUS: "Business",
+  CBE: "Chemical & Biomolecular Engineering",
+  CE: "Computer Engineering",
+  CEE: "Civil Engineering",
+  CHEM: "Chemistry and Biological Chemistry",
+  CHIN: "Chinese",
+  CS: "Communication Studies",
+  CSC: "Computer Science",
+  ECON: "Economics",
+  EEE: "Electrical & Electronic Engineering",
+  EESS: "Environmental Earth Systems Science",
+  ELH: "English",
+  HIST: "History",
+  ICC: "Interdisciplinary Collaborative Courses",
+  LMS: "Linguistics & Multilingual Studies",
+  MAT: "Materials Engineering",
+  MATH: "Mathematical Sciences",
+  ME: "Mechanical Engineering",
+  MED: "Medicine",
+  MS: "Maritime Studies",
+  NIE: "NIE",
+  NTC: "Nanyang Technopreneurship Centre",
+  PHIL: "Philosophy",
+  PHY: "Physics and Applied Physics",
+  PPGA: "Public Policy And Global Affairs",
+  PSY: "Psychology",
+  SOC: "Sociology",
+  SOH: "Humanities",
+  SPS: "Physical and Mathematical Sciences",
+  SSM: "Sport Science And Management",
+  SSS: "Social Sciences",
+  OTHERS: "Others"
+}

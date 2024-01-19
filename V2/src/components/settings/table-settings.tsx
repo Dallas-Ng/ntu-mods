@@ -39,13 +39,14 @@ export default function TableSettings({ toggleBorder = false }: Props) {
       <div
         id="table-settings"
         className="flex flex-col items-center justify-center gap-2 lg:flex-row">
-        <div className="relative flex h-[200px] w-10/12 flex-col justify-between rounded-lg border p-3 shadow-lg lg:h-[230px] lg:w-[384px]">
+        <div className="relative flex h-[200px] w-10/12 flex-col justify-between rounded-lg border-2 p-3 lg:h-[230px] lg:w-[384px]">
           <div className="flex justify-between gap-0 lg:flex-row">
-            <table className="h-min w-[75%]">
+            <table className="h-min w-[75%] border-none">
               <tbody>
                 <tr>
                   <TimetableCell
                     divClassName="h-min w-full cursor-default text-xs"
+                    tdClassName="border-none"
                     moduleKey={moduleKey}
                     index={index}
                   />
@@ -53,11 +54,12 @@ export default function TableSettings({ toggleBorder = false }: Props) {
               </tbody>
             </table>
 
-            <table className="h-min w-[35%]">
+            <table className="h-min w-[35%] border-none">
               <tbody>
                 <tr>
                   <TimetableCell
                     divClassName="h-min w-full cursor-default text-xs"
+                    tdClassName="border-none"
                     moduleKey={moduleKey}
                     index={index}
                   />
@@ -75,8 +77,8 @@ export default function TableSettings({ toggleBorder = false }: Props) {
               onClick={reRollIndex}
               variant="outline"
               size="icon"
-              className="ml-2">
-              <RefreshCcw className="size-5" />
+              className="ml-2 w-[40px]">
+              <RefreshCcw className="size-4" />
             </Button>
           </div>
         </div>

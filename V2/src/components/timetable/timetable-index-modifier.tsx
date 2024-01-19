@@ -34,7 +34,7 @@ const IndexCommandItem = ({ index }: { index: Index }) => {
         </span>
       </div>
 
-      <div className="flex w-full justify-between gap-2 text-xs text-secondary-foreground">
+      <div className="flex w-full justify-between gap-2 text-xs text-muted-foreground">
         <span>{index.time}</span>
         <span>{index.venue}</span>
       </div>

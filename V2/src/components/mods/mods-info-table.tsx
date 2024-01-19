@@ -8,9 +8,7 @@ interface Props {
   module: Module
 }
 
-const NotAvailable = () => (
-  <span className="text-secondary-foreground">N/A</span>
-)
+const NotAvailable = () => <span className="text-muted-foreground">N/A</span>
 
 const testPossibleModuleCode = (str: string) =>
   str.length > 6 ? /^[A-Z]{2}\d{4}$/.test(str.slice(0, 6)) : false

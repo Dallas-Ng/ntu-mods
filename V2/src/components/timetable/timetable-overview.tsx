@@ -65,7 +65,7 @@ const TimetableOverview = () => {
                         {formatTime(exam.end_time)}
                       </>
                     ) : (
-                      <span className="text-secondary-foreground">NA</span>
+                      <span className="text-muted-foreground">NA</span>
                     )}
                   </td>
                 </tr>

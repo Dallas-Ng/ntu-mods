@@ -63,7 +63,7 @@ const TimetableCopyButton = () => {
             )}>
             <p>Plan {timetableIdx + 1}</p>
 
-            <div className="gap-2 text-xs text-secondary-foreground">
+            <div className="gap-2 text-xs text-muted-foreground">
               <div className="grid grid-cols-4">
                 {Object.entries(timetable).map(([moduleKey, indexKey]) => (
                   <div>

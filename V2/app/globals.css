@@ -99,7 +99,7 @@ table {
 }
 
 table th {
-  @apply font-normal text-secondary-foreground;
+  @apply font-normal text-muted-foreground;
 }
 
 table th,

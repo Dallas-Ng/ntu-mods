@@ -274,19 +274,19 @@ export const TimetableTableLoader = () => {
       <thead>
         <tr>
           <th className="w-[38px]"></th>
-          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
+          <th className="h-fit p-0 text-center font-normal text-muted-foreground">
             Mon
           </th>
-          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
+          <th className="h-fit p-0 text-center font-normal text-muted-foreground">
             Tue
           </th>
-          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
+          <th className="h-fit p-0 text-center font-normal text-muted-foreground">
             Wed
           </th>
-          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
+          <th className="h-fit p-0 text-center font-normal text-muted-foreground">
             Thu
           </th>
-          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
+          <th className="h-fit p-0 text-center font-normal text-muted-foreground">
             Fri
           </th>
         </tr>

@@ -14,7 +14,7 @@ export default function NotFoundModulePage() {
 
       <h1 className="text-2xl">This module does not exist.</h1>
 
-      <p className="text-secondary-foreground">
+      <p className="text-muted-foreground">
         We currently do not support academic years before AY 2023-2024. If this
         is a bug, please contact us.
       </p>

@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export default function HelpPage() {
   return (
-    <div className="mb-[50px] flex flex-col gap-2 text-secondary-foreground">
+    <div className="mb-[50px] flex flex-col gap-2 text-muted-foreground">
       <h1 className="text-2xl">Privacy Policy</h1>
 
       <p>Last updated: December 23, 2023</p>

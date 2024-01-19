@@ -172,7 +172,7 @@ export default function ModsPage() {
                 {moduleFaculty === "all"
                   ? "All Faculty"
                   : MODULE_FACULTY[moduleFaculty]}
-                <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
 
@@ -200,7 +200,7 @@ export default function ModsPage() {
                     <div className="flex items-baseline gap-2">
                       <CheckIcon
                         className={cn(
-                          "ml-auto h-4 w-4",
+                          "ml-auto size-4",
                           moduleFaculty === "all" ? "opacity-100" : "opacity-0"
                         )}
                       />
@@ -223,7 +223,7 @@ export default function ModsPage() {
                         <div className="flex items-baseline gap-2">
                           <CheckIcon
                             className={cn(
-                              "ml-auto h-4 w-4",
+                              "ml-auto size-4",
                               moduleFaculty === facultyKey
                                 ? "opacity-100"
                                 : "opacity-0"
@@ -344,7 +344,7 @@ export default function ModsPage() {
         ))}
       </div>
 
-      <p className="hover:text-hover-primary text-center text-sm text-muted-foreground transition-colors">
+      <p className="text-center text-sm text-muted-foreground transition-colors hover:text-primary-alt">
         <Link
           href="https://wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"
           target="_blank">

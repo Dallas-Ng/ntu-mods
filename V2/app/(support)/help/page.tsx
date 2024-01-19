@@ -48,7 +48,7 @@ export default function HelpPage() {
       <div className="p-5">
         <Link
           href="/timetable"
-          className="hover:text-hover-primary flex items-center transition-colors">
+          className="flex items-center transition-colors hover:text-primary-alt">
           <ArrowLeft className="size-5" /> Back to Stars
         </Link>
       </div>

@@ -4,6 +4,7 @@ import { Fragment } from "react"
 
 import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
 import { getModuleIndexMap } from "@/lib/get-module-index-map"
+import { cn } from "@/lib/utils"
 import { useTimetable } from "@/hooks/use-timetable"
 
 import TimetableCell from "./timetable-cell"
@@ -143,14 +144,14 @@ const TimetableTable = (props: Props) => {
 
   const STARS_MATRIX = Array.from({ length: MATRIX_ROWS }, (_, i) => {
     const timeslot = (
-      <td className="relative p-1 text-center">
+      <td className="relative w-full max-w-[20px] md:max-w-[40px]">
         {i !== 0 && (
-          <span className="absolute left-0 top-[-8px] w-full bg-background">
+          <span className="absolute left-0 top-[-8px] w-full bg-white text-center">
             {STARS_TIMESLOTS[i].start}
           </span>
         )}
 
-        <div className="min-h-[20px] w-full" />
+        <div className="min-h-[20px] w-[20px] md:w-[40px]" />
       </td>
     )
 
@@ -193,6 +194,7 @@ const TimetableTable = (props: Props) => {
           moduleKey={moduleKey}
           index={index}
           fullCell={props.fullCell}
+          divClassName={cn(STARS_MATRIX[tsIndex].length > 10 && "md:px-1")} // if there are more than 10 columns, reduce the padding
         />
       )
 
@@ -203,13 +205,18 @@ const TimetableTable = (props: Props) => {
   })
 
   /**
+   * Calculates the max length of any day in matrix
+   */
+  let MAX_LENGTH_MATRIX = 0
+  STARS_MATRIX.forEach((matrixRow) => {
+    MAX_LENGTH_MATRIX = Math.max(matrixRow.length, MAX_LENGTH_MATRIX)
+  })
+
+  /**
    * Generation of Table Head and Table Body
    */
   const TableHeadItems = Object.entries(MAP_CONFLICTS).map(([k, v]) => (
-    <th
-      key={k}
-      colSpan={v}
-      className="h-fit p-0 text-center font-normal text-secondary">
+    <th key={k} colSpan={v} className="">
       {TRUN_DAY_MAP[Number(k)]}
     </th>
   ))
@@ -231,47 +238,55 @@ const TimetableTable = (props: Props) => {
           matrixCol ? (
             <Fragment key={matrixColIdx}>{matrixCol}</Fragment>
           ) : (
-            <td className="p-0" key={matrixColIdx} />
+            <td key={matrixColIdx} />
           )
         )}
       </tr>
     )
   })
 
+  const TABLE_OVERFLOW_THRESHOLD = MAX_LENGTH_MATRIX > 15
+
   return (
-    <table className="table-border size-full table-fixed border-collapse border-2 p-0 text-[0.6rem] md:text-xs">
-      <thead>
-        <tr>
-          <th className="w-[38px]"></th>
+    <div className={cn(TABLE_OVERFLOW_THRESHOLD && "overflow-x-auto")}>
+      <table
+        className={cn(
+          "w-full text-[0.6rem] md:text-xs",
+          TABLE_OVERFLOW_THRESHOLD ? "md:table-auto" : "md:table-fixed"
+        )}>
+        <thead>
+          <tr>
+            <th className="w-[20px] md:w-[40px]"></th>
 
-          {TableHeadItems}
-        </tr>
-      </thead>
+            {TableHeadItems}
+          </tr>
+        </thead>
 
-      <tbody>{TableBodyItems}</tbody>
-    </table>
+        <tbody>{TableBodyItems}</tbody>
+      </table>
+    </div>
   )
 }
 
 export const TimetableTableLoader = () => {
   return (
-    <table className="table-border size-full table-fixed border-collapse border p-0 text-[0.6rem] md:text-xs">
+    <table className="table-fixed border-collapse border p-0 text-[0.6rem] md:text-xs">
       <thead>
         <tr>
           <th className="w-[38px]"></th>
-          <th className="h-fit p-0 text-center font-normal text-secondary">
+          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
             Mon
           </th>
-          <th className="h-fit p-0 text-center font-normal text-secondary">
+          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
             Tue
           </th>
-          <th className="h-fit p-0 text-center font-normal text-secondary">
+          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
             Wed
           </th>
-          <th className="h-fit p-0 text-center font-normal text-secondary">
+          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
             Thu
           </th>
-          <th className="h-fit p-0 text-center font-normal text-secondary">
+          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
             Fri
           </th>
         </tr>

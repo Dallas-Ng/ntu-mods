@@ -1,5 +1,3 @@
-"use client"
-
 import { Fragment } from "react"
 
 import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
@@ -8,7 +6,6 @@ import { getModuleIndexes } from "@/lib/get-module-indexes"
 import { cn } from "@/lib/utils"
 
 import TimetableCell from "../timetable/timetable-cell"
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
 
 /**
  * Calculates the number of conflicts between a given time slot and previous time slots in a day.
@@ -162,14 +159,14 @@ const TimetableTable = ({ moduleKey }: Props) => {
 
   const STARS_MATRIX = Array.from({ length: MATRIX_ROWS }, (_, i) => {
     const timeslot = (
-      <td className="relative p-1 text-center">
+      <td className="relative w-full max-w-[20px] md:max-w-[40px]">
         {i !== 0 && (
-          <span className="absolute left-0 top-[-8px] w-full bg-background">
+          <span className="absolute left-0 top-[-8px] w-full bg-white text-center">
             {STARS_TIMESLOTS[i].start}
           </span>
         )}
 
-        <div className="min-h-[20px] w-full" />
+        <div className="min-h-[20px] w-[20px] md:w-[40px]" />
       </td>
     )
 
@@ -232,10 +229,7 @@ const TimetableTable = ({ moduleKey }: Props) => {
    * Generation of Table Head and Table Body
    */
   const TableHeadItems = Object.entries(MAP_CONFLICTS).map(([k, v]) => (
-    <th
-      key={k}
-      colSpan={v}
-      className="h-fit p-1 text-center font-normal text-secondary">
+    <th key={k} colSpan={v}>
       {TRUN_DAY_MAP[Number(k)]}
     </th>
   ))
@@ -252,7 +246,7 @@ const TimetableTable = ({ moduleKey }: Props) => {
           matrixCol ? (
             <Fragment key={matrixColIdx}>{matrixCol}</Fragment>
           ) : (
-            <td className="p-0" key={matrixColIdx} />
+            <td key={matrixColIdx} />
           )
         )}
       </tr>
@@ -278,20 +272,17 @@ const TimetableTable = ({ moduleKey }: Props) => {
   }
 
   const TABLE_OVERFLOW_THRESHOLD = MAX_LENGTH_MATRIX > 15
-  const TABLE_WIDTH = TABLE_OVERFLOW_THRESHOLD
-    ? `${100 + MAX_LENGTH_MATRIX * 2}vw`
-    : "100%"
 
   return (
-    <div className={cn(TABLE_OVERFLOW_THRESHOLD && "overflow-x-scroll")}>
+    <div className={cn(TABLE_OVERFLOW_THRESHOLD && "overflow-x-auto")}>
       <table
         className={cn(
-          "table-border size-full table-fixed border-collapse border-2 p-0 text-[0.6rem] md:text-xs"
-        )}
-        style={{ width: TABLE_WIDTH }}>
+          "w-full text-[0.6rem] md:text-xs",
+          TABLE_OVERFLOW_THRESHOLD ? "md:table-auto" : "md:table-fixed"
+        )}>
         <thead>
           <tr>
-            <th className="w-[38px]"></th>
+            <th className="w-[20px] md:w-[40px]"></th>
 
             {TableHeadItems}
           </tr>
@@ -308,27 +299,27 @@ export const TimetableTableLoader = () => {
     <table className="table-border size-full table-fixed border-collapse border p-0 text-[0.6rem] md:text-xs">
       <thead>
         <tr>
-          <th className="w-[38px]"></th>
-          <th className="h-fit p-0 text-center font-normal text-secondary">
+          <th className="w-[40px]"></th>
+          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
             Mon
           </th>
-          <th className="h-fit p-0 text-center font-normal text-secondary">
+          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
             Tue
           </th>
-          <th className="h-fit p-0 text-center font-normal text-secondary">
+          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
             Wed
           </th>
-          <th className="h-fit p-0 text-center font-normal text-secondary">
+          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
             Thu
           </th>
-          <th className="h-fit p-0 text-center font-normal text-secondary">
+          <th className="h-fit p-0 text-center font-normal text-secondary-foreground">
             Fri
           </th>
         </tr>
       </thead>
 
       <tbody>
-        {STARS_TIMESLOTS.map((x, i) => (
+        {STARS_TIMESLOTS.slice(0, 10).map((x, i) => (
           <tr key={i}>
             <td className="relative p-1 text-center">
               {i !== 0 && (

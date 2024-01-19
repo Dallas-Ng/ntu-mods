@@ -16,6 +16,9 @@ interface Props {
   hideTimeDate?: boolean
   overrideIndex?: React.ReactNode
   indexes?: Index[]
+  onMouseOver?: () => void
+  onMouseOut?: () => void
+  dimmed?: boolean
 }
 
 // TODO: Variations
@@ -29,7 +32,10 @@ const TimetableCell = (props: Props) => {
     fullCell = false,
     hideTimeDate = false,
     overrideIndex = null,
-    indexes = []
+    indexes = [],
+    onMouseOver = undefined,
+    onMouseOut = undefined,
+    dimmed = false
   } = props
   const indexStyle = getIndexTypeStyle(index.type)
 
@@ -48,12 +54,17 @@ const TimetableCell = (props: Props) => {
    * The actual rendered table-cell
    */
   return (
-    <td className={cn("p-1", tdClassName)} rowSpan={index.duration}>
+    <td
+      className={cn("p-1", tdClassName)}
+      rowSpan={index.duration}
+      onMouseOut={onMouseOut}
+      onMouseOver={onMouseOver}>
       <div
         className={cn(
-          "flex h-full cursor-pointer items-center break-words rounded-lg p-1 transition-colors md:px-3",
+          "flex h-full cursor-pointer items-center break-words rounded-lg p-1  md:px-3",
           indexStyle.background,
-          divClassName
+          divClassName,
+          dimmed && "opacity-40 dark:opacity-20"
         )}>
         <div className="w-full">
           <>

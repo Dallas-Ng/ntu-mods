@@ -1,8 +1,9 @@
 "use client"
 
-import { Fragment } from "react"
+import { Fragment, useState } from "react"
 
 import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
+import { getIndexType } from "@/lib/get-index-type"
 import { getModuleIndexMap } from "@/lib/get-module-index-map"
 import { cn } from "@/lib/utils"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -52,6 +53,7 @@ interface Props {
 const TimetableTable = (props: Props) => {
   const { timetable } = useTimetable(props.timetable)
   const moduleIndexMap = getModuleIndexMap(timetable)
+  const [currentHoverKey, setCurrentHoverKey] = useState("")
 
   const MAP: { [day: number]: Index[] } = {
     1: [],
@@ -191,6 +193,11 @@ const TimetableTable = (props: Props) => {
 
       STARS_MATRIX[tsIndex][cellPosition] = (
         <TimetableCell
+          onMouseOver={() => setCurrentHoverKey(moduleKey)}
+          onMouseOut={() => setCurrentHoverKey("")}
+          dimmed={
+            currentHoverKey !== "" ? currentHoverKey !== moduleKey : undefined
+          }
           moduleKey={moduleKey}
           index={index}
           fullCell={props.fullCell}

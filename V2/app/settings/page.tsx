@@ -25,54 +25,48 @@ const TableSettings = dynamic(
 
 export default function SettingsPage() {
   return (
-    <div className="mx-auto max-w-2xl">
-      <div className="rounded-md border p-0">
-        <div className="flex flex-col gap-6 p-3">
-          <div className="flex   w-full flex-col gap-3">
-            <h1 className="text-3xl font-bold">Settings</h1>
+    <div className="mx-auto max-w-2xl rounded-md border bg-card pb-2 shadow-lg">
+      <div className="flex flex-col gap-6 p-3">
+        <div className="flex w-full flex-col gap-3">
+          <h1 className="text-3xl font-bold">Settings</h1>
 
-            <p className="text-muted-foreground">
-              We are building more customisability into the page!
+          <p className="text-muted-foreground">
+            We are building more customisability into the page!
+          </p>
+
+          <hr />
+
+          <Link href="/debug">
+            <Button
+              className="text-sm text-muted-foreground"
+              variant="outline"
+              size="sm">
+              Clear my data
+            </Button>
+          </Link>
+        </div>
+
+        <div className="flex flex-col justify-center gap-3">
+          <div>
+            <p>Appearance Settings</p>
+
+            <p className="text-sm text-muted-foreground">
+              Customize the appearance of the app. Switch between day and night
+              themes.
             </p>
-
-            <hr />
-
-            <Link href="/debug">
-              <Button
-                className="text-sm text-muted-foreground"
-                variant="outline"
-                size="sm">
-                Clear my data
-              </Button>
-            </Link>
           </div>
 
-          <div className="flex flex-col justify-center gap-3">
-            <div>
-              <p>Appearance Settings</p>
+          <AppearanceSettings />
 
-              <p className="text-sm text-muted-foreground">
-                Customize the appearance of the app. Switch between day and
-                night themes.
-              </p>
-            </div>
+          <div>
+            <p className="mt-5">Table Settings</p>
 
-            <AppearanceSettings />
-
-            <div>
-              <p className="mt-5">Table Settings</p>
-
-              <p className="text-sm text-muted-foreground">
-                Customize the appearance of the stars table.
-              </p>
-            </div>
-
-            <TableSettings />
+            <p className="text-sm text-muted-foreground">
+              Customize the appearance of the stars table.
+            </p>
           </div>
 
-          {/* <div>
-            <Feedback />
-          </div> */}
+          <TableSettings />
         </div>
       </div>
     </div>

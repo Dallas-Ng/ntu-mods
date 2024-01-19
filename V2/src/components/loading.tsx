@@ -9,7 +9,7 @@ export default function Loading({ loading = true }: LoadingProps) {
 
   return (
     <div className="flex size-full items-center justify-center">
-      <Loader2 className="size-10 animate-spin text-secondary" />
+      <Loader2 className="size-10 animate-spin text-secondary-foreground" />
     </div>
   )
 }

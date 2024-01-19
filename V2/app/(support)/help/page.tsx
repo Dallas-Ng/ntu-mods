@@ -48,7 +48,7 @@ export default function HelpPage() {
       <div className="p-5">
         <Link
           href="/timetable"
-          className="flex items-center transition-colors hover:text-secondary-foreground">
+          className="hover:text-hover-primary flex items-center transition-colors">
           <ArrowLeft className="size-5" /> Back to Stars
         </Link>
       </div>
@@ -59,7 +59,7 @@ export default function HelpPage() {
             Frequently Asked Questions
           </h1>
 
-          <p className="text-secondary">
+          <p className="text-secondary-foreground">
             Can&apos;t find the answer you&apos;re looking for? <br />
             <a
               href="mailto:ngdallas1@gmail.com"
@@ -76,7 +76,7 @@ export default function HelpPage() {
             <div className="mb-[3rem]" key={i}>
               <h2 className="text-xl font-bold">{question}</h2>
 
-              <p className="mt-2 text-secondary">{answer}</p>
+              <p className="mt-2 text-secondary-foreground">{answer}</p>
             </div>
           ))}
 

@@ -15,7 +15,7 @@ const TimetableHiddenContentHelper = () => {
     <>
       {threshold && (
         <Link href="/settings#table-settings">
-          <div className="flex items-start gap-1 text-sm text-secondary hover:underline md:items-center">
+          <div className="flex items-start gap-1 text-sm text-secondary-foreground hover:underline md:items-center">
             <span>
               <InfoIcon className="size-5" />
             </span>

@@ -1,8 +1,8 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-import { SettingsSlice, createSettingsSlice } from "./settings.state"
-import { TimetableSlice, createTimetableSlice } from "./timetable.state"
+import { createSettingsSlice, SettingsSlice } from "./settings.state"
+import { createTimetableSlice, TimetableSlice } from "./timetable.state"
 
 interface StoreState extends TimetableSlice, SettingsSlice {}
 

@@ -10,5 +10,4 @@ node_modules
 .next
 build
 .contentlayer
-backend
-data/*.json
+src/data/**/*.json

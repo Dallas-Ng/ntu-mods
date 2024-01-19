@@ -12,7 +12,7 @@ const Header = (props: Props) => {
         {title}
       </h1>
 
-      {subtitle && <p className="text-secondary">{subtitle}</p>}
+      {subtitle && <p className="text-secondary-foreground">{subtitle}</p>}
     </div>
   )
 }

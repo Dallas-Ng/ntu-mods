@@ -9,7 +9,7 @@ interface Props {
 const ModsHeader = ({ module }: Props) => {
   return (
     <>
-      <span className="text-secondary">{module.code}</span>
+      <span className="text-secondary-foreground">{module.code}</span>
 
       <h1 className="text-3xl capitalize">{formatTitle(module.title)}</h1>
 

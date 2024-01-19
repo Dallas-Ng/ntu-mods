@@ -22,8 +22,8 @@ const TimetableModifier = () => {
         </div>
       </div>
 
-      <div className="relative max-h-[50vh] min-h-10 w-full overflow-y-auto rounded-lg border-2">
-        <div className="p-2 text-center text-xs text-secondary">
+      <div className="relative min-h-10 w-full overflow-y-auto rounded-lg border-2 md:max-h-[50vh]">
+        <div className="p-2 text-center text-xs text-secondary-foreground">
           Registered Modules
         </div>
         <hr />
@@ -41,12 +41,14 @@ const TimetableModifier = () => {
               <div className="flex w-full justify-between">
                 <div className="flex gap-1">
                   <div className="w-[60px]">{moduleKey}</div>
-                  <div className="text-sm text-secondary">{indexKey}</div>
+                  <div className="text-sm text-secondary-foreground">
+                    {indexKey}
+                  </div>
                 </div>
 
                 <div>
                   <TrashIcon
-                    className="size-4 text-secondary hover:text-foreground"
+                    className="size-4 text-secondary-foreground hover:text-foreground"
                     onClick={(e) => {
                       e.stopPropagation()
                       removeItemFromTimetable(moduleKey)
@@ -61,7 +63,7 @@ const TimetableModifier = () => {
         {Object.entries(timetable).length === 0 && (
           <>
             <div className="p-2">
-              <div className="text-center text-sm text-secondary">
+              <div className="text-center text-sm text-secondary-foreground">
                 You have not added modules
                 <br /> Click on the search bar above to add modules
               </div>
@@ -78,14 +80,14 @@ export const TimetableModifierLoader = () => (
     <Skeleton className="h-[40px]" />
 
     <div className="relative max-h-[50vh] min-h-10 w-full overflow-y-auto rounded-lg border">
-      <div className="p-2 text-center text-xs text-secondary">
+      <div className="p-2 text-center text-xs text-secondary-foreground">
         Registered Modules
       </div>
 
       <hr />
 
       <div className="p-2">
-        <div className="text-center text-sm text-secondary">
+        <div className="text-center text-sm text-secondary-foreground">
           You have not added modules
           <br /> Click on the search bar above to add modules
         </div>

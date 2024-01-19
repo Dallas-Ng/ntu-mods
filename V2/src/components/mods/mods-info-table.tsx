@@ -8,7 +8,9 @@ interface Props {
   module: Module
 }
 
-const NotAvailable = () => <span className="text-secondary">N/A</span>
+const NotAvailable = () => (
+  <span className="text-secondary-foreground">N/A</span>
+)
 
 const testPossibleModuleCode = (str: string) =>
   str.length > 6 ? /^[A-Z]{2}\d{4}$/.test(str.slice(0, 6)) : false
@@ -65,14 +67,14 @@ const ModsInfoTable = ({ module }: Props) => {
                       {preq.length === 6 ? (
                         <Link
                           href={`/mods/${preq}`}
-                          className="transition-colors hover:text-secondary-foreground">
+                          className="hover:text-hover-primary transition-colors">
                           {preq}
                         </Link>
                       ) : // Test if the first 6 characters are a valid module code
                       testPossibleModuleCode(preq) ? (
                         <Link
                           href={`/mods/${preq.slice(0, 6)}`}
-                          className="transition-colors hover:text-secondary-foreground">
+                          className="hover:text-hover-primary transition-colors">
                           {preq.slice(0, 6)} {preq.slice(6)}
                         </Link>
                       ) : (
@@ -102,7 +104,7 @@ const ModsInfoTable = ({ module }: Props) => {
                   <Fragment key={mewIdx}>
                     <Link
                       href={`/mods/${mew}`}
-                      className="transition-colors hover:text-secondary-foreground">
+                      className="hover:text-hover-primary transition-colors">
                       {mew}
                     </Link>
 

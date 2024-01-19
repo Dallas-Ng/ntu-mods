@@ -67,7 +67,7 @@ export default function TableSettings({ toggleBorder = false }: Props) {
           </div>
 
           <div className="flex w-full items-baseline justify-between">
-            <p className="w-full truncate text-xs capitalize text-secondary">
+            <p className="w-full truncate text-xs capitalize text-secondary-foreground">
               {TRUN_M_DATA[moduleKey]}
             </p>
 
@@ -100,7 +100,7 @@ export default function TableSettings({ toggleBorder = false }: Props) {
                 <div>
                   <p className="capitalize">{key === "key" ? "Index" : key} </p>
 
-                  <span className="text-xs text-secondary">
+                  <span className="text-xs text-secondary-foreground">
                     {!["day", "remarks"].includes(key) &&
                       index[key as keyof typeof index]}
 

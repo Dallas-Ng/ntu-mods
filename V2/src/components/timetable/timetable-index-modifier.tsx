@@ -127,7 +127,7 @@ const TimetableIndexModifier = (props: Props) => {
                             </span>
                           </div>
 
-                          <div className="flex w-full justify-between gap-2 text-xs text-secondary">
+                          <div className="flex w-full justify-between gap-2 text-xs text-secondary-foreground">
                             <span>{v.time}</span>
                             <span>{v.venue}</span>
                           </div>

@@ -123,12 +123,12 @@ export default function ModsPage() {
       <h1 className="text-3xl font-semibold capitalize">NTU Modules</h1>
 
       {filteredModules.length === 0 ? (
-        <p className="text-secondary">
+        <p className="text-secondary-foreground">
           View all {Object.keys(M_DATA).length} modules offered by NTU in
           AY2023/2024.
         </p>
       ) : (
-        <p className="text-secondary">
+        <p className="text-secondary-foreground">
           Filtered down to {filteredModules.length} modules.
         </p>
       )}
@@ -158,7 +158,9 @@ export default function ModsPage() {
             {Object.entries(MODULE_FACULTY).map(([facultyKey, facultyName]) => (
               <SelectItem key={facultyKey} value={facultyKey}>
                 {facultyName}{" "}
-                <span className="text-xs text-secondary">{facultyKey}</span>
+                <span className="text-xs text-secondary-foreground">
+                  {facultyKey}
+                </span>
               </SelectItem>
             ))}
           </SelectContent>
@@ -228,7 +230,9 @@ export default function ModsPage() {
           <p className="w-full text-center">
             There are no modules found
             <br />
-            <span className="text-secondary">Try changing your filters</span>
+            <span className="text-secondary-foreground">
+              Try changing your filters
+            </span>
           </p>
         </div>
       )}
@@ -237,12 +241,14 @@ export default function ModsPage() {
         {filteredModules.map(([code, moduleData]) => (
           <Link key={code} href={`/mods/${code}`}>
             <div className="rounded-lg border-2 p-3 transition-colors hover:bg-accent">
-              <p className="text-sm text-secondary">{moduleData.code}</p>
+              <p className="text-sm text-secondary-foreground">
+                {moduleData.code}
+              </p>
 
               <p className="truncate">{moduleData.title}</p>
 
               <div className="mt-4 flex items-center justify-between text-xs">
-                <div className="flex gap-1 text-secondary">
+                <div className="flex gap-1 text-secondary-foreground">
                   {getModuleCategories(moduleData.searchKeys).map(
                     (category, i) => (
                       <div key={i} className="rounded-full border px-2 py-0">
@@ -252,7 +258,7 @@ export default function ModsPage() {
                   )}
                 </div>
 
-                <div className="text-sm text-secondary">
+                <div className="text-sm text-secondary-foreground">
                   {getModuleFaculty(moduleData.searchKeys)}
                 </div>
               </div>
@@ -261,7 +267,7 @@ export default function ModsPage() {
         ))}
       </div>
 
-      <p className="text-center text-sm text-secondary transition-colors hover:text-secondary-foreground">
+      <p className="hover:text-hover-primary text-center text-sm text-secondary-foreground transition-colors">
         <Link
           href="https://wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"
           target="_blank">

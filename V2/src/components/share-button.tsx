@@ -1,10 +1,7 @@
 import { Link } from "lucide-react"
 import { toast } from "sonner"
 
-import { cn } from "@/lib/utils"
-
 import ButtonCollapsable from "./button-collapsable"
-import { Button } from "./ui/button"
 
 interface Props {
   link: string

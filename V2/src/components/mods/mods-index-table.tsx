@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useState } from "react"
 
 import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
 import { getIndexType } from "@/lib/get-index-type"

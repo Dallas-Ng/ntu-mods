@@ -8,7 +8,7 @@ interface Props {
   cardClassName?: string
 }
 
-const ModuleCard = ({ module, variant = "default", cardClassName }: Props) => {
+const ModuleCard = ({ module, cardClassName }: Props) => {
   return (
     <Link key={module.code} href={`/mods/${module.code}`}>
       <div

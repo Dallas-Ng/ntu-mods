@@ -4,7 +4,7 @@ import { siteConfig } from "@/config/site"
 
 const Footer = () => {
   return (
-    <footer className="flex h-12 items-center justify-center gap-4 text-center text-sm text-secondary-foreground">
+    <footer className="flex h-12 items-center justify-center gap-4 text-center text-sm text-muted-foreground">
       <Link
         href="/privacy"
         className="hover:text-hover-primary transition-colors">

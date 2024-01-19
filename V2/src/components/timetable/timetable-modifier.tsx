@@ -23,7 +23,7 @@ const TimetableModifier = () => {
       </div>
 
       <div className="rounded-lg border-2">
-        <div className="p-2 text-center text-xs text-secondary-foreground">
+        <div className="p-2 text-center text-xs text-muted-foreground">
           Registered Modules
         </div>
 
@@ -43,7 +43,7 @@ const TimetableModifier = () => {
                 <div className="flex w-full items-center justify-between">
                   <div className="flex gap-1">
                     <div className="w-[60px]">{moduleKey}</div>
-                    <div className="text-sm text-secondary-foreground">
+                    <div className="text-sm text-muted-foreground">
                       {indexKey}
                     </div>
                   </div>
@@ -54,7 +54,7 @@ const TimetableModifier = () => {
                       e.stopPropagation()
                       removeItemFromTimetable(moduleKey)
                     }}>
-                    <TrashIcon className="size-4 text-secondary-foreground hover:text-foreground" />
+                    <TrashIcon className="size-4 text-muted-foreground hover:text-foreground" />
                   </div>
                 </div>
               </div>
@@ -65,7 +65,7 @@ const TimetableModifier = () => {
         {Object.entries(timetable).length === 0 && (
           <>
             <div className="p-2">
-              <div className="text-center text-sm text-secondary-foreground">
+              <div className="text-center text-sm text-muted-foreground">
                 You have not added modules
                 <br /> Click on the search bar above to add modules
               </div>
@@ -82,14 +82,14 @@ export const TimetableModifierLoader = () => (
     <Skeleton className="h-[40px]" />
 
     <div className="relative max-h-[50vh] min-h-10 w-full overflow-y-auto rounded-lg border">
-      <div className="p-2 text-center text-xs text-secondary-foreground">
+      <div className="p-2 text-center text-xs text-muted-foreground">
         Registered Modules
       </div>
 
       <hr />
 
       <div className="p-2">
-        <div className="text-center text-sm text-secondary-foreground">
+        <div className="text-center text-sm text-muted-foreground">
           You have not added modules
           <br /> Click on the search bar above to add modules
         </div>

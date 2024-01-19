@@ -31,7 +31,7 @@ export default function SettingsPage() {
           <div className="flex   w-full flex-col gap-3">
             <h1 className="text-3xl font-bold">Settings</h1>
 
-            <p className="text-secondary-foreground">
+            <p className="text-muted-foreground">
               We are building more customisability into the page!
             </p>
 
@@ -39,7 +39,7 @@ export default function SettingsPage() {
 
             <Link href="/debug">
               <Button
-                className="text-sm text-secondary-foreground"
+                className="text-sm text-muted-foreground"
                 variant="outline"
                 size="sm">
                 Clear my data
@@ -51,7 +51,7 @@ export default function SettingsPage() {
             <div>
               <p>Appearance Settings</p>
 
-              <p className="text-sm text-secondary-foreground">
+              <p className="text-sm text-muted-foreground">
                 Customize the appearance of the app. Switch between day and
                 night themes.
               </p>
@@ -62,7 +62,7 @@ export default function SettingsPage() {
             <div>
               <p className="mt-5">Table Settings</p>
 
-              <p className="text-sm text-secondary-foreground">
+              <p className="text-sm text-muted-foreground">
                 Customize the appearance of the stars table.
               </p>
             </div>

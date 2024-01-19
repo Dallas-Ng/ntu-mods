@@ -59,7 +59,7 @@ const TimetablePlanSwitcher = () => {
         <DrawerTrigger asChild>{trigger}</DrawerTrigger>
 
         <DrawerContent className="p-2">
-          <span className="w-full text-center text-sm text-secondary-foreground">
+          <span className="w-full text-center text-sm text-muted-foreground">
             Select a plan to view
           </span>
 

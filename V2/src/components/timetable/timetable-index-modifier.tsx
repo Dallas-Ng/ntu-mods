@@ -67,10 +67,8 @@ const TimetableIndexModifier = (props: Props) => {
 
   const hasCommonLecture =
     moduleLectures.length > 0 && randomLecture.length > 0
-      ? moduleLectures.every(
-          (item) =>
-            randomLecture.some((x) => x.day === item.day) &&
-            randomLecture.some((x) => x.time === item.time)
+      ? moduleLectures.every((item) =>
+          randomLecture.some((x) => x.day === item.day && x.time === item.time)
         )
       : false
 

@@ -15,7 +15,7 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 
-import { cn } from "../lib/utils"
+import { cn, delay } from "../lib/utils"
 import { Button } from "./ui/button"
 
 interface Props {
@@ -45,6 +45,11 @@ const CustomSelect = (props: Props) => {
   useEffect(() => {
     onChange && onChange(activeItem)
   }, [activeItem])
+
+  const handleClose = async () => {
+    await delay(100)
+    setPopoverOpen(false)
+  }
 
   return (
     <div ref={containerRef} className={cn("w-full", divClassName)}>
@@ -78,7 +83,7 @@ const CustomSelect = (props: Props) => {
                   className="cursor-pointer hover:bg-accent"
                   onSelect={() => {
                     setActiveItem(item.value)
-                    closeOnSelect && setPopoverOpen(false)
+                    closeOnSelect && handleClose()
                   }}>
                   <div className="flex items-center gap-2 ">
                     <CheckIcon

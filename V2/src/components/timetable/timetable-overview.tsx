@@ -22,8 +22,8 @@ const TimetableOverview = () => {
             <th className="w-fit md:w-[100px]">Index</th>
             <th className="w-fit md:w-[100px]">Module</th>
             <th className="hidden text-left md:table-cell">Title</th>
-            <th>AU</th>
-            <th>Exams</th>
+            <th className="w-fit">AU</th>
+            <th className="w-fit">Exams</th>
           </tr>
         </thead>
 

@@ -105,9 +105,7 @@ const Page = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 h-16 w-full bg-background shadow hover:cursor-pointer dark:border-t-2 md:hidden">
-        <MobileTimetableModifierButton />
-      </div>
+      <MobileTimetableModifierButton />
 
       {/* Buffer for button */}
       <div className="block h-16 md:hidden" />

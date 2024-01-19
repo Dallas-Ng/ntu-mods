@@ -1,18 +1,39 @@
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
+"use client"
+
+import { useState } from "react"
+
+import { useSettings } from "@/hooks/use-settings"
+import { Drawer, DrawerContent } from "@/components/ui/drawer"
 
 import TimetableModifier from "../timetable-modifier"
 
 const MobileTimetableModifierButton = () => {
-  return (
-    <Drawer>
-      <DrawerTrigger asChild>
-        <div className="flex size-full items-center justify-center bg-primary text-primary-foreground">
-          Click to Edit Modules
-        </div>
-      </DrawerTrigger>
+  const [snap, setSnap] = useState<number | string | null>("85px")
 
-      <DrawerContent className="h-[90svh] p-2">
-        <TimetableModifier />
+  const { isMobile } = useSettings()
+
+  if (!isMobile) return null
+
+  return (
+    <Drawer
+      open
+      dismissible={false}
+      modal={snap === "85px" ? false : true}
+      snapPoints={["85px", 1]}
+      activeSnapPoint={snap}
+      setActiveSnapPoint={setSnap}>
+      <DrawerContent
+        className="h-[100svh] p-2 focus:outline-none"
+        onClick={() => setSnap(1)}>
+        <div className="flex h-full flex-col">
+          <div className="size-full flex-1">
+            <TimetableModifier />
+          </div>
+
+          <p className="text-center text-sm text-muted-foreground ">
+            Swipe down to close
+          </p>
+        </div>
       </DrawerContent>
     </Drawer>
   )

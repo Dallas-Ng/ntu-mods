@@ -51,33 +51,36 @@ const TimetableCopyButton = () => {
       <p className="p-2 text-center text-sm text-rose-800 ">
         You will override your existing data
       </p>
+      <div className="overflow-y-auto">
+        <div className="space-y-1">
+          {timetables.map((timetable, timetableIdx) => (
+            <div
+              key={timetableIdx}
+              onClick={() => setOverrideIndex(timetableIdx)}
+              className={cn(
+                "rounded-md p-2 hover:cursor-pointer hover:bg-accent",
+                overrideIndex === timetableIdx && "bg-muted"
+              )}>
+              <p>Plan {timetableIdx + 1}</p>
 
-      <div className="space-y-1">
-        {timetables.map((timetable, timetableIdx) => (
-          <div
-            key={timetableIdx}
-            onClick={() => setOverrideIndex(timetableIdx)}
-            className={cn(
-              "rounded-md p-2 hover:cursor-pointer hover:bg-accent",
-              overrideIndex === timetableIdx && "bg-muted"
-            )}>
-            <p>Plan {timetableIdx + 1}</p>
+              <div className="mt-2 text-xs text-muted-foreground">
+                <div className="flex flex-wrap gap-1">
+                  {Object.keys(timetable).map((moduleKey) => (
+                    <div
+                      key={moduleKey}
+                      className="rounded-full border border-muted-foreground px-2 py-0">
+                      {moduleKey}
+                    </div>
+                  ))}
+                </div>
 
-            <div className="gap-2 text-xs text-muted-foreground">
-              <div className="grid grid-cols-4">
-                {Object.entries(timetable).map(([moduleKey, indexKey]) => (
-                  <div>
-                    {moduleKey} - {indexKey}
-                  </div>
-                ))}
+                {Object.entries(timetable).length === 0 && (
+                  <p>No Modules Added</p>
+                )}
               </div>
-
-              {Object.entries(timetable).length === 0 && (
-                <p>No Modules Added</p>
-              )}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </>
   )
@@ -108,20 +111,24 @@ const TimetableCopyButton = () => {
   if (isMobile)
     return (
       <Drawer>
-        <DrawerTrigger asChild>{trigger}</DrawerTrigger>
+        <DrawerTrigger asChild>
+          <div>{trigger}</div>
+        </DrawerTrigger>
 
-        <DrawerContent className="h-[60vh] p-2">
+        <DrawerContent className="h-[80vh] p-2">
           <DrawerHeader className="p-2">Copy to Timetable</DrawerHeader>
           {Content}
 
-          <DrawerFooter className="border-t">{Footer}</DrawerFooter>
+          <DrawerFooter className="border-t p-0 pt-2">{Footer}</DrawerFooter>
         </DrawerContent>
       </Drawer>
     )
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogTrigger asChild>
+        <div>{trigger}</div>
+      </DialogTrigger>
 
       <DialogContent className="p-2">
         <DialogHeader className="p-2 pb-0">Copy to Timetable</DialogHeader>

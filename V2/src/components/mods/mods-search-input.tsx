@@ -21,6 +21,7 @@ const ModsSearchInput = ({ defaultValue }: Props) => {
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams)
+    if (params.get("dbSearchTerm") === null && dbSearchTerm === "") return
 
     if (!dbSearchTerm || dbSearchTerm === "") {
       params.set("dbSearchTerm", "")

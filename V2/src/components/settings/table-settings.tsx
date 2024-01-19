@@ -39,9 +39,9 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
       <div
         id="table-settings"
         className="flex flex-col items-center justify-center gap-2 lg:flex-row">
-        <div className="relative flex h-[200px] w-10/12 flex-col justify-between rounded-lg border-2 p-3 lg:h-[230px] lg:w-[384px]">
+        <div className="relative flex h-[200px] w-full flex-col justify-between rounded-lg border-2 p-3 md:w-10/12 lg:h-[230px] lg:w-[384px]">
           <div className="flex justify-between gap-0 lg:flex-row">
-            <table className="h-min w-[75%] border-none">
+            <table className="h-min w-[65%] border-none">
               <tbody>
                 <tr>
                   <TimetableCell
@@ -123,13 +123,13 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
   )
 }
 
-export const TableSettingsSkeleton = () => {
+export const TableSettingsLoading = () => {
   return (
     <div className="flex flex-col items-center justify-center gap-2 lg:flex-row">
-      <div className="relative mx-auto flex h-[200px] w-full flex-col justify-between rounded-lg border p-3 shadow-lg md:w-10/12 lg:mx-0 lg:h-[230px] lg:w-[384px]">
+      <div className="relative flex h-[200px] w-10/12 flex-col justify-between rounded-lg border-2 p-3 lg:h-[230px] lg:w-[384px]">
         <div className="flex justify-between gap-2 lg:flex-row">
-          <Skeleton className="h-[80px] w-[250px]" />
-          <Skeleton className="h-[105px] w-[100px]" />
+          <Skeleton className="h-[80px] w-[65%] border-none" />
+          <Skeleton className="h-[105px] w-[35%]" />
         </div>
 
         <div className="flex w-full items-baseline justify-between">
@@ -139,12 +139,9 @@ export const TableSettingsSkeleton = () => {
       </div>
 
       <div className="grid w-full grid-cols-2 gap-1 md:w-10/12 lg:w-fit">
-        <Skeleton className="h-[48px] w-full md:w-[110px]" />
-        <Skeleton className="h-[48px] w-full md:w-[110px]" />
-        <Skeleton className="h-[48px] w-full md:w-[110px]" />
-        <Skeleton className="h-[48px] w-full md:w-[110px]" />
-        <Skeleton className="h-[48px] w-full md:w-[110px]" />
-        <Skeleton className="h-[48px] w-full md:w-[110px]" />
+        {Array.from({ length: 6 }, (_, i) => (
+          <Skeleton key={i} className="h-[48px] w-full py-1 lg:w-[110px]" />
+        ))}
         <Skeleton className="col-span-2 h-[48px] w-full" />
       </div>
     </div>

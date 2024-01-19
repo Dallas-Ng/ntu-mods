@@ -8,13 +8,21 @@ import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/b
 import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview"
-import TimetableTable from "@/components/timetable/timetable-table"
+import { TimetableTableLoader } from "@/components/timetable/timetable-table"
 
 const TimetableOverview = dynamic(
   () => import("@/components/timetable/timetable-overview"),
   {
     ssr: false,
     loading: () => <TimetableOverviewLoading />
+  }
+)
+
+const TimetableTable = dynamic(
+  () => import("@/components/timetable/timetable-table"),
+  {
+    ssr: false,
+    loading: () => <TimetableTableLoader />
   }
 )
 

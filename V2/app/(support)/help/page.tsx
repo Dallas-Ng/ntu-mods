@@ -20,7 +20,7 @@ const HELP_CONFIG: HelpConfig[] = [
       "On the stars page, click on the add course button, after which you can use the search bar to search for courses. Click on the course to see the indexes available for that course. After adding an index, the timetable will be updated automatically."
   },
   {
-    question: "How does this help me in stars?",
+    question: "How does this help me in STARS?",
     answer:
       "While we do not help track vacanies right now, we provide you a way to plan your courses and indexes before stars opens and allow you to share with your friends if you want to take the same index."
   },
@@ -44,17 +44,17 @@ const HELP_CONFIG: HelpConfig[] = [
 
 export default function HelpPage() {
   return (
-    <>
-      <div className="p-5">
+    <div className="md:p-5">
+      <div className="mb-4">
         <Link
           href="/timetable"
-          className="flex items-center transition-colors hover:text-primary-alt">
-          <ArrowLeft className="size-5" /> Back to Stars
+          className="flex items-center text-sm transition-colors hover:text-primary-alt">
+          <ArrowLeft className="size-5" /> Back to Timetable
         </Link>
       </div>
 
-      <div className="flex flex-col gap-2 md:flex-row">
-        <div className="p-5">
+      <div className="flex flex-col gap-5 md:flex-row">
+        <div>
           <h1 className="mb-2 bg-gradient-to-r from-indigo-600 to-indigo-900 bg-clip-text text-2xl font-bold text-transparent">
             Frequently Asked Questions
           </h1>
@@ -71,7 +71,7 @@ export default function HelpPage() {
           </p>
         </div>
 
-        <div className="p-5 md:w-[70%]">
+        <div className="md:w-[70%]">
           {HELP_CONFIG.map(({ question, answer }, i) => (
             <div className="mb-[3rem]" key={i}>
               <h2 className="text-xl font-bold">{question}</h2>
@@ -81,7 +81,7 @@ export default function HelpPage() {
           ))}
 
           <Link href="/debug">
-            <Alert>
+            <Alert className="transition-colors hover:bg-muted">
               <ServerCrash className="size-5" />
 
               <AlertTitle>Having Problems with the System?</AlertTitle>
@@ -93,6 +93,6 @@ export default function HelpPage() {
           </Link>
         </div>
       </div>
-    </>
+    </div>
   )
 }

@@ -16,14 +16,14 @@ const LayoutDefault = ({
   breadcrumbs = true
 }: Props) => {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-background">
       <Navbar />
 
       {breadcrumbs && <Breadcrumbs />}
 
       <main
         className={cn(
-          "container relative flex-1 px-3  md:px-5",
+          "container relative flex-1 px-3 md:px-5 ",
           containerClassName
         )}>
         {children}

@@ -10,6 +10,52 @@ type Indexes = {
   [indexKey: string]: Index[]
 }
 
+type ModuleType =
+  | "CORE" // All others (core)
+  | "GLOAD" // BDE
+  | "MLOAD" // Minor
+  | "GERP" // General Education
+  | "CNY" // CN Yang Scholars
+  | "USP" // CN Yang Scholars
+
+type ModuleFaculty =
+  | "OTHERS"
+  | "ACC" // Accountancy
+  | "ADM" // Art, Design & Media
+  | "BMS" // Biomedical Sciences
+  | "BS" // Biological Sciences
+  | "BUS" // Business
+  | "CBE" // Chemical & Biomolecular Engineering
+  | "CE" // Computer Engineering
+  | "CEE" // Civil Engineering
+  | "CHEM" // Chemistry and Biological Chemistry
+  | "CHIN" // Chinese
+  | "CS" // Communication Studies
+  | "CSC" // Computer Science
+  | "ECON" // Economics
+  | "EEE" // Electrical & Electronic Engineering
+  | "EESS" // Environmental Earth Systems Science
+  | "ELH" // English
+  | "HIST" // History
+  | "ICC" // Interdisciplinary Collaborative Courses
+  | "LMS" // Linguistics & Multilingual Studies
+  | "MAT" // Materials Engineering
+  | "MATH" // Mathematical Sciences
+  | "ME" // Mechanical Engineering
+  | "MED" // Medicine
+  | "MS" // Maritime Studies
+  | "NIE" // National Institute of Education
+  | "NTC" // Nanyang Technopreneurship Centre
+  | "PHIL" // Philosophy
+  | "PHY" // Physics and Applied Physics
+  | "PPGA" // Public Policy And Global Affairs
+  | "PSY" // Psychology
+  | "SOC" // Sociology
+  | "SOH" // Humanities
+  | "SPS" // Physical and Mathematical Sciences
+  | "SSM" // Sport Science And Management
+  | "SSS" // Social Science
+
 interface Module {
   code: string
   au: string

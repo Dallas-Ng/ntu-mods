@@ -1,10 +1,14 @@
+"use client"
+
 import { Fragment } from "react"
 
 import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
 import { getIndexType } from "@/lib/get-index-type"
 import { getModuleIndexes } from "@/lib/get-module-indexes"
+import { cn } from "@/lib/utils"
 
 import TimetableCell from "../timetable/timetable-cell"
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
 
 /**
  * Calculates the number of conflicts between a given time slot and previous time slots in a day.
@@ -206,6 +210,7 @@ const TimetableTable = ({ moduleKey }: Props) => {
           fullCell
           hideTimeDate
           overrideIndex={getIndexType(index.type) === "LEC" ? <></> : null}
+          divClassName={cn(STARS_MATRIX[tsIndex].length > 10 && "md:px-1")} // if there are more than 10 columns, reduce the padding
         />
       )
 
@@ -216,26 +221,29 @@ const TimetableTable = ({ moduleKey }: Props) => {
   })
 
   /**
+   * Calculates the max length of any day in matrix
+   */
+  let MAX_LENGTH_MATRIX = 0
+  STARS_MATRIX.forEach((matrixRow) => {
+    MAX_LENGTH_MATRIX = Math.max(matrixRow.length, MAX_LENGTH_MATRIX)
+  })
+
+  /**
    * Generation of Table Head and Table Body
    */
   const TableHeadItems = Object.entries(MAP_CONFLICTS).map(([k, v]) => (
     <th
       key={k}
       colSpan={v}
-      className="h-fit p-0 text-center font-normal text-secondary">
+      className="h-fit p-1 text-center font-normal text-secondary">
       {TRUN_DAY_MAP[Number(k)]}
     </th>
   ))
 
   const TableBodyItems = STARS_MATRIX.map((matrixRow, matrixRowIdx) => {
     // Hide rows that are not within the time range
-    if (Object.keys(moduleIndexes).length > 0) {
-      if (
-        matrixRowIdx < minTimeSlotToShow ||
-        matrixRowIdx > maxTimeSlotToShow
-      ) {
-        return null
-      }
+    if (matrixRowIdx < minTimeSlotToShow || matrixRowIdx > maxTimeSlotToShow) {
+      return null
     }
 
     return (
@@ -251,18 +259,47 @@ const TimetableTable = ({ moduleKey }: Props) => {
     )
   })
 
+  // This means theres no indexes available for this module
+  if (Object.keys(moduleIndexes).length === 0) {
+    return (
+      <div className="w-full border-2 p-4 text-center">
+        No Indexes Available
+      </div>
+    )
+  }
+
+  // This means theres onyl online course
+  if (Object.values(moduleIndexes).some((x) => x.length === 0)) {
+    return (
+      <div className="w-full border-2 p-4 text-center">
+        No Indexes Available - Onine Course
+      </div>
+    )
+  }
+
+  const TABLE_OVERFLOW_THRESHOLD = MAX_LENGTH_MATRIX > 15
+  const TABLE_WIDTH = TABLE_OVERFLOW_THRESHOLD
+    ? `${100 + MAX_LENGTH_MATRIX * 2}vw`
+    : "100%"
+
   return (
-    <table className="table-border size-full table-fixed border-collapse border p-0 text-[0.6rem] md:text-xs">
-      <thead>
-        <tr>
-          <th className="w-[38px]"></th>
+    <div className={cn(TABLE_OVERFLOW_THRESHOLD && "overflow-x-scroll")}>
+      <table
+        className={cn(
+          "table-border size-full table-fixed border-collapse border-2 p-0 text-[0.6rem] md:text-xs"
+        )}
+        style={{ width: TABLE_WIDTH }}>
+        <thead>
+          <tr>
+            <th className="w-[38px]"></th>
 
-          {TableHeadItems}
-        </tr>
-      </thead>
+            {TableHeadItems}
+          </tr>
+        </thead>
 
-      <tbody>{TableBodyItems}</tbody>
-    </table>
+        <tbody>{TableBodyItems}</tbody>
+      </table>
+    </div>
   )
 }
 

@@ -1,17 +1,16 @@
 "use client"
 
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useBoundState } from "@/state/bound.state"
 import { ArrowLeft } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 
-export default function DebugContent() {
+const DebugContent = () => {
   const state = useBoundState()
   const { resetTimetables, resetSettings } = state
 
-  function resetApplicationState() {
+  const resetApplicationState = () => {
     const confirmed = confirm(
       "If you encountered any problems, press confirm. Otherwise, press cancel."
     )
@@ -53,3 +52,4 @@ export default function DebugContent() {
     </>
   )
 }
+export default DebugContent

@@ -15,7 +15,7 @@ interface Props {
  *
  * @param persistQuerystring - A boolean indicating whether to persist the querystring to the screenshot page.
  */
-export default function StarsScreenshotButton({ persistQuerystring }: Props) {
+const StarsScreenshotButton = ({ persistQuerystring }: Props) => {
   let href = `/screenshot`
   const searchParams = useSearchParams()
 
@@ -33,3 +33,5 @@ export default function StarsScreenshotButton({ persistQuerystring }: Props) {
 export const StarsScreenshotButtonLoading = () => (
   <ButtonCollapsable icon={ImageDown} text="Export as Image" disabled />
 )
+
+export default StarsScreenshotButton

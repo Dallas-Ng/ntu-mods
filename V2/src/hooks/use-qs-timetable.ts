@@ -1,6 +1,6 @@
 import { useSearchParams } from "next/navigation"
 
-export function useQsTimetable(): Timetable | undefined {
+export const useQsTimetable = (): Timetable | undefined => {
   const searchParams = useSearchParams()
   const obj = Object.fromEntries(searchParams.entries())
 

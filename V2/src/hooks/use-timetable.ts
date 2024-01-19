@@ -4,7 +4,7 @@ import { useBoundState } from "@/state/bound.state"
 
 import { useQsTimetable } from "./use-qs-timetable"
 
-export function useTimetable(argTimetable?: Timetable) {
+export const useTimetable = (argTimetable?: Timetable) => {
   const {
     timetables,
     timetableIndex,

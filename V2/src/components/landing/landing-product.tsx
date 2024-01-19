@@ -9,10 +9,12 @@ const TEMPLATE_COURSES = {
   EE4208: "32263"
 }
 
-export default function LandingProduct() {
+const LandingProduct = () => {
   return (
     <div className="relative h-[59vh] w-full justify-center overflow-hidden rounded-lg border-4 bg-background shadow-xl dark:bg-slate-950">
       <TimetableTable timetable={TEMPLATE_COURSES} fullCell />
     </div>
   )
 }
+
+export default LandingProduct

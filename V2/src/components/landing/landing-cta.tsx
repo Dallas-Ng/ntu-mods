@@ -3,7 +3,7 @@ import Link from "next/link"
 
 import { Button } from "../ui/button"
 
-export default function LandingCTA() {
+const LandingCTA = () => {
   return (
     <div className="z-10 flex items-center justify-center align-middle">
       <div className="max-w-[800px]">
@@ -30,3 +30,5 @@ export default function LandingCTA() {
     </div>
   )
 }
+
+export default LandingCTA

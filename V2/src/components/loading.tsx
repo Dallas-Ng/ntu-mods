@@ -4,7 +4,7 @@ interface LoadingProps {
   loading?: boolean
 }
 
-export default function Loading({ loading = true }: LoadingProps) {
+const Loading = ({ loading = true }: LoadingProps) => {
   if (!loading) return <></>
 
   return (
@@ -13,3 +13,5 @@ export default function Loading({ loading = true }: LoadingProps) {
     </div>
   )
 }
+
+export default Loading

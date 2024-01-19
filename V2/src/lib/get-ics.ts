@@ -1,5 +1,5 @@
 import { addDays, format, isBefore, startOfWeek } from "date-fns"
-import { EventAttributes, createEvents } from "ics"
+import { createEvents, EventAttributes } from "ics"
 
 import { formatRemarks } from "./format"
 import { getIndex } from "./get-index"

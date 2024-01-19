@@ -1,4 +1,6 @@
-import { Fragment } from "react"
+"use client"
+
+import { Fragment, useEffect, useState } from "react"
 
 import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
 import { getIndexType } from "@/lib/get-index-type"
@@ -47,6 +49,7 @@ interface Props {
 
 const TimetableTable = ({ moduleKey }: Props) => {
   const moduleIndexes = getModuleIndexes(moduleKey)
+  const [currentHoverKey, setCurrentHoverKey] = useState("")
 
   let MAP: { [day: number]: Index[] } = {
     1: [],
@@ -202,6 +205,14 @@ const TimetableTable = ({ moduleKey }: Props) => {
 
       STARS_MATRIX[tsIndex][cellPosition] = (
         <TimetableCell
+          onMouseOver={() => setCurrentHoverKey(index.key)}
+          onMouseOut={() => setCurrentHoverKey("")}
+          dimmed={
+            currentHoverKey !== ""
+              ? currentHoverKey !== index.key &&
+                getIndexType(index.type) !== "LEC"
+              : undefined
+          }
           moduleKey={moduleKey}
           index={index}
           fullCell

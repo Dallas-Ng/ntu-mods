@@ -3,7 +3,6 @@
 import { Fragment, useState } from "react"
 
 import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
-import { getIndexType } from "@/lib/get-index-type"
 import { getModuleIndexMap } from "@/lib/get-module-index-map"
 import { cn } from "@/lib/utils"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -198,6 +197,7 @@ const TimetableTable = (props: Props) => {
           dimmed={
             currentHoverKey !== "" ? currentHoverKey !== moduleKey : undefined
           }
+          indexes={moduleIndexMap[moduleKey]}
           moduleKey={moduleKey}
           index={index}
           fullCell={props.fullCell}

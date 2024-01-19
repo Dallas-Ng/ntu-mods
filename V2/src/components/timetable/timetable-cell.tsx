@@ -21,8 +21,6 @@ interface Props {
   dimmed?: boolean
 }
 
-// TODO: Variations
-
 const TimetableCell = (props: Props) => {
   const {
     // Required Props
@@ -47,7 +45,10 @@ const TimetableCell = (props: Props) => {
   const { tableCell } = settings
 
   const variations = indexes.filter(
-    (item) => item.day === index.day && item.time === index.time
+    (item) =>
+      item.key === index.key &&
+      item.day === index.day &&
+      item.time === index.time
   )
   const hasDifferenceInRemarks = variations.some(
     (v) => v.remarks !== index.remarks && v.remarks !== ""

@@ -13,7 +13,7 @@ const ModuleCard = ({ module, variant = "default", cardClassName }: Props) => {
     <Link key={module.code} href={`/mods/${module.code}`}>
       <div
         className={cn(
-          "rounded-lg border p-2 text-sm text-muted-foreground",
+          "rounded-lg border bg-card p-2 text-sm text-muted-foreground",
           cardClassName
         )}>
         <p>{module.code}</p>

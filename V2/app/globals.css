@@ -104,5 +104,5 @@ table th {
 
 table th,
 table td {
-  @apply border border-slate-200 p-1  dark:border-slate-900;
+  @apply border border-slate-200 p-1 dark:border-slate-900 md:p-2;
 }

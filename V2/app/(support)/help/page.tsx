@@ -55,7 +55,7 @@ export default function HelpPage() {
 
       <div className="flex flex-col gap-2 md:flex-row">
         <div className="p-5">
-          <h1 className="mb-2 bg-gradient-to-r from-emerald-600 to-emerald-900 bg-clip-text text-2xl font-bold text-transparent">
+          <h1 className="mb-2 bg-gradient-to-r from-indigo-600 to-indigo-900 bg-clip-text text-2xl font-bold text-transparent">
             Frequently Asked Questions
           </h1>
 

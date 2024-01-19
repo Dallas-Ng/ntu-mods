@@ -101,7 +101,7 @@ const TimetableModulesSelect = () => {
   }
 
   return (
-    <div ref={ref} className="rounded-md border">
+    <div ref={ref} className="rounded-md border-2">
       <Command shouldFilter={false} className="bg-background">
         <CommandInput
           placeholder="Search for Module"

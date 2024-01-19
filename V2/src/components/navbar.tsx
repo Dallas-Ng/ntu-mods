@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -19,9 +20,29 @@ import { Button } from "./ui/button"
 
 const Navbar = () => {
   const pathname = usePathname()
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    /**
+     * Upon scrolling past the top beta header, it will create a shadow in the navigation menu
+     */
+    const handleScroll = () => {
+      const scrollPos = window.scrollY
+      if (scrollPos > 50) setScrolled(true)
+      else setScrolled(false)
+    }
+
+    window.addEventListener("scroll", handleScroll)
+
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   return (
-    <header className="sticky top-0 z-10 w-full backdrop-blur-xl">
+    <header
+      className={cn(
+        "sticky top-0 z-10 w-full backdrop-blur-xl",
+        scrolled && "shadow"
+      )}>
       <div className="container flex h-16 items-center px-2 md:px-4">
         <div className="flex">
           <Link href="/" className="flex items-center">
@@ -45,7 +66,7 @@ const Navbar = () => {
             </span>
           </Link>
 
-          <NavigationMenu className="flex items-center">
+          <NavigationMenu className="ml-2 flex items-center">
             <NavigationMenuList>
               <NavigationMenuItem>
                 {siteConfig.navLinks.map((link) => (

@@ -22,7 +22,7 @@ const TimetableModifier = () => {
         </div>
       </div>
 
-      <div className="relative max-h-[50vh] min-h-10 w-full overflow-y-auto rounded-lg border">
+      <div className="relative max-h-[50vh] min-h-10 w-full overflow-y-auto rounded-lg border-2">
         <div className="p-2 text-center text-xs text-secondary">
           Registered Modules
         </div>

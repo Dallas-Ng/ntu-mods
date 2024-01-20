@@ -75,20 +75,25 @@ export const generateTimetableMatrix = (
    * - Remove empty rows (timeslots)
    * - Remove empty columns (days - only saturday and sunday)
    */
+  // Checks saturday and sunday for empty columns
+  const hasNoSundayIndexes = Object.values(TABLE_MATRIX).every(
+    (rowData) => rowData[6].length === 0
+  )
+  const hasNoSaturdayIndexes = Object.values(TABLE_MATRIX).every(
+    (rowData) => rowData[5].length === 0
+  )
+
   Object.entries(TABLE_MATRIX).forEach(([key, rowData]) => {
     // remove empty rows
     if (rowData.every((dayCol) => dayCol.length === 0)) {
       delete TABLE_MATRIX[parseInt(key)]
     }
 
-    // Checks saturday and sunday for empty columns
-    for (let index = rowData.length - 1; index >= 0; index--) {
-      const length = rowData[index].length
+    // Need to show saturday if there are sunday indexes
+    if (hasNoSundayIndexes) {
+      delete TABLE_MAX_DAY_COLUMNS[7]
 
-      if (length === 0 && index >= 5) {
-        rowData.splice(index, 1)
-        delete TABLE_MAX_DAY_COLUMNS[index + 1] // remove from max day columns
-      }
+      if (hasNoSaturdayIndexes) delete TABLE_MAX_DAY_COLUMNS[6]
     }
   })
 

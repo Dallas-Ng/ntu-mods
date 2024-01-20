@@ -3,7 +3,6 @@ import Link from "next/link"
 import { ServerCrash } from "lucide-react"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Button } from "@/components/ui/button"
 import FeedbackCard from "@/components/feedback-card"
 import Header from "@/components/header"
 import { AppearanceSettingsLoading } from "@/components/settings/appearance-settings"

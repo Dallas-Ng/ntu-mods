@@ -81,7 +81,6 @@ export default function RootLayout({
           <Toaster position="top-center" />
           <GTag />
           <ClarityTag />
-
           <TailwindIndicator />
         </ThemeProvider>
       </body>

@@ -83,10 +83,18 @@ export const generateTimetableMatrix = (
     (rowData) => rowData[5].length === 0
   )
 
-  Object.entries(TABLE_MATRIX).forEach(([key, rowData]) => {
+  Object.entries(TABLE_MATRIX).forEach(([key, rowData], idx) => {
     // remove empty rows
-    if (rowData.every((dayCol) => dayCol.length === 0)) {
-      delete TABLE_MATRIX[parseInt(key)]
+    if (moduleIndexesFlat.length > 0) {
+      if (rowData.every((dayCol) => dayCol.length === 0)) {
+        delete TABLE_MATRIX[parseInt(key)]
+      }
+    } else {
+      // Show 0930 to 1830 when there are no indexes
+      // Should sync with the loading component
+      if (idx > 20 || idx < 3) {
+        delete TABLE_MATRIX[parseInt(key)]
+      }
     }
 
     // Need to show saturday if there are sunday indexes

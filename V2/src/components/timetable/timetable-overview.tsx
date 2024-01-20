@@ -1,8 +1,9 @@
 "use client"
 
 import Link from "next/link"
+import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
 
-import { getModule } from "@/lib/get-module"
+import { getModuleAu } from "@/lib/get-module-au"
 import getModuleExam from "@/lib/get-module-exam"
 import { getModuleIndexMap } from "@/lib/get-module-index-map"
 import { cn } from "@/lib/utils"
@@ -29,9 +30,10 @@ const TimetableOverview = () => {
 
         <tbody>
           {Object.entries(moduleIndexMap).map(
-            ([module, indexes], moduleIdx) => {
-              const moduleData = getModule(module)
-              const exam = getModuleExam(module)
+            ([moduleKey, indexes], moduleIdx) => {
+              const moduleTitle = TRUN_M_DATA[moduleKey]
+              const au = getModuleAu(moduleKey)
+              const exam = getModuleExam(moduleKey)
 
               return (
                 <tr
@@ -41,21 +43,21 @@ const TimetableOverview = () => {
 
                   <td className="w-fit md:w-[100px]">
                     <Link
-                      href={`/mods/${module}`}
+                      href={`/mods/${moduleKey}`}
                       className="transition-colors hover:text-primary-alt">
-                      {module}
+                      {moduleKey}
                     </Link>
                   </td>
 
                   <td className="hidden  text-left md:table-cell">
                     <Link
-                      href={`/mods/${module}`}
+                      href={`/mods/${moduleKey}`}
                       className="transition-colors hover:text-primary-alt">
-                      {moduleData.title}
+                      {moduleTitle}
                     </Link>
                   </td>
 
-                  <td>{moduleData.au.replace("AU", "")}</td>
+                  <td>{au.replace("AU", "")}</td>
 
                   <td>
                     {exam ? (
@@ -79,11 +81,9 @@ const TimetableOverview = () => {
             <td className="hidden md:table-cell"></td>
             <td>
               {Object.keys(moduleIndexMap).reduce((acc, module) => {
-                const moduleData = getModule(module)
+                const au = getModuleAu(module)
 
-                return (
-                  acc + (parseInt(moduleData.au.trim().replace("AU", "")) || 0)
-                )
+                return acc + (parseInt(au.trim().replace("AU", "")) || 0)
               }, 0)}
               .0 AUs
             </td>

@@ -14,7 +14,7 @@ const ScreenshotSettingsButton = () => {
         </Button>
       </DrawerTrigger>
 
-      <DrawerContent>
+      <DrawerContent className="max-h-[100svh]">
         <div className="space-y-5 p-5">
           <AppearanceSettings />
 
@@ -24,5 +24,11 @@ const ScreenshotSettingsButton = () => {
     </Drawer>
   )
 }
+
+export const ScreenshotSettingsButtonLoader = () => (
+  <Button variant="outline" size="icon" disabled>
+    <Settings className="size-5" />
+  </Button>
+)
 
 export default ScreenshotSettingsButton

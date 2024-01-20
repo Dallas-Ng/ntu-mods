@@ -1,11 +1,13 @@
 import Link from "next/link"
 
+import Header from "@/components/header"
+
 export default function HelpPage() {
   return (
-    <div className="mb-[50px] flex flex-col gap-2 ">
-      <h1 className="text-2xl">Privacy Policy</h1>
-
-      <p>Last updated: December 23, 2023</p>
+    <div className="mx-auto max-w-2xl space-y-4 text-muted-foreground md:mt-5">
+      <div className="text-foreground">
+        <Header title="Privacy Policy" subtitle="Last Updated: Dec 2023" />
+      </div>
 
       <br />
 

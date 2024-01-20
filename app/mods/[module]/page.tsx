@@ -1,11 +1,9 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
-import { TRUN_COURSE_CONTENT } from "@/data/truncated-course-content"
+import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
 
-import { capitaliseEachWord } from "@/lib/capitalise-each-word"
-import { formatTitle } from "@/lib/format"
-import { getModuleData } from "@/lib/get-module-data"
+import { getModule } from "@/lib/get-module"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
@@ -14,15 +12,19 @@ import RelatedModules from "@/components/related-modules"
 // Change the dynamic behavior of a layout or page to fully static or fully dynamic.
 // 'auto' | 'force-dynamic' | 'error' | 'force-static'
 // @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
-export const dynamic = "auto"
+export const dynamic = "force-static"
 
 // Disable dynamic routes
 // @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamicparams
 export const dynamicParams = true
 
+// No revalidation
+// @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
+export const revalidate = Infinity
+
 export default function Page({ params }: { params: { module: string } }) {
-  const moduleCode = params.module
-  const moduleData = getModuleData(moduleCode)
+  const moduleKey = params.module
+  const moduleData = getModule(moduleKey)
 
   /**
    * Handles improper page slugs
@@ -32,8 +34,8 @@ export default function Page({ params }: { params: { module: string } }) {
      * Check if mod is in lower case. If so, redirect to the correct page
      *    e.g. /mods/ma1000 -> /mods/MA1000
      */
-    const lowerCaseMod = Object.keys(TRUN_COURSE_CONTENT).find(
-      (k) => k.toLowerCase() === moduleCode
+    const lowerCaseMod = Object.keys(TRUN_M_DATA).find(
+      (k) => k.toLowerCase() === moduleKey
     )
 
     if (lowerCaseMod) {
@@ -56,20 +58,19 @@ export default function Page({ params }: { params: { module: string } }) {
       </div>
 
       <div className="mt-10">
-        <h2 className="mb-2 text-lg">Available Indexes (Coming Soon)</h2>
+        <h2 className="mb-2 text-lg">Available Indexes</h2>
 
-        <ModsIndexTable />
+        <ModsIndexTable moduleKey={moduleKey} />
 
         <div className="mt-10">
           <h2 className="mb-2 text-lg">Other Relevant Mods</h2>
-
           <RelatedModules
-            limit={3}
-            moduleKey={moduleCode}
+            limit={9}
+            moduleKey={moduleKey}
             emptyContent={
               <Link
                 href="/mods"
-                className="text-sm text-secondary transition-colors hover:text-secondary-foreground">
+                className="text-sm text-muted-foreground transition-colors hover:text-primary-alt">
                 No Mods Found. Click here to see all Mods
               </Link>
             }
@@ -85,7 +86,7 @@ export default function Page({ params }: { params: { module: string } }) {
  */
 export async function generateStaticParams() {
   // All urls are to follow this scheme - `/mods/SC1005`
-  return Object.keys(TRUN_COURSE_CONTENT).map((key) => ({
+  return Object.keys(TRUN_M_DATA).map((key) => ({
     module: key
   }))
 }
@@ -100,13 +101,15 @@ export async function generateMetadata({
   params: { module: string }
 }): Promise<Metadata | null> {
   const moduleKey = params.module
-  const mod = Object.keys(TRUN_COURSE_CONTENT).find((k) => k === moduleKey)
+  const mod = Object.keys(TRUN_M_DATA).find((k) => k === moduleKey)
 
   if (!mod) {
     return null
   }
-  const moduleTitle = TRUN_COURSE_CONTENT[moduleKey]
-  const title = capitaliseEachWord(formatTitle(moduleTitle))
+  const moduleTitle = TRUN_M_DATA[moduleKey]
+
+  const title = moduleTitle
+
   const description = `Explore ${moduleKey} ${title}. Find detailed information, reviews, and schedules for various faculty and subjects. Plan your academic journey with ease.`
   return {
     title: `${moduleKey} ${title}`,

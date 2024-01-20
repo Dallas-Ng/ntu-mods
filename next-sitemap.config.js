@@ -1,10 +1,10 @@
 /** @type {import('next-sitemap').IConfig} */
-const CONDLIDATED_COURSE_DATA_2023_1 = require("./data/consolidated-course-content-2023-1.json")
-const CONDLIDATED_COURSE_DATA_2023_2 = require("./data/consolidated-course-content-2023-1.json")
+const M_DATA_S1 = require("./src/data/2023/m-data-s1.json")
+const M_DATA_S2 = require("./src/data/2023/m-data-s2.json")
 
-const C_COURSE_DATA = {
-  ...CONDLIDATED_COURSE_DATA_2023_1,
-  ...CONDLIDATED_COURSE_DATA_2023_2
+const M_DATA = {
+  ...M_DATA_S1,
+  ...M_DATA_S2
 }
 
 module.exports = {
@@ -12,7 +12,7 @@ module.exports = {
   generateRobotsTxt: true, // (optional)
   exclude: ["/debug", "/settings"],
   additionalPaths: async (config) => {
-    return Object.keys(C_COURSE_DATA).map((key) => ({
+    return Object.keys(M_DATA).map((key) => ({
       loc: `/mods/${key}`,
       changefreq: config.changefreq,
       priority: config.priority,

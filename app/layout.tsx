@@ -1,16 +1,18 @@
-import "@/styles/globals.css"
-import { Metadata, Viewport } from "next"
-import { Analytics } from "@vercel/analytics/react"
+import type { Metadata, Viewport } from "next"
+import { Inter } from "next/font/google"
+
+import "./globals.css"
 
 import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
 import ClarityTag from "@/components/clarity"
 import GTag from "@/components/gtag"
 import MobileTracker from "@/components/mobile-tracker"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
-import { ThemeProvider } from "@/components/theme-provider"
+import TailwindIndicator from "@/components/tailwind-indicator"
+import ThemeProvider from "@/components/theme-provider"
+
+const inter = Inter({ subsets: ["latin"] })
 
 const defaults = siteConfig.metatags.default
 
@@ -25,9 +27,9 @@ export const metadata: Metadata = {
   authors: defaults.authors,
   creator: "Dallas Ng",
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png"
+    icon: "/favicon.ico"
+    // shortcut: "/favicon-16x16.png",
+    // apple: "/apple-touch-icon.png"
   },
   openGraph: {
     type: "website",
@@ -64,28 +66,24 @@ export const viewport: Viewport = {
   maximumScale: 1
 }
 
-interface RootLayoutProps {
+export default function RootLayout({
+  children
+}: {
   children: React.ReactNode
-}
-
-export default function RootLayout({ children }: RootLayoutProps) {
+}) {
   return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <body className={cn("font-sans antialiased", fontSans.variable)}>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn(inter.className, "antialiased ")}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          {children}
 
-            {/* Auxillary services */}
-            <GTag />
-            <MobileTracker />
-            <ClarityTag />
-            <TailwindIndicator />
-            <Toaster position="top-center" />
-            <Analytics />
-          </ThemeProvider>
-        </body>
-      </html>
-    </>
+          <MobileTracker />
+          <Toaster position="top-center" />
+          <GTag />
+          <ClarityTag />
+          <TailwindIndicator />
+        </ThemeProvider>
+      </body>
+    </html>
   )
 }

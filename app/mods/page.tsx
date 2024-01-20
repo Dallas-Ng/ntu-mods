@@ -1,61 +1,136 @@
-"use client"
-
-import { useState } from "react"
 import Link from "next/link"
-import { TRUN_COURSE_CONTENT } from "@/data/truncated-course-content"
+import { M_DATA } from "@/data/2023/m-data"
+import { M_DATA_S1 } from "@/data/2023/m-data-s1"
+import { M_DATA_S2 } from "@/data/2023/m-data-s2"
 
-import { formatTitle } from "@/lib/format"
-import { useDebounce } from "@/hooks/use-debounce"
-import { Input } from "@/components/ui/input"
+import { MODULE_CATEGORY } from "@/lib/constants"
+import { getModuleCategories } from "@/lib/get-module-category"
+import { getModuleFaculty } from "@/lib/get-module-faculty"
+import Header from "@/components/header"
+import {
+  ModsFacultySelect,
+  SearchModuleFaculty
+} from "@/components/mods/mods-faculty-select"
+import {
+  ModsModuleTypeSelect,
+  SearchModuleType
+} from "@/components/mods/mods-module-type-select"
+import ModsSearchInput from "@/components/mods/mods-search-input"
+import {
+  ModsSemesterSelect,
+  Semester
+} from "@/components/mods/mods-semester-select"
 
-export default function ModsPage() {
-  const [search, setSearch] = useState("")
+interface Props {
+  searchParams: {
+    dbSearchTerm?: string
+    semester?: Semester
+    moduleType?: SearchModuleType
+    moduleFaculty?: SearchModuleFaculty
+  }
+}
 
-  const dbSearchTerm = useDebounce(search, 200) // arbitrary delay - anything lower makes it feel laggy
+const TestPage = ({ searchParams }: Props) => {
+  const {
+    dbSearchTerm = "",
+    semester = "s2",
+    moduleType = "all",
+    moduleFaculty = "all"
+  } = searchParams
 
-  const filteredModules = Object.entries(TRUN_COURSE_CONTENT).filter(
-    ([moduleCode, title]) =>
-      dbSearchTerm === "" ||
-      moduleCode.toLowerCase().includes(dbSearchTerm.toLowerCase()) ||
-      title.toLowerCase().includes(dbSearchTerm.toLowerCase())
-  )
+  // Semseter Data
+  const MODULE_DATA =
+    semester === "s2" ? M_DATA_S2 : semester === "all" ? M_DATA : M_DATA_S1
+
+  let filteredModules = Object.entries(MODULE_DATA)
+
+  // Assume its a module code prefix
+  if (dbSearchTerm.length === 2) {
+    filteredModules = filteredModules.filter(([moduleKey, _]) => {
+      return moduleKey.toLowerCase().startsWith(dbSearchTerm.toLowerCase())
+    })
+  }
+
+  // Filter by module type
+  filteredModules = filteredModules.filter(([_, moduleData]) => {
+    if (moduleType === "all") return true
+    return getModuleCategories(moduleData.searchKeys).includes(moduleType)
+  })
+
+  // Filter by module faculty
+  filteredModules = filteredModules.filter(([_, moduleData]) => {
+    if (moduleFaculty === "all") return true
+    return getModuleFaculty(moduleData.searchKeys) === moduleFaculty
+  })
+
+  // Filter by module name or tilte
+  filteredModules = filteredModules.filter(([moduleKey, moduleData]) => {
+    return (
+      moduleKey.toLowerCase().includes(dbSearchTerm.toLowerCase()) ||
+      moduleData.title.toLowerCase().includes(dbSearchTerm.toLowerCase())
+    )
+  })
 
   return (
-    <div className="space-y-3">
-      <h1 className="text-3xl font-semibold capitalize">NTU Modules</h1>
-
-      {filteredModules.length === Object.keys(TRUN_COURSE_CONTENT).length ? (
-        <p className="text-secondary">
-          View all {Object.keys(TRUN_COURSE_CONTENT).length} modules offered by
-          NTU.
-        </p>
-      ) : (
-        <p className="text-secondary">
-          Filtered down to {filteredModules.length} modules.
-        </p>
-      )}
-
-      <Input
-        name="moduleCode"
-        placeholder="Search for module name or code"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+    <div className="relative space-y-3">
+      <Header
+        title="NTU Modules"
+        subtitle={<p>Filtered down to {filteredModules.length} modules.</p>}
       />
 
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
-        {filteredModules.map(([code, title]) => {
-          return (
-            <Link key={code} href={`/mods/${code}`}>
-              <div className={"rounded-lg border p-2"}>
-                <p className="text-sm text-secondary">{code}</p>
-                <p className="capitalize">{formatTitle(title)}</p>
-              </div>
-            </Link>
-          )
-        })}
+      <div className="flex w-full flex-col gap-2 md:flex-row">
+        <ModsSearchInput defaultValue={dbSearchTerm} />
+        <ModsFacultySelect defaultValue={moduleFaculty} />
+
+        <div className="flex gap-2">
+          <ModsSemesterSelect defaultValue={semester} />
+          <ModsModuleTypeSelect defaultValue={moduleType} />
+        </div>
       </div>
 
-      <p className="text-center text-sm text-secondary transition-colors hover:text-secondary-foreground">
+      <hr className="py-2" />
+
+      {filteredModules.length === 0 && (
+        <div className="flex h-20 w-full items-center rounded-md border text-center">
+          <p className="w-full text-center">
+            There are no modules found
+            <br />
+            <span className="text-muted-foreground">
+              Try changing your filters
+            </span>
+          </p>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        {filteredModules.map(([code, moduleData]) => (
+          <Link key={code} href={`/mods/${code}`}>
+            <div className="rounded-lg border-2 p-3 transition-colors hover:bg-accent">
+              <p className="text-sm text-muted-foreground">{moduleData.code}</p>
+
+              <p className="truncate">{moduleData.title}</p>
+
+              <div className="mt-4 flex items-center justify-between text-xs">
+                <div className="flex gap-1 text-muted-foreground">
+                  {getModuleCategories(moduleData.searchKeys).map(
+                    (category, i) => (
+                      <div key={i} className="rounded-full border px-2 py-0">
+                        <span key={i}>{MODULE_CATEGORY[category]}</span>
+                      </div>
+                    )
+                  )}
+                </div>
+
+                <div className="text-sm text-muted-foreground">
+                  {getModuleFaculty(moduleData.searchKeys)}
+                </div>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      <p className="text-center text-sm text-muted-foreground transition-colors hover:text-primary-alt">
         <Link
           href="https://wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"
           target="_blank">
@@ -65,3 +140,5 @@ export default function ModsPage() {
     </div>
   )
 }
+
+export default TestPage

@@ -112,7 +112,7 @@ export default function ScreenshotPage() {
       )}
 
       <div
-        className="flex h-full w-full items-center justify-center"
+        className="flex size-full items-center justify-center"
         style={{ ...padding, scale }}>
         <TimetableTable />
       </div>

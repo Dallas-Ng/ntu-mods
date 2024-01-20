@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic"
 
 import Header from "@/components/header"
+import { TimetableTableLoader } from "@/components/timetable-table/table"
 import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile-timetable-modifier-button"
 import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button"
 import { TimetablePlanSwitcherLoading } from "@/components/timetable/buttons/timetable-plan-switcher"
@@ -10,7 +11,6 @@ import TimetableHiddenContentHelper from "@/components/timetable/timetable-hidde
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import { TimetableModifierLoader } from "@/components/timetable/timetable-modifier"
 import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview"
-import { TimetableTableLoader } from "@/components/timetable/timetable-table"
 
 const TimetableScreenshotButton = dynamic(
   () => import("@/components/timetable/buttons/timetable-screenshot-button"),

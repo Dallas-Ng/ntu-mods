@@ -3,12 +3,12 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
+import { TimetableTableLoader } from "@/components/timetable-table/table"
 import { TimetableCopyButtonLoading } from "@/components/timetable/buttons/timetable-copy-button"
 import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button"
 import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview"
-import { TimetableTableLoader } from "@/components/timetable/timetable-table"
 
 const TimetableOverview = dynamic(
   () => import("@/components/timetable/timetable-overview"),

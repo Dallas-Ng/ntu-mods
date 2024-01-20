@@ -1,0 +1,102 @@
+"use client"
+
+import { getIndexTypeStyle } from "@/lib/get-index-type-style"
+import { cn } from "@/lib/utils"
+import { useSettings } from "@/hooks/use-settings"
+
+import { TimetableTableCellContent } from "./cell-content"
+
+interface Props {
+  moduleKey: string
+  index: Index
+  indexes: Index[]
+  fullCell?: boolean
+  dimmed?: boolean
+  hideIndex?: boolean
+  //
+  onMouseOver?: () => void
+  onMouseOut?: () => void
+}
+
+export const TimetableTableCell = (props: Props) => {
+  const {
+    moduleKey,
+    index,
+    indexes = [], // used for variations checking
+    // Styles
+    fullCell, // override for user's settings
+    dimmed = false,
+    hideIndex = false,
+    //
+    onMouseOver,
+    onMouseOut
+  } = props
+
+  // Settings for cells
+  const { settings } = useSettings()
+  const { tableCell } = settings
+
+  // Sytling and Modifications
+  const indexStyle = getIndexTypeStyle(index.type)
+
+  // Variations
+  const variations = indexes.filter(
+    (i) => i.key === index.key && i.day === index.day && i.time === index.time
+  )
+  const hasDiffRemarks = variations.some(
+    (v) => v.remarks !== index.remarks && v.remarks !== ""
+  )
+  const hasDiffVenues = variations.some((v) => v.venue !== index.venue)
+
+  // If there are variations, we will render the cell with the differences
+  const indexRemarks = hasDiffRemarks
+    ? variations.map((x) => x.remarks).join(", ")
+    : index.remarks
+
+  const indexVenues = hasDiffVenues
+    ? variations.map((x) => x.venue).join(", ")
+    : index.venue
+
+  return (
+    <td
+      rowSpan={index.duration}
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
+      className="p-1">
+      {/*  */}
+      <div
+        className={cn(
+          "flex h-full cursor-pointer items-center break-words rounded-lg p-1 md:p-2",
+          indexStyle.background,
+          dimmed && "opacity-30 dark:opacity-20"
+        )}>
+        <div className="w-full">
+          {/*  */}
+          <TimetableTableCellContent
+            index={{
+              ...index,
+              remarks: indexRemarks,
+              venue: indexVenues,
+              key: hideIndex ? "" : index.key
+            }}
+            moduleKey={moduleKey}
+            tableCell={
+              fullCell
+                ? {
+                    key: true,
+                    type: true,
+                    group: true,
+                    day: true,
+                    time: true,
+                    venue: true,
+                    remarks: true,
+                    duration: false // always false
+                  }
+                : tableCell
+            }
+          />
+        </div>
+      </div>
+    </td>
+  )
+}

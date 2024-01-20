@@ -6,3 +6,10 @@ export const parseTime = (index: Index) => {
   const endTime = parse(split[1], "HHmm", new Date())
   return { startTime, endTime }
 }
+
+export const parseTimeNumber = (index: Index) => {
+  const split = index.time.split("-")
+  const startTime = parseInt(split[0])
+  const endTime = parseInt(split[1])
+  return { startTime, endTime }
+}

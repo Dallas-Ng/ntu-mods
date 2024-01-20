@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic"
 
 import Header from "@/components/header"
+import { Migration } from "@/components/migration"
 import { TimetableTableLoader } from "@/components/timetable-table/table"
 import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile-timetable-modifier-button"
 import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button"
@@ -70,6 +71,8 @@ const TimetableOverview = dynamic(
 const Page = () => {
   return (
     <>
+      <Migration />
+
       <div className="space-y-4">
         <Header title="Timetable" />
 

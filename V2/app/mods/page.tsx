@@ -6,6 +6,7 @@ import { M_DATA_S2 } from "@/data/2023/m-data-s2"
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
+import Header from "@/components/header"
 import {
   ModsFacultySelect,
   SearchModuleFaculty
@@ -72,11 +73,10 @@ const TestPage = ({ searchParams }: Props) => {
 
   return (
     <div className="relative space-y-3">
-      <h1 className="text-3xl font-semibold capitalize">NTU Modules</h1>
-
-      <p className="text-muted-foreground">
-        Filtered down to {filteredModules.length} modules.
-      </p>
+      <Header
+        title="NTU Modules"
+        subtitle={<p>Filtered down to {filteredModules.length} modules.</p>}
+      />
 
       <div className="flex w-full flex-col gap-2 md:flex-row">
         <ModsSearchInput defaultValue={dbSearchTerm} />

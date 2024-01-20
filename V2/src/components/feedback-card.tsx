@@ -73,11 +73,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
   }
 
   return (
-    <div
-      className={cn(
-        "container mx-auto max-w-3xl rounded-md border p-3 shadow",
-        divClassName
-      )}>
+    <div className={cn("rounded-md border p-3 shadow", divClassName)}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

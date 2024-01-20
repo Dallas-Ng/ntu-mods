@@ -1,89 +1,92 @@
-import React from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import Loading from "@/components/loading"
-import StarsDownloadIcsButton from "@/components/stars/stars-buttons/stars-download-ics-button"
-import StarsScreenshotButton from "@/components/stars/stars-buttons/stars-screenshot-button"
-import TimetableHeader from "@/components/stars/timetable-header"
-
-const ExamTimetable = dynamic(
-  () => import("@/components/stars/exam-timetable"),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex h-[100px] items-center justify-center">
-        <Loading />
-      </div>
-    )
-  }
-)
-
-const StarsCopyTimetableButton = dynamic(
-  () => import("@/components/stars/stars-buttons/stars-copy-timetable-button"),
-  { ssr: false, loading: () => <Skeleton className="h-[40px] w-[137.58px]" /> }
-)
-
-const StarsTable = dynamic(() => import("@/components/stars/stars-table"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-[576px] items-center justify-center rounded-lg border">
-      <Loading />
-    </div>
-  )
-})
+import Header from "@/components/header"
+import { TimetableTableLoader } from "@/components/timetable-table/table"
+import { TimetableCopyButtonLoading } from "@/components/timetable/buttons/timetable-copy-button"
+import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button"
+import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button"
+import TimetableLegend from "@/components/timetable/timetable-legend"
+import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview"
 
 const TimetableOverview = dynamic(
-  () => import("@/components/stars/timetable-overview"),
+  () => import("@/components/timetable/timetable-overview"),
   {
     ssr: false,
-    loading: () => (
-      <div className="flex h-[150px] items-center justify-center">
-        <Loading />
-      </div>
-    )
+    loading: () => <TimetableOverviewLoading />
   }
 )
 
-export default function StarsSharePage() {
+const TimetableTable = dynamic(
+  () => import("@/components/timetable/timetable-table"),
+  {
+    ssr: false,
+    loading: () => <TimetableTableLoader />
+  }
+)
+
+const TimetableCopyButton = dynamic(
+  () => import("@/components/timetable/buttons/timetable-copy-button"),
+  {
+    ssr: false,
+    loading: () => <TimetableCopyButtonLoading />
+  }
+)
+const TimetableScreenshotButton = dynamic(
+  () => import("@/components/timetable/buttons/timetable-screenshot-button"),
+  {
+    ssr: false,
+    loading: () => <StarsScreenshotButtonLoading />
+  }
+)
+
+const TimetableDownloadCalendarButton = dynamic(
+  () =>
+    import("@/components/timetable/buttons/timetable-download-calendar-button"),
+  { ssr: false, loading: () => <TimetableDownloadCalendarButtonLoading /> }
+)
+
+const Page = () => {
   return (
-    <>
-      <TimetableHeader variant="share">
-        <Link href="/stars">
-          <Button>Make My Timetable</Button>
-        </Link>
+    <div className="space-y-4">
+      <Header
+        title="Timetable"
+        subtitle={
+          <span className="font-semibold text-rose-600">Read Only</span>
+        }
+      />
 
-        <StarsCopyTimetableButton />
+      <div className="flex justify-between gap-2">
+        <div className="flex gap-2">
+          <Link href="/timetable">
+            <Button>Make My Timetable</Button>
+          </Link>
 
-        <div className="ml-auto flex gap-1">
-          <StarsScreenshotButton persistQuerystring />
-          <StarsDownloadIcsButton />
-        </div>
-      </TimetableHeader>
-
-      <div className="overflow-hidden rounded-xl border-2">
-        <StarsTable />
-      </div>
-
-      <div className="mb-[50px] mt-2 flex flex-col gap-2 md:flex-row">
-        <div className="w-full lg:w-[50%]">
-          <h2 className="mb-2">Overview</h2>
-
-          <div className="rounded-lg border">
-            <TimetableOverview />
-          </div>
+          <TimetableCopyButton />
         </div>
 
-        <div className="w-full lg:w-[50%]">
-          <h2 className="mb-2">Exam Timetable</h2>
-
-          <div className="h-fit rounded-lg border">
-            <ExamTimetable />
-          </div>
+        <div className="flex gap-2">
+          <TimetableScreenshotButton persistQuerystring />
+          <TimetableDownloadCalendarButton />
         </div>
       </div>
-    </>
+
+      <p className="text-center text-sm text-muted-foreground">
+        This timetable is being shared by someone.{" "}
+        <br className="block md:hidden" />
+        Copy the timetable to edit!
+      </p>
+
+      <TimetableTable />
+
+      <div className="w-fit">
+        <TimetableLegend />
+      </div>
+
+      <TimetableOverview />
+    </div>
   )
 }
+
+export default Page

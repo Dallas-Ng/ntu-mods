@@ -38,7 +38,7 @@ const TimetableOverview = () => {
               return (
                 <tr
                   key={moduleIdx}
-                  className={cn(moduleIdx % 2 == 1 && "bg-accent")}>
+                  className={cn(moduleIdx % 2 == 1 && "bg-muted")}>
                   <td className="w-fit md:w-[100px]">{indexes[0].key}</td>
 
                   <td className="w-fit md:w-[100px]">

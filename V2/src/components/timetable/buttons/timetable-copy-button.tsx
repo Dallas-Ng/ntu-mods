@@ -58,7 +58,7 @@ const TimetableCopyButton = () => {
               key={timetableIdx}
               onClick={() => setOverrideIndex(timetableIdx)}
               className={cn(
-                "rounded-md p-2 hover:cursor-pointer hover:bg-accent",
+                "rounded-md p-2 transition-colors hover:cursor-pointer hover:bg-accent",
                 overrideIndex === timetableIdx && "bg-muted"
               )}>
               <p>Plan {timetableIdx + 1}</p>

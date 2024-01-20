@@ -32,7 +32,7 @@ const TimetablePlanSwitcher = () => {
       <ChevronDown
         className={cn(
           "ml-1 size-4 transition-transform",
-          isContainerOpen && "rotate-180"
+          isContainerOpen && "-rotate-180"
         )}
       />
     </Button>
@@ -45,8 +45,8 @@ const TimetablePlanSwitcher = () => {
           key={index}
           onSelect={() => handleClick(index)}
           className={cn(
-            "cursor-pointer py-3 transition-all hover:bg-muted md:py-1.5",
-            index === timetableIndex && "bg-accent text-accent-foreground "
+            "cursor-pointer py-3 transition-all hover:bg-accent md:py-1.5",
+            index === timetableIndex && "bg-muted"
           )}>
           Plan {index + 1}
         </CommandItem>

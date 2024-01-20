@@ -38,7 +38,7 @@ const TimetableModifier = () => {
               <div
                 className={cn(
                   "cursor-pointer pl-4 pr-1 text-sm transition-colors hover:bg-accent",
-                  activeKey === moduleKey && "bg-accent"
+                  activeKey === moduleKey && "bg-muted"
                 )}>
                 <div className="flex w-full items-center justify-between">
                   <div className="flex gap-1">

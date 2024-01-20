@@ -95,3 +95,11 @@ interface Exam {
   key: string
   name: string
 }
+
+interface Feedback {
+  id: number
+  feedback: string
+  category: string
+  author: string
+  created_at: Date
+}

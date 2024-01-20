@@ -2,6 +2,7 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
+import FeedbackCard from "@/components/feedback-card"
 import { AppearanceSettingsLoading } from "@/components/settings/appearance-settings"
 import { TableSettingsLoading } from "@/components/settings/table-settings"
 
@@ -23,8 +24,8 @@ const TableSettings = dynamic(
 
 export default function SettingsPage() {
   return (
-    <div className="mx-auto max-w-2xl rounded-md border bg-card pb-2 shadow-lg">
-      <div className="flex flex-col gap-6 p-3">
+    <div className="mx-auto max-w-2xl space-y-4">
+      <div className="flex flex-col gap-6 rounded-md border bg-card p-3 pb-2 shadow-lg">
         <div className="flex w-full flex-col gap-3">
           <h1 className="text-3xl font-bold">Settings</h1>
 
@@ -66,6 +67,20 @@ export default function SettingsPage() {
 
           <TableSettings />
         </div>
+      </div>
+
+      <div
+        id="feedback"
+        className="flex flex-col rounded-md border bg-card p-5 shadow-lg">
+        <div>
+          <p>Feedback </p>
+
+          <p className="text-sm text-muted-foreground">
+            Let us know of any problems or suggestions you have!
+          </p>
+        </div>
+
+        <FeedbackCard divClassName="border-none p-0 mt-5" />
       </div>
     </div>
   )

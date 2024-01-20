@@ -13,7 +13,7 @@ const Footer = () => {
 
       {/* TODO: finish below */}
       <Link
-        href="/settings"
+        href="/settings#feedback"
         className="transition-colors hover:text-primary-alt">
         Report an Issue
       </Link>

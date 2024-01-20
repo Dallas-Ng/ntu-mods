@@ -7,7 +7,7 @@ const Header = (props: Props) => {
   const { title, subtitle } = props
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-3">
       <h1 className="break-words text-3xl font-semibold leading-[1]">
         {title}
       </h1>

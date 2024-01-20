@@ -6,7 +6,7 @@ const INIT_SETTINGS: Settings = {
     type: true,
     group: true,
     day: false,
-    time: true,
+    time: false,
     venue: true,
     remarks: true,
     duration: false

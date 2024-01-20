@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 
+import { Banner } from "./banner"
 import Breadcrumbs from "./breadcrumbs"
 import Footer from "./footer"
 import Navbar from "./navbar"
@@ -17,6 +18,7 @@ const LayoutDefault = ({
 }: Props) => {
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      <Banner.release />
       <Navbar />
 
       {breadcrumbs && <Breadcrumbs />}

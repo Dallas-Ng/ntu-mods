@@ -115,7 +115,7 @@ export const TimetableTable = (props: Props) => {
 }
 
 export const TimetableTableLoader = () => (
-  <table className="table-fixed text-[0.6rem] md:text-xs">
+  <table className="table-fixed text-[0.6rem] opacity-30 md:text-xs">
     <TimetableTableThead
       days={5}
       maxDayColumns={{ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }} // default

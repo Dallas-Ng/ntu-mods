@@ -96,7 +96,7 @@ const TimetableOverview = () => {
 
 export const TimetableOverviewLoading = () => {
   return (
-    <table className="table table-fixed text-xs">
+    <table className="table table-fixed text-xs opacity-30">
       <thead>
         <tr className="border-b">
           <th className="w-fit md:w-[100px]">Index</th>

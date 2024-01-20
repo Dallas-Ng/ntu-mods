@@ -7,10 +7,14 @@ import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/b
 import { TimetablePlanSwitcherLoading } from "@/components/timetable/buttons/timetable-plan-switcher"
 import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button"
 import { TimetableShareButtonLoading } from "@/components/timetable/buttons/timetable-share-button"
-import TimetableHiddenContentHelper from "@/components/timetable/timetable-hidden-content-helper"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import { TimetableModifierLoader } from "@/components/timetable/timetable-modifier"
 import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview"
+
+const TimetableHiddenContentHelper = dynamic(
+  () => import("@/components/timetable/timetable-hidden-content-helper"),
+  { ssr: false }
+)
 
 const TimetableScreenshotButton = dynamic(
   () => import("@/components/timetable/buttons/timetable-screenshot-button"),

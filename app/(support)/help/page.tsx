@@ -96,7 +96,7 @@ export default function HelpPage() {
 
         <ul id="faq-0" className="list-inside list-disc">
           {HELP_CONFIG.map(({ question }, i) => (
-            <li>
+            <li key={i}>
               <Link
                 href={`#faq-${i}`}
                 className="text-blue-500 transition-colors hover:text-blue-600">

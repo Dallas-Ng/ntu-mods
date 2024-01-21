@@ -85,6 +85,16 @@ export const generateTimetableMatrix = (
   })
 
   /**
+   * Sort the indexes in each cell by duration
+   * Higher duration to lower duration, this helps create a visual pattern
+   */
+  Object.values(TABLE_MATRIX).forEach((row) => {
+    row.forEach((day) => {
+      day.sort((a, b) => b.duration - a.duration)
+    })
+  })
+
+  /**
    * Generate the max columns for each day
    * - This is used to generate the colspan for each cell
    */

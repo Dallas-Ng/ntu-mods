@@ -12,6 +12,7 @@ interface Props {
   indexes: Index[]
   fullCell?: boolean
   dimmed?: boolean
+  moduleKeyText?: string
   hideIndex?: boolean
   //
   onMouseOver?: () => void
@@ -26,6 +27,7 @@ export const TimetableTableCell = (props: Props) => {
     // Styles
     fullCell, // override for user's settings
     dimmed = false,
+    moduleKeyText = undefined,
     hideIndex = false,
     //
     onMouseOver,
@@ -79,7 +81,7 @@ export const TimetableTableCell = (props: Props) => {
               venue: indexVenues,
               key: hideIndex ? "" : index.key
             }}
-            moduleKey={moduleKey}
+            moduleKey={moduleKeyText ? moduleKeyText : moduleKey}
             tableCell={
               fullCell
                 ? {

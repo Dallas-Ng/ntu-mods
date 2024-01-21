@@ -9,7 +9,15 @@ interface Props {
 const ModsIndexTable = ({ moduleKey }: Props) => {
   const moduleIndexes = getModuleIndexes(moduleKey)
 
-  return <TimetableTable moduleIndexMap={moduleIndexes} hideIndex fullCell />
+  return (
+    <TimetableTable
+      moduleIndexMap={moduleIndexes}
+      hideIndex
+      fullCell
+      showModuleKeyAsCommon
+      alwaysHighlightLectures
+    />
+  )
 }
 
 export default ModsIndexTable

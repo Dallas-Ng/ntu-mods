@@ -23,7 +23,7 @@ const MobileTimetableModifierButton = () => {
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}>
       <DrawerContent
-        className="h-[100svh] p-2 focus:outline-none"
+        className="h-[100svh] rounded-t-3xl border-4 border-b-0 border-primary p-2 focus:outline-none"
         onClick={() => setSnap(1)}>
         <div className="flex h-full flex-col">
           <div className="size-full flex-1">

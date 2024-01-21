@@ -18,6 +18,11 @@ export const generateTimetableMatrix = (
   uniqueLecturesIgnoreIndexKey = true
 ) => {
   const moduleIndexesFlat = Object.values(moduleIndexes).flat()
+
+  /**
+   * Remove LECTURE indexes that are not unique
+   */
+
   const uniqueLectures = getUniqueLectures(
     moduleIndexes,
     uniqueLecturesIgnoreIndexKey

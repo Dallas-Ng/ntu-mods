@@ -145,7 +145,7 @@ const TimetableIndexModifier = (props: Props) => {
                 value={indexKey}
                 onSelect={handleSelect}
                 className="rounded-none transition-colors hover:cursor-pointer hover:bg-accent">
-                <div className="flex w-full justify-between gap-2 text-sm ">
+                <div className="flex w-full justify-between gap-2 text-sm">
                   <span className="flex items-center gap-1">
                     <Check
                       className={cn(
@@ -158,7 +158,7 @@ const TimetableIndexModifier = (props: Props) => {
                   </span>
 
                   {/* Dont remove this flex-col, there can be multiple timeslots for 1 index (e.g. lab, tutorial, lecture) */}
-                  <div className="flex w-full flex-col gap-1 ">
+                  <div className="flex w-full flex-col gap-1">
                     {indexes.map((index, i) => {
                       if (
                         hasCommonLecture &&

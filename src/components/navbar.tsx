@@ -43,7 +43,7 @@ const Navbar = () => {
         "sticky top-0 z-10 w-full backdrop-blur-xl",
         scrolled && "shadow"
       )}>
-      <div className="container flex h-16 items-center px-2 md:px-4">
+      <div className="container flex h-16 items-center px-2 lg:px-4">
         <div className="flex">
           <Link href="/" className="flex items-center">
             <Image

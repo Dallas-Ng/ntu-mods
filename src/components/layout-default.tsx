@@ -25,7 +25,7 @@ const LayoutDefault = ({
 
       <main
         className={cn(
-          "container relative flex-1 px-3 md:px-5 ",
+          "container relative flex-1 px-3 lg:px-5 ",
           containerClassName
         )}>
         {children}

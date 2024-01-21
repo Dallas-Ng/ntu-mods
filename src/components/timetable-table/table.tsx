@@ -15,12 +15,12 @@ import { TimetableTableCell } from "./cell"
 import { TimetableTableThead } from "./thead"
 
 const TimeSlotItem = ({ startTime }: { startTime: number }) => (
-  <td className="relative max-w-[28px] md:max-w-[40px]">
+  <td className="relative max-w-[28px] lg:max-w-[40px]">
     <span className="absolute left-0 top-[-8px] w-full bg-card text-center">
       {startTime}
     </span>
 
-    <div className="min-h-[20px] w-[28px] md:w-[40px]" />
+    <div className="min-h-[20px] w-[28px] lg:w-[40px]" />
   </td>
 )
 
@@ -50,7 +50,7 @@ export const TimetableTable = (props: Props) => {
     <div className={cn(TABLE_OVERFLOW_THRESHOLD && "overflow-x-auto")}>
       <table
         className={cn(
-          "w-full text-[0.6rem] md:text-xs",
+          "w-full text-[0.6rem] lg:text-xs",
           TABLE_OVERFLOW_THRESHOLD ? "table-auto" : "table-fixed"
         )}>
         <TimetableTableThead
@@ -147,7 +147,7 @@ export const TimetableTable = (props: Props) => {
 }
 
 export const TimetableTableLoader = () => (
-  <table className="table-fixed text-[0.6rem] opacity-30 md:text-xs">
+  <table className="table-fixed text-[0.6rem] opacity-30 lg:text-xs">
     <TimetableTableThead
       days={5}
       maxDayColumns={{ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }} // default

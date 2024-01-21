@@ -72,7 +72,7 @@ const HELP_CONFIG: HelpConfig[] = [
 
 export default function HelpPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-10 md:mt-5">
+    <div className="mx-auto max-w-2xl space-y-10 lg:mt-5">
       <div className="space-y-5">
         <Header
           title="Frequently Asked Questions"

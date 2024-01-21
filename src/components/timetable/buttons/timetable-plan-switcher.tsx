@@ -45,7 +45,7 @@ const TimetablePlanSwitcher = () => {
           key={index}
           onSelect={() => handleClick(index)}
           className={cn(
-            "cursor-pointer py-3 transition-all hover:bg-accent md:py-1.5",
+            "cursor-pointer py-3 transition-all hover:bg-accent lg:py-1.5",
             index === timetableIndex && "bg-muted"
           )}>
           Plan {index + 1}

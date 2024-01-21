@@ -26,7 +26,7 @@ const TableSettings = dynamic(
 
 export default function SettingsPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-4 md:mt-5">
+    <div className="mx-auto max-w-2xl space-y-4 lg:mt-5">
       <Header title="Settings" subtitle="Customise the website!" />
 
       <div className="space-y-5">

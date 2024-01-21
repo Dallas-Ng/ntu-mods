@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Settings } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
@@ -20,6 +20,7 @@ import { Button } from "./ui/button"
 
 const Navbar = () => {
   const pathname = usePathname()
+  const router = useRouter()
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const Navbar = () => {
         "sticky top-0 z-10 w-full backdrop-blur-xl",
         scrolled && "shadow"
       )}>
-      <div className="container flex h-16 items-center px-2 md:px-4">
+      <div className="container flex h-16 items-center px-2 lg:px-4">
         <div className="flex">
           <Link href="/" className="flex items-center">
             <Image
@@ -94,11 +95,13 @@ const Navbar = () => {
         <div className="flex flex-1 items-center justify-end">
           <ThemeToggle />
 
-          <Link href="/settings">
-            <Button size="icon" variant="ghost">
-              <Settings className="size-5" />
-            </Button>
-          </Link>
+          <Button
+            aria-label="Settings Button"
+            size="icon"
+            variant="ghost"
+            onClick={() => router.push("/settings")}>
+            <Settings className="size-5" />
+          </Button>
         </div>
       </div>
     </header>

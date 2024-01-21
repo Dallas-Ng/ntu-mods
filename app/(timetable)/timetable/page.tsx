@@ -87,7 +87,7 @@ const Page = () => {
         </div>
 
         <div className="flex h-full items-start justify-between gap-4">
-          <div className="size-full space-y-4 md:w-[70%]">
+          <div className="size-full space-y-4 md:w-[60%] lg:w-[70%]">
             {/* Needs these divs to make space-y-4 work in loading time */}
             <div>
               <TimetableTable />
@@ -98,7 +98,7 @@ const Page = () => {
             </div>
           </div>
 
-          <div className="hidden md:block md:w-[30%]">
+          <div className="hidden md:block md:w-[40%] lg:w-[30%]">
             <TimetableModifier />
           </div>
         </div>

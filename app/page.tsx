@@ -18,7 +18,7 @@ const Product = dynamic(() => import("@/components/landing/landing-product"), {
 
 export default function IndexPage() {
   return (
-    <LayoutDefault containerClassName="max-w-full p-0 md:p-0">
+    <LayoutDefault containerClassName="max-w-full p-0">
       <div className="relative z-[3] space-y-10 p-3">
         <CTA />
       </div>
@@ -31,16 +31,18 @@ export default function IndexPage() {
         <Image
           height={600}
           width={900}
+          loading="eager"
           alt="some cool waves"
           src="/landing/product-bg.svg"
-          className="absolute  bottom-1/2 left-0 z-[1] hidden w-full md:block"
+          className="absolute  bottom-1/2 left-0 z-[1] hidden w-full lg:block"
         />
         <Image
           height={600}
           width={900}
+          loading="eager"
           alt="some cool waves"
           src="/landing/product-bg.svg"
-          className="absolute top-1/2 z-[1] hidden w-full rotate-180 md:block"
+          className="absolute top-1/2 z-[1] hidden w-full rotate-180 lg:block"
         />
       </div>
 

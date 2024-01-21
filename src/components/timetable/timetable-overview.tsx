@@ -20,9 +20,9 @@ const TimetableOverview = () => {
       <table className="table w-full table-fixed text-center text-xs">
         <thead>
           <tr className="border-b">
-            <th className="w-fit md:w-[100px]">Index</th>
-            <th className="w-fit md:w-[100px]">Module</th>
-            <th className="hidden text-left md:table-cell">Title</th>
+            <th className="w-fit lg:w-[100px]">Index</th>
+            <th className="w-fit lg:w-[100px]">Module</th>
+            <th className="hidden text-left lg:table-cell">Title</th>
             <th className="w-fit">AU</th>
             <th className="w-fit">Exams</th>
           </tr>
@@ -39,9 +39,9 @@ const TimetableOverview = () => {
                 <tr
                   key={moduleIdx}
                   className={cn(moduleIdx % 2 == 1 && "bg-muted")}>
-                  <td className="w-fit md:w-[100px]">{indexes[0].key}</td>
+                  <td className="w-fit lg:w-[100px]">{indexes[0].key}</td>
 
-                  <td className="w-fit md:w-[100px]">
+                  <td className="w-fit lg:w-[100px]">
                     <Link
                       href={`/mods/${moduleKey}`}
                       className="transition-colors hover:text-primary-alt">
@@ -49,7 +49,7 @@ const TimetableOverview = () => {
                     </Link>
                   </td>
 
-                  <td className="hidden  text-left md:table-cell">
+                  <td className="hidden text-left lg:table-cell">
                     <Link
                       href={`/mods/${moduleKey}`}
                       className="transition-colors hover:text-primary-alt">
@@ -78,7 +78,7 @@ const TimetableOverview = () => {
           <tr className="border-t">
             <td></td>
             <td></td>
-            <td className="hidden md:table-cell"></td>
+            <td className="hidden lg:table-cell"></td>
             <td>
               {Object.keys(moduleIndexMap).reduce((acc, module) => {
                 const au = getModuleAu(module)
@@ -87,6 +87,7 @@ const TimetableOverview = () => {
               }, 0)}
               .0 AUs
             </td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -99,9 +100,9 @@ export const TimetableOverviewLoading = () => {
     <table className="table table-fixed text-xs opacity-30">
       <thead>
         <tr className="border-b">
-          <th className="w-fit md:w-[100px]">Index</th>
-          <th className="w-fit md:w-[100px]">Module</th>
-          <th className="hidden text-left md:table-cell">Title</th>
+          <th className="w-fit lg:w-[100px]">Index</th>
+          <th className="w-fit lg:w-[100px]">Module</th>
+          <th className="hidden text-left lg:table-cell">Title</th>
           <th>AU</th>
           <th>Exams</th>
         </tr>
@@ -111,7 +112,7 @@ export const TimetableOverviewLoading = () => {
         <tr>
           <td></td>
           <td></td>
-          <td className="hidden md:table-cell"></td>
+          <td className="hidden lg:table-cell"></td>
           <td className="text-center">0.0 AUs</td>
         </tr>
       </tbody>

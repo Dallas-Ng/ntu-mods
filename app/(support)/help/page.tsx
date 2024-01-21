@@ -72,7 +72,7 @@ const HELP_CONFIG: HelpConfig[] = [
 
 export default function HelpPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-10 md:mt-5">
+    <div className="mx-auto max-w-2xl space-y-10 lg:mt-5">
       <div className="space-y-5">
         <Header
           title="Frequently Asked Questions"
@@ -96,7 +96,7 @@ export default function HelpPage() {
 
         <ul id="faq-0" className="list-inside list-disc">
           {HELP_CONFIG.map(({ question }, i) => (
-            <li>
+            <li key={i}>
               <Link
                 href={`#faq-${i}`}
                 className="text-blue-500 transition-colors hover:text-blue-600">

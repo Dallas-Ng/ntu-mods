@@ -28,10 +28,18 @@ interface Props {
   moduleIndexMap: TimetableWithIndex
   hideIndex?: boolean
   fullCell?: boolean
+  showModuleKeyAsCommon?: boolean
+  alwaysHighlightLectures?: boolean
 }
 
 export const TimetableTable = (props: Props) => {
-  const { moduleIndexMap, hideIndex = false, fullCell = false } = props
+  const {
+    moduleIndexMap,
+    hideIndex = false,
+    fullCell = false,
+    showModuleKeyAsCommon = false,
+    alwaysHighlightLectures = false
+  } = props
   const { isMobile } = useSettings()
   const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS, TABLE_OVERFLOW_THRESHOLD } =
     generateTimetableMatrix(moduleIndexMap, isMobile ? 6 : 9)
@@ -70,6 +78,14 @@ export const TimetableTable = (props: Props) => {
                         const firstIndex = getFirstTsIndex(index)
                         const isLecture = getIndexType(index.type) === "LEC"
 
+                        // Dim lectures if there are tutorials or labs hovered
+                        const shouldDimlecture = isLecture
+                          ? // Always highlight lectures if alwaysHighlightLectures is true
+                            alwaysHighlightLectures
+                            ? false
+                            : true
+                          : true
+
                         // Only render the first cell, the cells below will be empty due to rowspan
                         if (
                           firstIndex === tsIndex &&
@@ -82,18 +98,32 @@ export const TimetableTable = (props: Props) => {
 
                           return (
                             <TimetableTableCell
+                              // Core
                               key={index.key}
                               moduleKey={moduleKey}
                               index={index}
+                              indexes={moduleIndexMap[moduleKey]}
+                              // Styling
+                              moduleKeyText={
+                                isLecture && showModuleKeyAsCommon
+                                  ? "COMMON"
+                                  : moduleKey
+                              }
                               hideIndex={hideIndex}
                               fullCell={fullCell}
-                              indexes={moduleIndexMap[moduleKey]}
                               dimmed={
                                 currentHoverKey !== "" &&
                                 currentHoverKey !== index.key &&
-                                !isLecture
+                                shouldDimlecture
                               }
-                              onMouseOver={() => setCurrentHoverKey(index.key)}
+                              onMouseOver={() => {
+                                // Hovering on lectures will not highlight other indexes as they are common lectures
+                                if (isLecture && alwaysHighlightLectures) {
+                                  // setCurrentHoverKey(index.key)
+                                } else {
+                                  setCurrentHoverKey(index.key)
+                                }
+                              }}
                               onMouseOut={() => setCurrentHoverKey("")}
                             />
                           )

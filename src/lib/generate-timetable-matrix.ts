@@ -1,4 +1,6 @@
 import { STARS_TIMESLOTS } from "./constants"
+import { getIndexType } from "./get-index-type"
+import { getUniqueLectures } from "./get-unique-lectures"
 import { parseTimeNumber } from "./parse-time"
 
 /**
@@ -12,9 +14,29 @@ export const getFirstTsIndex = (index: Index) => {
 
 export const generateTimetableMatrix = (
   moduleIndexes: TimetableWithIndex,
-  maxColumnsThreshold = 9
+  maxColumnsThreshold = 9,
+  uniqueLecturesIgnoreIndexKey = true
 ) => {
   const moduleIndexesFlat = Object.values(moduleIndexes).flat()
+  const uniqueLectures = getUniqueLectures(
+    moduleIndexes,
+    uniqueLecturesIgnoreIndexKey
+  )
+
+  Object.keys(moduleIndexes).forEach((moduleKey) => {
+    moduleIndexes[moduleKey] = moduleIndexes[moduleKey].filter((lecture) => {
+      if (getIndexType(lecture.type) === "LEC") {
+        return uniqueLectures.some((uniqueLecture) => {
+          if (uniqueLecture.key === lecture.key) {
+            return true
+          }
+          return false
+        })
+      } else {
+        return true // Keep other types of indexes
+      }
+    })
+  })
 
   /**
    * Generate the max columns for each day

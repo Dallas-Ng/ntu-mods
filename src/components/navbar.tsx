@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { Settings } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
@@ -20,6 +20,7 @@ import { Button } from "./ui/button"
 
 const Navbar = () => {
   const pathname = usePathname()
+  const router = useRouter()
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -94,11 +95,13 @@ const Navbar = () => {
         <div className="flex flex-1 items-center justify-end">
           <ThemeToggle />
 
-          <Link href="/settings">
-            <Button size="icon" variant="ghost">
-              <Settings className="size-5" />
-            </Button>
-          </Link>
+          <Button
+            aria-label="Settings Button"
+            size="icon"
+            variant="ghost"
+            onClick={() => router.push("/settings")}>
+            <Settings className="size-5" />
+          </Button>
         </div>
       </div>
     </header>

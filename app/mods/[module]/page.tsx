@@ -101,14 +101,13 @@ export async function generateMetadata({
   params: { module: string }
 }): Promise<Metadata | null> {
   const moduleKey = params.module
-  const mod = Object.keys(TRUN_M_DATA).find((k) => k === moduleKey)
+  const mod = getModule(moduleKey)
 
   if (!mod) {
     return null
   }
-  const moduleTitle = TRUN_M_DATA[moduleKey]
 
-  const title = moduleTitle
+  const title = mod.title
 
   const description = `Explore ${moduleKey} ${title}. Find detailed information, reviews, and schedules for various faculty and subjects. Plan your academic journey with ease.`
   return {

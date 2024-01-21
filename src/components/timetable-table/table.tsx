@@ -9,6 +9,7 @@ import {
 } from "@/lib/generate-timetable-matrix"
 import { getIndexType } from "@/lib/get-index-type"
 import { cn } from "@/lib/utils"
+import { useSettings } from "@/hooks/use-settings"
 
 import { TimetableTableCell } from "./cell"
 import { TimetableTableThead } from "./thead"
@@ -31,8 +32,9 @@ interface Props {
 
 export const TimetableTable = (props: Props) => {
   const { moduleIndexMap, hideIndex = false, fullCell = false } = props
+  const { isMobile } = useSettings()
   const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS, TABLE_OVERFLOW_THRESHOLD } =
-    generateTimetableMatrix(moduleIndexMap)
+    generateTimetableMatrix(moduleIndexMap, isMobile ? 6 : 9)
 
   const [currentHoverKey, setCurrentHoverKey] = useState("")
 

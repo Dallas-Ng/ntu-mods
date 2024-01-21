@@ -15,7 +15,7 @@ import { TimetableTableCell } from "./cell"
 import { TimetableTableThead } from "./thead"
 
 const TimeSlotItem = ({ startTime }: { startTime: number }) => (
-  <td className="relative w-full max-w-[28px] md:max-w-[40px]">
+  <td className="relative max-w-[28px] md:max-w-[40px]">
     <span className="absolute left-0 top-[-8px] w-full bg-card text-center">
       {startTime}
     </span>

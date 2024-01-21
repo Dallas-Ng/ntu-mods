@@ -78,7 +78,7 @@ const TestPage = ({ searchParams }: Props) => {
         subtitle={<p>Filtered down to {filteredModules.length} modules.</p>}
       />
 
-      <div className="flex w-full flex-col gap-2 md:flex-row">
+      <div className="flex w-full flex-col gap-2 lg:flex-row">
         <ModsSearchInput defaultValue={dbSearchTerm} />
         <ModsFacultySelect defaultValue={moduleFaculty} />
 

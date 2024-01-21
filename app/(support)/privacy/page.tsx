@@ -4,7 +4,7 @@ import Header from "@/components/header"
 
 export default function HelpPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-4 text-muted-foreground md:mt-5">
+    <div className="mx-auto max-w-2xl space-y-4 text-muted-foreground lg:mt-5">
       <div className="text-foreground">
         <Header title="Privacy Policy" subtitle="Last Updated: Dec 2023" />
       </div>

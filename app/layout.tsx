@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 
 import "./globals.css"
-
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
@@ -62,8 +61,7 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: dark)", color: "black" }
   ],
   width: "device-width",
-  initialScale: 1,
-  maximumScale: 1
+  initialScale: 1
 }
 
 export default function RootLayout({

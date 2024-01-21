@@ -123,7 +123,7 @@ const TimetableModulesSelect = () => {
                 value={moduleKey}
                 disabled={disabled}
                 onSelect={() => (disabled ? null : handleSelect(moduleKey))}
-                className="cursor-pointer py-3 transition-colors hover:bg-accent md:py-2">
+                className="cursor-pointer py-3 transition-colors hover:bg-accent lg:py-2">
                 <Check
                   className={cn(
                     "mr-2 size-4 transition-opacity",

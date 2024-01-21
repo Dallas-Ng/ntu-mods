@@ -26,7 +26,7 @@ export const getIndexTypeStyle = (indexType: string) => {
       return {
         borderLeft: "border-l-yellow-600",
         text: "text-yellow-800 dark:text-yellow-300",
-        textAlt: "text-yellow-600 dark:text-yellow-500",
+        textAlt: "text-yellow-600 dark:text-yellow-400",
         background:
           "bg-yellow-200 dark:bg-yellow-500 hover:bg-yellow-300 dark:bg-opacity-20 dark:hover:bg-opacity-30 transition-opacity duration-300"
       }
@@ -44,7 +44,7 @@ export const getIndexTypeStyle = (indexType: string) => {
       return {
         borderLeft: "border-l-indigo-600",
         text: "text-indigo-800 dark:text-indigo-300",
-        textAlt: "text-indigo-600 dark:text-indigo-500",
+        textAlt: "text-indigo-600 dark:text-indigo-400",
         background:
           "bg-indigo-200 dark:bg-indigo-500 hover:bg-indigo-300 dark:bg-opacity-20 dark:hover:bg-opacity-30 transition-opacity duration-300"
       }

@@ -68,7 +68,7 @@ export const TimetableTableCell = (props: Props) => {
       {/*  */}
       <div
         className={cn(
-          "flex h-full cursor-pointer items-center break-words rounded-lg p-1 md:p-2",
+          "flex h-full cursor-pointer items-center break-words rounded-lg p-1 lg:p-2",
           indexStyle.background,
           dimmed && "opacity-30 dark:opacity-20"
         )}>

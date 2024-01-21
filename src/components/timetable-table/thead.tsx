@@ -8,7 +8,7 @@ interface Props {
 export const TimetableTableThead = ({ days, maxDayColumns }: Props) => (
   <thead>
     <tr>
-      <th className="w-[28px] max-w-[28px] md:max-w-[40px]"></th>
+      <th className="w-[28px] max-w-[28px] lg:max-w-[40px]"></th>
 
       {Array.from({ length: days }, (_, i) => (
         <th key={i} colSpan={maxDayColumns[i + 1]}>

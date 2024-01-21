@@ -42,7 +42,7 @@ export const ModsModuleTypeSelect = ({ defaultValue = "all" }: Props) => {
       defaultValue="all"
       selectItems={selectItems}
       onChange={(value) => setModuleType(value as SearchModuleType)}
-      divClassName="basis-3/5 md:w-[200px]"
+      divClassName="basis-3/5 lg:w-[200px]"
     />
   )
 }

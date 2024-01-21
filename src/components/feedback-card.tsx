@@ -108,7 +108,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
                   <Textarea
                     placeholder="Your Feedback..."
                     {...field}
-                    className="h-[200px] md:h-[100px]"
+                    className="h-[200px] lg:h-[100px]"
                   />
                 </FormControl>
 
@@ -120,7 +120,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
           <div className="flex justify-end">
             <Button
               type="submit"
-              className="self w-full md:w-[200px]"
+              className="self w-full lg:w-[200px]"
               disabled={loading}>
               Submit
             </Button>

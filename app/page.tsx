@@ -31,6 +31,7 @@ export default function IndexPage() {
         <Image
           height={600}
           width={900}
+          loading="eager"
           alt="some cool waves"
           src="/landing/product-bg.svg"
           className="absolute  bottom-1/2 left-0 z-[1] hidden w-full lg:block"
@@ -38,6 +39,7 @@ export default function IndexPage() {
         <Image
           height={600}
           width={900}
+          loading="eager"
           alt="some cool waves"
           src="/landing/product-bg.svg"
           className="absolute top-1/2 z-[1] hidden w-full rotate-180 lg:block"

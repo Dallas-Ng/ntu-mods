@@ -1,8 +1,16 @@
 import { Fragment } from "react"
 import Link from "next/link"
 import { M_EXAMS } from "@/data/2023/exam"
+import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
 
 import { cn } from "@/lib/utils"
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "../ui/tooltip"
 
 interface Props {
   module: Module
@@ -10,8 +18,9 @@ interface Props {
 
 const NotAvailable = () => <span className="text-muted-foreground">N/A</span>
 
-const testPossibleModuleCode = (str: string) =>
-  str.length > 6 ? /^[A-Z]{2}\d{4}$/.test(str.slice(0, 6)) : false
+const validateModuleCode = (moduleKey: string) => {
+  return moduleKey in TRUN_M_DATA
+}
 
 const ModsInfoTable = ({ module }: Props) => {
   const exam = module.code in M_EXAMS ? M_EXAMS[module.code] : undefined
@@ -57,29 +66,40 @@ const ModsInfoTable = ({ module }: Props) => {
               module.prerequisite.map((preqGrp, preqGrpIdx) => (
                 // Preq group
                 <div key={preqGrpIdx} className="w-full">
-                  {preqGrp.map((preq, preqIdx) => (
-                    // Individual preq
-                    <span key={preqIdx}>
-                      {preq.length === 6 ? (
-                        <Link
-                          href={`/mods/${preq}`}
-                          className="transition-colors hover:text-primary-alt">
-                          {preq}
-                        </Link>
-                      ) : // Test if the first 6 characters are a valid module code
-                      testPossibleModuleCode(preq) ? (
-                        <Link
-                          href={`/mods/${preq.slice(0, 6)}`}
-                          className="transition-colors hover:text-primary-alt">
-                          {preq.slice(0, 6)} {preq.slice(6)}
-                        </Link>
-                      ) : (
-                        <span key={preqIdx}>{preq}</span>
-                      )}
+                  {preqGrp.map((preq, preqIdx) => {
+                    const preqModuleCode = preq.slice(0, 6)
+                    const validPreqModuleCode =
+                      validateModuleCode(preqModuleCode)
 
-                      {preqIdx < preqGrp.length - 1 && <span>, </span>}
-                    </span>
-                  ))}
+                    return (
+                      // Individual preq
+                      <span key={preqIdx}>
+                        {validPreqModuleCode ? (
+                          <Link
+                            href={`/mods/${preq.slice(0, 6)}`}
+                            className="text-blue-500 transition-colors hover:text-blue-600">
+                            {preq.slice(0, 6)} {preq.slice(6)}
+                          </Link>
+                        ) : (
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <span>
+                                  {preq.slice(0, 6)} {preq.slice(6)}
+                                </span>
+                              </TooltipTrigger>
+
+                              <TooltipContent>
+                                This module is not available
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
+
+                        {preqIdx < preqGrp.length - 1 && <span>, </span>}
+                      </span>
+                    )
+                  })}
 
                   {preqGrpIdx < (module.prerequisite || []).length - 1 && (
                     <span> or</span>
@@ -96,13 +116,31 @@ const ModsInfoTable = ({ module }: Props) => {
           <td className="p-2">
             {module.mutuallyExclusiveWith &&
               module.mutuallyExclusiveWith.map((mew, mewIdx) => {
+                const validModuleCode = validateModuleCode(mew)
+
                 return (
                   <Fragment key={mewIdx}>
-                    <Link
-                      href={`/mods/${mew}`}
-                      className="transition-colors hover:text-primary-alt">
-                      {mew}
-                    </Link>
+                    {validModuleCode ? (
+                      <Link
+                        href={`/mods/${mew}`}
+                        className="text-blue-500  transition-colors hover:text-blue-600">
+                        {mew}
+                      </Link>
+                    ) : (
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <span>
+                              <span>{mew}</span>
+                            </span>
+                          </TooltipTrigger>
+
+                          <TooltipContent>
+                            This module is not available
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    )}
 
                     <>
                       {mewIdx <

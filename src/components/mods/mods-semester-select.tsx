@@ -28,7 +28,7 @@ export const ModsSemesterSelect = ({ defaultValue = "s2" }: Props) => {
   return (
     <CustomSelect
       closeOnSelect
-      defaultValue="s2"
+      defaultValue={defaultValue}
       selectItems={[
         { value: "all", label: "All Sems" },
         { value: "s1", label: "Sem 1" },

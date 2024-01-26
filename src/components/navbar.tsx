@@ -71,7 +71,12 @@ const Navbar = () => {
             <NavigationMenuList>
               <NavigationMenuItem>
                 {siteConfig.navLinks.map((link) => (
-                  <Link href={link.route} key={link.route} prefetch={false}>
+                  <Link
+                    href={link.route}
+                    key={link.route}
+                    prefetch={false}
+                    passHref
+                    legacyBehavior>
                     <NavigationMenuLink
                       className={cn(
                         "mr-1 p-1 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100 md:p-3",

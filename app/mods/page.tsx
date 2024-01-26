@@ -3,6 +3,7 @@ import { M_DATA } from "@/data/2023/m-data"
 import { M_DATA_S1 } from "@/data/2023/m-data-s1"
 import { M_DATA_S2 } from "@/data/2023/m-data-s2"
 
+import { areObjectsEqual } from "@/lib/are-objects-equal"
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
@@ -20,6 +21,13 @@ import {
   ModsSemesterSelect,
   Semester
 } from "@/components/mods/mods-semester-select"
+
+const DEFAULT_FILTERS = {
+  dbSearchTerm: "",
+  semester: "s2",
+  moduleType: "all",
+  moduleFaculty: "all"
+}
 
 interface Props {
   searchParams: {
@@ -43,6 +51,13 @@ const TestPage = ({ searchParams }: Props) => {
     semester === "s2" ? M_DATA_S2 : semester === "all" ? M_DATA : M_DATA_S1
 
   let filteredModules = Object.entries(MODULE_DATA)
+
+  // Don't show all modules if no filters are applied
+  // This is to prevent the page from being too long and reduce compute time
+  const noChangedFilters = areObjectsEqual(searchParams, DEFAULT_FILTERS)
+  if (noChangedFilters) {
+    filteredModules = []
+  }
 
   // Assume its a module code prefix
   if (dbSearchTerm.length === 2) {
@@ -75,7 +90,11 @@ const TestPage = ({ searchParams }: Props) => {
     <div className="relative space-y-3">
       <Header
         title="NTU Modules"
-        subtitle={<p>Filtered down to {filteredModules.length} modules.</p>}
+        subtitle={
+          noChangedFilters
+            ? "Search for a module below!"
+            : "Filtered down to {filteredModules.length} modules."
+        }
       />
 
       <div className="flex w-full flex-col gap-2 lg:flex-row">
@@ -90,7 +109,7 @@ const TestPage = ({ searchParams }: Props) => {
 
       <hr className="py-2" />
 
-      {filteredModules.length === 0 && (
+      {!noChangedFilters && filteredModules.length === 0 && (
         <div className="flex h-20 w-full items-center rounded-md border text-center">
           <p className="w-full text-center">
             There are no modules found

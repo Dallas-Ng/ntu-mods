@@ -52,7 +52,7 @@ export default function Page({ params }: { params: { module: string } }) {
           <ModsHeader module={moduleData} />
         </div>
 
-        <div className="w-full xl:w-3/6">
+        <div className="h-fit w-full xl:w-3/6">
           <ModsInfoTable module={moduleData} />
         </div>
       </div>

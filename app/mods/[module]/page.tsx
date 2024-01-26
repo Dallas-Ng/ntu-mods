@@ -86,9 +86,11 @@ export default function Page({ params }: { params: { module: string } }) {
  */
 export async function generateStaticParams() {
   // All urls are to follow this scheme - `/mods/SC1005`
-  return Object.keys(TRUN_M_DATA).map((key) => ({
-    module: key
-  }))
+  return Object.keys(TRUN_M_DATA)
+    .slice(0, 1)
+    .map((key) => ({
+      module: key
+    }))
 }
 
 /**

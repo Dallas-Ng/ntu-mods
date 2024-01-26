@@ -74,8 +74,9 @@ const Navbar = () => {
                   <Link
                     href={link.route}
                     key={link.route}
-                    legacyBehavior
-                    passHref>
+                    prefetch={false}
+                    passHref
+                    legacyBehavior>
                     <NavigationMenuLink
                       className={cn(
                         "mr-1 p-1 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100 md:p-3",

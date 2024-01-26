@@ -1,16 +1,17 @@
 export const siteConfig = {
   url: "https://ntumods.com",
-  name: "NTU Mods",
+  name: "NTUMods",
   ogImage: "https://ntumods.com/og-image.png",
   metatags: {
     default: {
-      title: "NTU Mods",
+      title: "NTUMods",
       desc: "Build your timetable easier with NTU Mods. Create, customize, and manage your class schedule hassle-free",
       keywords: [
         "NTU",
         "Nanyang Technological University",
         "stars",
         "STARS",
+        "ntumods",
         "ntu mods",
         "ntu stars"
       ],

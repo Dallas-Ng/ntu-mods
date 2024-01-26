@@ -39,7 +39,7 @@ export const ModsModuleTypeSelect = ({ defaultValue = "all" }: Props) => {
   return (
     <CustomSelect
       closeOnSelect
-      defaultValue="all"
+      defaultValue={defaultValue}
       selectItems={selectItems}
       onChange={(value) => setModuleType(value as SearchModuleType)}
       divClassName="basis-3/5 lg:w-[200px]"

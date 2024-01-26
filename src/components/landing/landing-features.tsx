@@ -16,7 +16,7 @@ const LandingFeatures = () => {
 
       <div className="mx-auto flex max-w-7xl flex-col gap-5">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <Link href="/timetable" className="cursor-pointer">
+          <Link href="/timetable" className="cursor-pointer" prefetch={false}>
             <div className="relative h-[300px] w-full rounded-xl border p-3 shadow">
               <div className="absolute left-8 top-12 w-10/12 md:left-3 lg:left-8">
                 <h3 className="text-2xl font-bold">
@@ -57,7 +57,7 @@ const LandingFeatures = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          <Link href="/mods" className="cursor-pointer">
+          <Link href="/mods" className="cursor-pointer" prefetch={false}>
             <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
               <Image
                 src="/landing/icc-mods.svg"
@@ -79,7 +79,7 @@ const LandingFeatures = () => {
             </div>
           </Link>
 
-          <Link href="/timetable" className="cursor-pointer">
+          <Link href="/timetable" className="cursor-pointer" prefetch={false}>
             <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
               <Image
                 src="/landing/share.svg"
@@ -100,7 +100,7 @@ const LandingFeatures = () => {
             </div>
           </Link>
 
-          <Link href="/settings" className="cursor-pointer">
+          <Link href="/settings" className="cursor-pointer" prefetch={false}>
             <div className="relative h-[300px] w-full overflow-hidden rounded-xl border bg-muted p-3 shadow">
               <div className="flex w-[500px] gap-1 md:w-[300px] lg:w-[500px]">
                 <DarkThemeIcon label={false} />

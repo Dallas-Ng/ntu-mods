@@ -54,7 +54,11 @@ const TestPage = ({ searchParams }: Props) => {
 
   // Don't show all modules if no filters are applied
   // This is to prevent the page from being too long and reduce compute time
-  const noChangedFilters = areObjectsEqual(searchParams, DEFAULT_FILTERS)
+  const noChangedFilters = areObjectsEqual(
+    { dbSearchTerm, semester, moduleType, moduleFaculty },
+    DEFAULT_FILTERS
+  )
+
   if (noChangedFilters) {
     filteredModules = []
   }
@@ -93,7 +97,7 @@ const TestPage = ({ searchParams }: Props) => {
         subtitle={
           noChangedFilters
             ? "Search for a module below!"
-            : "Filtered down to {filteredModules.length} modules."
+            : `Filtered down to ${filteredModules.length} modules.`
         }
       />
 

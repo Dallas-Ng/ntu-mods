@@ -23,7 +23,6 @@ const HELP_CONFIG: HelpConfig[] = [
         If you wish to plan for your courses you can use the{" "}
         <Link
           href="/timetable"
-          prefetch={false}
           className="text-blue-500 transition-colors hover:text-blue-600">
           timetable
         </Link>{" "}
@@ -31,7 +30,6 @@ const HELP_CONFIG: HelpConfig[] = [
         modules and related information, you can use the{" "}
         <Link
           href="/mods"
-          prefetch={false}
           className="text-blue-500 transition-colors hover:text-blue-600">
           mods
         </Link>{" "}

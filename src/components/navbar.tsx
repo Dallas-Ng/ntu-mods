@@ -74,7 +74,6 @@ const Navbar = () => {
                   <Link
                     href={link.route}
                     key={link.route}
-                    prefetch={false}
                     passHref
                     legacyBehavior>
                     <NavigationMenuLink

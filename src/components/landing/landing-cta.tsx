@@ -28,7 +28,7 @@ const LandingCTA = () => {
         </p>
 
         <div className="my-4 flex justify-center">
-          <Link href="/timetable" prefetch={false}>
+          <Link href="/timetable">
             <Button>Build My Timetable Now</Button>
           </Link>
         </div>

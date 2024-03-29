@@ -1,3 +1,4 @@
+import { TABLE_SETTINGS } from "@/config/table-settings"
 import { TRUN_DAY_MAP } from "@/lib/constants"
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
 export const TimetableTableThead = ({ days, maxDayColumns }: Props) => (
   <thead>
     <tr>
-      <th className="w-[28px] max-w-[28px] lg:max-w-[40px]"></th>
+      <th className={TABLE_SETTINGS.TIMESLOT_CLASS}></th>
 
       {Array.from({ length: days }, (_, i) => (
         <th key={i} colSpan={maxDayColumns[i + 1]}>

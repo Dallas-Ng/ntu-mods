@@ -36,9 +36,9 @@ export const STARS_TIMESLOTS = [
   { start: 2200, end: 2230 },
   { start: 2230, end: 2300 },
   { start: 2330, end: 2359 }
-]
+] as const
 
-export const DAY_MAP: Record<number, string> = {
+export const DAY_MAP = {
   1: "Monday",
   2: "Tuesday",
   3: "Wednesday",
@@ -46,9 +46,9 @@ export const DAY_MAP: Record<number, string> = {
   5: "Friday",
   6: "Saturday",
   7: "Sunday"
-}
+} as const
 
-export const TRUN_DAY_MAP: Record<number, string> = {
+export const TRUN_DAY_MAP = {
   1: "Mon",
   2: "Tue",
   3: "Wed",
@@ -56,7 +56,7 @@ export const TRUN_DAY_MAP: Record<number, string> = {
   5: "Fri",
   6: "Sat",
   7: "Sun"
-}
+} as const
 
 export const COURSE_TYPE = {
   LEC: "Lecture",
@@ -65,7 +65,7 @@ export const COURSE_TYPE = {
   TUT: "Tutorial",
   PRJ: "Project",
   DES: "Design"
-}
+} as const
 
 export const MODULE_CATEGORY = {
   CORE: "Core",
@@ -74,7 +74,7 @@ export const MODULE_CATEGORY = {
   GERP: "General Education",
   CNY: "C N Yang Scholars",
   USP: "C N Yang Scholars"
-}
+} as const
 
 export const MODULE_FACULTY = {
   ACC: "Accountancy",
@@ -113,4 +113,4 @@ export const MODULE_FACULTY = {
   SSM: "Sport Science And Management",
   SSS: "Social Sciences",
   OTHERS: "Others"
-}
+} as const

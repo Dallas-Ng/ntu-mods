@@ -2,6 +2,9 @@ import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 
 import "./globals.css"
+
+import { Author } from "next/dist/lib/metadata/types/metadata-types"
+
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
@@ -22,8 +25,8 @@ export const metadata: Metadata = {
     template: `%s - ${siteConfig.name}`
   },
   description: defaults.desc,
-  keywords: defaults.keywords,
-  authors: defaults.authors,
+  keywords: defaults.keywords as unknown as string[],
+  authors: defaults.authors as unknown as Author[],
   creator: "Dallas Ng",
   icons: {
     icon: "/favicon.ico"

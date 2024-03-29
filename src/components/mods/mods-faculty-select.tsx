@@ -44,7 +44,7 @@ export const ModsFacultySelect = ({ defaultValue = "all" }: Props) => {
   return (
     <CustomSelect
       closeOnSelect
-      defaultValue="all"
+      defaultValue={defaultValue}
       selectItems={selectItems}
       onChange={(value) => setModuleFaculty(value as SearchModuleFaculty)}
       divClassName="w-full lg:max-w-[350px]"

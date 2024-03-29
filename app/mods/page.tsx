@@ -38,7 +38,7 @@ interface Props {
   }
 }
 
-const TestPage = ({ searchParams }: Props) => {
+const ModsPage = ({ searchParams }: Props) => {
   const {
     dbSearchTerm = "",
     semester = "s2",
@@ -164,4 +164,4 @@ const TestPage = ({ searchParams }: Props) => {
   )
 }
 
-export default TestPage
+export default ModsPage

@@ -27,7 +27,7 @@ const IndexCommandItem = ({ index }: { index: Index }) => {
   return (
     <div>
       <div className="flex w-full justify-between gap-2 ">
-        <span>{DAY_MAP[index.day]}</span>
+        <span>{DAY_MAP[index.day as keyof typeof DAY_MAP]}</span>
 
         <span className={cn(indexStyle.textAlt, "font-semibold")}>
           {getIndexType(index.type)} - {index.group}
@@ -86,7 +86,9 @@ const TimetableIndexModifier = (props: Props) => {
             ? itemVal.toLowerCase().includes(searchTerm)
             : // means itemVal is a number
               itemKey != "duration" && // duration is also a number, so dont use it to filter days
-              DAY_MAP[itemVal].toLowerCase().includes(searchTerm)
+              DAY_MAP[itemVal as keyof typeof DAY_MAP]
+                .toLowerCase()
+                .includes(searchTerm)
         )
       )
 

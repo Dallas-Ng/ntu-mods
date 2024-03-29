@@ -95,7 +95,7 @@ const TimetableCell = (props: Props) => {
                 {(fullCell || tableCell.time) && <>{index.time}</>}
 
                 {(fullCell || tableCell.day) && index.day > 0 && (
-                  <> {TRUN_DAY_MAP[index.day]}</>
+                  <> {TRUN_DAY_MAP[index.day as keyof typeof TRUN_DAY_MAP]}</>
                 )}
               </p>
             )}

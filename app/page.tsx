@@ -18,7 +18,7 @@ const Product = dynamic(() => import("@/components/landing/landing-product"), {
 
 export default function IndexPage() {
   return (
-    <LayoutDefault containerClassName="max-w-full p-0">
+    <LayoutDefault containerClassName="max-w-full p-0 lg:px-0">
       <div className="relative z-[3] space-y-10 p-3">
         <CTA />
       </div>

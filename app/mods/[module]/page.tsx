@@ -7,6 +7,7 @@ import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
 import { getModule } from "@/lib/get-module"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsInfoTable from "@/components/mods/mods-info-table"
+import ModsWorkloadTable from "@/components/mods/mods-workload-table"
 import RelatedModules from "@/components/related-modules"
 import { TimetableTableLoader } from "@/components/timetable-table/table"
 
@@ -57,17 +58,21 @@ export default function Page({ params }: { params: { module: string } }) {
   return (
     <>
       <div className="flex flex-col gap-6 xl:flex-row">
-        <div className="w-full space-y-2 xl:w-3/6">
+        <div className="w-full xl:w-3/6">
           <ModsHeader module={moduleData} />
         </div>
 
-        <div className="h-fit w-full xl:w-3/6">
+        <div className="h-fit w-full space-y-2 xl:w-3/6">
           <ModsInfoTable module={moduleData} />
+
+          <hr />
+
+          <ModsWorkloadTable moduleKey={moduleKey} />
         </div>
       </div>
 
-      <div className="mt-10">
-        <h2 className="mb-2 text-lg">Available Indexes</h2>
+      <div className="mt-10 space-y-2">
+        <h2 className="text-lg">Available Indexes</h2>
 
         <ModsIndexTable moduleKey={moduleKey} />
 

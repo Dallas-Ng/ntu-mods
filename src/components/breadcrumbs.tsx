@@ -37,11 +37,11 @@ const Breadcrumbs = (props: Props) => {
         })}
       />
 
-      <span className="flex items-center gap-1 text-muted-foreground ">
+      <span className="flex items-center gap-1 text-sm text-muted-foreground">
         {breadcrumbs.map(({ href, label }, idx) => {
           return (
             <Fragment key={href}>
-              {idx > 0 && <ChevronRight className="h-4 w-4" />}
+              {idx > 0 && <ChevronRight className="size-4" />}
               <Link href={href} className="hover:text-secondary-foreground">
                 {label}
               </Link>

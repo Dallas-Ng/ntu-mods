@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils"
 
-import { Banner } from "./banner"
 import Footer from "./footer"
 import Navbar from "./navbar"
 
@@ -11,7 +10,6 @@ interface Props {
 
 const LayoutDefault = ({ children, containerClassName }: Props) => (
   <div className="flex min-h-screen flex-col bg-background">
-    <Banner.release />
     <Navbar />
 
     <main

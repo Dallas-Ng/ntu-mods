@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 import { MODULE_FACULTY } from "@/lib/constants"
@@ -20,9 +20,11 @@ export const ModsFacultySelect = ({ defaultValue = "all" }: Props) => {
   const { replace } = useRouter()
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams)
-    if (params.get("moduleFaculty") === null && moduleFaculty === "all") return
+    setModuleFaculty(defaultValue)
+  }, [defaultValue])
 
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams)
     params.set("moduleFaculty", moduleFaculty)
     replace(`${pathname}?${params.toString()}`, { scroll: false })
   }, [moduleFaculty])

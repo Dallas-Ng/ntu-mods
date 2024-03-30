@@ -11,7 +11,7 @@ const ModsHeader = ({ module }: Props) => {
   const faculty = getModuleFaculty(module.searchKeys)
 
   return (
-    <>
+    <div className="space-y-2">
       <Breadcrumbs
         breadcrumbs={[
           {
@@ -22,7 +22,6 @@ const ModsHeader = ({ module }: Props) => {
           { name: module.code, label: module.code, href: `/${module.code}` }
         ]}
       />
-
       <h1 className="text-3xl capitalize">{formatTitle(module.title)}</h1>
 
       <div
@@ -33,7 +32,7 @@ const ModsHeader = ({ module }: Props) => {
             .replaceAll("\n", "<br/>")
         }}
       />
-    </>
+    </div>
   )
 }
 

@@ -77,7 +77,7 @@ export default function HelpPage() {
         <Header
           title="Frequently Asked Questions"
           subtitle={
-            <p className="w-full text-muted-foreground">
+            <span className="w-full text-muted-foreground">
               Can&apos;t find the answer you&apos;re looking for?{" "}
               <a
                 href="mailto:ngdallas1@gmail.com"
@@ -86,7 +86,7 @@ export default function HelpPage() {
                   Reach out to me <Mail className="size-5" />
                 </span>
               </a>
-            </p>
+            </span>
           }
         />
       </div>

@@ -20,8 +20,6 @@ export const ModsModuleTypeSelect = ({ defaultValue = "all" }: Props) => {
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams)
-    if (params.get("moduleType") === null && moduleType === "all") return
-
     params.set("moduleType", moduleType)
     replace(`${pathname}?${params.toString()}`, { scroll: false })
   }, [moduleType])

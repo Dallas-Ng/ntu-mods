@@ -31,12 +31,9 @@ export const generateTimetableMatrix = (
   Object.keys(moduleIndexes).forEach((moduleKey) => {
     moduleIndexes[moduleKey] = moduleIndexes[moduleKey].filter((lecture) => {
       if (getIndexType(lecture.type) === "LEC") {
-        return uniqueLectures.some((uniqueLecture) => {
-          if (uniqueLecture.key === lecture.key) {
-            return true
-          }
-          return false
-        })
+        return uniqueLectures.some(
+          (uniqueLecture) => uniqueLecture.key === lecture.key
+        )
       } else {
         return true // Keep other types of indexes
       }

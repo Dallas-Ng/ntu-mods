@@ -19,8 +19,6 @@ export const ModsSemesterSelect = ({ defaultValue = "s2" }: Props) => {
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams)
-    if (params.get("semester") === null && semester === "s2") return
-
     params.set("semester", semester)
     replace(`${pathname}?${params.toString()}`, { scroll: false })
   }, [semester])

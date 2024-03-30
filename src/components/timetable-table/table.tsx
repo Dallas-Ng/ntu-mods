@@ -1,7 +1,8 @@
 "use client"
 
-import { Fragment, useState } from "react"
+import { Fragment, useMemo, useState } from "react"
 
+import { TABLE_SETTINGS } from "@/config/table-settings"
 import { STARS_TIMESLOTS } from "@/lib/constants"
 import {
   generateTimetableMatrix,
@@ -15,12 +16,12 @@ import { TimetableTableCell } from "./cell"
 import { TimetableTableThead } from "./thead"
 
 const TimeSlotItem = ({ startTime }: { startTime: number }) => (
-  <td className="relative max-w-[28px] lg:max-w-[40px]">
-    <span className="absolute left-0 top-[-8px] w-full bg-card text-center">
+  <td className="relative">
+    <span className="absolute left-0 top-[-8px] w-full bg-card px-1 text-center">
       {startTime}
     </span>
 
-    <div className="min-h-[20px] w-[28px] lg:w-[40px]" />
+    <div className={TABLE_SETTINGS.TIMESLOT_CLASS} />
   </td>
 )
 
@@ -41,8 +42,12 @@ export const TimetableTable = (props: Props) => {
     alwaysHighlightLectures = false
   } = props
   const { isMobile } = useSettings()
+
   const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS, TABLE_OVERFLOW_THRESHOLD } =
-    generateTimetableMatrix(moduleIndexMap, isMobile ? 6 : 9)
+    useMemo(
+      () => generateTimetableMatrix(moduleIndexMap, isMobile ? 6 : 9),
+      [moduleIndexMap, isMobile]
+    )
 
   const [currentHoverKey, setCurrentHoverKey] = useState("")
 

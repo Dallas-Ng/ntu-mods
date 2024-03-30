@@ -20,9 +20,11 @@ export const ModsFacultySelect = ({ defaultValue = "all" }: Props) => {
   const { replace } = useRouter()
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams)
-    if (params.get("moduleFaculty") === null && moduleFaculty === "all") return
+    setModuleFaculty(defaultValue)
+  }, [defaultValue])
 
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams)
     params.set("moduleFaculty", moduleFaculty)
     replace(`${pathname}?${params.toString()}`, { scroll: false })
   }, [moduleFaculty])
@@ -44,7 +46,7 @@ export const ModsFacultySelect = ({ defaultValue = "all" }: Props) => {
   return (
     <CustomSelect
       closeOnSelect
-      defaultValue="all"
+      defaultValue={defaultValue}
       selectItems={selectItems}
       onChange={(value) => setModuleFaculty(value as SearchModuleFaculty)}
       divClassName="w-full lg:max-w-[350px]"

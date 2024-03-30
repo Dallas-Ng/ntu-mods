@@ -66,4 +66,4 @@ export const siteConfig = {
     repo: "https://github.com/Dallas-Ng/ntu-dabao",
     telegram: "https://t.me/dallas_ng"
   }
-}
+} as const

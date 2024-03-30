@@ -1,13 +1,22 @@
 import { Metadata } from "next"
+import nextDynamic from "next/dynamic"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
 
 import { getModule } from "@/lib/get-module"
 import ModsHeader from "@/components/mods/mods-header"
-import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
 import RelatedModules from "@/components/related-modules"
+import { TimetableTableLoader } from "@/components/timetable-table/table"
+
+const ModsIndexTable = nextDynamic(
+  () => import("@/components/mods/mods-index-table"),
+  {
+    ssr: false,
+    loading: () => <TimetableTableLoader />
+  }
+)
 
 // Change the dynamic behavior of a layout or page to fully static or fully dynamic.
 // 'auto' | 'force-dynamic' | 'error' | 'force-static'

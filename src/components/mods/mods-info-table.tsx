@@ -83,7 +83,7 @@ const ModsInfoTable = ({ module }: Props) => {
                         ) : (
                           <TooltipProvider>
                             <Tooltip>
-                              <TooltipTrigger>
+                              <TooltipTrigger className="cursor-default">
                                 <span>
                                   {preq.slice(0, 6)} {preq.slice(6)}
                                 </span>
@@ -129,7 +129,7 @@ const ModsInfoTable = ({ module }: Props) => {
                     ) : (
                       <TooltipProvider>
                         <Tooltip>
-                          <TooltipTrigger>
+                          <TooltipTrigger className="cursor-default">
                             <span>
                               <span>{mew}</span>
                             </span>

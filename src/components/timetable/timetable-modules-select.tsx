@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from "react"
 import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
 import { Check } from "lucide-react"
 
+import { getIndex } from "@/lib/get-index"
 import { getModuleIndexes } from "@/lib/get-module-indexes"
+import { parseTimeNumber } from "@/lib/parse-time"
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
 import { useOutsideClick } from "@/hooks/use-outside-click"
@@ -70,37 +72,56 @@ const TimetableModulesSelect = () => {
     }
 
     const indexes = getModuleIndexes(moduleKey)
-    let selectedIndex = indexes[Object.keys(indexes)[0]]
+    let selectedIndexKey = indexes[Object.keys(indexes)[0]][0].key
 
-    // TODO: Fix conflict detection
+    /**
+     * Conflict resolution
+     * Assigns the best index upon user's selection
+     *  - No conflicts within existing index (i.e. try not to increase day-cols)
+     *
+     * If unable to find best index, assign based on default key (first in JSON)
+     */
 
-    // Object.values(indexes).every((moduleIndex) => {
-    //   let hasConflict = false
+    let hasConflict = false
 
-    //   moduleIndex.forEach((index) => {
-    //     Object.values(moduleIndexMap).forEach((existingCoursesIndex) => {
-    //       existingCoursesIndex.forEach((existingIndex) => {
-    //         const { startTime: previousStart, endTime: previousEnd } =
-    //           parseTime(existingIndex)
-    //         const { startTime: currentStart, endTime: currentEnd } =
-    //           parseTime(index)
+    Object.values(indexes).every((newModuleIndex) => {
+      newModuleIndex.forEach((newIndex) => {
+        Object.values(timetable).forEach((timetableIndex) => {
+          const existingIndex = getIndex(timetableIndex)
 
-    //         if (currentStart < previousEnd && currentEnd > previousStart) {
-    //           hasConflict = true
-    //         }
-    //       })
-    //     })
+          existingIndex.forEach((extIndex) => {
+            if (extIndex.day === newIndex.day) {
+              const { startTime: newStartTime, endTime: newEndTime } =
+                parseTimeNumber(newIndex)
+              const { startTime: extStartTime, endTime: extEndTime } =
+                parseTimeNumber(extIndex)
 
-    //     if (!hasConflict) {
-    //       selectedIndex = moduleIndex
-    //       return false // Break out of the every loop
-    //     }
-    //   })
+              if (
+                // Check if the start time of the new index falls within the existing index's time slot
+                (newStartTime >= extStartTime && newStartTime < extEndTime) ||
+                // Check if the end time of the new index falls within the existing index's time slot
+                (newEndTime > extStartTime && newEndTime <= extEndTime) ||
+                // Check if the existing index is completely within the new index's time slot
+                (newStartTime <= extStartTime && newEndTime >= extEndTime)
+              ) {
+                hasConflict = true
+              }
+            }
+          })
+        })
 
-    //   return true // Continue the every loop
-    // })
+        if (!hasConflict) {
+          selectedIndexKey = newIndex.key
+          return false // Break out of the every loop
+        } else {
+          hasConflict = false // reset the flag so that we can check again
+        }
+      })
 
-    addItemToTimetable(moduleKey, selectedIndex[0].key)
+      return true
+    })
+
+    addItemToTimetable(moduleKey, selectedIndexKey)
     setDisabled(false)
   }
 

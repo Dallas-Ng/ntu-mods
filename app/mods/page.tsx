@@ -4,7 +4,7 @@ import { M_DATA_S1 } from "@/data/2023/m-data-s1"
 import { M_DATA_S2 } from "@/data/2023/m-data-s2"
 
 import { areObjectsEqual } from "@/lib/are-objects-equal"
-import { MODULE_CATEGORY } from "@/lib/constants"
+import { MODULE_CATEGORY, MODULE_FACULTY } from "@/lib/constants"
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
 import Header from "@/components/header"
@@ -38,8 +38,8 @@ interface Props {
   }
 }
 
-const TestPage = ({ searchParams }: Props) => {
-  const {
+const ModsPage = ({ searchParams }: Props) => {
+  let {
     dbSearchTerm = "",
     semester = "s2",
     moduleType = "all",
@@ -62,6 +62,16 @@ const TestPage = ({ searchParams }: Props) => {
   if (noChangedFilters) {
     filteredModules = []
   }
+
+  // Validate Filters, else set to All
+  // TODO: fix the search params
+  semester = ["s1", "s2", "all"].includes(semester) ? semester : "all"
+  moduleType = Object.keys(MODULE_CATEGORY).includes(moduleType)
+    ? moduleType
+    : "all"
+  moduleFaculty = Object.keys(MODULE_FACULTY).includes(moduleFaculty)
+    ? moduleFaculty
+    : "all"
 
   // Assume its a module code prefix
   if (dbSearchTerm.length === 2) {
@@ -164,4 +174,4 @@ const TestPage = ({ searchParams }: Props) => {
   )
 }
 
-export default TestPage
+export default ModsPage

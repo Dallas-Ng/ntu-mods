@@ -55,7 +55,9 @@ export const TimetableTableCellContent = (props: Props) => {
       <p>
         {tableCell.time && <>{index.time}</>}
 
-        {tableCell.day && index.day > 0 && <> {TRUN_DAY_MAP[index.day]}</>}
+        {tableCell.day && index.day > 0 && (
+          <> {TRUN_DAY_MAP[index.day as keyof typeof TRUN_DAY_MAP]}</>
+        )}
       </p>
 
       {tableCell.venue && <p>{index.venue}</p>}

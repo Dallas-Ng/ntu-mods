@@ -108,7 +108,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
 
                     {key === "day" &&
                       index[key] > 0 &&
-                      TRUN_DAY_MAP[index[key]]}
+                      TRUN_DAY_MAP[index[key] as keyof typeof TRUN_DAY_MAP]}
 
                     {key === "remarks" &&
                       (index[key] === "" ? "No Remarks" : index[key])}

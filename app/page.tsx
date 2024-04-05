@@ -23,7 +23,7 @@ export default function IndexPage() {
         <CTA />
       </div>
 
-      <div className="relative">
+      <div className="relative overflow-hidden">
         <div className="container relative z-[2] p-3">
           <Product />
         </div>

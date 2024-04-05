@@ -89,7 +89,9 @@ const ModsPage = ({ searchParams }: Props) => {
     // Filter by module type
     if (moduleType !== "all") {
       filteredModules = filteredModules.filter(([_, moduleData]) =>
-        getModuleCategories(moduleData.searchKeys).includes(moduleType)
+        getModuleCategories(moduleData.searchKeys).includes(
+          moduleType as ModuleType
+        )
       )
     }
 

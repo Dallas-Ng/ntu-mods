@@ -13,6 +13,10 @@ import {
   SearchModuleFaculty
 } from "@/components/mods/mods-faculty-select"
 import {
+  ModsLevelSelect,
+  SearchModuleLevel
+} from "@/components/mods/mods-module-level-select"
+import {
   ModsModuleTypeSelect,
   SearchModuleType
 } from "@/components/mods/mods-module-type-select"
@@ -35,6 +39,7 @@ interface Props {
     semester?: Semester
     moduleType?: SearchModuleType
     moduleFaculty?: SearchModuleFaculty
+    moduleLevel?: SearchModuleLevel
   }
 }
 
@@ -43,7 +48,8 @@ const ModsPage = ({ searchParams }: Props) => {
     dbSearchTerm = "",
     semester = "s2",
     moduleType = "all",
-    moduleFaculty = "all"
+    moduleFaculty = "all",
+    moduleLevel = "all"
   } = searchParams
 
   // Semseter Data
@@ -55,7 +61,7 @@ const ModsPage = ({ searchParams }: Props) => {
   // Don't show all modules if no filters are applied
   // This is to prevent the page from being too long and reduce compute time
   const noChangedFilters = areObjectsEqual(
-    { dbSearchTerm, semester, moduleType, moduleFaculty },
+    { dbSearchTerm, semester, moduleType, moduleFaculty, moduleLevel },
     DEFAULT_FILTERS
   )
 
@@ -100,6 +106,14 @@ const ModsPage = ({ searchParams }: Props) => {
     )
   })
 
+  // Used to persist module level select
+  const filteredModsExcludingLevel = filteredModules
+
+  filteredModules = filteredModules.filter(([moduleKey, _]) => {
+    if (moduleLevel === "all") return true
+    return moduleKey.slice(2, 3) === moduleLevel
+  })
+
   return (
     <div className="relative space-y-3">
       <Header
@@ -119,6 +133,13 @@ const ModsPage = ({ searchParams }: Props) => {
           <ModsSemesterSelect defaultValue={semester} />
           <ModsModuleTypeSelect defaultValue={moduleType} />
         </div>
+
+        <ModsLevelSelect
+          searchTerm={dbSearchTerm}
+          defaultValue={moduleLevel}
+          modules={filteredModsExcludingLevel}
+          filterModsLength={filteredModules.length}
+        />
       </div>
 
       <hr className="py-2" />

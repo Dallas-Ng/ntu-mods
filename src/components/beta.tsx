@@ -10,7 +10,9 @@ import { useSettings } from "@/hooks/use-settings"
 export const BetaWrapper = ({ children }: { children?: React.ReactNode }) => {
   const { isBeta } = useSettings()
 
-  return isBeta ? <>{children}</> : <></>
+  const isOnBetaDomain = window.location.host === "beta.ntumods.com"
+
+  return isOnBetaDomain || isBeta ? <>{children}</> : <></>
 }
 
 type BetaKeys = {

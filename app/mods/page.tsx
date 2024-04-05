@@ -57,6 +57,7 @@ const ModsPage = ({ searchParams }: Props) => {
     semester === "s2" ? M_DATA_S2 : semester === "all" ? M_DATA : M_DATA_S1
 
   let filteredModules = Object.entries(MODULE_DATA)
+  let filteredModsExcludingLevel = filteredModules
 
   // Don't show all modules if no filters are applied
   // This is to prevent the page from being too long and reduce compute time
@@ -64,10 +65,6 @@ const ModsPage = ({ searchParams }: Props) => {
     { dbSearchTerm, semester, moduleType, moduleFaculty, moduleLevel },
     DEFAULT_FILTERS
   )
-
-  if (noChangedFilters) {
-    filteredModules = []
-  }
 
   // Validate Filters, else set to All
   // TODO: fix the search params
@@ -79,40 +76,50 @@ const ModsPage = ({ searchParams }: Props) => {
     ? moduleFaculty
     : "all"
 
-  // Assume its a module code prefix
-  if (dbSearchTerm.length === 2) {
-    filteredModules = filteredModules.filter(([moduleKey, _]) => {
-      return moduleKey.toLowerCase().startsWith(dbSearchTerm.toLowerCase())
-    })
+  if (noChangedFilters) {
+    filteredModules = []
+  } else {
+    // Assume its a module code prefix
+    if (dbSearchTerm.length === 2) {
+      filteredModules = filteredModules.filter(([moduleKey, _]) =>
+        moduleKey.toLowerCase().startsWith(dbSearchTerm.toLowerCase())
+      )
+    }
+
+    // Filter by module type
+    if (moduleType !== "all") {
+      filteredModules = filteredModules.filter(([_, moduleData]) =>
+        getModuleCategories(moduleData.searchKeys).includes(moduleType)
+      )
+    }
+
+    // Filter by module faculty
+    if (moduleFaculty !== "all") {
+      filteredModules = filteredModules.filter(
+        ([_, moduleData]) =>
+          getModuleFaculty(moduleData.searchKeys) === moduleFaculty
+      )
+    }
+
+    if (dbSearchTerm.length !== 2) {
+      // Filter by module name or tilte
+      filteredModules = filteredModules.filter(([moduleKey, moduleData]) => {
+        return (
+          moduleKey.toLowerCase().includes(dbSearchTerm.toLowerCase()) ||
+          moduleData.title.toLowerCase().includes(dbSearchTerm.toLowerCase())
+        )
+      })
+    }
+
+    // Used to persist module level select
+    filteredModsExcludingLevel = filteredModules
+
+    if (moduleLevel !== "all") {
+      filteredModules = filteredModules.filter(
+        ([moduleKey, _]) => moduleKey.slice(2, 3) === moduleLevel
+      )
+    }
   }
-
-  // Filter by module type
-  filteredModules = filteredModules.filter(([_, moduleData]) => {
-    if (moduleType === "all") return true
-    return getModuleCategories(moduleData.searchKeys).includes(moduleType)
-  })
-
-  // Filter by module faculty
-  filteredModules = filteredModules.filter(([_, moduleData]) => {
-    if (moduleFaculty === "all") return true
-    return getModuleFaculty(moduleData.searchKeys) === moduleFaculty
-  })
-
-  // Filter by module name or tilte
-  filteredModules = filteredModules.filter(([moduleKey, moduleData]) => {
-    return (
-      moduleKey.toLowerCase().includes(dbSearchTerm.toLowerCase()) ||
-      moduleData.title.toLowerCase().includes(dbSearchTerm.toLowerCase())
-    )
-  })
-
-  // Used to persist module level select
-  const filteredModsExcludingLevel = filteredModules
-
-  filteredModules = filteredModules.filter(([moduleKey, _]) => {
-    if (moduleLevel === "all") return true
-    return moduleKey.slice(2, 3) === moduleLevel
-  })
 
   return (
     <div className="relative space-y-3">

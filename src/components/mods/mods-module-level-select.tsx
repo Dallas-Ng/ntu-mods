@@ -56,6 +56,8 @@ export const ModsLevelSelect = ({
   }, [defaultValue])
 
   useEffect(() => {
+    if (defaultValue === moduleLevel) return
+
     const params = new URLSearchParams(searchParams)
     params.set("moduleLevel", moduleLevel)
     replace(`${pathname}?${params.toString()}`, { scroll: false })
@@ -63,8 +65,8 @@ export const ModsLevelSelect = ({
 
   useEffect(() => {
     // If there are no mods showing, clear the filter
-    if (modules.length !== 0 && filterModsLength === 0) setModuleLevel("all")
-  }, [filterModsLength])
+    if (modules.length === 0 && filterModsLength === 0) setModuleLevel("all")
+  }, [modules, filterModsLength])
 
   const moduleSelectItems = Array.from(getModuleLevels(Object.values(modules)))
     .map((val) => ({
@@ -91,8 +93,9 @@ export const ModsLevelSelect = ({
 
   return (
     <CustomSelect
+      disabled={modules.length === 0 && filterModsLength === 0}
       closeOnSelect
-      defaultValue={defaultValue}
+      defaultValue={moduleLevel}
       selectItems={selectItems}
       onChange={(value) => setModuleLevel(value as SearchModuleLevel)}
       divClassName="basis-1/2 lg:w-[150px]"

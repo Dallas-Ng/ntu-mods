@@ -24,6 +24,8 @@ export const ModsFacultySelect = ({ defaultValue = "all" }: Props) => {
   }, [defaultValue])
 
   useEffect(() => {
+    if (defaultValue === moduleFaculty) return
+
     const params = new URLSearchParams(searchParams)
     params.set("moduleFaculty", moduleFaculty)
     replace(`${pathname}?${params.toString()}`, { scroll: false })

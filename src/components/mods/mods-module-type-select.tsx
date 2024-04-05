@@ -19,6 +19,8 @@ export const ModsModuleTypeSelect = ({ defaultValue = "all" }: Props) => {
   const { replace } = useRouter()
 
   useEffect(() => {
+    if (defaultValue === moduleType) return
+
     const params = new URLSearchParams(searchParams)
     params.set("moduleType", moduleType)
     replace(`${pathname}?${params.toString()}`, { scroll: false })

@@ -25,6 +25,7 @@ interface Props {
   closeOnSelect?: boolean
   onChange?: (value: string | null) => void
   divClassName?: string
+  disabled?: boolean
 }
 const CustomSelect = (props: Props) => {
   const {
@@ -33,7 +34,8 @@ const CustomSelect = (props: Props) => {
     selectItems,
     closeOnSelect = false,
     onChange,
-    divClassName
+    divClassName,
+    disabled
   } = props
 
   const containerRef = useRef<HTMLDivElement>(null)
@@ -60,6 +62,7 @@ const CustomSelect = (props: Props) => {
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger asChild>
           <Button
+            disabled={disabled}
             variant="outline"
             role="combobox"
             className={cn("w-full justify-between", divClassName)}>

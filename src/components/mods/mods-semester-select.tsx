@@ -18,6 +18,8 @@ export const ModsSemesterSelect = ({ defaultValue = "s2" }: Props) => {
   const { replace } = useRouter()
 
   useEffect(() => {
+    if (defaultValue === semester) return
+
     const params = new URLSearchParams(searchParams)
     params.set("semester", semester)
     replace(`${pathname}?${params.toString()}`, { scroll: false })

@@ -58,7 +58,7 @@ const ModsPage = ({ searchParams }: Props) => {
     semester === "s2" ? M_DATA_S2 : semester === "all" ? M_DATA : M_DATA_S1
 
   let filteredModules = Object.entries(MODULE_DATA)
-  let filteredModsExcludingLevel = filteredModules
+  let filteredModsExcludingLevel: [string, Module][] = []
 
   // Don't show all modules if no filters are applied
   // This is to prevent the page from being too long and reduce compute time

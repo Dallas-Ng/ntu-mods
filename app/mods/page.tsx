@@ -12,6 +12,7 @@ import {
   ModsFacultySelect,
   SearchModuleFaculty
 } from "@/components/mods/mods-faculty-select"
+import ModuleCardList from "@/components/mods/mods-module-card-list"
 import {
   ModsLevelSelect,
   SearchModuleLevel
@@ -78,7 +79,7 @@ const ModsPage = ({ searchParams }: Props) => {
     : "all"
 
   if (noChangedFilters) {
-    filteredModules = []
+    // filteredModules = []
   } else {
     // Assume its a module code prefix
     if (dbSearchTerm.length === 2) {
@@ -169,33 +170,7 @@ const ModsPage = ({ searchParams }: Props) => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {filteredModules.map(([code, moduleData]) => (
-          <Link key={code} href={`/mods/${code}`}>
-            <div className="rounded-lg border-2 p-3 transition-colors hover:bg-accent">
-              <p className="text-sm text-muted-foreground">{moduleData.code}</p>
-
-              <p className="truncate">{moduleData.title}</p>
-
-              <div className="mt-4 flex items-center justify-between text-xs">
-                <div className="flex gap-1 text-muted-foreground">
-                  {getModuleCategories(moduleData.searchKeys).map(
-                    (category, i) => (
-                      <div key={i} className="rounded-full border px-2 py-0">
-                        <span key={i}>{MODULE_CATEGORY[category]}</span>
-                      </div>
-                    )
-                  )}
-                </div>
-
-                <div className="text-sm text-muted-foreground">
-                  {getModuleFaculty(moduleData.searchKeys)}
-                </div>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+      <ModuleCardList filteredModules={filteredModules} />
 
       <p className="text-center text-sm text-muted-foreground transition-colors hover:text-primary-alt">
         <Link

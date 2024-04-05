@@ -4,7 +4,7 @@ interface BannerProps {
   children: React.ReactNode
 }
 
-const BannerWrapper = (props: BannerProps) => {
+export const BannerWrapper = (props: BannerProps) => {
   return (
     <div className="relative z-10 flex items-center justify-center bg-primary p-1">
       <p className="text-center text-sm font-medium leading-6 text-primary-foreground">

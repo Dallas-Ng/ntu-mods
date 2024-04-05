@@ -11,7 +11,8 @@ const INIT_SETTINGS: Settings = {
     remarks: true,
     duration: false
   },
-  isMobile: false
+  isMobile: false,
+  isBeta: false
 }
 
 interface Settings {
@@ -26,6 +27,7 @@ interface Settings {
     duration: boolean
   }
   isMobile: boolean
+  isBeta: boolean
 }
 
 export interface SettingsSlice {

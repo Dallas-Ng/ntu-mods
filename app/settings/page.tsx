@@ -6,7 +6,13 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import FeedbackCard from "@/components/feedback-card"
 import Header from "@/components/header"
 import { AppearanceSettingsLoading } from "@/components/settings/appearance-settings"
+import { BetaSettingsLoading } from "@/components/settings/beta-settings"
 import { TableSettingsLoading } from "@/components/settings/table-settings"
+
+const BetaSettings = dynamic(
+  () => import("@/components/settings/beta-settings"),
+  { ssr: false, loading: () => <BetaSettingsLoading /> }
+)
 
 const AppearanceSettings = dynamic(
   () => import("@/components/settings/appearance-settings"),
@@ -44,34 +50,58 @@ export default function SettingsPage() {
           </Link>
         </div>
 
-        <div className="flex flex-col gap-6 rounded-md border bg-card p-3 pb-5 shadow-lg">
-          <div className="flex flex-col justify-center gap-3">
-            <div>
-              <p>Appearance Settings</p>
+        <div
+          id="dark-mode"
+          className="space-y-4 rounded-md border bg-card px-4 pb-4 pt-2 shadow-lg">
+          <div>
+            <p>Appearance Settings</p>
 
-              <p className="text-sm text-muted-foreground">
-                Customize the appearance of the app. Switch between day and
-                night themes.
-              </p>
-            </div>
-
-            <AppearanceSettings />
-
-            <div>
-              <p className="mt-5">Table Settings</p>
-
-              <p className="text-sm text-muted-foreground">
-                Customize the appearance of the stars table.
-              </p>
-            </div>
-
-            <TableSettings />
+            <p className="text-sm text-muted-foreground">
+              Customize the appearance of the app. Switch between day and night
+              themes.
+            </p>
           </div>
+
+          <hr />
+
+          <AppearanceSettings />
+        </div>
+
+        <div
+          id="table-settings"
+          className="space-y-4 rounded-md border bg-card px-4 pb-4 pt-2 shadow-lg">
+          <div>
+            <p>Table Settings</p>
+
+            <p className="text-sm text-muted-foreground">
+              Customize the appearance of the stars table.
+            </p>
+          </div>
+
+          <hr />
+
+          <TableSettings />
+        </div>
+
+        <div
+          id="beta"
+          className="space-y-4 rounded-md border bg-card px-4 pb-4 pt-2 shadow-lg">
+          <div>
+            <p>Beta Settings</p>
+
+            <p className="text-sm text-muted-foreground">
+              Opt in for beta updates, see new content before we release it!
+            </p>
+          </div>
+
+          <hr />
+
+          <BetaSettings />
         </div>
 
         <div
           id="feedback"
-          className="flex flex-col rounded-md border bg-card p-5 shadow-lg">
+          className="space-y-2 rounded-md border bg-card px-4 pb-4 pt-2 shadow-lg">
           <div>
             <p>Feedback </p>
 

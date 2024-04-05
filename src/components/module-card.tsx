@@ -18,7 +18,7 @@ const ModuleCard = ({ module, cardClassName }: Props) => {
         )}>
         <p>{module.code}</p>
 
-        <p className="text-foreground">{module.title}</p>
+        <p className="truncate text-foreground">{module.title}</p>
       </div>
     </Link>
   )

@@ -46,6 +46,10 @@ const CustomSelect = (props: Props) => {
     onChange && onChange(activeItem)
   }, [activeItem])
 
+  useEffect(() => {
+    setActiveItem(defaultValue)
+  }, [defaultValue])
+
   const handleClose = async () => {
     await delay(100)
     setPopoverOpen(false)

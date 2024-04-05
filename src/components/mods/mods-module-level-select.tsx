@@ -63,7 +63,7 @@ export const ModsLevelSelect = ({
 
   useEffect(() => {
     // If there are no mods showing, clear the filter
-    if (filterModsLength === 0) setModuleLevel("all")
+    if (modules.length !== 0 && filterModsLength === 0) setModuleLevel("all")
   }, [filterModsLength])
 
   const moduleSelectItems = Array.from(getModuleLevels(Object.values(modules)))

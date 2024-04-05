@@ -33,7 +33,7 @@ export const ModsSemesterSelect = ({ defaultValue = "s2" }: Props) => {
         { value: "s2", label: "Sem 2" }
       ]}
       onChange={(value) => setSemester(value as Semester)}
-      divClassName="basis-2/5 lg:w-[200px]"
+      divClassName="basis-1/2 lg:w-[200px]"
     />
   )
 }

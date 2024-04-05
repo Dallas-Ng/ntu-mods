@@ -95,7 +95,7 @@ export const ModsLevelSelect = ({
       defaultValue={defaultValue}
       selectItems={selectItems}
       onChange={(value) => setModuleLevel(value as SearchModuleLevel)}
-      divClassName="w-full lg:max-w-[130px]"
+      divClassName="basis-1/2 lg:w-[150px]"
     />
   )
 }

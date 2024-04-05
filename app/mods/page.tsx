@@ -137,16 +137,19 @@ const ModsPage = ({ searchParams }: Props) => {
         <ModsFacultySelect defaultValue={moduleFaculty} />
 
         <div className="flex gap-2">
-          <ModsSemesterSelect defaultValue={semester} />
           <ModsModuleTypeSelect defaultValue={moduleType} />
         </div>
 
-        <ModsLevelSelect
-          searchTerm={dbSearchTerm}
-          defaultValue={moduleLevel}
-          modules={filteredModsExcludingLevel}
-          filterModsLength={filteredModules.length}
-        />
+        <div className="flex gap-2">
+          <ModsSemesterSelect defaultValue={semester} />
+
+          <ModsLevelSelect
+            searchTerm={dbSearchTerm}
+            defaultValue={moduleLevel}
+            modules={filteredModsExcludingLevel}
+            filterModsLength={filteredModules.length}
+          />
+        </div>
       </div>
 
       <hr className="py-2" />

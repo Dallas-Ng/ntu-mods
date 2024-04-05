@@ -30,7 +30,8 @@ const DEFAULT_FILTERS = {
   dbSearchTerm: "",
   semester: "s2",
   moduleType: "all",
-  moduleFaculty: "all"
+  moduleFaculty: "all",
+  moduleLevel: "all"
 }
 
 interface Props {

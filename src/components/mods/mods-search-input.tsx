@@ -1,44 +1,37 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
+import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
+import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 
 import { Input } from "../ui/input"
 
-interface Props {
-  defaultValue: string
-}
-
-const ModsSearchInput = ({ defaultValue }: Props) => {
-  const [searchTerm, setSearchTerm] = useState(defaultValue)
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const { replace } = useRouter()
-
-  const dbSearchTerm = useDebounce(searchTerm, 200)
+const ModsSearchInput = ({ paramsValue }: { paramsValue: string }) => {
+  console.log(paramsValue)
+  const { value, setValue } = useModsSearchParams(paramsValue, "searchTerm")
+  const [currSearchTerm, setCurrSearchTerm] = useState<string>(paramsValue)
+  const dbSearchTerm = useDebounce(currSearchTerm, 200)
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams)
-    if (params.get("dbSearchTerm") === null && dbSearchTerm === "") return
-
-    if (!dbSearchTerm || dbSearchTerm === "") {
-      params.set("dbSearchTerm", "")
-    } else {
-      params.set("dbSearchTerm", dbSearchTerm)
-    }
-
-    replace(`${pathname}?${params.toString()}`, { scroll: false })
+    setValue(dbSearchTerm)
   }, [dbSearchTerm])
+
+  useEffect(() => {
+    setCurrSearchTerm(paramsValue)
+  }, [paramsValue])
 
   return (
     <Input
-      className="md:flex-1"
-      name="moduleCode"
+      className={cn(
+        "md:flex-1",
+        value.length > 0 && "rounded-md ring-1 ring-ring"
+      )}
+      name="searchTerm"
       placeholder="Search for module name or code"
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
+      value={currSearchTerm}
+      onChange={(e) => setCurrSearchTerm(e.target.value)}
     />
   )
 }

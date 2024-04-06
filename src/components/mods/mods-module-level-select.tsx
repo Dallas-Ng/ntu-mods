@@ -1,8 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { useEffect } from "react"
 
+import { cn } from "@/lib/utils"
+import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import CustomSelect from "@/components/select"
 
 const getModuleLevels = (moduleKeys: [string, Module][]) => {
@@ -33,38 +34,25 @@ export type SearchModuleLevel =
   | "all"
 
 interface Props {
-  defaultValue?: SearchModuleLevel
   modules: [string, Module][]
   filterModsLength: number
+  paramValue: string
   searchTerm: string
 }
 
 export const ModsLevelSelect = ({
-  defaultValue = "all",
   modules = [],
   filterModsLength = 0,
+  paramValue,
   searchTerm
 }: Props) => {
-  const [moduleLevel, setModuleLevel] =
-    useState<SearchModuleLevel>(defaultValue)
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const { replace } = useRouter()
+  const { value, setValue } = useModsSearchParams(paramValue, "moduleLevel")
 
   useEffect(() => {
-    setModuleLevel(defaultValue)
-  }, [defaultValue])
-
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams)
-    params.set("moduleLevel", moduleLevel)
-    replace(`${pathname}?${params.toString()}`, { scroll: false })
-  }, [moduleLevel])
-
-  useEffect(() => {
-    // If there are no mods showing, clear the filter
-    if (modules.length !== 0 && filterModsLength === 0) setModuleLevel("all")
-  }, [filterModsLength])
+    if (filterModsLength === 0 && modules.length !== 0) {
+      setValue("all")
+    }
+  }, [filterModsLength, modules])
 
   const moduleSelectItems = Array.from(getModuleLevels(Object.values(modules)))
     .map((val) => ({
@@ -91,11 +79,15 @@ export const ModsLevelSelect = ({
 
   return (
     <CustomSelect
+      disabled={modules.length === 0 && filterModsLength === 0}
       closeOnSelect
-      defaultValue={defaultValue}
+      value={value}
       selectItems={selectItems}
-      onChange={(value) => setModuleLevel(value as SearchModuleLevel)}
-      divClassName="basis-1/2 lg:w-[150px]"
+      onChange={(value) => setValue(value as SearchModuleLevel)}
+      divClassName={cn(
+        "basis-1/2 lg:w-[150px]",
+        value !== "all" && "ring-1 ring-ring rounded-md"
+      )}
     />
   )
 }

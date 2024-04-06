@@ -1,35 +1,14 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-
 import { MODULE_FACULTY } from "@/lib/constants"
+import { cn } from "@/lib/utils"
+import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import CustomSelect from "@/components/select"
 
 export type SearchModuleFaculty = ModuleFaculty | "all"
 
-interface Props {
-  defaultValue?: SearchModuleFaculty
-}
-
-export const ModsFacultySelect = ({ defaultValue = "all" }: Props) => {
-  const [moduleFaculty, setModuleFaculty] =
-    useState<SearchModuleFaculty>(defaultValue)
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const { replace } = useRouter()
-
-  useEffect(() => {
-    setModuleFaculty(defaultValue)
-  }, [defaultValue])
-
-  useEffect(() => {
-    if (defaultValue === moduleFaculty) return
-
-    const params = new URLSearchParams(searchParams)
-    params.set("moduleFaculty", moduleFaculty)
-    replace(`${pathname}?${params.toString()}`, { scroll: false })
-  }, [moduleFaculty])
+export const ModsFacultySelect = ({ paramsValue }: { paramsValue: string }) => {
+  const { value, setValue } = useModsSearchParams(paramsValue, "moduleFaculty")
 
   const selectItems = [
     { value: "all", label: "All Faculty" },
@@ -48,10 +27,13 @@ export const ModsFacultySelect = ({ defaultValue = "all" }: Props) => {
   return (
     <CustomSelect
       closeOnSelect
-      defaultValue={defaultValue}
+      value={value}
       selectItems={selectItems}
-      onChange={(value) => setModuleFaculty(value as SearchModuleFaculty)}
-      divClassName="w-full lg:max-w-[350px]"
+      onChange={(value) => setValue(value as SearchModuleFaculty)}
+      divClassName={cn(
+        "w-full lg:max-w-[350px]",
+        value !== "all" && "ring-1 ring-ring rounded-md"
+      )}
     />
   )
 }

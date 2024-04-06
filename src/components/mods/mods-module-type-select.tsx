@@ -1,30 +1,18 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-
 import { MODULE_CATEGORY } from "@/lib/constants"
+import { cn } from "@/lib/utils"
+import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import CustomSelect from "@/components/select"
 
 export type SearchModuleType = ModuleType | "all"
 
-interface Props {
-  defaultValue?: SearchModuleType
-}
-
-export const ModsModuleTypeSelect = ({ defaultValue = "all" }: Props) => {
-  const [moduleType, setModuleType] = useState<SearchModuleType>(defaultValue)
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const { replace } = useRouter()
-
-  useEffect(() => {
-    if (defaultValue === moduleType) return
-
-    const params = new URLSearchParams(searchParams)
-    params.set("moduleType", moduleType)
-    replace(`${pathname}?${params.toString()}`, { scroll: false })
-  }, [moduleType])
+export const ModsModuleTypeSelect = ({
+  paramsValue
+}: {
+  paramsValue: string
+}) => {
+  const { value, setValue } = useModsSearchParams(paramsValue, "moduleType")
 
   const selectItems = [
     { value: "all", label: "All Module Types" },
@@ -39,10 +27,13 @@ export const ModsModuleTypeSelect = ({ defaultValue = "all" }: Props) => {
   return (
     <CustomSelect
       closeOnSelect
-      defaultValue={defaultValue}
+      value={value}
       selectItems={selectItems}
-      onChange={(value) => setModuleType(value as SearchModuleType)}
-      divClassName="w-full lg:w-[200px]"
+      onChange={(value) => setValue(value as SearchModuleType)}
+      divClassName={cn(
+        "w-full lg:w-[200px]",
+        value !== "all" && "ring-1 ring-ring rounded-md"
+      )}
     />
   )
 }

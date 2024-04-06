@@ -1,41 +1,32 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
-
+import { cn } from "@/lib/utils"
+import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import CustomSelect from "@/components/select"
 
 export type Semester = "s1" | "s2" | "all"
 
-interface Props {
-  defaultValue: Semester
-}
-
-export const ModsSemesterSelect = ({ defaultValue = "s2" }: Props) => {
-  const [semester, setSemester] = useState<Semester>(defaultValue)
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const { replace } = useRouter()
-
-  useEffect(() => {
-    if (defaultValue === semester) return
-
-    const params = new URLSearchParams(searchParams)
-    params.set("semester", semester)
-    replace(`${pathname}?${params.toString()}`, { scroll: false })
-  }, [semester])
+export const ModsSemesterSelect = ({
+  paramsValue
+}: {
+  paramsValue: string
+}) => {
+  const { value, setValue } = useModsSearchParams(paramsValue, "semester")
 
   return (
     <CustomSelect
       closeOnSelect
-      defaultValue={defaultValue}
+      value={value}
       selectItems={[
         { value: "all", label: "All Sems" },
         { value: "s1", label: "Sem 1" },
         { value: "s2", label: "Sem 2" }
       ]}
-      onChange={(value) => setSemester(value as Semester)}
-      divClassName="basis-1/2 lg:w-[200px]"
+      onChange={(value) => setValue(value as Semester)}
+      divClassName={cn(
+        "basis-1/2 lg:w-[200px]",
+        value !== "all" && "ring-1 ring-ring rounded-md"
+      )}
     />
   )
 }

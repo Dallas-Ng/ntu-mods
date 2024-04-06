@@ -19,7 +19,7 @@ import { cn, delay } from "../lib/utils"
 import { Button } from "./ui/button"
 
 interface Props {
-  defaultValue: string
+  value: string
   emptyText?: string
   selectItems: { value: string; label: string | React.ReactNode }[]
   closeOnSelect?: boolean
@@ -29,7 +29,7 @@ interface Props {
 }
 const CustomSelect = (props: Props) => {
   const {
-    defaultValue,
+    value,
     emptyText,
     selectItems,
     closeOnSelect = false,
@@ -39,7 +39,7 @@ const CustomSelect = (props: Props) => {
   } = props
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const [activeItem, setActiveItem] = useState<string | null>(defaultValue)
+  const [activeItem, setActiveItem] = useState<string | null>(value)
   const [popoverOpen, setPopoverOpen] = useState(false)
 
   const activeItemLabel = selectItems.find((item) => item.value === activeItem)
@@ -49,8 +49,8 @@ const CustomSelect = (props: Props) => {
   }, [activeItem])
 
   useEffect(() => {
-    setActiveItem(defaultValue)
-  }, [defaultValue])
+    setActiveItem(value)
+  }, [value])
 
   const handleClose = async () => {
     await delay(100)

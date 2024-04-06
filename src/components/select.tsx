@@ -19,25 +19,27 @@ import { cn, delay } from "../lib/utils"
 import { Button } from "./ui/button"
 
 interface Props {
-  defaultValue: string
+  value: string
   emptyText?: string
   selectItems: { value: string; label: string | React.ReactNode }[]
   closeOnSelect?: boolean
   onChange?: (value: string | null) => void
   divClassName?: string
+  disabled?: boolean
 }
 const CustomSelect = (props: Props) => {
   const {
-    defaultValue,
+    value,
     emptyText,
     selectItems,
     closeOnSelect = false,
     onChange,
-    divClassName
+    divClassName,
+    disabled
   } = props
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const [activeItem, setActiveItem] = useState<string | null>(defaultValue)
+  const [activeItem, setActiveItem] = useState<string | null>(value)
   const [popoverOpen, setPopoverOpen] = useState(false)
 
   const activeItemLabel = selectItems.find((item) => item.value === activeItem)
@@ -47,8 +49,8 @@ const CustomSelect = (props: Props) => {
   }, [activeItem])
 
   useEffect(() => {
-    setActiveItem(defaultValue)
-  }, [defaultValue])
+    setActiveItem(value)
+  }, [value])
 
   const handleClose = async () => {
     await delay(100)
@@ -60,6 +62,7 @@ const CustomSelect = (props: Props) => {
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger asChild>
           <Button
+            disabled={disabled}
             variant="outline"
             role="combobox"
             className={cn("w-full justify-between", divClassName)}>

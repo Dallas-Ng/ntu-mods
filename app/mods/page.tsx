@@ -1,13 +1,12 @@
-import Link from "next/link"
-import { M_DATA } from "@/data/2023/m-data"
-import { M_DATA_S1 } from "@/data/2023/m-data-s1"
-import { M_DATA_S2 } from "@/data/2023/m-data-s2"
+"use client"
 
-import { areObjectsEqual } from "@/lib/are-objects-equal"
-import { MODULE_CATEGORY, MODULE_FACULTY } from "@/lib/constants"
+import { useEffect, useState } from "react"
+import Link from "next/link"
+
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
 import Header from "@/components/header"
+import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import {
   ModsFacultySelect,
   SearchModuleFaculty
@@ -25,18 +24,14 @@ import {
   ModsSemesterSelect,
   Semester
 } from "@/components/mods/mods-semester-select"
-
-const DEFAULT_FILTERS = {
-  dbSearchTerm: "",
-  semester: "s2",
-  moduleType: "all",
-  moduleFaculty: "all",
-  moduleLevel: "all"
-}
+import {
+  ModuleCardDetail,
+  ModuleCardDetailLoading
+} from "@/components/module-card"
 
 interface Props {
   searchParams: {
-    dbSearchTerm?: string
+    searchTerm?: string
     semester?: Semester
     moduleType?: SearchModuleType
     moduleFaculty?: SearchModuleFaculty
@@ -45,110 +40,106 @@ interface Props {
 }
 
 const ModsPage = ({ searchParams }: Props) => {
-  let {
-    dbSearchTerm = "",
+  const {
+    searchTerm = "",
     semester = "s2",
     moduleType = "all",
     moduleFaculty = "all",
     moduleLevel = "all"
   } = searchParams
 
-  // Semseter Data
-  const MODULE_DATA =
-    semester === "s2" ? M_DATA_S2 : semester === "all" ? M_DATA : M_DATA_S1
+  const [modules, setModules] = useState<{ [moduleKey: string]: Module }>({})
+  const [loading, setLoading] = useState(true)
 
-  let filteredModules = Object.entries(MODULE_DATA)
-  let filteredModsExcludingLevel = filteredModules
+  useEffect(() => {
+    const loadModule = async () => {
+      setLoading(true)
+      let modulesToLoad: { [moduleKey: string]: Module } = {}
 
-  // Don't show all modules if no filters are applied
-  // This is to prevent the page from being too long and reduce compute time
-  const noChangedFilters = areObjectsEqual(
-    { dbSearchTerm, semester, moduleType, moduleFaculty, moduleLevel },
-    DEFAULT_FILTERS
-  )
+      if (semester === "s2")
+        modulesToLoad = (await import("@/data/2023/m-data-s2")).M_DATA_S2
 
-  // Validate Filters, else set to All
-  // TODO: fix the search params
-  semester = ["s1", "s2", "all"].includes(semester) ? semester : "all"
-  moduleType = Object.keys(MODULE_CATEGORY).includes(moduleType)
-    ? moduleType
-    : "all"
-  moduleFaculty = Object.keys(MODULE_FACULTY).includes(moduleFaculty)
-    ? moduleFaculty
-    : "all"
+      if (semester === "s1")
+        modulesToLoad = (await import("@/data/2023/m-data-s1")).M_DATA_S1
 
-  if (noChangedFilters) {
-    filteredModules = []
-  } else {
+      if (semester === "all")
+        modulesToLoad = (await import("@/data/2023/m-data")).M_DATA
+
+      setModules(modulesToLoad)
+      setLoading(false)
+    }
+
+    loadModule()
+  }, [semester])
+
+  let filteredModules = Object.entries(modules)
+  let filteredModsExcludingLevel: [string, Module][] = []
+
+  /**
+   *
+   */
+  if (searchTerm.length === 2) {
     // Assume its a module code prefix
-    if (dbSearchTerm.length === 2) {
-      filteredModules = filteredModules.filter(([moduleKey, _]) =>
-        moduleKey.toLowerCase().startsWith(dbSearchTerm.toLowerCase())
+    filteredModules = filteredModules.filter(([moduleKey, _]) =>
+      moduleKey.toLowerCase().startsWith(searchTerm.toLowerCase())
+    )
+  } else {
+    // Filter by module name or tilte
+    filteredModules = filteredModules.filter(([moduleKey, moduleData]) => {
+      return (
+        moduleKey.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        moduleData.title.toLowerCase().includes(searchTerm.toLowerCase())
       )
-    }
+    })
+  }
 
-    // Filter by module type
-    if (moduleType !== "all") {
-      filteredModules = filteredModules.filter(([_, moduleData]) =>
-        getModuleCategories(moduleData.searchKeys).includes(
-          moduleType as ModuleType
-        )
+  // Filter by module type
+  if (moduleType !== "all") {
+    filteredModules = filteredModules.filter(([_, moduleData]) =>
+      getModuleCategories(moduleData.searchKeys).includes(
+        moduleType as ModuleType
       )
-    }
+    )
+  }
 
-    // Filter by module faculty
-    if (moduleFaculty !== "all") {
-      filteredModules = filteredModules.filter(
-        ([_, moduleData]) =>
-          getModuleFaculty(moduleData.searchKeys) === moduleFaculty
-      )
-    }
+  // Filter by module faculty
+  if (moduleFaculty !== "all") {
+    filteredModules = filteredModules.filter(
+      ([_, moduleData]) =>
+        getModuleFaculty(moduleData.searchKeys) === moduleFaculty
+    )
+  }
 
-    if (dbSearchTerm.length !== 2) {
-      // Filter by module name or tilte
-      filteredModules = filteredModules.filter(([moduleKey, moduleData]) => {
-        return (
-          moduleKey.toLowerCase().includes(dbSearchTerm.toLowerCase()) ||
-          moduleData.title.toLowerCase().includes(dbSearchTerm.toLowerCase())
-        )
-      })
-    }
+  // Used to persist module level select
+  filteredModsExcludingLevel = filteredModules
 
-    // Used to persist module level select
-    filteredModsExcludingLevel = filteredModules
-
-    if (moduleLevel !== "all") {
-      filteredModules = filteredModules.filter(
-        ([moduleKey, _]) => moduleKey.slice(2, 3) === moduleLevel
-      )
-    }
+  if (moduleLevel !== "all") {
+    filteredModules = filteredModules.filter(
+      ([moduleKey, _]) => moduleKey.slice(2, 3) === moduleLevel
+    )
   }
 
   return (
     <div className="relative space-y-3">
       <Header
         title="NTU Modules"
-        subtitle={
-          noChangedFilters
-            ? "Search for a module below!"
-            : `Filtered down to ${filteredModules.length} modules.`
-        }
+        subtitle={`Filtered down to ${filteredModules.length} modules.`}
       />
 
       <div className="flex w-full flex-col gap-2 lg:flex-row">
-        <ModsSearchInput defaultValue={dbSearchTerm} />
-        <ModsFacultySelect defaultValue={moduleFaculty} />
+        <ModsSearchInput paramsValue={searchTerm} />
+        <ModsFacultySelect paramsValue={moduleFaculty} />
 
         <div className="flex gap-2">
-          <ModsModuleTypeSelect defaultValue={moduleType} />
+          <ModsModuleTypeSelect paramsValue={moduleType} />
         </div>
 
         <div className="flex gap-2">
-          <ModsSemesterSelect defaultValue={semester} />
+          <ModsSemesterSelect paramsValue={semester} />
 
           <ModsLevelSelect
-            searchTerm={dbSearchTerm}
-            defaultValue={moduleLevel}
+            searchTerm={searchTerm}
+            paramValue={moduleLevel}
             modules={filteredModsExcludingLevel}
             filterModsLength={filteredModules.length}
           />
@@ -157,44 +148,20 @@ const ModsPage = ({ searchParams }: Props) => {
 
       <hr className="py-2" />
 
-      {!noChangedFilters && filteredModules.length === 0 && (
-        <div className="flex h-20 w-full items-center rounded-md border text-center">
-          <p className="w-full text-center">
-            There are no modules found
-            <br />
-            <span className="text-muted-foreground">
-              Try changing your filters
-            </span>
-          </p>
-        </div>
-      )}
+      {!loading && filteredModules.length === 0 && <ModsEmptyCard />}
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {filteredModules.map(([code, moduleData]) => (
-          <Link key={code} href={`/mods/${code}`}>
-            <div className="rounded-lg border-2 p-3 transition-colors hover:bg-accent">
-              <p className="text-sm text-muted-foreground">{moduleData.code}</p>
-
-              <p className="truncate">{moduleData.title}</p>
-
-              <div className="mt-4 flex items-center justify-between text-xs">
-                <div className="flex gap-1 text-muted-foreground">
-                  {getModuleCategories(moduleData.searchKeys).map(
-                    (category, i) => (
-                      <div key={i} className="rounded-full border px-2 py-0">
-                        <span key={i}>{MODULE_CATEGORY[category]}</span>
-                      </div>
-                    )
-                  )}
-                </div>
-
-                <div className="text-sm text-muted-foreground">
-                  {getModuleFaculty(moduleData.searchKeys)}
-                </div>
-              </div>
-            </div>
-          </Link>
-        ))}
+        {loading ? (
+          Array.from({ length: 9 }).map((_, idx) => (
+            <ModuleCardDetailLoading key={idx} />
+          ))
+        ) : (
+          <>
+            {filteredModules.map(([code, moduleData], idx) => (
+              <ModuleCardDetail key={idx} code={code} moduleData={moduleData} />
+            ))}
+          </>
+        )}
       </div>
 
       <p className="text-center text-sm text-muted-foreground transition-colors hover:text-primary-alt">

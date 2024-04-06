@@ -1,9 +1,8 @@
-import Link from "next/link"
-import { M_DATA } from "@/data/2023/m-data"
-import { M_DATA_S1 } from "@/data/2023/m-data-s1"
-import { M_DATA_S2 } from "@/data/2023/m-data-s2"
+"use client"
 
-import { MODULE_CATEGORY } from "@/lib/constants"
+import { useEffect, useState } from "react"
+import Link from "next/link"
+
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
 import Header from "@/components/header"
@@ -25,6 +24,10 @@ import {
   ModsSemesterSelect,
   Semester
 } from "@/components/mods/mods-semester-select"
+import {
+  ModuleCardDetail,
+  ModuleCardDetailLoading
+} from "@/components/module-card"
 
 interface Props {
   searchParams: {
@@ -45,11 +48,31 @@ const ModsPage = ({ searchParams }: Props) => {
     moduleLevel = "all"
   } = searchParams
 
-  // Semseter Data
-  const MODULE_DATA =
-    semester === "s2" ? M_DATA_S2 : semester === "s1" ? M_DATA_S1 : M_DATA
+  const [modules, setModules] = useState<{ [moduleKey: string]: Module }>({})
+  const [loading, setLoading] = useState(true)
 
-  let filteredModules = Object.entries(MODULE_DATA)
+  useEffect(() => {
+    const loadModule = async () => {
+      setLoading(true)
+      let modulesToLoad: { [moduleKey: string]: Module } = {}
+
+      if (semester === "s2")
+        modulesToLoad = (await import("@/data/2023/m-data-s2")).M_DATA_S2
+
+      if (semester === "s1")
+        modulesToLoad = (await import("@/data/2023/m-data-s1")).M_DATA_S1
+
+      if (semester === "all")
+        modulesToLoad = (await import("@/data/2023/m-data")).M_DATA
+
+      setModules(modulesToLoad)
+      setLoading(false)
+    }
+
+    loadModule()
+  }, [semester])
+
+  let filteredModules = Object.entries(modules)
   let filteredModsExcludingLevel: [string, Module][] = []
 
   /**
@@ -125,34 +148,20 @@ const ModsPage = ({ searchParams }: Props) => {
 
       <hr className="py-2" />
 
-      {filteredModules.length === 0 && <ModsEmptyCard />}
+      {!loading && filteredModules.length === 0 && <ModsEmptyCard />}
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {filteredModules.map(([code, moduleData]) => (
-          <Link key={code} href={`/mods/${code}`}>
-            <div className="rounded-lg border-2 p-3 transition-colors hover:bg-accent">
-              <p className="text-sm text-muted-foreground">{moduleData.code}</p>
-
-              <p className="truncate">{moduleData.title}</p>
-
-              <div className="mt-4 flex items-center justify-between text-xs">
-                <div className="flex gap-1 text-muted-foreground">
-                  {getModuleCategories(moduleData.searchKeys).map(
-                    (category, i) => (
-                      <div key={i} className="rounded-full border px-2 py-0">
-                        <span key={i}>{MODULE_CATEGORY[category]}</span>
-                      </div>
-                    )
-                  )}
-                </div>
-
-                <div className="text-sm text-muted-foreground">
-                  {getModuleFaculty(moduleData.searchKeys)}
-                </div>
-              </div>
-            </div>
-          </Link>
-        ))}
+        {loading ? (
+          Array.from({ length: 9 }).map((_, idx) => (
+            <ModuleCardDetailLoading key={idx} />
+          ))
+        ) : (
+          <>
+            {filteredModules.map(([code, moduleData], idx) => (
+              <ModuleCardDetail key={idx} code={code} moduleData={moduleData} />
+            ))}
+          </>
+        )}
       </div>
 
       <p className="text-center text-sm text-muted-foreground transition-colors hover:text-primary-alt">

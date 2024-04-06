@@ -25,8 +25,8 @@ const ModsWorkloadTable = ({ moduleKey }: { moduleKey: string }) => {
             const indexStyle = getIndexTypeStyle(key.toUpperCase())
 
             return (
-              <TooltipProvider key={idx}>
-                <Tooltip>
+              <TooltipProvider>
+                <Tooltip key={idx}>
                   <TooltipTrigger>
                     <div className="flex gap-[0.25rem] text-xs">
                       {Array.from({ length: value }).map((_) => (

@@ -8,6 +8,7 @@ import { Settings } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
+import { useSettings } from "@/hooks/use-settings"
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -22,6 +23,7 @@ const Navbar = () => {
   const pathname = usePathname()
   const router = useRouter()
   const [scrolled, setScrolled] = useState(false)
+  const { isBeta } = useSettings()
 
   useEffect(() => {
     /**
@@ -70,23 +72,29 @@ const Navbar = () => {
           <NavigationMenu className="ml-2 flex items-center">
             <NavigationMenuList>
               <NavigationMenuItem>
-                {siteConfig.navLinks.map((link) => (
-                  <Link
-                    href={link.route}
-                    key={link.route}
-                    passHref
-                    legacyBehavior>
-                    <NavigationMenuLink
-                      className={cn(
-                        "mr-1 p-1 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100 md:p-3",
-                        pathname.includes(link.route)
-                          ? "text-slate-950 dark:text-slate-100"
-                          : "text-slate-500 dark:text-slate-400"
-                      )}>
-                      {link.label}
-                    </NavigationMenuLink>
-                  </Link>
-                ))}
+                {siteConfig.navLinks.map((link) => {
+                  if (!isBeta && link.beta) {
+                    return <></>
+                  }
+
+                  return (
+                    <Link
+                      href={link.route}
+                      key={link.route}
+                      passHref
+                      legacyBehavior>
+                      <NavigationMenuLink
+                        className={cn(
+                          "mr-1 p-1 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100 md:p-3",
+                          pathname.includes(link.route)
+                            ? "text-slate-950 dark:text-slate-100"
+                            : "text-slate-500 dark:text-slate-400"
+                        )}>
+                        {link.label}
+                      </NavigationMenuLink>
+                    </Link>
+                  )
+                })}
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>

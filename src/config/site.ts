@@ -34,6 +34,10 @@ export const siteConfig = {
       title: "All NTU Modules",
       desc: "View all the modules offered by NTU. Find out more about the modules you are interested in and plan your timetable with ease"
     },
+    faculty: {
+      title: "[BETA] Faculty",
+      desc: "BETA"
+    },
     help: {
       title: "Help",
       desc: "Find answers to frequently asked questions and get help using the NTU Timetable Generator. Learn how to optimize your schedule and make the most of our features"
@@ -56,9 +60,10 @@ export const siteConfig = {
     }
   },
   navLinks: [
-    { label: "Timetable", route: "/timetable" },
-    { label: "Mods", route: "/mods" },
-    { label: "Help", route: "/help" }
+    { label: "Timetable", route: "/timetable", beta: false },
+    { label: "Mods", route: "/mods", beta: false },
+    { label: "Faculty", route: "/faculty", beta: true },
+    { label: "Help", route: "/help", beta: false }
   ],
   links: {
     github: "https://github.com/Dallas-Ng",

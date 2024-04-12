@@ -1,6 +1,16 @@
 export const getModuleCategories = (searchKeys: string[]): ModuleType[] => {
   const includedCategories = new Set<ModuleType>()
 
+  if (searchKeys.find((x) => x.split(";").length === 4)) {
+    // We assume that these are cores based on how they were scrapped
+    // 4: "CEEC;;1;F"
+    // 5: "CSC;;1;F"
+    // 6: "CSEC;;1;F"
+    // 7: "DSAI;;1;F"
+    // 8: "ECDS;;1;F"
+    includedCategories.add("CORE")
+  }
+
   for (const key of searchKeys) {
     if (key.includes("GLOAD")) {
       includedCategories.add("GLOAD")
@@ -13,10 +23,6 @@ export const getModuleCategories = (searchKeys: string[]): ModuleType[] => {
     } else if (key.includes("USP")) {
       includedCategories.add("CNY")
     }
-  }
-
-  if (includedCategories.size === 0) {
-    includedCategories.add("CORE")
   }
 
   return Array.from(includedCategories) as ModuleType[]

@@ -135,7 +135,7 @@ export const generateTimetableMatrix = (
     (x) => x.start === earliestTime
   )
   const latestTsIndex = Object.values(STARS_TIMESLOTS).findIndex(
-    (x) => x.end === latestTime + 10
+    (x) => x.end >= latestTime
   )
 
   Object.entries(TABLE_MATRIX).forEach(([key, rowData], idx) => {

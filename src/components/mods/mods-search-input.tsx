@@ -9,7 +9,6 @@ import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import { Input } from "../ui/input"
 
 const ModsSearchInput = ({ paramsValue }: { paramsValue: string }) => {
-  console.log(paramsValue)
   const { value, setValue } = useModsSearchParams(paramsValue, "searchTerm")
   const [currSearchTerm, setCurrSearchTerm] = useState<string>(paramsValue)
   const dbSearchTerm = useDebounce(currSearchTerm, 200)

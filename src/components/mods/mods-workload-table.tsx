@@ -1,3 +1,5 @@
+import { Fragment } from "react"
+
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 import { getModuleWorkload } from "@/lib/get-module-workload"
 import { cn } from "@/lib/utils"
@@ -25,27 +27,30 @@ const ModsWorkloadTable = ({ moduleKey }: { moduleKey: string }) => {
             const indexStyle = getIndexTypeStyle(key.toUpperCase())
 
             return (
-              <TooltipProvider>
-                <Tooltip key={idx}>
-                  <TooltipTrigger>
-                    <div className="flex gap-[0.25rem] text-xs">
-                      {Array.from({ length: value }).map((_) => (
-                        <div
-                          className={cn(
-                            indexStyle.background,
-                            "rounded-sm px-2 py-1"
-                          )}>
-                          {key.toUpperCase()}
-                        </div>
-                      ))}
-                    </div>
-                  </TooltipTrigger>
+              <Fragment key={idx}>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <div className="flex gap-[0.25rem] text-xs">
+                        {Array.from({ length: value }).map((_, idx) => (
+                          <div
+                            key={idx}
+                            className={cn(
+                              indexStyle.background,
+                              "rounded-sm px-2 py-1"
+                            )}>
+                            {key.toUpperCase()}
+                          </div>
+                        ))}
+                      </div>
+                    </TooltipTrigger>
 
-                  <TooltipContent>
-                    {value} hrs of {key.toUpperCase()} each week
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                    <TooltipContent>
+                      {value} hrs of {key.toUpperCase()} each week
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </Fragment>
             )
           })}
       </div>

@@ -79,7 +79,7 @@ export const TimetableTable = (props: Props) => {
 
                   return (
                     <Fragment key={matrixKey + dayIndex}>
-                      {dayColumn.map((index) => {
+                      {dayColumn.map((index, offsetIdx) => {
                         const firstIndex = getFirstTsIndex(index)
                         const isLecture = getIndexType(index.type) === "LEC"
 
@@ -104,7 +104,7 @@ export const TimetableTable = (props: Props) => {
                           return (
                             <TimetableTableCell
                               // Core
-                              key={index.key}
+                              key={`${matrixKey}-${dayIndex}-${index.key}-${offsetIdx}`}
                               moduleKey={moduleKey}
                               index={index}
                               indexes={moduleIndexMap[moduleKey]}

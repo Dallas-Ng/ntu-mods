@@ -18,7 +18,7 @@ const ModsWorkloadTable = ({ moduleKey }: { moduleKey: string }) => {
         Total hours per week: {totalHours} hrs
       </div>
 
-      <div className="flex gap-[0.25rem] text-sm">
+      <div className="flex flex-wrap gap-[0.25rem] text-sm">
         {Object.entries(moduleWorkload)
           .filter(([_, v]) => v) // remove empty workload
           .map(([key, value], idx) => {

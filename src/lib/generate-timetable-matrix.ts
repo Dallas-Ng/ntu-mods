@@ -117,10 +117,31 @@ export const generateTimetableMatrix = (
     (rowData) => rowData[5].length === 0
   )
 
+  /**
+   * Get the earliest and latest ts index so that we can show the
+   * empty rows in between
+   */
+  let earliestTime = 2359
+  let latestTime = 700 // This should be the earliest time that a index can have
+
+  moduleIndexesFlat.forEach((index) => {
+    const { startTime, endTime } = parseTimeNumber(index)
+
+    if (startTime < earliestTime) earliestTime = startTime
+    if (endTime > latestTime) latestTime = endTime
+  })
+
+  const earliestTsIndex = Object.values(STARS_TIMESLOTS).findIndex(
+    (x) => x.start === earliestTime
+  )
+  const latestTsIndex = Object.values(STARS_TIMESLOTS).findIndex(
+    (x) => x.end === latestTime + 10
+  )
+
   Object.entries(TABLE_MATRIX).forEach(([key, rowData], idx) => {
     // remove empty rows
     if (moduleIndexesFlat.length > 0) {
-      if (rowData.every((dayCol) => dayCol.length === 0)) {
+      if (earliestTsIndex > idx || idx > latestTsIndex) {
         delete TABLE_MATRIX[parseInt(key)]
       }
     } else {

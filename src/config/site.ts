@@ -61,9 +61,11 @@ export const siteConfig = {
     { label: "Help", route: "/help" }
   ],
   links: {
-    github: "https://github.com/Dallas-Ng",
+    github: "https://github.com/dallas-ng",
     linkedIn: "https://www.linkedin.com/in/dallas-ng/",
-    repo: "https://github.com/Dallas-Ng/ntu-dabao",
+    repo: "https://github.com/dallas-ng/ntu-mods",
+    contribute:
+      "https://github.com/dallas-ng/ntu-mods/blob/main/CONTRIBUTING.md",
     telegram: "https://t.me/dallas_ng"
   }
 } as const

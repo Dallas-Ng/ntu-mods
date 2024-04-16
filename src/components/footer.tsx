@@ -24,6 +24,13 @@ const Footer = () => {
         className="transition-colors hover:text-primary-alt">
         Dallas &copy; 2024
       </Link>
+
+      <Link
+        href={siteConfig.links.contribute}
+        target="_blank"
+        className="transition-colors hover:text-primary-alt">
+        Contribute
+      </Link>
     </footer>
   )
 }

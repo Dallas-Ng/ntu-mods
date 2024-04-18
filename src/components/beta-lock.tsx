@@ -27,7 +27,7 @@ const BetaLockWrapper = ({ children }: Props) => {
 
       if (!hasLsBetaKey) handleAuth()
     }
-  }, [auth])
+  }, [auth, isBetaDomain])
 
   const handleAuth = () => {
     if (auth) return

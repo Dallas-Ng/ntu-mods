@@ -14,7 +14,10 @@ interface Props {
 const BetaLockWrapper = ({ children }: Props) => {
   // We default to allow as we dont want SSR to render blank
   const [auth, setAuth] = useState(true)
-  const isBetaDomain = window.location.hostname.includes("beta")
+  const isBetaDomain =
+    typeof window !== "undefined"
+      ? window.location.hostname.includes("beta")
+      : false
 
   useEffect(() => {
     if (isBetaDomain) {

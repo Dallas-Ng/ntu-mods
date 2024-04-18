@@ -8,6 +8,7 @@ import { Author } from "next/dist/lib/metadata/types/metadata-types"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
+import BetaLock from "@/components/beta-lock"
 import ClarityTag from "@/components/clarity"
 import GTag from "@/components/gtag"
 import MobileTracker from "@/components/mobile-tracker"
@@ -76,8 +77,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn(inter.className, "antialiased ")}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          {children}
-
+          <BetaLock>{children}</BetaLock>
           <MobileTracker />
           <Toaster position="top-center" />
           <GTag />

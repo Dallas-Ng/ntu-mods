@@ -1,6 +1,18 @@
+"use client"
+
+import dynamic from "next/dynamic"
+
 import { getModuleIndexes } from "@/lib/get-module-indexes"
 
-import { TimetableTable } from "../timetable-table/table"
+import { TimetableTableLoader } from "../timetable-table/table"
+
+const TimetableTable = dynamic(
+  () => import("@/components/timetable-table/table"),
+  {
+    ssr: false,
+    loading: () => <TimetableTableLoader />
+  }
+)
 
 interface Props {
   moduleKey: string

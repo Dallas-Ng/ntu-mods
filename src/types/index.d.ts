@@ -10,6 +10,9 @@ type Indexes = {
   [indexKey: string]: Index[]
 }
 
+type ModuleJsonFile = { [moduleKey: string]: Module }
+type ModuleIndexJsonFile = { [moduleKey: string]: Index[] }
+
 type ModuleType =
   | "CORE" // All others (core)
   | "GLOAD" // BDE
@@ -72,6 +75,8 @@ interface Module {
   mutuallyExclusiveWith?: string[]
   notAvailableAsCoreToProgramme?: string
   notOffered?: string
+  year: string
+  semester: string
 }
 
 interface Index {

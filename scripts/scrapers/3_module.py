@@ -234,6 +234,9 @@ def process_module():
     files = get_files("json/course-modules", order=1)
     
     for file in files:
+        academic_year = file.split("-")[0]
+        semester = file.replace(".json", "").split("-")[1]
+        
         if "processed" in file:
             # Skipped processed files
             continue
@@ -243,6 +246,8 @@ def process_module():
 
         for course in data:
             code = course.get("code")
+            course["year"] = academic_year
+            course["semester"] = semester
             course["title"] = course["title"].lower()
 
             if code in consolidated_modules.keys():

@@ -215,14 +215,19 @@ def aggregate_indexes():
 
             for key in json_data.keys():
                 if key not in indexes:
-                    indexes[key] = []
+                    indexes[key] = {}
 
                 for index_key in json_data[key]["indexes"].keys():
                     module_indexes = json_data[key]["indexes"][index_key]
 
                     for index in module_indexes:
-                        if index not in indexes[key]:
-                            indexes[key].append(index)
+                        index_item_key = index["key"]
+
+                        if index_item_key not in indexes[key]:
+                            indexes[key][index_item_key] = []
+
+                        if index not in indexes[key][index_item_key]:
+                            indexes[key][index_item_key].append(index)
 
         jsonify(f"indexes/aggregated-{dir_name}.json", indexes)
 
@@ -331,7 +336,7 @@ if __name__ == "__main__":
         else:
             multi_worker_course_indexer()
 
-        aggregate_indexes()
+    aggregate_indexes()
 
     if FLAGS.INJEST_DATA:
         injest_indexes()

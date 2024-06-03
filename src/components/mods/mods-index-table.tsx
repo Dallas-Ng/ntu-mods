@@ -1,4 +1,9 @@
-import { getModuleIndexes } from "@/lib/get-module-indexes"
+"use client"
+
+import useSWR from "swr"
+
+import { ApiModuleIndexes } from "@/types/api.types"
+import { get } from "@/lib/api"
 
 import { TimetableTable } from "../timetable-table/table"
 
@@ -7,7 +12,10 @@ interface Props {
 }
 
 const ModsIndexTable = ({ moduleKey }: Props) => {
-  const moduleIndexes = getModuleIndexes(moduleKey)
+  const key = `/modules/${moduleKey}/indexes`
+  const { data } = useSWR(key, () => get<ApiModuleIndexes>(key))
+
+  const moduleIndexes = data?.indexes || {}
 
   if (Object.values(moduleIndexes).length === 0) {
     return (

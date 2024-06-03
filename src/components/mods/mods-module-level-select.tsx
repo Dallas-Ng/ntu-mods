@@ -2,24 +2,10 @@
 
 import { useEffect } from "react"
 
+import { getModuleLevels } from "@/lib/get-module-levels"
 import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import CustomSelect from "@/components/select"
-
-const getModuleLevels = (moduleKeys: [string, Module][]) => {
-  return moduleKeys.reduce((levels, [key]) => {
-    const int = parseInt(key.slice(2, 3))
-
-    // Only set keys which are numbers
-    // Mods like `ADP26N` "P" character keys is hidden from user
-    // Mods like CC00002, 0 key is hidden from user
-    if (!isNaN(int) && int > 0) {
-      levels.add(int.toString())
-    }
-
-    return levels
-  }, new Set<string>())
-}
 
 export type SearchModuleLevel =
   | "0000" // technically this exist, but we hide it from the user
@@ -34,27 +20,27 @@ export type SearchModuleLevel =
   | "all"
 
 interface Props {
-  modules: [string, Module][]
+  moduleLevels: string[]
   filterModsLength: number
   paramValue: string
   searchTerm: string
 }
 
 export const ModsLevelSelect = ({
-  modules = [],
+  moduleLevels = [],
   filterModsLength = 0,
   paramValue,
   searchTerm
 }: Props) => {
-  const { value, setValue } = useModsSearchParams(paramValue, "moduleLevel")
+  const { value, setValue } = useModsSearchParams(paramValue, "level")
 
   useEffect(() => {
-    if (filterModsLength === 0 && modules.length !== 0) {
+    if (filterModsLength === 0 && moduleLevels.length !== 0) {
       setValue("all")
     }
-  }, [filterModsLength, modules])
+  }, [filterModsLength, moduleLevels])
 
-  const moduleSelectItems = Array.from(getModuleLevels(Object.values(modules)))
+  const moduleSelectItems = moduleLevels
     .map((val) => ({
       value: val,
       label: (
@@ -79,7 +65,7 @@ export const ModsLevelSelect = ({
 
   return (
     <CustomSelect
-      disabled={modules.length === 0 && filterModsLength === 0}
+      disabled={moduleLevels.length === 0 && filterModsLength === 0}
       closeOnSelect
       value={value}
       selectItems={selectItems}

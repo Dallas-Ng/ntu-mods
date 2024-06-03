@@ -2,9 +2,9 @@ import { Metadata } from "next"
 import nextDynamic from "next/dynamic"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
-import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
 
-import { getModule } from "@/lib/get-module"
+import { ApiModule, ApiModules } from "@/types/api.types"
+import { get } from "@/lib/api"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsInfoTable from "@/components/mods/mods-info-table"
 import ModsWorkloadTable from "@/components/mods/mods-workload-table"
@@ -32,9 +32,14 @@ export const dynamicParams = true
 // @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
 export const revalidate = Infinity
 
-export default function Page({ params }: { params: { module: string } }) {
+async function getData(moduleKey: string) {
+  const { module } = await get<ApiModule>(`/modules/${moduleKey}`)
+  return module
+}
+
+export default async function Page({ params }: { params: { module: string } }) {
   const moduleKey = params.module
-  const moduleData = getModule(moduleKey)
+  const moduleData = await getData(moduleKey)
 
   /**
    * Handles improper page slugs
@@ -44,12 +49,8 @@ export default function Page({ params }: { params: { module: string } }) {
      * Check if mod is in lower case. If so, redirect to the correct page
      *    e.g. /mods/ma1000 -> /mods/MA1000
      */
-    const lowerCaseMod = Object.keys(TRUN_M_DATA).find(
-      (k) => k.toLowerCase() === moduleKey
-    )
-
-    if (lowerCaseMod) {
-      redirect(`/mods/${lowerCaseMod.toUpperCase()}`)
+    if (moduleKey !== moduleKey.toUpperCase()) {
+      redirect(`/mods/${moduleKey.toUpperCase()}`)
     } else {
       notFound()
     }
@@ -100,9 +101,8 @@ export default function Page({ params }: { params: { module: string } }) {
  */
 export async function generateStaticParams() {
   // All urls are to follow this scheme - `/mods/SC1005`
-  return Object.keys(TRUN_M_DATA).map((key) => ({
-    module: key
-  }))
+  const { modules } = await get<ApiModules>("/modules", { limit: 9999 })
+  return modules
 }
 
 /**
@@ -115,13 +115,13 @@ export async function generateMetadata({
   params: { module: string }
 }): Promise<Metadata | null> {
   const moduleKey = params.module
-  const mod = getModule(moduleKey)
+  const module = await getData(moduleKey)
 
-  if (!mod) {
+  if (!module) {
     return null
   }
 
-  const title = mod.title
+  const title = module.title
 
   const description = `Explore ${moduleKey} ${title}. Find detailed information, reviews, and schedules for various faculty and subjects. Plan your academic journey with ease.`
   return {

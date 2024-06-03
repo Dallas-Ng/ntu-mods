@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
-type Key =
-  | "searchTerm"
-  | "semester"
-  | "moduleType"
-  | "moduleFaculty"
-  | "moduleLevel"
+type Key = "searchTerm" | "semester" | "type" | "faculty" | "level"
 
 export const useModsSearchParams = (paramValue: string, key: Key) => {
   const defaultValue =
-    key === "searchTerm" ? "" : key === "semester" ? "s2" : "all"
+    key === "searchTerm" ? "" : key === "semester" ? "s1" : "all"
   const [value, setValue] = useState(defaultValue)
 
   const searchParams = useSearchParams()

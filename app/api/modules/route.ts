@@ -3,6 +3,7 @@ import { apiGetMetadata } from "@/lib/api-get-metadata"
 import { IS_DEV } from "@/lib/constants"
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
+import { getModuleLevels } from "@/lib/get-module-levels"
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
@@ -54,7 +55,9 @@ export async function GET(req: Request) {
     )
   }
 
-  if (moduleLevel) {
+  const moduleLevels = getModuleLevels(filteredModules)
+
+  if (moduleLevel && moduleLevel !== "all") {
     filteredModules = filteredModules.filter(
       ([moduleKey, _]) => moduleKey.slice(2, 3) === moduleLevel
     )
@@ -83,6 +86,7 @@ export async function GET(req: Request) {
     }),
     // Keep total on top so its easier to view/debug
     total: filteredModules.length,
-    modules: moduleToReturn
+    modules: moduleToReturn,
+    moduleLevels: Array.from(moduleLevels)
   })
 }

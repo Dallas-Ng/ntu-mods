@@ -12,7 +12,7 @@ export const ModsModuleTypeSelect = ({
 }: {
   paramsValue: string
 }) => {
-  const { value, setValue } = useModsSearchParams(paramsValue, "moduleType")
+  const { value, setValue } = useModsSearchParams(paramsValue, "type")
 
   const selectItems = [
     { value: "all", label: "All Module Types" },

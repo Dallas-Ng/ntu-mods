@@ -1,10 +1,11 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Link from "next/link"
+import useSWR from "swr"
 
-import { getModuleCategories } from "@/lib/get-module-category"
-import { getModuleFaculty } from "@/lib/get-module-faculty"
+import { ApiModules } from "@/types/api.types"
+import { get } from "@/lib/api"
+import { useDebounce } from "@/hooks/use-debounce"
 import Header from "@/components/header"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import {
@@ -33,105 +34,43 @@ interface Props {
   searchParams: {
     searchTerm?: string
     semester?: Semester
-    moduleType?: SearchModuleType
-    moduleFaculty?: SearchModuleFaculty
-    moduleLevel?: SearchModuleLevel
+    type?: SearchModuleType
+    faculty?: SearchModuleFaculty
+    level?: SearchModuleLevel
   }
 }
 
 const ModsPage = ({ searchParams }: Props) => {
   const {
     searchTerm = "",
-    semester = "s2",
-    moduleType = "all",
-    moduleFaculty = "all",
-    moduleLevel = "all"
+    semester = "s1",
+    type = "all",
+    faculty = "all",
+    level = "all"
   } = searchParams
 
-  const [modules, setModules] = useState<{ [moduleKey: string]: Module }>({})
-  const [loading, setLoading] = useState(true)
+  const dbSearchParams = useDebounce(searchParams, 100)
 
-  useEffect(() => {
-    const loadModule = async () => {
-      setLoading(true)
-      let modulesToLoad: { [moduleKey: string]: Module } = {}
+  const { data, isLoading } = useSWR(["/modules", dbSearchParams], () =>
+    get<ApiModules>("/modules", dbSearchParams)
+  )
 
-      if (semester === "s2")
-        modulesToLoad = (await import("@/data/2023/m-data-s2")).M_DATA_S2
-
-      if (semester === "s1")
-        modulesToLoad = (await import("@/data/2023/m-data-s1")).M_DATA_S1
-
-      if (semester === "all")
-        modulesToLoad = (await import("@/data/2023/m-data")).M_DATA
-
-      setModules(modulesToLoad)
-      setLoading(false)
-    }
-
-    loadModule()
-  }, [semester])
-
-  let filteredModules = Object.entries(modules)
-  let filteredModsExcludingLevel: [string, Module][] = []
-
-  /**
-   *
-   */
-  if (searchTerm.length === 2) {
-    // Assume its a module code prefix
-    filteredModules = filteredModules.filter(([moduleKey, _]) =>
-      moduleKey.toLowerCase().startsWith(searchTerm.toLowerCase())
-    )
-  } else {
-    // Filter by module name or tilte
-    filteredModules = filteredModules.filter(([moduleKey, moduleData]) => {
-      return (
-        moduleKey.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        moduleData.title.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    })
-  }
-
-  // Filter by module type
-  if (moduleType !== "all") {
-    filteredModules = filteredModules.filter(([_, moduleData]) =>
-      getModuleCategories(moduleData.searchKeys).includes(
-        moduleType as ModuleType
-      )
-    )
-  }
-
-  // Filter by module faculty
-  if (moduleFaculty !== "all") {
-    filteredModules = filteredModules.filter(
-      ([_, moduleData]) =>
-        getModuleFaculty(moduleData.searchKeys) === moduleFaculty
-    )
-  }
-
-  // Used to persist module level select
-  filteredModsExcludingLevel = filteredModules
-
-  if (moduleLevel !== "all") {
-    filteredModules = filteredModules.filter(
-      ([moduleKey, _]) => moduleKey.slice(2, 3) === moduleLevel
-    )
-  }
+  const filteredModules = data?.modules || []
+  const moduleLevels = data?.moduleLevels || []
 
   return (
     <div className="relative space-y-3">
       <Header
         title="NTU Modules"
-        subtitle={`Filtered down to ${filteredModules.length} modules.`}
+        subtitle={`Filtered down to ${data?.total} modules.`}
       />
 
       <div className="flex w-full flex-col gap-2 lg:flex-row">
         <ModsSearchInput paramsValue={searchTerm} />
-        <ModsFacultySelect paramsValue={moduleFaculty} />
+        <ModsFacultySelect paramsValue={faculty} />
 
         <div className="flex gap-2">
-          <ModsModuleTypeSelect paramsValue={moduleType} />
+          <ModsModuleTypeSelect paramsValue={type} />
         </div>
 
         <div className="flex gap-2">
@@ -139,8 +78,8 @@ const ModsPage = ({ searchParams }: Props) => {
 
           <ModsLevelSelect
             searchTerm={searchTerm}
-            paramValue={moduleLevel}
-            modules={filteredModsExcludingLevel}
+            paramValue={level}
+            moduleLevels={moduleLevels}
             filterModsLength={filteredModules.length}
           />
         </div>
@@ -148,17 +87,21 @@ const ModsPage = ({ searchParams }: Props) => {
 
       <hr className="py-2" />
 
-      {!loading && filteredModules.length === 0 && <ModsEmptyCard />}
+      {!isLoading && filteredModules.length === 0 && <ModsEmptyCard />}
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {loading ? (
-          Array.from({ length: 9 }).map((_, idx) => (
+        {isLoading ? (
+          Array.from({ length: 6 }).map((_, idx) => (
             <ModuleCardDetailLoading key={idx} />
           ))
         ) : (
           <>
-            {filteredModules.map(([code, moduleData], idx) => (
-              <ModuleCardDetail key={idx} code={code} moduleData={moduleData} />
+            {filteredModules.map((module, idx) => (
+              <ModuleCardDetail
+                key={idx}
+                code={module.code}
+                moduleData={module}
+              />
             ))}
           </>
         )}

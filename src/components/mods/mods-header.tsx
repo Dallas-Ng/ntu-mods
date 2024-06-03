@@ -17,7 +17,7 @@ const ModsHeader = ({ module }: Props) => {
           {
             name: faculty,
             label: faculty,
-            href: `/mods?moduleFaculty=${faculty}`
+            href: `/mods?faculty=${faculty}`
           },
           { name: module.code, label: module.code, href: `/${module.code}` }
         ]}

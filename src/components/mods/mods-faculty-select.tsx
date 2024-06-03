@@ -8,7 +8,7 @@ import CustomSelect from "@/components/select"
 export type SearchModuleFaculty = ModuleFaculty | "all"
 
 export const ModsFacultySelect = ({ paramsValue }: { paramsValue: string }) => {
-  const { value, setValue } = useModsSearchParams(paramsValue, "moduleFaculty")
+  const { value, setValue } = useModsSearchParams(paramsValue, "faculty")
 
   const selectItems = [
     { value: "all", label: "All Faculty" },

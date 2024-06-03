@@ -22,7 +22,7 @@ export const ModuleCard = ({ module, cardClassName }: ModuleCardProps) => (
       )}>
       <p>{module.code}</p>
 
-      <p className="truncate text-foreground">{module.title}</p>
+      <p className="truncate capitalize text-foreground">{module.title}</p>
     </div>
   </Link>
 )
@@ -40,7 +40,7 @@ export const ModuleCardDetail = ({
     <div className="rounded-lg border-2 p-3 transition-colors hover:bg-accent">
       <p className="text-sm text-muted-foreground">{moduleData.code}</p>
 
-      <p className="truncate">{moduleData.title}</p>
+      <p className="truncate capitalize">{moduleData.title}</p>
 
       <div className="mt-4 flex items-center justify-between text-xs">
         <div className="flex gap-1 text-muted-foreground">

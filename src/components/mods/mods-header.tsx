@@ -1,5 +1,4 @@
 import { formatTitle } from "@/lib/format"
-import { getModuleFaculty } from "@/lib/get-module-faculty"
 
 import Breadcrumbs from "../breadcrumbs"
 
@@ -8,8 +7,6 @@ interface Props {
 }
 
 const ModsHeader = ({ module }: Props) => {
-  const faculty = getModuleFaculty(module.code, module.searchKeys)
-
   return (
     <div className="space-y-2">
       <Breadcrumbs
@@ -19,7 +16,11 @@ const ModsHeader = ({ module }: Props) => {
             label: "Mods",
             href: `/mods`
           },
-          { name: module.code, label: module.code, href: `/${module.code}` }
+          {
+            name: module.code,
+            label: module.code,
+            href: `/mods/${module.code}`
+          }
         ]}
       />
       <h1 className="text-3xl">{formatTitle(module.title)}</h1>

@@ -1,13 +1,25 @@
 import Link from "next/link"
 
+import { cn } from "@/lib/utils"
+
 interface BannerProps {
   children: React.ReactNode
+  divClass?: string
+  pClass?: string
 }
 
 export const BannerWrapper = (props: BannerProps) => {
   return (
-    <div className="relative z-10 flex items-center justify-center bg-primary p-1">
-      <p className="text-center text-sm font-medium leading-6 text-primary-foreground">
+    <div
+      className={cn(
+        "relative z-10 flex items-center justify-center bg-primary p-1",
+        props.divClass
+      )}>
+      <p
+        className={cn(
+          "text-center text-sm font-medium leading-6 text-primary-foreground",
+          props.pClass
+        )}>
         {props.children}
       </p>
     </div>

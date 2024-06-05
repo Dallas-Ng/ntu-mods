@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 
 import { Author } from "next/dist/lib/metadata/types/metadata-types"
+import dynamic from "next/dynamic"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -15,6 +16,10 @@ import GTag from "@/components/gtag"
 import MobileTracker from "@/components/mobile-tracker"
 import TailwindIndicator from "@/components/tailwind-indicator"
 import ThemeProvider from "@/components/theme-provider"
+
+const BetaBanner = dynamic(() => import("@/components/beta-banner"), {
+  ssr: false
+})
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -78,6 +83,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn(inter.className, "antialiased ")}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <BetaBanner />
           <Banner.updatedAy />
           <BetaLock>{children}</BetaLock>
           <MobileTracker />

@@ -6,7 +6,7 @@ import BetaWrapper from "./beta"
 const BetaBanner = () => (
   <BetaWrapper>
     <Link href="/settings#beta">
-      <BannerWrapper>
+      <BannerWrapper divClass="bg-secondary" pClass="text-white">
         You are in <strong className="font-semibold">Beta mode!</strong> Click
         to turn off Beta
       </BannerWrapper>

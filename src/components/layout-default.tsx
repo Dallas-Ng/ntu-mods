@@ -1,5 +1,3 @@
-import dynamic from "next/dynamic"
-
 import { cn } from "@/lib/utils"
 
 import Footer from "./footer"

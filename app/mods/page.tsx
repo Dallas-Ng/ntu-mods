@@ -7,10 +7,7 @@ import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
 import Header from "@/components/header"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
-import {
-  ModsFacultySelect,
-  SearchModuleFaculty
-} from "@/components/mods/mods-faculty-select"
+import { SearchModuleFaculty } from "@/components/mods/mods-faculty-select"
 import {
   ModsLevelSelect,
   SearchModuleLevel
@@ -20,10 +17,7 @@ import {
   SearchModuleType
 } from "@/components/mods/mods-module-type-select"
 import ModsSearchInput from "@/components/mods/mods-search-input"
-import {
-  ModsSemesterSelect,
-  Semester
-} from "@/components/mods/mods-semester-select"
+import { Semester } from "@/components/mods/mods-semester-select"
 import {
   ModuleCardDetail,
   ModuleCardDetailLoading

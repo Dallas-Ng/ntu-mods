@@ -40,6 +40,13 @@ export const Banner = {
       Optimsed for website, mobile support coming soon!
     </BannerWrapper>
   ),
+  updatedAy: () => (
+    <Link href="/mods">
+      <BannerWrapper>
+        NTU Mods is updated (kind of) for AY2024/2025!
+      </BannerWrapper>
+    </Link>
+  ),
   experienceProblems: () => (
     <BannerWrapper>
       Clicking of courses in the timetable has problems, please use the

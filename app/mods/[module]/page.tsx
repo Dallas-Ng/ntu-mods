@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
-import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
+import { TRUN_M_DATA } from "@/data/2024/trun-m-data"
 
 import { getModule } from "@/lib/get-module"
 import ModsHeader from "@/components/mods/mods-header"

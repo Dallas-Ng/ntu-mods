@@ -42,7 +42,7 @@ interface Props {
 const ModsPage = ({ searchParams }: Props) => {
   const {
     searchTerm = "",
-    semester = "s2",
+    semester = "s1",
     moduleType = "all",
     moduleFaculty = "all",
     moduleLevel = "all"
@@ -56,14 +56,14 @@ const ModsPage = ({ searchParams }: Props) => {
       setLoading(true)
       let modulesToLoad: { [moduleKey: string]: Module } = {}
 
-      if (semester === "s2")
-        modulesToLoad = (await import("@/data/2023/m-data-s2")).M_DATA_S2
+      // if (semester === "s2")
+      //   modulesToLoad = (await import("@/data/2024/m-data-s2")).M_DATA_S2
 
       if (semester === "s1")
-        modulesToLoad = (await import("@/data/2023/m-data-s1")).M_DATA_S1
+        modulesToLoad = (await import("@/data/2024/m-data-s1")).M_DATA_S1
 
-      if (semester === "all")
-        modulesToLoad = (await import("@/data/2023/m-data")).M_DATA
+      // if (semester === "all")
+      //   modulesToLoad = (await import("@/data/2024/m-data")).M_DATA
 
       setModules(modulesToLoad)
       setLoading(false)
@@ -106,7 +106,8 @@ const ModsPage = ({ searchParams }: Props) => {
   if (moduleFaculty !== "all") {
     filteredModules = filteredModules.filter(
       ([_, moduleData]) =>
-        getModuleFaculty(moduleData.searchKeys) === moduleFaculty
+        getModuleFaculty(moduleData.code, moduleData.searchKeys) ===
+        moduleFaculty
     )
   }
 
@@ -128,14 +129,14 @@ const ModsPage = ({ searchParams }: Props) => {
 
       <div className="flex w-full flex-col gap-2 lg:flex-row">
         <ModsSearchInput paramsValue={searchTerm} />
-        <ModsFacultySelect paramsValue={moduleFaculty} />
+        {/* <ModsFacultySelect paramsValue={moduleFaculty} /> */}
 
         <div className="flex gap-2">
           <ModsModuleTypeSelect paramsValue={moduleType} />
         </div>
 
         <div className="flex gap-2">
-          <ModsSemesterSelect paramsValue={semester} />
+          {/* <ModsSemesterSelect paramsValue={semester} /> */}
 
           <ModsLevelSelect
             searchTerm={searchTerm}
@@ -168,7 +169,7 @@ const ModsPage = ({ searchParams }: Props) => {
         <Link
           href="https://wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"
           target="_blank">
-          Updated as at AY2023/2024
+          Updated as at AY2024/2025
         </Link>
       </p>
     </div>

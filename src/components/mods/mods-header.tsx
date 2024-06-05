@@ -8,21 +8,21 @@ interface Props {
 }
 
 const ModsHeader = ({ module }: Props) => {
-  const faculty = getModuleFaculty(module.searchKeys)
+  const faculty = getModuleFaculty(module.code, module.searchKeys)
 
   return (
     <div className="space-y-2">
       <Breadcrumbs
         breadcrumbs={[
           {
-            name: faculty,
-            label: faculty,
-            href: `/mods?moduleFaculty=${faculty}`
+            name: "Mods",
+            label: "Mods",
+            href: `/mods`
           },
           { name: module.code, label: module.code, href: `/${module.code}` }
         ]}
       />
-      <h1 className="text-3xl capitalize">{formatTitle(module.title)}</h1>
+      <h1 className="text-3xl">{formatTitle(module.title)}</h1>
 
       <div
         className="w-full text-muted-foreground"

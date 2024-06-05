@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
+import { TRUN_M_DATA } from "@/data/2024/trun-m-data"
 import { Check } from "lucide-react"
 
 import { getIndex } from "@/lib/get-index"

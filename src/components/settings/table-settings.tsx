@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
+import { TRUN_M_DATA } from "@/data/2024/trun-m-data"
 import { RefreshCcw } from "lucide-react"
 
 import { TRUN_DAY_MAP } from "@/lib/constants"

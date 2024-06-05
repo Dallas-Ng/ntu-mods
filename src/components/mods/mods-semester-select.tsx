@@ -18,9 +18,9 @@ export const ModsSemesterSelect = ({
       closeOnSelect
       value={value}
       selectItems={[
-        { value: "all", label: "All Sems" },
-        { value: "s1", label: "Sem 1" },
-        { value: "s2", label: "Sem 2" }
+        // { value: "all", label: "All Sems" },
+        { value: "s1", label: "Sem 1" }
+        // { value: "s2", label: "Sem 2" }
       ]}
       onChange={(value) => setValue(value as Semester)}
       divClassName={cn(

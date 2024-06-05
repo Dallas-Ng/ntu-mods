@@ -1,4 +1,4 @@
-import { M_DATA } from "@/data/2023/m-data"
+import { M_DATA } from "@/data/2024/m-data"
 
 import { getModule } from "./get-module"
 

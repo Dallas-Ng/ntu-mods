@@ -1,7 +1,7 @@
 import { Fragment } from "react"
 import Link from "next/link"
-import { M_EXAMS } from "@/data/2023/exam"
-import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
+import { M_EXAMS } from "@/data/2024/exam"
+import { TRUN_M_DATA } from "@/data/2024/trun-m-data"
 
 import { cn } from "@/lib/utils"
 

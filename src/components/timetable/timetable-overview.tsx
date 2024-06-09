@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { TRUN_M_DATA } from "@/data/2023/trun-m-data"
+import { TRUN_M_DATA } from "@/data/2024/trun-m-data"
 
 import { getModuleAu } from "@/lib/get-module-au"
 import getModuleExam from "@/lib/get-module-exam"

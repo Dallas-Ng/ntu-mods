@@ -25,7 +25,10 @@ const ModsIndexTable = ({ moduleKey }: Props) => {
     return (
       <div className="rounded-md border p-2 py-5 text-center">
         <p className="w-full text-muted-foreground">
-          No indexes available for this semester
+          No indexes available for this semester <br />
+          <span className="text-sm">
+            (This might be an old module not longer offered in AY24/25)
+          </span>
         </p>
       </div>
     )

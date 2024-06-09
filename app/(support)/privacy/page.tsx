@@ -521,13 +521,13 @@ export default function HelpPage() {
         changes. Changes to this Privacy Policy are effective when they are
         posted on this page.
       </p>
-
+      {/* 
       <h2 className="my-2 text-xl">Contact Us</h2>
 
       <p>
         If you have any questions about this Privacy Policy, you can contact me:
         By email: ngdallas1@gmail.com
-      </p>
+      </p> */}
     </div>
   )
 }

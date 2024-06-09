@@ -11,7 +11,7 @@ import { Input } from "../ui/input"
 const ModsSearchInput = ({ paramsValue }: { paramsValue: string }) => {
   const { value, setValue } = useModsSearchParams(paramsValue, "searchTerm")
   const [currSearchTerm, setCurrSearchTerm] = useState<string>(paramsValue)
-  const dbSearchTerm = useDebounce(currSearchTerm, 200)
+  const dbSearchTerm = useDebounce(currSearchTerm, 300)
 
   useEffect(() => {
     setValue(dbSearchTerm)

@@ -52,7 +52,7 @@ export const ModuleCardDetail = ({
         </div>
 
         <div className="text-sm text-muted-foreground">
-          {getModuleFaculty(moduleData.searchKeys)}
+          {getModuleFaculty(code, moduleData.searchKeys)}
         </div>
       </div>
     </div>

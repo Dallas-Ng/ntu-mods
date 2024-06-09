@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { M_INDEXES } from "@/data/2023/m-indexes"
+import { M_INDEXES } from "@/data/2024/m-indexes"
 
 import { getIcs } from "@/lib/get-ics"
 

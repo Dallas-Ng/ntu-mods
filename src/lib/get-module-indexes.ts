@@ -1,4 +1,4 @@
-import { M_INDEXES } from "@/data/2023/m-indexes"
+import { M_INDEXES } from "@/data/2024/m-indexes"
 
 export const getModuleIndexes = (moduleKey: string) => {
   const moduleIndexes = M_INDEXES[moduleKey]

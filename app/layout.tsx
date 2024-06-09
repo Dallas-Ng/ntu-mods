@@ -4,16 +4,22 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 
 import { Author } from "next/dist/lib/metadata/types/metadata-types"
+import dynamic from "next/dynamic"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
+import { Banner } from "@/components/banner"
 import BetaLock from "@/components/beta-lock"
 import ClarityTag from "@/components/clarity"
 import GTag from "@/components/gtag"
 import MobileTracker from "@/components/mobile-tracker"
 import TailwindIndicator from "@/components/tailwind-indicator"
 import ThemeProvider from "@/components/theme-provider"
+
+const BetaBanner = dynamic(() => import("@/components/beta-banner"), {
+  ssr: false
+})
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -28,7 +34,7 @@ export const metadata: Metadata = {
   description: defaults.desc,
   keywords: defaults.keywords as unknown as string[],
   authors: defaults.authors as unknown as Author[],
-  creator: "Dallas Ng",
+  // creator: "Dallas Ng",
   icons: {
     icon: "/favicon.ico"
     // shortcut: "/favicon-16x16.png",
@@ -54,8 +60,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteConfig.name,
     description: defaults.desc,
-    images: [siteConfig.ogImage],
-    creator: "@dallas-ng"
+    images: [siteConfig.ogImage]
+    // creator: "@dallas-ng"
   }
 }
 
@@ -77,6 +83,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn(inter.className, "antialiased ")}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <BetaBanner />
+          <Banner.updatedAy />
           <BetaLock>{children}</BetaLock>
           <MobileTracker />
           <Toaster position="top-center" />

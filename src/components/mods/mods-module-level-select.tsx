@@ -85,7 +85,7 @@ export const ModsLevelSelect = ({
       selectItems={selectItems}
       onChange={(value) => setValue(value as SearchModuleLevel)}
       divClassName={cn(
-        "basis-1/2 lg:w-[150px]",
+        "w-full lg:w-[150px]",
         value !== "all" && "ring-1 ring-ring rounded-md"
       )}
     />

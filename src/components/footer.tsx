@@ -19,8 +19,7 @@ const Footer = () => {
       </Link>
 
       <Link
-        href={siteConfig.links.github}
-        target="_blank"
+        href="/settings#feedback"
         className="transition-colors hover:text-primary-alt">
         Dallas &copy; 2024
       </Link>

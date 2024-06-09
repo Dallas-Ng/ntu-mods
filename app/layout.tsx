@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   description: defaults.desc,
   keywords: defaults.keywords as unknown as string[],
   authors: defaults.authors as unknown as Author[],
-  creator: "Dallas Ng",
+  // creator: "Dallas Ng",
   icons: {
     icon: "/favicon.ico"
     // shortcut: "/favicon-16x16.png",
@@ -60,8 +60,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteConfig.name,
     description: defaults.desc,
-    images: [siteConfig.ogImage],
-    creator: "@dallas-ng"
+    images: [siteConfig.ogImage]
+    // creator: "@dallas-ng"
   }
 }
 

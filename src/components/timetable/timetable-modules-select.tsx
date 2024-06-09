@@ -123,6 +123,7 @@ const TimetableModulesSelect = () => {
 
     addItemToTimetable(moduleKey, selectedIndexKey)
     setDisabled(false)
+    setInputValue("")
   }
 
   return (

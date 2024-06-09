@@ -1,9 +1,8 @@
 import Link from "next/link"
-import { Mail, ServerCrash } from "lucide-react"
+import { ServerCrash } from "lucide-react"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import FeedbackCard from "@/components/feedback-card"
-import Header from "@/components/header"
 
 interface HelpConfig {
   question: React.ReactNode

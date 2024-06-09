@@ -1,7 +1,5 @@
 import Link from "next/link"
 
-import { siteConfig } from "@/config/site"
-
 const Footer = () => {
   return (
     <footer className="flex h-12 items-center justify-center gap-4 text-center text-sm text-muted-foreground">

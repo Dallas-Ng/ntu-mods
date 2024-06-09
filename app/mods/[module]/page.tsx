@@ -1,14 +1,22 @@
 import { Metadata } from "next"
+import dynamicLoad from "next/dynamic"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 import { TRUN_M_DATA } from "@/data/2024/trun-m-data"
 
 import { getModule } from "@/lib/get-module"
 import ModsHeader from "@/components/mods/mods-header"
-import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
 import ModsWorkloadTable from "@/components/mods/mods-workload-table"
 import RelatedModules from "@/components/related-modules"
+
+import { TimetableTableLoader } from "../../../src/components/timetable-table/table"
+
+// TODO: needed until common lecture ssr bug is fixed
+const ModsIndexTable = dynamicLoad(
+  () => import("@/components/mods/mods-index-table"),
+  { ssr: false, loading: () => <TimetableTableLoader /> }
+)
 
 // Change the dynamic behavior of a layout or page to fully static or fully dynamic.
 // 'auto' | 'force-dynamic' | 'error' | 'force-static'

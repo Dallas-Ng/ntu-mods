@@ -1,13 +1,7 @@
-import dynamic from "next/dynamic"
-
 import { cn } from "@/lib/utils"
 
 import Footer from "./footer"
 import Navbar from "./navbar"
-
-const BetaBanner = dynamic(() => import("@/components/beta-banner"), {
-  ssr: false
-})
 
 interface Props {
   children?: React.ReactNode
@@ -16,8 +10,6 @@ interface Props {
 
 const LayoutDefault = ({ children, containerClassName }: Props) => (
   <div className="flex min-h-screen flex-col bg-background">
-    <BetaBanner />
-
     <Navbar />
 
     <main

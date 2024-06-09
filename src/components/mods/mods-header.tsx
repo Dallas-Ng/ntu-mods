@@ -1,5 +1,4 @@
 import { formatTitle } from "@/lib/format"
-import { getModuleFaculty } from "@/lib/get-module-faculty"
 
 import Breadcrumbs from "../breadcrumbs"
 
@@ -8,21 +7,23 @@ interface Props {
 }
 
 const ModsHeader = ({ module }: Props) => {
-  const faculty = getModuleFaculty(module.searchKeys)
-
   return (
     <div className="space-y-2">
       <Breadcrumbs
         breadcrumbs={[
           {
-            name: faculty,
-            label: faculty,
-            href: `/mods?moduleFaculty=${faculty}`
+            name: "Mods",
+            label: "Mods",
+            href: `/mods`
           },
-          { name: module.code, label: module.code, href: `/${module.code}` }
+          {
+            name: module.code,
+            label: module.code,
+            href: `/mods/${module.code}`
+          }
         ]}
       />
-      <h1 className="text-3xl capitalize">{formatTitle(module.title)}</h1>
+      <h1 className="text-3xl">{formatTitle(module.title)}</h1>
 
       <div
         className="w-full text-muted-foreground"

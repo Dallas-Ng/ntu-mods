@@ -1,8 +1,10 @@
 export const formatTitle = (courseTitle: string) => {
-  return courseTitle
-    .toLowerCase()
-    .replace(/[^a-zA-Z ]/g, "")
-    .replace(/\s+/g, " ")
+  return (
+    courseTitle
+      // .toLowerCase()
+      .replace(/[^a-zA-Z ]/g, "")
+      .replace(/\s+/g, " ")
+  )
 }
 
 export const formatRemarks = (remarks: string) => {

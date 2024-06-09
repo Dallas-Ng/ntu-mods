@@ -4,20 +4,20 @@ import { TimetableTable } from "../timetable-table/table"
 
 const TEMPLATE_COURSES = {
   // Make sure these indexes actually exist in the database
-  MH1812: "10122",
-  MH1810: "50001",
-  CC0007: "83019",
-  BA2204: "00187",
-  IM2073: "32361",
-  EE4208: "32263",
-  AD1101: "00085"
+  // MA3003: "23285",
+  HR2008: "17289",
+  IE3102: "33110",
+  BG2119: "55067",
+  IM3180: "36001",
+  BH3605: "00798",
+  LF5003: "18045"
 }
 
 const moduleIndexMap = getModuleIndexMap(TEMPLATE_COURSES)
 
 const LandingProduct = () => {
   return (
-    <div className="relative h-[59vh] w-full justify-center overflow-hidden rounded-lg border-4 bg-background shadow-xl dark:bg-slate-950">
+    <div className="relative h-[48.5vh] w-full justify-center overflow-hidden rounded-lg border-4 bg-background shadow-xl dark:bg-slate-950">
       <TimetableTable moduleIndexMap={moduleIndexMap} fullCell />
     </div>
   )

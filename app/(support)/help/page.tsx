@@ -1,9 +1,8 @@
 import Link from "next/link"
-import { Mail, ServerCrash } from "lucide-react"
+import { ServerCrash } from "lucide-react"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import FeedbackCard from "@/components/feedback-card"
-import Header from "@/components/header"
 
 interface HelpConfig {
   question: React.ReactNode
@@ -52,7 +51,7 @@ const HELP_CONFIG: HelpConfig[] = [
     answer: (
       <>
         We have updated the system for{" "}
-        <span className="underline">Academic Year 2023-2024 Semester 2</span>.
+        <span className="underline">Academic Year 2024-2025 Semester 1</span>.
         If you have any missing courses or suggestions, please feel free to
         email me or send a feedback below.
       </>
@@ -73,7 +72,7 @@ const HELP_CONFIG: HelpConfig[] = [
 export default function HelpPage() {
   return (
     <div className="mx-auto max-w-2xl space-y-10 lg:mt-5">
-      <div className="space-y-5">
+      {/* <div className="space-y-5">
         <Header
           title="Frequently Asked Questions"
           subtitle={
@@ -89,7 +88,7 @@ export default function HelpPage() {
             </span>
           }
         />
-      </div>
+      </div> */}
 
       <div className="space-y-3">
         <p>Quick Access</p>

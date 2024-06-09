@@ -21,10 +21,10 @@ type BetaKeys = {
 }
 
 const BETA_KEYS: BetaKeys[] = [
-  {
-    title: "Faculty Pages",
-    desc: "View mods by faculty"
-  }
+  // {
+  //   title: "Faculty Pages",
+  //   desc: "View mods by faculty"
+  // }
 ]
 
 export const BetaList = () =>

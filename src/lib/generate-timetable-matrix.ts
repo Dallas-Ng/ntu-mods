@@ -17,17 +17,28 @@ export const generateTimetableMatrix = (
   maxColumnsThreshold = 9,
   uniqueLecturesIgnoreIndexKey = true
 ) => {
-  const moduleIndexesFlat = Object.values(moduleIndexes).flat()
-
-  /**
-   * Remove LECTURE indexes that are not unique
-   */
-
+  // Identify unique lectures
   const uniqueLectures = getUniqueLectures(
     moduleIndexes,
     uniqueLecturesIgnoreIndexKey
   )
 
+  // Extract unique lecture keys
+  const uniqueLectureKeys = new Set(
+    uniqueLectures.map((lecture) => lecture.key)
+  )
+
+  // Flatten module indexes and filter out non-unique lectures
+  const moduleIndexesFlat = Object.values(moduleIndexes)
+    .flat()
+    .filter(
+      (index) =>
+        getIndexType(index.type) !== "LEC" || uniqueLectureKeys.has(index.key)
+    )
+
+  /**
+   * Remove LECTURE indexes that are not unique
+   */
   Object.keys(moduleIndexes).forEach((moduleKey) => {
     moduleIndexes[moduleKey] = moduleIndexes[moduleKey].filter((lecture) => {
       if (getIndexType(lecture.type) === "LEC") {

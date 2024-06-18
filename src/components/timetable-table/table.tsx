@@ -171,5 +171,3 @@ export const TimetableTableLoader = () => (
     </tbody>
   </table>
 )
-
-export default TimetableTable

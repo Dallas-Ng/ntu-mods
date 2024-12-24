@@ -1,3 +1,5 @@
+"use client"
+
 import dynamic from "next/dynamic"
 import Image from "next/image"
 
@@ -6,6 +8,7 @@ import CTA from "@/components/landing/landing-cta"
 import Features from "@/components/landing/landing-features"
 import Roadmap from "@/components/landing/landing-roadmap"
 import LayoutDefault from "@/components/layout-default"
+import ReportTrigger from "@/components/report-trigger"
 
 const Product = dynamic(() => import("@/components/landing/landing-product"), {
   ssr: false,
@@ -19,6 +22,7 @@ const Product = dynamic(() => import("@/components/landing/landing-product"), {
 export default function IndexPage() {
   return (
     <LayoutDefault containerClassName="max-w-full p-0 lg:px-0">
+      <ReportTrigger />
       <div className="relative z-[3] space-y-10 p-3">
         <CTA />
       </div>

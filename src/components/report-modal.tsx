@@ -1,9 +1,11 @@
+"use client"
+
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import Modal from "@/components/feedback-modal"
+import FeedbackModal from "@/components/feedback-modal"
 
-const ReportTrigger = () => {
+const ReportModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleButtonClick = () => {
@@ -23,10 +25,10 @@ const ReportTrigger = () => {
         </Button>
       </div>
       {isModalOpen && (
-        <Modal onClose={handleCloseModal} /> // Pass the close handler to Modal
+        <FeedbackModal onClose={handleCloseModal} /> // Pass the close handler to Modal
       )}
     </>
   )
 }
 
-export default ReportTrigger
+export default ReportModal

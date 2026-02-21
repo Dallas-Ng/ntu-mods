@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
 import Link from "next/link"
 
 import { getModuleCategories } from "@/lib/get-module-category"
@@ -22,6 +22,7 @@ import {
   ModuleCardDetail,
   ModuleCardDetailLoading
 } from "@/components/module-card"
+import { useAcademicContextHook } from "@/hooks/use-academic-context"
 
 interface Props {
   searchParams: {
@@ -33,6 +34,14 @@ interface Props {
   }
 }
 
+interface ModuleData {
+  code: string
+  title: string
+  au: string
+  searchKeys?: string[]
+  notAvailableToProgramme?: string
+}
+
 const ModsPage = ({ searchParams }: Props) => {
   const {
     searchTerm = "",
@@ -42,43 +51,98 @@ const ModsPage = ({ searchParams }: Props) => {
     moduleLevel = "all"
   } = searchParams
 
-  const [modules, setModules] = useState<{ [moduleKey: string]: Module }>({})
+  const { year, semester: contextSemester } = useAcademicContextHook()
+  const [modules, setModules] = useState<ModuleData[]>([])
+  const [allModulesLoaded, setAllModulesLoaded] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [hasMore, setHasMore] = useState(true)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const loaderRef = useRef<HTMLDivElement>(null)
 
+  const loadModules = useCallback(
+    async (skip: number = 0) => {
+      try {
+        if (skip === 0) setLoading(true)
+        else setIsLoadingMore(true)
+
+        const params = new URLSearchParams({
+          year: year,
+          semester: contextSemester,
+          skip: skip.toString(),
+          limit: "100"
+        })
+
+        const response = await fetch(`/api/data/modules?${params}`)
+        if (!response.ok) throw new Error("Failed to load modules")
+
+        const data = await response.json()
+
+        if (skip === 0) {
+          setModules(data.modules)
+        } else {
+          setModules((prev) => [...prev, ...data.modules])
+        }
+
+        setHasMore(data.hasMore)
+        setAllModulesLoaded(!data.hasMore)
+      } catch (error) {
+        console.error("Error loading modules:", error)
+        setAllModulesLoaded(true)
+      } finally {
+        setLoading(false)
+        setIsLoadingMore(false)
+      }
+    },
+    [year, contextSemester]
+  )
+
+  // Load initial modules when year/semester changes
   useEffect(() => {
-    const loadModule = async () => {
-      setLoading(true)
-      let modulesToLoad: { [moduleKey: string]: Module } = {}
+    setModules([])
+    setAllModulesLoaded(false)
+    loadModules(0)
+  }, [year, contextSemester, loadModules])
 
-      // if (semester === "s2")
-      //   modulesToLoad = (await import("@/data/2024/m-data-s2")).M_DATA_S2
+  // Infinite scroll observer
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (
+        entries[0].isIntersecting &&
+        !loading &&
+        !isLoadingMore &&
+        hasMore &&
+        !allModulesLoaded
+      ) {
+        loadModules(modules.length)
+      }
+    })
 
-      if (semester === "s1")
-        modulesToLoad = (await import("@/data/2024/m-data-s1")).M_DATA_S1
-
-      // if (semester === "all")
-      //   modulesToLoad = (await import("@/data/2024/m-data")).M_DATA
-
-      setModules(modulesToLoad)
-      setLoading(false)
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current)
     }
 
-    loadModule()
-  }, [semester])
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current)
+      }
+    }
+  }, [modules.length, loading, isLoadingMore, hasMore, allModulesLoaded, loadModules])
 
-  let filteredModules = Object.entries(modules)
-  let filteredModsExcludingLevel: [string, Module][] = []
+
+  // Convert modules array for filtering
+  let filteredModules: [string, ModuleData][] = modules.map((m) => [m.code, m])
+  let filteredModsExcludingLevel: [string, ModuleData][] = []
 
   /**
-   *
+   * Filter by search term
    */
   if (searchTerm.length === 2) {
     // Assume its a module code prefix
     filteredModules = filteredModules.filter(([moduleKey, _]) =>
       moduleKey.toLowerCase().startsWith(searchTerm.toLowerCase())
     )
-  } else {
-    // Filter by module name or tilte
+  } else if (searchTerm.length > 0) {
+    // Filter by module name or title
     filteredModules = filteredModules.filter(([moduleKey, moduleData]) => {
       return (
         moduleKey.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -90,7 +154,7 @@ const ModsPage = ({ searchParams }: Props) => {
   // Filter by module type
   if (moduleType !== "all") {
     filteredModules = filteredModules.filter(([_, moduleData]) =>
-      getModuleCategories(moduleData.searchKeys).includes(
+      getModuleCategories(moduleData.searchKeys || []).includes(
         moduleType as ModuleType
       )
     )
@@ -100,7 +164,7 @@ const ModsPage = ({ searchParams }: Props) => {
   if (moduleFaculty !== "all") {
     filteredModules = filteredModules.filter(
       ([_, moduleData]) =>
-        getModuleFaculty(moduleData.code, moduleData.searchKeys) ===
+        getModuleFaculty(moduleData.code, moduleData.searchKeys || []) ===
         moduleFaculty
     )
   }
@@ -118,7 +182,13 @@ const ModsPage = ({ searchParams }: Props) => {
     <div className="relative space-y-3">
       <Header
         title="NTU Modules"
-        subtitle={`Filtered down to ${filteredModules.length} modules.`}
+        subtitle={`Showing ${filteredModules.length} modules${
+          loading
+            ? ""
+            : allModulesLoaded
+              ? ""
+              : " (scroll to load more)"
+        }`}
       />
 
       <div className="flex w-full flex-col gap-2 lg:flex-row">
@@ -135,7 +205,7 @@ const ModsPage = ({ searchParams }: Props) => {
           <ModsLevelSelect
             searchTerm={searchTerm}
             paramValue={moduleLevel}
-            modules={filteredModsExcludingLevel}
+            modules={filteredModsExcludingLevel as unknown as [string, Module][]}
             filterModsLength={filteredModules.length}
           />
         </div>
@@ -153,17 +223,26 @@ const ModsPage = ({ searchParams }: Props) => {
         ) : (
           <>
             {filteredModules.map(([code, moduleData], idx) => (
-              <ModuleCardDetail key={idx} code={code} moduleData={moduleData} />
+              <ModuleCardDetail key={idx} code={code} moduleData={moduleData as unknown as Module} />
             ))}
           </>
         )}
       </div>
 
+      {/* Infinite scroll loader */}
+      {!allModulesLoaded && <div ref={loaderRef} className="h-4" />}
+
+      {isLoadingMore && (
+        <div className="flex justify-center py-4">
+          <div className="text-sm text-muted-foreground">Loading more...</div>
+        </div>
+      )}
+
       <p className="text-center text-sm text-muted-foreground transition-colors hover:text-primary-alt">
         <Link
           href="https://wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"
           target="_blank">
-          Updated as at AY2024/2025
+          Updated as at AY{year}/{parseInt(year) + 1}
         </Link>
       </p>
     </div>

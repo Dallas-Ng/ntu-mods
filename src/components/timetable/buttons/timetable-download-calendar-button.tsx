@@ -5,10 +5,12 @@ import { Calendar } from "lucide-react"
 import { toast } from "sonner"
 
 import { useTimetable } from "@/hooks/use-timetable"
+import { useAcademicContextHook } from "@/hooks/use-academic-context"
 import ButtonCollapsable from "@/components/button-collapsable"
 
 const TimetableDownloadCalendarButton = () => {
   const { timetable } = useTimetable()
+  const { year, semester } = useAcademicContextHook()
   const [loading, setLoading] = useState(false)
 
   const handleClick = async () => {
@@ -19,7 +21,11 @@ const TimetableDownloadCalendarButton = () => {
 
     setLoading(true)
 
-    await fetch(`/api/ics?${new URLSearchParams(timetable)}`, {
+    const params = new URLSearchParams(timetable)
+    params.append("year", year)
+    params.append("semester", semester)
+
+    await fetch(`/api/ics?${params}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" }
     })

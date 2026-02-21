@@ -1,10 +1,11 @@
 "use client"
 
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
+import { useAcademicContextHook } from "@/hooks/use-academic-context"
 import Header from "@/components/header"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import { SearchModuleFaculty } from "@/components/mods/mods-faculty-select"
@@ -22,7 +23,6 @@ import {
   ModuleCardDetail,
   ModuleCardDetailLoading
 } from "@/components/module-card"
-import { useAcademicContextHook } from "@/hooks/use-academic-context"
 
 interface Props {
   searchParams: {
@@ -52,6 +52,7 @@ const ModsPage = ({ searchParams }: Props) => {
   } = searchParams
 
   const { year, semester: contextSemester } = useAcademicContextHook()
+  const [mounted, setMounted] = useState(false)
   const [modules, setModules] = useState<ModuleData[]>([])
   const [allModulesLoaded, setAllModulesLoaded] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -96,6 +97,10 @@ const ModsPage = ({ searchParams }: Props) => {
     [year, contextSemester]
   )
 
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   // Load initial modules when year/semester changes
   useEffect(() => {
     setModules([])
@@ -126,8 +131,14 @@ const ModsPage = ({ searchParams }: Props) => {
         observer.unobserve(loaderRef.current)
       }
     }
-  }, [modules.length, loading, isLoadingMore, hasMore, allModulesLoaded, loadModules])
-
+  }, [
+    modules.length,
+    loading,
+    isLoadingMore,
+    hasMore,
+    allModulesLoaded,
+    loadModules
+  ])
 
   // Convert modules array for filtering
   let filteredModules: [string, ModuleData][] = modules.map((m) => [m.code, m])
@@ -182,13 +193,11 @@ const ModsPage = ({ searchParams }: Props) => {
     <div className="relative space-y-3">
       <Header
         title="NTU Modules"
-        subtitle={`Showing ${filteredModules.length} modules${
-          loading
-            ? ""
-            : allModulesLoaded
-              ? ""
-              : " (scroll to load more)"
-        }`}
+        subtitle={
+          mounted
+            ? `AY${year}/${parseInt(year) + 1} Semester ${contextSemester}`
+            : "\u00A0"
+        }
       />
 
       <div className="flex w-full flex-col gap-2 lg:flex-row">
@@ -205,7 +214,9 @@ const ModsPage = ({ searchParams }: Props) => {
           <ModsLevelSelect
             searchTerm={searchTerm}
             paramValue={moduleLevel}
-            modules={filteredModsExcludingLevel as unknown as [string, Module][]}
+            modules={
+              filteredModsExcludingLevel as unknown as [string, Module][]
+            }
             filterModsLength={filteredModules.length}
           />
         </div>
@@ -213,7 +224,7 @@ const ModsPage = ({ searchParams }: Props) => {
 
       <hr className="py-2" />
 
-      {!loading && filteredModules.length === 0 && <ModsEmptyCard />}
+      {allModulesLoaded && filteredModules.length === 0 && <ModsEmptyCard />}
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {loading ? (
@@ -223,7 +234,11 @@ const ModsPage = ({ searchParams }: Props) => {
         ) : (
           <>
             {filteredModules.map(([code, moduleData], idx) => (
-              <ModuleCardDetail key={idx} code={code} moduleData={moduleData as unknown as Module} />
+              <ModuleCardDetail
+                key={idx}
+                code={code}
+                moduleData={moduleData as unknown as Module}
+              />
             ))}
           </>
         )}

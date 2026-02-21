@@ -9,6 +9,7 @@ Steps
 1. Fetch available academic semesters  ->  data/01_semesters.json
 2. Scrape all courses for a semester   ->  data/02_courses_{YYYY}_{S}.json
 3. Convert to mdata format             ->  data/03_mdata_{YYYY}_{S}.json
+4. Convert to indexes format           ->  data/04_indexes_{YYYY}_{S}.json
 
 By default, existing data files are reused and steps are skipped if their
 output already exists.  Use --refetch to ignore cached data and re-run
@@ -51,6 +52,7 @@ from step2_scrape_courses import (
     DATA_DIR,
 )
 from step3_convert_mdata import convert, default_output_path
+from step4_convert_indexes import convert as convert_indexes, default_output_path as default_indexes_path
 
 
 def run_step1(refetch: bool, indent: Optional[int]) -> None:
@@ -89,6 +91,17 @@ def run_step3(courses_path: Path, refetch: bool, indent: Optional[int]) -> None:
     print(f"[Step 3] Converting {courses_path.name} to mdata...")
     convert(courses_path, out, indent=indent)
     print(f"[Step 3] Done — {out.name}")
+
+
+def run_step4(courses_path: Path, refetch: bool, indent: Optional[int]) -> None:
+    """Convert raw courses JSON to indexes format."""
+    out = default_indexes_path(courses_path)
+    if not refetch and out.exists():
+        print(f"[Step 4] Using cached {out.name} (pass --refetch to update).")
+        return
+    print(f"[Step 4] Converting {courses_path.name} to indexes...")
+    convert_indexes(courses_path, out, indent=indent)
+    print(f"[Step 4] Done — {out.name}")
 
 
 def main() -> None:
@@ -162,9 +175,11 @@ def main() -> None:
         for sem in semesters:
             courses_path = run_step2(sem, max_workers=args.workers, refetch=args.refetch, indent=indent)
             run_step3(courses_path, refetch=args.refetch, indent=indent)
+            run_step4(courses_path, refetch=args.refetch, indent=indent)
     else:
         courses_path = run_step2(acadsem, max_workers=args.workers, refetch=args.refetch, indent=indent)
         run_step3(courses_path, refetch=args.refetch, indent=indent)
+        run_step4(courses_path, refetch=args.refetch, indent=indent)
 
     print("\nPipeline complete.")
 

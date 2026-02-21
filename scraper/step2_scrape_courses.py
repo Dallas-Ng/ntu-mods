@@ -245,13 +245,19 @@ def _parse_table_format(soup: BeautifulSoup) -> List[Dict[str, object]]:
 
                 # The schedule table is the next table with a 'border' attribute
                 schedules: List[Dict[str, str]] = []
+                last_index = ""
                 if j < len(tables) and tables[j].has_attr("border"):
                     for srow in tables[j].find_all("tr")[1:]:
                         cols = [c.get_text(strip=True) for c in srow.find_all(["td", "th"])]
                         if not cols:
                             continue
+                        index = cols[0] if len(cols) > 0 else ""
+                        if index:
+                            last_index = index
+                        else:
+                            index = last_index
                         schedules.append({
-                            "index": cols[0] if len(cols) > 0 else "",
+                            "index": index,
                             "type": cols[1] if len(cols) > 1 else "",
                             "group": cols[2] if len(cols) > 2 else "",
                             "day": cols[3] if len(cols) > 3 else "",

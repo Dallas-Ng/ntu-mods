@@ -5,11 +5,11 @@ Scrapes course schedule data from the [NTU class schedule portal](https://wish.w
 ## Pipeline
 
 ```
-Step 1                     Step 2                          Step 3
-fetch semesters     →      scrape courses          →       convert to mdata
+Step 1                     Step 2                          Step 3                        Step 4
+fetch semesters     →      scrape courses          →       convert to mdata      →       convert to indexes
                            (per semester, per programme)
 
-data/01_semesters.json  →  data/02_courses_YYYY_S.json  →  data/03_mdata_YYYY_S.json
+data/01_semesters.json  →  data/02_courses_YYYY_S.json  →  data/03_mdata_YYYY_S.json  →  data/04_indexes_YYYY_S.json
 ```
 
 ## Setup
@@ -184,6 +184,41 @@ Courses that appear in multiple programmes are merged — all programme codes ar
 
 ---
 
+#### Step 4 — Convert to indexes
+
+Converts a raw courses file into a per-course, per-index schedule mapping.
+
+```bash
+# Auto-detects the most recently modified 02_courses_*.json
+python3 step4_convert_indexes.py
+
+# Specify input explicitly
+python3 step4_convert_indexes.py data/02_courses_2025_2.json
+
+# Specify both input and output
+python3 step4_convert_indexes.py data/02_courses_2025_2.json data/04_indexes_2025_2.json
+
+# Pretty-print the output
+python3 step4_convert_indexes.py data/02_courses_2025_2.json --pretty
+```
+
+Output: `data/04_indexes_2025_2.json`
+
+```json
+{
+  "CSC1010": {
+    "10001": [
+      { "key": "10001", "type": "LEC", "group": "1", "day": 1, "time": "0830-0930", "venue": "LT1", "remarks": "", "duration": 2 },
+      { "key": "10001", "type": "TUT", "group": "T1", "day": 3, "time": "1030-1120", "venue": "TR1", "remarks": "", "duration": 2 }
+    ]
+  }
+}
+```
+
+Each slot's `day` is an integer (Mon=1 … Sun=7) and `duration` is the number of 30-minute units the class occupies.
+
+---
+
 ## Data files
 
 | File | Description |
@@ -191,6 +226,7 @@ Courses that appear in multiple programmes are merged — all programme codes ar
 | `data/01_semesters.json` | All available academic semesters |
 | `data/02_courses_YYYY_S.json` | Raw course data for a semester, keyed by programme |
 | `data/03_mdata_YYYY_S.json` | Converted mdata, keyed by course code |
+| `data/04_indexes_YYYY_S.json` | Schedule indexes keyed by course code → index number |
 
 > **Note:** Data files are not committed to version control. Run the pipeline to generate them.
 

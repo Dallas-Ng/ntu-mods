@@ -19,7 +19,7 @@ const Footer = () => {
       <Link
         href="/settings#feedback"
         className="transition-colors hover:text-primary-alt">
-        Dallas &copy; 2024
+        Dallas &copy; {new Date().getFullYear()}
       </Link>
     </footer>
   )

@@ -55,7 +55,9 @@ export const ModsSemesterYearSelect = () => {
     .filter((s) => s.code.startsWith(`${year};`))
     .map((s) => ({
       value: s.code.split(";")[1],
-      label: s.name
+      // Remove everything up to and including the first 4-digit year (e.g. "Acad Yr 2019 "),
+      // so only the term name remains (e.g. "Semester 2", "Special Term I")
+      label: s.name.replace(/^.*?\b\d{4}\b\s*/, "")
     }))
 
   const yearOptions = years.map((y) => ({
@@ -91,7 +93,7 @@ export const ModsSemesterYearSelect = () => {
 
           setAcademicContext(newYear, newSemester)
         }}
-        divClassName={cn("w-20 lg:w-auto", "rounded-md")}
+        divClassName={cn("w-24 text-center rounded-md")}
       />
 
       <CustomSelect
@@ -99,7 +101,7 @@ export const ModsSemesterYearSelect = () => {
         value={semester}
         selectItems={currentYearSemesters}
         onChange={(value) => setAcademicContext(year, value as string)}
-        divClassName={cn("w-24 lg:w-auto", "rounded-md")}
+        divClassName={cn("w-24 lg:w-44 rounded-md text-center")}
       />
     </div>
   )

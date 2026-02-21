@@ -1,9 +1,8 @@
 # NTU Mods
 
 Build your timetable easier with NTU Mods. Create, customize, and manage your class schedule hassle-free
-      
-![NTU Mods Banner](/public/og-image.png)
 
+![NTU Mods Banner](/public/og-image.png)
 
 ## License
 

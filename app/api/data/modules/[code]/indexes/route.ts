@@ -1,16 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
+import fs from "fs/promises"
+import path from "path"
+import { NextRequest, NextResponse } from "next/server"
 
 interface Index {
-  key: string;
-  type: string;
-  group: string;
-  day: number;
-  time: string;
-  venue: string;
-  remarks?: string;
-  duration: number;
+  key: string
+  type: string
+  group: string
+  day: number
+  time: string
+  venue: string
+  remarks?: string
+  duration: number
 }
 
 /**
@@ -23,44 +23,44 @@ export async function GET(
   { params }: { params: { code: string } }
 ) {
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const year = searchParams.get('year');
-    const semester = searchParams.get('semester');
-    const code = params.code?.toUpperCase();
+    const searchParams = request.nextUrl.searchParams
+    const year = searchParams.get("year")
+    const semester = searchParams.get("semester")
+    const code = params.code?.toUpperCase()
 
     // Validate parameters
     if (!year || !semester) {
       return NextResponse.json(
-        { error: 'Missing required parameters: year and semester' },
+        { error: "Missing required parameters: year and semester" },
         { status: 400 }
-      );
+      )
     }
 
     if (!code) {
       return NextResponse.json(
-        { error: 'Missing module code' },
+        { error: "Missing module code" },
         { status: 400 }
-      );
+      )
     }
 
     const indexesPath = path.join(
       process.cwd(),
       `src/data/api/indexes/${year}_${semester}.json`
-    );
+    )
 
     // Check if file exists
     try {
-      await fs.access(indexesPath);
+      await fs.access(indexesPath)
     } catch {
       return NextResponse.json(
         { error: `No data available for ${year} semester ${semester}` },
         { status: 404 }
-      );
+      )
     }
 
-    const data = await fs.readFile(indexesPath, 'utf-8');
-    const indexesObj = JSON.parse(data);
-    const moduleIndexes = indexesObj[code];
+    const data = await fs.readFile(indexesPath, "utf-8")
+    const indexesObj = JSON.parse(data)
+    const moduleIndexes = indexesObj[code]
 
     if (!moduleIndexes) {
       // Module might not have any indexes in this semester
@@ -68,27 +68,27 @@ export async function GET(
         { indexes: [] },
         {
           headers: {
-            'Cache-Control':
-              'public, s-maxage=86400, stale-while-revalidate=604800',
-          },
+            "Cache-Control":
+              "public, s-maxage=86400, stale-while-revalidate=604800"
+          }
         }
-      );
+      )
     }
 
     return NextResponse.json(
       { indexes: moduleIndexes },
       {
         headers: {
-          'Cache-Control':
-            'public, s-maxage=86400, stale-while-revalidate=604800',
-        },
+          "Cache-Control":
+            "public, s-maxage=86400, stale-while-revalidate=604800"
+        }
       }
-    );
+    )
   } catch (error) {
-    console.error('Error fetching module indexes:', error);
+    console.error("Error fetching module indexes:", error)
     return NextResponse.json(
-      { error: 'Failed to fetch module indexes' },
+      { error: "Failed to fetch module indexes" },
       { status: 500 }
-    );
+    )
   }
 }

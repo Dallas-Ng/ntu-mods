@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server"
 import fs from "fs/promises"
 import path from "path"
+import { NextResponse } from "next/server"
 
 import { getIcs } from "@/lib/get-ics"
 
@@ -53,7 +53,7 @@ export async function GET(request: Request) {
         year,
         semester,
         key,
-        value,
+        value
       })
     }
 

@@ -54,9 +54,7 @@ export const Banner = {
   ),
   updatedAy: () => (
     <Link href="/mods">
-      <BannerWrapper>
-        NTU Mods is updated (kind of) for AY2024/2025!
-      </BannerWrapper>
+      <BannerWrapper>NTU Mods is updated for 2026!</BannerWrapper>
     </Link>
   ),
   experienceProblems: () => (

@@ -10,10 +10,60 @@ interface Module {
   notAvailableToProgramme?: string
 }
 
+const METADATA_DIR = path.join(process.cwd(), "src/data/api/metadata")
+
+async function loadAllModules(): Promise<Map<string, Module>> {
+  const files = await fs.readdir(METADATA_DIR)
+  const jsonFiles = files.filter((f) => f.endsWith(".json")).sort() // ASC = chronological, latest wins
+
+  const merged = new Map<string, Module>()
+  for (const file of jsonFiles) {
+    const data = await fs.readFile(path.join(METADATA_DIR, file), "utf-8")
+    const obj = JSON.parse(data) as Record<string, Module>
+    for (const [code, module] of Object.entries(obj)) {
+      merged.set(code, { ...module, code })
+    }
+  }
+  return merged
+}
+
+async function loadSemesterModules(
+  year: string,
+  semester: string
+): Promise<Map<string, Module>> {
+  const filePath = path.join(METADATA_DIR, `${year}_${semester}.json`)
+  try {
+    await fs.access(filePath)
+  } catch {
+    return new Map()
+  }
+  const data = await fs.readFile(filePath, "utf-8")
+  const obj = JSON.parse(data) as Record<string, Module>
+  const map = new Map<string, Module>()
+  for (const [code, module] of Object.entries(obj)) {
+    map.set(code, { ...module, code })
+  }
+  return map
+}
+
+function moduleMatchesType(module: Module, type: string): boolean {
+  return (
+    module.searchKeys?.some((k) => k.split(";")[0] === type) ?? false
+  )
+}
+
 /**
  * GET /api/data/modules
- * Returns paginated list of modules for a given year and semester
- * Query params: year, semester, skip (default: 0), limit (default: 100)
+ * Returns paginated, server-side filtered list of modules.
+ *
+ * Query params:
+ *   year?     - YYYY (omit for all years)
+ *   semester? - 1|2|S (omit for all semesters)
+ *   skip      - pagination offset (default 0)
+ *   limit     - page size (default 100, max 200)
+ *   q?        - search query (code/title, case-insensitive)
+ *   type?     - module type: CORE|GLOAD|MLOAD|GERP|CNY
+ *   level?    - module level digit: 1-7
  */
 export async function GET(request: NextRequest) {
   try {
@@ -24,38 +74,45 @@ export async function GET(request: NextRequest) {
     const limit = Math.min(
       parseInt(searchParams.get("limit") || "100", 10),
       200
-    ) // Max 200
-
-    // Validate parameters
-    if (!year || !semester) {
-      return NextResponse.json(
-        { error: "Missing required parameters: year and semester" },
-        { status: 400 }
-      )
-    }
-
-    const metadataPath = path.join(
-      process.cwd(),
-      `src/data/api/metadata/${year}_${semester}.json`
     )
+    const q = searchParams.get("q")?.toLowerCase().trim() || null
+    const type = searchParams.get("type") || null
+    const level = searchParams.get("level") || null
 
-    // Check if file exists
-    try {
-      await fs.access(metadataPath)
-    } catch {
-      return NextResponse.json(
-        { error: `No data available for ${year} semester ${semester}` },
-        { status: 404 }
+    let modulesMap: Map<string, Module>
+
+    if (year && semester) {
+      modulesMap = await loadSemesterModules(year, semester)
+      if (modulesMap.size === 0) {
+        return NextResponse.json(
+          { error: `No data available for ${year} semester ${semester}` },
+          { status: 404 }
+        )
+      }
+    } else {
+      modulesMap = await loadAllModules()
+    }
+
+    let modules = Array.from(modulesMap.values())
+
+    if (q && q.length > 0) {
+      modules = modules.filter(
+        (m) =>
+          m.code.toLowerCase().includes(q) ||
+          m.title.toLowerCase().includes(q)
       )
     }
 
-    const data = await fs.readFile(metadataPath, "utf-8")
-    const modulesObj = JSON.parse(data)
+    if (type) {
+      modules = modules.filter((m) => moduleMatchesType(m, type))
+    }
 
-    // Convert object to array and apply pagination
-    const modulesArray = Object.values(modulesObj) as Module[]
-    const total = modulesArray.length
-    const paginated = modulesArray.slice(skip, skip + limit)
+    if (level) {
+      modules = modules.filter((m) => m.code.slice(2, 3) === level)
+    }
+
+    const total = modules.length
+    const paginated = modules.slice(skip, skip + limit)
 
     return NextResponse.json(
       {

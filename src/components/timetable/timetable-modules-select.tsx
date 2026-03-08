@@ -6,10 +6,10 @@ import { Check } from "lucide-react"
 import { getIndex } from "@/lib/get-index"
 import { parseTimeNumber } from "@/lib/parse-time"
 import { cn } from "@/lib/utils"
+import { useAcademicContextHook } from "@/hooks/use-academic-context"
+import { useModuleSearchApi } from "@/hooks/use-module-search-api"
 import { useOutsideClick } from "@/hooks/use-outside-click"
 import { useTimetable } from "@/hooks/use-timetable"
-import { useModuleSearchApi } from "@/hooks/use-module-search-api"
-import { useAcademicContextHook } from "@/hooks/use-academic-context"
 import {
   Command,
   CommandInput,
@@ -26,6 +26,10 @@ const TimetableModulesSelect = () => {
   const { results: searchResults } = useModuleSearchApi(inputValue, 300)
   const ref = useRef<HTMLDivElement>(null)
   const [disabled, setDisabled] = useState(false)
+
+  const isModuleWindowOpen =
+    searchResults.length > 0 ||
+    (searchResults.length === 0 && inputValue.length !== 0)
 
   useOutsideClick(ref, () => {
     /**
@@ -52,7 +56,7 @@ const TimetableModulesSelect = () => {
       // Fetch module indexes from API
       const params = new URLSearchParams({
         year,
-        semester,
+        semester
       })
 
       const response = await fetch(
@@ -138,7 +142,20 @@ const TimetableModulesSelect = () => {
           onValueChange={(val) => setInputValue(val)}
         />
 
-        <CommandList className={cn(searchResults.length > 0 && "border-t")}>
+        <CommandList className={cn(isModuleWindowOpen && "border-t")}>
+          {searchResults.length === 0 && inputValue.length !== 0 && (
+            <CommandItem
+              key="empty"
+              disabled
+              className="py-3 transition-colors hover:bg-accent lg:py-2">
+              <div className="flex w-full flex-col text-center text-xs text-muted-foreground">
+                <span className="pb-1">No Results Found</span>
+                <hr className="p-1" />
+                <span>Check the academic year, semester or search term</span>
+              </div>
+            </CommandItem>
+          )}
+
           {searchResults.map((module) => {
             const isActive = Object.keys(timetable).find(
               (x) => x === module.code

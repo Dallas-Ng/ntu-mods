@@ -1,21 +1,24 @@
-import { M_INDEXES } from "@/data/2024/m-indexes"
-import { TRUN_M_DATA } from "@/data/2024/trun-m-data"
+import { MODULE_MAP } from "@/data/api/module-map"
+import { INDEX_MAP } from "@/data/api/index-map"
 
 export const getRandomModuleIndex = () => {
-  const moduleKeys = Object.keys(TRUN_M_DATA)
-  let randomModuleKey
-  let indexes
+  // Only consider modules that have at least one index key
+  const modulesWithIndexes = Object.entries(MODULE_MAP).filter(
+    ([, entry]) => entry.indexKeys.length > 0
+  )
 
-  // Continue to select a random module key until a valid one is found
+  let randomModuleKey: string
+  let randomIndexKey: string
+  let index: Index
+
   do {
-    randomModuleKey = moduleKeys[Math.floor(Math.random() * moduleKeys.length)]
-    indexes = M_INDEXES[randomModuleKey]
-  } while (!indexes)
-
-  const indexKeys = Object.keys(indexes)
-  const randomIndex = indexKeys[Math.floor(Math.random() * indexKeys.length)]
-
-  const index = indexes[randomIndex][0]
+    const [code, entry] =
+      modulesWithIndexes[Math.floor(Math.random() * modulesWithIndexes.length)]
+    randomModuleKey = code
+    randomIndexKey =
+      entry.indexKeys[Math.floor(Math.random() * entry.indexKeys.length)]
+    index = INDEX_MAP[randomIndexKey]?.[0]
+  } while (!index)
 
   return { randomModuleKey, randomIndex: index }
 }

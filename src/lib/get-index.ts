@@ -1,5 +1,5 @@
-import { INDEXES } from "@/data/2024/indexes"
+import { INDEX_MAP } from "@/data/api/index-map"
 
 export const getIndex = (indexKey: string): Index[] => {
-  return INDEXES[indexKey]
+  return INDEX_MAP[indexKey] ?? []
 }

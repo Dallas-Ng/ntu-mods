@@ -1,56 +1,73 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
-import { TRUN_M_DATA } from "@/data/2024/trun-m-data"
 
-import { getModule } from "@/lib/get-module"
+import { getAllModuleMetadata } from "@/lib/server/get-module-metadata"
+import {
+  getModuleCurrentSemester,
+  getModuleSemesters
+} from "@/lib/server/get-module-current-semester"
+import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
+import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
 import ModsWorkloadTable from "@/components/mods/mods-workload-table"
+import { ModuleContextNav } from "@/components/mods/module-context-nav"
 import RelatedModules from "@/components/related-modules"
 
-// Change the dynamic behavior of a layout or page to fully static or fully dynamic.
-// 'auto' | 'force-dynamic' | 'error' | 'force-static'
-// @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamic
 export const dynamic = "force-static"
-
-// Disable dynamic routes
-// @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#dynamicparams
 export const dynamicParams = true
-
-// No revalidation
-// @see https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
 export const revalidate = Infinity
 
-export default function Page({ params }: { params: { module: string } }) {
-  const moduleKey = params.module
-  const moduleData = getModule(moduleKey)
+// Latest semester used for static generation
+const LATEST_YEAR = "2025"
+const LATEST_SEMESTER = "2"
 
-  /**
-   * Handles improper page slugs
-   */
-  if (!moduleData) {
-    /**
-     * Check if mod is in lower case. If so, redirect to the correct page
-     *    e.g. /mods/ma1000 -> /mods/MA1000
-     */
-    const lowerCaseMod = Object.keys(TRUN_M_DATA).find(
-      (k) => k.toLowerCase() === moduleKey
-    )
+export default async function Page({ params }: { params: { module: string } }) {
+  const rawKey = params.module
 
-    if (lowerCaseMod) {
-      redirect(`/mods/${lowerCaseMod.toUpperCase()}`)
-    } else {
-      notFound()
-    }
+  // Normalise to uppercase
+  if (rawKey !== rawKey.toUpperCase()) {
+    redirect(getModuleUrl(rawKey.toUpperCase()))
+  }
+
+  const moduleKey = rawKey.toUpperCase()
+
+  // Find module's current semester
+  const current = await getModuleCurrentSemester(moduleKey)
+  if (!current) notFound()
+
+  const { year, semester } = current
+
+  // Fetch module metadata and indexes
+  const [allMeta, indexes] = await Promise.all([
+    getAllModuleMetadata(year, semester),
+    getModuleIndexesData(moduleKey, year, semester)
+  ])
+
+  const moduleData = allMeta[moduleKey]
+  if (!moduleData) notFound()
+
+  // Fetch all semesters for this module (for "other offerings" nav)
+  const allSemesters = await getModuleSemesters(moduleKey)
+  const otherSemesters = allSemesters.filter(
+    (s) => !(s.year === year && s.semester === semester)
+  )
+
+  const semesterLabel = (s: { year: string; semester: string }) => {
+    const semName =
+      s.semester === "S" ? "Special Term" : `Semester ${s.semester}`
+    return `AY${s.year}/${parseInt(s.year) + 1} ${semName}`
   }
 
   return (
     <>
+      <ModuleContextNav code={moduleKey} displayedYear={year} displayedSemester={semester} />
+
       <div className="flex flex-col gap-6 xl:flex-row">
         <div className="w-full xl:w-3/6">
-          <ModsHeader module={moduleData} />
+          <ModsHeader module={moduleData} currentYear={year} currentSemester={semester} />
         </div>
 
         <div className="h-fit w-full space-y-2 xl:w-3/6">
@@ -58,20 +75,38 @@ export default function Page({ params }: { params: { module: string } }) {
 
           <hr />
 
-          <ModsWorkloadTable moduleKey={moduleKey} />
+          <ModsWorkloadTable indexes={indexes} />
         </div>
       </div>
+
+      {otherSemesters.length > 0 && (
+        <div className="mt-6 space-y-1">
+          <p className="text-sm text-muted-foreground">Other offerings</p>
+          <div className="flex flex-wrap gap-2">
+            {otherSemesters.map((s) => (
+              <Link
+                key={`${s.year}-${s.semester}`}
+                href={getModuleVersionUrl(moduleKey, s.year, s.semester)}
+                className="rounded-md border px-3 py-1 text-sm transition-colors hover:bg-accent">
+                {semesterLabel(s)}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="mt-10 space-y-2">
         <h2 className="text-lg">Available Indexes</h2>
 
-        <ModsIndexTable moduleKey={moduleKey} />
+        <ModsIndexTable indexes={indexes} />
 
         <div className="mt-10">
           <h2 className="mb-2 text-lg">Other Relevant Mods</h2>
           <RelatedModules
             limit={9}
             moduleKey={moduleKey}
+            currentYear={year}
+            currentSemester={semester}
             emptyContent={
               <Link
                 href="/mods"
@@ -86,37 +121,27 @@ export default function Page({ params }: { params: { module: string } }) {
   )
 }
 
-/**
- * Generates static parameters for the module page.
- */
 export async function generateStaticParams() {
-  // All urls are to follow this scheme - `/mods/SC1005`
-  return Object.keys(TRUN_M_DATA).map((key) => ({
-    module: key
-  }))
+  const allMeta = await getAllModuleMetadata(LATEST_YEAR, LATEST_SEMESTER)
+  return Object.keys(allMeta).map((key) => ({ module: key }))
 }
 
-/**
- * Generates metadata for a module based on the provided parameters.
- * @returns A promise that resolves to the generated metadata or null if the module is not found.
- */
 export async function generateMetadata({
   params
 }: {
   params: { module: string }
 }): Promise<Metadata | null> {
-  const moduleKey = params.module
-  const mod = getModule(moduleKey)
+  const moduleKey = params.module.toUpperCase()
+  const current = await getModuleCurrentSemester(moduleKey)
+  if (!current) return null
 
-  if (!mod) {
-    return null
-  }
+  const allMeta = await getAllModuleMetadata(current.year, current.semester)
+  const mod = allMeta[moduleKey]
+  if (!mod) return null
 
-  const title = mod.title
-
-  const description = `Explore ${moduleKey} ${title}. Find detailed information, reviews, and schedules for various faculty and subjects. Plan your academic journey with ease.`
   return {
-    title: `${moduleKey} ${title}`,
-    description: description.replace(/\s+/g, " ") // triming repeating spaces
+    title: `${moduleKey} ${mod.title}`,
+    description: `Explore ${moduleKey} ${mod.title}. Find detailed information and schedules. Plan your academic journey with ease.`,
+    alternates: { canonical: getModuleUrl(moduleKey) }
   }
 }

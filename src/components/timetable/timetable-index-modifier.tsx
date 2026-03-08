@@ -6,7 +6,8 @@ import { Check } from "lucide-react"
 import { DAY_MAP } from "@/lib/constants"
 import { getIndexType } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
-import { getModuleIndexes } from "@/lib/get-module-indexes"
+import { INDEX_MAP } from "@/data/api/index-map"
+import { MODULE_MAP } from "@/data/api/module-map"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -50,7 +51,14 @@ interface Props {
 
 const TimetableIndexModifier = (props: Props) => {
   const { moduleKey, onOpenChange } = props
-  const indexes = getModuleIndexes(moduleKey)
+  const moduleEntry = MODULE_MAP[moduleKey]
+  const indexes: { [indexKey: string]: Index[] } = {}
+  if (moduleEntry) {
+    for (const indexKey of moduleEntry.indexKeys) {
+      const slots = INDEX_MAP[indexKey]
+      if (slots) indexes[indexKey] = slots.filter((s) => s.day !== 0)
+    }
+  }
   const { isMobile } = useSettings()
   const { timetable, updateItemIndex } = useTimetable()
   const containerRef = useRef<HTMLDivElement>(null)

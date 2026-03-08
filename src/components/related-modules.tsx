@@ -1,23 +1,34 @@
-import { getRelatedModules } from "@/lib/get-related-modules"
+import { getAllModuleMetadata } from "@/lib/server/get-module-metadata"
 
 import ModuleCard from "./module-card"
 
 interface Props {
   moduleKey: string
+  currentYear: string
+  currentSemester: string
   limit?: number
   emptyContent?: React.ReactNode
 }
 
-const RelatedModules = ({
+const RelatedModules = async ({
   moduleKey,
+  currentYear,
+  currentSemester,
   limit = 0,
   emptyContent = undefined
 }: Props) => {
-  const relatedModules = getRelatedModules(moduleKey, limit) // limit 12 only
+  const allMeta = await getAllModuleMetadata(currentYear, currentSemester)
+  const prefix = moduleKey.slice(0, 2)
 
-  return relatedModules.length > 0 ? (
+  let related = Object.values(allMeta)
+    .filter((m) => m.code.slice(0, 2) === prefix && m.code !== moduleKey)
+    .sort((a, b) => parseInt(a.code.slice(2)) - parseInt(b.code.slice(2)))
+
+  if (limit > 0) related = related.slice(0, limit)
+
+  return related.length > 0 ? (
     <div className="grid grid-cols-1 gap-2 text-sm md:grid-cols-3">
-      {relatedModules.map((module) => (
+      {related.map((module) => (
         <ModuleCard key={module.code} module={module} />
       ))}
     </div>

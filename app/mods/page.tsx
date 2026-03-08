@@ -17,6 +17,7 @@ import {
 } from "@/components/mods/mods-module-type-select"
 import ModsSearchInput from "@/components/mods/mods-search-input"
 import { Semester } from "@/components/mods/mods-semester-select"
+import ModsSemesterNav from "@/components/mods/mods-semester-nav"
 import {
   ModuleCardDetail,
   ModuleCardDetailLoading
@@ -36,8 +37,9 @@ interface ModuleData {
   code: string
   title: string
   au: string
-  searchKeys?: string[]
+  searchKeys: string[]
   notAvailableToProgramme?: string
+  isCurrentSemester?: boolean
 }
 
 const ModsPage = ({ searchParams }: Props) => {
@@ -172,7 +174,9 @@ const ModsPage = ({ searchParams }: Props) => {
               <ModuleCardDetail
                 key={idx}
                 code={moduleData.code}
-                moduleData={moduleData as unknown as Module}
+                moduleData={moduleData}
+                year={moduleData.isCurrentSemester ? undefined : year}
+                semester={moduleData.isCurrentSemester ? undefined : semester}
               />
             ))}
           </>
@@ -187,6 +191,8 @@ const ModsPage = ({ searchParams }: Props) => {
           <div className="text-sm text-muted-foreground">Loading more...</div>
         </div>
       )}
+
+      <ModsSemesterNav />
 
       <p className="text-center text-sm text-muted-foreground transition-colors hover:text-primary-alt">
         <Link

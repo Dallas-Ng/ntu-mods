@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { TRUN_M_DATA } from "@/data/2024/trun-m-data"
+import { MODULE_MAP } from "@/data/api/module-map"
 import { RefreshCcw } from "lucide-react"
 
 import { TRUN_DAY_MAP } from "@/lib/constants"
@@ -70,7 +70,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
 
           <div className="flex w-full items-baseline justify-between">
             <p className="w-full truncate text-xs capitalize text-muted-foreground">
-              {TRUN_M_DATA[moduleKey]}
+              {MODULE_MAP[moduleKey]?.title}
             </p>
 
             <Button

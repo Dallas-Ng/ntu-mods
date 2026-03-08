@@ -3,13 +3,14 @@ import Link from "next/link"
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
+import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import { cn } from "@/lib/utils"
+import type { ApiModule } from "@/lib/server/get-module-metadata"
 
 import { Skeleton } from "./ui/skeleton"
 
 interface ModuleCardProps {
-  module: Module
-  variant?: "default" | "small"
+  module: ApiModule
   cardClassName?: string
 }
 
@@ -29,14 +30,24 @@ export const ModuleCard = ({ module, cardClassName }: ModuleCardProps) => (
 
 interface ModuleCardDetailProps {
   code: string
-  moduleData: Module
+  moduleData: ApiModule
+  year?: string
+  semester?: string
 }
 
 export const ModuleCardDetail = ({
   code,
-  moduleData
+  moduleData,
+  year,
+  semester
 }: ModuleCardDetailProps) => (
-  <Link key={code} href={`/mods/${code}`}>
+  <Link
+    key={code}
+    href={
+      year && semester
+        ? getModuleVersionUrl(code, year, semester)
+        : getModuleUrl(code)
+    }>
     <div className="rounded-lg border-2 p-3 transition-colors hover:bg-accent">
       <p className="text-sm text-muted-foreground">{moduleData.code}</p>
 

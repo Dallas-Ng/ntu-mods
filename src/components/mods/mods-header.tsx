@@ -1,21 +1,23 @@
 import { formatTitle } from "@/lib/format"
+import type { ApiModule } from "@/lib/server/get-module-metadata"
 
 import Breadcrumbs from "../breadcrumbs"
 
 interface Props {
-  module: Module
+  module: ApiModule
+  currentYear: string
+  currentSemester: string
 }
 
-const ModsHeader = ({ module }: Props) => {
+const ModsHeader = ({ module, currentYear, currentSemester }: Props) => {
+  const semName =
+    currentSemester === "S" ? "Special Term" : `Semester ${currentSemester}`
+
   return (
     <div className="space-y-2">
       <Breadcrumbs
         breadcrumbs={[
-          {
-            name: "Mods",
-            label: "Mods",
-            href: `/mods`
-          },
+          { name: "Mods", label: "Mods", href: "/mods" },
           {
             name: module.code,
             label: module.code,
@@ -24,15 +26,9 @@ const ModsHeader = ({ module }: Props) => {
         ]}
       />
       <h1 className="text-3xl">{formatTitle(module.title)}</h1>
-
-      <div
-        className="w-full text-muted-foreground"
-        dangerouslySetInnerHTML={{
-          __html: module.description
-            .replaceAll("\n\n", "<br/><br/>")
-            .replaceAll("\n", "<br/>")
-        }}
-      />
+      <p className="text-sm text-muted-foreground">
+        Current offering — AY{currentYear}/{parseInt(currentYear) + 1} {semName}
+      </p>
     </div>
   )
 }

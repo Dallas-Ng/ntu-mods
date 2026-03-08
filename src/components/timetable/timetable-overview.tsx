@@ -1,10 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { TRUN_M_DATA } from "@/data/2024/trun-m-data"
+import { MODULE_MAP } from "@/data/api/module-map"
 
-import { getModuleAu } from "@/lib/get-module-au"
-import getModuleExam from "@/lib/get-module-exam"
 import { getModuleIndexMap } from "@/lib/get-module-index-map"
 import { cn } from "@/lib/utils"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -12,8 +10,6 @@ import { useTimetable } from "@/hooks/use-timetable"
 const TimetableOverview = () => {
   const { timetable } = useTimetable()
   const moduleIndexMap = getModuleIndexMap(timetable)
-
-  const formatTime = (time: string) => time.replace(" ", "")
 
   return (
     <div className="">
@@ -24,16 +20,15 @@ const TimetableOverview = () => {
             <th className="w-fit lg:w-[100px]">Module</th>
             <th className="hidden text-left lg:table-cell">Title</th>
             <th className="w-fit">AU</th>
-            <th className="w-fit">Exams</th>
           </tr>
         </thead>
 
         <tbody>
           {Object.entries(moduleIndexMap).map(
             ([moduleKey, indexes], moduleIdx) => {
-              const moduleTitle = TRUN_M_DATA[moduleKey]
-              const au = getModuleAu(moduleKey)
-              const exam = getModuleExam(moduleKey)
+              const entry = MODULE_MAP[moduleKey]
+              const moduleTitle = entry?.title ?? ""
+              const au = entry?.au ?? "0"
 
               return (
                 <tr
@@ -57,19 +52,7 @@ const TimetableOverview = () => {
                     </Link>
                   </td>
 
-                  <td>{au.replace("AU", "")}</td>
-
-                  <td>
-                    {exam ? (
-                      <>
-                        {exam.date} <br />
-                        {formatTime(exam.start_time)} to{" "}
-                        {formatTime(exam.end_time)}
-                      </>
-                    ) : (
-                      <span className="text-muted-foreground">NA</span>
-                    )}
-                  </td>
+                  <td>{au}</td>
                 </tr>
               )
             }
@@ -80,14 +63,12 @@ const TimetableOverview = () => {
             <td></td>
             <td className="hidden lg:table-cell"></td>
             <td>
-              {Object.keys(moduleIndexMap).reduce((acc, module) => {
-                const au = getModuleAu(module)
-
-                return acc + (parseInt(au.trim().replace("AU", "")) || 0)
-              }, 0)}
-              .0 AUs
+              {Object.keys(moduleIndexMap).reduce((acc, moduleKey) => {
+                const au = parseFloat(MODULE_MAP[moduleKey]?.au ?? "0") || 0
+                return acc + au
+              }, 0).toFixed(1)}{" "}
+              AUs
             </td>
-            <td></td>
           </tr>
         </tbody>
       </table>
@@ -104,7 +85,6 @@ export const TimetableOverviewLoading = () => {
           <th className="w-fit lg:w-[100px]">Module</th>
           <th className="hidden text-left lg:table-cell">Title</th>
           <th>AU</th>
-          <th>Exams</th>
         </tr>
       </thead>
 

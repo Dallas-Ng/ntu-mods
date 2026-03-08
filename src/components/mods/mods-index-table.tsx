@@ -1,22 +1,15 @@
-import { getModuleIndexes } from "@/lib/get-module-indexes"
-
 import { TimetableTable } from "../timetable-table/table"
 
 interface Props {
-  moduleKey: string
+  indexes: Record<string, Index[]>
 }
 
-const ModsIndexTable = ({ moduleKey }: Props) => {
-  const moduleIndexes = getModuleIndexes(moduleKey)
-
-  if (Object.values(moduleIndexes).length === 0) {
+const ModsIndexTable = ({ indexes }: Props) => {
+  if (Object.values(indexes).length === 0) {
     return (
       <div className="rounded-md border p-2 py-5 text-center">
         <p className="w-full text-muted-foreground">
-          No indexes available for this semester <br />
-          <span className="text-sm">
-            (This might be an old module not longer offered in AY24/25)
-          </span>
+          No indexes available for this semester
         </p>
       </div>
     )
@@ -24,7 +17,7 @@ const ModsIndexTable = ({ moduleKey }: Props) => {
 
   return (
     <TimetableTable
-      moduleIndexMap={moduleIndexes}
+      moduleIndexMap={indexes}
       hideIndex
       fullCell
       showModuleKeyAsCommon

@@ -7,7 +7,7 @@ import { DAY_MAP } from "@/lib/constants"
 import { getIndexType } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 import { cn } from "@/lib/utils"
-import { useAcademicContextHook } from "@/hooks/use-academic-context"
+import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 
@@ -52,7 +52,7 @@ interface Props {
 
 const TimetableIndexModifier = (props: Props) => {
   const { moduleKey, onOpenChange } = props
-  const { year, semester } = useAcademicContextHook()
+  const { year, semester } = useLatestSemester()
   const [indexes, setIndexes] = useState<Indexes>({})
   const [filteredIndexes, setFilteredIndexes] = useState<Indexes>({})
   const { isMobile } = useSettings()

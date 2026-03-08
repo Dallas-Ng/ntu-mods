@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAcademicContextHook } from './use-academic-context';
+import { useLatestSemester } from './use-latest-semester';
 
 interface Module {
   code: string;
@@ -21,7 +21,7 @@ interface ModulesResponse {
  * Automatically uses the current year/semester from academic context
  */
 export const useModulesApi = () => {
-  const { year, semester } = useAcademicContextHook();
+  const { year, semester } = useLatestSemester();
   const [modules, setModules] = useState<Module[]>([]);
   const [total, setTotal] = useState(0);
   const [hasMore, setHasMore] = useState(true);

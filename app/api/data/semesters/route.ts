@@ -1,6 +1,7 @@
 import fs from "fs/promises"
 import path from "path"
 import { NextResponse } from "next/server"
+import { getLatestSemester } from "@/lib/server/get-latest-semester"
 
 /**
  * GET /api/data/semesters
@@ -15,8 +16,8 @@ export async function GET() {
     const data = await fs.readFile(semestersPath, "utf-8")
     const semesters = JSON.parse(data)
 
-    // Find the latest semester (first one in the list)
-    const latestSemester = semesters.length > 0 ? semesters[0].code : null
+    const latest = await getLatestSemester()
+    const latestSemester = `${latest.year};${latest.semester}`
 
     return NextResponse.json(
       {

@@ -4,12 +4,12 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 
 import { cn } from "@/lib/utils"
-import { useAcademicContextHook } from "@/hooks/use-academic-context"
+import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useTimetable } from "@/hooks/use-timetable"
 
 const TimetableOverview = () => {
   const { timetable } = useTimetable()
-  const { year, semester } = useAcademicContextHook()
+  const { year, semester } = useLatestSemester()
   const [examMap, setExamMap] = useState<
     Record<string, { date: string; start_time: string; end_time: string }>
   >({})

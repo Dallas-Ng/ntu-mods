@@ -9,12 +9,14 @@ import { siteConfig } from "@/config/site"
 
 const appendSlash = (href: string) => (href.startsWith("/") ? href : `/${href}`)
 
+interface BreadcrumbItem {
+  name: string // shown in breadcrumbs jsonLD
+  href: string
+  label: string // shown in ui
+}
+
 interface Props {
-  breadcrumbs: {
-    name: string // shown in breadcrumbs jsonLD
-    href: string
-    label: string // shown in ui
-  }[]
+  breadcrumbs: BreadcrumbItem[]
 }
 
 const Breadcrumbs = (props: Props) => {

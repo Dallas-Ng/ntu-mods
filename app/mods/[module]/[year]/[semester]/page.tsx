@@ -11,7 +11,6 @@ import { getModuleCategories } from "@/lib/get-module-category"
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { formatTitle } from "@/lib/format"
 import ModsIndexTable from "@/components/mods/mods-index-table"
-import { ModuleContextNav } from "@/components/mods/module-context-nav"
 import Breadcrumbs from "@/components/breadcrumbs"
 
 export const revalidate = Infinity
@@ -56,8 +55,6 @@ export default async function Page({ params }: { params: Params }) {
 
   return (
     <>
-      <ModuleContextNav code={code} displayedYear={year} displayedSemester={semester} />
-
       {/* Historical snapshot banner */}
       <div className="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
         Historical snapshot — {semLabel}
@@ -78,7 +75,11 @@ export default async function Page({ params }: { params: Params }) {
           <Breadcrumbs
             breadcrumbs={[
               { name: "Mods", label: "Mods", href: "/mods" },
-              { name: code, label: code, href: getModuleUrl(code) },
+              {
+                name: code,
+                label: code,
+                href: getModuleUrl(code)
+              },
               { name: semLabel, label: semLabel, href: getModuleVersionUrl(code, year, semester) }
             ]}
           />

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 
-import { useAcademicContextHook } from "@/hooks/use-academic-context"
+import { useLatestSemester } from "@/hooks/use-latest-semester"
 import ModuleCard from "../module-card"
 import type { ApiModule } from "@/lib/server/get-module-metadata"
 
@@ -14,7 +14,7 @@ import type { ApiModule } from "@/lib/server/get-module-metadata"
 const ModsNotFoundRelatedMods = () => {
   const pathname = usePathname()
   const moduleKey = pathname.split("/")[2]?.toUpperCase() ?? ""
-  const { year, semester } = useAcademicContextHook()
+  const { year, semester } = useLatestSemester()
   const [related, setRelated] = useState<ApiModule[]>([])
 
   useEffect(() => {

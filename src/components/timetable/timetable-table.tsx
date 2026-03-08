@@ -1,6 +1,6 @@
 "use client"
 
-import { useAcademicContextHook } from "@/hooks/use-academic-context"
+import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableIndexes } from "@/hooks/use-timetable-indexes"
 
@@ -12,7 +12,7 @@ interface Props {
 
 const TimetablePageTable = (props: Props) => {
   const { timetable } = useTimetable(props.timetable)
-  const { year, semester } = useAcademicContextHook()
+  const { year, semester } = useLatestSemester()
   const { moduleIndexMap, isLoading } = useTimetableIndexes(
     timetable,
     year,

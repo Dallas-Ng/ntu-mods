@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 
-import { useAcademicContextHook } from "@/hooks/use-academic-context"
+import { useLatestSemester } from "@/hooks/use-latest-semester"
 import Header from "@/components/header"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import { SearchModuleFaculty } from "@/components/mods/mods-faculty-select"
@@ -17,7 +17,6 @@ import {
 } from "@/components/mods/mods-module-type-select"
 import ModsSearchInput from "@/components/mods/mods-search-input"
 import { Semester } from "@/components/mods/mods-semester-select"
-import ModsSemesterNav from "@/components/mods/mods-semester-nav"
 import {
   ModuleCardDetail,
   ModuleCardDetailLoading
@@ -49,7 +48,7 @@ const ModsPage = ({ searchParams }: Props) => {
     moduleLevel = "all"
   } = searchParams
 
-  const { year, semester } = useAcademicContextHook()
+  const { year, semester } = useLatestSemester()
   const [modules, setModules] = useState<ModuleData[]>([])
   const [allModulesLoaded, setAllModulesLoaded] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -175,8 +174,6 @@ const ModsPage = ({ searchParams }: Props) => {
                 key={idx}
                 code={moduleData.code}
                 moduleData={moduleData}
-                year={moduleData.isCurrentSemester ? undefined : year}
-                semester={moduleData.isCurrentSemester ? undefined : semester}
               />
             ))}
           </>
@@ -191,8 +188,6 @@ const ModsPage = ({ searchParams }: Props) => {
           <div className="text-sm text-muted-foreground">Loading more...</div>
         </div>
       )}
-
-      <ModsSemesterNav />
 
       <p className="text-center text-sm text-muted-foreground transition-colors hover:text-primary-alt">
         <Link

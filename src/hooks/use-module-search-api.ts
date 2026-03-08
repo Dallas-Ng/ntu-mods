@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAcademicContextHook } from './use-academic-context';
+import { useLatestSemester } from './use-latest-semester';
 import { useDebounce } from './use-debounce';
 
 interface Module {
@@ -21,7 +21,7 @@ interface SearchResponse {
  * Debounces search queries to avoid excessive API calls
  */
 export const useModuleSearchApi = (query: string = '', debounceMs: number = 300) => {
-  const { year, semester } = useAcademicContextHook();
+  const { year, semester } = useLatestSemester();
   const debouncedQuery = useDebounce(query, debounceMs);
 
   const [results, setResults] = useState<Module[]>([]);

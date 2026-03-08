@@ -5,12 +5,12 @@ import { Calendar } from "lucide-react"
 import { toast } from "sonner"
 
 import { useTimetable } from "@/hooks/use-timetable"
-import { useAcademicContextHook } from "@/hooks/use-academic-context"
+import { useLatestSemester } from "@/hooks/use-latest-semester"
 import ButtonCollapsable from "@/components/button-collapsable"
 
 const TimetableDownloadCalendarButton = () => {
   const { timetable } = useTimetable()
-  const { year, semester } = useAcademicContextHook()
+  const { year, semester } = useLatestSemester()
   const [loading, setLoading] = useState(false)
 
   const handleClick = async () => {

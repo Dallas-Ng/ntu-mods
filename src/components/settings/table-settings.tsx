@@ -5,7 +5,7 @@ import { RefreshCcw } from "lucide-react"
 
 import { TRUN_DAY_MAP } from "@/lib/constants"
 import { cn } from "@/lib/utils"
-import { useAcademicContextHook } from "@/hooks/use-academic-context"
+import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useSettings } from "@/hooks/use-settings"
 
 import TimetableCell from "../timetable/timetable-cell"
@@ -27,7 +27,7 @@ interface Props {
 const TableSettings = ({ toggleBorder = false }: Props) => {
   const { settings, updateSettings } = useSettings()
   const { tableCell } = settings
-  const { year, semester } = useAcademicContextHook()
+  const { year, semester } = useLatestSemester()
   const [randomData, setRandomData] = useState<RandomModuleData | null>(null)
   const [rerollKey, setRerollKey] = useState(0)
 

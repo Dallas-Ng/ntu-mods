@@ -9,21 +9,17 @@ import {
 } from "@/lib/server/get-module-current-semester"
 import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
 import { getModuleExamData } from "@/lib/server/get-module-exam-data"
+import { getLatestSemester } from "@/lib/server/get-latest-semester"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
 import ModsWorkloadTable from "@/components/mods/mods-workload-table"
-import { ModuleContextNav } from "@/components/mods/module-context-nav"
 import RelatedModules from "@/components/related-modules"
 
 export const dynamic = "force-static"
 export const dynamicParams = true
 export const revalidate = Infinity
-
-// Latest semester used for static generation
-const LATEST_YEAR = "2025"
-const LATEST_SEMESTER = "2"
 
 export default async function Page({ params }: { params: { module: string } }) {
   const rawKey = params.module
@@ -65,8 +61,6 @@ export default async function Page({ params }: { params: { module: string } }) {
 
   return (
     <>
-      <ModuleContextNav code={moduleKey} displayedYear={year} displayedSemester={semester} />
-
       <div className="flex flex-col gap-6 xl:flex-row">
         <div className="w-full xl:w-3/6">
           <ModsHeader module={moduleData} currentYear={year} currentSemester={semester} />
@@ -124,7 +118,8 @@ export default async function Page({ params }: { params: { module: string } }) {
 }
 
 export async function generateStaticParams() {
-  const allMeta = await getAllModuleMetadata(LATEST_YEAR, LATEST_SEMESTER)
+  const latest = await getLatestSemester()
+  const allMeta = await getAllModuleMetadata(latest.year, latest.semester)
   return Object.keys(allMeta).map((key) => ({ module: key }))
 }
 

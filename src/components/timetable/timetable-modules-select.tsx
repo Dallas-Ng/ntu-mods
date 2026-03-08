@@ -5,7 +5,7 @@ import { Check } from "lucide-react"
 
 import { parseTimeNumber } from "@/lib/parse-time"
 import { cn } from "@/lib/utils"
-import { useAcademicContextHook } from "@/hooks/use-academic-context"
+import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useModuleSearchApi } from "@/hooks/use-module-search-api"
 import { useOutsideClick } from "@/hooks/use-outside-click"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -21,7 +21,7 @@ const TimetableModulesSelect = () => {
   const [isLoadingModule, setIsLoadingModule] = useState(false)
   const { timetable, addItemToTimetable, removeItemFromTimetable } =
     useTimetable()
-  const { year, semester } = useAcademicContextHook()
+  const { year, semester } = useLatestSemester()
   const { results: searchResults } = useModuleSearchApi(inputValue, 300)
   const ref = useRef<HTMLDivElement>(null)
   const [disabled, setDisabled] = useState(false)

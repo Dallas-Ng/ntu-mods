@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/navigation-menu"
 
 import ThemeToggle from "./theme-toggle"
-import { ModsSemesterYearSelect } from "./mods/mods-semester-year-select"
 import { Button } from "./ui/button"
 
 const Navbar = () => {
@@ -94,10 +93,6 @@ const Navbar = () => {
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-2">
-          <div className="hidden md:block">
-            <ModsSemesterYearSelect />
-          </div>
-
           <ThemeToggle />
 
           <Button

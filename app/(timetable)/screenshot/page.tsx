@@ -17,7 +17,6 @@ import {
 } from "lucide-react"
 
 import { BASE_URL } from "@/lib/constants"
-import { getModuleIndexMap } from "@/lib/get-module-index-map"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -63,7 +62,6 @@ export default function ScreenshotPage() {
   const [showPlanSwitcher, setShowPlanSwitcher] = useState(true)
 
   const { timetable } = useTimetable()
-  const moduleIndexMap = getModuleIndexMap(timetable)
 
   const searchParams = useSearchParams()
   const urlParams = new URLSearchParams(timetable)
@@ -95,7 +93,7 @@ export default function ScreenshotPage() {
     <div
       className="relative z-[1] h-[100svh] w-screen"
       onClick={() => setShowTaskbar((p) => !p)}>
-      {Object.keys(moduleIndexMap).length === 0 && (
+      {Object.keys(timetable).length === 0 && (
         <div className="p-5">
           <Link href="/timetable">
             <Alert>

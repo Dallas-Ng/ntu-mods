@@ -1,18 +1,24 @@
 "use client"
 
-import { useState } from "react"
-import { MODULE_MAP } from "@/data/api/module-map"
+import { useEffect, useState } from "react"
 import { RefreshCcw } from "lucide-react"
 
 import { TRUN_DAY_MAP } from "@/lib/constants"
-import { getRandomModuleIndex } from "@/lib/get-random-module-index"
 import { cn } from "@/lib/utils"
+import { useAcademicContextHook } from "@/hooks/use-academic-context"
 import { useSettings } from "@/hooks/use-settings"
 
 import TimetableCell from "../timetable/timetable-cell"
 import { Button } from "../ui/button"
 import { Skeleton } from "../ui/skeleton"
 import { Toggle } from "../ui/toggle"
+
+interface RandomModuleData {
+  code: string
+  title: string
+  indexKey: string
+  index: Index
+}
 
 interface Props {
   toggleBorder?: boolean
@@ -21,18 +27,33 @@ interface Props {
 const TableSettings = ({ toggleBorder = false }: Props) => {
   const { settings, updateSettings } = useSettings()
   const { tableCell } = settings
-  const [RANDOM_C_INDEX, setRandomCIndex] = useState(getRandomModuleIndex())
+  const { year, semester } = useAcademicContextHook()
+  const [randomData, setRandomData] = useState<RandomModuleData | null>(null)
+  const [rerollKey, setRerollKey] = useState(0)
 
-  const moduleKey = RANDOM_C_INDEX.randomModuleKey
-  const index = RANDOM_C_INDEX.randomIndex
+  useEffect(() => {
+    const controller = new AbortController()
+    const params = new URLSearchParams({ year, semester })
 
-  const reRollIndex = () => {
-    setRandomCIndex(getRandomModuleIndex())
-  }
+    fetch(`/api/data/modules/random?${params}`, { signal: controller.signal })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && data.code) setRandomData(data)
+      })
+      .catch(() => {})
+
+    return () => controller.abort()
+  }, [year, semester, rerollKey])
+
+  const reRollIndex = () => setRerollKey((k) => k + 1)
 
   const updateTableCell = (checked: boolean, key: keyof typeof tableCell) => {
     updateSettings({ ...settings, tableCell: { ...tableCell, [key]: checked } })
   }
+
+  if (!randomData) return <TableSettingsLoading />
+
+  const { code: moduleKey, title, index } = randomData
 
   return (
     <>
@@ -70,7 +91,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
 
           <div className="flex w-full items-baseline justify-between">
             <p className="w-full truncate text-xs capitalize text-muted-foreground">
-              {MODULE_MAP[moduleKey]?.title}
+              {title}
             </p>
 
             <Button

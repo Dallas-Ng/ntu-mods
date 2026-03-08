@@ -2,8 +2,6 @@ import fs from "fs/promises"
 import path from "path"
 import { NextRequest, NextResponse } from "next/server"
 
-import MODULE_MAP_JSON from "@/data/api/module-map.json"
-
 interface Module {
   code: string
   title: string
@@ -116,19 +114,7 @@ export async function GET(request: NextRequest) {
     const total = modules.length
     const pageModules = modules.slice(skip, skip + limit)
 
-    const moduleMap = MODULE_MAP_JSON as Record<
-      string,
-      { currentYear?: string; currentSemester?: string }
-    >
-    const paginated = pageModules.map((m) => {
-      const entry = moduleMap[m.code]
-      const isCurrentSemester =
-        !year ||
-        !semester ||
-        !entry ||
-        (entry.currentYear === year && entry.currentSemester === semester)
-      return { ...m, isCurrentSemester }
-    })
+    const paginated = pageModules.map((m) => ({ ...m, isCurrentSemester: true }))
 
     return NextResponse.json(
       {

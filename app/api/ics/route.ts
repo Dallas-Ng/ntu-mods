@@ -33,12 +33,12 @@ export async function GET(request: Request) {
     `src/data/api/indexes/${year}_${semester}.json`
   )
 
-  let indexes: Record<string, any>
+  let moduleIndexes: Record<string, Record<string, Index[]>>
 
   try {
     const indexesData = await fs.readFile(indexesPath, "utf-8")
-    indexes = JSON.parse(indexesData)
-  } catch (error) {
+    moduleIndexes = JSON.parse(indexesData)
+  } catch {
     return handleFailure(
       `Failed to load indexes for ${year} semester ${semester}`
     )
@@ -46,9 +46,10 @@ export async function GET(request: Request) {
 
   const timetable: Timetable = {}
 
-  // Check if the module key and index key are valid
+  // Validate module key and index key, build flat indexLookup
+  const indexLookup: Record<string, Index[]> = {}
   for (const [key, value] of timetableEntries) {
-    if (!(key in indexes) || !(value in indexes[key])) {
+    if (!(key in moduleIndexes) || !(value in moduleIndexes[key])) {
       return handleFailure("Invalid module key or index key", {
         year,
         semester,
@@ -56,11 +57,27 @@ export async function GET(request: Request) {
         value
       })
     }
-
     timetable[key] = value
+    indexLookup[value] = moduleIndexes[key][value]
   }
 
-  const icsText = getIcs(timetable)
+  // Load module titles for event descriptions
+  const titleLookup: Record<string, string> = {}
+  try {
+    const metadataPath = path.join(
+      process.cwd(),
+      `src/data/api/metadata/${year}_${semester}.json`
+    )
+    const metaData = await fs.readFile(metadataPath, "utf-8")
+    const metaObj = JSON.parse(metaData) as Record<string, { title: string }>
+    for (const code of Object.keys(timetable)) {
+      if (metaObj[code]) titleLookup[code] = metaObj[code].title
+    }
+  } catch {
+    // titles are optional — proceed without them
+  }
+
+  const icsText = getIcs(timetable, indexLookup, titleLookup)
   if (icsText) {
     return NextResponse.json({ icsText }, { status: 200 })
   } else {

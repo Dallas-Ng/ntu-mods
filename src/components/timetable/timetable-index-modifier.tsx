@@ -1,14 +1,13 @@
 "use client"
 
-import { Fragment, useRef, useState } from "react"
+import { Fragment, useEffect, useRef, useState } from "react"
 import { Check } from "lucide-react"
 
 import { DAY_MAP } from "@/lib/constants"
 import { getIndexType } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
-import { INDEX_MAP } from "@/data/api/index-map"
-import { MODULE_MAP } from "@/data/api/module-map"
 import { cn } from "@/lib/utils"
+import { useAcademicContextHook } from "@/hooks/use-academic-context"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 
@@ -21,6 +20,8 @@ import {
 } from "../ui/command"
 import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+
+type Indexes = Record<string, Index[]>
 
 const IndexCommandItem = ({ index }: { index: Index }) => {
   const indexStyle = getIndexTypeStyle(index.type)
@@ -51,18 +52,34 @@ interface Props {
 
 const TimetableIndexModifier = (props: Props) => {
   const { moduleKey, onOpenChange } = props
-  const moduleEntry = MODULE_MAP[moduleKey]
-  const indexes: { [indexKey: string]: Index[] } = {}
-  if (moduleEntry) {
-    for (const indexKey of moduleEntry.indexKeys) {
-      const slots = INDEX_MAP[indexKey]
-      if (slots) indexes[indexKey] = slots.filter((s) => s.day !== 0)
-    }
-  }
+  const { year, semester } = useAcademicContextHook()
+  const [indexes, setIndexes] = useState<Indexes>({})
+  const [filteredIndexes, setFilteredIndexes] = useState<Indexes>({})
   const { isMobile } = useSettings()
   const { timetable, updateItemIndex } = useTimetable()
   const containerRef = useRef<HTMLDivElement>(null)
-  const [filteredIndexes, setFilteredIndexes] = useState(indexes)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const params = new URLSearchParams({ year, semester })
+    fetch(`/api/data/modules/${moduleKey}/indexes?${params}`, {
+      signal: controller.signal
+    })
+      .then((res) => (res.ok ? res.json() : { indexes: {} }))
+      .then((data) => {
+        const raw: Indexes = data.indexes ?? {}
+        const filtered: Indexes = {}
+        for (const [key, slots] of Object.entries(raw)) {
+          const valid = (slots as Index[]).filter((s) => s.day !== 0)
+          if (valid.length) filtered[key] = valid
+        }
+        setIndexes(filtered)
+        setFilteredIndexes(filtered)
+      })
+      .catch(() => {})
+
+    return () => controller.abort()
+  }, [moduleKey, year, semester])
 
   const randomLecture =
     Object.values(indexes)
@@ -146,7 +163,7 @@ const TimetableIndexModifier = (props: Props) => {
       <CommandEmpty>No indexes code found</CommandEmpty>
 
       <CommandList className="max-h-full md:max-h-[28rem]">
-        {Object.entries(filteredIndexes).map(([indexKey, indexes]) => {
+        {Object.entries(filteredIndexes).map(([indexKey, slots]) => {
           const active = timetable[moduleKey] === indexKey
 
           return (
@@ -169,7 +186,7 @@ const TimetableIndexModifier = (props: Props) => {
 
                   {/* Dont remove this flex-col, there can be multiple timeslots for 1 index (e.g. lab, tutorial, lecture) */}
                   <div className="flex w-full flex-col gap-1">
-                    {indexes.map((index, i) => {
+                    {slots.map((index, i) => {
                       if (
                         hasCommonLecture &&
                         getIndexType(index.type) === "LEC"

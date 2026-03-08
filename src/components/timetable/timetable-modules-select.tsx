@@ -3,7 +3,6 @@
 import { useRef, useState } from "react"
 import { Check } from "lucide-react"
 
-import { getIndex } from "@/lib/get-index"
 import { parseTimeNumber } from "@/lib/parse-time"
 import { cn } from "@/lib/utils"
 import { useAcademicContextHook } from "@/hooks/use-academic-context"
@@ -53,25 +52,42 @@ const TimetableModulesSelect = () => {
         return
       }
 
-      // Fetch module indexes from API
-      const params = new URLSearchParams({
-        year,
-        semester
-      })
+      const params = new URLSearchParams({ year, semester })
 
-      const response = await fetch(
-        `/api/data/modules/${moduleKey}/indexes?${params}`
-      )
+      // Fetch indexes for the new module and all existing timetable modules in parallel
+      const existingCodes = Object.keys(timetable)
+      const [newModuleRes, batchRes] = await Promise.all([
+        fetch(`/api/data/modules/${moduleKey}/indexes?${params}`),
+        existingCodes.length > 0
+          ? fetch(
+              `/api/data/indexes/batch?modules=${existingCodes.join(",")}&${params}`
+            )
+          : Promise.resolve(null)
+      ])
 
-      if (!response.ok) {
+      if (!newModuleRes.ok) {
         throw new Error("Failed to load module indexes")
       }
 
-      const data = await response.json()
+      const data = await newModuleRes.json()
       const indexes = data.indexes
 
       if (!indexes || Object.keys(indexes).length === 0) {
         throw new Error("No indexes available for this module")
+      }
+
+      // Build flat existing index lookup: { indexKey: Index[] }
+      const existingIndexLookup: Record<string, Index[]> = {}
+      if (batchRes) {
+        const batchData = await batchRes.json()
+        for (const [code, moduleIndexes] of Object.entries(
+          batchData as Record<string, Record<string, Index[]>>
+        )) {
+          const selectedKey = timetable[code]
+          if (selectedKey && moduleIndexes[selectedKey]) {
+            existingIndexLookup[selectedKey] = moduleIndexes[selectedKey]
+          }
+        }
       }
 
       let selectedIndexKey = indexes[Object.keys(indexes)[0]][0].key
@@ -89,7 +105,7 @@ const TimetableModulesSelect = () => {
       Object.values(indexes).every((newModuleIndex: any) => {
         newModuleIndex.forEach((newIndex: any) => {
           Object.values(timetable).forEach((timetableIndex) => {
-            const existingIndex = getIndex(timetableIndex)
+            const existingIndex = existingIndexLookup[timetableIndex] ?? []
 
             existingIndex.forEach((extIndex) => {
               if (extIndex.day === newIndex.day) {

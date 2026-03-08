@@ -2,18 +2,26 @@ import { addDays, differenceInWeeks, format, startOfWeek } from "date-fns"
 import { createEvents, EventAttributes } from "ics"
 
 import { formatRemarks } from "./format"
-import { getIndex } from "./get-index"
-import { getModule } from "./get-module"
 import { parseTime } from "./parse-time"
 
 const MIN_DATE = new Date("2024-08-12") // Start of AY24/25 Semester 1
 
-export const getIcs = (timetable: { [moduleKey: string]: string }) => {
+/**
+ * Generate an ICS calendar from a timetable.
+ * @param timetable - { moduleCode: indexKey }
+ * @param indexLookup - flat map of indexKey -> Index slots (built from semester indexes file)
+ * @param titleLookup - map of moduleCode -> title (optional, for event descriptions)
+ */
+export const getIcs = (
+  timetable: { [moduleKey: string]: string },
+  indexLookup: Record<string, Index[]>,
+  titleLookup: Record<string, string> = {}
+) => {
   const events: EventAttributes[] = []
 
   for (const [moduleKey, indexKey] of Object.entries(timetable)) {
-    const moduleData = getModule(moduleKey)
-    const indexes = getIndex(indexKey)
+    const indexes = indexLookup[indexKey] ?? []
+    const title = titleLookup[moduleKey] ?? moduleKey
 
     for (const index of indexes) {
       const formattedRemarks = formatRemarks(index.remarks)
@@ -26,13 +34,12 @@ export const getIcs = (timetable: { [moduleKey: string]: string }) => {
       const { startTime, endTime } = parseTime(index)
 
       // Calculate start and end dates
-      const start = addDays(startingWeek, index.day - 1) // Adjust index.day to start from 0
+      const start = addDays(startingWeek, index.day - 1)
       start.setHours(startTime.getHours(), startTime.getMinutes())
 
-      const end = addDays(startingWeek, index.day - 1) // Adjust index.day to start from 0
+      const end = addDays(startingWeek, index.day - 1)
       end.setHours(endTime.getHours(), endTime.getMinutes())
 
-      // Calculate the number of occurrences
       const totalWeeks = 13 // The schedule lasts for 13 weeks
 
       // Map day numbers to iCalendar day abbreviations
@@ -51,7 +58,6 @@ export const getIcs = (timetable: { [moduleKey: string]: string }) => {
         end.setDate(end.getDate() + 7)
       }
 
-      // Create the recurrence rule
       let recurrenceRule = ``
       if (isAllWeeks) {
         recurrenceRule = `FREQ=WEEKLY;COUNT=${totalWeeks}`
@@ -65,7 +71,7 @@ export const getIcs = (timetable: { [moduleKey: string]: string }) => {
         title: `[${moduleKey}] ${index.type} (${index.group})`,
         start: format(start, "yyyyMMdd'T'HHmmss"),
         end: format(end, "yyyyMMdd'T'HHmmss"),
-        description: `${moduleData.title}\nLocation: ${index.venue}\nRemarks: ${index.remarks}`,
+        description: `${title}\nLocation: ${index.venue}\nRemarks: ${index.remarks}`,
         recurrenceRule: recurrenceRule
       }
       events.push(event)

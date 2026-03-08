@@ -8,6 +8,7 @@ directory, then generates derived lookup files used by the app.
 Mapping:
     scraper/data/03_mdata_YYYY_S.json  ->  src/data/api/metadata/YYYY_S.json
     scraper/data/04_indexes_YYYY_S.json ->  src/data/api/indexes/YYYY_S.json
+    scraper/data/05_exams_YYYY_S.json   ->  src/data/api/exams/YYYY_S.json
     scraper/data/01_semesters.json      ->  src/data/api/semesters.json  (if present)
 
 Generated (from all metadata/indexes files in src/data/api/):
@@ -34,6 +35,7 @@ API_DIR = SCRAPER_DIR.parent / "src" / "data" / "api"
 PATTERNS = [
     (re.compile(r"^03_mdata_(.+)\.json$"), API_DIR / "metadata"),
     (re.compile(r"^04_indexes_(.+)\.json$"), API_DIR / "indexes"),
+    (re.compile(r"^05_exams_(.+)\.json$"), API_DIR / "exams"),
 ]
 
 

@@ -94,6 +94,7 @@ interface Exam {
   end_time: string
   key: string
   name: string
+  duration?: number
 }
 
 interface Feedback {

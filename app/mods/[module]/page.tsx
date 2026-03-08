@@ -8,6 +8,7 @@ import {
   getModuleSemesters
 } from "@/lib/server/get-module-current-semester"
 import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
+import { getModuleExamData } from "@/lib/server/get-module-exam-data"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
@@ -41,9 +42,10 @@ export default async function Page({ params }: { params: { module: string } }) {
   const { year, semester } = current
 
   // Fetch module metadata and indexes
-  const [allMeta, indexes] = await Promise.all([
+  const [allMeta, indexes, exam] = await Promise.all([
     getAllModuleMetadata(year, semester),
-    getModuleIndexesData(moduleKey, year, semester)
+    getModuleIndexesData(moduleKey, year, semester),
+    getModuleExamData(moduleKey, year, semester)
   ])
 
   const moduleData = allMeta[moduleKey]
@@ -71,7 +73,7 @@ export default async function Page({ params }: { params: { module: string } }) {
         </div>
 
         <div className="h-fit w-full space-y-2 xl:w-3/6">
-          <ModsInfoTable module={moduleData} />
+          <ModsInfoTable module={moduleData} exam={exam} />
 
           <hr />
 

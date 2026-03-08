@@ -5,11 +5,11 @@ Scrapes course schedule data from the [NTU class schedule portal](https://wish.w
 ## Pipeline
 
 ```
-Step 1                     Step 2                          Step 3                        Step 4
-fetch semesters     →      scrape courses          →       convert to mdata      →       convert to indexes
+Step 1                     Step 2                          Step 3                        Step 4                         Step 5
+fetch semesters     →      scrape courses          →       convert to mdata      →       convert to indexes       →  convert to exams
                            (per semester, per programme)
 
-data/01_semesters.json  →  data/02_courses_YYYY_S.json  →  data/03_mdata_YYYY_S.json  →  data/04_indexes_YYYY_S.json
+data/01_semesters.json  →  data/02_courses_YYYY_S.json  →  data/03_mdata_YYYY_S.json  →  data/04_indexes_YYYY_S.json  →  data/05_exams_YYYY_S.json
 ```
 
 ## Setup
@@ -219,6 +219,43 @@ Each slot's `day` is an integer (Mon=1 … Sun=7) and `duration` is the number o
 
 ---
 
+#### Step 5 — Convert exams
+
+Converts exam CSV files in `data/exams` into per-semester exam JSON.
+
+CSV naming convention:
+- `data/exams/exams-YYYY-YYYY-s1.csv` for Semester 1
+- `data/exams/exams-YYYY-YYYY-s2.csv` for Semester 2
+
+```bash
+# Convert exams for a semester
+python3 step5_convert_exams.py "2025;2"
+
+# Specify both semester and output path
+python3 step5_convert_exams.py "2025;2" data/05_exams_2025_2.json
+
+# Pretty-print the output
+python3 step5_convert_exams.py "2025;2" --pretty
+```
+
+Output: `data/05_exams_2025_2.json`
+
+```json
+{
+  "SC2001": {
+    "date": "24 April 2026",
+    "day": 5,
+    "start_time": "9.00 am",
+    "end_time": "11.00 am",
+    "key": "SC2001",
+    "name": "ALGORITHM DESIGN & ANALYSIS",
+    "duration": 4
+  }
+}
+```
+
+---
+
 ## Data files
 
 | File | Description |
@@ -227,6 +264,7 @@ Each slot's `day` is an integer (Mon=1 … Sun=7) and `duration` is the number o
 | `data/02_courses_YYYY_S.json` | Raw course data for a semester, keyed by programme |
 | `data/03_mdata_YYYY_S.json` | Converted mdata, keyed by course code |
 | `data/04_indexes_YYYY_S.json` | Schedule indexes keyed by course code → index number |
+| `data/05_exams_YYYY_S.json` | Exam timetable keyed by course code |
 
 > **Note:** Data files are not committed to version control. Run the pipeline to generate them.
 

@@ -1,15 +1,33 @@
 "use client"
 
 import Link from "next/link"
+import { useEffect, useState } from "react"
 import { MODULE_MAP } from "@/data/api/module-map"
 
 import { getModuleIndexMap } from "@/lib/get-module-index-map"
 import { cn } from "@/lib/utils"
+import { useAcademicContextHook } from "@/hooks/use-academic-context"
 import { useTimetable } from "@/hooks/use-timetable"
 
 const TimetableOverview = () => {
   const { timetable } = useTimetable()
+  const { year, semester } = useAcademicContextHook()
   const moduleIndexMap = getModuleIndexMap(timetable)
+  const [examMap, setExamMap] = useState<
+    Record<string, { date: string; start_time: string; end_time: string }>
+  >({})
+
+  useEffect(() => {
+    const controller = new AbortController()
+    const params = new URLSearchParams({ year, semester })
+
+    fetch(`/api/data/exams?${params}`, { signal: controller.signal })
+      .then((res) => (res.ok ? res.json() : { exams: {} }))
+      .then((data) => setExamMap(data.exams ?? {}))
+      .catch(() => setExamMap({}))
+
+    return () => controller.abort()
+  }, [year, semester])
 
   return (
     <div className="">
@@ -20,6 +38,7 @@ const TimetableOverview = () => {
             <th className="w-fit lg:w-[100px]">Module</th>
             <th className="hidden text-left lg:table-cell">Title</th>
             <th className="w-fit">AU</th>
+            <th className="w-fit lg:w-[220px]">Exam</th>
           </tr>
         </thead>
 
@@ -29,6 +48,10 @@ const TimetableOverview = () => {
               const entry = MODULE_MAP[moduleKey]
               const moduleTitle = entry?.title ?? ""
               const au = entry?.au ?? "0"
+              const exam = examMap[moduleKey]
+              const examDisplay = exam
+                ? `${exam.date}, ${exam.start_time} - ${exam.end_time}`
+                : ""
 
               return (
                 <tr
@@ -53,6 +76,7 @@ const TimetableOverview = () => {
                   </td>
 
                   <td>{au}</td>
+                  <td className="text-left">{examDisplay}</td>
                 </tr>
               )
             }
@@ -69,6 +93,7 @@ const TimetableOverview = () => {
               }, 0).toFixed(1)}{" "}
               AUs
             </td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -85,6 +110,7 @@ export const TimetableOverviewLoading = () => {
           <th className="w-fit lg:w-[100px]">Module</th>
           <th className="hidden text-left lg:table-cell">Title</th>
           <th>AU</th>
+          <th>Exam</th>
         </tr>
       </thead>
 
@@ -94,6 +120,7 @@ export const TimetableOverviewLoading = () => {
           <td></td>
           <td className="hidden lg:table-cell"></td>
           <td className="text-center">0.0 AUs</td>
+          <td></td>
         </tr>
       </tbody>
     </table>

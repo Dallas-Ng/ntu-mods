@@ -5,6 +5,7 @@ import { notFound, redirect } from "next/navigation"
 import { getModuleMetadata } from "@/lib/server/get-module-metadata"
 import { getModuleCurrentSemester } from "@/lib/server/get-module-current-semester"
 import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
+import { getModuleExamData } from "@/lib/server/get-module-exam-data"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import { getModuleCategories } from "@/lib/get-module-category"
 import { MODULE_CATEGORY } from "@/lib/constants"
@@ -44,7 +45,10 @@ export default async function Page({ params }: { params: Params }) {
     redirect(getModuleUrl(code))
   }
 
-  const indexes = await getModuleIndexesData(code, year, semester)
+  const [indexes, exam] = await Promise.all([
+    getModuleIndexesData(code, year, semester),
+    getModuleExamData(code, year, semester)
+  ])
   const categories = getModuleCategories(moduleData.searchKeys)
 
   const semName = semester === "S" ? "Special Term" : `Semester ${semester}`
@@ -111,6 +115,15 @@ export default async function Page({ params }: { params: Params }) {
                   <td className="p-2">{moduleData.notAvailableToProgramme}</td>
                 </tr>
               )}
+
+              <tr>
+                <td className="p-2">Exam</td>
+                <td className="p-2">
+                  {exam
+                    ? `${exam.date}, ${exam.start_time} - ${exam.end_time}`
+                    : ""}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

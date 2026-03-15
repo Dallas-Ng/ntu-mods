@@ -97,28 +97,29 @@ export default async function Page({ params }: { params: { module: string } }) {
         </div>
       </div>
 
-      {otherSemesters.length > 0 && (
-        <div className="mt-6 space-y-1">
-          <p className="text-sm text-muted-foreground">Other offerings</p>
-          <div className="flex flex-wrap gap-2">
-            {otherSemesters.map((s) => (
-              <Link
-                key={`${s.year}-${s.semester}`}
-                href={getModuleVersionUrl(moduleKey, s.year, s.semester)}
-                className="rounded-md border px-3 py-1 text-sm transition-colors hover:bg-accent">
-                {semesterLabel(s)}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div className="mt-10 space-y-2">
+      <div className="mt-10 space-y-6">
         <h2 className="text-lg">Available Indexes</h2>
 
         <ModsIndexTable indexes={indexes} />
 
-        <div className="mt-10">
+        {otherSemesters.length > 0 && (
+          <div>
+            <h2 className="mb-2 text-lg">Other offerings</h2>
+
+            <div className="flex flex-wrap gap-2">
+              {otherSemesters.map((s) => (
+                <Link
+                  key={`${s.year}-${s.semester}`}
+                  href={getModuleVersionUrl(moduleKey, s.year, s.semester)}
+                  className="rounded-md border px-3 py-1 text-sm transition-colors hover:bg-accent">
+                  {semesterLabel(s)}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div>
           <h2 className="mb-2 text-lg">Other Relevant Mods</h2>
           <RelatedModules
             limit={9}

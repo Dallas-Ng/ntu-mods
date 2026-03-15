@@ -64,10 +64,7 @@ export async function GET(request: NextRequest) {
       if (results.length >= MAX_RESULTS) break
 
       const moduleData = module as Module
-      const searchableText = `${code} ${moduleData.title}`.toLowerCase()
-      const searchKeys = moduleData.searchKeys?.join(" ").toLowerCase() || ""
-
-      if (searchableText.includes(query) || searchKeys.includes(query)) {
+      if (code.toLowerCase().includes(query)) {
         results.push({
           ...moduleData,
           code

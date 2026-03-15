@@ -47,9 +47,7 @@ async function loadSemesterModules(
 }
 
 function moduleMatchesType(module: Module, type: string): boolean {
-  return (
-    module.searchKeys?.some((k) => k.split(";")[0] === type) ?? false
-  )
+  return module.searchKeys?.some((k) => k.split(";")[0] === type) ?? false
 }
 
 /**
@@ -96,11 +94,24 @@ export async function GET(request: NextRequest) {
     let modules = Array.from(modulesMap.values())
 
     if (q && q.length > 0) {
-      modules = modules.filter(
-        (m) =>
-          m.code.toLowerCase().includes(q) ||
-          m.title.toLowerCase().includes(q)
-      )
+      const isCodeQuery = /^[a-z]{2,4}\d*/i.test(q)
+      if (isCodeQuery) {
+        const codeMatches = modules.filter((m) =>
+          m.code.toLowerCase().includes(q)
+        )
+        const titleMatches = modules.filter(
+          (m) =>
+            !m.code.toLowerCase().includes(q) &&
+            m.title.toLowerCase().includes(q)
+        )
+        modules = [...codeMatches, ...titleMatches]
+      } else {
+        modules = modules.filter(
+          (m) =>
+            m.title.toLowerCase().includes(q) ||
+            m.code.toLowerCase().includes(q)
+        )
+      }
     }
 
     if (type) {
@@ -114,7 +125,10 @@ export async function GET(request: NextRequest) {
     const total = modules.length
     const pageModules = modules.slice(skip, skip + limit)
 
-    const paginated = pageModules.map((m) => ({ ...m, isCurrentSemester: true }))
+    const paginated = pageModules.map((m) => ({
+      ...m,
+      isCurrentSemester: true
+    }))
 
     return NextResponse.json(
       {

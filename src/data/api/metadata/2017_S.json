@@ -1,0 +1,94 @@
+{
+  "EE1002": {
+    "searchKeys": [
+      "EEE;;1;P",
+      "EEE;;4;P"
+    ],
+    "code": "EE1002",
+    "title": "Physics Foundation For Electrical & Electronic Engineering",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "FE1011"
+      ],
+      [
+        "FE1012"
+      ],
+      [
+        "FE0001"
+      ],
+      [
+        "PH1011"
+      ],
+      [
+        "PH1012"
+      ]
+    ]
+  },
+  "EE2010": {
+    "searchKeys": [
+      "EEE;;2;P",
+      "EEE;;4;P"
+    ],
+    "code": "EE2010",
+    "title": "Signals & Systems",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "FE1006",
+        "FE1007"
+      ],
+      [
+        "MATH1A",
+        "MATH1B"
+      ],
+      [
+        "EE2092"
+      ],
+      [
+        "MH1810",
+        "MH1811"
+      ],
+      [
+        "FE1006",
+        "MH1811"
+      ],
+      [
+        "FE1007",
+        "MH1810"
+      ],
+      [
+        "MH2810"
+      ],
+      [
+        "CY1601",
+        "CY1602"
+      ]
+    ]
+  },
+  "EE3002": {
+    "searchKeys": [
+      "EEE;;3;P",
+      "EEE;;4;P"
+    ],
+    "code": "EE3002",
+    "title": "Microprocessors",
+    "au": "4.0"
+  },
+  "MA2004": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2004",
+    "title": "Manufacturing Processes",
+    "au": "3.0"
+  },
+  "MH1812": {
+    "searchKeys": [
+      "CSC;;1;P"
+    ],
+    "code": "MH1812",
+    "title": "Discrete Mathematics",
+    "au": "3.0"
+  }
+}

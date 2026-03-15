@@ -1,0 +1,135 @@
+{
+  "CZ3004": {
+    "searchKeys": [
+      "CSC;;1;P",
+      "CSC;;2;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CZ3004",
+    "title": "Multidisciplinary Design Project",
+    "au": "4.0",
+    "notAvailableToProgramme": "Year 3 standing"
+  },
+  "EE0005": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE0005",
+    "title": "Introduction To Data Science & Artificial Intelligence",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CE1003"
+      ],
+      [
+        "CZ1003"
+      ],
+      [
+        "BG2211"
+      ],
+      [
+        "CH2107"
+      ],
+      [
+        "CV1014"
+      ],
+      [
+        "MS1008"
+      ],
+      [
+        "MA1008"
+      ],
+      [
+        "EE1005"
+      ],
+      [
+        "RE1016"
+      ]
+    ]
+  },
+  "EE1005": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "EE1005",
+    "title": "From Computational Thinking To Programming",
+    "au": "3.0"
+  },
+  "EE1102": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "EE1102",
+    "title": "Physics Foundation For Electrical & Electronic Engineering",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "PH1011"
+      ],
+      [
+        "PH1012"
+      ],
+      [
+        "CE1013"
+      ],
+      [
+        "CZ1013"
+      ],
+      [
+        "CE1113"
+      ],
+      [
+        "CZ1113"
+      ],
+      [
+        "SC1013"
+      ]
+    ]
+  },
+  "EE2010": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE2010",
+    "title": "Signals & Systems",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "MH1810",
+        "MH1811"
+      ],
+      [
+        "MH2810"
+      ],
+      [
+        "CY1601",
+        "CY1602"
+      ]
+    ]
+  },
+  "EE3002": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE3002",
+    "title": "Microprocessors",
+    "au": "4.0"
+  },
+  "MA2071": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2071",
+    "title": "Laboratory Experiments (Me)",
+    "au": "1.0"
+  },
+  "MA3071": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3071",
+    "title": "Engineering Experiments (Me)",
+    "au": "1.0"
+  }
+}

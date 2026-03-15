@@ -1,0 +1,36 @@
+{
+  "EE1002": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "EE1002",
+    "title": "Physics Foundation For Electrical & Electronic Engineering",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "FE1011"
+      ],
+      [
+        "FE1012"
+      ],
+      [
+        "FE0001"
+      ],
+      [
+        "PH1011"
+      ],
+      [
+        "PH1012"
+      ]
+    ]
+  },
+  "MA2001": {
+    "searchKeys": [
+      "ME;;2;P",
+      "ME;;1;P"
+    ],
+    "code": "MA2001",
+    "title": "Mechanics Of Materials",
+    "au": "3.0"
+  }
+}

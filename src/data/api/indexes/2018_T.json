@@ -1,0 +1,490 @@
+{
+  "MA2071": {
+    "26674": [
+      {
+        "key": "26674",
+        "type": "LAB",
+        "group": "PLA1",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      },
+      {
+        "key": "26674",
+        "type": "LAB",
+        "group": "PLA1",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      }
+    ],
+    "26675": [
+      {
+        "key": "26675",
+        "type": "LAB",
+        "group": "PLA2",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      },
+      {
+        "key": "26675",
+        "type": "LAB",
+        "group": "PLA2",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      }
+    ],
+    "26676": [
+      {
+        "key": "26676",
+        "type": "LAB",
+        "group": "PLA3",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      },
+      {
+        "key": "26676",
+        "type": "LAB",
+        "group": "PLA3",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      }
+    ],
+    "26677": [
+      {
+        "key": "26677",
+        "type": "LAB",
+        "group": "PLA4",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      },
+      {
+        "key": "26677",
+        "type": "LAB",
+        "group": "PLA4",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      }
+    ],
+    "26678": [
+      {
+        "key": "26678",
+        "type": "LAB",
+        "group": "PLA5",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      },
+      {
+        "key": "26678",
+        "type": "LAB",
+        "group": "PLA5",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      }
+    ],
+    "26679": [
+      {
+        "key": "26679",
+        "type": "LAB",
+        "group": "PLA6",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      },
+      {
+        "key": "26679",
+        "type": "LAB",
+        "group": "PLA6",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      }
+    ],
+    "26680": [
+      {
+        "key": "26680",
+        "type": "LAB",
+        "group": "PLA7",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      },
+      {
+        "key": "26680",
+        "type": "LAB",
+        "group": "PLA7",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      }
+    ],
+    "26681": [
+      {
+        "key": "26681",
+        "type": "LAB",
+        "group": "PLA8",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      },
+      {
+        "key": "26681",
+        "type": "LAB",
+        "group": "PLA8",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      }
+    ],
+    "26682": [
+      {
+        "key": "26682",
+        "type": "LAB",
+        "group": "PLA9",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      },
+      {
+        "key": "26682",
+        "type": "LAB",
+        "group": "PLA9",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      }
+    ],
+    "26683": [
+      {
+        "key": "26683",
+        "type": "LAB",
+        "group": "PLA10",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      },
+      {
+        "key": "26683",
+        "type": "LAB",
+        "group": "PLA10",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-5",
+        "duration": 6
+      }
+    ]
+  },
+  "MA3071": {
+    "26694": [
+      {
+        "key": "26694",
+        "type": "LAB",
+        "group": "PLA1",
+        "day": 5,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      },
+      {
+        "key": "26694",
+        "type": "LAB",
+        "group": "PLA1",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      }
+    ],
+    "26695": [
+      {
+        "key": "26695",
+        "type": "LAB",
+        "group": "PLA2",
+        "day": 5,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      },
+      {
+        "key": "26695",
+        "type": "LAB",
+        "group": "PLA2",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      }
+    ],
+    "26696": [
+      {
+        "key": "26696",
+        "type": "LAB",
+        "group": "PLA3",
+        "day": 5,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      },
+      {
+        "key": "26696",
+        "type": "LAB",
+        "group": "PLA3",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      }
+    ],
+    "26697": [
+      {
+        "key": "26697",
+        "type": "LAB",
+        "group": "PLA4",
+        "day": 5,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      },
+      {
+        "key": "26697",
+        "type": "LAB",
+        "group": "PLA4",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      }
+    ],
+    "26698": [
+      {
+        "key": "26698",
+        "type": "LAB",
+        "group": "PLA5",
+        "day": 5,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      },
+      {
+        "key": "26698",
+        "type": "LAB",
+        "group": "PLA5",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      }
+    ],
+    "26699": [
+      {
+        "key": "26699",
+        "type": "LAB",
+        "group": "PLA6",
+        "day": 5,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      },
+      {
+        "key": "26699",
+        "type": "LAB",
+        "group": "PLA6",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      }
+    ],
+    "26700": [
+      {
+        "key": "26700",
+        "type": "LAB",
+        "group": "PLA7",
+        "day": 5,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      },
+      {
+        "key": "26700",
+        "type": "LAB",
+        "group": "PLA7",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      }
+    ],
+    "26701": [
+      {
+        "key": "26701",
+        "type": "LAB",
+        "group": "PLA8",
+        "day": 5,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      },
+      {
+        "key": "26701",
+        "type": "LAB",
+        "group": "PLA8",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      }
+    ],
+    "26702": [
+      {
+        "key": "26702",
+        "type": "LAB",
+        "group": "PLA9",
+        "day": 5,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      },
+      {
+        "key": "26702",
+        "type": "LAB",
+        "group": "PLA9",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      }
+    ],
+    "26703": [
+      {
+        "key": "26703",
+        "type": "LAB",
+        "group": "PLA10",
+        "day": 5,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      },
+      {
+        "key": "26703",
+        "type": "LAB",
+        "group": "PLA10",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      }
+    ],
+    "26704": [
+      {
+        "key": "26704",
+        "type": "LAB",
+        "group": "PLA11",
+        "day": 5,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      },
+      {
+        "key": "26704",
+        "type": "LAB",
+        "group": "PLA11",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      }
+    ],
+    "26705": [
+      {
+        "key": "26705",
+        "type": "LAB",
+        "group": "PLA12",
+        "day": 5,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      },
+      {
+        "key": "26705",
+        "type": "LAB",
+        "group": "PLA12",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "",
+        "remarks": "Teaching Wk1-6",
+        "duration": 6
+      }
+    ]
+  }
+}

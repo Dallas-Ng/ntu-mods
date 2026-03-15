@@ -1,0 +1,202 @@
+{
+  "EE1002": {
+    "37501": [
+      {
+        "key": "37501",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ],
+    "37502": [
+      {
+        "key": "37502",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ],
+    "37503": [
+      {
+        "key": "37503",
+        "type": "TUT",
+        "group": "EPT3",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ],
+    "37505": [
+      {
+        "key": "37505",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ],
+    "37506": [
+      {
+        "key": "37506",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ],
+    "37507": [
+      {
+        "key": "37507",
+        "type": "TUT",
+        "group": "EPT3",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ]
+  },
+  "EE1005": {
+    "37510": [
+      {
+        "key": "37510",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ],
+    "37511": [
+      {
+        "key": "37511",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ],
+    "37512": [
+      {
+        "key": "37512",
+        "type": "TUT",
+        "group": "EPT3",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ]
+  },
+  "EE2010": {
+    "37515": [
+      {
+        "key": "37515",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ],
+    "37516": [
+      {
+        "key": "37516",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ],
+    "37517": [
+      {
+        "key": "37517",
+        "type": "TUT",
+        "group": "EPT3",
+        "day": 4,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ]
+  },
+  "EE3002": {
+    "37520": [
+      {
+        "key": "37520",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ],
+    "37521": [
+      {
+        "key": "37521",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ],
+    "37522": [
+      {
+        "key": "37522",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ],
+    "37523": [
+      {
+        "key": "37523",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 3,
+        "time": "1900-2200",
+        "venue": "ONLINE",
+        "remarks": "Teaching Wk1-4",
+        "duration": 6
+      }
+    ]
+  }
+}

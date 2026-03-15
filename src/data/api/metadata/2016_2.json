@@ -1,0 +1,774 @@
+{
+  "CZ1005": {
+    "searchKeys": [
+      "CSC;;1;P"
+    ],
+    "code": "CZ1005",
+    "title": "Digital Logic",
+    "au": "3.0"
+  },
+  "CZ1006": {
+    "searchKeys": [
+      "CSC;;1;P"
+    ],
+    "code": "CZ1006",
+    "title": "Computer Organisation And Architecture",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1005(Corequisite)"
+      ],
+      [
+        "CE1005(Corequisite)"
+      ]
+    ]
+  },
+  "CZ1007": {
+    "searchKeys": [
+      "CSC;;1;P"
+    ],
+    "code": "CZ1007",
+    "title": "Data Structures",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1003"
+      ],
+      [
+        "CE1003"
+      ]
+    ]
+  },
+  "CZ1012": {
+    "searchKeys": [
+      "CSC;;1;P"
+    ],
+    "code": "CZ1012",
+    "title": "Engineering Mathematics Ii",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1011(Corequisite)"
+      ]
+    ]
+  },
+  "CZ2001": {
+    "searchKeys": [
+      "CSC;;2;P"
+    ],
+    "code": "CZ2001",
+    "title": "Algorithms",
+    "au": "3.0",
+    "notAvailableToProgramme": "U15% & onwards students are also required to read CE/CZ1012",
+    "prerequisite": [
+      [
+        "CZ1001",
+        "CZ1007"
+      ],
+      [
+        "CE1001",
+        "CE1007"
+      ],
+      [
+        "CE1007",
+        "MH1812"
+      ],
+      [
+        "CZ1007",
+        "MH1812"
+      ]
+    ]
+  },
+  "CZ2003": {
+    "searchKeys": [
+      "CSC;;2;P"
+    ],
+    "code": "CZ2003",
+    "title": "Computer Graphics And Visualisation",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CE1008"
+      ],
+      [
+        "CZ1008"
+      ],
+      [
+        "CE1011"
+      ],
+      [
+        "CZ1011"
+      ]
+    ]
+  },
+  "CZ2006": {
+    "searchKeys": [
+      "CSC;;2;P"
+    ],
+    "code": "CZ2006",
+    "title": "Software Engineering",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ2002(Corequisite)"
+      ],
+      [
+        "CE2002(Corequisite)"
+      ]
+    ]
+  },
+  "CZ3003": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;3;P"
+    ],
+    "code": "CZ3003",
+    "title": "Software Systems Analysis And Design",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ2006(Corequisite)"
+      ],
+      [
+        "CE2006(Corequisite)"
+      ]
+    ]
+  },
+  "EE0001": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;5;P"
+    ],
+    "code": "EE0001",
+    "title": "Impact Of Electromagnetic Radiation On Humans",
+    "au": "3.0"
+  },
+  "EE2001": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "EE2001",
+    "title": "Circuit Analysis",
+    "au": "4.0"
+  },
+  "EE2003": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE2003",
+    "title": "Semiconductor Fundamentals",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "EE1002"
+      ],
+      [
+        "FE1002"
+      ]
+    ]
+  },
+  "EE2004": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "EE2004",
+    "title": "Digital Electronics",
+    "au": "4.0"
+  },
+  "EE2006": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "EE2006",
+    "title": "Engineering Mathematics I",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "FE1007"
+      ],
+      [
+        "MATH1B"
+      ],
+      [
+        "EE2092"
+      ],
+      [
+        "MH1811"
+      ],
+      [
+        "MH2810"
+      ],
+      [
+        "CY1602"
+      ]
+    ]
+  },
+  "EE2007": {
+    "searchKeys": [
+      "EEE;;3;P",
+      "EEE;;2;P"
+    ],
+    "code": "EE2007",
+    "title": "Engineering Mathematics Ii",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "FE1007"
+      ],
+      [
+        "EE2092"
+      ],
+      [
+        "MH1811"
+      ],
+      [
+        "MH2810"
+      ],
+      [
+        "CY1602"
+      ]
+    ]
+  },
+  "EE3001": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE3001",
+    "title": "Engineering Electromagnetics",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "EE2007(Corequisite)"
+      ],
+      [
+        "MATH1C"
+      ]
+    ]
+  },
+  "EE3012": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE3012",
+    "title": "Communication Principles",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2010"
+      ]
+    ]
+  },
+  "EE3015": {
+    "searchKeys": [
+      "EEE;;3;P",
+      "EEE;;2;P"
+    ],
+    "code": "EE3015",
+    "title": "Power Systems And Protection",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2001"
+      ]
+    ]
+  },
+  "EE3017": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE3017",
+    "title": "Computer Communications",
+    "au": "3.0"
+  },
+  "EE4001": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4001",
+    "title": "Software Engineering",
+    "au": "3.0"
+  },
+  "EE4105": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4105",
+    "title": "Cellular Communication System Design",
+    "au": "2.0"
+  },
+  "EE4153": {
+    "searchKeys": [
+      "EEE;;5;P"
+    ],
+    "code": "EE4153",
+    "title": "Telecommunication Systems",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "E302"
+      ],
+      [
+        "E312"
+      ],
+      [
+        "EE3012"
+      ]
+    ]
+  },
+  "EE4504": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;5;P"
+    ],
+    "code": "EE4504",
+    "title": "Design Of Clean Energy Systems",
+    "au": "2.0",
+    "notAvailableToProgramme": "BRC students also require EE3010 as pre-requisite.",
+    "prerequisite": [
+      [
+        "EE3015"
+      ]
+    ]
+  },
+  "EE4534": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;5;P"
+    ],
+    "code": "EE4534",
+    "title": "Modern Distribution Systems With Renewable Resources",
+    "au": "3.0",
+    "notAvailableToProgramme": "BRC students also require EE3010 as pre-requisite.",
+    "prerequisite": [
+      [
+        "EE3015"
+      ]
+    ]
+  },
+  "EE4718": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;5;P"
+    ],
+    "code": "EE4718",
+    "title": "Enterprise Network Design",
+    "au": "2.0",
+    "prerequisite": [
+      [
+        "EE3017"
+      ]
+    ]
+  },
+  "EE4761": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4761",
+    "title": "Computer Networking",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE3017"
+      ],
+      [
+        "E450N"
+      ]
+    ]
+  },
+  "EE4791": {
+    "searchKeys": [
+      "EEE;;5;P"
+    ],
+    "code": "EE4791",
+    "title": "Database Systems",
+    "au": "3.0"
+  },
+  "ET0001": {
+    "searchKeys": [
+      "ME;;1;P",
+      "ME;;3;P",
+      "ME;;2;P",
+      "ME;;4;P",
+      "ME;;5;P"
+    ],
+    "code": "ET0001",
+    "title": "Enterprise And Innovation",
+    "au": "1.0"
+  },
+  "HW0001": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "HW0001",
+    "title": "English Proficiency",
+    "au": "0.0",
+    "notAvailableToProgramme": "for students who fail QET"
+  },
+  "HW0188": {
+    "searchKeys": [
+      "EEE;;2;P",
+      "ME;;1;P",
+      "ME;;3;P",
+      "ME;;2;P",
+      "CSC;;1;P",
+      "ME;;4;P",
+      "ME;;5;P"
+    ],
+    "code": "HW0188",
+    "title": "Engineering Communication I",
+    "au": "2.0",
+    "prerequisite": [
+      [
+        "HW0001(Corequisite)"
+      ]
+    ]
+  },
+  "HW0310": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "ME;;1;P",
+      "ME;;3;P",
+      "ME;;2;P",
+      "ME;;4;P",
+      "ME;;5;P"
+    ],
+    "code": "HW0310",
+    "title": "Professional Communication",
+    "au": "2.0",
+    "notAvailableToProgramme": "Exempted/Pass in HW001/HW0001",
+    "prerequisite": [
+      [
+        "HW001"
+      ],
+      [
+        "HW0001"
+      ]
+    ]
+  },
+  "HY0001": {
+    "searchKeys": [
+      "ME;;1;P",
+      "ME;;3;P",
+      "ME;;2;P",
+      "ME;;4;P",
+      "ME;;5;P"
+    ],
+    "code": "HY0001",
+    "title": "Ethics And Moral Reasoning",
+    "au": "1.0"
+  },
+  "MA0100": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA0100",
+    "title": "Environmental Sustainability",
+    "au": "3.0"
+  },
+  "MA0101": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA0101",
+    "title": "Engineers And Society",
+    "au": "3.0"
+  },
+  "MA1001": {
+    "searchKeys": [
+      "ME;;1;P",
+      "ME;;2;P"
+    ],
+    "code": "MA1001",
+    "title": "Dynamics",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "FE1012 (Min Grade :I)",
+        "MH1810 (Min Grade :I)"
+      ],
+      [
+        "MH1810 (Min Grade :I)",
+        "PH1011 (Min Grade :I)"
+      ],
+      [
+        "MH2812 (Min Grade :I)",
+        "PH1011 (Min Grade :I)"
+      ],
+      [
+        "CY1201 (Min Grade :I)",
+        "PH1011 (Min Grade :I)"
+      ],
+      [
+        "MH1810 (Min Grade :I)",
+        "PH1012 (Min Grade :I)"
+      ],
+      [
+        "CY1201 (Min Grade :I)",
+        "PH1012 (Min Grade :I)"
+      ],
+      [
+        "CY1305 (Min Grade :I)",
+        "MH1810 (Min Grade :I)"
+      ],
+      [
+        "CY1201 (Min Grade :I)",
+        "CY1305 (Min Grade :I)"
+      ],
+      [
+        "MH2812 (Min Grade :I)",
+        "PH1012 (Min Grade :I)"
+      ],
+      [
+        "CY1305 (Min Grade :I)",
+        "MH2812 (Min Grade :I)"
+      ],
+      [
+        "FE1012 (Min Grade :I)",
+        "MH2812 (Min Grade :I)"
+      ],
+      [
+        "CY1201 (Min Grade :F)",
+        "FE1012 (Min Grade :F)"
+      ],
+      [
+        "FE1011 (Min Grade :F)",
+        "MH1810 (Min Grade :F)"
+      ],
+      [
+        "FE1011 (Min Grade :I)",
+        "MH2812 (Min Grade :I)"
+      ],
+      [
+        "CY1201 (Min Grade :I)",
+        "FE1011 (Min Grade :I)"
+      ],
+      [
+        "MH2810 (Min Grade :I)",
+        "PH1011 (Min Grade :I)"
+      ],
+      [
+        "MH2810 (Min Grade :I)",
+        "PH1012 (Min Grade :I)"
+      ]
+    ]
+  },
+  "MA2001": {
+    "searchKeys": [
+      "ME;;1;P",
+      "ME;;2;P"
+    ],
+    "code": "MA2001",
+    "title": "Mechanics Of Materials",
+    "au": "3.0"
+  },
+  "MA2002": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2002",
+    "title": "Theory Of Mechanism",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA1001"
+      ]
+    ]
+  },
+  "MA2006": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2006",
+    "title": "Engineering Mathematics",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "FE1006",
+        "FE1007"
+      ],
+      [
+        "MH1810",
+        "MH1811"
+      ],
+      [
+        "FE1006",
+        "MH1811"
+      ],
+      [
+        "FE1007",
+        "MH1810"
+      ],
+      [
+        "CY1203"
+      ],
+      [
+        "MH2812"
+      ],
+      [
+        "CY1602"
+      ],
+      [
+        "MH2810"
+      ]
+    ]
+  },
+  "MA2007": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2007",
+    "title": "Thermodynamics",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2003"
+      ]
+    ]
+  },
+  "MA3002": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3002",
+    "title": "Solid Mechanics And Vibration",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2001"
+      ]
+    ]
+  },
+  "MA3003": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3003",
+    "title": "Heat Transfer",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2007"
+      ],
+      [
+        "MP2303"
+      ]
+    ]
+  },
+  "MA3004": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3004",
+    "title": "Mathematical Methods In Engineering",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MH1810",
+        "MH1811"
+      ],
+      [
+        "CY1203"
+      ],
+      [
+        "MH2812"
+      ],
+      [
+        "FE1006",
+        "FE1007"
+      ],
+      [
+        "FE1006",
+        "MH1811"
+      ],
+      [
+        "CY1602"
+      ],
+      [
+        "MH2810"
+      ]
+    ]
+  },
+  "MA3071": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3071",
+    "title": "Engineering Experiments (Me)",
+    "au": "1.0"
+  },
+  "MA4831": {
+    "searchKeys": [
+      "ME;;3;P",
+      "ME;;4;P"
+    ],
+    "code": "MA4831",
+    "title": "Computer-Aided Engineering",
+    "au": "3.0"
+  },
+  "MA4843": {
+    "searchKeys": [
+      "ME;;3;P",
+      "ME;;4;P"
+    ],
+    "code": "MA4843",
+    "title": "Management Of Product Development",
+    "au": "3.0"
+  },
+  "MA4850": {
+    "searchKeys": [
+      "ME;;3;P",
+      "ME;;4;P"
+    ],
+    "code": "MA4850",
+    "title": "Supply Chain And Logistics Management",
+    "au": "3.0"
+  },
+  "MA4853": {
+    "searchKeys": [
+      "ME;;3;P",
+      "ME;;4;P"
+    ],
+    "code": "MA4853",
+    "title": "Manufacturing Systems",
+    "au": "3.0"
+  },
+  "MA4854": {
+    "searchKeys": [
+      "ME;;3;P",
+      "ME;;4;P"
+    ],
+    "code": "MA4854",
+    "title": "Quality Assurance And Management",
+    "au": "3.0"
+  },
+  "MA8103": {
+    "searchKeys": [
+      "ME;;1;P",
+      "ME;;3;P",
+      "ME;;2;P",
+      "ME;;4;P",
+      "ME;;5;P"
+    ],
+    "code": "MA8103",
+    "title": "Human Resource Management",
+    "au": "3.0"
+  },
+  "MP4007": {
+    "searchKeys": [
+      "ME;;4;P",
+      "ME;;5;P"
+    ],
+    "code": "MP4007",
+    "title": "Engineers And Society",
+    "au": "3.0"
+  },
+  "MP4008": {
+    "searchKeys": [
+      "ME;;4;P",
+      "ME;;5;P"
+    ],
+    "code": "MP4008",
+    "title": "Human Resource Management",
+    "au": "3.0"
+  }
+}

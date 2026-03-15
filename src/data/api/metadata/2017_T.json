@@ -1,0 +1,18 @@
+{
+  "MA2071": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2071",
+    "title": "Laboratory Experiments (Me)",
+    "au": "1.0"
+  },
+  "MA3071": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3071",
+    "title": "Engineering Experiments (Me)",
+    "au": "1.0"
+  }
+}

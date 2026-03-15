@@ -1,0 +1,801 @@
+{
+  "CZ1005": {
+    "searchKeys": [
+      "CSC;;1;P"
+    ],
+    "code": "CZ1005",
+    "title": "Digital Logic",
+    "au": "3.0"
+  },
+  "CZ1006": {
+    "searchKeys": [
+      "CSC;;1;P"
+    ],
+    "code": "CZ1006",
+    "title": "Computer Organisation & Architecture",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1005(Corequisite)"
+      ],
+      [
+        "CE1005(Corequisite)"
+      ]
+    ]
+  },
+  "CZ1007": {
+    "searchKeys": [
+      "CSC;;1;P"
+    ],
+    "code": "CZ1007",
+    "title": "Data Structures",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1003"
+      ],
+      [
+        "CE1003"
+      ]
+    ]
+  },
+  "CZ1011": {
+    "searchKeys": [
+      "CSC;;1;P"
+    ],
+    "code": "CZ1011",
+    "title": "Engineering Mathematics I",
+    "au": "3.0"
+  },
+  "CZ2001": {
+    "searchKeys": [
+      "CSC;;2;P"
+    ],
+    "code": "CZ2001",
+    "title": "Algorithms",
+    "au": "3.0",
+    "notAvailableToProgramme": "U15% & onwards students are also required to read CE/CZ1012",
+    "prerequisite": [
+      [
+        "CZ1001",
+        "CZ1007"
+      ],
+      [
+        "CE1001",
+        "CE1007"
+      ],
+      [
+        "CE1007",
+        "MH1812"
+      ],
+      [
+        "CZ1007",
+        "MH1812"
+      ]
+    ]
+  },
+  "CZ2002": {
+    "searchKeys": [
+      "CSC;;2;P"
+    ],
+    "code": "CZ2002",
+    "title": "Object Oriented Design & Programming",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1007"
+      ],
+      [
+        "CE1007"
+      ]
+    ]
+  },
+  "CZ2003": {
+    "searchKeys": [
+      "CSC;;2;P"
+    ],
+    "code": "CZ2003",
+    "title": "Computer Graphics & Visualisation",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CE1008"
+      ],
+      [
+        "CZ1008"
+      ],
+      [
+        "CE1011"
+      ],
+      [
+        "CZ1011"
+      ]
+    ]
+  },
+  "CZ2004": {
+    "searchKeys": [
+      "CSC;;2;P"
+    ],
+    "code": "CZ2004",
+    "title": "Human Computer Interaction",
+    "au": "3.0"
+  },
+  "CZ2005": {
+    "searchKeys": [
+      "CSC;;3;P"
+    ],
+    "code": "CZ2005",
+    "title": "Operating Systems",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1006",
+        "CZ1007"
+      ],
+      [
+        "CE1006",
+        "CE1007"
+      ]
+    ]
+  },
+  "CZ2007": {
+    "searchKeys": [
+      "CSC;;3;P"
+    ],
+    "code": "CZ2007",
+    "title": "Introduction To Databases",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1007",
+        "CZ2001(Corequisite)"
+      ],
+      [
+        "CE1007",
+        "CE2001(Corequisite)"
+      ],
+      [
+        "CE1007",
+        "CZ2001(Corequisite)"
+      ],
+      [
+        "CE2001(Corequisite)",
+        "CZ1007"
+      ]
+    ]
+  },
+  "CZ3001": {
+    "searchKeys": [
+      "CSC;;1;P",
+      "CSC;;3;P"
+    ],
+    "code": "CZ3001",
+    "title": "Advanced Computer Architecture",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1006"
+      ],
+      [
+        "CE1006"
+      ]
+    ]
+  },
+  "CZ3002": {
+    "searchKeys": [
+      "CSC;;3;P"
+    ],
+    "code": "CZ3002",
+    "title": "Advanced Software Engineering",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ2006"
+      ],
+      [
+        "CE2006"
+      ]
+    ]
+  },
+  "CZ4042": {
+    "searchKeys": [
+      "CSC;;4;P"
+    ],
+    "code": "CZ4042",
+    "title": "Neural Network & Deep Learning",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1003",
+        "CZ1007",
+        "CZ1011",
+        "CZ1012"
+      ],
+      [
+        "CE1003",
+        "CE1007",
+        "CE1011",
+        "CE1012"
+      ]
+    ]
+  },
+  "CZ4045": {
+    "searchKeys": [
+      "CSC;;4;P"
+    ],
+    "code": "CZ4045",
+    "title": "Natural Language Processing",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ2001"
+      ]
+    ]
+  },
+  "CZ4062": {
+    "searchKeys": [
+      "CSC;;4;P"
+    ],
+    "code": "CZ4062",
+    "title": "Computer Security (System Security)",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ2005"
+      ]
+    ]
+  },
+  "CZ4068": {
+    "searchKeys": [
+      "CSC;;4;P"
+    ],
+    "code": "CZ4068",
+    "title": "Application Security",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ2005",
+        "CZ3006"
+      ]
+    ]
+  },
+  "EE0040": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE0040",
+    "title": "Engineers & Society",
+    "au": "3.0",
+    "notAvailableToProgramme": "EEE4 standing"
+  },
+  "EE2001": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE2001",
+    "title": "Circuit Analysis",
+    "au": "4.0"
+  },
+  "EE2002": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE2002",
+    "title": "Analog Electronics",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "EE2001"
+      ]
+    ]
+  },
+  "EE2006": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE2006",
+    "title": "Engineering Mathematics I",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "FE1007"
+      ],
+      [
+        "MATH1B"
+      ],
+      [
+        "EE2092"
+      ],
+      [
+        "MH1811"
+      ],
+      [
+        "MH2810"
+      ],
+      [
+        "CY1602"
+      ]
+    ]
+  },
+  "EE2007": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE2007",
+    "title": "Engineering Mathematics Ii",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "FE1007"
+      ],
+      [
+        "EE2092"
+      ],
+      [
+        "MH1811"
+      ],
+      [
+        "MH2810"
+      ],
+      [
+        "CY1602"
+      ]
+    ]
+  },
+  "EE2008": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE2008",
+    "title": "Data Structures & Algorithms",
+    "au": "4.0"
+  },
+  "EE2073": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE2073",
+    "title": "Introduction To Eee Design & Project",
+    "au": "2.0"
+  },
+  "EE3001": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE3001",
+    "title": "Engineering Electromagnetics",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "EE2007(Corequisite)"
+      ],
+      [
+        "MATH1C"
+      ]
+    ]
+  },
+  "EE3010": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE3010",
+    "title": "Electrical Devices & Machines",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2001"
+      ]
+    ]
+  },
+  "EE3012": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE3012",
+    "title": "Communication Principles",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2010"
+      ]
+    ]
+  },
+  "EE4110": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4110",
+    "title": "Optical Communication System Design",
+    "au": "2.0"
+  },
+  "EE4188": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4188",
+    "title": "Wireless Communications",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "E302"
+      ],
+      [
+        "E312"
+      ],
+      [
+        "EE3012"
+      ]
+    ]
+  },
+  "EE4503": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4503",
+    "title": "Power Engineering Design",
+    "au": "2.0",
+    "prerequisite": [
+      [
+        "EE3010",
+        "EE3015"
+      ]
+    ]
+  },
+  "EE4530": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4530",
+    "title": "Power System Analysis & Control",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2005"
+      ],
+      [
+        "EE3010",
+        "EE3015"
+      ]
+    ]
+  },
+  "EE4532": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4532",
+    "title": "Power Electronics & Drives",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2005"
+      ],
+      [
+        "EE3010",
+        "EE3015"
+      ]
+    ]
+  },
+  "EE4717": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4717",
+    "title": "Web Application Design",
+    "au": "2.0"
+  },
+  "EE4758": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4758",
+    "title": "Information Security",
+    "au": "3.0"
+  },
+  "EE8061": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE8061",
+    "title": "Innovation & Technology Management",
+    "au": "3.0"
+  },
+  "EE8094": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE8094",
+    "title": "Impact Of Electromagnetic Radiation On Humans",
+    "au": "3.0"
+  },
+  "ET0001": {
+    "searchKeys": [
+      "EEE;;3;P",
+      "EEE;;4;P",
+      "EEE;;1;P",
+      "EEE;;2;P",
+      "EEE;;5;P",
+      "ME;;3;P",
+      "ME;;1;P",
+      "ME;;2;P",
+      "ME;;5;P",
+      "ME;;4;P",
+      "CSC;;4;P"
+    ],
+    "code": "ET0001",
+    "title": "Enterprise & Innovation",
+    "au": "1.0"
+  },
+  "GC0001": {
+    "searchKeys": [
+      "EEE;;1;P",
+      "ME;;3;P",
+      "ME;;1;P",
+      "ME;;2;P",
+      "ME;;5;P",
+      "CSC;;1;P",
+      "ME;;4;P",
+      "CSC;;2;P",
+      "CSC;;4;P",
+      "CSC;;3;P"
+    ],
+    "code": "GC0001",
+    "title": "Sustainability: Seeing Through The Haze",
+    "au": "1.0"
+  },
+  "HW0001": {
+    "searchKeys": [
+      "EEE;;1;P",
+      "ME;;3;P",
+      "ME;;1;P",
+      "ME;;2;P",
+      "ME;;5;P",
+      "CSC;;1;P",
+      "ME;;4;P"
+    ],
+    "code": "HW0001",
+    "title": "English Proficiency",
+    "au": "0.0",
+    "notAvailableToProgramme": "for students who fail QET"
+  },
+  "HW0288": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "HW0288",
+    "title": "Engineering Communication Ii",
+    "au": "2.0",
+    "notAvailableToProgramme": "Year 3 standing",
+    "prerequisite": [
+      [
+        "HW0188 (Not Applicable to IEM)"
+      ]
+    ]
+  },
+  "HY0001": {
+    "searchKeys": [
+      "EEE;;3;P",
+      "EEE;;4;P",
+      "EEE;;1;P",
+      "EEE;;2;P",
+      "EEE;;5;P",
+      "ME;;3;P",
+      "ME;;1;P",
+      "ME;;2;P",
+      "ME;;5;P",
+      "CSC;;1;P",
+      "ME;;4;P",
+      "CSC;;2;P",
+      "CSC;;4;P",
+      "CSC;;3;P"
+    ],
+    "code": "HY0001",
+    "title": "Ethics & Moral Reasoning",
+    "au": "1.0"
+  },
+  "MA1002": {
+    "searchKeys": [
+      "ME;;1;P",
+      "ME;;2;P"
+    ],
+    "code": "MA1002",
+    "title": "Fundamental Engineering Materials",
+    "au": "3.0"
+  },
+  "MA2003": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2003",
+    "title": "Introduction To Thermo-Fluids",
+    "au": "3.0"
+  },
+  "MA2004": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2004",
+    "title": "Manufacturing Processes",
+    "au": "3.0"
+  },
+  "MA2005": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2005",
+    "title": "Engineering Graphics",
+    "au": "3.0"
+  },
+  "MA2009": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2009",
+    "title": "Introduction To Electrical Circuits & Electronic Devices",
+    "au": "3.0"
+  },
+  "MA3001": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3001",
+    "title": "Machine Element Design",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2001 (Min Grade :I)",
+        "MA2002 (Min Grade :I)"
+      ]
+    ]
+  },
+  "MA3005": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3005",
+    "title": "Control Theory",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2006 (Min Grade :I)"
+      ]
+    ]
+  },
+  "MA3010": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3010",
+    "title": "Thermodynamics & Heat Transfer",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2003"
+      ]
+    ]
+  },
+  "MA4001": {
+    "searchKeys": [
+      "ME;;4;P"
+    ],
+    "code": "MA4001",
+    "title": "Engineering Design",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "MA3001 (Min Grade :I)"
+      ]
+    ]
+  },
+  "MA4002": {
+    "searchKeys": [
+      "ME;;4;P"
+    ],
+    "code": "MA4002",
+    "title": "Fluid Dynamics",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA3006"
+      ],
+      [
+        "MP2303",
+        "MP2305"
+      ],
+      [
+        "MP2003",
+        "MP2005"
+      ]
+    ]
+  },
+  "MA4838": {
+    "searchKeys": [
+      "ME;;4;P"
+    ],
+    "code": "MA4838",
+    "title": "Non-Conventional Manufacturing Processes",
+    "au": "3.0"
+  },
+  "MA4842": {
+    "searchKeys": [
+      "ME;;4;P"
+    ],
+    "code": "MA4842",
+    "title": "Engineering Metrology",
+    "au": "3.0"
+  },
+  "MA4845": {
+    "searchKeys": [
+      "ME;;4;P"
+    ],
+    "code": "MA4845",
+    "title": "Manufacturing Automation",
+    "au": "3.0"
+  },
+  "MA4849": {
+    "searchKeys": [
+      "ME;;4;P"
+    ],
+    "code": "MA4849",
+    "title": "Operations Research",
+    "au": "3.0"
+  },
+  "MA4850": {
+    "searchKeys": [
+      "ME;;4;P"
+    ],
+    "code": "MA4850",
+    "title": "Supply Chain & Logistics Management",
+    "au": "3.0"
+  },
+  "MH2810": {
+    "searchKeys": [
+      "EEE;;1;P",
+      "ME;;3;P",
+      "ME;;1;P",
+      "ME;;2;P",
+      "ME;;5;P",
+      "ME;;4;P"
+    ],
+    "code": "MH2810",
+    "title": "Mathematics A",
+    "au": "4.0"
+  },
+  "ML0001": {
+    "searchKeys": [
+      "ME;;5;P",
+      "ME;;4;P"
+    ],
+    "code": "ML0001",
+    "title": "Absolute Basics For Career",
+    "au": "1.0"
+  },
+  "ML0002": {
+    "searchKeys": [
+      "ME;;3;P",
+      "ME;;5;P",
+      "ME;;4;P"
+    ],
+    "code": "ML0002",
+    "title": "Career Power Up!",
+    "au": "1.0",
+    "prerequisite": [
+      [
+        "ML0001"
+      ]
+    ]
+  },
+  "PH1012": {
+    "searchKeys": [
+      "EEE;;1;P",
+      "ME;;3;P",
+      "ME;;1;P",
+      "ME;;2;P",
+      "ME;;5;P",
+      "ME;;4;P"
+    ],
+    "code": "PH1012",
+    "title": "Physics A",
+    "au": "4.0",
+    "notAvailableToProgramme": "For students w/o A level Physics(applicable to F/T students)"
+  }
+}

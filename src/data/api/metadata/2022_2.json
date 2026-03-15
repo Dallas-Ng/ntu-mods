@@ -1,0 +1,923 @@
+{
+  "CC0001": {
+    "searchKeys": [
+      "EEE;;2;P",
+      "ME;;1;P",
+      "ME;;2;P",
+      "ME;;3;P",
+      "ME;;4;P",
+      "ME;;5;P"
+    ],
+    "code": "CC0001",
+    "title": "Inquiry & Communication In An Interdisciplinary World",
+    "au": "2.0"
+  },
+  "CC0005": {
+    "searchKeys": [
+      "EEE;;1;P",
+      "ME;;1;P",
+      "ME;;2;P",
+      "ME;;3;P",
+      "ME;;4;P",
+      "ME;;5;P"
+    ],
+    "code": "CC0005",
+    "title": "Healthy Living & Wellbeing",
+    "au": "3.0"
+  },
+  "CZ1104": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CZ1104",
+    "title": "Linear Algebra For Computing",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1103(Corequisite)",
+        "MH1810"
+      ]
+    ]
+  },
+  "CZ2005": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CZ2005",
+    "title": "Operating Systems",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1006",
+        "CZ1007"
+      ],
+      [
+        "CE1006",
+        "CE1007"
+      ],
+      [
+        "CE1106",
+        "CE1107"
+      ],
+      [
+        "CZ1106",
+        "CZ1107"
+      ]
+    ]
+  },
+  "CZ2006": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CZ2006",
+    "title": "Software Engineering",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ2002(Corequisite)"
+      ],
+      [
+        "CE2002(Corequisite)"
+      ]
+    ]
+  },
+  "CZ2007": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CZ2007",
+    "title": "Introduction To Databases",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1007",
+        "CZ2001(Corequisite)"
+      ],
+      [
+        "CE1007",
+        "CE2001(Corequisite)"
+      ],
+      [
+        "CE1007",
+        "CZ2001(Corequisite)"
+      ],
+      [
+        "CE2001(Corequisite)",
+        "CZ1007"
+      ],
+      [
+        "CE2101(Corequisite)"
+      ],
+      [
+        "CZ2101(Corequisite)"
+      ]
+    ]
+  },
+  "CZ3003": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CZ3003",
+    "title": "Software Systems Analysis & Design",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ2006(Corequisite)"
+      ],
+      [
+        "CE2006(Corequisite)"
+      ]
+    ]
+  },
+  "CZ3005": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CZ3005",
+    "title": "Artificial Intelligence",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ1003",
+        "CZ2001"
+      ],
+      [
+        "CE1003",
+        "CE2001"
+      ],
+      [
+        "CE1003",
+        "CZ2001"
+      ],
+      [
+        "CZ1107",
+        "CZ1115"
+      ],
+      [
+        "CE1107",
+        "CE1115"
+      ],
+      [
+        "CZ1103",
+        "CZ2101"
+      ]
+    ]
+  },
+  "CZ3007": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CZ3007",
+    "title": "Compiler Techniques",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ2001",
+        "CZ2006"
+      ],
+      [
+        "CE2001",
+        "CE2006"
+      ],
+      [
+        "CE2006",
+        "CE2101"
+      ],
+      [
+        "CZ2006",
+        "CZ2101"
+      ]
+    ]
+  },
+  "CZ4041": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CZ4041",
+    "title": "Machine Learning",
+    "au": "3.0",
+    "notAvailableToProgramme": "Year 3 standing",
+    "prerequisite": [
+      [
+        "CZ1007",
+        "CZ1011"
+      ],
+      [
+        "CZ1107",
+        "CZ2100"
+      ],
+      [
+        "CZ1007",
+        "MH2500"
+      ],
+      [
+        "CZ1107",
+        "MH2500"
+      ]
+    ]
+  },
+  "CZ4052": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CZ4052",
+    "title": "Cloud Computing",
+    "au": "3.0",
+    "notAvailableToProgramme": "Year 3 standing",
+    "prerequisite": [
+      [
+        "CZ1104"
+      ],
+      [
+        "CZ1012"
+      ],
+      [
+        "MH2802"
+      ]
+    ]
+  },
+  "CZ4062": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CZ4062",
+    "title": "Computer Security",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "CZ2005"
+      ]
+    ]
+  },
+  "EE2005": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE2005",
+    "title": "Electrical Devices & Machines",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2001"
+      ],
+      [
+        "EE2101"
+      ]
+    ]
+  },
+  "EE2101": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "EE2101",
+    "title": "Circuit Analysis",
+    "au": "3.0"
+  },
+  "EE2102": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE2102",
+    "title": "Analog Electronics",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2001"
+      ],
+      [
+        "EE2101"
+      ]
+    ]
+  },
+  "EE2103": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE2103",
+    "title": "Semiconductor Fundamentals",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE1002"
+      ],
+      [
+        "CY1307"
+      ],
+      [
+        "EE1102"
+      ]
+    ]
+  },
+  "EE3015": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE3015",
+    "title": "Power Systems & Conversion",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2001"
+      ],
+      [
+        "EE2101"
+      ]
+    ]
+  },
+  "EE4208": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;3;P"
+    ],
+    "code": "EE4208",
+    "title": "Intelligent Systems Design",
+    "au": "2.0"
+  },
+  "EE4504": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;3;P"
+    ],
+    "code": "EE4504",
+    "title": "Design Of Clean Energy Systems",
+    "au": "2.0",
+    "prerequisite": [
+      [
+        "EE3010",
+        "EE3015"
+      ],
+      [
+        "EE2005",
+        "EE3015"
+      ]
+    ]
+  },
+  "EE4533": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;3;P"
+    ],
+    "code": "EE4533",
+    "title": "Power Apparatus & System Protection",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE3010",
+        "EE3015"
+      ],
+      [
+        "EE2005",
+        "EE3015"
+      ]
+    ]
+  },
+  "EE4534": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;3;P"
+    ],
+    "code": "EE4534",
+    "title": "Modern Distribution Systems With Renewable Resources",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE3010",
+        "EE3015"
+      ],
+      [
+        "EE2005",
+        "EE3015"
+      ]
+    ]
+  },
+  "EG0001": {
+    "searchKeys": [
+      "EEE;;2;P",
+      "ME;;1;P",
+      "ME;;2;P",
+      "ME;;3;P",
+      "ME;;4;P",
+      "ME;;5;P",
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "EG0001",
+    "title": "Engineers & Society",
+    "au": "3.0"
+  },
+  "EG1001": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "EG1001",
+    "title": "Engineers In Society",
+    "au": "2.0"
+  },
+  "ET0001": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "ET0001",
+    "title": "Enterprise & Innovation",
+    "au": "1.0"
+  },
+  "HW0001": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "HW0001",
+    "title": "Introduction To Academic Communication",
+    "au": "0.0",
+    "notAvailableToProgramme": "for students who fail QET"
+  },
+  "HW0288": {
+    "searchKeys": [
+      "EEE;;3;P",
+      "ME;;1;P",
+      "ME;;2;P",
+      "ME;;3;P",
+      "ME;;4;P",
+      "ME;;5;P"
+    ],
+    "code": "HW0288",
+    "title": "Engineering Communication",
+    "au": "2.0",
+    "notAvailableToProgramme": "Year 3 standing",
+    "prerequisite": [
+      [
+        "HW0188 (Not Applicable to IEM)"
+      ],
+      [
+        "HW0111 (Not Applicable to IEM)"
+      ],
+      [
+        "CC0001 (Not Applicable to IEM)"
+      ]
+    ]
+  },
+  "HY0001": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;3;P",
+      "ME;;1;P",
+      "ME;;2;P",
+      "ME;;3;P",
+      "ME;;4;P",
+      "ME;;5;P",
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "HY0001",
+    "title": "Ethics & Moral Reasoning",
+    "au": "1.0"
+  },
+  "IE2104": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "IE2104",
+    "title": "Digital Electronics",
+    "au": "3.0"
+  },
+  "IE2108": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "IE2108",
+    "title": "Data Structures & Algorithms",
+    "au": "3.0"
+  },
+  "IE3017": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "IE3017",
+    "title": "Computer Communications",
+    "au": "3.0"
+  },
+  "IE4001": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;3;P"
+    ],
+    "code": "IE4001",
+    "title": "Software Engineering",
+    "au": "3.0"
+  },
+  "IE4109": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;3;P"
+    ],
+    "code": "IE4109",
+    "title": "Wireless System Design",
+    "au": "2.0"
+  },
+  "IE4155": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;3;P"
+    ],
+    "code": "IE4155",
+    "title": "Wireless Communications & Mobile Networks",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2010"
+      ],
+      [
+        "IM2004"
+      ],
+      [
+        "IE2010"
+      ],
+      [
+        "IE2110"
+      ]
+    ]
+  },
+  "IE4718": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;3;P"
+    ],
+    "code": "IE4718",
+    "title": "Enterprise Network Design",
+    "au": "2.0",
+    "prerequisite": [
+      [
+        "EE3017"
+      ],
+      [
+        "IE3017"
+      ],
+      [
+        "IM2003"
+      ]
+    ]
+  },
+  "IE4791": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;3;P"
+    ],
+    "code": "IE4791",
+    "title": "Database Systems",
+    "au": "3.0"
+  },
+  "MA0218": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA0218",
+    "title": "Introduction To Data Science & Artificial Intelligence",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA1008"
+      ],
+      [
+        "FE1008"
+      ],
+      [
+        "CY1402"
+      ]
+    ]
+  },
+  "MA1001": {
+    "searchKeys": [
+      "ME;;1;P",
+      "ME;;2;P"
+    ],
+    "code": "MA1001",
+    "title": "Dynamics",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MH2810 (Min Grade :I)",
+        "PH1011 (Min Grade :I)"
+      ],
+      [
+        "MH1810 (Min Grade :I)",
+        "PH1011 (Min Grade :I)"
+      ],
+      [
+        "MH2812 (Min Grade :I)",
+        "PH1011 (Min Grade :I)"
+      ],
+      [
+        "CY1201 (Min Grade :I)",
+        "PH1011 (Min Grade :I)"
+      ],
+      [
+        "MH1810 (Min Grade :I)",
+        "PH1012 (Min Grade :I)"
+      ],
+      [
+        "CY1201 (Min Grade :I)",
+        "PH1012 (Min Grade :I)"
+      ],
+      [
+        "CY1305 (Min Grade :I)",
+        "MH1810 (Min Grade :I)"
+      ],
+      [
+        "CY1201 (Min Grade :I)",
+        "CY1305 (Min Grade :I)"
+      ],
+      [
+        "MH2812 (Min Grade :I)",
+        "PH1012 (Min Grade :I)"
+      ],
+      [
+        "CY1305 (Min Grade :I)",
+        "MH2812 (Min Grade :I)"
+      ],
+      [
+        "MH2810 (Min Grade :I)",
+        "PH1012 (Min Grade :I)"
+      ]
+    ]
+  },
+  "MA1008": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA1008",
+    "title": "Introduction To Computational Thinking",
+    "au": "3.0"
+  },
+  "MA2002": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2002",
+    "title": "Theory Of Mechanism",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA1001"
+      ]
+    ]
+  },
+  "MA2006": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2006",
+    "title": "Engineering Mathematics",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MH1810",
+        "MH1811"
+      ],
+      [
+        "CY1203"
+      ],
+      [
+        "MH2812"
+      ],
+      [
+        "CY1602"
+      ],
+      [
+        "MH2810"
+      ]
+    ]
+  },
+  "MA3002": {
+    "searchKeys": [
+      "ME;;1;P",
+      "ME;;2;P",
+      "ME;;3;P",
+      "ME;;4;P",
+      "ME;;5;P"
+    ],
+    "code": "MA3002",
+    "title": "Solid Mechanics & Vibration",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2001"
+      ]
+    ]
+  },
+  "MA3004": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3004",
+    "title": "Mathematical Methods In Engineering",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MH1810",
+        "MH1811"
+      ],
+      [
+        "CY1203"
+      ],
+      [
+        "MH2812"
+      ],
+      [
+        "CY1602"
+      ],
+      [
+        "MH2810"
+      ]
+    ]
+  },
+  "MA3006": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3006",
+    "title": "Fluid Mechanics",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2003"
+      ]
+    ]
+  },
+  "MA4845": {
+    "searchKeys": [
+      "ME;;4;P"
+    ],
+    "code": "MA4845",
+    "title": "Additive Manufacturing In Industry 4.0",
+    "au": "3.0"
+  },
+  "MA4853": {
+    "searchKeys": [
+      "ME;;4;P"
+    ],
+    "code": "MA4853",
+    "title": "Manufacturing Systems",
+    "au": "3.0"
+  },
+  "MA4854": {
+    "searchKeys": [
+      "ME;;4;P"
+    ],
+    "code": "MA4854",
+    "title": "Quality Assurance & Management",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2006"
+      ]
+    ]
+  },
+  "MH1812": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "MH1812",
+    "title": "Discrete Mathematics",
+    "au": "3.0"
+  },
+  "SC1004": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "SC1004",
+    "title": "Linear Algebra For Computing",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MH1810",
+        "SC1003(Corequisite)"
+      ]
+    ]
+  },
+  "SC1007": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "SC1007",
+    "title": "Data Structures & Algorithms",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "SC1003"
+      ]
+    ]
+  },
+  "SC1015": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "SC1015",
+    "title": "Introduction To Data Science & Artificial Intelligence",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "SC1003"
+      ]
+    ]
+  },
+  "SC2005": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "SC2005",
+    "title": "Operating Systems",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "SC1006",
+        "SC1007"
+      ]
+    ]
+  },
+  "SC2006": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "SC2006",
+    "title": "Software Engineering",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "SC2002(Corequisite)"
+      ]
+    ]
+  },
+  "SC2207": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "SC2207",
+    "title": "Introduction To Databases",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "SC2001(Corequisite)"
+      ],
+      [
+        "MH1403"
+      ]
+    ]
+  }
+}

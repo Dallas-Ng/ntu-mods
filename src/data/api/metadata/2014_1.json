@@ -1,0 +1,592 @@
+{
+  "EE0040": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE0040",
+    "title": "Engineers & Society",
+    "au": "3.0",
+    "notAvailableToProgramme": "EEE4 standing"
+  },
+  "EE1002": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE1002",
+    "title": "Physics Foundation For Electrical & Electronic Engineering",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "FE1011"
+      ],
+      [
+        "FE1012"
+      ],
+      [
+        "FE0001"
+      ],
+      [
+        "PH1011"
+      ],
+      [
+        "PH1012"
+      ]
+    ]
+  },
+  "EE2001": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE2001",
+    "title": "Circuit Analysis",
+    "au": "4.0"
+  },
+  "EE2004": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "EE2004",
+    "title": "Digital Electronics",
+    "au": "4.0"
+  },
+  "EE2006": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE2006",
+    "title": "Engineering Mathematics I",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "FE1007"
+      ],
+      [
+        "MATH1B"
+      ],
+      [
+        "EE2092"
+      ],
+      [
+        "MH1811"
+      ],
+      [
+        "MH2810"
+      ]
+    ]
+  },
+  "EE2007": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE2007",
+    "title": "Engineering Mathematics Ii",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "FE1007"
+      ],
+      [
+        "EE2092"
+      ],
+      [
+        "MH1811"
+      ],
+      [
+        "MH2810"
+      ]
+    ]
+  },
+  "EE2008": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE2008",
+    "title": "Data Structures & Algorithms",
+    "au": "3.0"
+  },
+  "EE2010": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "EE2010",
+    "title": "Signals & Systems",
+    "au": "4.0",
+    "notAvailableToProgramme": "PRE-REQUISITE NOT APPLICABLE TO PART-TIME STUDENT",
+    "prerequisite": [
+      [
+        "FE1006",
+        "FE1007"
+      ],
+      [
+        "MATH1A",
+        "MATH1B"
+      ],
+      [
+        "EE2092"
+      ],
+      [
+        "MH1810",
+        "MH1811"
+      ],
+      [
+        "FE1006",
+        "MH1811"
+      ],
+      [
+        "FE1007",
+        "MH1810"
+      ],
+      [
+        "MH2810"
+      ]
+    ]
+  },
+  "EE3001": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE3001",
+    "title": "Engineering Electromagnetics",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "EE2007(Corequisite)"
+      ],
+      [
+        "MATH1C"
+      ]
+    ]
+  },
+  "EE3002": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE3002",
+    "title": "Microprocessors",
+    "au": "4.0"
+  },
+  "EE3010": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE3010",
+    "title": "Electrical Devices And Machines",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2001"
+      ]
+    ]
+  },
+  "EE3017": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE3017",
+    "title": "Computer Communications",
+    "au": "3.0"
+  },
+  "EE3019": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE3019",
+    "title": "Integrated Electronics",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2002"
+      ]
+    ]
+  },
+  "EE4041": {
+    "searchKeys": [
+      "EEE;;5;P"
+    ],
+    "code": "EE4041",
+    "title": "Human Resource Management",
+    "au": "3.0",
+    "notAvailableToProgramme": "Year 4 Standing"
+  },
+  "EE4110": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4110",
+    "title": "Optical Communication System Design",
+    "au": "2.0"
+  },
+  "EE4188": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;5;P"
+    ],
+    "code": "EE4188",
+    "title": "Wireless Communications",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "E302"
+      ],
+      [
+        "E312"
+      ],
+      [
+        "EE3012"
+      ]
+    ]
+  },
+  "EE4207": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4207",
+    "title": "Control Engineering Design",
+    "au": "2.0"
+  },
+  "EE4266": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;5;P"
+    ],
+    "code": "EE4266",
+    "title": "Computer Vision",
+    "au": "3.0"
+  },
+  "EE4503": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4503",
+    "title": "Power Engineering Design",
+    "au": "2.0",
+    "notAvailableToProgramme": "BRC students also require EE3010 as pre-requisite",
+    "prerequisite": [
+      [
+        "EE3015"
+      ]
+    ]
+  },
+  "EE4530": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;5;P"
+    ],
+    "code": "EE4530",
+    "title": "Power System Analysis And Control",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2005"
+      ],
+      [
+        "EE3010",
+        "EE3015"
+      ]
+    ]
+  },
+  "EE4717": {
+    "searchKeys": [
+      "EEE;;4;P"
+    ],
+    "code": "EE4717",
+    "title": "Web Application Design",
+    "au": "2.0"
+  },
+  "EE4758": {
+    "searchKeys": [
+      "EEE;;4;P",
+      "EEE;;5;P"
+    ],
+    "code": "EE4758",
+    "title": "Computer Security",
+    "au": "3.0"
+  },
+  "HW0001": {
+    "searchKeys": [
+      "EEE;;2;P",
+      "EEE;;1;P",
+      "ME;;1;P",
+      "ME;;2;P",
+      "CSC;;1;P"
+    ],
+    "code": "HW0001",
+    "title": "English Proficiency",
+    "au": "0.0",
+    "notAvailableToProgramme": "for students who fail QET"
+  },
+  "HW0310": {
+    "searchKeys": [
+      "ME;;3;P",
+      "ME;;5;P",
+      "ME;;4;P"
+    ],
+    "code": "HW0310",
+    "title": "Professional Communication",
+    "au": "2.0",
+    "notAvailableToProgramme": "Exempted/Pass in HW001/HW0001",
+    "prerequisite": [
+      [
+        "HW001"
+      ],
+      [
+        "HW0001"
+      ]
+    ]
+  },
+  "MA1002": {
+    "searchKeys": [
+      "ME;;1;P",
+      "ME;;2;P"
+    ],
+    "code": "MA1002",
+    "title": "Fundamental Engineering Materials",
+    "au": "3.0"
+  },
+  "MA2003": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2003",
+    "title": "Introduction To Thermo-Fluids",
+    "au": "3.0"
+  },
+  "MA2004": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2004",
+    "title": "Manufacturing Processes",
+    "au": "3.0"
+  },
+  "MA2005": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2005",
+    "title": "Engineering Graphics",
+    "au": "3.0"
+  },
+  "MA2009": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2009",
+    "title": "Introduction To Electrical Circuits & Electronic Devices",
+    "au": "3.0"
+  },
+  "MA3001": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3001",
+    "title": "Machine Element Design",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2001 (Min Grade :F)",
+        "MA2002 (Min Grade :F)"
+      ]
+    ]
+  },
+  "MA3002": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3002",
+    "title": "Solid Mechanics And Vibration",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2001"
+      ]
+    ]
+  },
+  "MA3005": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3005",
+    "title": "Control Theory",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2006 (Min Grade :F)"
+      ]
+    ]
+  },
+  "MA3006": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3006",
+    "title": "Fluid Mechanics",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MA2003"
+      ]
+    ]
+  },
+  "MH2810": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "MH2810",
+    "title": "Mathematics A",
+    "au": "4.0"
+  },
+  "MH2812": {
+    "searchKeys": [
+      "ME;;1;P",
+      "ME;;2;P"
+    ],
+    "code": "MH2812",
+    "title": "Foundation Mathematics",
+    "au": "3.0"
+  },
+  "MP3001": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MP3001",
+    "title": "Dynamics & Control",
+    "au": "4.0",
+    "prerequisite": [
+      [
+        "MP2007 (Min Grade :F)"
+      ],
+      [
+        "G264 (Min Grade :F)"
+      ],
+      [
+        "M214T"
+      ]
+    ]
+  },
+  "MP3011": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MP3011",
+    "title": "Engineering Design",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MP2011 (Min Grade :F)"
+      ]
+    ]
+  },
+  "MP4005": {
+    "searchKeys": [
+      "ME;;3;P",
+      "ME;;5;P",
+      "ME;;4;P"
+    ],
+    "code": "MP4005",
+    "title": "Fluid Dynamics",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MP2003",
+        "MP2005"
+      ],
+      [
+        "G263",
+        "M361",
+        "M363"
+      ],
+      [
+        "G263M",
+        "M361",
+        "M363"
+      ],
+      [
+        "MP2303",
+        "MP2305"
+      ]
+    ]
+  },
+  "MP4007": {
+    "searchKeys": [
+      "ME;;5;P",
+      "ME;;4;P"
+    ],
+    "code": "MP4007",
+    "title": "Engineers And Society",
+    "au": "3.0"
+  },
+  "MP4012": {
+    "searchKeys": [
+      "ME;;4;P"
+    ],
+    "code": "MP4012",
+    "title": "Design Optimization And Analysis",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MP2001",
+        "MP2006"
+      ]
+    ]
+  },
+  "MP4E02": {
+    "searchKeys": [
+      "ME;;5;P",
+      "ME;;4;P"
+    ],
+    "code": "MP4E02",
+    "title": "Human Factors In Design",
+    "au": "3.0"
+  },
+  "MP4F02": {
+    "searchKeys": [
+      "ME;;5;P",
+      "ME;;4;P"
+    ],
+    "code": "MP4F02",
+    "title": "Manufacturing Systems And Automation",
+    "au": "3.0"
+  },
+  "MP4F10": {
+    "searchKeys": [
+      "ME;;5;P",
+      "ME;;4;P"
+    ],
+    "code": "MP4F10",
+    "title": "Electronics Manufacturing And Packaging",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "M286"
+      ],
+      [
+        "M286M"
+      ],
+      [
+        "MP2004"
+      ],
+      [
+        "MP3104"
+      ],
+      [
+        "MP2304"
+      ],
+      [
+        "MP3304"
+      ]
+    ]
+  },
+  "PH1012": {
+    "searchKeys": [
+      "EEE;;2;P",
+      "EEE;;1;P",
+      "ME;;1;P",
+      "ME;;2;P"
+    ],
+    "code": "PH1012",
+    "title": "Physics A",
+    "au": "4.0",
+    "notAvailableToProgramme": "For students w/o A level Physics(applicable to F/T students)"
+  }
+}

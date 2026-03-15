@@ -1,0 +1,200 @@
+{
+  "CC0006": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CC0006",
+    "title": "Sustainability: Society, Economy & Environment",
+    "au": "3.0"
+  },
+  "CC0007": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "CC0007",
+    "title": "Science & Technology For Humanity",
+    "au": "3.0"
+  },
+  "EE1102": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "EE1102",
+    "title": "Physics Foundation For Electrical & Electronic Engineering",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "PH1011"
+      ],
+      [
+        "PH1012"
+      ],
+      [
+        "CE1013"
+      ],
+      [
+        "CZ1013"
+      ],
+      [
+        "CE1113"
+      ],
+      [
+        "CZ1113"
+      ],
+      [
+        "SC1013"
+      ]
+    ]
+  },
+  "EE3101": {
+    "searchKeys": [
+      "EEE;;3;P"
+    ],
+    "code": "EE3101",
+    "title": "Engineering Electromagnetics",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE2007(Corequisite)",
+        "PH1011"
+      ],
+      [
+        "IE2107(Corequisite)",
+        "PH1011"
+      ],
+      [
+        "IM2007(Corequisite)",
+        "PH1011"
+      ],
+      [
+        "IE2107(Corequisite)",
+        "PH1012"
+      ],
+      [
+        "EE2007(Corequisite)",
+        "PH1012"
+      ],
+      [
+        "IM2007(Corequisite)",
+        "PH1012"
+      ],
+      [
+        "IE2007(Corequisite)",
+        "PH1011"
+      ],
+      [
+        "IE2007(Corequisite)",
+        "PH1012"
+      ],
+      [
+        "CY1602"
+      ]
+    ]
+  },
+  "IE0005": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "IE0005",
+    "title": "Introduction To Data Science & Artificial Intelligence",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "EE1005"
+      ],
+      [
+        "CE1003"
+      ],
+      [
+        "CZ1003"
+      ],
+      [
+        "BG2211"
+      ],
+      [
+        "CH2107"
+      ],
+      [
+        "CV1014"
+      ],
+      [
+        "MS1008"
+      ],
+      [
+        "MA1008"
+      ],
+      [
+        "IE1005"
+      ],
+      [
+        "RE1016"
+      ]
+    ]
+  },
+  "IE1005": {
+    "searchKeys": [
+      "EEE;;1;P"
+    ],
+    "code": "IE1005",
+    "title": "From Computational Thinking To Programming",
+    "au": "3.0"
+  },
+  "IE2110": {
+    "searchKeys": [
+      "EEE;;2;P"
+    ],
+    "code": "IE2110",
+    "title": "Signals & Systems",
+    "au": "3.0",
+    "prerequisite": [
+      [
+        "MH1810",
+        "MH1811"
+      ],
+      [
+        "MH2810"
+      ],
+      [
+        "CY1601",
+        "CY1602"
+      ],
+      [
+        "EG2810"
+      ]
+    ]
+  },
+  "MA2071": {
+    "searchKeys": [
+      "ME;;2;P"
+    ],
+    "code": "MA2071",
+    "title": "Laboratory Experiments (Me)",
+    "au": "1.0"
+  },
+  "MA3071": {
+    "searchKeys": [
+      "ME;;3;P"
+    ],
+    "code": "MA3071",
+    "title": "Engineering Experiments (Me)",
+    "au": "1.0"
+  },
+  "SC2079": {
+    "searchKeys": [
+      "CSC;;2;P",
+      "CSC;;1;P",
+      "CSC;;3;P",
+      "CSC;;4;P"
+    ],
+    "code": "SC2079",
+    "title": "Multidisciplinary Design Project",
+    "au": "4.0",
+    "notAvailableToProgramme": "Year 3 standing; Year 2 standing (Part time)"
+  }
+}

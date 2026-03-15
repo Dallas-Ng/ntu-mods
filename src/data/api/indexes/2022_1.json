@@ -1,0 +1,2586 @@
+{
+  "CC0003": {
+    "37501": [
+      {
+        "key": "37501",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 4,
+        "time": "1900-2050",
+        "venue": "LHN-TR+24",
+        "remarks": "Teaching Wk3,5,7,9,11,13",
+        "duration": 4
+      }
+    ],
+    "37502": [
+      {
+        "key": "37502",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 4,
+        "time": "1900-2050",
+        "venue": "LHN-TR+24",
+        "remarks": "Teaching Wk2,4,6,8,10,12",
+        "duration": 4
+      }
+    ],
+    "37503": [
+      {
+        "key": "37503",
+        "type": "TUT",
+        "group": "EPT3",
+        "day": 4,
+        "time": "1900-2050",
+        "venue": "TR+90",
+        "remarks": "Teaching Wk3,5,7,9,11,13",
+        "duration": 4
+      }
+    ],
+    "37504": [
+      {
+        "key": "37504",
+        "type": "TUT",
+        "group": "EPT4",
+        "day": 4,
+        "time": "1900-2050",
+        "venue": "TR+91",
+        "remarks": "Teaching Wk2,4,6,8,10,12",
+        "duration": 4
+      }
+    ]
+  },
+  "CZ1106": {
+    "14530": [
+      {
+        "key": "14530",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 1,
+        "time": "1830-1920",
+        "venue": "LT9",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "14530",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 1,
+        "time": "1930-2020",
+        "venue": "LT9",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      },
+      {
+        "key": "14530",
+        "type": "LAB",
+        "group": "PT1",
+        "day": 1,
+        "time": "2030-2120",
+        "venue": "HWLAB2",
+        "remarks": "",
+        "duration": 2
+      }
+    ]
+  },
+  "CZ2002": {
+    "14520": [
+      {
+        "key": "14520",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 4,
+        "time": "1830-1920",
+        "venue": "SWLAB2",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "14520",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 4,
+        "time": "1930-2020",
+        "venue": "SWLAB2",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "14520",
+        "type": "LAB",
+        "group": "PT1",
+        "day": 4,
+        "time": "2030-2120",
+        "venue": "SWLAB2",
+        "remarks": "",
+        "duration": 2
+      }
+    ]
+  },
+  "CZ2100": {
+    "14531": [
+      {
+        "key": "14531",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 3,
+        "time": "1830-2020",
+        "venue": "LT9",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "14531",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 3,
+        "time": "2030-2120",
+        "venue": "LT9",
+        "remarks": "",
+        "duration": 2
+      }
+    ]
+  },
+  "CZ2101": {
+    "14519": [
+      {
+        "key": "14519",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 2,
+        "time": "1830-1920",
+        "venue": "LT10",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "14519",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 2,
+        "time": "1930-2020",
+        "venue": "LT10",
+        "remarks": "Teaching Wk1-4,6,7,9,11,12",
+        "duration": 2
+      },
+      {
+        "key": "14519",
+        "type": "LAB",
+        "group": "PT1",
+        "day": 2,
+        "time": "2030-2120",
+        "venue": "LT10",
+        "remarks": "Teaching Wk5,8,11,13",
+        "duration": 2
+      }
+    ]
+  },
+  "CZ3001": {
+    "14510": [
+      {
+        "key": "14510",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 3,
+        "time": "1830-2120",
+        "venue": "LT10",
+        "remarks": "Teaching Wk2,11,13",
+        "duration": 6
+      },
+      {
+        "key": "14510",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 3,
+        "time": "1830-2020",
+        "venue": "LT10",
+        "remarks": "Teaching Wk4,6,8,10",
+        "duration": 4
+      },
+      {
+        "key": "14510",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 3,
+        "time": "2030-2120",
+        "venue": "LT10",
+        "remarks": "Teaching Wk3-10,12",
+        "duration": 2
+      },
+      {
+        "key": "14510",
+        "type": "LAB",
+        "group": "PT1",
+        "day": 3,
+        "time": "1830-2020",
+        "venue": "HWLAB1",
+        "remarks": "Teaching Wk3,5,7,9,12",
+        "duration": 4
+      }
+    ]
+  },
+  "CZ3002": {
+    "14516": [
+      {
+        "key": "14516",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 1,
+        "time": "1830-1920",
+        "venue": "SWLAB2",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "14516",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 1,
+        "time": "1930-2020",
+        "venue": "SWLAB2",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      },
+      {
+        "key": "14516",
+        "type": "LAB",
+        "group": "PT1",
+        "day": 1,
+        "time": "2030-2120",
+        "venue": "SWLAB2",
+        "remarks": "",
+        "duration": 2
+      }
+    ]
+  },
+  "CZ3006": {
+    "14514": [
+      {
+        "key": "14514",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 3,
+        "time": "1830-1920",
+        "venue": "TR+7",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "14514",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 3,
+        "time": "1930-2020",
+        "venue": "TR+7",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      },
+      {
+        "key": "14514",
+        "type": "LAB",
+        "group": "PT1",
+        "day": 3,
+        "time": "2030-2120",
+        "venue": "SWLAB2",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "CZ4031": {
+    "14515": [
+      {
+        "key": "14515",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 2,
+        "time": "1830-2020",
+        "venue": "TR+7",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "14515",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 2,
+        "time": "2030-2120",
+        "venue": "TR+7",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "CZ4032": {
+    "14513": [
+      {
+        "key": "14513",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 2,
+        "time": "1830-2020",
+        "venue": "LT9",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "14513",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 2,
+        "time": "2030-2120",
+        "venue": "LT9",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "CZ4062": {
+    "14511": [
+      {
+        "key": "14511",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 4,
+        "time": "1830-2020",
+        "venue": "LT15",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "14511",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 4,
+        "time": "2030-2120",
+        "venue": "LT15",
+        "remarks": "",
+        "duration": 2
+      }
+    ]
+  },
+  "CZ4064": {
+    "14512": [
+      {
+        "key": "14512",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 1,
+        "time": "1830-2020",
+        "venue": "LT10",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "14512",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 1,
+        "time": "2030-2120",
+        "venue": "LT10",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "EE2002": {
+    "37524": [
+      {
+        "key": "37524",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 2,
+        "time": "2030-2120",
+        "venue": "LT28",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "37524",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "1900-2020",
+        "venue": "TR+88",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37524",
+        "type": "LAB",
+        "group": "EPL1",
+        "day": 4,
+        "time": "1900-2150",
+        "venue": "S2-B4A-01",
+        "remarks": "Teaching Wk4,8,10",
+        "duration": 6
+      }
+    ],
+    "37525": [
+      {
+        "key": "37525",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 2,
+        "time": "2030-2120",
+        "venue": "LT28",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "37525",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 2,
+        "time": "1900-2020",
+        "venue": "TR+89",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37525",
+        "type": "LAB",
+        "group": "EPL2",
+        "day": 5,
+        "time": "1900-2150",
+        "venue": "S2-B4A-01",
+        "remarks": "Teaching Wk4,7,10",
+        "duration": 6
+      }
+    ],
+    "37526": [
+      {
+        "key": "37526",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 2,
+        "time": "2030-2120",
+        "venue": "LT28",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "37526",
+        "type": "TUT",
+        "group": "EPT3",
+        "day": 2,
+        "time": "1900-2020",
+        "venue": "TR+90",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37526",
+        "type": "LAB",
+        "group": "EPL3",
+        "day": 5,
+        "time": "1900-2150",
+        "venue": "S2-B4A-01",
+        "remarks": "Teaching Wk4,7,10",
+        "duration": 6
+      }
+    ]
+  },
+  "EE2073": {
+    "37542": [
+      {
+        "key": "37542",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "TR102",
+        "remarks": "Teaching Wk1,2",
+        "duration": 6
+      },
+      {
+        "key": "37542",
+        "type": "PRJ",
+        "group": "EPJ1",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "S2-B4C-15",
+        "remarks": "Teaching Wk3-10,12,13",
+        "duration": 6
+      }
+    ]
+  },
+  "EE2101": {
+    "37521": [
+      {
+        "key": "37521",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "1900-1950",
+        "venue": "TR+93",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "37521",
+        "type": "LAB",
+        "group": "EPL1",
+        "day": 5,
+        "time": "1900-2150",
+        "venue": "S2-B5C-07",
+        "remarks": "Teaching Wk8,13",
+        "duration": 6
+      }
+    ],
+    "37522": [
+      {
+        "key": "37522",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "1900-1950",
+        "venue": "TR+93",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "37522",
+        "type": "LAB",
+        "group": "EPL2",
+        "day": 5,
+        "time": "1900-2150",
+        "venue": "S2-B5C-07",
+        "remarks": "Teaching Wk6,12",
+        "duration": 6
+      }
+    ]
+  },
+  "EE3001": {
+    "37561": [
+      {
+        "key": "37561",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 1,
+        "time": "1900-2020",
+        "venue": "TR+92",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37561",
+        "type": "LAB",
+        "group": "EPL1",
+        "day": 2,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17",
+        "remarks": "Teaching Wk4,8",
+        "duration": 6
+      }
+    ],
+    "37562": [
+      {
+        "key": "37562",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 1,
+        "time": "1900-2020",
+        "venue": "TR+93",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37562",
+        "type": "LAB",
+        "group": "EPL3",
+        "day": 4,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17",
+        "remarks": "Teaching Wk4,7",
+        "duration": 6
+      }
+    ],
+    "37563": [
+      {
+        "key": "37563",
+        "type": "TUT",
+        "group": "EPT3",
+        "day": 1,
+        "time": "1900-2020",
+        "venue": "TR+94",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37563",
+        "type": "LAB",
+        "group": "EPL4",
+        "day": 4,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17",
+        "remarks": "Teaching Wk5,8",
+        "duration": 6
+      }
+    ],
+    "37564": [
+      {
+        "key": "37564",
+        "type": "TUT",
+        "group": "EPT4",
+        "day": 5,
+        "time": "1900-2020",
+        "venue": "TR+88",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37564",
+        "type": "LAB",
+        "group": "EPL2",
+        "day": 2,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17",
+        "remarks": "Teaching Wk5,9",
+        "duration": 6
+      }
+    ],
+    "37565": [
+      {
+        "key": "37565",
+        "type": "TUT",
+        "group": "EPT4",
+        "day": 5,
+        "time": "1900-2020",
+        "venue": "TR+88",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37565",
+        "type": "LAB",
+        "group": "EPL5",
+        "day": 4,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17.",
+        "remarks": "Teaching Wk6,9",
+        "duration": 6
+      }
+    ]
+  },
+  "EE3010": {
+    "37570": [
+      {
+        "key": "37570",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "1900-2020",
+        "venue": "TR102",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37570",
+        "type": "LAB",
+        "group": "EPL3",
+        "day": 4,
+        "time": "1900-2150",
+        "venue": "S2-B5C-07",
+        "remarks": "Teaching Wk7,13",
+        "duration": 6
+      }
+    ],
+    "37572": [
+      {
+        "key": "37572",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 4,
+        "time": "1900-2020",
+        "venue": "TR102",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37572",
+        "type": "LAB",
+        "group": "EPL2",
+        "day": 2,
+        "time": "1900-2150",
+        "venue": "S2-B5C-07",
+        "remarks": "Teaching Wk6,13",
+        "duration": 6
+      }
+    ]
+  },
+  "EE4503": {
+    "37585": [
+      {
+        "key": "37585",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 4,
+        "time": "1900-2150",
+        "venue": "S2-B5C-02.",
+        "remarks": "",
+        "duration": 6
+      }
+    ]
+  },
+  "EE4530": {
+    "37587": [
+      {
+        "key": "37587",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 1,
+        "time": "1900-2050",
+        "venue": "TR+64",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "37587",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 1,
+        "time": "2100-2150",
+        "venue": "TR+64",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "EE4532": {
+    "37589": [
+      {
+        "key": "37589",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 1,
+        "time": "1900-2050",
+        "venue": "TR+62",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "37589",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 1,
+        "time": "2100-2150",
+        "venue": "TR+62",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "EE5081": {
+    "37596": [
+      {
+        "key": "37596",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "LT29",
+        "remarks": "",
+        "duration": 6
+      }
+    ]
+  },
+  "EG0001": {
+    "37554": [
+      {
+        "key": "37554",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 5,
+        "time": "2000-2150",
+        "venue": "LT22",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "37554",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 5,
+        "time": "1900-1950",
+        "venue": "TR+94",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "37556": [
+      {
+        "key": "37556",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 5,
+        "time": "2000-2150",
+        "venue": "LT22",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "37556",
+        "type": "TUT",
+        "group": "EPT3",
+        "day": 5,
+        "time": "1900-1950",
+        "venue": "TR+96",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "ET0001": {
+    "37517": [
+      {
+        "key": "37517",
+        "type": "",
+        "group": "EEE",
+        "day": null,
+        "time": "",
+        "venue": "",
+        "remarks": "Online Course",
+        "duration": 0
+      }
+    ],
+    "26548": [
+      {
+        "key": "26548",
+        "type": "",
+        "group": "PMAE",
+        "day": null,
+        "time": "",
+        "venue": "",
+        "remarks": "Online Course",
+        "duration": 0
+      }
+    ]
+  },
+  "GC0001": {
+    "26549": [
+      {
+        "key": "26549",
+        "type": "",
+        "group": "PMAE",
+        "day": null,
+        "time": "",
+        "venue": "",
+        "remarks": "Online Course",
+        "duration": 0
+      }
+    ]
+  },
+  "HW0001": {
+    "26501": [
+      {
+        "key": "26501",
+        "type": "TUT",
+        "group": "MAPT1",
+        "day": 5,
+        "time": "1900-2050",
+        "venue": "LHS-TR+52",
+        "remarks": "Teaching Wk3-13",
+        "duration": 4
+      }
+    ],
+    "26502": [
+      {
+        "key": "26502",
+        "type": "TUT",
+        "group": "MAPT2",
+        "day": 5,
+        "time": "1900-2050",
+        "venue": "LHN-TR+22",
+        "remarks": "Teaching Wk3-13",
+        "duration": 4
+      }
+    ],
+    "14517": [
+      {
+        "key": "14517",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 1,
+        "time": "1900-2050",
+        "venue": "TR+33",
+        "remarks": "Teaching Wk3-13",
+        "duration": 4
+      }
+    ]
+  },
+  "HW0288": {
+    "37551": [
+      {
+        "key": "37551",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 3,
+        "time": "1900-2050",
+        "venue": "TR+92",
+        "remarks": "Teaching Wk2-13",
+        "duration": 4
+      }
+    ],
+    "14508": [
+      {
+        "key": "14508",
+        "type": "TUT",
+        "group": "SCSE1",
+        "day": 5,
+        "time": "1900-2050",
+        "venue": "LHS-TR+11",
+        "remarks": "Teaching Wk2-13",
+        "duration": 4
+      }
+    ],
+    "14509": [
+      {
+        "key": "14509",
+        "type": "TUT",
+        "group": "SCSE2",
+        "day": 4,
+        "time": "1900-2050",
+        "venue": "LHN-TR+34",
+        "remarks": "Teaching Wk2-13",
+        "duration": 4
+      }
+    ]
+  },
+  "HY0001": {
+    "37518": [
+      {
+        "key": "37518",
+        "type": "",
+        "group": "EEE",
+        "day": null,
+        "time": "",
+        "venue": "",
+        "remarks": "Online Course",
+        "duration": 0
+      }
+    ],
+    "26550": [
+      {
+        "key": "26550",
+        "type": "",
+        "group": "PMAE",
+        "day": null,
+        "time": "",
+        "venue": "",
+        "remarks": "Online Course",
+        "duration": 0
+      }
+    ]
+  },
+  "IE2007": {
+    "37532": [
+      {
+        "key": "37532",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 1,
+        "time": "2030-2150",
+        "venue": "LT27",
+        "remarks": "Teaching Wk7-13",
+        "duration": 3
+      },
+      {
+        "key": "37532",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 3,
+        "time": "2030-2150",
+        "venue": "LT24",
+        "remarks": "Teaching Wk7-13",
+        "duration": 3
+      },
+      {
+        "key": "37532",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 1,
+        "time": "1900-2020",
+        "venue": "TR+88",
+        "remarks": "",
+        "duration": 3
+      }
+    ],
+    "37533": [
+      {
+        "key": "37533",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 1,
+        "time": "2030-2150",
+        "venue": "LT27",
+        "remarks": "Teaching Wk7-13",
+        "duration": 3
+      },
+      {
+        "key": "37533",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 3,
+        "time": "2030-2150",
+        "venue": "LT24",
+        "remarks": "Teaching Wk7-13",
+        "duration": 3
+      },
+      {
+        "key": "37533",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 1,
+        "time": "1900-2020",
+        "venue": "TR+89",
+        "remarks": "",
+        "duration": 3
+      }
+    ],
+    "37535": [
+      {
+        "key": "37535",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 1,
+        "time": "2030-2150",
+        "venue": "LT27",
+        "remarks": "Teaching Wk7-13",
+        "duration": 3
+      },
+      {
+        "key": "37535",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 3,
+        "time": "2030-2150",
+        "venue": "LT24",
+        "remarks": "Teaching Wk7-13",
+        "duration": 3
+      },
+      {
+        "key": "37535",
+        "type": "TUT",
+        "group": "EPT4",
+        "day": 1,
+        "time": "1900-2020",
+        "venue": "TR+91",
+        "remarks": "",
+        "duration": 3
+      }
+    ]
+  },
+  "IE2106": {
+    "37529": [
+      {
+        "key": "37529",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 4,
+        "time": "1900-1950",
+        "venue": "TR+69",
+        "remarks": "",
+        "duration": 2
+      }
+    ]
+  },
+  "IE2108": {
+    "37536": [
+      {
+        "key": "37536",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 6,
+        "time": "1900-2050",
+        "venue": "ONLINE",
+        "remarks": "Asynchronous online learning",
+        "duration": 4
+      },
+      {
+        "key": "37536",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 3,
+        "time": "1900-2020",
+        "venue": "TR+88",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37536",
+        "type": "LAB",
+        "group": "EPL1",
+        "day": 4,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17",
+        "remarks": "Teaching Wk6,11",
+        "duration": 6
+      }
+    ],
+    "37538": [
+      {
+        "key": "37538",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 6,
+        "time": "1900-2050",
+        "venue": "ONLINE",
+        "remarks": "Asynchronous online learning",
+        "duration": 4
+      },
+      {
+        "key": "37538",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 3,
+        "time": "1900-2020",
+        "venue": "TR+89",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37538",
+        "type": "LAB",
+        "group": "EPL2",
+        "day": 5,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17",
+        "remarks": "Teaching Wk6,11",
+        "duration": 6
+      }
+    ],
+    "37539": [
+      {
+        "key": "37539",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 6,
+        "time": "1900-2050",
+        "venue": "ONLINE",
+        "remarks": "Asynchronous online learning",
+        "duration": 4
+      },
+      {
+        "key": "37539",
+        "type": "TUT",
+        "group": "EPT3",
+        "day": 4,
+        "time": "1900-2020",
+        "venue": "TR+92",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37539",
+        "type": "LAB",
+        "group": "EPL3",
+        "day": 5,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17",
+        "remarks": "Teaching Wk8,12",
+        "duration": 6
+      }
+    ],
+    "37540": [
+      {
+        "key": "37540",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 6,
+        "time": "1900-2050",
+        "venue": "ONLINE",
+        "remarks": "Asynchronous online learning",
+        "duration": 4
+      },
+      {
+        "key": "37540",
+        "type": "TUT",
+        "group": "EPT3",
+        "day": 4,
+        "time": "1900-2020",
+        "venue": "TR+92",
+        "remarks": "",
+        "duration": 3
+      },
+      {
+        "key": "37540",
+        "type": "LAB",
+        "group": "EPL4",
+        "day": 5,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17",
+        "remarks": "Teaching Wk7,13",
+        "duration": 6
+      }
+    ]
+  },
+  "IE3012": {
+    "37573": [
+      {
+        "key": "37573",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 2,
+        "time": "1900-2020",
+        "venue": "LHS-LT",
+        "remarks": "Teaching Wk1",
+        "duration": 3
+      },
+      {
+        "key": "37573",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "1900-2020",
+        "venue": "TR103",
+        "remarks": "Teaching Wk2-13",
+        "duration": 3
+      },
+      {
+        "key": "37573",
+        "type": "LAB",
+        "group": "EPL1",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17",
+        "remarks": "Teaching Wk10",
+        "duration": 6
+      }
+    ],
+    "37574": [
+      {
+        "key": "37574",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 2,
+        "time": "1900-2020",
+        "venue": "LHS-LT",
+        "remarks": "Teaching Wk1",
+        "duration": 3
+      },
+      {
+        "key": "37574",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "1900-2020",
+        "venue": "TR103",
+        "remarks": "Teaching Wk2-13",
+        "duration": 3
+      },
+      {
+        "key": "37574",
+        "type": "LAB",
+        "group": "EPL3",
+        "day": 4,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17",
+        "remarks": "Teaching Wk12",
+        "duration": 6
+      }
+    ],
+    "37575": [
+      {
+        "key": "37575",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 2,
+        "time": "1900-2020",
+        "venue": "LHS-LT",
+        "remarks": "Teaching Wk1",
+        "duration": 3
+      },
+      {
+        "key": "37575",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 4,
+        "time": "1900-2020",
+        "venue": "TR103",
+        "remarks": "Teaching Wk2-13",
+        "duration": 3
+      },
+      {
+        "key": "37575",
+        "type": "LAB",
+        "group": "EPL1",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17",
+        "remarks": "Teaching Wk10",
+        "duration": 6
+      }
+    ],
+    "37576": [
+      {
+        "key": "37576",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 2,
+        "time": "1900-2020",
+        "venue": "LHS-LT",
+        "remarks": "Teaching Wk1",
+        "duration": 3
+      },
+      {
+        "key": "37576",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 4,
+        "time": "1900-2020",
+        "venue": "TR103",
+        "remarks": "Teaching Wk2-13",
+        "duration": 3
+      },
+      {
+        "key": "37576",
+        "type": "LAB",
+        "group": "EPL2",
+        "day": 2,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17",
+        "remarks": "Teaching Wk11",
+        "duration": 6
+      }
+    ]
+  },
+  "IE4110": {
+    "37580": [
+      {
+        "key": "37580",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 4,
+        "time": "1900-2150",
+        "venue": "S2-B4C-17.",
+        "remarks": "Teaching Wk9,10,12,13",
+        "duration": 6
+      },
+      {
+        "key": "37580",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 4,
+        "time": "1900-2150",
+        "venue": "TR+93",
+        "remarks": "Teaching Wk1-8,11",
+        "duration": 6
+      }
+    ]
+  },
+  "IE4154": {
+    "37583": [
+      {
+        "key": "37583",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 2,
+        "time": "1900-2050",
+        "venue": "TR+78",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "37583",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 2,
+        "time": "2100-2150",
+        "venue": "TR+78",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "IE4717": {
+    "37592": [
+      {
+        "key": "37592",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 6,
+        "time": "0930-1020",
+        "venue": "RECORDED",
+        "remarks": "Teaching Wk1-11",
+        "duration": 2
+      },
+      {
+        "key": "37592",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 5,
+        "time": "1900-2050",
+        "venue": "S2-B3B-08",
+        "remarks": "Teaching Wk1-11",
+        "duration": 4
+      },
+      {
+        "key": "37592",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 5,
+        "time": "1900-2150",
+        "venue": "S2-B3B-08",
+        "remarks": "Teaching Wk12,13",
+        "duration": 6
+      }
+    ]
+  },
+  "IE4758": {
+    "37594": [
+      {
+        "key": "37594",
+        "type": "LEC/STUDIO",
+        "group": "EPLE",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "LT22",
+        "remarks": "",
+        "duration": 6
+      }
+    ]
+  },
+  "MA1002": {
+    "26503": [
+      {
+        "key": "26503",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 4,
+        "time": "2000-2150",
+        "venue": "LT11",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26503",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 4,
+        "time": "1900-1950",
+        "venue": "TR+1",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "MA2001": {
+    "26505": [
+      {
+        "key": "26505",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 4,
+        "time": "2000-2150",
+        "venue": "LT14",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26505",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 4,
+        "time": "1900-1950",
+        "venue": "LT14",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "26506": [
+      {
+        "key": "26506",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 4,
+        "time": "2000-2150",
+        "venue": "LT14",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26506",
+        "type": "TUT",
+        "group": "PT2",
+        "day": 4,
+        "time": "1900-1950",
+        "venue": "TR+36",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "MA2003": {
+    "26509": [
+      {
+        "key": "26509",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 5,
+        "time": "2000-2050",
+        "venue": "LT11",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "26509",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 5,
+        "time": "1900-1950",
+        "venue": "LHN-TR+13",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "26510": [
+      {
+        "key": "26510",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 5,
+        "time": "2000-2050",
+        "venue": "LT11",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "26510",
+        "type": "TUT",
+        "group": "PT2",
+        "day": 5,
+        "time": "1900-1950",
+        "venue": "LHN-TR+16",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "MA2004": {
+    "26512": [
+      {
+        "key": "26512",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "2000-2050",
+        "venue": "LT11",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "26512",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 1,
+        "time": "1900-1950",
+        "venue": "LT11",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "26513": [
+      {
+        "key": "26513",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "2000-2050",
+        "venue": "LT11",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "26513",
+        "type": "TUT",
+        "group": "PT2",
+        "day": 1,
+        "time": "2100-2150",
+        "venue": "LT11",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "MA2005": {
+    "26515": [
+      {
+        "key": "26515",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 2,
+        "time": "1900-2050",
+        "venue": "LT12",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26515",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "N3.2-B1-02",
+        "remarks": "Teaching Wk2-13",
+        "duration": 6
+      },
+      {
+        "key": "26515",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "N3.2-01-34",
+        "remarks": "Teaching Wk2-13",
+        "duration": 6
+      }
+    ],
+    "26516": [
+      {
+        "key": "26516",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 2,
+        "time": "1900-2050",
+        "venue": "LT12",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26516",
+        "type": "TUT",
+        "group": "PT2",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "N3.2-B1-02",
+        "remarks": "Teaching Wk2-13",
+        "duration": 6
+      },
+      {
+        "key": "26516",
+        "type": "TUT",
+        "group": "PT2",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "N3.2-01-34",
+        "remarks": "Teaching Wk2-13",
+        "duration": 6
+      }
+    ],
+    "26517": [
+      {
+        "key": "26517",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 2,
+        "time": "1900-2050",
+        "venue": "LT12",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26517",
+        "type": "TUT",
+        "group": "PT3",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "N3.2-B1-02",
+        "remarks": "Teaching Wk2-13",
+        "duration": 6
+      },
+      {
+        "key": "26517",
+        "type": "TUT",
+        "group": "PT3",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "N3.2-01-34",
+        "remarks": "Teaching Wk2-13",
+        "duration": 6
+      }
+    ],
+    "26518": [
+      {
+        "key": "26518",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 2,
+        "time": "1900-2050",
+        "venue": "LT12",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26518",
+        "type": "TUT",
+        "group": "PT4",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "N3.2-B1-02",
+        "remarks": "Teaching Wk2-13",
+        "duration": 6
+      },
+      {
+        "key": "26518",
+        "type": "TUT",
+        "group": "PT4",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "N3.2-01-34",
+        "remarks": "Teaching Wk2-13",
+        "duration": 6
+      }
+    ]
+  },
+  "MA2009": {
+    "26519": [
+      {
+        "key": "26519",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 4,
+        "time": "2000-2050",
+        "venue": "LT12",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "26519",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 4,
+        "time": "1900-1950",
+        "venue": "LT12",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "26520": [
+      {
+        "key": "26520",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 4,
+        "time": "2000-2050",
+        "venue": "LT12",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "26520",
+        "type": "TUT",
+        "group": "PT2",
+        "day": 4,
+        "time": "2100-2150",
+        "venue": "LT12",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "MA3001": {
+    "26522": [
+      {
+        "key": "26522",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "1900-2050",
+        "venue": "LT13",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26522",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 2,
+        "time": "1900-2150",
+        "venue": "LHN-TR+13",
+        "remarks": "Teaching Wk2-13",
+        "duration": 6
+      }
+    ],
+    "26523": [
+      {
+        "key": "26523",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "1900-2050",
+        "venue": "LT13",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26523",
+        "type": "TUT",
+        "group": "PT2",
+        "day": 2,
+        "time": "1900-2150",
+        "venue": "LHN-TR+16",
+        "remarks": "Teaching Wk2-13",
+        "duration": 6
+      }
+    ]
+  },
+  "MA3005": {
+    "26525": [
+      {
+        "key": "26525",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 4,
+        "time": "2000-2150",
+        "venue": "LT13",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26525",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 4,
+        "time": "1900-1950",
+        "venue": "LHN-TR+13",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "26526": [
+      {
+        "key": "26526",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 4,
+        "time": "2000-2150",
+        "venue": "LT13",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26526",
+        "type": "TUT",
+        "group": "PT2",
+        "day": 4,
+        "time": "1900-1950",
+        "venue": "LHN-TR+16",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "MA3010": {
+    "26527": [
+      {
+        "key": "26527",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "2000-2150",
+        "venue": "LT13",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26527",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 3,
+        "time": "1900-1950",
+        "venue": "LT13",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "26528": [
+      {
+        "key": "26528",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "2000-2150",
+        "venue": "LT13",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "26528",
+        "type": "TUT",
+        "group": "PT2",
+        "day": 3,
+        "time": "1900-1950",
+        "venue": "LT13",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "MA4001": {
+    "26529": [
+      {
+        "key": "26529",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "1900-1950",
+        "venue": "LT15",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "26529",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 2,
+        "time": "1900-2150",
+        "venue": "LHN-TR+12",
+        "remarks": "Teaching Wk2-13",
+        "duration": 6
+      }
+    ],
+    "26530": [
+      {
+        "key": "26530",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "1900-1950",
+        "venue": "LT15",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "26530",
+        "type": "TUT",
+        "group": "PT2",
+        "day": 2,
+        "time": "1900-2150",
+        "venue": "LHN-TR+04",
+        "remarks": "Teaching Wk2-13",
+        "duration": 6
+      }
+    ]
+  },
+  "MA4002": {
+    "26531": [
+      {
+        "key": "26531",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 4,
+        "time": "1900-2150",
+        "venue": "LT5",
+        "remarks": "",
+        "duration": 6
+      }
+    ]
+  },
+  "MA4842": {
+    "26533": [
+      {
+        "key": "26533",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "2000-2150",
+        "venue": "LT14",
+        "remarks": "",
+        "duration": 4
+      }
+    ]
+  },
+  "MA4849": {
+    "26535": [
+      {
+        "key": "26535",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 5,
+        "time": "1900-2150",
+        "venue": "LT14",
+        "remarks": "",
+        "duration": 6
+      }
+    ]
+  },
+  "MA4850": {
+    "26536": [
+      {
+        "key": "26536",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "1900-1950",
+        "venue": "LT14",
+        "remarks": "",
+        "duration": 2
+      }
+    ]
+  },
+  "MH1810": {
+    "14503": [
+      {
+        "key": "14503",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 3,
+        "time": "1830-2020",
+        "venue": "LT18",
+        "remarks": "Teaching Wk2-13",
+        "duration": 4
+      }
+    ]
+  },
+  "MH2810": {
+    "37505": [
+      {
+        "key": "37505",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "LT26",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "37505",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 5,
+        "time": "1900-1950",
+        "venue": "TR+64",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "37506": [
+      {
+        "key": "37506",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "LT26",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "37506",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 5,
+        "time": "1900-1950",
+        "venue": "TR+65",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "37507": [
+      {
+        "key": "37507",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "LT26",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "37507",
+        "type": "TUT",
+        "group": "EPT3",
+        "day": 5,
+        "time": "2000-2050",
+        "venue": "TR+64",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "37508": [
+      {
+        "key": "37508",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "LT26",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "37508",
+        "type": "TUT",
+        "group": "EPT4",
+        "day": 5,
+        "time": "2000-2050",
+        "venue": "TR+65",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "26538": [
+      {
+        "key": "26538",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "LT26",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "26538",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 2,
+        "time": "1900-1950",
+        "venue": "TR+4",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "26539": [
+      {
+        "key": "26539",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "LT26",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "26539",
+        "type": "TUT",
+        "group": "PT2",
+        "day": 2,
+        "time": "1900-1950",
+        "venue": "TR+5",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "26540": [
+      {
+        "key": "26540",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "LT26",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "26540",
+        "type": "TUT",
+        "group": "PT3",
+        "day": 2,
+        "time": "2000-2050",
+        "venue": "TR+4",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ],
+    "26541": [
+      {
+        "key": "26541",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 3,
+        "time": "1900-2150",
+        "venue": "LT26",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "26541",
+        "type": "TUT",
+        "group": "PT4",
+        "day": 2,
+        "time": "2000-2050",
+        "venue": "TR+5",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  },
+  "PH1012": {
+    "37510": [
+      {
+        "key": "37510",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "ONLINE",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "37510",
+        "type": "TUT",
+        "group": "EPT1",
+        "day": 5,
+        "time": "1900-1950",
+        "venue": "TR+66",
+        "remarks": "",
+        "duration": 2
+      }
+    ],
+    "37511": [
+      {
+        "key": "37511",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "ONLINE",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "37511",
+        "type": "TUT",
+        "group": "EPT2",
+        "day": 5,
+        "time": "1900-1950",
+        "venue": "TR+67",
+        "remarks": "",
+        "duration": 2
+      }
+    ],
+    "37512": [
+      {
+        "key": "37512",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "ONLINE",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "37512",
+        "type": "TUT",
+        "group": "EPT3",
+        "day": 5,
+        "time": "2000-2050",
+        "venue": "TR+66",
+        "remarks": "",
+        "duration": 2
+      }
+    ],
+    "37513": [
+      {
+        "key": "37513",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "ONLINE",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "37513",
+        "type": "TUT",
+        "group": "EPT4",
+        "day": 5,
+        "time": "2000-2050",
+        "venue": "TR+67",
+        "remarks": "",
+        "duration": 2
+      }
+    ],
+    "26543": [
+      {
+        "key": "26543",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "ONLINE",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "26543",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 2,
+        "time": "1900-1950",
+        "venue": "TR+2",
+        "remarks": "",
+        "duration": 2
+      }
+    ],
+    "26544": [
+      {
+        "key": "26544",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "ONLINE",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "26544",
+        "type": "TUT",
+        "group": "PT2",
+        "day": 2,
+        "time": "1900-1950",
+        "venue": "TR+3",
+        "remarks": "",
+        "duration": 2
+      }
+    ],
+    "26545": [
+      {
+        "key": "26545",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "ONLINE",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "26545",
+        "type": "TUT",
+        "group": "PT3",
+        "day": 2,
+        "time": "2000-2050",
+        "venue": "TR+2",
+        "remarks": "",
+        "duration": 2
+      }
+    ],
+    "26546": [
+      {
+        "key": "26546",
+        "type": "LEC/STUDIO",
+        "group": "PLE",
+        "day": 1,
+        "time": "1900-2150",
+        "venue": "ONLINE",
+        "remarks": "",
+        "duration": 6
+      },
+      {
+        "key": "26546",
+        "type": "TUT",
+        "group": "PT4",
+        "day": 2,
+        "time": "2000-2050",
+        "venue": "TR+3",
+        "remarks": "",
+        "duration": 2
+      }
+    ]
+  },
+  "SC1003": {
+    "14501": [
+      {
+        "key": "14501",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 4,
+        "time": "1830-1920",
+        "venue": "SWLAB1",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "14501",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 4,
+        "time": "1930-2020",
+        "venue": "SWLAB1",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "14501",
+        "type": "LAB",
+        "group": "PT1",
+        "day": 4,
+        "time": "2030-2120",
+        "venue": "SWLAB1",
+        "remarks": "",
+        "duration": 2
+      }
+    ]
+  },
+  "SC1005": {
+    "14502": [
+      {
+        "key": "14502",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 2,
+        "time": "2030-2120",
+        "venue": "LT11",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "14502",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 2,
+        "time": "1830-2020",
+        "venue": "LT11",
+        "remarks": "Teaching Wk2,4,6,8,10,12",
+        "duration": 4
+      },
+      {
+        "key": "14502",
+        "type": "LAB",
+        "group": "PT1",
+        "day": 2,
+        "time": "1830-2020",
+        "venue": "HWLAB3",
+        "remarks": "Teaching Wk1,3,5,7,9,11,13",
+        "duration": 4
+      }
+    ]
+  },
+  "SC1006": {
+    "14504": [
+      {
+        "key": "14504",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 1,
+        "time": "1830-1920",
+        "venue": "LT9",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "14504",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 1,
+        "time": "1930-2020",
+        "venue": "LT9",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      },
+      {
+        "key": "14504",
+        "type": "LAB",
+        "group": "PT1",
+        "day": 1,
+        "time": "2030-2120",
+        "venue": "HWLAB2",
+        "remarks": "",
+        "duration": 2
+      }
+    ]
+  },
+  "SC2000": {
+    "14505": [
+      {
+        "key": "14505",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 3,
+        "time": "1830-2020",
+        "venue": "LT9",
+        "remarks": "",
+        "duration": 4
+      },
+      {
+        "key": "14505",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 3,
+        "time": "2030-2120",
+        "venue": "LT9",
+        "remarks": "",
+        "duration": 2
+      }
+    ]
+  },
+  "SC2001": {
+    "14506": [
+      {
+        "key": "14506",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 2,
+        "time": "1830-1920",
+        "venue": "LT10",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "14506",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 2,
+        "time": "1930-2020",
+        "venue": "LT10",
+        "remarks": "Teaching Wk1-4,6,7,9,11,12",
+        "duration": 2
+      },
+      {
+        "key": "14506",
+        "type": "LAB",
+        "group": "PT1",
+        "day": 2,
+        "time": "2030-2120",
+        "venue": "LT10",
+        "remarks": "Teaching Wk5,8,11,13",
+        "duration": 2
+      }
+    ]
+  },
+  "SC2002": {
+    "14507": [
+      {
+        "key": "14507",
+        "type": "LEC/STUDIO",
+        "group": "PT1",
+        "day": 4,
+        "time": "1830-1920",
+        "venue": "SWLAB2",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      },
+      {
+        "key": "14507",
+        "type": "TUT",
+        "group": "PT1",
+        "day": 4,
+        "time": "1930-2020",
+        "venue": "SWLAB2",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      },
+      {
+        "key": "14507",
+        "type": "LAB",
+        "group": "PT1",
+        "day": 4,
+        "time": "2030-2120",
+        "venue": "SWLAB2",
+        "remarks": "Teaching Wk2-13",
+        "duration": 2
+      }
+    ]
+  }
+}

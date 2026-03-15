@@ -7,10 +7,17 @@ type Key =
   | "moduleType"
   | "moduleFaculty"
   | "moduleLevel"
+  | "currentOnly"
 
 export const useModsSearchParams = (paramValue: string, key: Key) => {
   const defaultValue =
-    key === "searchTerm" ? "" : key === "semester" ? "s2" : "all"
+    key === "searchTerm"
+      ? ""
+      : key === "semester"
+        ? "s2"
+        : key === "currentOnly"
+          ? "true"
+          : "all"
   const [value, setValue] = useState(defaultValue)
 
   const searchParams = useSearchParams()

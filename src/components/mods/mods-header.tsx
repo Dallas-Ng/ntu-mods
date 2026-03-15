@@ -7,9 +7,15 @@ interface Props {
   module: ApiModule
   currentYear: string
   currentSemester: string
+  isCurrentOffering?: boolean
 }
 
-const ModsHeader = ({ module, currentYear, currentSemester }: Props) => {
+const ModsHeader = ({
+  module,
+  currentYear,
+  currentSemester,
+  isCurrentOffering = true
+}: Props) => {
   const semName =
     currentSemester === "S" ? "Special Term" : `Semester ${currentSemester}`
 
@@ -27,7 +33,8 @@ const ModsHeader = ({ module, currentYear, currentSemester }: Props) => {
       />
       <h1 className="text-3xl">{formatTitle(module.title)}</h1>
       <p className="text-sm text-muted-foreground">
-        Current offering — AY{currentYear}/{parseInt(currentYear) + 1} {semName}
+        {isCurrentOffering ? "Current offering" : "Last offered"} — AY
+        {currentYear}/{parseInt(currentYear) + 1} {semName}
       </p>
     </div>
   )

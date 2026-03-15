@@ -17,6 +17,7 @@ import {
 } from "@/components/mods/mods-module-type-select"
 import ModsSearchInput from "@/components/mods/mods-search-input"
 import { Semester } from "@/components/mods/mods-semester-select"
+import { ModsCurrentOnlyToggle } from "@/components/mods/mods-current-only-toggle"
 import {
   ModuleCardDetail,
   ModuleCardDetailLoading
@@ -29,6 +30,7 @@ interface Props {
     moduleType?: SearchModuleType
     moduleFaculty?: SearchModuleFaculty
     moduleLevel?: SearchModuleLevel
+    currentOnly?: string
   }
 }
 
@@ -39,13 +41,16 @@ interface ModuleData {
   searchKeys: string[]
   notAvailableToProgramme?: string
   isCurrentSemester?: boolean
+  latestYear?: string
+  latestSemester?: string
 }
 
 const ModsPage = ({ searchParams }: Props) => {
   const {
     searchTerm = "",
     moduleType = "all",
-    moduleLevel = "all"
+    moduleLevel = "all",
+    currentOnly = "true"
   } = searchParams
 
   const { year, semester } = useLatestSemester()
@@ -63,8 +68,6 @@ const ModsPage = ({ searchParams }: Props) => {
         else setIsLoadingMore(true)
 
         const params = new URLSearchParams({
-          year,
-          semester,
           skip: skip.toString(),
           limit: "100"
         })
@@ -72,6 +75,7 @@ const ModsPage = ({ searchParams }: Props) => {
         if (searchTerm) params.set("q", searchTerm)
         if (moduleType !== "all") params.set("type", moduleType)
         if (moduleLevel !== "all") params.set("level", moduleLevel)
+        if (currentOnly === "true") params.set("currentOnly", "true")
 
         const response = await fetch(`/api/data/modules?${params}`)
         if (!response.ok) throw new Error("Failed to load modules")
@@ -94,7 +98,7 @@ const ModsPage = ({ searchParams }: Props) => {
         setIsLoadingMore(false)
       }
     },
-    [year, semester, searchTerm, moduleType, moduleLevel]
+    [year, semester, searchTerm, moduleType, moduleLevel, currentOnly]
   )
 
   // Reload from scratch whenever year, semester, or filters change
@@ -102,7 +106,7 @@ const ModsPage = ({ searchParams }: Props) => {
     setModules([])
     setAllModulesLoaded(false)
     loadModules(0)
-  }, [year, semester, searchTerm, moduleType, moduleLevel, loadModules])
+  }, [year, semester, searchTerm, moduleType, moduleLevel, currentOnly, loadModules])
 
   // Infinite scroll observer
   useEffect(() => {
@@ -155,6 +159,10 @@ const ModsPage = ({ searchParams }: Props) => {
           {/* <ModsSemesterSelect paramsValue={semester} /> */}
 
           <ModsLevelSelect searchTerm={searchTerm} paramValue={moduleLevel} />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <ModsCurrentOnlyToggle paramsValue={currentOnly} />
         </div>
       </div>
 

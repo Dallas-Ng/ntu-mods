@@ -38,7 +38,7 @@ export default async function Page({ params }: { params: { module: string } }) {
   const { year, semester } = current
 
   // Fetch module metadata and indexes
-  const [allMeta, indexes, exam = []] = await Promise.all([
+  const [allMeta, indexes, exam] = await Promise.all([
     getAllModuleMetadata(year, semester),
     getModuleIndexesData(moduleKey, year, semester),
     getModuleExamData(moduleKey, year, semester)
@@ -46,6 +46,11 @@ export default async function Page({ params }: { params: { module: string } }) {
 
   const moduleData = allMeta[moduleKey]
   if (!moduleData) notFound()
+
+  // Determine whether this module is offered in the current (latest) semester
+  const latest = await getLatestSemester()
+  const isCurrentOffering =
+    current.year === latest.year && current.semester === latest.semester
 
   // Fetch all semesters for this module (for "other offerings" nav)
   const allSemesters = await getModuleSemesters(moduleKey)
@@ -61,12 +66,20 @@ export default async function Page({ params }: { params: { module: string } }) {
 
   return (
     <>
+      {!isCurrentOffering && (
+        <div className="mb-4 rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
+          Not offered in the current semester · Last offered{" "}
+          {semesterLabel(current)}
+        </div>
+      )}
+
       <div className="flex flex-col gap-6 xl:flex-row">
         <div className="w-full xl:w-3/6">
           <ModsHeader
             module={moduleData}
             currentYear={year}
             currentSemester={semester}
+            isCurrentOffering={isCurrentOffering}
           />
           {moduleData.description && (
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">

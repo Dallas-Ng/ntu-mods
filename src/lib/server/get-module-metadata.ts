@@ -18,6 +18,10 @@ export interface ApiModule {
   notOfferedAsBde?: string
   notOfferedAsUe?: string
   extras?: Record<string, string>
+  // Present when returned by /api/data/modules
+  isCurrentSemester?: boolean
+  latestYear?: string
+  latestSemester?: string
 }
 
 const METADATA_DIR = path.join(process.cwd(), "src/data/api/metadata")

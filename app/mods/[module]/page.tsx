@@ -47,8 +47,6 @@ export default async function Page({ params }: { params: { module: string } }) {
   const moduleData = allMeta[moduleKey]
   if (!moduleData) notFound()
 
-  console.log(moduleData, indexes, exam)
-
   // Fetch all semesters for this module (for "other offerings" nav)
   const allSemesters = await getModuleSemesters(moduleKey)
   const otherSemesters = allSemesters.filter(

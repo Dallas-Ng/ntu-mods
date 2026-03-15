@@ -52,6 +52,11 @@ from step2_scrape_courses import (
     write_courses,
     DATA_DIR,
 )
+from step2b_scrape_content import (
+    scrape_content_for_semester,
+    output_path_for as content_output_path_for,
+    write_content,
+)
 from step3_convert_mdata import convert, default_output_path
 from step4_convert_indexes import convert as convert_indexes, default_output_path as default_indexes_path
 from step5_convert_exams import convert as convert_exams, output_path_for as exams_output_path_for
@@ -82,6 +87,19 @@ def run_step2(acadsem: str, max_workers: int, refetch: bool, indent: Optional[in
     total = sum(len(v) for v in courses.values())
     print(f"[Step 2] Done — {total} courses across {len(courses)} programmes -> {path.name}")
     return path
+
+
+def run_step2b(acadsem: str, max_workers: int, refetch: bool, indent: Optional[int]) -> None:
+    """Scrape course content (description, grade type, restrictions) for the semester."""
+    out = content_output_path_for(acadsem)
+    if not refetch and out.exists():
+        print(f"[Step 2b] Using cached {out.name} (pass --refetch to update).")
+        return
+    print(f"[Step 2b] Scraping course content for semester '{acadsem}'...")
+    content = scrape_content_for_semester(acadsem, max_workers=max_workers)
+    write_content(acadsem, content, indent=indent)
+    total = sum(len(v) for v in content.values())
+    print(f"[Step 2b] Done — {total} courses across {len(content)} programmes -> {out.name}")
 
 
 def run_step3(courses_path: Path, refetch: bool, indent: Optional[int]) -> None:
@@ -188,11 +206,13 @@ def main() -> None:
             print(f"Filtered to {len(semesters)} semester(s) from {args.min_year} onwards.")
         for sem in semesters:
             courses_path = run_step2(sem, max_workers=args.workers, refetch=args.refetch, indent=indent)
+            run_step2b(sem, max_workers=args.workers, refetch=args.refetch, indent=indent)
             run_step3(courses_path, refetch=args.refetch, indent=indent)
             run_step4(courses_path, refetch=args.refetch, indent=indent)
             run_step5(sem, refetch=args.refetch, indent=indent)
     else:
         courses_path = run_step2(acadsem, max_workers=args.workers, refetch=args.refetch, indent=indent)
+        run_step2b(acadsem, max_workers=args.workers, refetch=args.refetch, indent=indent)
         run_step3(courses_path, refetch=args.refetch, indent=indent)
         run_step4(courses_path, refetch=args.refetch, indent=indent)
         run_step5(acadsem, refetch=args.refetch, indent=indent)

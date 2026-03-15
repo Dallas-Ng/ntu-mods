@@ -82,6 +82,11 @@ export const generateTimetableMatrix = (
     const { startTime } = parseTimeNumber(index)
     const tsIndex = STARS_TIMESLOTS.findIndex((ts) => ts.start === startTime)
 
+    // @TODO For modules with day null
+    if (!index.day) {
+      return
+    }
+
     // Add index into respective matrix position
     TABLE_MATRIX[tsIndex][index.day - 1].push(index)
 

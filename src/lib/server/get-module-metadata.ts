@@ -6,7 +6,18 @@ export interface ApiModule {
   title: string
   au: string
   searchKeys: string[]
+  prerequisite?: string[][]
+  description?: string
+  gradeType?: string
+  mutuallyExclusiveWith?: string[]
   notAvailableToProgramme?: string
+  notAvailableToAllProgrammeWith?: string
+  notAvailableAsBdeueToProgramme?: string
+  notAvailableAsCoreToProgramme?: string
+  notAvailableAsPeToProgramme?: string
+  notOfferedAsBde?: string
+  notOfferedAsUe?: string
+  extras?: Record<string, string>
 }
 
 const METADATA_DIR = path.join(process.cwd(), "src/data/api/metadata")

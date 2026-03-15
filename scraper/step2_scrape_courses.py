@@ -36,6 +36,7 @@ SEMESTERS_PATH = DATA_DIR / "01_semesters.json"
 
 SCHEDULE_MAIN_URL = "https://wish.wis.ntu.edu.sg/webexe/owa/aus_schedule.main"
 SCHEDULE_DISPLAY_URL = "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1"
+SCHEDULE_PROGRAMME_URL = "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display"
 HEADERS = {
     "User-Agent": (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -53,8 +54,22 @@ HEADERS = {
 
 def get_acadsem_programme_codes(
     session: Optional[requests.Session] = None,
+    acadsem: Optional[str] = None,
 ) -> Tuple[List[str], List[str]]:
-    """Fetch semester and programme codes from the NTU schedule landing page.
+    """Fetch semester and programme codes from the NTU schedule portal.
+
+    The portal's main page only returns the programme list for whichever
+    semester is currently selected by default (often Special Term, with a
+    small subset of programmes).  To get the full programme list for a given
+    semester, we must POST to ``SCHEDULE_PROGRAMME_URL`` with that semester —
+    which is what the browser does when the user changes the semester dropdown.
+
+    Parameters
+    ----------
+    acadsem:
+        Semester code to fetch programmes for (e.g. ``'2025;2'``).  When
+        omitted the function falls back to the default-selected semester on
+        the main page, which may be incomplete.
 
     Returns
     -------
@@ -63,7 +78,7 @@ def get_acadsem_programme_codes(
         codes (e.g. ``['CSC;;1;F', ...]``).
     """
     sess = session or requests.Session()
-    print(f"Fetching semesters and programmes from '{SCHEDULE_MAIN_URL}'...")
+    print(f"Fetching semesters from '{SCHEDULE_MAIN_URL}'...")
     resp = sess.get(SCHEDULE_MAIN_URL, headers=HEADERS)
     resp.raise_for_status()
 
@@ -78,7 +93,24 @@ def get_acadsem_programme_codes(
         if opt.get("value")
     ]
 
-    prog_select = soup.find("select", attrs={"name": "r_course_yr"})
+    # If a specific semester was requested, POST to the programme-list endpoint
+    # to get the complete programme list for that semester.  Without this, the
+    # page only returns programmes for whichever semester is currently selected
+    # by default (typically Special Term with a small subset).
+    target_sem = acadsem or (acadsem_values[0] if acadsem_values else None)
+    if target_sem:
+        print(f"Fetching programme list for semester '{target_sem}'...")
+        prog_resp = sess.post(
+            SCHEDULE_PROGRAMME_URL,
+            data={"acadsem": target_sem, "boption": "x", "staff_access": "false"},
+            headers=HEADERS,
+        )
+        prog_resp.raise_for_status()
+        prog_soup = BeautifulSoup(prog_resp.text, "html.parser")
+    else:
+        prog_soup = soup
+
+    prog_select = prog_soup.find("select", attrs={"name": "r_course_yr"})
     if not prog_select:
         raise ValueError("Could not find 'r_course_yr' select element on the page.")
     programme_values: List[str] = []
@@ -160,37 +192,39 @@ def _parse_legacy_format(text: str) -> List[Dict[str, object]]:
         course_code = m.group("code").strip()
         course_title = re.sub(r"[\*~#]+$", "", m.group("title").strip()).strip()
         credits = float(m.group("credits"))
-        prerequisite: Optional[str] = None
-        remark: Optional[str] = None
+        fields: Dict[str, str] = {}
         schedules: List[Dict[str, str]] = []
 
         for line in section[1:]:
-            if line.startswith("Prerequisite:"):
-                prerequisite = line.partition(":")[2].strip()
-            elif line.startswith("Remark:"):
-                val = line.partition(":")[2].strip()
-                remark = (remark + " " + val) if remark else val
-            elif re.match(r"^INDEX\s+TYPE", line):
+            if re.match(r"^INDEX\s+TYPE", line):
                 continue
-            else:
-                tbl_m = table_line_re.match(line)
-                if tbl_m:
-                    schedules.append({
-                        "index": tbl_m.group("index"),
-                        "type": tbl_m.group("type"),
-                        "group": tbl_m.group("group"),
-                        "day": tbl_m.group("day"),
-                        "time": tbl_m.group("time"),
-                        "venue": tbl_m.group("venue"),
-                        "remark": tbl_m.group("remark") or "",
-                    })
+            tbl_m = table_line_re.match(line)
+            if tbl_m:
+                schedules.append({
+                    "index": tbl_m.group("index"),
+                    "type": tbl_m.group("type"),
+                    "group": tbl_m.group("group"),
+                    "day": tbl_m.group("day"),
+                    "time": tbl_m.group("time"),
+                    "venue": tbl_m.group("venue"),
+                    "remark": tbl_m.group("remark") or "",
+                })
+            elif ":" in line:
+                label, _, value = line.partition(":")
+                label = label.strip()
+                value = value.strip()
+                if label and value:
+                    fields[label] = (
+                        (fields[label] + " " + value).strip()
+                        if label in fields
+                        else value
+                    )
 
         courses.append({
             "course_code": course_code,
             "course_title": course_title,
             "credits": credits,
-            "prerequisite": prerequisite,
-            "remark": remark,
+            "fields": fields,
             "schedules": schedules,
         })
     return courses
@@ -215,21 +249,20 @@ def _parse_table_format(soup: BeautifulSoup) -> List[Dict[str, object]]:
                 credit_m = re.search(r"([0-9]*\.?[0-9]+)", cells[-1].get_text(strip=True))
                 credits = float(credit_m.group(1)) if credit_m else None
 
-                prerequisite: Optional[str] = None
-                remark: Optional[str] = None
+                fields: Dict[str, str] = {}
                 current_tag: Optional[str] = None
 
-                # Parse prerequisite/remark rows within the metadata table
+                # Parse all labeled rows within the metadata table
                 for rrow in table.find_all("tr")[1:]:
                     cell_texts = [c.get_text(" ", strip=True) for c in rrow.find_all(["td", "th"])]
                     if not cell_texts:
                         continue
                     first_cell = cell_texts[0]
-                    prerequisite, remark, current_tag = _extract_prereq_remark(
-                        first_cell, cell_texts, prerequisite, remark, current_tag
+                    fields, current_tag = _extract_fields(
+                        first_cell, cell_texts, fields, current_tag
                     )
 
-                # Collect additional remark/prerequisite from subsequent non-border tables
+                # Collect additional fields from subsequent non-border tables
                 j = i + 1
                 while j < len(tables) and not tables[j].has_attr("border"):
                     local_tag: Optional[str] = None
@@ -238,9 +271,15 @@ def _parse_table_format(soup: BeautifulSoup) -> List[Dict[str, object]]:
                         if not cell_texts:
                             continue
                         first_cell = cell_texts[0]
-                        prerequisite, remark, local_tag = _extract_prereq_remark(
-                            first_cell, cell_texts, prerequisite, remark, local_tag
+                        fields, local_tag = _extract_fields(
+                            first_cell, cell_texts, fields, local_tag
                         )
+                    # Also capture any plain <p> text as description
+                    for ptag in tables[j].find_all("p"):
+                        text = ptag.get_text(" ", strip=True)
+                        if text:
+                            existing = fields.get("description", "")
+                            fields["description"] = (existing + " " + text).strip() if existing else text
                     j += 1
 
                 # The schedule table is the next table with a 'border' attribute
@@ -270,8 +309,7 @@ def _parse_table_format(soup: BeautifulSoup) -> List[Dict[str, object]]:
                     "course_code": code,
                     "course_title": title,
                     "credits": credits,
-                    "prerequisite": prerequisite,
-                    "remark": remark,
+                    "fields": fields,
                     "schedules": schedules,
                 })
                 i = j + 1
@@ -280,36 +318,44 @@ def _parse_table_format(soup: BeautifulSoup) -> List[Dict[str, object]]:
     return courses
 
 
-def _extract_prereq_remark(
+def _extract_fields(
     first_cell: str,
     cell_texts: List[str],
-    prerequisite: Optional[str],
-    remark: Optional[str],
+    fields: Dict[str, str],
     current_tag: Optional[str],
-) -> Tuple[Optional[str], Optional[str], Optional[str]]:
-    """Update prerequisite/remark state from a single table row."""
-    if first_cell.startswith("Prerequisite"):
-        current_tag = "prerequisite"
-        parts = first_cell.split(":", 1)
-        remainder = " ".join(([parts[1].strip()] if len(parts) == 2 else []) + cell_texts[1:]).strip()
+) -> Tuple[Dict[str, str], Optional[str]]:
+    """Capture ALL labeled table rows into a fields dict generically.
+
+    Any row whose first cell ends with a colon is treated as a label/value
+    pair.  Rows whose first cell is empty or a non-breaking space are treated
+    as continuations of the previous label.  Everything else resets the
+    current tag so stray rows don't bleed into the wrong field.
+    """
+    if first_cell in ("", "\xa0"):
+        # Continuation of the previous labeled row
+        if current_tag:
+            continuation = " ".join(cell_texts[1:]).strip()
+            if continuation:
+                fields[current_tag] = (
+                    (fields[current_tag] + " " + continuation).strip()
+                    if current_tag in fields
+                    else continuation
+                )
+    elif ":" in first_cell:
+        # Labeled row: e.g. "Grade Type:", "Mutually Exclusive with:", …
+        label = first_cell.split(":", 1)[0].strip()
+        remainder_parts = [first_cell.split(":", 1)[1].strip()] + cell_texts[1:]
+        remainder = " ".join(p for p in remainder_parts if p).strip()
+        current_tag = label
         if remainder:
-            prerequisite = (prerequisite + " " + remainder) if prerequisite else remainder
-    elif first_cell.startswith("Remark"):
-        current_tag = "remark"
-        parts = first_cell.split(":", 1)
-        remainder = " ".join(([parts[1].strip()] if len(parts) == 2 else []) + cell_texts[1:]).strip()
-        if remainder:
-            remark = (remark + " " + remainder) if remark else remainder
-    elif (first_cell in ("", "\xa0")) and current_tag in ("prerequisite", "remark"):
-        continuation = " ".join(cell_texts[1:]).strip()
-        if continuation:
-            if current_tag == "prerequisite":
-                prerequisite = (prerequisite + " " + continuation) if prerequisite else continuation
-            else:
-                remark = (remark + " " + continuation) if remark else continuation
+            fields[label] = (
+                (fields[label] + " " + remainder).strip()
+                if label in fields
+                else remainder
+            )
     else:
         current_tag = None
-    return prerequisite, remark, current_tag
+    return fields, current_tag
 
 
 # ---------------------------------------------------------------------------
@@ -368,7 +414,7 @@ def scrape_courses_for_semester(
     max_workers:
         Number of threads for parallel scraping. ``1`` means sequential.
     """
-    semesters, programmes = get_acadsem_programme_codes()
+    semesters, programmes = get_acadsem_programme_codes(acadsem=acadsem)
     if acadsem not in semesters:
         raise ValueError(f"Semester '{acadsem}' is not listed on the schedule page.")
 

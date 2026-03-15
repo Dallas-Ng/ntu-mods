@@ -85,6 +85,11 @@ export default async function Page({ params }: { params: Params }) {
           />
           <h1 className="mt-2 text-3xl">{formatTitle(moduleData.title)}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{semLabel}</p>
+          {moduleData.description && (
+            <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+              {moduleData.description}
+            </p>
+          )}
         </div>
 
         <div className="h-fit w-full xl:w-3/6">
@@ -110,12 +115,62 @@ export default async function Page({ params }: { params: Params }) {
                 </tr>
               )}
 
+              {moduleData.gradeType && (
+                <tr>
+                  <td className="p-2">Grade Type</td>
+                  <td className="p-2">{moduleData.gradeType}</td>
+                </tr>
+              )}
+
               {moduleData.notAvailableToProgramme && (
                 <tr>
                   <td className="p-2">Not Available To Programme</td>
                   <td className="p-2">{moduleData.notAvailableToProgramme}</td>
                 </tr>
               )}
+
+              {moduleData.notAvailableToAllProgrammeWith && (
+                <tr>
+                  <td className="p-2">Not Available To All Programme With</td>
+                  <td className="p-2">{moduleData.notAvailableToAllProgrammeWith}</td>
+                </tr>
+              )}
+
+              {moduleData.notAvailableAsBdeueToProgramme && (
+                <tr>
+                  <td className="p-2">Not Available As BDE/UE To Programme</td>
+                  <td className="p-2">{moduleData.notAvailableAsBdeueToProgramme}</td>
+                </tr>
+              )}
+
+              {moduleData.notAvailableAsCoreToProgramme && (
+                <tr>
+                  <td className="p-2">Not Available As Core To Programme</td>
+                  <td className="p-2">{moduleData.notAvailableAsCoreToProgramme}</td>
+                </tr>
+              )}
+
+              {moduleData.notAvailableAsPeToProgramme && (
+                <tr>
+                  <td className="p-2">Not Available As PE To Programme</td>
+                  <td className="p-2">{moduleData.notAvailableAsPeToProgramme}</td>
+                </tr>
+              )}
+
+              {moduleData.mutuallyExclusiveWith && (
+                <tr>
+                  <td className="p-2">Mutually Exclusive With</td>
+                  <td className="p-2">{moduleData.mutuallyExclusiveWith.join(", ")}</td>
+                </tr>
+              )}
+
+              {moduleData.extras &&
+                Object.entries(moduleData.extras).map(([label, value]) => (
+                  <tr key={label}>
+                    <td className="p-2">{label}</td>
+                    <td className="p-2">{value}</td>
+                  </tr>
+                ))}
 
               <tr>
                 <td className="p-2">Exam</td>

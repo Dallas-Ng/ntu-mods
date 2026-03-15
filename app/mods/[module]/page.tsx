@@ -2,15 +2,15 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
-import { getAllModuleMetadata } from "@/lib/server/get-module-metadata"
+import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
+import { getLatestSemester } from "@/lib/server/get-latest-semester"
 import {
   getModuleCurrentSemester,
   getModuleSemesters
 } from "@/lib/server/get-module-current-semester"
-import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
 import { getModuleExamData } from "@/lib/server/get-module-exam-data"
-import { getLatestSemester } from "@/lib/server/get-latest-semester"
-import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
+import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
+import { getAllModuleMetadata } from "@/lib/server/get-module-metadata"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
@@ -38,7 +38,7 @@ export default async function Page({ params }: { params: { module: string } }) {
   const { year, semester } = current
 
   // Fetch module metadata and indexes
-  const [allMeta, indexes, exam] = await Promise.all([
+  const [allMeta, indexes, exam = []] = await Promise.all([
     getAllModuleMetadata(year, semester),
     getModuleIndexesData(moduleKey, year, semester),
     getModuleExamData(moduleKey, year, semester)
@@ -46,6 +46,8 @@ export default async function Page({ params }: { params: { module: string } }) {
 
   const moduleData = allMeta[moduleKey]
   if (!moduleData) notFound()
+
+  console.log(moduleData, indexes, exam)
 
   // Fetch all semesters for this module (for "other offerings" nav)
   const allSemesters = await getModuleSemesters(moduleKey)
@@ -63,7 +65,16 @@ export default async function Page({ params }: { params: { module: string } }) {
     <>
       <div className="flex flex-col gap-6 xl:flex-row">
         <div className="w-full xl:w-3/6">
-          <ModsHeader module={moduleData} currentYear={year} currentSemester={semester} />
+          <ModsHeader
+            module={moduleData}
+            currentYear={year}
+            currentSemester={semester}
+          />
+          {moduleData.description && (
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              {moduleData.description}
+            </p>
+          )}
         </div>
 
         <div className="h-fit w-full space-y-2 xl:w-3/6">

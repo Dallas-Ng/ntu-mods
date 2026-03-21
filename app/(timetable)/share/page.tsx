@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import { TimetableTableLoader } from "@/components/timetable-table/table"
 import { TimetableCopyButtonLoading } from "@/components/timetable/buttons/timetable-copy-button"
-import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button"
 import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview"
@@ -41,11 +40,11 @@ const TimetableScreenshotButton = dynamic(
   }
 )
 
-const TimetableDownloadCalendarButton = dynamic(
-  () =>
-    import("@/components/timetable/buttons/timetable-download-calendar-button"),
-  { ssr: false, loading: () => <TimetableDownloadCalendarButtonLoading /> }
-)
+// const TimetableDownloadCalendarButton = dynamic(
+//   () =>
+//     import("@/components/timetable/buttons/timetable-download-calendar-button"),
+//   { ssr: false, loading: () => <TimetableDownloadCalendarButtonLoading /> }
+// )
 
 const Page = () => {
   return (
@@ -68,7 +67,7 @@ const Page = () => {
 
         <div className="flex gap-2">
           <TimetableScreenshotButton persistQuerystring />
-          <TimetableDownloadCalendarButton />
+          {/* <TimetableDownloadCalendarButton /> */}
         </div>
       </div>
 

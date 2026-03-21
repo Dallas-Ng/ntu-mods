@@ -3,14 +3,17 @@ import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
 import { TimetableTable } from "../timetable-table/table"
 
 const TEMPLATE_COURSES: Record<string, string> = {
-  // Make sure these indexes actually exist in the database
-  // MA3003: "23285",
-  HR2008: "17289",
-  IE3102: "33110",
-  BG2119: "55067",
-  IM3180: "36001",
-  BH3605: "00798",
-  LF5003: "18045"
+  // Showcases all index types spread across Mon–Fri
+  // LEC/STUDIO Mon 0930–1220, DES Wed 1330–1620
+  EE4228: "32652",
+  // LEC/STUDIO Mon 1630–1820, TUT Wed 0930–1020, LAB Thu 1030–1420
+  BS1005: "08511",
+  // LEC/STUDIO Fri 0830–0920, TUT Wed 1130–1320
+  AAE18B: "39291",
+  // PRJ Tue 1330–1620, LEC/STUDIO Wed 1630–1820
+  EE2073: "32492",
+  // SEM Thu 0830–1020
+  AB0403: "00551"
 }
 
 const LANDING_YEAR = "2025"

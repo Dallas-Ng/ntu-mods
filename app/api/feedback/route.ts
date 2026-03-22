@@ -1,26 +1,32 @@
 import { NextResponse } from "next/server"
-import { sql } from "@vercel/postgres"
 
 interface Data {
   feedback: string
-  category: string
   author: string
 }
 
 export async function POST(req: Request) {
   const data: Data = await req.json()
 
-  const { rowCount } = await sql`
-    INSERT INTO table_feedback
-        (feedback, category, author)
-    VALUES
-        (${data.feedback}, ${data.category}, ${data.author})
-    RETURNING *;
-  `
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`
+    },
+    body: JSON.stringify({
+      from: "NTU Mods Feedback <feedback@updates.ntumods.com>",
+      to: "ngdallas1@gmail.com",
+      subject: "New Feedback on NTU Mods",
+      text: `From: ${data.author}\n\n${data.feedback}`
+    })
+  })
 
-  if (rowCount > 0) {
+  if (res.ok) {
     return NextResponse.json({ success: true }, { status: 200 })
   } else {
-    return NextResponse.json({ success: false }, { status: 500 })
+    const error = await res.json()
+    console.error("Resend error:", error)
+    return NextResponse.json({ success: false, error }, { status: 500 })
   }
 }

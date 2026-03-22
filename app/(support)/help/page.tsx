@@ -11,61 +11,82 @@ interface HelpConfig {
 
 const HELP_CONFIG: HelpConfig[] = [
   {
-    question: "What is this website for?",
+    question: "What is NTU Mods?",
     answer:
-      "This website is a tool for Nanyang Technological University (NTU) students to plan for their courses / modules during the course registration period or for browsing modules offered by NTU. It allows you to navigate seamlessly on one platform rather than using the school's website."
+      "NTU Mods is a timetable planner and module browser for Nanyang Technological University (NTU) students. It lets you browse modules, compare indexes, and plan your schedule — without needing to log into STARS."
   },
   {
-    question: "How do I use this website?",
+    question: "How do I plan my timetable?",
     answer: (
       <>
-        If you wish to plan for your courses you can use the{" "}
+        Head to the{" "}
         <Link
           href="/timetable"
           className="text-blue-500 transition-colors hover:text-blue-600">
           timetable
         </Link>{" "}
-        planner to do so. If you want to browse through all available indexes,
-        modules and related information, you can use the{" "}
+        page and search for a module by code or title. Select it, then choose an
+        index that fits your schedule. The app automatically detects conflicts
+        with your existing classes and highlights them.
+      </>
+    )
+  },
+  {
+    question: "What is an index?",
+    answer:
+      "An index is a specific class group for a module — it has a fixed set of timeslots and venues for lectures, tutorials, and labs. Different indexes cover the same course content but meet at different times. You pick one index per module when registering in STARS."
+  },
+  {
+    question: "How do I browse modules?",
+    answer: (
+      <>
+        Use the{" "}
         <Link
           href="/mods"
           className="text-blue-500 transition-colors hover:text-blue-600">
           mods
         </Link>{" "}
-        page.
+        page to search and filter all NTU modules. Click on any module to see
+        its full details — description, academic units, prerequisites, exam
+        schedule, and all available indexes with their timeslots and venues.
       </>
     )
   },
   {
-    question: "How does this help me in STARS?",
+    question: "How do I export my timetable?",
     answer:
-      "It gets tiring trying to see which index fits into your timetable, its even worse when your ICC mods indexes such as CC0005 and CC0003 isn't even shown on the NTU Stars Planner. This website allows you to see all the indexes available for a module and allows you to plan for your timetable."
+      "There are two export options on the timetable page. You can download an .ics calendar file to import directly into Google Calendar, Apple Calendar, or Outlook. You can also save your timetable as an image — useful for sharing or setting as a wallpaper."
   },
   {
-    question: "Can you include vacanies for indexes?",
+    question: "How do I share my timetable?",
     answer:
-      "Currently, there is no way for us to include vacancies for indexes as we do not have access to the school's database. However, we are looking into ways to do so."
+      "Use the share button on the timetable page to generate a shareable URL. Anyone with the link can view your timetable, and they can copy it to their own planner to modify it."
   },
   {
-    question: "Can you update your system to include...?",
-    answer: (
-      <>
-        We have updated the system for{" "}
-        <span className="underline">Academic Year 2024-2025 Semester 1</span>.
-        If you have any missing courses or suggestions, please feel free to
-        email me or send a feedback below.
-      </>
-    )
+    question: "Can you show live vacancies for indexes?",
+    answer:
+      "No — vacancy data is not publicly available from NTU's systems. Use NTU Mods to figure out which indexes fit your schedule, then check STARS for real-time availability when registration opens."
   },
   {
     question: "Do you track my data?",
     answer:
-      "We do track the number of users and user activity, but we do not track any of your personal data (we do not have access to it anyways). Everything is done on your local browser."
+      "We track general usage analytics (page views, number of visitors) via Vercel. We do not collect any personal data. Everything you add to your timetable is stored only in your browser and never sent to our servers."
   },
   {
-    question: "There is something wrong with the system!",
-    answer:
-      "You can contact me via email or use the debug page to reset the system."
+    question: "Something looks broken!",
+    answer: (
+      <>
+        Try the{" "}
+        <Link
+          href="/debug"
+          className="text-blue-500 transition-colors hover:text-blue-600">
+          debug page
+        </Link>
+        , which lets you inspect and reset your local timetable data. This is
+        useful if the app behaves unexpectedly after an update. You can also
+        send us feedback below.
+      </>
+    )
   }
 ]
 

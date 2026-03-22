@@ -112,6 +112,47 @@ The current semester is controlled by the first entry in [`src/data/api/semester
 
 Semester codes follow the format `{year};{semester}` where semester is `1`, `2`, `S` (Special Term), or `T` (Special Term II).
 
+## Maintenance
+
+The following tasks must be performed manually at the start of each semester.
+
+### Each Semester
+
+#### 1. Run the data pipeline
+
+Re-run the full scraper pipeline (see [Data Pipeline](#data-pipeline)) with the new semester code.
+
+#### 2. Add exam timetable
+
+Download the exam timetable from NTU and place the CSV in `scraper/data/exams/` with the naming convention:
+
+```
+exams-YYYY-YYYY-sX.csv   # e.g. exams-2025-2026-s2.csv
+```
+
+Then re-run step 5 of the scraper (`5_exams.py`) to convert it to JSON.
+
+#### 3. Update `semesters.json`
+
+Add the new semester to the top of [`src/data/api/semesters.json`](src/data/api/semesters.json) (see [Updating the Current Semester](#updating-the-current-semester)).
+
+#### 4. Update ICS start date
+
+Update `MIN_DATE` in [`src/lib/get-ics.ts`](src/lib/get-ics.ts) to the **Monday of Week 1** of the new semester:
+
+```ts
+const MIN_DATE = new Date("YYYY-MM-DD");
+```
+
+This date is used to calculate recurring calendar events in `.ics` exports. The correct date can be found in the NTU academic calendar.
+
+### Each Academic Year
+
+#### 5. Update banner and landing page
+
+- [`src/components/banner.tsx`](src/components/banner.tsx) — update the banner announcement text with the new academic year
+- [`src/components/landing/landing-product.tsx`](src/components/landing/landing-product.tsx) — update `LANDING_YEAR` and `LANDING_SEMESTER` constants
+
 ## Contributing
 
 Contributions are welcome. Please open an issue first to discuss any significant changes.

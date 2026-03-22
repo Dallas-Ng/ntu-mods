@@ -12,12 +12,12 @@ export const BannerWrapper = (props: BannerProps) => {
   return (
     <div
       className={cn(
-        "relative z-10 flex items-center justify-center bg-primary p-1",
+        "relative z-10 flex items-center justify-center bg-yellow-400 p-1",
         props.divClass
       )}>
       <p
         className={cn(
-          "text-center text-sm font-medium leading-6 text-primary-foreground",
+          "text-center text-sm font-medium leading-6 text-black",
           props.pClass
         )}>
         {props.children}
@@ -54,7 +54,7 @@ export const Banner = {
   ),
   updatedAy: () => (
     <Link href="/mods">
-      <BannerWrapper>NTU Mods is updated for 2026!</BannerWrapper>
+      <BannerWrapper>NTU Mods is updated!</BannerWrapper>
     </Link>
   ),
   experienceProblems: () => (

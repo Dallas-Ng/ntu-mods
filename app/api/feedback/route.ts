@@ -15,7 +15,7 @@ export async function POST(req: Request) {
       Authorization: `Bearer ${process.env.RESEND_API_KEY}`
     },
     body: JSON.stringify({
-      from: "NTU Mods Feedback <feedback@updates.ntumods.com>",
+      from: "feedback@ntumods.com",
       to: "ngdallas1@gmail.com",
       subject: "New Feedback on NTU Mods",
       text: `From: ${data.author}\n\n${data.feedback}`

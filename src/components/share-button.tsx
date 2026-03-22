@@ -12,17 +12,24 @@ interface Props {
 
 const ShareButton = ({ link, title, description, disabled }: Props) => {
   const handleShare = () => {
-    try {
-      navigator.share({
-        title: title,
-        text: description,
-        url: link
-      })
-    } catch {
-      // It means that theres no share functionality
-      navigator.clipboard.writeText(link)
-      toast("Share link copied to clipboard")
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent)
+
+    if (isMobile && navigator.share) {
+      navigator
+        .share({
+          title: title,
+          text: description,
+          url: link
+        })
+        .catch(() => {
+          navigator.clipboard.writeText(link)
+          toast("Share link copied to clipboard")
+        })
+      return
     }
+
+    navigator.clipboard.writeText(link)
+    toast("Share link copied to clipboard")
   }
 
   return (

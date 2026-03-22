@@ -7,6 +7,7 @@ import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile
 import { TimetablePlanSwitcherLoading } from "@/components/timetable/buttons/timetable-plan-switcher"
 import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button"
 import { TimetableShareButtonLoading } from "@/components/timetable/buttons/timetable-share-button"
+import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import { TimetableModifierLoader } from "@/components/timetable/timetable-modifier"
 import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview"
@@ -24,11 +25,11 @@ const TimetableScreenshotButton = dynamic(
   }
 )
 
-// const TimetableDownloadCalendarButton = dynamic(
-//   () =>
-//     import("@/components/timetable/buttons/timetable-download-calendar-button"),
-//   { ssr: false, loading: () => <TimetableDownloadCalendarButtonLoading /> }
-// )
+const TimetableDownloadCalendarButton = dynamic(
+  () =>
+    import("@/components/timetable/buttons/timetable-download-calendar-button"),
+  { ssr: false, loading: () => <TimetableDownloadCalendarButtonLoading /> }
+)
 
 const TimetableShareButton = dynamic(
   () => import("@/components/timetable/buttons/timetable-share-button"),
@@ -80,7 +81,7 @@ const Page = () => {
 
           <div className="flex gap-2">
             <TimetableScreenshotButton />
-            {/* <TimetableDownloadCalendarButton /> */}
+            <TimetableDownloadCalendarButton />
             <TimetableShareButton />
           </div>
         </div>

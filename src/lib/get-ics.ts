@@ -4,7 +4,7 @@ import { createEvents, EventAttributes } from "ics"
 import { formatRemarks } from "./format"
 import { parseTime } from "./parse-time"
 
-const MIN_DATE = new Date("2024-08-12") // Start of AY24/25 Semester 1
+const MIN_DATE = new Date("2026-01-12") // Start of AY25/26 Semester 2
 
 /**
  * Generate an ICS calendar from a timetable.

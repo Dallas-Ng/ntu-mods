@@ -2,7 +2,7 @@ import Link from "next/link"
 
 const Footer = () => {
   return (
-    <footer className="flex h-12 items-center justify-center gap-4 text-center text-sm text-muted-foreground">
+    <footer className="mt-6 flex h-12 items-center justify-center gap-4 text-center text-sm text-muted-foreground">
       <Link
         href="/privacy"
         className="transition-colors hover:text-primary-alt">

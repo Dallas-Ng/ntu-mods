@@ -8,13 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import FeedbackCard from "@/components/feedback-card"
 import Header from "@/components/header"
 import { AppearanceSettingsLoading } from "@/components/settings/appearance-settings"
-import { BetaSettingsLoading } from "@/components/settings/beta-settings"
 import { TableSettingsLoading } from "@/components/settings/table-settings"
-
-const BetaSettings = dynamic(
-  () => import("@/components/settings/beta-settings"),
-  { ssr: false, loading: () => <BetaSettingsLoading /> }
-)
 
 const AppearanceSettings = dynamic(
   () => import("@/components/settings/appearance-settings"),
@@ -43,13 +37,25 @@ export default function SettingsPage() {
       <div className="space-y-5">
         <div>
           <Link href="/debug">
-            <Alert className="border-2 transition-colors hover:bg-muted">
-              <ServerCrash className="size-5" />
+            <div className="flex items-center gap-2 text-sm hover:underline">
+              <ServerCrash className="size-4" />
+              <span>
+                Having Problems with the System? Click here if you need to reset
+                the application
+              </span>
+            </div>
+          </Link>
+        </div>
 
-              <AlertTitle>Having Problems with the System?</AlertTitle>
+        <div>
+          <Link href="/changelog" className="block">
+            <Alert className="border transition-colors hover:bg-muted">
+              <History className="size-5" />
+
+              <AlertTitle>See what changed recently</AlertTitle>
 
               <AlertDescription>
-                Click here if you need to reset the application
+                View the latest NTU Mods features, fixes, and data updates.
               </AlertDescription>
             </Alert>
           </Link>
@@ -88,7 +94,7 @@ export default function SettingsPage() {
           <TableSettings />
         </div>
 
-        <div
+        {/* <div
           id="beta"
           className="space-y-4 rounded-md border bg-card px-4 pb-4 pt-2 shadow-lg">
           <div>
@@ -102,7 +108,7 @@ export default function SettingsPage() {
           <hr />
 
           <BetaSettings />
-        </div>
+        </div> */}
 
         <div
           id="feedback"
@@ -117,18 +123,6 @@ export default function SettingsPage() {
 
           <FeedbackCard divClassName="border-none p-0 mt-5" />
         </div>
-
-        <Link href="/changelog" className="block">
-          <Alert className="border-2 transition-colors hover:bg-muted">
-            <History className="size-5" />
-
-            <AlertTitle>See what changed recently</AlertTitle>
-
-            <AlertDescription>
-              View the latest NTU Mods features, fixes, and data updates.
-            </AlertDescription>
-          </Alert>
-        </Link>
       </div>
     </div>
   )

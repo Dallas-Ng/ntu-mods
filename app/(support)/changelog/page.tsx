@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
 
 import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
@@ -11,6 +14,8 @@ type ChangelogCategory =
   | "Content"
   | "Data"
   | "Performance"
+
+type ChangelogFilter = ChangelogCategory | "All"
 
 interface ChangelogItem {
   category: ChangelogCategory
@@ -32,8 +37,7 @@ const CATEGORY_STYLES: Record<ChangelogCategory, string> = {
     "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-300",
   Content:
     "border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-900 dark:bg-violet-950 dark:text-violet-300",
-  Data:
-    "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300",
+  Data: "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300",
   Performance:
     "border-cyan-200 bg-cyan-50 text-cyan-700 dark:border-cyan-900 dark:bg-cyan-950 dark:text-cyan-300"
 }
@@ -54,20 +58,41 @@ const ChangelogLink = ({
 
 const CATEGORIES = Object.keys(CATEGORY_STYLES) as ChangelogCategory[]
 
+const FILTERS = ["All", ...CATEGORIES] as ChangelogFilter[]
+
+const getCategoryBadgeClassName = (category: ChangelogCategory) =>
+  cn(
+    "inline-flex h-6 w-fit items-center rounded-full border px-2 text-xs font-medium leading-none",
+    CATEGORY_STYLES[category]
+  )
+
 const CategoryBadge = ({ category }: { category: ChangelogCategory }) => (
-  <span
-    className={cn(
-      "inline-flex h-6 w-fit items-center rounded-full border px-2 text-xs font-medium leading-none",
-      CATEGORY_STYLES[category]
-    )}>
-    {category}
-  </span>
+  <span className={getCategoryBadgeClassName(category)}>{category}</span>
 )
 
-const CategoryLegend = () => (
+const ChangelogFilters = ({
+  activeFilter,
+  onFilterChange
+}: {
+  activeFilter: ChangelogFilter
+  onFilterChange: (filter: ChangelogFilter) => void
+}) => (
   <div className="flex flex-wrap gap-2">
-    {CATEGORIES.map((category) => (
-      <CategoryBadge key={category} category={category} />
+    {FILTERS.map((filter) => (
+      <button
+        key={filter}
+        type="button"
+        aria-pressed={activeFilter === filter}
+        onClick={() => onFilterChange(filter)}
+        className={cn(
+          "inline-flex h-6 w-fit items-center rounded-full border px-2 text-xs font-medium leading-none transition-opacity hover:opacity-80",
+          activeFilter !== filter && "opacity-50",
+          filter === "All"
+            ? "border-border bg-muted text-foreground"
+            : CATEGORY_STYLES[filter]
+        )}>
+        {filter}
+      </button>
     ))}
   </div>
 )
@@ -77,19 +102,23 @@ const ChangelogTable = ({ items }: { items: ChangelogItem[] }) => (
     <tbody>
       {items.map((item, i) => (
         <tr key={i} className="align-top">
-          <td className="w-28 py-1.5 pr-3">
+          <td className="w-28 border py-1.5 pr-3">
             <CategoryBadge category={item.category} />
           </td>
 
-          <td className="py-1.5 leading-6">{item.content}</td>
+          <td className="border py-1.5 leading-6">{item.content}</td>
         </tr>
       ))}
     </tbody>
   </table>
 )
 
-const ChangelogReleaseCard = ({ release }: { release: ChangelogRelease }) => (
-  <section className="space-y-4 rounded-md border bg-card p-4 shadow-sm">
+const ChangelogReleaseSection = ({
+  release
+}: {
+  release: ChangelogRelease
+}) => (
+  <section className="space-y-4 border-t border-border pt-6 first:border-t-0 first:pt-0">
     <div className="flex flex-wrap items-baseline justify-between gap-2">
       <h2 className="text-xl font-semibold">{release.title}</h2>
 
@@ -204,17 +233,18 @@ const CHANGELOG: ChangelogRelease[] = [
             FAQ content.
           </>
         )
-      },
-      {
-        category: "New Feature",
-        content: (
-          <>
-            Added{" "}
-            <ChangelogLink href="/debug">debug and reset helpers</ChangelogLink>{" "}
-            for recovering local timetable data.
-          </>
-        )
       }
+      // Do not tell user
+      // {
+      //   category: "New Feature",
+      //   content: (
+      //     <>
+      //       Added{" "}
+      //       <ChangelogLink href="/debug">debug and reset helpers</ChangelogLink>{" "}
+      //       for recovering local timetable data.
+      //     </>
+      //   )
+      // }
     ]
   },
   {
@@ -284,6 +314,16 @@ const CHANGELOG: ChangelogRelease[] = [
 ]
 
 export default function ChangelogPage() {
+  const [activeFilter, setActiveFilter] = useState<ChangelogFilter>("All")
+
+  const filteredChangelog = CHANGELOG.map((release) => ({
+    ...release,
+    items:
+      activeFilter === "All"
+        ? release.items
+        : release.items.filter((item) => item.category === activeFilter)
+  })).filter((release) => release.items.length > 0)
+
   return (
     <div className={cn(SUPPORT_PAGE_CONTAINER_CLASSNAME, "space-y-8")}>
       <div className="space-y-5">
@@ -292,12 +332,15 @@ export default function ChangelogPage() {
           subtitle="A simple record of recent NTU Mods updates, fixes, and new features."
         />
 
-        <CategoryLegend />
+        <ChangelogFilters
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+        />
       </div>
 
-      <div className="space-y-5">
-        {CHANGELOG.map((release) => (
-          <ChangelogReleaseCard key={release.title} release={release} />
+      <div className="space-y-6">
+        {filteredChangelog.map((release) => (
+          <ChangelogReleaseSection key={release.title} release={release} />
         ))}
       </div>
     </div>

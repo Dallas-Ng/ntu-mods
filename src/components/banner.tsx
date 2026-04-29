@@ -53,8 +53,8 @@ export const Banner = {
     </BannerWrapper>
   ),
   updatedAy: () => (
-    <Link href="/mods">
-      <BannerWrapper>NTU Mods is updated!</BannerWrapper>
+    <Link href="/changelog">
+      <BannerWrapper>NTU Mods has new features!</BannerWrapper>
     </Link>
   ),
   experienceProblems: () => (

@@ -25,11 +25,12 @@ type Indexes = Record<string, Index[]>
 
 const IndexCommandItem = ({ index }: { index: Index }) => {
   const indexStyle = getIndexTypeStyle(index.type)
+  const isOnline = !index.day || index.day === 0
 
   return (
     <div>
       <div className="flex w-full justify-between gap-2 ">
-        <span>{DAY_MAP[index.day as keyof typeof DAY_MAP]}</span>
+        <span>{isOnline ? "Online" : DAY_MAP[index.day as keyof typeof DAY_MAP]}</span>
 
         <span className={cn(indexStyle.textAlt, "font-semibold")}>
           {getIndexType(index.type)} - {index.group}
@@ -37,7 +38,7 @@ const IndexCommandItem = ({ index }: { index: Index }) => {
       </div>
 
       <div className="flex w-full justify-between gap-2 text-xs text-muted-foreground">
-        <span>{index.time}</span>
+        <span>{isOnline ? "No scheduled timeslot" : index.time}</span>
         <span>{index.venue}</span>
       </div>
     </div>
@@ -70,8 +71,7 @@ const TimetableIndexModifier = (props: Props) => {
         const raw: Indexes = data.indexes ?? {}
         const filtered: Indexes = {}
         for (const [key, slots] of Object.entries(raw)) {
-          const valid = (slots as Index[]).filter((s) => s.day !== 0)
-          if (valid.length) filtered[key] = valid
+          filtered[key] = slots as Index[]
         }
         setIndexes(filtered)
         setFilteredIndexes(filtered)

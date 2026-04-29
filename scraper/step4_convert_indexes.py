@@ -89,7 +89,7 @@ def convert(input_path: Path, output_path: Path, indent: Optional[int] = None) -
             for slot in course.get("schedules", []):
                 index_key: str = slot["index"]
                 day_str: str = slot.get("day", "")
-                day_int: Optional[int] = DAY_MAP.get(day_str.upper())
+                day_int: int = DAY_MAP.get(day_str.upper(), 0)
 
                 time_range: str = slot.get("time", "")
                 try:
@@ -97,9 +97,14 @@ def convert(input_path: Path, output_path: Path, indent: Optional[int] = None) -
                 except (ValueError, ZeroDivisionError):
                     dur = 0
 
+                # NTU uses compound types like "LEC/STUDIO" for art & design courses (introduced 2025;2).
+                # Normalize to the canonical prefix so downstream type checks stay stable.
+                raw_type = slot.get("type", "")
+                slot_type = raw_type.split("/")[0] if "/" in raw_type else raw_type
+
                 slot_entry = {
                     "key": index_key,
-                    "type": slot.get("type", ""),
+                    "type": slot_type,
                     "group": slot.get("group", ""),
                     "day": day_int,
                     "time": time_range,

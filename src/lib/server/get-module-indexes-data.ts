@@ -5,7 +5,6 @@ const INDEXES_DIR = path.join(process.cwd(), "src/data/api/indexes")
 
 /**
  * Read class schedule indexes for a module in a specific semester.
- * Filters out invalid day=0 entries.
  * Returns an empty object if the file or module is not found.
  */
 export async function getModuleIndexesData(
@@ -21,13 +20,7 @@ export async function getModuleIndexesData(
     const moduleIndexes = obj[code]
     if (!moduleIndexes) return {}
 
-    // Filter out invalid day=0 entries (mirrors legacy get-module-indexes.ts)
-    return Object.fromEntries(
-      Object.entries(moduleIndexes).map(([key, slots]) => [
-        key,
-        slots.filter((s) => s.day !== 0)
-      ])
-    )
+    return moduleIndexes
   } catch {
     return {}
   }

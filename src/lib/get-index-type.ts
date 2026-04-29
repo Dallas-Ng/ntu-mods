@@ -6,6 +6,5 @@ export const getIndexType = (type: string) => {
   if (type.includes("DES")) return "DES"
   if (type.includes("PRJ")) return "PRJ"
 
-  // TODO: Fix this
   return "LEC"
 }

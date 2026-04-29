@@ -3,9 +3,11 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 
-import { useLatestSemester } from "@/hooks/use-latest-semester"
+import { getModuleCategories } from "@/lib/get-module-category"
 import { useAllModules, type AllModule } from "@/hooks/use-all-modules"
+import { useLatestSemester } from "@/hooks/use-latest-semester"
 import Header from "@/components/header"
+import { ModsCurrentOnlyToggle } from "@/components/mods/mods-current-only-toggle"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import { SearchModuleFaculty } from "@/components/mods/mods-faculty-select"
 import {
@@ -18,7 +20,6 @@ import {
 } from "@/components/mods/mods-module-type-select"
 import ModsSearchInput from "@/components/mods/mods-search-input"
 import { Semester } from "@/components/mods/mods-semester-select"
-import { ModsCurrentOnlyToggle } from "@/components/mods/mods-current-only-toggle"
 import {
   ModuleCardDetail,
   ModuleCardDetailLoading
@@ -54,7 +55,9 @@ function filterModules(
 
   if (opts.moduleType !== "all") {
     filtered = filtered.filter((m) =>
-      m.searchKeys?.some((k) => k.split(";")[0] === opts.moduleType)
+      getModuleCategories(m.searchKeys ?? []).includes(
+        opts.moduleType as ModuleType
+      )
     )
   }
 
@@ -71,15 +74,13 @@ function filterModules(
       )
       const titleMatches = filtered.filter(
         (m) =>
-          !m.code.toLowerCase().includes(q) &&
-          m.title.toLowerCase().includes(q)
+          !m.code.toLowerCase().includes(q) && m.title.toLowerCase().includes(q)
       )
       filtered = [...codeMatches, ...titleMatches]
     } else {
       filtered = filtered.filter(
         (m) =>
-          m.title.toLowerCase().includes(q) ||
-          m.code.toLowerCase().includes(q)
+          m.title.toLowerCase().includes(q) || m.code.toLowerCase().includes(q)
       )
     }
   }

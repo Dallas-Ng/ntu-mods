@@ -5,6 +5,7 @@ import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import FeedbackCard from "@/components/feedback-card"
+import Header from "@/components/header"
 
 interface HelpConfig {
   question: React.ReactNode
@@ -94,86 +95,77 @@ const HELP_CONFIG: HelpConfig[] = [
 
 export default function HelpPage() {
   return (
-    <div className={cn(SUPPORT_PAGE_CONTAINER_CLASSNAME, "space-y-10")}>
-      {/* <div className="space-y-5">
-        <Header
-          title="Frequently Asked Questions"
-          subtitle={
-            <span className="w-full text-muted-foreground">
-              Can&apos;t find the answer you&apos;re looking for?{" "}
-              <a
-                href="mailto:ngdallas1@gmail.com"
-                className="inline-flex text-primary hover:underline">
-                <span className="flex items-center gap-1">
-                  Reach out to me <Mail className="size-5" />
-                </span>
-              </a>
-            </span>
-          }
-        />
-      </div> */}
+    <div className={cn(SUPPORT_PAGE_CONTAINER_CLASSNAME, "space-y-8")}>
+      <Header
+        title="Help"
+        subtitle="Answers for planning timetables, browsing modules, exporting schedules, and fixing local app issues."
+      />
 
       <div className="space-y-3">
-        <p>Quick Access</p>
+        <h2 className="text-xl font-semibold">Quick Access</h2>
 
-        <ul id="faq-0" className="list-inside list-disc">
+        <nav className="grid gap-2 sm:grid-cols-2">
           {HELP_CONFIG.map(({ question }, i) => (
-            <li key={i}>
-              <Link
-                href={`#faq-${i}`}
-                className="text-blue-500 transition-colors hover:text-blue-600">
-                {question}
-              </Link>
-            </li>
+            <Link
+              key={i}
+              href={`#faq-${i}`}
+              className="rounded-md border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+              {question}
+            </Link>
           ))}
-        </ul>
+        </nav>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-6">
         {HELP_CONFIG.map(({ question, answer }, i) => (
-          <>
-            <div id={`faq-${i}`} key={i} className="space-y-3 pt-[65px]">
-              <h2 className="text-xl font-bold">{question}</h2>
+          <section
+            id={`faq-${i}`}
+            key={i}
+            className="scroll-mt-20 space-y-3 border-t border-border pt-6 first:border-t-0 first:pt-0">
+            <h2 className="text-xl font-semibold">{question}</h2>
 
-              <p className="mt-2 text-muted-foreground">{answer}</p>
-            </div>
-
-            {i === HELP_CONFIG.length - 1 && (
-              <div>
-                <Link href="/debug">
-                  <Alert className="border-2 transition-colors hover:bg-muted">
-                    <ServerCrash className="size-5" />
-
-                    <AlertTitle>Having Problems with the System?</AlertTitle>
-
-                    <AlertDescription>
-                      Click here if you need to reset the application
-                    </AlertDescription>
-                  </Alert>
-                </Link>
-              </div>
-            )}
-          </>
+            <p className="text-muted-foreground">{answer}</p>
+          </section>
         ))}
       </div>
 
-      <div className="space-y-3">
-        <h3>Give us your feedback!</h3>
+      <div className="grid gap-3">
+        <Link href="/debug" className="block">
+          <Alert className="border transition-colors hover:bg-muted">
+            <ServerCrash className="size-5" />
 
-        <FeedbackCard divClassName="border-2" />
+            <AlertTitle>Having Problems with the System?</AlertTitle>
+
+            <AlertDescription>
+              Reset local timetable data if the app behaves unexpectedly.
+            </AlertDescription>
+          </Alert>
+        </Link>
+
+        <Link href="/changelog" className="block">
+          <Alert className="border transition-colors hover:bg-muted">
+            <History className="size-5" />
+
+            <AlertTitle>See what changed recently</AlertTitle>
+
+            <AlertDescription>
+              View the latest NTU Mods features, fixes, and data updates.
+            </AlertDescription>
+          </Alert>
+        </Link>
       </div>
 
-      <Link href="/changelog" className="block">
-        <Alert className="border-2 transition-colors hover:bg-muted">
-          <History className="size-5" />
+      <div id="feedback" className="space-y-3">
+        <div>
+          <h2 className="text-xl font-semibold">Feedback</h2>
 
-          <AlertTitle>See what changed recently</AlertTitle>
+          <p className="text-sm text-muted-foreground">
+            Let us know of any problems or suggestions you have.
+          </p>
+        </div>
 
-          <AlertDescription>
-            View the latest NTU Mods features, fixes, and data updates.
-          </AlertDescription>
-        </Alert>
-      </Link>
+        <FeedbackCard divClassName="border" />
+      </div>
     </div>
   )
 }

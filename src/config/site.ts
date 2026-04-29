@@ -50,6 +50,10 @@ export const siteConfig = {
       title: "Settings",
       desc: "Configure the NTU Mods to your liking. Change your theme, table settings, and more"
     },
+    changelog: {
+      title: "Changelog",
+      desc: "See the latest NTU Mods updates, fixes, and feature improvements"
+    },
     articles: {
       title: "Articles",
       desc: "Read NTUMods guides, updates, and notes for planning your NTU timetable and understanding modules"

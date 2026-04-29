@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ServerCrash } from "lucide-react"
+import { History, ServerCrash } from "lucide-react"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import FeedbackCard from "@/components/feedback-card"
@@ -160,6 +160,18 @@ export default function HelpPage() {
 
         <FeedbackCard divClassName="border-2" />
       </div>
+
+      <Link href="/changelog" className="block">
+        <Alert className="border-2 transition-colors hover:bg-muted">
+          <History className="size-5" />
+
+          <AlertTitle>See what changed recently</AlertTitle>
+
+          <AlertDescription>
+            View the latest NTU Mods features, fixes, and data updates.
+          </AlertDescription>
+        </Alert>
+      </Link>
     </div>
   )
 }

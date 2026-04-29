@@ -9,7 +9,12 @@ const Footer = () => {
         Privacy
       </Link>
 
-      {/* TODO: finish below */}
+      <Link
+        href="/changelog"
+        className="transition-colors hover:text-primary-alt">
+        Changelog
+      </Link>
+
       <Link
         href="/settings#feedback"
         className="transition-colors hover:text-primary-alt">

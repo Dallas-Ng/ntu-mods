@@ -17,6 +17,9 @@ interface Props {
   //
   onMouseOver?: () => void
   onMouseOut?: () => void
+  onClick?: () => void
+  previewCandidate?: boolean
+  previewActive?: boolean
 }
 
 export const TimetableTableCell = (props: Props) => {
@@ -31,7 +34,10 @@ export const TimetableTableCell = (props: Props) => {
     hideIndex = false,
     //
     onMouseOver,
-    onMouseOut
+    onMouseOut,
+    onClick,
+    previewCandidate = false,
+    previewActive = false
   } = props
 
   // Settings for cells
@@ -70,8 +76,12 @@ export const TimetableTableCell = (props: Props) => {
         className={cn(
           "flex h-full cursor-pointer items-center break-words rounded-lg p-[var(--cell-padding)]",
           indexStyle.background,
+          previewCandidate &&
+            "opacity-50 ring-1 ring-foreground/30 hover:opacity-90",
+          previewActive && "ring-2 ring-primary/70",
           dimmed && "opacity-30 dark:opacity-20"
-        )}>
+        )}
+        onClick={onClick}>
         <div className="w-full">
           {/*  */}
           <TimetableTableCellContent

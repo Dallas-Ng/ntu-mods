@@ -31,7 +31,22 @@ interface Props {
   fullCell?: boolean
   showModuleKeyAsCommon?: boolean
   alwaysHighlightLectures?: boolean
+  indexPicker?: {
+    enabled: boolean
+    activeModuleKey: string | null
+    activeIndexKey?: string
+    onActiveModuleChange: (moduleKey: string) => void
+    onIndexSelect: (moduleKey: string, indexKey: string) => void
+  }
 }
+
+const cloneModuleIndexMap = (moduleIndexMap: TimetableWithIndex) =>
+  Object.fromEntries(
+    Object.entries(moduleIndexMap).map(([moduleKey, indexes]) => [
+      moduleKey,
+      [...indexes]
+    ])
+  ) as TimetableWithIndex
 
 export const TimetableTable = (props: Props) => {
   const {
@@ -39,13 +54,18 @@ export const TimetableTable = (props: Props) => {
     hideIndex = false,
     fullCell = false,
     showModuleKeyAsCommon = false,
-    alwaysHighlightLectures = false
+    alwaysHighlightLectures = false,
+    indexPicker
   } = props
   const { isMobile } = useSettings()
 
   const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS, TABLE_OVERFLOW_THRESHOLD } =
     useMemo(
-      () => generateTimetableMatrix(moduleIndexMap, isMobile ? 6 : 9),
+      () =>
+        generateTimetableMatrix(
+          cloneModuleIndexMap(moduleIndexMap),
+          isMobile ? 6 : 9
+        ),
       [moduleIndexMap, isMobile]
     )
 
@@ -97,9 +117,17 @@ export const TimetableTable = (props: Props) => {
                           rowDayIndex === index.day
                         ) {
                           const moduleKey = Object.keys(moduleIndexMap).find(
-                            (x) =>
-                              moduleIndexMap[x].find((y) => y.key === index.key)
+                            (x) => moduleIndexMap[x].some((y) => y === index)
                           ) as string // Guaranteed to be defined
+                          const indexPickerEnabled = indexPicker?.enabled
+                          const previewActive =
+                            !!indexPickerEnabled &&
+                            indexPicker.activeModuleKey === moduleKey &&
+                            index.key === indexPicker.activeIndexKey
+                          const previewCandidate =
+                            !!indexPickerEnabled &&
+                            indexPicker.activeModuleKey === moduleKey &&
+                            index.key !== indexPicker.activeIndexKey
 
                           return (
                             <TimetableTableCell
@@ -121,6 +149,21 @@ export const TimetableTable = (props: Props) => {
                                 currentHoverKey !== index.key &&
                                 shouldDimlecture
                               }
+                              previewActive={previewActive}
+                              previewCandidate={previewCandidate}
+                              onClick={() => {
+                                if (!indexPickerEnabled) return
+
+                                if (previewCandidate) {
+                                  indexPicker.onIndexSelect(
+                                    moduleKey,
+                                    index.key
+                                  )
+                                  return
+                                }
+
+                                indexPicker.onActiveModuleChange(moduleKey)
+                              }}
                               onMouseOver={() => {
                                 // Hovering on lectures will not highlight other indexes as they are common lectures
                                 if (isLecture && alwaysHighlightLectures) {

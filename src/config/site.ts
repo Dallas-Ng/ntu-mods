@@ -50,6 +50,10 @@ export const siteConfig = {
       title: "Settings",
       desc: "Configure the NTU Mods to your liking. Change your theme, table settings, and more"
     },
+    articles: {
+      title: "Articles",
+      desc: "Read NTUMods guides, updates, and notes for planning your NTU timetable and understanding modules"
+    },
     debug: {
       title: "Debug",
       desc: "Why study when you can just dabao your mods?"
@@ -58,6 +62,7 @@ export const siteConfig = {
   navLinks: [
     { label: "Timetable", route: "/timetable" },
     { label: "Mods", route: "/mods" },
+    { label: "Articles", route: "/articles" },
     { label: "Help", route: "/help" }
   ],
   links: {

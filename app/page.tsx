@@ -2,6 +2,7 @@ import dynamic from "next/dynamic"
 import Image from "next/image"
 
 import { Skeleton } from "@/components/ui/skeleton"
+import Articles from "@/components/landing/landing-articles"
 import CTA from "@/components/landing/landing-cta"
 import Features from "@/components/landing/landing-features"
 import Roadmap from "@/components/landing/landing-roadmap"
@@ -48,6 +49,10 @@ export default function IndexPage() {
 
       <div className="relative z-[3] mt-10 space-y-10 p-3">
         <Features />
+
+        <div className="container py-20">
+          <Articles />
+        </div>
 
         <Roadmap />
       </div>

@@ -3,6 +3,8 @@ import path from "path"
 import { NextResponse } from "next/server"
 import { getLatestSemester } from "@/lib/server/get-latest-semester"
 
+export const dynamic = "force-static"
+
 /**
  * GET /api/data/semesters
  * Returns all available academic semesters

@@ -1,36 +1,24 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useMemo } from "react"
 import { usePathname } from "next/navigation"
 
-import { useLatestSemester } from "@/hooks/use-latest-semester"
+import { useAllModules } from "@/hooks/use-all-modules"
 import ModuleCard from "../module-card"
 import type { ApiModule } from "@/lib/server/get-module-metadata"
 
-/**
- * Component that shows related modules on the not-found page.
- * Uses the API route so it works as a client component.
- */
 const ModsNotFoundRelatedMods = () => {
   const pathname = usePathname()
   const moduleKey = pathname.split("/")[2]?.toUpperCase() ?? ""
-  const { year, semester } = useLatestSemester()
-  const [related, setRelated] = useState<ApiModule[]>([])
+  const { modules } = useAllModules()
 
-  useEffect(() => {
-    if (!moduleKey) return
+  const related = useMemo(() => {
+    if (!moduleKey) return []
     const prefix = moduleKey.slice(0, 2)
-    const params = new URLSearchParams({ year, semester, limit: "9" })
-    fetch(`/api/data/modules?${params}`)
-      .then((r) => r.json())
-      .then((data) => {
-        const filtered = (data.modules as ApiModule[])
-          .filter((m) => m.code.startsWith(prefix) && m.code !== moduleKey)
-          .slice(0, 9)
-        setRelated(filtered)
-      })
-      .catch(() => {})
-  }, [moduleKey, year, semester])
+    return modules
+      .filter((m) => m.code.startsWith(prefix) && m.code !== moduleKey)
+      .slice(0, 9) as ApiModule[]
+  }, [modules, moduleKey])
 
   if (related.length === 0) return null
 

@@ -26,10 +26,29 @@ export const useTimetableIndexes = (
     const controller = new AbortController()
     setIsLoading(true)
 
-    const params = new URLSearchParams({ modules: modulesKey, year, semester })
-    fetch(`/api/data/indexes/batch?${params}`, { signal: controller.signal })
-      .then((res) => (res.ok ? res.json() : {}))
-      .then((data: AllModuleIndexes) => setAllModuleIndexes(data))
+    const codes = modulesKey.split(",")
+    const params = new URLSearchParams({ year, semester })
+
+    Promise.all(
+      codes.map((code) =>
+        fetch(`/api/data/modules/${code}/indexes?${params}`, {
+          signal: controller.signal
+        })
+          .then((res) => (res.ok ? res.json() : { indexes: {} }))
+          .then(
+            (data: { indexes: Record<string, Index[]> }) =>
+              [code, data.indexes ?? {}] as const
+          )
+          .catch(() => [code, {}] as const)
+      )
+    )
+      .then((entries) => {
+        const result: AllModuleIndexes = {}
+        for (const [code, indexes] of entries) {
+          if (Object.keys(indexes).length > 0) result[code] = indexes
+        }
+        setAllModuleIndexes(result)
+      })
       .catch(() => {})
       .finally(() => setIsLoading(false))
 

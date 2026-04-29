@@ -1,9 +1,10 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 
 import { useLatestSemester } from "@/hooks/use-latest-semester"
+import { useAllModules, type AllModule } from "@/hooks/use-all-modules"
 import Header from "@/components/header"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import { SearchModuleFaculty } from "@/components/mods/mods-faculty-select"
@@ -34,15 +35,56 @@ interface Props {
   }
 }
 
-interface ModuleData {
-  code: string
-  title: string
-  au: string
-  searchKeys: string[]
-  notAvailableToProgramme?: string
-  isCurrentSemester?: boolean
-  latestYear?: string
-  latestSemester?: string
+const PAGE_SIZE = 100
+
+function filterModules(
+  modules: AllModule[],
+  opts: {
+    searchTerm: string
+    moduleType: string
+    moduleLevel: string
+    currentOnly: boolean
+  }
+): AllModule[] {
+  let filtered = modules
+
+  if (opts.currentOnly) {
+    filtered = filtered.filter((m) => m.isCurrentSemester)
+  }
+
+  if (opts.moduleType !== "all") {
+    filtered = filtered.filter((m) =>
+      m.searchKeys?.some((k) => k.split(";")[0] === opts.moduleType)
+    )
+  }
+
+  if (opts.moduleLevel !== "all") {
+    filtered = filtered.filter((m) => m.code.slice(2, 3) === opts.moduleLevel)
+  }
+
+  if (opts.searchTerm) {
+    const q = opts.searchTerm.toLowerCase()
+    const isCodeQuery = /^[a-z]{2,4}\d*/i.test(q)
+    if (isCodeQuery) {
+      const codeMatches = filtered.filter((m) =>
+        m.code.toLowerCase().includes(q)
+      )
+      const titleMatches = filtered.filter(
+        (m) =>
+          !m.code.toLowerCase().includes(q) &&
+          m.title.toLowerCase().includes(q)
+      )
+      filtered = [...codeMatches, ...titleMatches]
+    } else {
+      filtered = filtered.filter(
+        (m) =>
+          m.title.toLowerCase().includes(q) ||
+          m.code.toLowerCase().includes(q)
+      )
+    }
+  }
+
+  return filtered
 }
 
 const ModsPage = ({ searchParams }: Props) => {
@@ -54,91 +96,44 @@ const ModsPage = ({ searchParams }: Props) => {
   } = searchParams
 
   const { year, semester } = useLatestSemester()
-  const [modules, setModules] = useState<ModuleData[]>([])
-  const [allModulesLoaded, setAllModulesLoaded] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [hasMore, setHasMore] = useState(true)
-  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const { modules: allModules, isLoading } = useAllModules()
+  const [displayCount, setDisplayCount] = useState(PAGE_SIZE)
   const loaderRef = useRef<HTMLDivElement>(null)
 
-  const loadModules = useCallback(
-    async (skip: number = 0) => {
-      try {
-        if (skip === 0) setLoading(true)
-        else setIsLoadingMore(true)
-
-        const params = new URLSearchParams({
-          skip: skip.toString(),
-          limit: "100"
-        })
-
-        if (searchTerm) params.set("q", searchTerm)
-        if (moduleType !== "all") params.set("type", moduleType)
-        if (moduleLevel !== "all") params.set("level", moduleLevel)
-        if (currentOnly === "true") params.set("currentOnly", "true")
-
-        const response = await fetch(`/api/data/modules?${params}`)
-        if (!response.ok) throw new Error("Failed to load modules")
-
-        const data = await response.json()
-
-        if (skip === 0) {
-          setModules(data.modules)
-        } else {
-          setModules((prev) => [...prev, ...data.modules])
-        }
-
-        setHasMore(data.hasMore)
-        setAllModulesLoaded(!data.hasMore)
-      } catch (error) {
-        console.error("Error loading modules:", error)
-        setAllModulesLoaded(true)
-      } finally {
-        setLoading(false)
-        setIsLoadingMore(false)
-      }
-    },
-    [year, semester, searchTerm, moduleType, moduleLevel, currentOnly]
+  const filteredModules = useMemo(
+    () =>
+      filterModules(allModules, {
+        searchTerm,
+        moduleType,
+        moduleLevel,
+        currentOnly: currentOnly === "true"
+      }),
+    [allModules, searchTerm, moduleType, moduleLevel, currentOnly]
   )
 
-  // Reload from scratch whenever year, semester, or filters change
-  useEffect(() => {
-    setModules([])
-    setAllModulesLoaded(false)
-    loadModules(0)
-  }, [year, semester, searchTerm, moduleType, moduleLevel, currentOnly, loadModules])
+  const displayedModules = useMemo(
+    () => filteredModules.slice(0, displayCount),
+    [filteredModules, displayCount]
+  )
 
-  // Infinite scroll observer
+  const hasMore = displayCount < filteredModules.length
+
+  // Reset display count when filters change
   useEffect(() => {
+    setDisplayCount(PAGE_SIZE)
+  }, [searchTerm, moduleType, moduleLevel, currentOnly])
+
+  // Infinite scroll
+  useEffect(() => {
+    if (!loaderRef.current) return
     const observer = new IntersectionObserver((entries) => {
-      if (
-        entries[0].isIntersecting &&
-        !loading &&
-        !isLoadingMore &&
-        hasMore &&
-        !allModulesLoaded
-      ) {
-        loadModules(modules.length)
+      if (entries[0].isIntersecting && hasMore) {
+        setDisplayCount((c) => c + PAGE_SIZE)
       }
     })
-
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current)
-    }
-
-    return () => {
-      if (loaderRef.current) {
-        observer.unobserve(loaderRef.current)
-      }
-    }
-  }, [
-    modules.length,
-    loading,
-    isLoadingMore,
-    hasMore,
-    allModulesLoaded,
-    loadModules
-  ])
+    observer.observe(loaderRef.current)
+    return () => observer.disconnect()
+  }, [hasMore])
 
   return (
     <div className="relative space-y-3">
@@ -149,15 +144,12 @@ const ModsPage = ({ searchParams }: Props) => {
 
       <div className="flex w-full flex-col gap-2 lg:flex-row">
         <ModsSearchInput paramsValue={searchTerm} />
-        {/* <ModsFacultySelect paramsValue={moduleFaculty} /> */}
 
         <div className="flex gap-2">
           <ModsModuleTypeSelect paramsValue={moduleType} />
         </div>
 
         <div className="flex gap-2">
-          {/* <ModsSemesterSelect paramsValue={semester} /> */}
-
           <ModsLevelSelect searchTerm={searchTerm} paramValue={moduleLevel} />
         </div>
 
@@ -168,16 +160,16 @@ const ModsPage = ({ searchParams }: Props) => {
 
       <hr className="py-2" />
 
-      {allModulesLoaded && modules.length === 0 && <ModsEmptyCard />}
+      {!isLoading && filteredModules.length === 0 && <ModsEmptyCard />}
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {loading ? (
+        {isLoading ? (
           Array.from({ length: 9 }).map((_, idx) => (
             <ModuleCardDetailLoading key={idx} />
           ))
         ) : (
           <>
-            {modules.map((moduleData, idx) => (
+            {displayedModules.map((moduleData, idx) => (
               <ModuleCardDetail
                 key={idx}
                 code={moduleData.code}
@@ -188,22 +180,17 @@ const ModsPage = ({ searchParams }: Props) => {
         )}
       </div>
 
-      {/* Infinite scroll loader */}
-      {!allModulesLoaded && <div ref={loaderRef} className="h-4" />}
+      {!isLoading && hasMore && <div ref={loaderRef} className="h-4" />}
 
-      {isLoadingMore && (
-        <div className="flex justify-center py-4">
-          <div className="text-sm text-muted-foreground">Loading more...</div>
-        </div>
+      {!isLoading && (
+        <p className="text-center text-sm text-muted-foreground transition-colors hover:text-primary-alt">
+          <Link
+            href="https://wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"
+            target="_blank">
+            Updated as at AY{year}/{parseInt(year) + 1}
+          </Link>
+        </p>
       )}
-
-      <p className="text-center text-sm text-muted-foreground transition-colors hover:text-primary-alt">
-        <Link
-          href="https://wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"
-          target="_blank">
-          Updated as at AY{year}/{parseInt(year) + 1}
-        </Link>
-      </p>
     </div>
   )
 }

@@ -56,13 +56,17 @@ const TimetableModulesSelect = () => {
 
       // Fetch indexes for the new module and all existing timetable modules in parallel
       const existingCodes = Object.keys(timetable)
-      const [newModuleRes, batchRes] = await Promise.all([
+      const [newModuleRes, ...existingResponses] = await Promise.all([
         fetch(`/api/data/modules/${moduleKey}/indexes?${params}`),
-        existingCodes.length > 0
-          ? fetch(
-              `/api/data/indexes/batch?modules=${existingCodes.join(",")}&${params}`
-            )
-          : Promise.resolve(null)
+        ...existingCodes.map((code) =>
+          fetch(`/api/data/modules/${code}/indexes?${params}`)
+            .then((res) => (res.ok ? res.json() : { indexes: {} }))
+            .then((data: { indexes: Record<string, Index[]> }) => ({
+              code,
+              indexes: data.indexes ?? {}
+            }))
+            .catch(() => ({ code, indexes: {} as Record<string, Index[]> }))
+        )
       ])
 
       if (!newModuleRes.ok) {
@@ -78,15 +82,10 @@ const TimetableModulesSelect = () => {
 
       // Build flat existing index lookup: { indexKey: Index[] }
       const existingIndexLookup: Record<string, Index[]> = {}
-      if (batchRes) {
-        const batchData = await batchRes.json()
-        for (const [code, moduleIndexes] of Object.entries(
-          batchData as Record<string, Record<string, Index[]>>
-        )) {
-          const selectedKey = timetable[code]
-          if (selectedKey && moduleIndexes[selectedKey]) {
-            existingIndexLookup[selectedKey] = moduleIndexes[selectedKey]
-          }
+      for (const { code, indexes: moduleIndexes } of existingResponses) {
+        const selectedKey = timetable[code]
+        if (selectedKey && moduleIndexes[selectedKey]) {
+          existingIndexLookup[selectedKey] = moduleIndexes[selectedKey]
         }
       }
 

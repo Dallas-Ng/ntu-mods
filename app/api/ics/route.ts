@@ -79,7 +79,15 @@ export async function GET(request: Request) {
 
   const icsText = getIcs(timetable, indexLookup, titleLookup)
   if (icsText) {
-    return NextResponse.json({ icsText }, { status: 200 })
+    return NextResponse.json(
+      { icsText },
+      {
+        status: 200,
+        headers: {
+          "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400"
+        }
+      }
+    )
   } else {
     return handleFailure("Empty ICS File", { icsText })
   }

@@ -33,7 +33,7 @@ const parseInline = (text: string): React.ReactNode[] => {
       nodes.push(
         <code
           key={match.index}
-          className="rounded bg-muted px-1 py-0.5 text-sm text-foreground">
+          className="break-words rounded bg-muted px-1 py-0.5 text-sm text-foreground">
           {token.slice(1, -1)}
         </code>
       )
@@ -64,7 +64,7 @@ const parseInline = (text: string): React.ReactNode[] => {
           <Link
             key={match.index}
             href={link[2]}
-            className="font-medium text-primary underline-offset-4 hover:underline"
+            className="break-words font-medium text-primary underline-offset-4 hover:underline"
             target={isExternal ? "_blank" : undefined}
             rel={isExternal ? "noreferrer" : undefined}>
             {link[1]}
@@ -110,8 +110,8 @@ const renderTable = (
   rows: string[][],
   key: string
 ) => (
-  <div key={key} className="my-6 overflow-x-auto">
-    <table className="min-w-full text-left text-sm">
+  <div key={key} className="my-5 max-w-full overflow-x-auto sm:my-6">
+    <table className="min-w-[36rem] text-left text-sm">
       <thead>
         <tr>
           {headers.map((header, headerIndex) => (
@@ -210,8 +210,10 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
       blocks.push(
         <pre
           key={index}
-          className="my-6 overflow-x-auto rounded-md border bg-muted p-4 text-foreground">
-          <code data-language={language}>{code.join("\n")}</code>
+          className="my-5 max-w-full overflow-x-auto rounded-md border bg-muted p-3 text-sm text-foreground sm:my-6 sm:p-4">
+          <code data-language={language} className="whitespace-pre">
+            {code.join("\n")}
+          </code>
         </pre>
       )
       index += 1
@@ -228,7 +230,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
         blocks.push(
           <h1
             key={index}
-            className="mb-6 text-4xl font-bold leading-tight tracking-normal text-foreground md:text-5xl">
+            className="mb-5 break-words text-3xl font-bold leading-tight tracking-normal text-foreground sm:mb-6 md:text-5xl">
             {text}
           </h1>
         )
@@ -237,7 +239,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
           <h2
             key={index}
             id={id}
-            className="scroll-mt-24 pt-12 text-3xl font-semibold leading-tight tracking-normal text-foreground">
+            className="scroll-mt-24 break-words pt-10 text-2xl font-semibold leading-tight tracking-normal text-foreground sm:pt-12 sm:text-3xl">
             {text}
           </h2>
         )
@@ -246,7 +248,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
           <h3
             key={index}
             id={id}
-            className="scroll-mt-24 pt-8 text-2xl font-semibold leading-snug tracking-normal text-foreground">
+            className="scroll-mt-24 break-words pt-8 text-xl font-semibold leading-snug tracking-normal text-foreground sm:text-2xl">
             {text}
           </h3>
         )
@@ -254,7 +256,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
         blocks.push(
           <h4
             key={index}
-            className="scroll-mt-24 pt-6 text-xl font-semibold leading-snug tracking-normal text-foreground">
+            className="scroll-mt-24 break-words pt-6 text-lg font-semibold leading-snug tracking-normal text-foreground sm:text-xl">
             {text}
           </h4>
         )
@@ -308,7 +310,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
       blocks.push(
         <blockquote
           key={index}
-          className="my-6 rounded-md border border-l-4 border-primary/20 border-l-primary bg-primary/5 px-4 py-3 text-foreground shadow-sm">
+          className="my-5 break-words rounded-md border border-l-4 border-primary/20 border-l-primary bg-primary/5 px-4 py-3 text-foreground shadow-sm sm:my-6">
           {parseInline(quote.join(" "))}
         </blockquote>
       )
@@ -336,13 +338,13 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
     }
 
     blocks.push(
-      <p key={index} className="my-4 leading-7 text-foreground/90">
+      <p key={index} className="my-4 break-words leading-7 text-foreground/90">
         {parseInline(paragraph.join(" "))}
       </p>
     )
   }
 
-  return <div>{blocks}</div>
+  return <div className="min-w-0 max-w-full">{blocks}</div>
 }
 
 export default ArticleMarkdown

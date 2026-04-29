@@ -1,5 +1,10 @@
 import { StateCreator } from "zustand"
 
+import {
+  AppearanceSettings,
+  DEFAULT_APPEARANCE_SETTINGS
+} from "@/config/appearance-settings"
+
 const INIT_SETTINGS: Settings = {
   tableCell: {
     key: false,
@@ -12,10 +17,11 @@ const INIT_SETTINGS: Settings = {
     duration: false
   },
   isMobile: false,
-  isBeta: false
+  isBeta: false,
+  appearance: DEFAULT_APPEARANCE_SETTINGS
 }
 
-interface Settings {
+export interface Settings {
   tableCell: {
     key: boolean
     type: boolean
@@ -28,6 +34,7 @@ interface Settings {
   }
   isMobile: boolean
   isBeta: boolean
+  appearance: AppearanceSettings
 }
 
 export interface SettingsSlice {

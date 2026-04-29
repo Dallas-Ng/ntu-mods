@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import Script from "next/script"
 import { notFound } from "next/navigation"
+import Script from "next/script"
 import { jsonLdScriptProps } from "react-schemaorg"
 import type { Article as ArticleJsonLd, WithContext } from "schema-dts"
 
@@ -27,7 +27,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
     .slice(0, 3)
 
   return (
-    <div className="py-6">
+    <div className="min-w-0 py-4 sm:py-6">
       <Breadcrumbs
         breadcrumbs={[
           { href: "/", label: "Home", name: "Home" },
@@ -60,16 +60,16 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
         })}
       />
 
-      <div className="mt-6 grid justify-center gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
-        <article className="w-full">
+      <div className="mt-5 grid min-w-0 justify-center gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
+        <article className="min-w-0 max-w-full">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={article.thumbnail}
             alt={article.thumbnailAlt}
-            className="mb-6 aspect-[16/9] w-full rounded-md border object-cover"
+            className="mb-5 aspect-[16/9] w-full rounded-md border object-cover sm:mb-6"
           />
 
-          <div className="mb-8 border-b pb-5 text-sm text-foreground/70">
+          <div className="mb-6 border-b pb-4 text-sm text-foreground/70 sm:mb-8 sm:pb-5">
             {new Date(article.date).toLocaleDateString("en-SG", {
               day: "numeric",
               month: "long",
@@ -78,22 +78,29 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
             · {article.readingTime} · {article.author}
           </div>
 
-          <ArticleMarkdown content={article.content} headings={article.headings} />
+          <ArticleMarkdown
+            content={article.content}
+            headings={article.headings}
+          />
         </article>
 
         <ArticleToc headings={article.headings} />
       </div>
 
       {moreArticles.length > 0 && (
-        <section className="mx-auto mt-12 max-w-3xl border-t pt-8">
-          <h2 className="text-xl font-semibold tracking-normal">More articles</h2>
+        <section className="mx-auto mt-10 max-w-3xl border-t pt-6 sm:mt-12 sm:pt-8">
+          <h2 className="text-xl font-semibold tracking-normal">
+            More articles
+          </h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-3">
             {moreArticles.map((item) => (
               <Link
                 key={item.slug}
                 href={`/articles/${item.slug}`}
                 className="rounded-md border bg-card p-3 transition-colors hover:bg-accent">
-                <p className="line-clamp-2 text-sm font-medium">{item.title}</p>
+                <p className="line-clamp-2 break-words text-sm font-medium">
+                  {item.title}
+                </p>
                 <p className="mt-2 text-xs text-foreground/70">
                   {item.readingTime}
                 </p>

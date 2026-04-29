@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Settings } from "lucide-react"
+import { Menu, Settings } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -17,6 +17,12 @@ import {
 
 import ThemeToggle from "./theme-toggle"
 import { Button } from "./ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from "./ui/dropdown-menu"
 
 const Navbar = () => {
   const pathname = usePathname()
@@ -38,15 +44,18 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  const primaryLinks = siteConfig.navLinks.slice(0, 2)
+  const menuLinks = siteConfig.navLinks.slice(2)
+
   return (
     <header
       className={cn(
         "sticky top-0 z-10 w-full backdrop-blur-xl",
         scrolled && "shadow"
       )}>
-      <div className="container flex h-16 items-center px-2 lg:px-4">
-        <div className="flex">
-          <Link href="/" className="flex items-center">
+      <div className="container flex h-16 items-center gap-2 px-2 lg:px-4">
+        <div className="flex min-w-0 items-center">
+          <Link href="/" className="flex shrink-0 items-center">
             <Image
               src="/logo.png"
               alt="Logo"
@@ -67,7 +76,7 @@ const Navbar = () => {
             </span>
           </Link>
 
-          <NavigationMenu className="ml-2 flex items-center">
+          <NavigationMenu className="ml-2 hidden items-center md:flex">
             <NavigationMenuList>
               <NavigationMenuItem>
                 {siteConfig.navLinks.map((link) => (
@@ -90,18 +99,66 @@ const Navbar = () => {
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
+
+          <nav className="ml-2 flex min-w-0 items-center gap-1 md:hidden">
+            {primaryLinks.map((link) => (
+              <Link
+                href={link.route}
+                key={link.route}
+                className={cn(
+                  "rounded-md px-2 py-1.5 text-sm font-semibold transition-colors hover:bg-accent hover:text-foreground",
+                  pathname.includes(link.route)
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                )}>
+                {link.label}
+              </Link>
+            ))}
+          </nav>
         </div>
 
-        <div className="flex flex-1 items-center justify-end gap-2">
+        <div className="flex flex-1 items-center justify-end gap-1 sm:gap-2">
           <ThemeToggle />
 
           <Button
             aria-label="Settings Button"
             size="icon"
             variant="ghost"
+            className="hidden md:inline-flex"
             onClick={() => router.push("/settings")}>
             <Settings className="size-5" />
           </Button>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                aria-label="Open navigation menu"
+                size="icon"
+                variant="ghost"
+                className="md:hidden">
+                <Menu className="size-5" />
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent align="end" className="w-44">
+              {menuLinks.map((link) => (
+                <DropdownMenuItem key={link.route} asChild>
+                  <Link
+                    href={link.route}
+                    className={cn(
+                      pathname.includes(link.route) && "text-foreground"
+                    )}>
+                    {link.label}
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+
+              <DropdownMenuItem onClick={() => router.push("/settings")}>
+                <Settings className="mr-2 size-4" />
+                Settings
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

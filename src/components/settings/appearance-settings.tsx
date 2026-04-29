@@ -1,12 +1,63 @@
 "use client"
 
-import { useTheme } from "next-themes"
+import { Check, RotateCcw } from "lucide-react"
 
+import {
+  APPEARANCE_DENSITIES,
+  CONTRAST_PRESETS,
+  DEFAULT_APPEARANCE_SETTINGS,
+  INDEX_TYPE_COLOR_KEYS,
+  TIMETABLE_STYLE_PRESETS
+} from "@/config/appearance-settings"
+import { cn } from "@/lib/utils"
+import { useSettings } from "@/hooks/use-settings"
+
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group"
 
 interface IconProps {
   label?: boolean
 }
+
+const TIMETABLE_PREVIEW_TYPES = [
+  {
+    label: "LEC",
+    background:
+      "bg-[hsl(var(--index-lec-bg))] dark:bg-[hsl(var(--index-lec-bg-dark)/var(--index-bg-opacity-dark))]",
+    text: "text-[hsl(var(--index-lec-text))] dark:text-[hsl(var(--index-lec-text-dark))]"
+  },
+  {
+    label: "LAB",
+    background:
+      "bg-[hsl(var(--index-lab-bg))] dark:bg-[hsl(var(--index-lab-bg-dark)/var(--index-bg-opacity-dark))]",
+    text: "text-[hsl(var(--index-lab-text))] dark:text-[hsl(var(--index-lab-text-dark))]"
+  },
+  {
+    label: "SEM",
+    background:
+      "bg-[hsl(var(--index-sem-bg))] dark:bg-[hsl(var(--index-sem-bg-dark)/var(--index-bg-opacity-dark))]",
+    text: "text-[hsl(var(--index-sem-text))] dark:text-[hsl(var(--index-sem-text-dark))]"
+  },
+  {
+    label: "TUT",
+    background:
+      "bg-[hsl(var(--index-tut-bg))] dark:bg-[hsl(var(--index-tut-bg-dark)/var(--index-bg-opacity-dark))]",
+    text: "text-[hsl(var(--index-tut-text))] dark:text-[hsl(var(--index-tut-text-dark))]"
+  },
+  {
+    label: "DES",
+    background:
+      "bg-[hsl(var(--index-des-bg))] dark:bg-[hsl(var(--index-des-bg-dark)/var(--index-bg-opacity-dark))]",
+    text: "text-[hsl(var(--index-des-text))] dark:text-[hsl(var(--index-des-text-dark))]"
+  },
+  {
+    label: "PRJ",
+    background:
+      "bg-[hsl(var(--index-prj-bg))] dark:bg-[hsl(var(--index-prj-bg-dark)/var(--index-bg-opacity-dark))]",
+    text: "text-[hsl(var(--index-prj-text))] dark:text-[hsl(var(--index-prj-text-dark))]"
+  }
+] as const
 
 export const LightThemeIcon = (props: IconProps) => {
   return (
@@ -67,40 +118,241 @@ export const DarkThemeIcon = (props: IconProps) => {
 }
 
 const AppearanceSettings = () => {
-  const { setTheme, theme } = useTheme()
+  const { settings, updateSettings } = useSettings()
+  const appearance = {
+    ...DEFAULT_APPEARANCE_SETTINGS,
+    ...settings.appearance
+  }
+
+  const updateAppearance = (next: Partial<typeof appearance>) => {
+    updateSettings({
+      appearance: {
+        ...appearance,
+        ...next
+      }
+    })
+  }
 
   return (
-    <>
-      <ToggleGroup
-        type="single"
-        value={theme}
-        onValueChange={(v) => setTheme(v)}
-        className="justify-center">
-        <ToggleGroupItem
-          value="light"
-          className="h-fit w-[50%] max-w-[250px] p-2 hover:border-accent">
-          <LightThemeIcon />
-        </ToggleGroupItem>
+    <div className="space-y-5">
+      <div className="mx-auto w-full max-w-sm space-y-3 rounded-md border bg-background p-3">
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm font-medium">Preview</p>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() =>
+              updateSettings({ appearance: DEFAULT_APPEARANCE_SETTINGS })
+            }
+            aria-label="Reset appearance">
+            <RotateCcw className="size-4" />
+          </Button>
+        </div>
 
-        <ToggleGroupItem
-          value="dark"
-          className="h-fit w-[50%] max-w-[250px] p-2 hover:bg-accent hover:text-accent-foreground">
-          <DarkThemeIcon />
-        </ToggleGroupItem>
-      </ToggleGroup>
-    </>
+        <div className="grid grid-cols-2 gap-2 text-xs">
+          {TIMETABLE_PREVIEW_TYPES.map((type) => (
+            <div
+              key={type.label}
+              className={cn(
+                "rounded-md p-[var(--cell-padding)]",
+                type.background
+              )}>
+              <p className={cn("font-bold", type.text)}>{type.label}</p>
+              <p className="text-muted-foreground">Index 00000</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="space-y-5">
+        <section className="space-y-3">
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <p className="text-sm font-medium">Radius</p>
+              <p className="text-xs text-muted-foreground">
+                Controls the roundness of buttons, cards, inputs, and cells.
+              </p>
+            </div>
+
+            <span className="rounded-md border px-2 py-1 text-xs text-muted-foreground">
+              {appearance.radius}px
+            </span>
+          </div>
+
+          <Input
+            type="range"
+            min={0}
+            max={16}
+            step={1}
+            value={appearance.radius}
+            onChange={(event) =>
+              updateAppearance({ radius: Number(event.target.value) })
+            }
+            className="h-9 px-0 shadow-none"
+          />
+        </section>
+
+        <section className="grid gap-3 sm:grid-cols-2">
+          <div className="space-y-3">
+            <div>
+              <p className="text-sm font-medium">Density</p>
+              <p className="text-xs text-muted-foreground">
+                Adjusts timetable and table spacing.
+              </p>
+            </div>
+
+            <ToggleGroup
+              type="single"
+              value={appearance.density}
+              onValueChange={(v) =>
+                v &&
+                updateAppearance({
+                  density: v as keyof typeof APPEARANCE_DENSITIES
+                })
+              }
+              className="grid grid-cols-3">
+              {Object.entries(APPEARANCE_DENSITIES).map(([key, value]) => (
+                <ToggleGroupItem key={key} value={key} className="px-1 text-xs">
+                  {value.label}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+          </div>
+
+          <div className="space-y-3">
+            <div>
+              <p className="text-sm font-medium">Contrast</p>
+              <p className="text-xs text-muted-foreground">
+                Lifts secondary text when you want a crisper interface.
+              </p>
+            </div>
+
+            <ToggleGroup
+              type="single"
+              value={appearance.contrast}
+              onValueChange={(v) =>
+                v &&
+                updateAppearance({
+                  contrast: v as keyof typeof CONTRAST_PRESETS
+                })
+              }
+              className="grid grid-cols-2">
+              {Object.entries(CONTRAST_PRESETS).map(([key, value]) => (
+                <ToggleGroupItem key={key} value={key}>
+                  {value.label}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+          </div>
+        </section>
+
+        <section className="space-y-3">
+          <div>
+            <p className="text-sm font-medium">Timetable colours</p>
+            <p className="text-xs text-muted-foreground">
+              Pick a hardcoded palette; LEC, LAB, SEM, TUT, DES, and PRJ stay
+              mapped.
+            </p>
+          </div>
+
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {Object.entries(TIMETABLE_STYLE_PRESETS).map(([key, value]) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() =>
+                  updateAppearance({
+                    timetableStyle: key as keyof typeof TIMETABLE_STYLE_PRESETS
+                  })
+                }
+                className={cn(
+                  "space-y-2 rounded-md border p-3 text-left transition-colors hover:bg-accent",
+                  appearance.timetableStyle === key && "border-primary"
+                )}>
+                <div className="flex gap-1">
+                  {INDEX_TYPE_COLOR_KEYS.map((type) => (
+                    <span
+                      key={type}
+                      className="h-2 flex-1 rounded-full"
+                      style={{
+                        backgroundColor: `hsl(${value.colors[type].bg})`
+                      }}
+                    />
+                  ))}
+                </div>
+                <div className="flex gap-2">
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium">{value.label}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {value.description}
+                    </p>
+                  </div>
+                  {appearance.timetableStyle === key && (
+                    <Check className="ml-auto size-4 shrink-0 text-primary" />
+                  )}
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
   )
 }
 
 export const AppearanceSettingsLoading = () => {
   return (
-    <div className="flex items-center justify-center gap-1">
-      <div className="h-fit w-[50%] max-w-[250px] p-2 opacity-50">
-        <LightThemeIcon />
+    <div className="space-y-5">
+      <div className="mx-auto w-full max-w-sm space-y-3 rounded-md border bg-background p-3 opacity-60">
+        <div className="flex items-center justify-between gap-2">
+          <div className="h-4 w-16 rounded bg-muted" />
+          <div className="size-9 rounded-md bg-muted" />
+        </div>
+
+        <div className="grid grid-cols-2 gap-2">
+          {Array.from({ length: 6 }, (_, index) => (
+            <div key={index} className="space-y-2 rounded-md bg-muted p-2">
+              <div className="h-3 w-10 rounded bg-background" />
+              <div className="h-2 w-16 rounded bg-background" />
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="h-fit w-[50%] max-w-[250px] p-2 opacity-50 ">
-        <DarkThemeIcon />
+      <div className="space-y-5 opacity-60">
+        <div className="space-y-3">
+          <div className="h-4 w-20 rounded bg-muted" />
+          <div className="h-9 rounded-md bg-muted" />
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div className="space-y-3">
+            <div className="h-4 w-20 rounded bg-muted" />
+            <div className="grid grid-cols-3 gap-1">
+              {Array.from({ length: 3 }, (_, index) => (
+                <div key={index} className="h-9 rounded-md bg-muted" />
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="h-4 w-20 rounded bg-muted" />
+            <div className="grid grid-cols-2 gap-1">
+              {Array.from({ length: 2 }, (_, index) => (
+                <div key={index} className="h-9 rounded-md bg-muted" />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <div className="h-4 w-32 rounded bg-muted" />
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }, (_, index) => (
+              <div key={index} className="h-24 rounded-md bg-muted" />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   )

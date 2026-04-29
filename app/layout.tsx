@@ -9,6 +9,7 @@ import dynamic from "next/dynamic"
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
+import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import { Banner } from "@/components/banner"
 import BetaLock from "@/components/beta-lock"
 import ClarityTag from "@/components/clarity"
@@ -83,6 +84,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn(inter.className, "antialiased ")}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <AppearanceStyleProvider />
           <BetaBanner />
           <Banner.updatedAy />
           <BetaLock>{children}</BetaLock>

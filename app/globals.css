@@ -25,6 +25,58 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
+    --cell-padding: 0.5rem;
+    --table-padding: 0.25rem;
+    --index-bg-opacity-dark: 0.2;
+    --index-bg-opacity-dark-hover: 0.28;
+    --index-lec-bg: 174 72% 88%;
+    --index-lec-bg-hover: 174 72% 82%;
+    --index-lec-bg-dark: 174 72% 65%;
+    --index-lec-text: 174 72% 26%;
+    --index-lec-text-alt: 174 72% 40%;
+    --index-lec-text-dark: 174 72% 65%;
+    --index-lec-text-alt-dark: 174 72% 56%;
+    --index-lec-border: 174 72% 40%;
+    --index-lab-bg: 84 70% 88%;
+    --index-lab-bg-hover: 84 70% 82%;
+    --index-lab-bg-dark: 84 70% 62%;
+    --index-lab-text: 84 70% 24%;
+    --index-lab-text-alt: 84 70% 38%;
+    --index-lab-text-dark: 84 70% 62%;
+    --index-lab-text-alt-dark: 84 70% 53%;
+    --index-lab-border: 84 70% 38%;
+    --index-sem-bg: 45 93% 88%;
+    --index-sem-bg-hover: 45 93% 82%;
+    --index-sem-bg-dark: 45 93% 68%;
+    --index-sem-text: 45 93% 33%;
+    --index-sem-text-alt: 45 93% 47%;
+    --index-sem-text-dark: 45 93% 68%;
+    --index-sem-text-alt-dark: 45 93% 59%;
+    --index-sem-border: 45 93% 47%;
+    --index-tut-bg: 199 89% 88%;
+    --index-tut-bg-hover: 199 89% 82%;
+    --index-tut-bg-dark: 199 89% 67%;
+    --index-tut-text: 199 89% 34%;
+    --index-tut-text-alt: 199 89% 48%;
+    --index-tut-text-dark: 199 89% 67%;
+    --index-tut-text-alt-dark: 199 89% 58%;
+    --index-tut-border: 199 89% 48%;
+    --index-des-bg: 239 84% 88%;
+    --index-des-bg-hover: 239 84% 82%;
+    --index-des-bg-dark: 239 84% 73%;
+    --index-des-text: 239 84% 38%;
+    --index-des-text-alt: 239 84% 67%;
+    --index-des-text-dark: 239 84% 73%;
+    --index-des-text-alt-dark: 239 84% 64%;
+    --index-des-border: 239 84% 67%;
+    --index-prj-bg: 346 77% 88%;
+    --index-prj-bg-hover: 346 77% 82%;
+    --index-prj-bg-dark: 346 77% 68%;
+    --index-prj-text: 346 77% 36%;
+    --index-prj-text-alt: 346 77% 50%;
+    --index-prj-text-dark: 346 77% 68%;
+    --index-prj-text-alt-dark: 346 77% 59%;
+    --index-prj-border: 346 77% 50%;
   }
 
   .dark {
@@ -108,5 +160,6 @@ table th {
 
 table th,
 table td {
-  @apply border border-slate-200 p-1 dark:border-slate-900;
+  @apply border border-slate-200 dark:border-slate-900;
+  padding: var(--table-padding);
 }

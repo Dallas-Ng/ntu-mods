@@ -66,7 +66,7 @@ const TimetableCell = (props: Props) => {
       onMouseOver={onMouseOver}>
       <div
         className={cn(
-          "flex h-full cursor-pointer items-center break-words rounded-lg p-1 md:px-3",
+          "flex h-full cursor-pointer items-center break-words rounded-lg p-[var(--cell-padding)]",
           indexStyle.background,
           divClassName,
           dimmed && "opacity-30 dark:opacity-20"

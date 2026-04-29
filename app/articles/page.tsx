@@ -9,9 +9,11 @@ export default function ArticlesPage() {
   const articles = getAllArticles()
 
   return (
-    <div className="py-8">
-      <div className="mb-8 max-w-3xl">
-        <h1 className="text-3xl font-bold tracking-normal">Articles</h1>
+    <div className="py-6 sm:py-8">
+      <div className="mb-6 max-w-3xl sm:mb-8">
+        <h1 className="text-2xl font-bold tracking-normal sm:text-3xl">
+          Articles
+        </h1>
         <p className="mt-2 text-foreground/80">
           Guides, updates, and notes from NTUMods.
         </p>
@@ -39,10 +41,10 @@ export default function ArticlesPage() {
                   })}{" "}
                   · {article.readingTime}
                 </div>
-                <h2 className="mt-2 line-clamp-2 font-semibold group-hover:text-primary">
+                <h2 className="mt-2 line-clamp-2 break-words font-semibold group-hover:text-primary">
                   {article.title}
                 </h2>
-                <p className="mt-2 line-clamp-3 text-sm leading-6 text-foreground/80">
+                <p className="mt-2 line-clamp-3 break-words text-sm leading-6 text-foreground/80">
                   {article.description}
                 </p>
               </div>
@@ -50,7 +52,7 @@ export default function ArticlesPage() {
           ))}
         </div>
       ) : (
-        <div className="rounded-md border bg-card p-6 text-sm text-foreground/80">
+        <div className="break-words rounded-md border bg-card p-4 text-sm text-foreground/80 sm:p-6">
           No articles published yet. Copy{" "}
           <code className="rounded bg-muted px-1 py-0.5">
             content/articles/_template.md

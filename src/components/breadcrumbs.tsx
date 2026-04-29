@@ -25,7 +25,7 @@ const Breadcrumbs = (props: Props) => {
   return (
     <>
       <Script
-        strategy="beforeInteractive"
+        strategy="afterInteractive"
         id="breadcrumbs-jsonld"
         {...jsonLdScriptProps<BreadcrumbList>({
           "@context": "https://schema.org",
@@ -39,12 +39,14 @@ const Breadcrumbs = (props: Props) => {
         })}
       />
 
-      <span className="flex items-center gap-1 text-sm text-muted-foreground">
+      <span className="flex min-w-0 max-w-full items-center gap-1 overflow-x-auto whitespace-nowrap pb-1 text-sm text-muted-foreground">
         {breadcrumbs.map(({ href, label }, idx) => {
           return (
             <Fragment key={href}>
-              {idx > 0 && <ChevronRight className="size-4" />}
-              <Link href={href} className="hover:text-secondary-foreground">
+              {idx > 0 && <ChevronRight className="size-4 shrink-0" />}
+              <Link
+                href={href}
+                className="max-w-[16rem] shrink-0 truncate hover:text-secondary-foreground sm:max-w-none">
                 {label}
               </Link>
             </Fragment>

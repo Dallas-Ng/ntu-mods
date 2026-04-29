@@ -32,8 +32,11 @@ const TableSettings = dynamic(
 
 export default function SettingsPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-4 lg:mt-5">
-      <Header title="Settings" subtitle="Customise the website!" />
+    <div className="mx-auto max-w-4xl space-y-4 lg:mt-5">
+      <Header
+        title="Settings"
+        subtitle="Customise the look, feel, and timetable detail level."
+      />
 
       <div className="space-y-5">
         <div>
@@ -57,8 +60,8 @@ export default function SettingsPage() {
             <p>Appearance Settings</p>
 
             <p className="text-sm text-muted-foreground">
-              Customize the appearance of the app. Switch between day and night
-              themes.
+              Tune theme, radius, density, contrast, and timetable colour
+              personality.
             </p>
           </div>
 

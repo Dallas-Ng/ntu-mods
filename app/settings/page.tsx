@@ -2,6 +2,8 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 import { History, ServerCrash } from "lucide-react"
 
+import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
+import { cn } from "@/lib/utils"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import FeedbackCard from "@/components/feedback-card"
 import Header from "@/components/header"
@@ -32,7 +34,7 @@ const TableSettings = dynamic(
 
 export default function SettingsPage() {
   return (
-    <div className="mx-auto max-w-4xl space-y-4 lg:mt-5">
+    <div className={cn(SUPPORT_PAGE_CONTAINER_CLASSNAME, "space-y-4")}>
       <Header
         title="Settings"
         subtitle="Customise the look, feel, and timetable detail level."

@@ -1,10 +1,16 @@
 import Link from "next/link"
 
+import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
+import { cn } from "@/lib/utils"
 import Header from "@/components/header"
 
 export default function HelpPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-4 text-muted-foreground lg:mt-5">
+    <div
+      className={cn(
+        SUPPORT_PAGE_CONTAINER_CLASSNAME,
+        "space-y-4 text-muted-foreground"
+      )}>
       <div className="text-foreground">
         <Header title="Privacy Policy" subtitle="Last Updated: Feb 2026" />
       </div>

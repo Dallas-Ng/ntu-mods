@@ -1,6 +1,8 @@
 import Link from "next/link"
 import { History, ServerCrash } from "lucide-react"
 
+import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
+import { cn } from "@/lib/utils"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import FeedbackCard from "@/components/feedback-card"
 
@@ -92,7 +94,7 @@ const HELP_CONFIG: HelpConfig[] = [
 
 export default function HelpPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-10 lg:mt-5">
+    <div className={cn(SUPPORT_PAGE_CONTAINER_CLASSNAME, "space-y-10")}>
       {/* <div className="space-y-5">
         <Header
           title="Frequently Asked Questions"

@@ -81,10 +81,9 @@ export default async function Page({ params }: { params: { module: string } }) {
             currentSemester={semester}
             isCurrentOffering={isCurrentOffering}
           />
+
           {moduleData.description && (
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-              {moduleData.description}
-            </p>
+            <p className="mt-4 leading-relaxed">{moduleData.description}</p>
           )}
         </div>
 

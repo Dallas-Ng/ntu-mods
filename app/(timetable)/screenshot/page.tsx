@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
@@ -55,6 +55,14 @@ const DEFAULT_PADDING = {
 }
 
 export default function ScreenshotPage() {
+  return (
+    <Suspense fallback={null}>
+      <ScreenshotPageContent />
+    </Suspense>
+  )
+}
+
+function ScreenshotPageContent() {
   const { isMobile } = useSettings()
   const [showTaskbar, setShowTaskbar] = useState(true)
   const [padding, setPadding] = useState(DEFAULT_PADDING)

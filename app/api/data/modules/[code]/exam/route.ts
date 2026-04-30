@@ -11,8 +11,9 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { code: string } }
 ) {
+  const searchParams = request.nextUrl.searchParams
+
   try {
-    const searchParams = request.nextUrl.searchParams
     const year = searchParams.get("year")
     const semester = searchParams.get("semester")
     const code = params.code?.toUpperCase()

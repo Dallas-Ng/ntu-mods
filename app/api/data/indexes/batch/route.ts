@@ -9,8 +9,9 @@ import { NextRequest, NextResponse } from "next/server"
  * Response: { [moduleCode]: { [indexKey]: Index[] } }
  */
 export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams
+
   try {
-    const searchParams = request.nextUrl.searchParams
     const year = searchParams.get("year")
     const semester = searchParams.get("semester")
     const modulesParam = searchParams.get("modules")

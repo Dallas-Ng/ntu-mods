@@ -11,8 +11,9 @@ import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
  * Response: { code, title, au, indexKey, index: Index }
  */
 export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams
+
   try {
-    const searchParams = request.nextUrl.searchParams
     const year = searchParams.get("year") ?? "2025"
     const semester = searchParams.get("semester") ?? "2"
 

@@ -8,8 +8,9 @@ import { getSemesterExamsData } from "@/lib/server/get-module-exam-data"
  * Query params: year, semester
  */
 export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams
+
   try {
-    const searchParams = request.nextUrl.searchParams
     const year = searchParams.get("year")
     const semester = searchParams.get("semester")
 

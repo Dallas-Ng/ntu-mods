@@ -4,8 +4,8 @@ import { MODULE_CATEGORY } from "@/lib/constants"
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
-import { cn } from "@/lib/utils"
 import type { ApiModule } from "@/lib/server/get-module-metadata"
+import { cn } from "@/lib/utils"
 
 import { Skeleton } from "./ui/skeleton"
 
@@ -51,9 +51,15 @@ interface ModuleCardDetailProps {
 
 function getHref(moduleData: ApiModule, code: string) {
   const isCurrentSemester = moduleData.isCurrentSemester !== false
-  return isCurrentSemester || !moduleData.latestYear || !moduleData.latestSemester
+  return isCurrentSemester ||
+    !moduleData.latestYear ||
+    !moduleData.latestSemester
     ? getModuleUrl(code)
-    : getModuleVersionUrl(code, moduleData.latestYear, moduleData.latestSemester)
+    : getModuleVersionUrl(
+        code,
+        moduleData.latestYear,
+        moduleData.latestSemester
+      )
 }
 
 export const ModuleCardDetail = ({

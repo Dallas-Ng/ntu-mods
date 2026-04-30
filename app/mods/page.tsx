@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { ChevronDown, LayoutGrid, List } from "lucide-react"
 
@@ -10,18 +10,19 @@ import { getModuleFaculty } from "@/lib/get-module-faculty"
 import { useAllModules, type AllModule } from "@/hooks/use-all-modules"
 import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useSettings } from "@/hooks/use-settings"
+import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import { ModsActiveFilters } from "@/components/mods/mods-active-filters"
-import {
-  ModsGroupBySelect,
-  type ModsGroupBy
-} from "@/components/mods/mods-group-by-select"
 import { ModsCurrentOnlyToggle } from "@/components/mods/mods-current-only-toggle"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import {
   ModsFacultySelect,
   SearchModuleFaculty
 } from "@/components/mods/mods-faculty-select"
+import {
+  ModsGroupBySelect,
+  type ModsGroupBy
+} from "@/components/mods/mods-group-by-select"
 import {
   ModsLevelSelect,
   SearchModuleLevel
@@ -38,7 +39,6 @@ import {
   ModuleListRow,
   ModuleListRowLoading
 } from "@/components/module-card"
-import { Button } from "@/components/ui/button"
 
 interface Props {
   searchParams: {
@@ -52,6 +52,18 @@ interface Props {
 }
 
 const PAGE_SIZE = 100
+const GROUP_DEFAULT_VISIBLE = 10
+const LOADING_CARD_COUNT = 9
+const LOADING_LIST_COUNT = 12
+const CODE_QUERY_RE = /^[a-z]{2,4}\d*/i
+const TYPE_PRIORITY: ModuleType[] = [
+  "CNY",
+  "USP",
+  "GERP",
+  "MLOAD",
+  "GLOAD",
+  "CORE"
+]
 
 function getGroupKey(module: AllModule, groupBy: ModsGroupBy): string {
   switch (groupBy) {
@@ -60,12 +72,11 @@ function getGroupKey(module: AllModule, groupBy: ModsGroupBy): string {
     case "au":
       return module.au ?? "?"
     case "faculty":
-      return getModuleFaculty(module.code, module.searchKeys ?? [])
+      return getModuleFaculty(module.code, module.searchKeys ?? []) || "OTHER"
     case "type": {
       const cats = getModuleCategories(module.searchKeys ?? [])
       if (cats.length === 0) return "OTHER"
-      const priority: ModuleType[] = ["CNY", "USP", "GERP", "MLOAD", "GLOAD", "CORE"]
-      return priority.find((p) => cats.includes(p)) ?? cats[0]
+      return TYPE_PRIORITY.find((p) => cats.includes(p)) ?? cats[0]
     }
     default:
       return ""
@@ -100,7 +111,9 @@ function groupModules(modules: AllModule[], groupBy: ModsGroupBy) {
     modules: mods
   }))
   if (groupBy === "level" || groupBy === "au") {
-    entries.sort((a, b) => a.key.localeCompare(b.key, undefined, { numeric: true }))
+    entries.sort((a, b) =>
+      a.key.localeCompare(b.key, undefined, { numeric: true })
+    )
   } else {
     entries.sort((a, b) => a.label.localeCompare(b.label))
   }
@@ -143,8 +156,7 @@ function filterModules(
 
   if (opts.searchTerm) {
     const q = opts.searchTerm.toLowerCase()
-    const isCodeQuery = /^[a-z]{2,4}\d*/i.test(q)
-    if (isCodeQuery) {
+    if (CODE_QUERY_RE.test(q)) {
       const codeMatches = filtered.filter((m) =>
         m.code.toLowerCase().includes(q)
       )
@@ -174,13 +186,17 @@ const ModsPage = ({ searchParams }: Props) => {
   } = searchParams
 
   const { year, semester } = useLatestSemester()
+  const nextYear = parseInt(year) + 1
   const { modules: allModules, isLoading } = useAllModules()
   const { modsViewMode, modsGroupBy, updateSettings } = useSettings()
-  const setViewMode = (mode: "cards" | "list") =>
-    updateSettings({ modsViewMode: mode })
   const [displayCount, setDisplayCount] = useState(PAGE_SIZE)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
   const loaderRef = useRef<HTMLDivElement>(null)
+
+  const setViewMode = useCallback(
+    (mode: "cards" | "list") => updateSettings({ modsViewMode: mode }),
+    [updateSettings]
+  )
 
   const filteredModules = useMemo(
     () =>
@@ -191,7 +207,14 @@ const ModsPage = ({ searchParams }: Props) => {
         moduleLevel,
         currentOnly: currentOnly === "true"
       }),
-    [allModules, searchTerm, moduleType, moduleFaculty, moduleLevel, currentOnly]
+    [
+      allModules,
+      searchTerm,
+      moduleType,
+      moduleFaculty,
+      moduleLevel,
+      currentOnly
+    ]
   )
 
   const displayedModules = useMemo(
@@ -201,19 +224,26 @@ const ModsPage = ({ searchParams }: Props) => {
 
   const groupedModules = useMemo(
     () =>
-      modsGroupBy !== "none" ? groupModules(filteredModules, modsGroupBy) : null,
+      modsGroupBy !== "none"
+        ? groupModules(filteredModules, modsGroupBy)
+        : null,
     [filteredModules, modsGroupBy]
   )
 
   const hasMore = displayCount < filteredModules.length
 
-  // Reset display count and group expansion when filters change
   useEffect(() => {
     setDisplayCount(PAGE_SIZE)
     setExpandedGroups(new Set())
-  }, [searchTerm, moduleType, moduleFaculty, moduleLevel, currentOnly, modsGroupBy])
+  }, [
+    searchTerm,
+    moduleType,
+    moduleFaculty,
+    moduleLevel,
+    currentOnly,
+    modsGroupBy
+  ])
 
-  // Infinite scroll
   useEffect(() => {
     if (!loaderRef.current) return
     const observer = new IntersectionObserver((entries) => {
@@ -225,28 +255,68 @@ const ModsPage = ({ searchParams }: Props) => {
     return () => observer.disconnect()
   }, [hasMore])
 
+  const renderModules = (modules: AllModule[], footer?: React.ReactNode) =>
+    modsViewMode === "cards" ? (
+      footer ? (
+        <div className="overflow-hidden rounded-lg border-2">
+          <div className="grid grid-cols-1 gap-4 p-3 md:grid-cols-3">
+            {modules.map((m, i) => (
+              <ModuleCardDetail
+                key={i}
+                code={m.code}
+                moduleData={m}
+                searchTerm={searchTerm}
+              />
+            ))}
+          </div>
+          <div className="border-t">{footer}</div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {modules.map((m, i) => (
+            <ModuleCardDetail
+              key={i}
+              code={m.code}
+              moduleData={m}
+              searchTerm={searchTerm}
+            />
+          ))}
+        </div>
+      )
+    ) : (
+      <div className="overflow-hidden rounded-lg border-2">
+        {modules.map((m, i) => (
+          <div key={i} className="border-b last:border-b-0">
+            <ModuleListRow
+              code={m.code}
+              moduleData={m}
+              searchTerm={searchTerm}
+            />
+          </div>
+        ))}
+        {footer && <div className="border-t">{footer}</div>}
+      </div>
+    )
+
+
   return (
     <div className="relative space-y-3">
       <Header
         title="NTU Modules"
-        subtitle={`AY${year}/${parseInt(year) + 1} Semester ${semester}`}
+        subtitle={`AY${year}/${nextYear} Semester ${semester}`}
       />
 
       <div className="flex w-full flex-col gap-2 lg:flex-row">
         <ModsSearchInput paramsValue={searchTerm} />
-
         <div className="flex gap-2">
           <ModsModuleTypeSelect paramsValue={moduleType} />
         </div>
-
         <div className="flex gap-2">
           <ModsFacultySelect paramsValue={moduleFaculty} />
         </div>
-
         <div className="flex gap-2">
           <ModsLevelSelect searchTerm={searchTerm} paramValue={moduleLevel} />
         </div>
-
         <div className="flex items-center gap-2">
           <ModsCurrentOnlyToggle paramsValue={currentOnly} />
         </div>
@@ -269,7 +339,8 @@ const ModsPage = ({ searchParams }: Props) => {
           <ModsGroupBySelect />
           {!isLoading && filteredModules.length > 0 && (
             <p className="text-sm text-muted-foreground">
-              {filteredModules.length} module{filteredModules.length !== 1 ? "s" : ""}
+              {filteredModules.length} module
+              {filteredModules.length !== 1 ? "s" : ""}
             </p>
           )}
         </div>
@@ -292,60 +363,17 @@ const ModsPage = ({ searchParams }: Props) => {
       </div>
 
       {(() => {
-        const renderModules = (modules: AllModule[], footer?: React.ReactNode) =>
-          modsViewMode === "cards" ? (
-            footer ? (
-              <div className="overflow-hidden rounded-lg border-2">
-                <div className="grid grid-cols-1 gap-4 p-3 md:grid-cols-3">
-                  {modules.map((m, i) => (
-                    <ModuleCardDetail
-                      key={i}
-                      code={m.code}
-                      moduleData={m}
-                      searchTerm={searchTerm}
-                    />
-                  ))}
-                </div>
-                <div className="border-t">{footer}</div>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                {modules.map((m, i) => (
-                  <ModuleCardDetail
-                    key={i}
-                    code={m.code}
-                    moduleData={m}
-                    searchTerm={searchTerm}
-                  />
-                ))}
-              </div>
-            )
-          ) : (
-            <div className="overflow-hidden rounded-lg border-2">
-              {modules.map((m, i) => (
-                <div key={i} className="border-b last:border-b-0">
-                  <ModuleListRow
-                    code={m.code}
-                    moduleData={m}
-                    searchTerm={searchTerm}
-                  />
-                </div>
-              ))}
-              {footer && <div className="border-t">{footer}</div>}
-            </div>
-          )
-
         if (isLoading) {
           return modsViewMode === "cards" ? (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              {Array.from({ length: 9 }).map((_, i) => (
+              {Array.from({ length: LOADING_CARD_COUNT }).map((_, i) => (
                 <ModuleCardDetailLoading key={i} />
               ))}
             </div>
           ) : (
             <div className="overflow-hidden rounded-lg border-2">
-              {Array.from({ length: 12 }).map((_, i) => (
-                <div key={i} className={i !== 11 ? "border-b" : ""}>
+              {Array.from({ length: LOADING_LIST_COUNT }).map((_, i) => (
+                <div key={i} className={i !== LOADING_LIST_COUNT - 1 ? "border-b" : ""}>
                   <ModuleListRowLoading />
                 </div>
               ))}
@@ -353,15 +381,15 @@ const ModsPage = ({ searchParams }: Props) => {
           )
         }
 
-        const GROUP_DEFAULT = 10
-
         if (groupedModules) {
           return (
             <div className="space-y-6">
               {groupedModules.map(({ key, label, modules }) => {
                 const isExpanded = expandedGroups.has(key)
-                const visible = isExpanded ? modules : modules.slice(0, GROUP_DEFAULT)
-                const hidden = modules.length - GROUP_DEFAULT
+                const visible = isExpanded
+                  ? modules
+                  : modules.slice(0, GROUP_DEFAULT_VISIBLE)
+                const hidden = modules.length - GROUP_DEFAULT_VISIBLE
                 return (
                   <div key={key} className="space-y-3">
                     <h3 className="text-sm font-medium">
@@ -376,8 +404,8 @@ const ModsPage = ({ searchParams }: Props) => {
                           size="sm"
                           className="w-full rounded-none"
                           onClick={() =>
-                            setExpandedGroups((prev) =>
-                              new Set(Array.from(prev).concat(key))
+                            setExpandedGroups(
+                              (prev) => new Set(Array.from(prev).concat(key))
                             )
                           }>
                           <ChevronDown className="mr-1 size-4" />
@@ -395,14 +423,16 @@ const ModsPage = ({ searchParams }: Props) => {
         return renderModules(displayedModules)
       })()}
 
-      {!isLoading && hasMore && modsGroupBy === "none" && <div ref={loaderRef} className="h-4" />}
+      {!isLoading && hasMore && modsGroupBy === "none" && (
+        <div ref={loaderRef} className="h-4" />
+      )}
 
       {!isLoading && (
         <p className="text-center text-sm text-muted-foreground transition-colors hover:text-primary-alt">
           <Link
             href="https://wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"
             target="_blank">
-            Updated as at AY{year}/{parseInt(year) + 1}
+            Updated as at AY{year}/{nextYear}
           </Link>
         </p>
       )}

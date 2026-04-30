@@ -41,10 +41,10 @@ export default function ArticlesPage() {
                   })}{" "}
                   · {article.readingTime}
                 </div>
-                <h2 className="mt-2 line-clamp-2 break-words font-semibold group-hover:text-primary">
+                <h2 className="mt-2 line-clamp-2 font-semibold break-words group-hover:text-primary">
                   {article.title}
                 </h2>
-                <p className="mt-2 line-clamp-3 break-words text-sm leading-6 text-foreground/80">
+                <p className="mt-2 line-clamp-3 text-sm leading-6 break-words text-foreground/80">
                   {article.description}
                 </p>
               </div>
@@ -52,7 +52,7 @@ export default function ArticlesPage() {
           ))}
         </div>
       ) : (
-        <div className="break-words rounded-md border bg-card p-4 text-sm text-foreground/80 sm:p-6">
+        <div className="rounded-md border bg-card p-4 text-sm break-words text-foreground/80 sm:p-6">
           No articles published yet. Copy{" "}
           <code className="rounded bg-muted px-1 py-0.5">
             content/articles/_template.md

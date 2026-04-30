@@ -78,7 +78,7 @@ const ArticleToc = ({ headings }: Props) => {
                 href={`#${heading.id}`}
                 aria-current={isActive ? "true" : undefined}
                 className={cn(
-                  "block border-l-2 border-transparent py-1.5 pl-3 pr-2 leading-5 text-foreground/65 transition-colors hover:border-primary/50 hover:text-foreground",
+                  "block border-l-2 border-transparent py-1.5 pr-2 pl-3 leading-5 text-foreground/65 transition-colors hover:border-primary/50 hover:text-foreground",
                   isActive && "border-l-primary bg-primary/5 text-foreground"
                 )}>
                 <span className="line-clamp-2">{heading.text}</span>

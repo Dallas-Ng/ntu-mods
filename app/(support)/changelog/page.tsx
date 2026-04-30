@@ -62,7 +62,7 @@ const FILTERS = ["All", ...CATEGORIES] as ChangelogFilter[]
 
 const getCategoryBadgeClassName = (category: ChangelogCategory) =>
   cn(
-    "inline-flex h-6 w-fit items-center rounded-full border px-2 text-xs font-medium leading-none",
+    "inline-flex h-6 w-fit items-center rounded-full border px-2 text-xs leading-none font-medium",
     CATEGORY_STYLES[category]
   )
 
@@ -85,7 +85,7 @@ const ChangelogFilters = ({
         aria-pressed={activeFilter === filter}
         onClick={() => onFilterChange(filter)}
         className={cn(
-          "inline-flex h-6 w-fit items-center rounded-full border px-2 text-xs font-medium leading-none transition-opacity hover:opacity-80",
+          "inline-flex h-6 w-fit items-center rounded-full border px-2 text-xs leading-none font-medium transition-opacity hover:opacity-80",
           activeFilter !== filter && "opacity-50",
           filter === "All"
             ? "border-border bg-muted text-foreground"

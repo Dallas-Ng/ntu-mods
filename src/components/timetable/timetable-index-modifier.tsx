@@ -158,7 +158,7 @@ const TimetableIndexModifier = (props: Props) => {
           </div>
 
           <span className="w-full">Day / Time</span>
-          <span className="whitespace-nowrap text-end">Group / Venue</span>
+          <span className="text-end whitespace-nowrap">Group / Venue</span>
         </div>
       )}
 

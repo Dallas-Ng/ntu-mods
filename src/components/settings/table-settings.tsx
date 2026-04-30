@@ -48,7 +48,10 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
   const reRollIndex = () => setRerollKey((k) => k + 1)
 
   const updateTableCell = (checked: boolean, key: keyof typeof tableCell) => {
-    updateSettings({ ...settings, tableCell: { ...tableCell, [key]: checked } })
+    updateSettings({
+      ...settings,
+      tableCell: { ...tableCell, [key]: checked }
+    })
   }
 
   if (!randomData) return <TableSettingsLoading />
@@ -90,7 +93,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
           </div>
 
           <div className="flex w-full items-baseline justify-between">
-            <p className="w-full truncate text-xs capitalize text-muted-foreground">
+            <p className="w-full truncate text-xs text-muted-foreground capitalize">
               {title}
             </p>
 

@@ -20,7 +20,7 @@ export const ModsCurrentOnlyToggle = ({
       />
       <Label
         htmlFor="current-only"
-        className="cursor-pointer whitespace-nowrap text-sm">
+        className="cursor-pointer text-sm whitespace-nowrap">
         Current sem only
       </Label>
     </div>

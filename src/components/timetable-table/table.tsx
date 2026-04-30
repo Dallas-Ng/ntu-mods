@@ -17,7 +17,7 @@ import { TimetableTableThead } from "./thead"
 
 const TimeSlotItem = ({ startTime }: { startTime: number }) => (
   <td className="relative">
-    <span className="absolute left-0 top-[-8px] w-full bg-card px-1 text-center">
+    <span className="absolute top-[-8px] left-0 w-full bg-card px-1 text-center">
       {startTime}
     </span>
 

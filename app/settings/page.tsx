@@ -63,7 +63,7 @@ export default function SettingsPage() {
 
         <div
           id="dark-mode"
-          className="space-y-4 rounded-md border bg-card px-4 pb-4 pt-2 shadow-lg">
+          className="space-y-4 rounded-md border bg-card px-4 pt-2 pb-4 shadow-lg">
           <div>
             <p>Appearance Settings</p>
 
@@ -80,7 +80,7 @@ export default function SettingsPage() {
 
         <div
           id="table-settings"
-          className="space-y-4 rounded-md border bg-card px-4 pb-4 pt-2 shadow-lg">
+          className="space-y-4 rounded-md border bg-card px-4 pt-2 pb-4 shadow-lg">
           <div>
             <p>Table Settings</p>
 
@@ -112,7 +112,7 @@ export default function SettingsPage() {
 
         <div
           id="feedback"
-          className="space-y-2 rounded-md border bg-card px-4 pb-4 pt-2 shadow-lg">
+          className="space-y-2 rounded-md border bg-card px-4 pt-2 pb-4 shadow-lg">
           <div>
             <p>Feedback </p>
 

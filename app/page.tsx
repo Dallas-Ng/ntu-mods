@@ -25,7 +25,7 @@ export default function IndexPage() {
       </div>
 
       <div className="relative overflow-hidden">
-        <div className="container relative z-[2] p-3">
+        <div className="relative z-[2] container p-3">
           <Product />
         </div>
 

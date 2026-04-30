@@ -8,7 +8,7 @@ const Header = (props: Props) => {
 
   return (
     <div className="space-y-3">
-      <h1 className="break-words text-3xl font-semibold leading-[1]">
+      <h1 className="text-3xl leading-[1] font-semibold break-words">
         {title}
       </h1>
 

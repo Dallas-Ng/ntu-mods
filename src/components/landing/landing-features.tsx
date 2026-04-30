@@ -18,7 +18,7 @@ const LandingFeatures = () => {
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <Link href="/timetable" className="cursor-pointer">
             <div className="relative h-[300px] w-full rounded-xl border p-3 shadow">
-              <div className="absolute left-8 top-12 w-10/12 md:left-3 lg:left-8">
+              <div className="absolute top-12 left-8 w-10/12 md:left-3 lg:left-8">
                 <h3 className="text-2xl font-bold">
                   Filter, Search and Manage
                 </h3>
@@ -38,7 +38,7 @@ const LandingFeatures = () => {
           </Link>
 
           <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
-            <div className="absolute left-8 top-12 w-10/12 md:left-3 lg:left-8">
+            <div className="absolute top-12 left-8 w-10/12 md:left-3 lg:left-8">
               <h3 className="text-2xl font-bold">Save as Photo or Calendar</h3>
               <p className="text-lg text-muted-foreground">
                 NTU Mods supports exporting your timetable for your lockscreen
@@ -51,7 +51,7 @@ const LandingFeatures = () => {
               alt="use on any devices"
               width={200}
               height={110}
-              className="absolute bottom-[-45%] right-5 w-[70%] p-5 lg:bottom-[-58%] lg:w-[60%]"
+              className="absolute right-5 bottom-[-45%] w-[70%] p-5 lg:bottom-[-58%] lg:w-[60%]"
             />
           </div>
         </div>
@@ -64,7 +64,7 @@ const LandingFeatures = () => {
                 alt="share with your friends"
                 width={400}
                 height={110}
-                className="absolute bottom-[-20%] right-[10%] w-[70%] -rotate-45 p-5 invert dark:invert-0"
+                className="absolute right-[10%] bottom-[-20%] w-[70%] -rotate-45 p-5 invert dark:invert-0"
               />
 
               <div className="absolute bottom-8 left-8 w-10/12 md:bottom-3 md:left-3 lg:bottom-3 lg:left-8">
@@ -86,7 +86,7 @@ const LandingFeatures = () => {
                 alt="share with your friends"
                 width={200}
                 height={110}
-                className="absolute left-1/2 top-0 w-[60%] -translate-x-1/2 p-5 md:top-[10%] md:w-[80%] lg:top-0 lg:w-[55%]"
+                className="absolute top-0 left-1/2 w-[60%] -translate-x-1/2 p-5 md:top-[10%] md:w-[80%] lg:top-0 lg:w-[55%]"
               />
 
               <div className="absolute bottom-8 left-8 w-10/12 md:bottom-3 md:left-3 lg:bottom-3 lg:left-8">

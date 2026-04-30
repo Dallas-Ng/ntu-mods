@@ -42,7 +42,7 @@ export const ModsLevelSelect = ({ paramValue, searchTerm }: Props) => {
       onChange={(value) => setValue(value as SearchModuleLevel)}
       divClassName={cn(
         "w-full lg:w-[150px]",
-        value !== "all" && "ring-1 ring-ring rounded-md"
+        value !== "all" && "ring-ring rounded-md ring-1"
       )}
     />
   )

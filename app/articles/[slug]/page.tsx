@@ -61,7 +61,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
       />
 
       <div className="mt-5 grid min-w-0 justify-center gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
-        <article className="min-w-0 max-w-full">
+        <article className="max-w-full min-w-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={article.thumbnail}
@@ -98,7 +98,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
                 key={item.slug}
                 href={`/articles/${item.slug}`}
                 className="rounded-md border bg-card p-3 transition-colors hover:bg-accent">
-                <p className="line-clamp-2 break-words text-sm font-medium">
+                <p className="line-clamp-2 text-sm font-medium break-words">
                   {item.title}
                 </p>
                 <p className="mt-2 text-xs text-foreground/70">

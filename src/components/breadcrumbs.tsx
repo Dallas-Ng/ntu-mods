@@ -39,7 +39,7 @@ const Breadcrumbs = (props: Props) => {
         })}
       />
 
-      <span className="flex min-w-0 max-w-full items-center gap-1 overflow-x-auto whitespace-nowrap pb-1 text-sm text-muted-foreground">
+      <span className="flex max-w-full min-w-0 items-center gap-1 overflow-x-auto pb-1 text-sm whitespace-nowrap text-muted-foreground">
         {breadcrumbs.map(({ href, label }, idx) => {
           return (
             <Fragment key={href}>

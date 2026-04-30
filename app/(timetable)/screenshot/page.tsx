@@ -117,7 +117,7 @@ export default function ScreenshotPage() {
 
       <div
         className={cn(
-          "fixed left-0 top-0 flex w-full items-center justify-center",
+          "fixed top-0 left-0 flex w-full items-center justify-center",
           showTaskbar ? "opacity-100" : "pointer-events-none opacity-0"
         )}>
         <span className="w-fit rounded-b-md border-2 border-t-0 bg-background p-1 px-2 text-center text-sm shadow">

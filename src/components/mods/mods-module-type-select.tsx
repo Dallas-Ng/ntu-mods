@@ -32,7 +32,7 @@ export const ModsModuleTypeSelect = ({
       onChange={(value) => setValue(value as SearchModuleType)}
       divClassName={cn(
         "w-full lg:w-[200px]",
-        value !== "all" && "ring-1 ring-ring rounded-md"
+        value !== "all" && "ring-ring rounded-md ring-1"
       )}
     />
   )

@@ -67,7 +67,7 @@ const Navbar = () => {
 
             <span
               className={cn(
-                "ml-1 hidden font-bold hover:text-slate-950 dark:hover:text-slate-100 md:inline-block",
+                "ml-1 hidden font-bold hover:text-slate-950 md:inline-block dark:hover:text-slate-100",
                 pathname === "/"
                   ? "text-slate-950 dark:text-slate-100"
                   : "text-slate-500 dark:text-slate-400"
@@ -87,7 +87,7 @@ const Navbar = () => {
                     legacyBehavior>
                     <NavigationMenuLink
                       className={cn(
-                        "mr-1 p-1 text-sm font-semibold hover:text-slate-950 dark:hover:text-slate-100 md:p-3",
+                        "mr-1 p-1 text-sm font-semibold hover:text-slate-950 md:p-3 dark:hover:text-slate-100",
                         pathname.includes(link.route)
                           ? "text-slate-950 dark:text-slate-100"
                           : "text-slate-500 dark:text-slate-400"

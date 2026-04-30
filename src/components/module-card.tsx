@@ -35,7 +35,7 @@ function highlightText(text: string, query: string) {
   return (
     <>
       {text.slice(0, idx)}
-      <mark className="bg-transparent font-semibold not-italic text-foreground">
+      <mark className="bg-transparent font-semibold text-foreground not-italic">
         {text.slice(idx, idx + query.length)}
       </mark>
       {text.slice(idx + query.length)}

@@ -32,8 +32,8 @@ export const ModsFacultySelect = ({ paramsValue }: { paramsValue: string }) => {
       selectItems={selectItems}
       onChange={(value) => setValue(value as SearchModuleFaculty)}
       divClassName={cn(
-        "w-full lg:max-w-[350px] min-w-[150px]",
-        value !== "all" && "ring-1 ring-ring rounded-md"
+        "w-full min-w-[150px] lg:max-w-[350px]",
+        value !== "all" && "ring-ring rounded-md ring-1"
       )}
     />
   )

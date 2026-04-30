@@ -17,7 +17,7 @@ export const BannerWrapper = (props: BannerProps) => {
       )}>
       <p
         className={cn(
-          "text-center text-sm font-medium leading-6 text-black",
+          "text-center text-sm leading-6 font-medium text-black",
           props.pClass
         )}>
         {props.children}

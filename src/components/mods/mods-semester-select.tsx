@@ -25,7 +25,7 @@ export const ModsSemesterSelect = ({
       onChange={(value) => setValue(value as Semester)}
       divClassName={cn(
         "basis-1/2 lg:w-[200px]",
-        value !== "all" && "ring-1 ring-ring rounded-md"
+        value !== "all" && "ring-ring rounded-md ring-1"
       )}
     />
   )

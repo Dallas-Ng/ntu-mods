@@ -17,7 +17,7 @@ const TimetableModifier = () => {
   return (
     <div className="flex size-full flex-col space-y-4">
       <div className="relative z-[2] h-[40px] w-full rounded-lg">
-        <div className="absolute left-0 top-0 w-full">
+        <div className="absolute top-0 left-0 w-full">
           <TimetableModulesSelect />
         </div>
       </div>
@@ -37,7 +37,7 @@ const TimetableModifier = () => {
               onOpenChange={(moduleKey) => setActiveKey(moduleKey)}>
               <div
                 className={cn(
-                  "cursor-pointer pl-4 pr-1 text-sm transition-colors hover:bg-accent",
+                  "cursor-pointer pr-1 pl-4 text-sm transition-colors hover:bg-accent",
                   activeKey === moduleKey && "rounded-b-none bg-muted"
                 )}>
                 <div className="flex w-full items-center justify-between">

@@ -33,7 +33,7 @@ const parseInline = (text: string): React.ReactNode[] => {
       nodes.push(
         <code
           key={match.index}
-          className="break-words rounded bg-muted px-1 py-0.5 text-sm text-foreground">
+          className="rounded bg-muted px-1 py-0.5 text-sm break-words text-foreground">
           {token.slice(1, -1)}
         </code>
       )
@@ -64,7 +64,7 @@ const parseInline = (text: string): React.ReactNode[] => {
           <Link
             key={match.index}
             href={link[2]}
-            className="break-words font-medium text-primary underline-offset-4 hover:underline"
+            className="font-medium break-words text-primary underline-offset-4 hover:underline"
             target={isExternal ? "_blank" : undefined}
             rel={isExternal ? "noreferrer" : undefined}>
             {link[1]}
@@ -118,7 +118,7 @@ const renderTable = (
             <th
               key={headerIndex}
               className={cn(
-                "whitespace-nowrap bg-muted px-3 py-2 font-semibold text-foreground",
+                "bg-muted px-3 py-2 font-semibold whitespace-nowrap text-foreground",
                 alignments[headerIndex] === "center" && "text-center",
                 alignments[headerIndex] === "right" && "text-right"
               )}>
@@ -230,7 +230,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
         blocks.push(
           <h1
             key={index}
-            className="mb-5 break-words text-3xl font-bold leading-tight tracking-normal text-foreground sm:mb-6 md:text-5xl">
+            className="mb-5 text-3xl leading-tight font-bold tracking-normal break-words text-foreground sm:mb-6 md:text-5xl">
             {text}
           </h1>
         )
@@ -239,7 +239,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
           <h2
             key={index}
             id={id}
-            className="scroll-mt-24 break-words pt-10 text-2xl font-semibold leading-tight tracking-normal text-foreground sm:pt-12 sm:text-3xl">
+            className="scroll-mt-24 pt-10 text-2xl leading-tight font-semibold tracking-normal break-words text-foreground sm:pt-12 sm:text-3xl">
             {text}
           </h2>
         )
@@ -248,7 +248,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
           <h3
             key={index}
             id={id}
-            className="scroll-mt-24 break-words pt-8 text-xl font-semibold leading-snug tracking-normal text-foreground sm:text-2xl">
+            className="scroll-mt-24 pt-8 text-xl leading-snug font-semibold tracking-normal break-words text-foreground sm:text-2xl">
             {text}
           </h3>
         )
@@ -256,7 +256,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
         blocks.push(
           <h4
             key={index}
-            className="scroll-mt-24 break-words pt-6 text-lg font-semibold leading-snug tracking-normal text-foreground sm:text-xl">
+            className="scroll-mt-24 pt-6 text-lg leading-snug font-semibold tracking-normal break-words text-foreground sm:text-xl">
             {text}
           </h4>
         )
@@ -310,7 +310,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
       blocks.push(
         <blockquote
           key={index}
-          className="my-5 break-words rounded-md border border-l-4 border-primary/20 border-l-primary bg-primary/5 px-4 py-3 text-foreground shadow-sm sm:my-6">
+          className="my-5 rounded-md border border-l-4 border-primary/20 border-l-primary bg-primary/5 px-4 py-3 break-words text-foreground shadow-sm sm:my-6">
           {parseInline(quote.join(" "))}
         </blockquote>
       )
@@ -338,13 +338,13 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
     }
 
     blocks.push(
-      <p key={index} className="my-4 break-words leading-7 text-foreground/90">
+      <p key={index} className="my-4 leading-7 break-words text-foreground/90">
         {parseInline(paragraph.join(" "))}
       </p>
     )
   }
 
-  return <div className="min-w-0 max-w-full">{blocks}</div>
+  return <div className="max-w-full min-w-0">{blocks}</div>
 }
 
 export default ArticleMarkdown

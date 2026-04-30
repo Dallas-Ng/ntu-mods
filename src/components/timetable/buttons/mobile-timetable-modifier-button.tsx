@@ -30,7 +30,7 @@ const MobileTimetableModifierButton = () => {
             <TimetableModifier />
           </div>
 
-          <p className="text-center text-sm text-muted-foreground ">
+          <p className="text-center text-sm text-muted-foreground">
             Swipe down to close
           </p>
         </div>

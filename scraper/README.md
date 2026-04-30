@@ -70,14 +70,14 @@ python3 main.py --semester all --refetch --workers 4
 
 **Options:**
 
-| Flag | Description |
-|------|-------------|
-| `--semester "YYYY;S"` | Semester to scrape. Use `all` for every available semester. Prompts interactively if omitted. |
-| `--workers N` | Number of parallel threads (default: `1`). Higher values are faster but put more load on NTU's servers. |
-| `--min-year YYYY` | Only scrape semesters from this year onwards. Only applies with `--semester all`. |
-| `--from "YYYY;S"` | Only scrape this semester and newer. Only applies with `--semester all`. Takes precedence over `--min-year`. |
-| `--refetch` | Ignore cached data and re-run all steps from scratch. |
-| `--pretty` | Pretty-print JSON output with indentation (default: minified). |
+| Flag                  | Description                                                                                                  |
+| --------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `--semester "YYYY;S"` | Semester to scrape. Use `all` for every available semester. Prompts interactively if omitted.                |
+| `--workers N`         | Number of parallel threads (default: `1`). Higher values are faster but put more load on NTU's servers.      |
+| `--min-year YYYY`     | Only scrape semesters from this year onwards. Only applies with `--semester all`.                            |
+| `--from "YYYY;S"`     | Only scrape this semester and newer. Only applies with `--semester all`. Takes precedence over `--min-year`. |
+| `--refetch`           | Ignore cached data and re-run all steps from scratch.                                                        |
+| `--pretty`            | Pretty-print JSON output with indentation (default: minified).                                               |
 
 ---
 
@@ -138,7 +138,15 @@ Output: `data/02_courses_2025_2.json`
       "prerequisite": null,
       "remark": null,
       "schedules": [
-        { "index": "10001", "type": "LEC", "group": "1", "day": "MON", "time": "0830-0930", "venue": "LT1", "remark": "" }
+        {
+          "index": "10001",
+          "type": "LEC",
+          "group": "1",
+          "day": "MON",
+          "time": "0830-0930",
+          "venue": "LT1",
+          "remark": ""
+        }
       ]
     }
   ]
@@ -208,8 +216,26 @@ Output: `data/04_indexes_2025_2.json`
 {
   "CSC1010": {
     "10001": [
-      { "key": "10001", "type": "LEC", "group": "1", "day": 1, "time": "0830-0930", "venue": "LT1", "remarks": "", "duration": 2 },
-      { "key": "10001", "type": "TUT", "group": "T1", "day": 3, "time": "1030-1120", "venue": "TR1", "remarks": "", "duration": 2 }
+      {
+        "key": "10001",
+        "type": "LEC",
+        "group": "1",
+        "day": 1,
+        "time": "0830-0930",
+        "venue": "LT1",
+        "remarks": "",
+        "duration": 2
+      },
+      {
+        "key": "10001",
+        "type": "TUT",
+        "group": "T1",
+        "day": 3,
+        "time": "1030-1120",
+        "venue": "TR1",
+        "remarks": "",
+        "duration": 2
+      }
     ]
   }
 }
@@ -224,6 +250,7 @@ Each slot's `day` is an integer (Mon=1 … Sun=7) and `duration` is the number o
 Converts exam CSV files in `data/exams` into per-semester exam JSON.
 
 CSV naming convention:
+
 - `data/exams/exams-YYYY-YYYY-s1.csv` for Semester 1
 - `data/exams/exams-YYYY-YYYY-s2.csv` for Semester 2
 
@@ -258,13 +285,13 @@ Output: `data/05_exams_2025_2.json`
 
 ## Data files
 
-| File | Description |
-|------|-------------|
-| `data/01_semesters.json` | All available academic semesters |
-| `data/02_courses_YYYY_S.json` | Raw course data for a semester, keyed by programme |
-| `data/03_mdata_YYYY_S.json` | Converted mdata, keyed by course code |
+| File                          | Description                                          |
+| ----------------------------- | ---------------------------------------------------- |
+| `data/01_semesters.json`      | All available academic semesters                     |
+| `data/02_courses_YYYY_S.json` | Raw course data for a semester, keyed by programme   |
+| `data/03_mdata_YYYY_S.json`   | Converted mdata, keyed by course code                |
 | `data/04_indexes_YYYY_S.json` | Schedule indexes keyed by course code → index number |
-| `data/05_exams_YYYY_S.json` | Exam timetable keyed by course code |
+| `data/05_exams_YYYY_S.json`   | Exam timetable keyed by course code                  |
 
 > **Note:** Data files are not committed to version control. Run the pipeline to generate them.
 
@@ -272,11 +299,11 @@ Output: `data/05_exams_2025_2.json`
 
 Semester codes follow the format `YYYY;S` where `YYYY` is the **academic year** (not the calendar year):
 
-| Code | Meaning | When it runs |
-|------|---------|-------------|
-| `2025;1` | Academic Year 2025 Semester 1 | Aug – Nov 2025 |
-| `2025;2` | Academic Year 2025 Semester 2 | Jan – Apr 2026 |
-| `2025;S` | Academic Year 2025 Special Term (Summer) | May – Jun 2026 |
+| Code     | Meaning                                     | When it runs   |
+| -------- | ------------------------------------------- | -------------- |
+| `2025;1` | Academic Year 2025 Semester 1               | Aug – Nov 2025 |
+| `2025;2` | Academic Year 2025 Semester 2               | Jan – Apr 2026 |
+| `2025;S` | Academic Year 2025 Special Term (Summer)    | May – Jun 2026 |
 | `2025;T` | Academic Year 2025 Special Term (trimester) | May – Aug 2026 |
 
 ---
@@ -316,20 +343,21 @@ python -c "import json; print(json.dumps(json.load(open('data/03_mdata_2025_2.js
 
 ### Data file locations
 
-| Scraper output | Production destination |
-|---------------|----------------------|
-| `scraper/data/03_mdata_YYYY_S.json` | `src/data/api/metadata/YYYY_S.json` |
-| `scraper/data/04_indexes_YYYY_S.json` | `src/data/api/indexes/YYYY_S.json` |
-| `scraper/data/05_exams_YYYY_S.json` | `src/data/api/exams/YYYY_S.json` |
-| `scraper/data/01_semesters.json` | `src/data/api/semesters.json` |
-| *(derived)* | `src/data/api/module-map.json` |
-| *(derived)* | `src/data/api/index-map.json` |
+| Scraper output                        | Production destination              |
+| ------------------------------------- | ----------------------------------- |
+| `scraper/data/03_mdata_YYYY_S.json`   | `src/data/api/metadata/YYYY_S.json` |
+| `scraper/data/04_indexes_YYYY_S.json` | `src/data/api/indexes/YYYY_S.json`  |
+| `scraper/data/05_exams_YYYY_S.json`   | `src/data/api/exams/YYYY_S.json`    |
+| `scraper/data/01_semesters.json`      | `src/data/api/semesters.json`       |
+| _(derived)_                           | `src/data/api/module-map.json`      |
+| _(derived)_                           | `src/data/api/index-map.json`       |
 
 ### Data invariants (quality rules)
 
 These are the correctness rules a quality-check agent should verify against any `03_mdata` / `04_indexes` / `05_exams` triplet:
 
 **`03_mdata_YYYY_S.json` (module metadata)**
+
 - Every entry has `code`, `title`, `au`, `searchKeys`
 - `au` parses as float > 0
 - `searchKeys` is a non-empty list of strings
@@ -337,16 +365,18 @@ These are the correctness rules a quality-check agent should verify against any 
 - Optional fields (`description`, `gradeType`, `maintainingDept`, `notAvailableToProgramme`, etc.) are strings when present, never empty string
 
 **`04_indexes_YYYY_S.json` (schedule slots)**
+
 - Structure: `{ "COURSE_CODE": { "INDEX_NUM": [ slot, ... ] } }`
 - Every `slot` has: `key` (= index number), `type`, `group`, `day`, `time`, `venue`, `remarks`, `duration`
 - `day` is int 1–7 (Mon=1, Sun=7). `day=0` is invalid — should not appear (server filters it, but flag if present)
 - `time` matches `HHMM-HHMM`, start < end, both in 0000–2359 range
-- `duration` = `ceil((end_minutes - start_minutes) / 30)` where minutes = HH*60+MM
+- `duration` = `ceil((end_minutes - start_minutes) / 30)` where minutes = HH\*60+MM
 - `type` is one of: `LEC`, `LAB`, `SEM`, `TUT`, `DES`, `PRJ`
 - No duplicate `(course_code, index, type, day, time)` tuple within the file
 - Every course code in indexes must exist in `03_mdata`
 
 **`05_exams_YYYY_S.json` (exam timetable)**
+
 - Structure: `{ "COURSE_CODE": { date, day, start_time, end_time, key, name, duration? } }`
 - `day` is int 1–7
 - `start_time` / `end_time` match pattern like `"9.00 am"` or `"2.30 pm"`
@@ -354,6 +384,7 @@ These are the correctness rules a quality-check agent should verify against any 
 - Every exam key must exist in `03_mdata`
 
 **Cross-file consistency**
+
 - Modules in `05_exams` that are absent from `03_mdata` → flag as orphaned exam entries
 - Modules in `03_mdata` with zero indexes in `04_indexes` → may be valid (distance learning) but worth noting
 

@@ -1,9 +1,4 @@
-Scrape
-    1. Acad Years (AY2024)
-    2. Courses Code
-    3. Course Content
-    4. Course Index
-
+Scrape 1. Acad Years (AY2024) 2. Courses Code 3. Course Content 4. Course Index
 
 Pickles
 

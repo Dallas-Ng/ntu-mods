@@ -1,8 +1,8 @@
 "use client"
 
+import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 
 export const ModsCurrentOnlyToggle = ({
   paramsValue

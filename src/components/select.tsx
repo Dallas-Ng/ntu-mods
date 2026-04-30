@@ -65,7 +65,10 @@ const CustomSelect = (props: Props) => {
             disabled={disabled}
             variant="outline"
             role="combobox"
-            className={cn("w-full justify-between overflow-hidden", divClassName)}>
+            className={cn(
+              "w-full justify-between overflow-hidden",
+              divClassName
+            )}>
             <div className="min-w-0 flex-1 overflow-hidden text-left">
               {activeItemLabel?.label}
             </div>

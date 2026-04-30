@@ -48,7 +48,7 @@ const TimetableCopyButton = () => {
 
   const Content = (
     <>
-      <p className="p-2 text-center text-sm text-rose-800 ">
+      <p className="p-2 text-center text-sm text-rose-800">
         You will override your existing data
       </p>
       <div className="overflow-y-auto">

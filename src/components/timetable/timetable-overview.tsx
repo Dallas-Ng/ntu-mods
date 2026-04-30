@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
 import { useEffect, useState } from "react"
+import Link from "next/link"
 
 import { cn } from "@/lib/utils"
 import { useLatestSemester } from "@/hooks/use-latest-semester"
@@ -47,7 +47,10 @@ const TimetableOverview = () => {
           .then((res) => (res.ok ? res.json() : null))
           .then((data) =>
             data
-              ? ([code, { title: data.title ?? "", au: data.au ?? "0" }] as const)
+              ? ([
+                  code,
+                  { title: data.title ?? "", au: data.au ?? "0" }
+                ] as const)
               : null
           )
           .catch(() => null)

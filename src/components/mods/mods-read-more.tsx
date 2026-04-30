@@ -44,7 +44,7 @@ const ModsReadMore = ({ children }: Props) => {
           </div>
 
           <div className="relative flex justify-center">
-            <span className="bg-background px-2 text-sm text-muted-foreground ">
+            <span className="bg-background px-2 text-sm text-muted-foreground">
               {showMore ? "Read less" : "Read more"}
             </span>
           </div>

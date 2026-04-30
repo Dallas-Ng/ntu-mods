@@ -14,7 +14,7 @@ const LayoutDefault = ({ children, containerClassName }: Props) => (
 
     <main
       className={cn(
-        "container relative flex-1 px-3 lg:px-5 ",
+        "container relative flex-1 px-3 lg:px-5",
         containerClassName
       )}>
       {children}

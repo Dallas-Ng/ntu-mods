@@ -50,7 +50,7 @@ const ScreenshotInfoButton = () => {
           value={tabValue}
           onValueChange={(val) => setTabValue(val)}>
           <DialogHeader>
-            <TabsList className="grid w-full grid-cols-3 ">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="ios">IOS</TabsTrigger>
               <TabsTrigger value="android">Android</TabsTrigger>
               <TabsTrigger value="web">Web</TabsTrigger>

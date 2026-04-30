@@ -10,7 +10,13 @@ interface Props {
   children: React.ReactNode
 }
 
-export const VersionedModuleLink = ({ code, year, semester, className, children }: Props) => {
+export const VersionedModuleLink = ({
+  code,
+  year,
+  semester,
+  className,
+  children
+}: Props) => {
   return (
     <Link
       href={getModuleVersionUrl(code, year, semester)}

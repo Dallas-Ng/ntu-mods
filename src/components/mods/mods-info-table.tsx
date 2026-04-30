@@ -72,7 +72,8 @@ const ModsInfoTable = ({ module, exam }: Props) => (
           if (Array.isArray(value)) return value.join(", ")
 
           // 3. Handle boolean flag fields (stored as string "true" from scraper)
-          if (key === "notOfferedAsBde" || key === "notOfferedAsUe") return "Yes"
+          if (key === "notOfferedAsBde" || key === "notOfferedAsUe")
+            return "Yes"
 
           // 4. Handle Strings/Numbers
           return String(value)

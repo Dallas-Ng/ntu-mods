@@ -4,15 +4,7 @@ import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import CustomSelect from "@/components/select"
 
-export type SearchModuleLevel =
-  | "1"
-  | "2"
-  | "3"
-  | "4"
-  | "5"
-  | "6"
-  | "7"
-  | "all"
+export type SearchModuleLevel = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "all"
 
 const LEVELS = ["1", "2", "3", "4", "5", "6", "7"]
 

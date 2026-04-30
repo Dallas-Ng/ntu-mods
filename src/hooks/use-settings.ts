@@ -1,6 +1,7 @@
 import { useBoundState } from "@/state/bound.state"
-import { useHydrated } from "@/hooks/use-hydrated"
 import type { Settings } from "@/state/settings.state"
+
+import { useHydrated } from "@/hooks/use-hydrated"
 
 export const useSettings = () => {
   const { settings, updateSettings, resetSettings } = useBoundState()
@@ -12,5 +13,13 @@ export const useSettings = () => {
     modsGroupBy = "none"
   } = hydrated ? settings : ({} as Settings)
 
-  return { isMobile, isBeta, modsViewMode, modsGroupBy, settings, updateSettings, resetSettings }
+  return {
+    isMobile,
+    isBeta,
+    modsViewMode,
+    modsGroupBy,
+    settings,
+    updateSettings,
+    resetSettings
+  }
 }

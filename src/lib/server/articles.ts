@@ -53,17 +53,10 @@ const parseTags = (value?: string) => {
   const trimmed = value.trim()
 
   if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
-    return trimmed
-      .slice(1, -1)
-      .split(",")
-      .map(parseScalar)
-      .filter(Boolean)
+    return trimmed.slice(1, -1).split(",").map(parseScalar).filter(Boolean)
   }
 
-  return trimmed
-    .split(",")
-    .map(parseScalar)
-    .filter(Boolean)
+  return trimmed.split(",").map(parseScalar).filter(Boolean)
 }
 
 const parseFrontmatter = (raw: string) => {

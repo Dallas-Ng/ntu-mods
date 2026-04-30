@@ -4,8 +4,8 @@ import { useState } from "react"
 import { Calendar } from "lucide-react"
 import { toast } from "sonner"
 
-import { useTimetable } from "@/hooks/use-timetable"
 import { useLatestSemester } from "@/hooks/use-latest-semester"
+import { useTimetable } from "@/hooks/use-timetable"
 import ButtonCollapsable from "@/components/button-collapsable"
 
 const TimetableDownloadCalendarButton = () => {

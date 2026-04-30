@@ -3,9 +3,10 @@
 import { useMemo } from "react"
 import { usePathname } from "next/navigation"
 
-import { useAllModules } from "@/hooks/use-all-modules"
-import ModuleCard from "../module-card"
 import type { ApiModule } from "@/lib/server/get-module-metadata"
+import { useAllModules } from "@/hooks/use-all-modules"
+
+import ModuleCard from "../module-card"
 
 const ModsNotFoundRelatedMods = () => {
   const pathname = usePathname()

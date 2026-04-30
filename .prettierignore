@@ -11,3 +11,4 @@ node_modules
 build
 .contentlayer
 src/data/**/*.json
+scraper/data/*

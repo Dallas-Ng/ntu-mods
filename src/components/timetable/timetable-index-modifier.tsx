@@ -29,8 +29,10 @@ const IndexCommandItem = ({ index }: { index: Index }) => {
 
   return (
     <div>
-      <div className="flex w-full justify-between gap-2 ">
-        <span>{isOnline ? "Online" : DAY_MAP[index.day as keyof typeof DAY_MAP]}</span>
+      <div className="flex w-full justify-between gap-2">
+        <span>
+          {isOnline ? "Online" : DAY_MAP[index.day as keyof typeof DAY_MAP]}
+        </span>
 
         <span className={cn(indexStyle.textAlt, "font-semibold")}>
           {getIndexType(index.type)} - {index.group}

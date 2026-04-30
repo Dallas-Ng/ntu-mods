@@ -12,7 +12,9 @@ const Header = (props: Props) => {
         {title}
       </h1>
 
-      {subtitle !== undefined && <p className="text-muted-foreground">{subtitle}</p>}
+      {subtitle !== undefined && (
+        <p className="text-muted-foreground">{subtitle}</p>
+      )}
     </div>
   )
 }

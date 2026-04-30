@@ -13,8 +13,8 @@ const LandingArticles = () => {
         <div>
           <h2 className="text-4xl font-bold">Articles</h2>
           <p className="text-foreground/75">
-            Guides for planning modules, choosing BDEs, and building a better NTU
-            timetable.
+            Guides for planning modules, choosing BDEs, and building a better
+            NTU timetable.
           </p>
         </div>
 

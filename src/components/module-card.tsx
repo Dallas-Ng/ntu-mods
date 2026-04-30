@@ -28,47 +28,77 @@ export const ModuleCard = ({ module, cardClassName }: ModuleCardProps) => (
   </Link>
 )
 
+function highlightText(text: string, query: string) {
+  if (!query) return <>{text}</>
+  const idx = text.toLowerCase().indexOf(query.toLowerCase())
+  if (idx === -1) return <>{text}</>
+  return (
+    <>
+      {text.slice(0, idx)}
+      <mark className="bg-transparent font-semibold not-italic text-foreground">
+        {text.slice(idx, idx + query.length)}
+      </mark>
+      {text.slice(idx + query.length)}
+    </>
+  )
+}
+
 interface ModuleCardDetailProps {
   code: string
   moduleData: ApiModule
+  searchTerm?: string
 }
 
-export const ModuleCardDetail = ({ code, moduleData }: ModuleCardDetailProps) => {
+function getHref(moduleData: ApiModule, code: string) {
   const isCurrentSemester = moduleData.isCurrentSemester !== false
-  const href =
-    isCurrentSemester || !moduleData.latestYear || !moduleData.latestSemester
-      ? getModuleUrl(code)
-      : getModuleVersionUrl(code, moduleData.latestYear, moduleData.latestSemester)
+  return isCurrentSemester || !moduleData.latestYear || !moduleData.latestSemester
+    ? getModuleUrl(code)
+    : getModuleVersionUrl(code, moduleData.latestYear, moduleData.latestSemester)
+}
+
+export const ModuleCardDetail = ({
+  code,
+  moduleData,
+  searchTerm = ""
+}: ModuleCardDetailProps) => {
+  const isCurrentSemester = moduleData.isCurrentSemester !== false
+  const categories = getModuleCategories(moduleData.searchKeys)
+  const faculty = getModuleFaculty(code, moduleData.searchKeys)
 
   return (
-    <Link key={code} href={href}>
+    <Link key={code} href={getHref(moduleData, code)}>
       <div
         className={cn(
-          "rounded-lg border-2 p-3 transition-colors hover:bg-accent",
+          "flex h-full flex-col rounded-lg border-2 p-3 transition-colors hover:bg-accent",
           !isCurrentSemester && "opacity-75"
         )}>
-        <div className="flex items-start justify-between gap-2">
-          <p className="text-sm text-muted-foreground">{moduleData.code}</p>
-          {!isCurrentSemester && (
-            <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
-              Not offered this sem
+        {!isCurrentSemester && (
+          <span className="mb-1.5 self-start rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+            Not offered this sem
+          </span>
+        )}
+
+        <p className="line-clamp-2 flex-1 leading-snug">
+          {highlightText(moduleData.title, searchTerm)}
+        </p>
+
+        <div className="mt-3 flex items-center justify-between gap-2 text-xs text-muted-foreground">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="shrink-0 font-mono">
+              {highlightText(code, searchTerm)}
             </span>
-          )}
-        </div>
-
-        <p className="truncate">{moduleData.title}</p>
-
-        <div className="mt-4 flex items-center justify-between text-xs">
-          <div className="flex gap-1 text-muted-foreground">
-            {getModuleCategories(moduleData.searchKeys).map((category, i) => (
-              <div key={i} className="rounded-full border px-2 py-0">
-                <span key={i}>{MODULE_CATEGORY[category]}</span>
-              </div>
-            ))}
+            <div className="flex gap-1">
+              {categories.map((category, i) => (
+                <span key={i} className="rounded-full border px-2 py-0">
+                  {MODULE_CATEGORY[category]}
+                </span>
+              ))}
+            </div>
           </div>
 
-          <div className="text-sm text-muted-foreground">
-            {getModuleFaculty(code, moduleData.searchKeys)}
+          <div className="flex shrink-0 items-center gap-2">
+            {moduleData.au && <span>{moduleData.au} AU</span>}
+            <span>{faculty}</span>
           </div>
         </div>
       </div>
@@ -77,16 +107,66 @@ export const ModuleCardDetail = ({ code, moduleData }: ModuleCardDetailProps) =>
 }
 
 export const ModuleCardDetailLoading = () => (
-  <div className="h-[108px] cursor-pointer rounded-lg border-2 p-3 transition-colors hover:bg-accent">
-    <Skeleton className="h-[20px] w-[70px]" />
-
-    <Skeleton className="mt-[4px] h-[20px]" />
-
-    <div className="mt-4 flex justify-between">
-      <Skeleton className="h-[18px] w-[41px] rounded-full" />
-
-      <Skeleton className="h-[20px] w-[28px]" />
+  <div className="flex h-[108px] flex-col rounded-lg border-2 p-3">
+    <Skeleton className="mb-1 h-[20px] w-full" />
+    <Skeleton className="h-[20px] w-3/4" />
+    <div className="mt-auto flex justify-between">
+      <Skeleton className="h-[16px] w-[60px]" />
+      <Skeleton className="h-[16px] w-[40px]" />
     </div>
+  </div>
+)
+
+export const ModuleListRow = ({
+  code,
+  moduleData,
+  searchTerm = ""
+}: ModuleCardDetailProps) => {
+  const isCurrentSemester = moduleData.isCurrentSemester !== false
+  const categories = getModuleCategories(moduleData.searchKeys)
+  const faculty = getModuleFaculty(code, moduleData.searchKeys)
+
+  return (
+    <Link key={code} href={getHref(moduleData, code)}>
+      <div
+        className={cn(
+          "flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-accent",
+          !isCurrentSemester && "opacity-60"
+        )}>
+        <span className="w-[80px] shrink-0 font-mono text-sm text-muted-foreground">
+          {highlightText(code, searchTerm)}
+        </span>
+
+        <span className="min-w-0 flex-1 truncate text-sm">
+          {highlightText(moduleData.title, searchTerm)}
+        </span>
+
+        <div className="hidden shrink-0 items-center gap-1 text-xs text-muted-foreground sm:flex">
+          {categories.map((category, i) => (
+            <span key={i} className="rounded-full border px-2 py-0">
+              {MODULE_CATEGORY[category]}
+            </span>
+          ))}
+        </div>
+
+        <span className="hidden shrink-0 text-xs text-muted-foreground sm:block">
+          {moduleData.au && `${moduleData.au} AU`}
+        </span>
+
+        <span className="w-[40px] shrink-0 text-right text-xs text-muted-foreground">
+          {faculty}
+        </span>
+      </div>
+    </Link>
+  )
+}
+
+export const ModuleListRowLoading = () => (
+  <div className="flex items-center gap-3 px-3 py-2.5">
+    <Skeleton className="h-4 w-[80px] shrink-0" />
+    <Skeleton className="h-4 flex-1" />
+    <Skeleton className="hidden h-4 w-[60px] sm:block" />
+    <Skeleton className="h-4 w-[40px] shrink-0" />
   </div>
 )
 

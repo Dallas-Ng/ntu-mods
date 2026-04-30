@@ -18,7 +18,9 @@ const INIT_SETTINGS: Settings = {
   },
   isMobile: false,
   isBeta: false,
-  appearance: DEFAULT_APPEARANCE_SETTINGS
+  appearance: DEFAULT_APPEARANCE_SETTINGS,
+  modsViewMode: "cards",
+  modsGroupBy: "none"
 }
 
 export interface Settings {
@@ -35,6 +37,8 @@ export interface Settings {
   isMobile: boolean
   isBeta: boolean
   appearance: AppearanceSettings
+  modsViewMode: "cards" | "list"
+  modsGroupBy: "none" | "level" | "au" | "faculty" | "type"
 }
 
 export interface SettingsSlice {

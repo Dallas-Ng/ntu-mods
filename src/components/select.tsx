@@ -65,8 +65,10 @@ const CustomSelect = (props: Props) => {
             disabled={disabled}
             variant="outline"
             role="combobox"
-            className={cn("w-full justify-between", divClassName)}>
-            {activeItemLabel?.label}
+            className={cn("w-full justify-between overflow-hidden", divClassName)}>
+            <div className="min-w-0 flex-1 overflow-hidden text-left">
+              {activeItemLabel?.label}
+            </div>
             <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -83,7 +85,9 @@ const CustomSelect = (props: Props) => {
           <Command>
             <CommandEmpty>{emptyText ?? "No items found."} </CommandEmpty>
 
-            <CommandGroup className="max-h-96 overflow-y-auto">
+            <CommandGroup
+              className="max-h-96 overflow-y-auto"
+              style={{ scrollbarGutter: "stable" }}>
               {selectItems.map((item) => (
                 <CommandItem
                   key={item.value}

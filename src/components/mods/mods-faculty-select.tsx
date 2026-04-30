@@ -14,13 +14,14 @@ export const ModsFacultySelect = ({ paramsValue }: { paramsValue: string }) => {
     { value: "all", label: "All Faculty" },
     ...Object.entries(MODULE_FACULTY).map(([categoryKey, categoryName]) => ({
       value: categoryKey,
-      label: (
-        <div className="flex items-baseline gap-1">
-          {categoryName}
-
-          <span className="text-xs text-muted-foreground">({categoryKey})</span>
-        </div>
-      )
+      label: categoryKey
+      // (
+      //   <span className="text-muted-foreground">({categoryKey})</span>
+      //   // <div className="min-w-0 items-baseline gap-1 text-wrap">
+      //   // {/* <span>{categoryName}</span> */}
+      //   // <br />
+      //   // </div>
+      // )
     }))
   ]
 
@@ -31,7 +32,7 @@ export const ModsFacultySelect = ({ paramsValue }: { paramsValue: string }) => {
       selectItems={selectItems}
       onChange={(value) => setValue(value as SearchModuleFaculty)}
       divClassName={cn(
-        "w-full lg:max-w-[350px]",
+        "w-full lg:max-w-[350px] min-w-[150px]",
         value !== "all" && "ring-1 ring-ring rounded-md"
       )}
     />

@@ -1,60 +1,129 @@
 "use client"
 
-import { Suspense, useEffect, useState } from "react"
-import dynamic from "next/dynamic"
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
 import {
+  Suspense,
+  useRef,
+  useState,
+  type ReactNode,
+  type RefObject
+} from "react"
+import Link from "next/link"
+import {
+  ArrowDown,
   ArrowLeft,
-  PanelBottomOpen,
-  PanelLeftOpen,
-  PanelRightOpen,
-  PanelTopOpen,
+  ArrowLeftRight,
+  ArrowRight,
+  ArrowUp,
+  EyeOff,
+  Maximize2,
+  Minimize2,
+  MoveHorizontal,
+  MoveVertical,
   RefreshCcw,
   ServerCrash,
   ZoomIn,
   ZoomOut
 } from "lucide-react"
 
-import { BASE_URL } from "@/lib/constants"
 import { cn } from "@/lib/utils"
+import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
+import { useTimetableIndexes } from "@/hooks/use-timetable-indexes"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select"
 import ScreenshotInfoButton from "@/components/screenshot/screenshot-info-button"
-import { ScreenshotSettingsButtonLoader } from "@/components/screenshot/settings-button"
-import ShareButton from "@/components/share-button"
-import { TimetableTableLoader } from "@/components/timetable-table/table"
-import TimetablePlanSwitcher from "@/components/timetable/buttons/timetable-plan-switcher"
+import {
+  TimetableTable,
+  TimetableTableLoader
+} from "@/components/timetable-table/table"
 
-const ScreenshotSettingsButton = dynamic(
-  () => import("@/components/screenshot/settings-button"),
-  {
-    ssr: false,
-    loading: () => <ScreenshotSettingsButtonLoader />
-  }
-)
+type CanvasPreset = "viewport" | "iphoneTall" | "androidTall" | "classic"
 
-const TimetableTable = dynamic(
-  () => import("@/components/timetable/timetable-table"),
-  {
-    ssr: false,
-    loading: () => <TimetableTableLoader />
-  }
-)
-
-type Padding = "paddingTop" | "paddingBottom" | "paddingLeft" | "paddingRight"
-type Direction = "increase" | "decrease"
-
-const DEFAULT_PADDING = {
-  paddingTop: 0,
-  paddingBottom: 0,
-  paddingLeft: 0,
-  paddingRight: 0
+type CanvasPresetOption = {
+  label: string
+  description: string
+  aspectRatio?: string
 }
 
-export default function ScreenshotPage() {
+type WallpaperCanvasProps = {
+  canvasRef: RefObject<HTMLDivElement>
+  preset: CanvasPreset
+  selectedPreset: CanvasPresetOption
+  scale: number
+  offsetX: number
+  offsetY: number
+  timetableRef: RefObject<HTMLDivElement>
+}
+
+type EditorToolbarProps = {
+  showControls: boolean
+  preset: CanvasPreset
+  scale: number
+  offsetX: number
+  offsetY: number
+  onPresetChange: (preset: CanvasPreset) => void
+  onScaleChange: (scale: number) => void
+  onScaleStep: (amount: number) => void
+  onOffsetXChange: (value: number) => void
+  onOffsetYChange: (value: number) => void
+  onFitWidth: () => void
+  onFitHeight: () => void
+  onCenter: () => void
+  onHideControls: () => void
+  positionStep: number
+}
+
+type ControlGroupProps = {
+  title: string
+  children: ReactNode
+}
+
+type OffsetControlProps = {
+  label: "X" | "Y"
+  icon: typeof MoveHorizontal
+  value: number
+  step: number
+  onChange: (value: number) => void
+}
+
+const MIN_SCALE = 0.45
+const MAX_SCALE = 1.8
+
+const CANVAS_PRESETS: Record<CanvasPreset, CanvasPresetOption> = {
+  viewport: {
+    label: "Current screen",
+    description: "Match this browser viewport."
+  },
+  iphoneTall: {
+    label: "iPhone tall",
+    description: "Modern lockscreen shape.",
+    aspectRatio: "9 / 19.5"
+  },
+  androidTall: {
+    label: "Android tall",
+    description: "Common tall Android shape.",
+    aspectRatio: "9 / 20"
+  },
+  classic: {
+    label: "Classic 9:16",
+    description: "Simple wallpaper ratio.",
+    aspectRatio: "9 / 16"
+  }
+}
+
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(Math.max(value, min), max)
+
+const ScreenshotPage = () => {
   return (
     <Suspense fallback={null}>
       <ScreenshotPageContent />
@@ -62,49 +131,68 @@ export default function ScreenshotPage() {
   )
 }
 
-function ScreenshotPageContent() {
+const ScreenshotPageContent = () => {
   const { isMobile } = useSettings()
-  const [showTaskbar, setShowTaskbar] = useState(true)
-  const [padding, setPadding] = useState(DEFAULT_PADDING)
+  const [showControls, setShowControls] = useState(true)
+  const [preset, setPreset] = useState<CanvasPreset>("viewport")
   const [scale, setScale] = useState(1)
-  const [showPlanSwitcher, setShowPlanSwitcher] = useState(true)
+  const [offsetX, setOffsetX] = useState(0)
+  const [offsetY, setOffsetY] = useState(0)
+  const canvasRef = useRef<HTMLDivElement>(null)
+  const timetableRef = useRef<HTMLDivElement>(null)
 
   const { timetable } = useTimetable()
 
-  const searchParams = useSearchParams()
-  const urlParams = new URLSearchParams(timetable)
-  const shareLink = `${BASE_URL}/screenshot?${urlParams.toString()}`
+  const positionStep = isMobile ? 8 : 18
+  const hasTimetable = Object.keys(timetable).length > 0
+  const selectedPreset = CANVAS_PRESETS[preset]
 
-  const STEP = isMobile ? 10 : 50
+  const updateScale = (nextScale: number) => {
+    setScale(clamp(Number(nextScale.toFixed(2)), MIN_SCALE, MAX_SCALE))
+  }
 
-  useEffect(() => {
-    // Hide plan switcher if the user is using a share link
-    if (Object.keys(Object.fromEntries(searchParams.entries())).length > 0) {
-      setShowPlanSwitcher(false)
-    }
-  }, [searchParams])
-
-  const changePadding = (paddingDirection: Padding, direction: Direction) => {
-    return setPadding((exPadding) => ({
-      ...exPadding,
-      [paddingDirection]:
-        exPadding[paddingDirection] + (direction === "increase" ? STEP : -STEP)
-    }))
+  const changeScale = (amount: number) => {
+    setScale((prevScale) =>
+      clamp(Number((prevScale + amount).toFixed(2)), MIN_SCALE, MAX_SCALE)
+    )
   }
 
   const reset = () => {
-    setPadding(DEFAULT_PADDING)
     setScale(1)
+    setOffsetX(0)
+    setOffsetY(0)
+  }
+
+  const fitToCanvas = (axis: "width" | "height") => {
+    const canvas = canvasRef.current
+    const timetableElement = timetableRef.current
+
+    if (!canvas || !timetableElement) return
+
+    const canvasRect = canvas.getBoundingClientRect()
+    const timetableRect = timetableElement.getBoundingClientRect()
+    const baseWidth = timetableRect.width / scale
+    const baseHeight = timetableRect.height / scale
+    const target =
+      axis === "width"
+        ? (canvasRect.width * 0.9) / baseWidth
+        : (canvasRect.height * 0.72) / baseHeight
+
+    updateScale(target)
+    setOffsetX(0)
+    setOffsetY(0)
   }
 
   return (
     <div
-      className="relative z-[1] h-[100svh] w-screen"
-      onClick={() => setShowTaskbar((p) => !p)}>
-      {Object.keys(timetable).length === 0 && (
-        <div className="p-5">
+      className="bg-muted/40 relative z-[1] flex h-[100svh] w-screen items-center justify-center overflow-hidden p-3 sm:p-6"
+      onClick={() => setShowControls((p) => !p)}>
+      {!hasTimetable && (
+        <div
+          className="w-full max-w-xl"
+          onClick={(event) => event.stopPropagation()}>
           <Link href="/timetable">
-            <Alert>
+            <Alert className="bg-background hover:bg-accent border shadow-lg transition-colors">
               <ServerCrash className="size-5" />
 
               <AlertTitle>Your timetable is empty!</AlertTitle>
@@ -117,134 +205,337 @@ function ScreenshotPageContent() {
         </div>
       )}
 
-      <div
-        className="flex size-full items-center justify-center"
-        style={{ ...padding, scale }}>
-        <TimetableTable />
-      </div>
+      {hasTimetable && (
+        <WallpaperCanvas
+          canvasRef={canvasRef}
+          preset={preset}
+          selectedPreset={selectedPreset}
+          scale={scale}
+          offsetX={offsetX}
+          offsetY={offsetY}
+          timetableRef={timetableRef}
+        />
+      )}
 
       <div
         className={cn(
-          "fixed top-0 left-0 flex w-full items-center justify-center",
-          showTaskbar ? "opacity-100" : "pointer-events-none opacity-0"
+          "fixed top-3 left-0 flex w-full justify-center px-3 transition-all duration-300",
+          showControls ? "opacity-100" : "pointer-events-none opacity-0"
         )}>
-        <span className="w-fit rounded-b-md border-2 border-t-0 bg-background p-1 px-2 text-center text-sm shadow">
-          Click anywhere on the screen to hide the toolbar
+        <span className="bg-background text-muted-foreground w-fit rounded-md border px-3 py-1.5 text-center text-xs shadow">
+          Compose the wallpaper, then hide controls before taking your
+          screenshot.
         </span>
       </div>
 
+      <EditorToolbar
+        showControls={showControls}
+        preset={preset}
+        scale={scale}
+        offsetX={offsetX}
+        offsetY={offsetY}
+        onPresetChange={setPreset}
+        onScaleChange={updateScale}
+        onScaleStep={changeScale}
+        onOffsetXChange={setOffsetX}
+        onOffsetYChange={setOffsetY}
+        onFitWidth={() => fitToCanvas("width")}
+        onFitHeight={() => fitToCanvas("height")}
+        onCenter={reset}
+        onHideControls={() => setShowControls(false)}
+        positionStep={positionStep}
+      />
+    </div>
+  )
+}
+
+const WallpaperCanvas = ({
+  canvasRef,
+  preset,
+  selectedPreset,
+  scale,
+  offsetX,
+  offsetY,
+  timetableRef
+}: WallpaperCanvasProps) => {
+  return (
+    <div
+      ref={canvasRef}
+      aria-label={`${selectedPreset.label} wallpaper preview`}
+      className={cn(
+        "bg-background text-foreground relative flex items-center justify-center overflow-hidden shadow-2xl transition-all duration-300",
+        preset === "viewport"
+          ? "size-full shadow-none"
+          : "h-[min(calc(100svh-1.5rem),900px)] max-h-full max-w-full rounded-lg"
+      )}
+      style={
+        selectedPreset.aspectRatio
+          ? { aspectRatio: selectedPreset.aspectRatio }
+          : undefined
+      }>
       <div
-        className={cn(
-          "fixed bottom-[3%] left-0 flex h-fit w-full justify-center transition-all duration-300",
-          showTaskbar ? "opacity-100" : "pointer-events-none opacity-0"
-        )}>
-        <div
-          className="flex flex-col gap-2"
-          onClick={(e) => e.stopPropagation()}>
-          <div className="flex justify-between gap-1">
-            <div className="w-full">
-              {showPlanSwitcher && <TimetablePlanSwitcher />}
-            </div>
-
-            <ScreenshotInfoButton />
-
-            <ShareButton
-              title="See a screenshot of my timetable!"
-              description="Share your timetable with your friends!"
-              link={shareLink}
-            />
-          </div>
-
-          <div className="rounded-lg border bg-background p-2 shadow">
-            <div className="flex w-full items-center justify-between gap-2">
-              <div className="grid w-fit grid-cols-3">
-                {/* Row 1 */}
-                <div />
-                <Button variant="outline" size="icon">
-                  <PanelBottomOpen
-                    className="size-5"
-                    onClick={() =>
-                      padding.paddingTop > 0
-                        ? changePadding("paddingTop", "decrease")
-                        : changePadding("paddingBottom", "increase")
-                    }
-                  />
-                </Button>
-                <div />
-
-                {/* Row 2 */}
-                <Button variant="outline" size="icon">
-                  <PanelRightOpen
-                    className="size-5"
-                    onClick={() =>
-                      padding.paddingLeft > 0
-                        ? changePadding("paddingLeft", "decrease")
-                        : changePadding("paddingRight", "increase")
-                    }
-                  />
-                </Button>
-                <div />
-                <Button variant="outline" size="icon">
-                  <PanelLeftOpen
-                    className="size-5"
-                    onClick={() => {
-                      padding.paddingRight > 0
-                        ? changePadding("paddingRight", "decrease")
-                        : changePadding("paddingLeft", "increase")
-                    }}
-                  />
-                </Button>
-
-                {/* Row 3 */}
-                <div />
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() =>
-                    padding.paddingBottom > 0
-                      ? changePadding("paddingBottom", "decrease")
-                      : changePadding("paddingTop", "increase")
-                  }>
-                  <PanelTopOpen className="size-5" />
-                </Button>
-                <div />
-              </div>
-
-              <div className="flex gap-1">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setScale((prevScale) => prevScale + 0.05)}>
-                  <ZoomIn className="size-5" />
-                </Button>
-
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setScale((prevScale) => prevScale - 0.05)}>
-                  <ZoomOut className="size-5" />
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex gap-1">
-            <div className="size-full">
-              <Link href="/timetable">
-                <Button className="text-sm" variant="outline">
-                  <ArrowLeft className="mr-1 size-4" /> Back
-                </Button>
-              </Link>
-            </div>
-
-            <ScreenshotSettingsButton />
-
-            <Button variant="outline" size="icon" onClick={reset}>
-              <RefreshCcw className="size-5" />
-            </Button>
-          </div>
-        </div>
+        ref={timetableRef}
+        className="w-[880px] max-w-[92%] transition-transform duration-200"
+        style={{
+          transform: `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${scale})`
+        }}>
+        <ScreenshotTimetable />
       </div>
     </div>
   )
 }
+
+const ScreenshotTimetable = () => {
+  const { timetable } = useTimetable()
+  const { year, semester } = useLatestSemester()
+  const { moduleIndexMap, isLoading } = useTimetableIndexes(
+    timetable,
+    year,
+    semester
+  )
+
+  if (isLoading && !Object.keys(moduleIndexMap).length) {
+    return <TimetableTableLoader />
+  }
+
+  return <TimetableTable moduleIndexMap={moduleIndexMap} />
+}
+
+const EditorToolbar = ({
+  showControls,
+  preset,
+  scale,
+  offsetX,
+  offsetY,
+  onPresetChange,
+  onScaleChange,
+  onScaleStep,
+  onOffsetXChange,
+  onOffsetYChange,
+  onFitWidth,
+  onFitHeight,
+  onCenter,
+  onHideControls,
+  positionStep
+}: EditorToolbarProps) => {
+  return (
+    <div
+      className={cn(
+        "fixed bottom-0 left-0 flex h-fit w-full justify-center px-3 transition-all duration-300 sm:bottom-5",
+        showControls ? "opacity-100" : "pointer-events-none opacity-0"
+      )}>
+      <div
+        className="bg-background/95 max-h-[62svh] w-89.5 max-w-full min-w-0 space-y-3 overflow-y-auto rounded-t-lg border p-3 shadow-2xl backdrop-blur sm:max-h-[min(70svh,560px)] sm:rounded-lg"
+        onClick={(event) => event.stopPropagation()}>
+        <div className="flex flex-wrap items-center justify-between gap-1">
+          <Link href="/timetable">
+            <Button className="gap-1 text-sm" variant="outline" size="sm">
+              <ArrowLeft className="size-4" /> Timetable
+            </Button>
+          </Link>
+
+          <div className="flex items-center gap-1">
+            <Button
+              type="button"
+              size="icon"
+              variant="outline"
+              onClick={onHideControls}>
+              <EyeOff className="size-4" />
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              aria-label="Reset composition"
+              onClick={onCenter}>
+              <RefreshCcw className="size-4" />
+            </Button>
+            <ScreenshotInfoButton />
+          </div>
+        </div>
+
+        <ControlGroup title="Canvas">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <Select
+              value={preset}
+              onValueChange={(value) => onPresetChange(value as CanvasPreset)}>
+              <SelectTrigger
+                aria-label="Wallpaper canvas preset"
+                className="sm:w-[220px]">
+                <SelectValue />
+              </SelectTrigger>
+
+              <SelectContent>
+                {Object.entries(CANVAS_PRESETS).map(([key, value]) => (
+                  <SelectItem key={key} value={key}>
+                    {value.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </ControlGroup>
+
+        <ControlGroup title="Fit">
+          <div className="flex flex-wrap gap-1">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="gap-1 px-2"
+              onClick={onFitWidth}>
+              <ArrowLeftRight className="size-4" />
+              Width
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="gap-1 px-2"
+              onClick={onFitHeight}>
+              <Maximize2 className="size-4" />
+              Height
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="gap-1 px-2"
+              onClick={onCenter}>
+              <Minimize2 className="size-4" />
+              Center
+            </Button>
+          </div>
+        </ControlGroup>
+
+        <ControlGroup title="Scale">
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              aria-label="Zoom out"
+              onClick={() => onScaleStep(-0.05)}>
+              <ZoomOut className="size-4" />
+            </Button>
+
+            <Input
+              type="range"
+              min={MIN_SCALE}
+              max={MAX_SCALE}
+              step={0.01}
+              value={scale}
+              aria-label="Timetable scale"
+              className="h-9 px-0 shadow-none"
+              onChange={(event) => onScaleChange(Number(event.target.value))}
+            />
+
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              aria-label="Zoom in"
+              onClick={() => onScaleStep(0.05)}>
+              <ZoomIn className="size-4" />
+            </Button>
+
+            <span className="text-muted-foreground w-11 text-right text-xs">
+              {Math.round(scale * 100)}%
+            </span>
+          </div>
+        </ControlGroup>
+
+        <ControlGroup title="Position">
+          <div className="flex justify-center gap-2">
+            <OffsetControl
+              label="X"
+              icon={MoveHorizontal}
+              value={offsetX}
+              step={positionStep}
+              onChange={onOffsetXChange}
+            />
+
+            <OffsetControl
+              label="Y"
+              icon={MoveVertical}
+              value={offsetY}
+              step={positionStep}
+              onChange={onOffsetYChange}
+            />
+          </div>
+        </ControlGroup>
+      </div>
+    </div>
+  )
+}
+
+const ControlGroup = ({ title, children }: ControlGroupProps) => {
+  return (
+    <section className="space-y-2">
+      <p className="text-muted-foreground text-xs font-medium uppercase">
+        {title}
+      </p>
+
+      {children}
+    </section>
+  )
+}
+
+const OffsetControl = ({
+  label,
+  icon: Icon,
+  value,
+  step,
+  onChange
+}: OffsetControlProps) => {
+  const DecreaseIcon = label === "X" ? ArrowLeft : ArrowUp
+  const IncreaseIcon = label === "X" ? ArrowRight : ArrowDown
+
+  return (
+    <div className="space-y-1 rounded-md border p-1.5">
+      <div className="text-muted-foreground flex items-center justify-between text-xs">
+        <span className="flex items-center gap-1">
+          <Icon className="size-3.5" />
+          {label}
+        </span>
+        <span>{value}px</span>
+      </div>
+
+      <div className="grid grid-cols-3 gap-1">
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          className="size-8"
+          aria-label={`Move ${label} backward`}
+          onClick={() => onChange(value - step)}>
+          <DecreaseIcon className="size-4" />
+        </Button>
+
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          className="size-8"
+          aria-label={`Reset ${label} offset`}
+          onClick={() => onChange(0)}>
+          <RefreshCcw className="size-3.5" />
+        </Button>
+
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          className="size-8"
+          aria-label={`Move ${label} forward`}
+          onClick={() => onChange(value + step)}>
+          <IncreaseIcon className="size-4" />
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export default ScreenshotPage

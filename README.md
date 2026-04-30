@@ -141,7 +141,7 @@ Add the new semester to the top of [`src/data/api/semesters.json`](src/data/api/
 Update `MIN_DATE` in [`src/lib/get-ics.ts`](src/lib/get-ics.ts) to the **Monday of Week 1** of the new semester:
 
 ```ts
-const MIN_DATE = new Date("YYYY-MM-DD");
+const MIN_DATE = new Date("YYYY-MM-DD")
 ```
 
 This date is used to calculate recurring calendar events in `.ics` exports. The correct date can be found in the NTU academic calendar.

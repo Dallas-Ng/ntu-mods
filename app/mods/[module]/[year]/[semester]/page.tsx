@@ -2,16 +2,16 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
-import { getModuleMetadata } from "@/lib/server/get-module-metadata"
-import { getModuleCurrentSemester } from "@/lib/server/get-module-current-semester"
-import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
-import { getModuleExamData } from "@/lib/server/get-module-exam-data"
-import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
-import { getModuleCategories } from "@/lib/get-module-category"
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { formatTitle } from "@/lib/format"
-import ModsIndexTable from "@/components/mods/mods-index-table"
+import { getModuleCategories } from "@/lib/get-module-category"
+import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
+import { getModuleCurrentSemester } from "@/lib/server/get-module-current-semester"
+import { getModuleExamData } from "@/lib/server/get-module-exam-data"
+import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
+import { getModuleMetadata } from "@/lib/server/get-module-metadata"
 import Breadcrumbs from "@/components/breadcrumbs"
+import ModsIndexTable from "@/components/mods/mods-index-table"
 
 export const revalidate = Infinity
 
@@ -60,7 +60,8 @@ export default async function Page({ params }: { params: Params }) {
         Historical snapshot — {semLabel}
         {current && (
           <>
-            {" "}·{" "}
+            {" "}
+            ·{" "}
             <Link
               href={getModuleUrl(code)}
               className="underline transition-colors hover:text-amber-600 dark:hover:text-amber-200">
@@ -80,13 +81,17 @@ export default async function Page({ params }: { params: Params }) {
                 label: code,
                 href: getModuleUrl(code)
               },
-              { name: semLabel, label: semLabel, href: getModuleVersionUrl(code, year, semester) }
+              {
+                name: semLabel,
+                label: semLabel,
+                href: getModuleVersionUrl(code, year, semester)
+              }
             ]}
           />
           <h1 className="mt-2 text-3xl">{formatTitle(moduleData.title)}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{semLabel}</p>
           {moduleData.description && (
-            <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               {moduleData.description}
             </p>
           )}
@@ -132,35 +137,45 @@ export default async function Page({ params }: { params: Params }) {
               {moduleData.notAvailableToAllProgrammeWith && (
                 <tr>
                   <td className="p-2">Not Available To All Programme With</td>
-                  <td className="p-2">{moduleData.notAvailableToAllProgrammeWith}</td>
+                  <td className="p-2">
+                    {moduleData.notAvailableToAllProgrammeWith}
+                  </td>
                 </tr>
               )}
 
               {moduleData.notAvailableAsBdeueToProgramme && (
                 <tr>
                   <td className="p-2">Not Available As BDE/UE To Programme</td>
-                  <td className="p-2">{moduleData.notAvailableAsBdeueToProgramme}</td>
+                  <td className="p-2">
+                    {moduleData.notAvailableAsBdeueToProgramme}
+                  </td>
                 </tr>
               )}
 
               {moduleData.notAvailableAsCoreToProgramme && (
                 <tr>
                   <td className="p-2">Not Available As Core To Programme</td>
-                  <td className="p-2">{moduleData.notAvailableAsCoreToProgramme}</td>
+                  <td className="p-2">
+                    {moduleData.notAvailableAsCoreToProgramme}
+                  </td>
                 </tr>
               )}
 
               {moduleData.notAvailableAsPeToProgramme && (
                 <tr>
                   <td className="p-2">Not Available As PE To Programme</td>
-                  <td className="p-2">{moduleData.notAvailableAsPeToProgramme}</td>
+                  <td className="p-2">
+                    {moduleData.notAvailableAsPeToProgramme}
+                  </td>
                 </tr>
               )}
 
               {moduleData.mutuallyExclusiveWith && (
                 <tr>
                   <td className="p-2">Mutually Exclusive With</td>
-                  <td className="p-2">{moduleData.mutuallyExclusiveWith.join(", ")}</td>
+                  <td className="p-2">
+                    {moduleData.mutuallyExclusiveWith.join(", ")}
+                  </td>
                 </tr>
               )}
 

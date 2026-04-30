@@ -27,6 +27,7 @@ That said, not all CC mods are useless. Some are genuinely manageable. Some are 
 NTU’s pitch is simple: your major teaches you your domain, CC teaches you how to function outside it.
 
 That usually means:
+
 - writing
 - presenting
 - teamwork
@@ -43,13 +44,13 @@ Students generally do not disagree with the idea. They mostly dislike the execut
 
 The general student consensus on Reddit is surprisingly consistent:
 
-| Take | What students usually mean |
-| --- | --- |
-| “Free GPA” | Easier content than major mods, but depends heavily on prof and group |
-| “Time sink” | Content is not hard, but coursework is annoying |
-| “Hit or miss” | A good prof makes the mod fine, a bad one makes it miserable |
-| “Group project simulator” | Your grade often depends on how useless your teammates are |
-| “Not useless, just badly run” | Idea is fine, delivery is the problem |
+| Take                          | What students usually mean                                            |
+| ----------------------------- | --------------------------------------------------------------------- |
+| “Free GPA”                    | Easier content than major mods, but depends heavily on prof and group |
+| “Time sink”                   | Content is not hard, but coursework is annoying                       |
+| “Hit or miss”                 | A good prof makes the mod fine, a bad one makes it miserable          |
+| “Group project simulator”     | Your grade often depends on how useless your teammates are            |
+| “Not useless, just badly run” | Idea is fine, delivery is the problem                                 |
 
 That is basically the entire CC experience in one table.
 
@@ -62,6 +63,7 @@ The biggest complaint is not usually difficulty. It is that CC mods often feel l
 These are usually the lifestyle / wellness / reflection-heavy ones.
 
 Think:
+
 - health
 - wellbeing
 - journaling
@@ -79,6 +81,7 @@ That said, these are also often the safest GPA CC mods if you just do the work. 
 Do not underestimate these just because the content feels obvious.
 
 These mods are usually:
+
 - easy to pass
 - annoying to ignore
 - easy to score if you stay consistent
@@ -90,6 +93,7 @@ Miss small components and your grade drops for very stupid reasons.
 This is the part of CC most students hate.
 
 You get grouped with people from completely different schools, then asked to solve some broad issue like:
+
 - sustainability
 - ageing
 - urban problems
@@ -98,6 +102,7 @@ You get grouped with people from completely different schools, then asked to sol
 This sounds fine on paper.
 
 In reality, it is usually:
+
 - 1 person carrying
 - 2 people confused
 - 1 person missing
@@ -110,6 +115,7 @@ This is why CC gets its “group project simulator” reputation. ([reddit.com](
 This mod is less about intelligence and more about damage control.
 
 Your actual skill here is:
+
 - picking competent teammates when possible
 - forcing early delegation
 - making sure someone owns the slides
@@ -122,6 +128,7 @@ Treat these like project management mods, not academic mods.
 These are the communication-heavy ones.
 
 Usually:
+
 - essays
 - presentations
 - class discussion
@@ -145,6 +152,7 @@ These are the ethics / society / policy / interdisciplinary thinking mods.
 These tend to have the biggest gap between what they are trying to do and how students experience them.
 
 The underlying idea is fine:
+
 - think critically
 - consider trade-offs
 - understand systems
@@ -158,22 +166,26 @@ It is usually not the module.
 
 It is usually one of these 3 things:
 
-### 1. Your professor  
+### 1. Your professor
+
 A decent prof can make a mid CC mod tolerable.
 
 A bad prof can make a harmless CC mod unbearable.
 
 For CC, teaching quality matters way more than content.
 
-### 2. Your group  
+### 2. Your group
+
 A bad group will tank your experience faster than the syllabus ever will.
 
 This is the single biggest reason students hate CC.
 
-### 3. Assessment design  
+### 3. Assessment design
+
 The worst CC mods are usually not hard.
 
 They are just badly designed:
+
 - too many tiny submissions
 - vague rubrics
 - subjective marking
@@ -191,13 +203,14 @@ Students are usually right to complain about the workload design.
 But students are also wrong when they say CC is completely useless.
 
 CC mods do teach useful things:
+
 - writing without rambling
 - presenting without dying
 - working with useless teammates
 - surviving vague instructions
 - managing ambiguity
 
-The problem is that these are useful *workplace* skills disguised as *academic* modules, which is why they feel irritating in school and weirdly relevant later.
+The problem is that these are useful _workplace_ skills disguised as _academic_ modules, which is why they feel irritating in school and weirdly relevant later.
 
 That is the real CC experience.
 
@@ -208,6 +221,7 @@ CC mods are usually not hard.
 They are just annoying in very specific ways.
 
 Treat them like this:
+
 - not your hardest mods
 - not your freest mods
 - disproportionately dependent on prof, group, and coursework design

@@ -9,6 +9,7 @@ You are a data quality agent for the **NTU Mods** project — a Next.js app that
 ## Step 1 — Orient yourself
 
 Read `scraper/README.md` (specifically the **Claude Agent Quick Reference** section at the bottom). It documents:
+
 - The pipeline steps and file naming conventions
 - The canonical data invariants you must check
 - Known edge cases and gotchas
@@ -16,20 +17,22 @@ Read `scraper/README.md` (specifically the **Claude Agent Quick Reference** sect
 ## Step 2 — Target semester
 
 Check data for semester: **`YYYY;S`**
-*(Replace `YYYY;S` with the semester code, e.g. `2025;2`)*
+_(Replace `YYYY;S` with the semester code, e.g. `2025;2`)_
 
 The three files to inspect are:
+
 - `scraper/data/03_mdata_YYYY_S.json` — module metadata
 - `scraper/data/04_indexes_YYYY_S.json` — schedule slots
 - `scraper/data/05_exams_YYYY_S.json` — exam timetable
 
-*(Replace `YYYY_S` with underscored form, e.g. `2025_2`)*
+_(Replace `YYYY_S` with underscored form, e.g. `2025_2`)_
 
 ## Step 3 — Checks to run
 
 Run all checks from the **Data invariants** section of `scraper/README.md`. Specifically:
 
 ### A. Module metadata (`03_mdata`)
+
 1. All required fields present: `code`, `title`, `au`, `searchKeys`
 2. `au` parses as float > 0
 3. `searchKeys` is non-empty list
@@ -37,6 +40,7 @@ Run all checks from the **Data invariants** section of `scraper/README.md`. Spec
 5. No empty-string values on optional text fields
 
 ### B. Schedule slots (`04_indexes`)
+
 1. `day` is int 1–7 for every slot — flag any `day=0` entries with course + index
 2. `time` matches `HHMM-HHMM`, start < end
 3. `duration` is correct: `ceil((end_min - start_min) / 30)` — sample 20 random slots
@@ -45,12 +49,14 @@ Run all checks from the **Data invariants** section of `scraper/README.md`. Spec
 6. Every course code in indexes exists in mdata
 
 ### C. Exam timetable (`05_exams`)
+
 1. Every exam key exists in mdata
 2. `day` is int 1–7
 3. `start_time` / `end_time` are parseable time strings
 4. `duration` (if present) matches computed exam length
 
 ### D. Cross-file stats (sanity numbers)
+
 - Total modules in mdata
 - Total modules with at least one index
 - Total modules with no indexes (list up to 10 examples)
@@ -89,6 +95,7 @@ For each WARN or FAIL row, list up to 5 concrete examples (course code, index, f
 ## Step 5 — Summary verdict
 
 End with one of:
+
 - **CLEAN** — no FAILs, ≤2 WARNs
 - **NEEDS REVIEW** — 1–3 FAILs or >2 WARNs — list what to investigate
 - **CORRUPT** — >3 FAILs — recommend re-running the pipeline with `--refetch`

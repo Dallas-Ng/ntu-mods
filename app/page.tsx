@@ -12,7 +12,7 @@ const Product = dynamic(() => import("@/components/landing/landing-product"), {
   ssr: false,
   loading: () => (
     <div className="bg-background dark:bg-slate-950">
-      <Skeleton className="z-[2] h-[59vh] w-full " />
+      <Skeleton className="z-[2] h-[59vh] w-full" />
     </div>
   )
 })
@@ -35,7 +35,7 @@ export default function IndexPage() {
           loading="eager"
           alt="some cool waves"
           src="/landing/product-bg.svg"
-          className="absolute  bottom-1/2 left-0 z-[1] hidden w-full lg:block"
+          className="absolute bottom-1/2 left-0 z-[1] hidden w-full lg:block"
         />
         <Image
           height={600}

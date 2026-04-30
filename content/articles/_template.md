@@ -26,10 +26,10 @@ Write your article in Markdown. The page will automatically build the right side
 - Add images with standard Markdown syntax: `![Alt text](https://example.com/image.jpg)`.
 - Add tables when comparison helps:
 
-| Module type | What to check | Notes |
-| --- | --- | --- |
-| Core | Prerequisites | Usually less flexible |
-| BDE | Restrictions | Availability changes |
+| Module type | What to check | Notes                 |
+| ----------- | ------------- | --------------------- |
+| Core        | Prerequisites | Usually less flexible |
+| BDE         | Restrictions  | Availability changes  |
 
 ## Final thoughts
 

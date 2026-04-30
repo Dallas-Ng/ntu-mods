@@ -4,7 +4,14 @@ description: "Understand what a BDE is at NTU, how Broadening and Deepening Elec
 date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"
-tags: ["NTU BDE", "Broadening and Deepening Elective", "NTU electives", "NTUMods", "NTU module planning"]
+tags:
+  [
+    "NTU BDE",
+    "Broadening and Deepening Elective",
+    "NTU electives",
+    "NTUMods",
+    "NTU module planning"
+  ]
 thumbnail: ""
 thumbnailAlt: "NTUMods guide to Broadening and Deepening Electives"
 ---
@@ -52,12 +59,12 @@ This depends entirely on your programme, school, matriculation year, and any spe
 
 There is no universal BDE number across NTU.
 
-| What affects your BDE AUs | Why it matters |
-| --- | --- |
-| Programme | Different degrees reserve different amounts of elective space |
-| Matriculation year | Curriculum structures can change by cohort |
-| Minor or second major | Some BDE space may be used to satisfy those requirements |
-| Exemptions or credit transfers | Your remaining AU count may change |
+| What affects your BDE AUs      | Why it matters                                                |
+| ------------------------------ | ------------------------------------------------------------- |
+| Programme                      | Different degrees reserve different amounts of elective space |
+| Matriculation year             | Curriculum structures can change by cohort                    |
+| Minor or second major          | Some BDE space may be used to satisfy those requirements      |
+| Exemptions or credit transfers | Your remaining AU count may change                            |
 
 Always check your official curriculum structure and degree audit. NTUMods helps you browse and plan, but your school and official NTU systems decide what counts.
 

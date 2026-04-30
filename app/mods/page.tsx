@@ -298,7 +298,6 @@ const ModsPage = ({ searchParams }: Props) => {
       </div>
     )
 
-
   return (
     <div className="relative space-y-3">
       <Header
@@ -373,7 +372,9 @@ const ModsPage = ({ searchParams }: Props) => {
           ) : (
             <div className="overflow-hidden rounded-lg border-2">
               {Array.from({ length: LOADING_LIST_COUNT }).map((_, i) => (
-                <div key={i} className={i !== LOADING_LIST_COUNT - 1 ? "border-b" : ""}>
+                <div
+                  key={i}
+                  className={i !== LOADING_LIST_COUNT - 1 ? "border-b" : ""}>
                   <ModuleListRowLoading />
                 </div>
               ))}
@@ -394,7 +395,9 @@ const ModsPage = ({ searchParams }: Props) => {
                   <div key={key} className="space-y-3">
                     <h3 className="text-sm font-medium">
                       {label}{" "}
-                      <span className="text-muted-foreground">({modules.length})</span>
+                      <span className="text-muted-foreground">
+                        ({modules.length})
+                      </span>
                     </h3>
                     {renderModules(
                       visible,

@@ -93,9 +93,9 @@ export const ModuleCardDetail = ({
             <span className="shrink-0 font-mono">
               {highlightText(code, searchTerm)}
             </span>
-            <div className="flex gap-1">
+            <div className="flex gap-1 overflow-hidden">
               {categories.map((category, i) => (
-                <span key={i} className="rounded-full border px-2 py-0">
+                <span key={i} className="shrink-0 truncate rounded-full border px-2 py-0">
                   {MODULE_CATEGORY[category]}
                 </span>
               ))}

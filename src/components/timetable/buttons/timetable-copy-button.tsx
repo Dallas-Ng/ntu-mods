@@ -91,7 +91,7 @@ const TimetableCopyButton = () => {
   )
 
   const Footer = (
-    <div className="h-[40px] w-full">
+    <div className="h-10 w-full">
       <div className="flex w-full justify-between">
         <Button variant="outline" onClick={handleClose}>
           Close
@@ -110,7 +110,7 @@ const TimetableCopyButton = () => {
 
   if (isMobile)
     return (
-      <Drawer>
+      <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>
           <div>{trigger}</div>
         </DrawerTrigger>

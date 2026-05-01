@@ -1,23 +1,22 @@
+import { useMemo } from "react"
 import { useSearchParams } from "next/navigation"
 
 export const useQsTimetable = (): Timetable | undefined => {
   const searchParams = useSearchParams()
-  const obj = Object.fromEntries(searchParams.entries())
 
-  if (Object.keys(obj).length === 0) {
-    return undefined
-  }
+  return useMemo(() => {
+    const obj = Object.fromEntries(searchParams.entries())
 
-  const timetable: Timetable = {}
+    if (Object.keys(obj).length === 0) {
+      return undefined
+    }
 
-  Object.entries(obj).forEach(([key, value]) => {
-    // TODO: Add in validation here
-    // if (key not in M_DATA || value not in M_DATA[key]) {
-    //  return
-    // }
+    const timetable: Timetable = {}
 
-    timetable[key] = value
-  })
+    Object.entries(obj).forEach(([key, value]) => {
+      timetable[key] = value
+    })
 
-  return timetable
+    return timetable
+  }, [searchParams])
 }

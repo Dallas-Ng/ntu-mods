@@ -1,8 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import Script from "next/script"
-import { jsonLdScriptProps } from "react-schemaorg"
 import type { Article as ArticleJsonLd, WithContext } from "schema-dts"
 
 import {
@@ -18,14 +16,31 @@ export const dynamic = "force-static"
 export const dynamicParams = true
 export const revalidate = false
 
-export default async function ArticlePage(props: { params: Promise<{ slug: string }> }) {
-  const params = await props.params;
+export default async function ArticlePage(props: {
+  params: Promise<{ slug: string }>
+}) {
+  const params = await props.params
   const article = getArticleBySlug(params.slug)
   if (!article) notFound()
 
   const moreArticles = getAllArticles()
     .filter((item) => item.slug !== article.slug)
     .slice(0, 3)
+
+  const jsonLd: WithContext<ArticleJsonLd> = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: article.title,
+    description: article.description,
+    image: getArticleImageUrl(article.thumbnail),
+    datePublished: article.date,
+    dateModified: article.updated || article.date,
+    author: {
+      "@type": "Person",
+      name: article.author
+    },
+    mainEntityOfPage: article.url
+  }
 
   return (
     <div className="min-w-0 py-4 sm:py-6">
@@ -41,24 +56,10 @@ export default async function ArticlePage(props: { params: Promise<{ slug: strin
         ]}
       />
 
-      <Script
+      <script
         id="article-jsonld"
         type="application/ld+json"
-        strategy="beforeInteractive"
-        {...jsonLdScriptProps<WithContext<ArticleJsonLd>>({
-          "@context": "https://schema.org",
-          "@type": "Article",
-          headline: article.title,
-          description: article.description,
-          image: getArticleImageUrl(article.thumbnail),
-          datePublished: article.date,
-          dateModified: article.updated || article.date,
-          author: {
-            "@type": "Person",
-            name: article.author
-          },
-          mainEntityOfPage: article.url
-        })}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
       <div className="mt-5 grid min-w-0 justify-center gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
@@ -123,7 +124,7 @@ export async function generateMetadata(
     params: Promise<{ slug: string }>
   }
 ): Promise<Metadata | null> {
-  const params = await props.params;
+  const params = await props.params
   const article = getArticleBySlug(params.slug)
   if (!article) return null
 

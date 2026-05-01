@@ -75,8 +75,8 @@ const Navbar = () => {
 
           <NavigationMenu className="ml-2 hidden items-center md:flex">
             <NavigationMenuList>
-              <NavigationMenuItem>
-                {siteConfig.navLinks.map((link) => (
+              {siteConfig.navLinks.map((link) => (
+                <NavigationMenuItem key={link.route}>
                   <NavigationMenuLink key={link.route} asChild>
                     <Link
                       href={link.route}
@@ -89,8 +89,8 @@ const Navbar = () => {
                       {link.label}
                     </Link>
                   </NavigationMenuLink>
-                ))}
-              </NavigationMenuItem>
+                </NavigationMenuItem>
+              ))}
             </NavigationMenuList>
           </NavigationMenu>
 

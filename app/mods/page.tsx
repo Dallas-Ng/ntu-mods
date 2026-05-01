@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { ChevronDown, LayoutGrid, List } from "lucide-react"
+import { ChevronDown, LayoutGrid, List, SlidersHorizontal } from "lucide-react"
 
 import { MODULE_CATEGORY, MODULE_FACULTY } from "@/lib/constants"
 import { getModuleCategories } from "@/lib/get-module-category"
@@ -191,7 +191,15 @@ const ModsPage = ({ searchParams }: Props) => {
   const { modsViewMode, modsGroupBy, updateSettings } = useSettings()
   const [displayCount, setDisplayCount] = useState(PAGE_SIZE)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
+  const [filtersOpen, setFiltersOpen] = useState(true)
   const loaderRef = useRef<HTMLDivElement>(null)
+
+  const activeFilterCount = [
+    moduleType !== "all",
+    moduleFaculty !== "all",
+    moduleLevel !== "all",
+    true
+  ].filter(Boolean).length
 
   const setViewMode = useCallback(
     (mode: "cards" | "list") => updateSettings({ modsViewMode: mode }),
@@ -305,20 +313,35 @@ const ModsPage = ({ searchParams }: Props) => {
         subtitle={`AY${year}/${nextYear} Semester ${semester}`}
       />
 
-      <div className="flex w-full flex-col gap-2 lg:flex-row">
-        <ModsSearchInput paramsValue={searchTerm} />
+      <div className="flex w-full flex-col gap-2">
         <div className="flex gap-2">
-          <ModsModuleTypeSelect paramsValue={moduleType} />
+          <ModsSearchInput paramsValue={searchTerm} />
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9 shrink-0 gap-1.5"
+            onClick={() => setFiltersOpen((o) => !o)}>
+            <SlidersHorizontal className="size-3.5" />
+            Filters
+            {activeFilterCount > 0 && (
+              <span className="bg-primary text-primary-foreground flex size-4 items-center justify-center rounded-full text-[10px] font-medium">
+                {activeFilterCount}
+              </span>
+            )}
+            <ChevronDown
+              className={`size-3.5 transition-transform${filtersOpen ? " rotate-180" : ""}`}
+            />
+          </Button>
         </div>
-        <div className="flex gap-2">
-          <ModsFacultySelect paramsValue={moduleFaculty} />
-        </div>
-        <div className="flex gap-2">
-          <ModsLevelSelect searchTerm={searchTerm} paramValue={moduleLevel} />
-        </div>
-        <div className="flex items-center gap-2">
-          <ModsCurrentOnlyToggle paramsValue={currentOnly} />
-        </div>
+
+        {filtersOpen && (
+          <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4">
+            <ModsModuleTypeSelect paramsValue={moduleType} />
+            <ModsFacultySelect paramsValue={moduleFaculty} />
+            <ModsLevelSelect searchTerm={searchTerm} paramValue={moduleLevel} />
+            <ModsCurrentOnlyToggle paramsValue={currentOnly} />
+          </div>
+        )}
       </div>
 
       <ModsActiveFilters
@@ -337,7 +360,7 @@ const ModsPage = ({ searchParams }: Props) => {
         <div className="flex items-center gap-3">
           <ModsGroupBySelect />
           {!isLoading && filteredModules.length > 0 && (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {filteredModules.length} module
               {filteredModules.length !== 1 ? "s" : ""}
             </p>
@@ -431,7 +454,7 @@ const ModsPage = ({ searchParams }: Props) => {
       )}
 
       {!isLoading && (
-        <p className="text-center text-sm text-muted-foreground transition-colors hover:text-primary-alt">
+        <p className="text-muted-foreground hover:text-primary-alt text-center text-sm transition-colors">
           <Link
             href="https://wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"
             target="_blank">

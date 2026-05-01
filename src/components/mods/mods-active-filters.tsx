@@ -34,6 +34,7 @@ export const ModsActiveFilters = ({
   if (searchTerm) {
     activeFilters.push({ key: "searchTerm", label: `"${searchTerm}"` })
   }
+
   if (moduleType !== "all") {
     activeFilters.push({
       key: "moduleType",
@@ -42,9 +43,11 @@ export const ModsActiveFilters = ({
         moduleType
     })
   }
+
   if (moduleLevel !== "all") {
     activeFilters.push({ key: "moduleLevel", label: `Level ${moduleLevel}` })
   }
+
   if (moduleFaculty !== "all") {
     activeFilters.push({
       key: "moduleFaculty",
@@ -53,6 +56,8 @@ export const ModsActiveFilters = ({
   }
   if (currentOnly === "false") {
     activeFilters.push({ key: "currentOnly", label: "All semesters" })
+  } else {
+    activeFilters.push({ key: "currentOnly", label: "Current Semester" })
   }
 
   if (activeFilters.length === 0) return null
@@ -69,7 +74,7 @@ export const ModsActiveFilters = ({
         <button
           key={key}
           onClick={() => clearFilter(key)}
-          className="flex items-center gap-1 rounded-full border bg-muted px-3 py-0.5 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+          className="bg-muted text-muted-foreground hover:bg-accent hover:text-foreground flex items-center gap-1 rounded-full border px-3 py-0.5 text-xs transition-colors">
           {label}
           <X className="h-3 w-3" />
         </button>

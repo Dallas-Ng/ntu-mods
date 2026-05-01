@@ -23,12 +23,12 @@ export const ModsLevelSelect = ({ paramValue, searchTerm }: Props) => {
       label: (
         <div>
           {searchTerm.length === 2 && (
-            <span className="text-xs text-muted-foreground">
+            <span className="text-muted-foreground text-xs">
               {searchTerm.toUpperCase()}
             </span>
           )}
           {val}
-          <span className="text-xs text-muted-foreground">XXX</span>
+          <span className="text-muted-foreground text-xs">XXX</span>
         </div>
       )
     }))
@@ -41,7 +41,7 @@ export const ModsLevelSelect = ({ paramValue, searchTerm }: Props) => {
       selectItems={selectItems}
       onChange={(value) => setValue(value as SearchModuleLevel)}
       divClassName={cn(
-        "w-full lg:w-[150px]",
+        "w-full",
         value !== "all" && "ring-ring rounded-md ring-1"
       )}
     />

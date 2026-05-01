@@ -18,10 +18,8 @@ interface Index {
  * Returns class schedules for a specific module
  * Query params: year, semester
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { code: string } }
-) {
+export async function GET(request: NextRequest, props: { params: Promise<{ code: string }> }) {
+  const params = await props.params;
   const searchParams = request.nextUrl.searchParams
 
   try {

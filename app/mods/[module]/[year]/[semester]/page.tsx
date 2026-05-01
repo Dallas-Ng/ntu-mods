@@ -21,7 +21,8 @@ interface Params {
   semester: string
 }
 
-export default async function Page({ params }: { params: Params }) {
+export default async function Page(props: { params: Promise<Params> }) {
+  const params = await props.params;
   const rawCode = params.module
   const { year, semester } = params
 
@@ -208,11 +209,12 @@ export default async function Page({ params }: { params: Params }) {
   )
 }
 
-export async function generateMetadata({
-  params
-}: {
-  params: Params
-}): Promise<Metadata | null> {
+export async function generateMetadata(
+  props: {
+    params: Promise<Params>
+  }
+): Promise<Metadata | null> {
+  const params = await props.params;
   const code = params.module.toUpperCase()
   const { year, semester } = params
 

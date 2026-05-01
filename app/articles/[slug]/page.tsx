@@ -18,7 +18,8 @@ export const dynamic = "force-static"
 export const dynamicParams = true
 export const revalidate = Infinity
 
-export default function ArticlePage({ params }: { params: { slug: string } }) {
+export default async function ArticlePage(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const article = getArticleBySlug(params.slug)
   if (!article) notFound()
 
@@ -117,11 +118,12 @@ export function generateStaticParams() {
   return getAllArticles().map((article) => ({ slug: article.slug }))
 }
 
-export function generateMetadata({
-  params
-}: {
-  params: { slug: string }
-}): Metadata | null {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ slug: string }>
+  }
+): Promise<Metadata | null> {
+  const params = await props.params;
   const article = getArticleBySlug(params.slug)
   if (!article) return null
 

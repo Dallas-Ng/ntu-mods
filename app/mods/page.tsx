@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState, use } from "react";
 import Link from "next/link"
 import { ChevronDown, LayoutGrid, List, SlidersHorizontal } from "lucide-react"
 
@@ -41,14 +41,14 @@ import {
 } from "@/components/module-card"
 
 interface Props {
-  searchParams: {
+  searchParams: Promise<{
     searchTerm?: string
     semester?: Semester
     moduleType?: SearchModuleType
     moduleFaculty?: SearchModuleFaculty
     moduleLevel?: SearchModuleLevel
     currentOnly?: string
-  }
+  }>
 }
 
 const PAGE_SIZE = 100
@@ -176,7 +176,8 @@ function filterModules(
   return filtered
 }
 
-const ModsPage = ({ searchParams }: Props) => {
+const ModsPage = (props: Props) => {
+  const searchParams = use(props.searchParams);
   const {
     searchTerm = "",
     moduleType = "all",

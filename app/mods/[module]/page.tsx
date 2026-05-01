@@ -21,7 +21,8 @@ export const dynamic = "force-static"
 export const dynamicParams = true
 export const revalidate = Infinity
 
-export default async function Page({ params }: { params: { module: string } }) {
+export default async function Page(props: { params: Promise<{ module: string }> }) {
+  const params = await props.params;
   const rawKey = params.module
 
   // Normalise to uppercase
@@ -145,11 +146,12 @@ export async function generateStaticParams() {
   return Object.keys(allMeta).map((key) => ({ module: key }))
 }
 
-export async function generateMetadata({
-  params
-}: {
-  params: { module: string }
-}): Promise<Metadata | null> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ module: string }>
+  }
+): Promise<Metadata | null> {
+  const params = await props.params;
   const moduleKey = params.module.toUpperCase()
   const current = await getModuleCurrentSemester(moduleKey)
   if (!current) return null

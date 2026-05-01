@@ -13,7 +13,7 @@ import { getModuleMetadata } from "@/lib/server/get-module-metadata"
 import Breadcrumbs from "@/components/breadcrumbs"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 
-export const revalidate = Infinity
+export const revalidate = false
 
 interface Params {
   module: string

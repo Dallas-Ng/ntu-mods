@@ -55,13 +55,13 @@ type CanvasPresetOption = {
 }
 
 type WallpaperCanvasProps = {
-  canvasRef: RefObject<HTMLDivElement>
+  canvasRef: RefObject<HTMLDivElement | null>
   preset: CanvasPreset
   selectedPreset: CanvasPresetOption
   scale: number
   offsetX: number
   offsetY: number
-  timetableRef: RefObject<HTMLDivElement>
+  timetableRef: RefObject<HTMLDivElement | null>
 }
 
 type EditorToolbarProps = {

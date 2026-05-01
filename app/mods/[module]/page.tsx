@@ -19,7 +19,7 @@ import RelatedModules from "@/components/related-modules"
 
 export const dynamic = "force-static"
 export const dynamicParams = true
-export const revalidate = Infinity
+export const revalidate = false
 
 export default async function Page(props: { params: Promise<{ module: string }> }) {
   const params = await props.params;

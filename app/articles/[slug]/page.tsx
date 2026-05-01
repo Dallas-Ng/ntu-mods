@@ -16,7 +16,7 @@ import Breadcrumbs from "@/components/breadcrumbs"
 
 export const dynamic = "force-static"
 export const dynamicParams = true
-export const revalidate = Infinity
+export const revalidate = false
 
 export default async function ArticlePage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;

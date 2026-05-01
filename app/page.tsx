@@ -1,21 +1,11 @@
-import dynamic from "next/dynamic"
 import Image from "next/image"
 
-import { Skeleton } from "@/components/ui/skeleton"
 import Articles from "@/components/landing/landing-articles"
 import CTA from "@/components/landing/landing-cta"
 import Features from "@/components/landing/landing-features"
+import Product from "@/components/landing/landing-product"
 import Roadmap from "@/components/landing/landing-roadmap"
 import LayoutDefault from "@/components/layout-default"
-
-const Product = dynamic(() => import("@/components/landing/landing-product"), {
-  ssr: false,
-  loading: () => (
-    <div className="bg-background dark:bg-slate-950">
-      <Skeleton className="z-[2] h-[59vh] w-full" />
-    </div>
-  )
-})
 
 export default function IndexPage() {
   return (

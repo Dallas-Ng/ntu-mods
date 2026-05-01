@@ -4,23 +4,19 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 
 import { Author } from "next/dist/lib/metadata/types/metadata-types"
-import dynamic from "next/dynamic"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import { Banner } from "@/components/banner"
+import BetaBanner from "@/components/beta-banner-dynamic"
 import BetaLock from "@/components/beta-lock"
 import ClarityTag from "@/components/clarity"
 import GTag from "@/components/gtag"
 import MobileTracker from "@/components/mobile-tracker"
 import TailwindIndicator from "@/components/tailwind-indicator"
 import ThemeProvider from "@/components/theme-provider"
-
-const BetaBanner = dynamic(() => import("@/components/beta-banner"), {
-  ssr: false
-})
 
 const inter = Inter({ subsets: ["latin"] })
 

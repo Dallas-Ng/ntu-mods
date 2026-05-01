@@ -3,7 +3,7 @@ import Link from "next/link"
 import { getAllArticles } from "@/lib/server/articles"
 
 export const dynamic = "force-static"
-export const revalidate = Infinity
+export const revalidate = false
 
 export default function ArticlesPage() {
   const articles = getAllArticles()

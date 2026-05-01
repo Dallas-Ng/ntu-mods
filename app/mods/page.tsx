@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState, use } from "react";
+import { use, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { ChevronDown, LayoutGrid, List, SlidersHorizontal } from "lucide-react"
 
@@ -177,7 +177,7 @@ function filterModules(
 }
 
 const ModsPage = (props: Props) => {
-  const searchParams = use(props.searchParams);
+  const searchParams = use(props.searchParams)
   const {
     searchTerm = "",
     moduleType = "all",
@@ -240,6 +240,9 @@ const ModsPage = (props: Props) => {
   )
 
   const hasMore = displayCount < filteredModules.length
+  const moduleCountLabel = `${filteredModules.length} module${
+    filteredModules.length !== 1 ? "s" : ""
+  }`
 
   useEffect(() => {
     setDisplayCount(PAGE_SIZE)
@@ -330,7 +333,7 @@ const ModsPage = (props: Props) => {
               </span>
             )}
             <ChevronDown
-              className={`size-3.5 transition-transform${filtersOpen ? " rotate-180" : ""}`}
+              className={`size-3.5 transition-transform${filtersOpen ? "rotate-180" : ""}`}
             />
           </Button>
         </div>
@@ -357,17 +360,17 @@ const ModsPage = (props: Props) => {
 
       {!isLoading && filteredModules.length === 0 && <ModsEmptyCard />}
 
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-3">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1 pb-2 sm:flex sm:justify-between">
+        <div className="min-w-0 sm:flex sm:items-center sm:gap-3">
           <ModsGroupBySelect />
+
           {!isLoading && filteredModules.length > 0 && (
-            <p className="text-muted-foreground text-sm">
-              {filteredModules.length} module
-              {filteredModules.length !== 1 ? "s" : ""}
+            <p className="text-muted-foreground hidden text-sm sm:block">
+              {moduleCountLabel}
             </p>
           )}
         </div>
-        <div className="flex gap-1">
+        <div className="flex shrink-0 gap-1">
           <Button
             variant={modsViewMode === "cards" ? "secondary" : "ghost"}
             size="sm"
@@ -383,7 +386,14 @@ const ModsPage = (props: Props) => {
             <List className="size-4" />
           </Button>
         </div>
+        {!isLoading && filteredModules.length > 0 && (
+          <p className="text-muted-foreground col-start-1 text-sm sm:hidden">
+            {moduleCountLabel}
+          </p>
+        )}
       </div>
+
+      <hr className="mt-4" />
 
       {(() => {
         if (isLoading) {

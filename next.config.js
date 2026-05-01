@@ -2,10 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   // productionBrowserSourceMaps: true,
-  experimental: {
-    scrollRestoration: true
-  },
-  redirects: () => {
+redirects: () => {
     return [
       {
         source: "/stars",

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type MouseEvent } from "react"
 import { TrashIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -14,6 +14,14 @@ const TimetableModifier = () => {
   const { timetable, removeItemFromTimetable } = useTimetable()
   const [activeKey, setActiveKey] = useState<string | null>(null)
 
+  const handleRemoveClick = (
+    event: MouseEvent<HTMLDivElement>,
+    moduleKey: string
+  ) => {
+    event.stopPropagation()
+    removeItemFromTimetable(moduleKey)
+  }
+
   return (
     <div className="flex size-full flex-col space-y-4">
       <div className="relative z-[2] h-[40px] w-full rounded-lg">
@@ -23,7 +31,7 @@ const TimetableModifier = () => {
       </div>
 
       <div className="rounded-lg border-2">
-        <div className="p-2 text-center text-xs text-muted-foreground">
+        <div className="text-muted-foreground p-2 text-center text-xs">
           Registered Modules
         </div>
 
@@ -37,24 +45,21 @@ const TimetableModifier = () => {
               onOpenChange={(moduleKey) => setActiveKey(moduleKey)}>
               <div
                 className={cn(
-                  "cursor-pointer pr-1 pl-4 text-sm transition-colors hover:bg-accent",
-                  activeKey === moduleKey && "rounded-b-none bg-muted"
+                  "hover:bg-accent cursor-pointer pr-1 pl-4 text-sm transition-colors",
+                  activeKey === moduleKey && "bg-muted rounded-b-none"
                 )}>
                 <div className="flex w-full items-center justify-between">
                   <div className="flex gap-1">
                     <div className="w-[60px]">{moduleKey}</div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-muted-foreground text-sm">
                       {indexKey}
                     </div>
                   </div>
 
                   <div
                     className="flex size-10 cursor-pointer items-center justify-center p-1"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      removeItemFromTimetable(moduleKey)
-                    }}>
-                    <TrashIcon className="size-4 text-muted-foreground hover:text-foreground" />
+                    onClick={(e) => handleRemoveClick(e, moduleKey)}>
+                    <TrashIcon className="text-muted-foreground hover:text-foreground size-4" />
                   </div>
                 </div>
               </div>
@@ -65,7 +70,7 @@ const TimetableModifier = () => {
         {Object.entries(timetable).length === 0 && (
           <>
             <div className="p-2">
-              <div className="text-center text-sm text-muted-foreground">
+              <div className="text-muted-foreground text-center text-sm">
                 You have not added modules
                 <br /> Click on the search bar above to add modules
               </div>
@@ -82,14 +87,14 @@ export const TimetableModifierLoader = () => (
     <Skeleton className="h-[40px]" />
 
     <div className="relative max-h-[50vh] min-h-10 w-full overflow-y-auto rounded-lg border-2">
-      <div className="p-2 text-center text-xs text-muted-foreground">
+      <div className="text-muted-foreground p-2 text-center text-xs">
         Registered Modules
       </div>
 
       <hr />
 
       <div className="p-2">
-        <div className="text-center text-sm text-muted-foreground">
+        <div className="text-muted-foreground text-center text-sm">
           You have not added modules
           <br /> Click on the search bar above to add modules
         </div>

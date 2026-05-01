@@ -21,6 +21,12 @@ const ModsReadMore = ({ children }: Props) => {
     }
   }, [])
 
+  const handleToggle = () => {
+    // When closing read more, we snap to the top of the page.
+    if (showMore) window.scrollTo({ top: 0 })
+    setShowMore((pS) => !pS)
+  }
+
   return (
     <>
       <div
@@ -34,17 +40,13 @@ const ModsReadMore = ({ children }: Props) => {
       {showButton ? (
         <div
           className="relative cursor-pointer text-center"
-          onClick={() => {
-            // When closing read more, we snap to the top of the page.
-            if (showMore) window.scrollTo({ top: 0 })
-            setShowMore((pS) => !pS)
-          }}>
+          onClick={handleToggle}>
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-secondary" />
+            <div className="border-secondary w-full border-t" />
           </div>
 
           <div className="relative flex justify-center">
-            <span className="bg-background px-2 text-sm text-muted-foreground">
+            <span className="bg-background text-muted-foreground px-2 text-sm">
               {showMore ? "Read less" : "Read more"}
             </span>
           </div>

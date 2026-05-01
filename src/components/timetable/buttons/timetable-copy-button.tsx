@@ -44,6 +44,11 @@ const TimetableCopyButton = () => {
     setOpen(false)
   }
 
+  const handleClose = () => {
+    setOverrideIndex(null)
+    setOpen(false)
+  }
+
   const trigger = <ButtonCollapsable icon={Copy} text="Copy Timetable" />
 
   const Content = (
@@ -58,17 +63,17 @@ const TimetableCopyButton = () => {
               key={timetableIdx}
               onClick={() => setOverrideIndex(timetableIdx)}
               className={cn(
-                "rounded-md p-2 transition-colors hover:cursor-pointer hover:bg-accent",
+                "hover:bg-accent rounded-md p-2 transition-colors hover:cursor-pointer",
                 overrideIndex === timetableIdx && "bg-muted"
               )}>
               <p>Plan {timetableIdx + 1}</p>
 
-              <div className="mt-2 text-xs text-muted-foreground">
+              <div className="text-muted-foreground mt-2 text-xs">
                 <div className="flex flex-wrap gap-1">
                   {Object.keys(timetable).map((moduleKey) => (
                     <div
                       key={moduleKey}
-                      className="rounded-full border border-muted-foreground px-2 py-0">
+                      className="border-muted-foreground rounded-full border px-2 py-0">
                       {moduleKey}
                     </div>
                   ))}
@@ -88,12 +93,7 @@ const TimetableCopyButton = () => {
   const Footer = (
     <div className="h-[40px] w-full">
       <div className="flex w-full justify-between">
-        <Button
-          variant="outline"
-          onClick={() => {
-            setOverrideIndex(null)
-            setOpen(false)
-          }}>
+        <Button variant="outline" onClick={handleClose}>
           Close
         </Button>
 

@@ -7,6 +7,16 @@ import CustomSelect from "@/components/select"
 
 export type SearchModuleType = ModuleType | "all"
 
+const SELECT_ITEMS = [
+  { value: "all", label: "All Module Types" },
+  ...Object.entries(MODULE_CATEGORY)
+    .filter(([k]) => k !== "USP")
+    .map(([categoryKey, categoryName]) => ({
+      value: categoryKey,
+      label: categoryName
+    }))
+]
+
 export const ModsModuleTypeSelect = ({
   paramsValue
 }: {
@@ -14,22 +24,16 @@ export const ModsModuleTypeSelect = ({
 }) => {
   const { value, setValue } = useModsSearchParams(paramsValue, "moduleType")
 
-  const selectItems = [
-    { value: "all", label: "All Module Types" },
-    ...Object.entries(MODULE_CATEGORY)
-      .filter(([k]) => k !== "USP")
-      .map(([categoryKey, categoryName]) => ({
-        value: categoryKey,
-        label: categoryName
-      }))
-  ]
+  const handleChange = (nextValue: string | null) => {
+    if (nextValue !== null) setValue(nextValue)
+  }
 
   return (
     <CustomSelect
       closeOnSelect
       value={value}
-      selectItems={selectItems}
-      onChange={(v) => { if (v !== null) setValue(v) }}
+      selectItems={SELECT_ITEMS}
+      onChange={handleChange}
       divClassName={cn(
         "w-full",
         value !== "all" && "ring-ring rounded-md ring-1"

@@ -57,6 +57,11 @@ const CustomSelect = (props: Props) => {
     setPopoverOpen(false)
   }
 
+  const handleSelect = (value: string) => {
+    setActiveItem(value)
+    if (closeOnSelect) handleClose()
+  }
+
   return (
     <div ref={containerRef} className={cn("w-full", divClassName)}>
       <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
@@ -94,11 +99,8 @@ const CustomSelect = (props: Props) => {
               {selectItems.map((item) => (
                 <CommandItem
                   key={item.value}
-                  className="cursor-pointer hover:bg-accent"
-                  onSelect={() => {
-                    setActiveItem(item.value)
-                    closeOnSelect && handleClose()
-                  }}>
+                  className="hover:bg-accent cursor-pointer"
+                  onSelect={() => handleSelect(item.value)}>
                   <div className="flex items-center gap-2">
                     <CheckIcon
                       className={cn(

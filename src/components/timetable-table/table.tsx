@@ -17,7 +17,7 @@ import { TimetableTableThead } from "./thead"
 
 const TimeSlotItem = ({ startTime }: { startTime: number }) => (
   <td className="relative">
-    <span className="absolute top-[-8px] left-0 w-full bg-card px-1 text-center">
+    <span className="bg-card absolute top-[-8px] left-0 w-full px-1 text-center">
       {startTime}
     </span>
 
@@ -70,6 +70,28 @@ export const TimetableTable = (props: Props) => {
     )
 
   const [currentHoverKey, setCurrentHoverKey] = useState("")
+
+  const handleIndexClick = (
+    moduleKey: string,
+    indexKey: string,
+    indexPickerEnabled: boolean | undefined,
+    previewCandidate: boolean
+  ) => {
+    if (!indexPickerEnabled) return
+
+    if (previewCandidate) {
+      indexPicker?.onIndexSelect(moduleKey, indexKey)
+      return
+    }
+
+    indexPicker?.onActiveModuleChange(moduleKey)
+  }
+
+  const handleIndexMouseOver = (indexKey: string, isLecture: boolean) => {
+    // Hovering on lectures will not highlight other indexes as they are common lectures
+    if (isLecture && alwaysHighlightLectures) return
+    setCurrentHoverKey(indexKey)
+  }
 
   return (
     <div className={cn(TABLE_OVERFLOW_THRESHOLD && "overflow-x-auto")}>
@@ -151,27 +173,17 @@ export const TimetableTable = (props: Props) => {
                               }
                               previewActive={previewActive}
                               previewCandidate={previewCandidate}
-                              onClick={() => {
-                                if (!indexPickerEnabled) return
-
-                                if (previewCandidate) {
-                                  indexPicker.onIndexSelect(
-                                    moduleKey,
-                                    index.key
-                                  )
-                                  return
-                                }
-
-                                indexPicker.onActiveModuleChange(moduleKey)
-                              }}
-                              onMouseOver={() => {
-                                // Hovering on lectures will not highlight other indexes as they are common lectures
-                                if (isLecture && alwaysHighlightLectures) {
-                                  // setCurrentHoverKey(index.key)
-                                } else {
-                                  setCurrentHoverKey(index.key)
-                                }
-                              }}
+                              onClick={() =>
+                                handleIndexClick(
+                                  moduleKey,
+                                  index.key,
+                                  indexPickerEnabled,
+                                  previewCandidate
+                                )
+                              }
+                              onMouseOver={() =>
+                                handleIndexMouseOver(index.key, isLecture)
+                              }
                               onMouseOut={() => setCurrentHoverKey("")}
                             />
                           )

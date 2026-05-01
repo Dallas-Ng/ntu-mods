@@ -310,6 +310,63 @@ const ModsPage = (props: Props) => {
       </div>
     )
 
+  const moduleResults = isLoading ? (
+    modsViewMode === "cards" ? (
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        {Array.from({ length: LOADING_CARD_COUNT }).map((_, i) => (
+          <ModuleCardDetailLoading key={i} />
+        ))}
+      </div>
+    ) : (
+      <div className="overflow-hidden rounded-lg border-2">
+        {Array.from({ length: LOADING_LIST_COUNT }).map((_, i) => (
+          <div
+            key={i}
+            className={i !== LOADING_LIST_COUNT - 1 ? "border-b" : ""}>
+            <ModuleListRowLoading />
+          </div>
+        ))}
+      </div>
+    )
+  ) : groupedModules ? (
+    <div className="space-y-6">
+      {groupedModules.map(({ key, label, modules }) => {
+        const isExpanded = expandedGroups.has(key)
+        const visible = isExpanded
+          ? modules
+          : modules.slice(0, GROUP_DEFAULT_VISIBLE)
+        const hidden = modules.length - GROUP_DEFAULT_VISIBLE
+        const footer =
+          !isExpanded && hidden > 0 ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-full rounded-none"
+              onClick={() =>
+                setExpandedGroups(
+                  (prev) => new Set(Array.from(prev).concat(key))
+                )
+              }>
+              <ChevronDown className="mr-1 size-4" />
+              See {hidden} more
+            </Button>
+          ) : undefined
+
+        return (
+          <div key={key} className="space-y-3">
+            <h3 className="text-sm font-medium">
+              {label}{" "}
+              <span className="text-muted-foreground">({modules.length})</span>
+            </h3>
+            {renderModules(visible, footer)}
+          </div>
+        )
+      })}
+    </div>
+  ) : (
+    renderModules(displayedModules)
+  )
+
   return (
     <div className="relative space-y-3">
       <Header
@@ -395,70 +452,7 @@ const ModsPage = (props: Props) => {
 
       <hr className="mt-4" />
 
-      {(() => {
-        if (isLoading) {
-          return modsViewMode === "cards" ? (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              {Array.from({ length: LOADING_CARD_COUNT }).map((_, i) => (
-                <ModuleCardDetailLoading key={i} />
-              ))}
-            </div>
-          ) : (
-            <div className="overflow-hidden rounded-lg border-2">
-              {Array.from({ length: LOADING_LIST_COUNT }).map((_, i) => (
-                <div
-                  key={i}
-                  className={i !== LOADING_LIST_COUNT - 1 ? "border-b" : ""}>
-                  <ModuleListRowLoading />
-                </div>
-              ))}
-            </div>
-          )
-        }
-
-        if (groupedModules) {
-          return (
-            <div className="space-y-6">
-              {groupedModules.map(({ key, label, modules }) => {
-                const isExpanded = expandedGroups.has(key)
-                const visible = isExpanded
-                  ? modules
-                  : modules.slice(0, GROUP_DEFAULT_VISIBLE)
-                const hidden = modules.length - GROUP_DEFAULT_VISIBLE
-                return (
-                  <div key={key} className="space-y-3">
-                    <h3 className="text-sm font-medium">
-                      {label}{" "}
-                      <span className="text-muted-foreground">
-                        ({modules.length})
-                      </span>
-                    </h3>
-                    {renderModules(
-                      visible,
-                      !isExpanded && hidden > 0 ? (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="w-full rounded-none"
-                          onClick={() =>
-                            setExpandedGroups(
-                              (prev) => new Set(Array.from(prev).concat(key))
-                            )
-                          }>
-                          <ChevronDown className="mr-1 size-4" />
-                          See {hidden} more
-                        </Button>
-                      ) : undefined
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          )
-        }
-
-        return renderModules(displayedModules)
-      })()}
+      {moduleResults}
 
       {!isLoading && hasMore && modsGroupBy === "none" && (
         <div ref={loaderRef} className="h-4" />

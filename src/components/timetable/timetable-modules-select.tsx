@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useModuleSearchApi } from "@/hooks/use-module-search-api"
 import { useOutsideClick } from "@/hooks/use-outside-click"
+import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import {
   Command,
@@ -23,6 +24,7 @@ const TimetableModulesSelect = () => {
     useTimetable()
   const { year, semester } = useLatestSemester()
   const { results: searchResults } = useModuleSearchApi(inputValue, 300)
+  const { isMobile } = useSettings()
   const ref = useRef<HTMLDivElement>(null)
   const [disabled, setDisabled] = useState(false)
 
@@ -47,6 +49,7 @@ const TimetableModulesSelect = () => {
       // If module is already in timetable, remove it
       if (Object.keys(timetable).find((x) => x === moduleKey)) {
         removeItemFromTimetable(moduleKey)
+        if (isMobile) setInputValue("")
         setDisabled(false)
         setIsLoadingModule(false)
         return
@@ -139,7 +142,7 @@ const TimetableModulesSelect = () => {
       })
 
       addItemToTimetable(moduleKey, selectedIndexKey)
-      setInputValue("")
+      if (isMobile) setInputValue("")
     } catch (error) {
       console.error("Error selecting module:", error)
     } finally {

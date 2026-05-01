@@ -1,8 +1,6 @@
 import { Fragment } from "react"
 import Link from "next/link"
-import Script from "next/script"
 import { ChevronRight } from "lucide-react"
-import { jsonLdScriptProps } from "react-schemaorg"
 import { BreadcrumbList } from "schema-dts"
 
 import { siteConfig } from "@/config/site"
@@ -21,22 +19,27 @@ interface Props {
 
 const Breadcrumbs = (props: Props) => {
   const { breadcrumbs = [] } = props
+  const jsonLd: BreadcrumbList = {
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs.map(({ href, name }, idx) => ({
+      "@type": "ListItem",
+      position: idx + 1,
+      item: `${siteConfig.url}${appendSlash(href)}`,
+      name
+    }))
+  }
 
   return (
     <>
-      <Script
-        strategy="afterInteractive"
+      <script
         id="breadcrumbs-jsonld"
-        {...jsonLdScriptProps<BreadcrumbList>({
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: breadcrumbs.map(({ href, name }, idx) => ({
-            "@type": "ListItem",
-            position: idx + 1,
-            item: `${siteConfig.url}${appendSlash(href)}`,
-            name
-          }))
-        })}
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            ...jsonLd
+          })
+        }}
       />
 
       <span className="flex max-w-full min-w-0 items-center gap-1 overflow-x-auto pb-1 text-sm whitespace-nowrap text-muted-foreground">

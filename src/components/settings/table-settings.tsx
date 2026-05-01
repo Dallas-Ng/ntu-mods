@@ -108,7 +108,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
         </div>
 
         <div className="grid w-full grid-cols-2 gap-1 md:w-10/12 lg:w-fit">
-          {Object.keys(tableCell).map((key) => {
+          {(Object.keys(tableCell) as (keyof typeof tableCell)[]).map((key) => {
             if (["duration"].includes(key)) return
 
             return (
@@ -119,20 +119,17 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
                   key === "remarks" && "col-span-2 lg:w-full",
                   toggleBorder && "border"
                 )}
-                pressed={tableCell[key as keyof typeof tableCell]}
-                onPressedChange={(val) =>
-                  updateTableCell(val, key as keyof typeof tableCell)
-                }>
+                pressed={tableCell[key]}
+                onPressedChange={(val) => updateTableCell(val, key)}>
                 <div>
                   <p className="capitalize">{key === "key" ? "Index" : key} </p>
 
                   <span className="text-xs text-muted-foreground">
-                    {!["day", "remarks"].includes(key) &&
-                      index[key as keyof typeof index]}
+                    {!["day", "remarks"].includes(key) && index[key]}
 
                     {key === "day" &&
                       index[key] > 0 &&
-                      TRUN_DAY_MAP[index[key] as keyof typeof TRUN_DAY_MAP]}
+                      (TRUN_DAY_MAP as Record<number, string>)[index[key]]}
 
                     {key === "remarks" &&
                       (index[key] === "" ? "No Remarks" : index[key])}

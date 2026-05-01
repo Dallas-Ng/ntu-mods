@@ -29,7 +29,7 @@ export const ModsModuleTypeSelect = ({
       closeOnSelect
       value={value}
       selectItems={selectItems}
-      onChange={(value) => setValue(value as SearchModuleType)}
+      onChange={(v) => { if (v !== null) setValue(v) }}
       divClassName={cn(
         "w-full",
         value !== "all" && "ring-ring rounded-md ring-1"

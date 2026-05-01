@@ -13,7 +13,7 @@ export const TimetableTableThead = ({ days, maxDayColumns }: Props) => (
 
       {Array.from({ length: days }, (_, i) => (
         <th key={i} colSpan={maxDayColumns[i + 1]}>
-          {TRUN_DAY_MAP[(i + 1) as keyof typeof TRUN_DAY_MAP]}
+          {(TRUN_DAY_MAP as Record<number, string>)[i + 1]}
         </th>
       ))}
     </tr>

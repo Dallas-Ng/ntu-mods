@@ -31,7 +31,7 @@ const IndexCommandItem = ({ index }: { index: Index }) => {
     <div>
       <div className="flex w-full justify-between gap-2">
         <span>
-          {isOnline ? "Online" : DAY_MAP[index.day as keyof typeof DAY_MAP]}
+          {isOnline ? "Online" : (DAY_MAP as Record<number, string>)[index.day]}
         </span>
 
         <span className={cn(indexStyle.textAlt, "font-semibold")}>
@@ -113,7 +113,7 @@ const TimetableIndexModifier = (props: Props) => {
             ? itemVal.toLowerCase().includes(searchTerm)
             : // means itemVal is a number
               itemKey != "duration" && // duration is also a number, so dont use it to filter days
-              DAY_MAP[itemVal as keyof typeof DAY_MAP]
+              (DAY_MAP as Record<number, string>)[itemVal]
                 .toLowerCase()
                 .includes(searchTerm)
         )

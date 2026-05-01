@@ -11,7 +11,7 @@ export const useSettings = () => {
     isBeta = false,
     modsViewMode = "cards",
     modsGroupBy = "none"
-  } = hydrated ? settings : ({} as Settings)
+  } = hydrated ? settings : ({} as Partial<Settings>)
 
   return {
     isMobile,

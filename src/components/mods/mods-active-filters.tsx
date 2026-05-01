@@ -39,8 +39,7 @@ export const ModsActiveFilters = ({
     activeFilters.push({
       key: "moduleType",
       label:
-        MODULE_CATEGORY[moduleType as keyof typeof MODULE_CATEGORY] ??
-        moduleType
+        (MODULE_CATEGORY as Record<string, string>)[moduleType] ?? moduleType
     })
   }
 
@@ -51,7 +50,7 @@ export const ModsActiveFilters = ({
   if (moduleFaculty !== "all") {
     activeFilters.push({
       key: "moduleFaculty",
-      label: `${MODULE_FACULTY[moduleFaculty as keyof typeof MODULE_FACULTY] ?? moduleFaculty} (${moduleFaculty})`
+      label: `${(MODULE_FACULTY as Record<string, string>)[moduleFaculty] ?? moduleFaculty} (${moduleFaculty})`
     })
   }
   if (currentOnly === "false") {
@@ -63,7 +62,7 @@ export const ModsActiveFilters = ({
   if (activeFilters.length === 0) return null
 
   const clearFilter = (key: string) => {
-    const params = new URLSearchParams(searchParams)
+    const params = new URLSearchParams(searchParams.toString())
     params.delete(key)
     router.push(`${pathname}?${params.toString()}`, { scroll: false })
   }

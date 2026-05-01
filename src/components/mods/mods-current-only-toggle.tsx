@@ -20,7 +20,7 @@ export const ModsCurrentOnlyToggle = ({
       closeOnSelect
       value={value}
       selectItems={selectItems}
-      onChange={(v) => setValue(v)}
+      onChange={(v) => { if (v !== null) setValue(v) }}
       divClassName="w-full ring-ring rounded-md ring-1"
     />
   )

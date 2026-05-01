@@ -109,7 +109,7 @@ export default function HelpPage() {
             <Link
               key={i}
               href={`#faq-${i}`}
-              className="rounded-md border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+              className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-md border px-3 py-2 text-sm transition-colors">
               {question}
             </Link>
           ))}
@@ -121,7 +121,7 @@ export default function HelpPage() {
           <section
             id={`faq-${i}`}
             key={i}
-            className="scroll-mt-20 space-y-3 border-t border-border pt-6 first:border-t-0 first:pt-0">
+            className="border-border scroll-mt-20 space-y-3 border-t pt-6 first:border-t-0 first:pt-0">
             <h2 className="text-xl font-semibold">{question}</h2>
 
             <p className="text-muted-foreground">{answer}</p>
@@ -131,7 +131,7 @@ export default function HelpPage() {
 
       <div className="grid gap-3">
         <Link href="/debug" className="block">
-          <Alert className="border transition-colors hover:bg-muted">
+          <Alert className="hover:bg-muted border transition-colors">
             <ServerCrash className="size-5" />
 
             <AlertTitle>Having Problems with the System?</AlertTitle>
@@ -143,7 +143,7 @@ export default function HelpPage() {
         </Link>
 
         <Link href="/changelog" className="block">
-          <Alert className="border transition-colors hover:bg-muted">
+          <Alert className="hover:bg-muted border transition-colors">
             <History className="size-5" />
 
             <AlertTitle>See what changed recently</AlertTitle>
@@ -159,7 +159,7 @@ export default function HelpPage() {
         <div>
           <h2 className="text-xl font-semibold">Feedback</h2>
 
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Let us know of any problems or suggestions you have.
           </p>
         </div>

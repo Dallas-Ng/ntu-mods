@@ -71,7 +71,7 @@ export default async function ArticlePage(props: {
             className="mb-5 aspect-[16/9] w-full rounded-md border object-cover sm:mb-6"
           />
 
-          <div className="mb-6 border-b pb-4 text-sm text-foreground/70 sm:mb-8 sm:pb-5">
+          <div className="text-foreground/70 mb-6 border-b pb-4 text-sm sm:mb-8 sm:pb-5">
             {new Date(article.date).toLocaleDateString("en-SG", {
               day: "numeric",
               month: "long",
@@ -99,11 +99,11 @@ export default async function ArticlePage(props: {
               <Link
                 key={item.slug}
                 href={`/articles/${item.slug}`}
-                className="rounded-md border bg-card p-3 transition-colors hover:bg-accent">
+                className="bg-card hover:bg-accent rounded-md border p-3 transition-colors">
                 <p className="line-clamp-2 text-sm font-medium break-words">
                   {item.title}
                 </p>
-                <p className="mt-2 text-xs text-foreground/70">
+                <p className="text-foreground/70 mt-2 text-xs">
                   {item.readingTime}
                 </p>
               </Link>
@@ -119,11 +119,9 @@ export function generateStaticParams() {
   return getAllArticles().map((article) => ({ slug: article.slug }))
 }
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ slug: string }>
-  }
-): Promise<Metadata | null> {
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata | null> {
   const params = await props.params
   const article = getArticleBySlug(params.slug)
   if (!article) return null

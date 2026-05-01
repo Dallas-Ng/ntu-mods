@@ -91,7 +91,7 @@ export const LightThemeIcon = (props: IconProps) => {
 export const DarkThemeIcon = (props: IconProps) => {
   return (
     <div className="dark w-full">
-      <div className="items-center rounded-md bg-popover p-1">
+      <div className="bg-popover items-center rounded-md p-1">
         <div className="space-y-2 rounded-sm bg-slate-900 p-2">
           <div className="hidden space-y-2 rounded-md bg-slate-800 p-2 shadow-sm md:block">
             <div className="h-2 w-[30%] rounded-lg bg-slate-400" />
@@ -135,7 +135,7 @@ const AppearanceSettings = () => {
 
   return (
     <div className="space-y-5">
-      <div className="mx-auto w-full max-w-sm space-y-3 rounded-md border bg-background p-3">
+      <div className="bg-background mx-auto w-full max-w-sm space-y-3 rounded-md border p-3">
         <div className="flex items-center justify-between gap-2">
           <p className="text-sm font-medium">Preview</p>
           <Button
@@ -169,12 +169,12 @@ const AppearanceSettings = () => {
           <div className="flex items-end justify-between gap-3">
             <div>
               <p className="text-sm font-medium">Radius</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Controls the roundness of buttons, cards, inputs, and cells.
               </p>
             </div>
 
-            <span className="rounded-md border px-2 py-1 text-xs text-muted-foreground">
+            <span className="text-muted-foreground rounded-md border px-2 py-1 text-xs">
               {appearance.radius}px
             </span>
           </div>
@@ -196,7 +196,7 @@ const AppearanceSettings = () => {
           <div className="space-y-3">
             <div>
               <p className="text-sm font-medium">Density</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Adjusts timetable and table spacing.
               </p>
             </div>
@@ -222,7 +222,7 @@ const AppearanceSettings = () => {
           <div className="space-y-3">
             <div>
               <p className="text-sm font-medium">Contrast</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Lifts secondary text when you want a crisper interface.
               </p>
             </div>
@@ -249,7 +249,7 @@ const AppearanceSettings = () => {
         <section className="space-y-3">
           <div>
             <p className="text-sm font-medium">Timetable colours</p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-muted-foreground text-xs">
               Pick a hardcoded palette; LEC, LAB, SEM, TUT, DES, and PRJ stay
               mapped.
             </p>
@@ -266,7 +266,7 @@ const AppearanceSettings = () => {
                   })
                 }
                 className={cn(
-                  "space-y-2 rounded-md border p-3 text-left transition-colors hover:bg-accent",
+                  "hover:bg-accent space-y-2 rounded-md border p-3 text-left transition-colors",
                   appearance.timetableStyle === key && "border-primary"
                 )}>
                 <div className="flex gap-1">
@@ -283,12 +283,12 @@ const AppearanceSettings = () => {
                 <div className="flex gap-2">
                   <div className="min-w-0">
                     <p className="text-sm font-medium">{value.label}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-muted-foreground text-xs">
                       {value.description}
                     </p>
                   </div>
                   {appearance.timetableStyle === key && (
-                    <Check className="ml-auto size-4 shrink-0 text-primary" />
+                    <Check className="text-primary ml-auto size-4 shrink-0" />
                   )}
                 </div>
               </button>
@@ -303,17 +303,17 @@ const AppearanceSettings = () => {
 export const AppearanceSettingsLoading = () => {
   return (
     <div className="space-y-5">
-      <div className="mx-auto w-full max-w-sm space-y-3 rounded-md border bg-background p-3 opacity-60">
+      <div className="bg-background mx-auto w-full max-w-sm space-y-3 rounded-md border p-3 opacity-60">
         <div className="flex items-center justify-between gap-2">
-          <div className="h-4 w-16 rounded bg-muted" />
-          <div className="size-9 rounded-md bg-muted" />
+          <div className="bg-muted h-4 w-16 rounded" />
+          <div className="bg-muted size-9 rounded-md" />
         </div>
 
         <div className="grid grid-cols-2 gap-2">
           {Array.from({ length: 6 }, (_, index) => (
-            <div key={index} className="space-y-2 rounded-md bg-muted p-2">
-              <div className="h-3 w-10 rounded bg-background" />
-              <div className="h-2 w-16 rounded bg-background" />
+            <div key={index} className="bg-muted space-y-2 rounded-md p-2">
+              <div className="bg-background h-3 w-10 rounded" />
+              <div className="bg-background h-2 w-16 rounded" />
             </div>
           ))}
         </div>
@@ -321,35 +321,35 @@ export const AppearanceSettingsLoading = () => {
 
       <div className="space-y-5 opacity-60">
         <div className="space-y-3">
-          <div className="h-4 w-20 rounded bg-muted" />
-          <div className="h-9 rounded-md bg-muted" />
+          <div className="bg-muted h-4 w-20 rounded" />
+          <div className="bg-muted h-9 rounded-md" />
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
           <div className="space-y-3">
-            <div className="h-4 w-20 rounded bg-muted" />
+            <div className="bg-muted h-4 w-20 rounded" />
             <div className="grid grid-cols-3 gap-1">
               {Array.from({ length: 3 }, (_, index) => (
-                <div key={index} className="h-9 rounded-md bg-muted" />
+                <div key={index} className="bg-muted h-9 rounded-md" />
               ))}
             </div>
           </div>
 
           <div className="space-y-3">
-            <div className="h-4 w-20 rounded bg-muted" />
+            <div className="bg-muted h-4 w-20 rounded" />
             <div className="grid grid-cols-2 gap-1">
               {Array.from({ length: 2 }, (_, index) => (
-                <div key={index} className="h-9 rounded-md bg-muted" />
+                <div key={index} className="bg-muted h-9 rounded-md" />
               ))}
             </div>
           </div>
         </div>
 
         <div className="space-y-3">
-          <div className="h-4 w-32 rounded bg-muted" />
+          <div className="bg-muted h-4 w-32 rounded" />
           <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }, (_, index) => (
-              <div key={index} className="h-24 rounded-md bg-muted" />
+              <div key={index} className="bg-muted h-24 rounded-md" />
             ))}
           </div>
         </div>

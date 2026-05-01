@@ -25,7 +25,7 @@ const ModsNotFoundRelatedMods = () => {
 
   return (
     <div className="space-y-2">
-      <p className="text-sm text-muted-foreground">Related modules</p>
+      <p className="text-muted-foreground text-sm">Related modules</p>
       <div className="grid grid-cols-1 gap-2 text-sm md:grid-cols-3">
         {related.map((module) => (
           <ModuleCard key={module.code} module={module} />

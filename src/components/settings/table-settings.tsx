@@ -93,7 +93,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
           </div>
 
           <div className="flex w-full items-baseline justify-between">
-            <p className="w-full truncate text-xs text-muted-foreground capitalize">
+            <p className="text-muted-foreground w-full truncate text-xs capitalize">
               {title}
             </p>
 
@@ -124,7 +124,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
                 <div>
                   <p className="capitalize">{key === "key" ? "Index" : key} </p>
 
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-muted-foreground text-xs">
                     {!["day", "remarks"].includes(key) && index[key]}
 
                     {key === "day" &&

@@ -162,8 +162,8 @@ const TimetableModulesSelect = () => {
             <CommandItem
               key="empty"
               disabled
-              className="py-3 transition-colors hover:bg-accent lg:py-2">
-              <div className="flex w-full flex-col text-center text-xs text-muted-foreground">
+              className="hover:bg-accent py-3 transition-colors lg:py-2">
+              <div className="text-muted-foreground flex w-full flex-col text-center text-xs">
                 <span className="pb-1">No Results Found</span>
                 <hr className="p-1" />
                 <span>Check the academic year, semester or search term</span>
@@ -182,7 +182,7 @@ const TimetableModulesSelect = () => {
                 value={module.code}
                 disabled={disabled || isLoadingModule}
                 onSelect={() => (disabled ? null : handleSelect(module.code))}
-                className="cursor-pointer py-3 transition-colors hover:bg-accent lg:py-2">
+                className="hover:bg-accent cursor-pointer py-3 transition-colors lg:py-2">
                 <Check
                   className={cn(
                     "mr-2 size-4 transition-opacity",
@@ -191,7 +191,7 @@ const TimetableModulesSelect = () => {
                 />
                 <div className="flex flex-col">
                   <span className="font-medium">{module.code}</span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-muted-foreground text-xs">
                     {module.title}
                   </span>
                 </div>

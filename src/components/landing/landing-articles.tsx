@@ -20,7 +20,7 @@ const LandingArticles = () => {
 
         <Link
           href="/articles"
-          className="text-sm font-medium text-primary underline-offset-4 hover:underline">
+          className="text-primary text-sm font-medium underline-offset-4 hover:underline">
           View all articles
         </Link>
       </div>
@@ -30,7 +30,7 @@ const LandingArticles = () => {
           <Link
             key={article.slug}
             href={`/articles/${article.slug}`}
-            className="group rounded-lg border bg-card transition-colors hover:bg-accent">
+            className="group bg-card hover:bg-accent rounded-lg border transition-colors">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={article.thumbnail}
@@ -39,7 +39,7 @@ const LandingArticles = () => {
             />
 
             <div className="p-4">
-              <p className="text-xs text-foreground/65">
+              <p className="text-foreground/65 text-xs">
                 {new Date(article.date).toLocaleDateString("en-SG", {
                   day: "numeric",
                   month: "short",
@@ -48,11 +48,11 @@ const LandingArticles = () => {
                 · {article.readingTime}
               </p>
 
-              <h3 className="mt-2 line-clamp-2 font-semibold group-hover:text-primary">
+              <h3 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold">
                 {article.title}
               </h3>
 
-              <p className="mt-2 line-clamp-3 text-sm leading-6 text-foreground/75">
+              <p className="text-foreground/75 mt-2 line-clamp-3 text-sm leading-6">
                 {article.description}
               </p>
             </div>

@@ -9,7 +9,7 @@ const Loading = ({ loading = true }: LoadingProps) => {
 
   return (
     <div className="flex size-full items-center justify-center">
-      <Loader2 className="size-10 animate-spin text-muted-foreground" />
+      <Loader2 className="text-muted-foreground size-10 animate-spin" />
     </div>
   )
 }

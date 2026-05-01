@@ -23,14 +23,14 @@ const MobileTimetableModifierButton = () => {
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}>
       <DrawerContent
-        className="h-[100svh] rounded-t-3xl border-4 border-b-0 border-primary p-2 focus:outline-none"
+        className="border-primary h-[100svh] rounded-t-3xl border-4 border-b-0 p-2 focus:outline-none"
         onClick={() => setSnap(1)}>
         <div className="flex h-full flex-col">
           <div className="size-full flex-1">
             <TimetableModifier />
           </div>
 
-          <p className="text-center text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-center text-sm">
             Swipe down to close
           </p>
         </div>

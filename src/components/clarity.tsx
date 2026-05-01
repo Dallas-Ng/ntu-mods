@@ -8,7 +8,7 @@ import { IS_PROD } from "@/lib/constants"
 const ClarityTag = () => {
   useEffect(() => {
     if (IS_PROD) {
-      if (!('clarity' in window)) {
+      if (!("clarity" in window)) {
         clarity.init("k9d6cixduy")
       }
     }

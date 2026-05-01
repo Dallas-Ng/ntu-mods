@@ -9,7 +9,7 @@ export default function HelpPage() {
     <div
       className={cn(
         SUPPORT_PAGE_CONTAINER_CLASSNAME,
-        "space-y-4 text-muted-foreground"
+        "text-muted-foreground space-y-4"
       )}>
       <div className="text-foreground">
         <Header title="Privacy Policy" subtitle="Last Updated: Feb 2026" />

@@ -45,7 +45,7 @@ const TimetablePlanSwitcher = () => {
           key={index}
           onSelect={() => handleClick(index)}
           className={cn(
-            "cursor-pointer py-3 transition-all hover:bg-accent lg:py-1.5",
+            "hover:bg-accent cursor-pointer py-3 transition-all lg:py-1.5",
             index === timetableIndex && "bg-muted"
           )}>
           Plan {index + 1}
@@ -60,7 +60,7 @@ const TimetablePlanSwitcher = () => {
         <DrawerTrigger asChild>{trigger}</DrawerTrigger>
 
         <DrawerContent className="p-2">
-          <span className="w-full text-center text-sm text-muted-foreground">
+          <span className="text-muted-foreground w-full text-center text-sm">
             Select a plan to switch
           </span>
 

@@ -8,7 +8,7 @@ const ModsIndexTable = ({ indexes }: Props) => {
   if (Object.values(indexes).length === 0) {
     return (
       <div className="rounded-md border p-2 py-5 text-center">
-        <p className="w-full text-muted-foreground">
+        <p className="text-muted-foreground w-full">
           No indexes available for this semester
         </p>
       </div>

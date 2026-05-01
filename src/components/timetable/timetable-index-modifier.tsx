@@ -39,7 +39,7 @@ const IndexCommandItem = ({ index }: { index: Index }) => {
         </span>
       </div>
 
-      <div className="flex w-full justify-between gap-2 text-xs text-muted-foreground">
+      <div className="text-muted-foreground flex w-full justify-between gap-2 text-xs">
         <span>{isOnline ? "No scheduled timeslot" : index.time}</span>
         <span>{index.venue}</span>
       </div>
@@ -140,7 +140,7 @@ const TimetableIndexModifier = (props: Props) => {
 
       {hasCommonLecture && (
         <div className="w-full space-y-2 border-b px-4 py-2 text-sm md:py-4">
-          <p className="text-center text-xs text-muted-foreground">
+          <p className="text-muted-foreground text-center text-xs">
             Common Lecture for Indexes
           </p>
 
@@ -151,7 +151,7 @@ const TimetableIndexModifier = (props: Props) => {
       )}
 
       {Object.keys(filteredIndexes).length > 0 && (
-        <div className="sticky top-0 z-20 flex w-full items-center gap-2 border-b bg-background p-1 text-xs">
+        <div className="bg-background sticky top-0 z-20 flex w-full items-center gap-2 border-b p-1 text-xs">
           <div className="flex gap-1">
             <span className="w-4" />
             <span className="w-[43px] text-center">Code</span>
@@ -173,7 +173,7 @@ const TimetableIndexModifier = (props: Props) => {
               <CommandItem
                 value={indexKey}
                 onSelect={handleSelect}
-                className="rounded-none transition-colors hover:cursor-pointer hover:bg-accent">
+                className="hover:bg-accent rounded-none transition-colors hover:cursor-pointer">
                 <div className="flex w-full justify-between gap-2 text-sm">
                   <span className="flex items-center gap-1">
                     <Check

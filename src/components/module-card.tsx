@@ -18,12 +18,12 @@ export const ModuleCard = ({ module, cardClassName }: ModuleCardProps) => (
   <Link key={module.code} href={`/mods/${module.code}`}>
     <div
       className={cn(
-        "rounded-lg border bg-card p-2 text-sm text-muted-foreground",
+        "bg-card text-muted-foreground rounded-lg border p-2 text-sm",
         cardClassName
       )}>
       <p>{module.code}</p>
 
-      <p className="truncate text-foreground">{module.title}</p>
+      <p className="text-foreground truncate">{module.title}</p>
     </div>
   </Link>
 )
@@ -35,7 +35,7 @@ function highlightText(text: string, query: string) {
   return (
     <>
       {text.slice(0, idx)}
-      <mark className="bg-transparent font-semibold text-foreground not-italic">
+      <mark className="text-foreground bg-transparent font-semibold not-italic">
         {text.slice(idx, idx + query.length)}
       </mark>
       {text.slice(idx + query.length)}
@@ -75,11 +75,11 @@ export const ModuleCardDetail = ({
     <Link key={code} href={getHref(moduleData, code)}>
       <div
         className={cn(
-          "flex h-full flex-col rounded-lg border-2 p-3 transition-colors hover:bg-accent",
+          "hover:bg-accent flex h-full flex-col rounded-lg border-2 p-3 transition-colors",
           !isCurrentSemester && "opacity-75"
         )}>
         {!isCurrentSemester && (
-          <span className="mb-1.5 self-start rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
+          <span className="bg-muted text-muted-foreground mb-1.5 self-start rounded-full px-2 py-0.5 text-xs">
             Not offered this sem
           </span>
         )}
@@ -88,14 +88,16 @@ export const ModuleCardDetail = ({
           {highlightText(moduleData.title, searchTerm)}
         </p>
 
-        <div className="mt-3 flex items-center justify-between gap-2 text-xs text-muted-foreground">
+        <div className="text-muted-foreground mt-3 flex items-center justify-between gap-2 text-xs">
           <div className="flex min-w-0 items-center gap-2">
             <span className="shrink-0 font-mono">
               {highlightText(code, searchTerm)}
             </span>
             <div className="flex gap-1 overflow-hidden">
               {categories.map((category, i) => (
-                <span key={i} className="shrink-0 truncate rounded-full border px-2 py-0">
+                <span
+                  key={i}
+                  className="shrink-0 truncate rounded-full border px-2 py-0">
                   {MODULE_CATEGORY[category]}
                 </span>
               ))}
@@ -136,10 +138,10 @@ export const ModuleListRow = ({
     <Link key={code} href={getHref(moduleData, code)}>
       <div
         className={cn(
-          "flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-accent",
+          "hover:bg-accent flex items-center gap-3 px-3 py-2.5 transition-colors",
           !isCurrentSemester && "opacity-60"
         )}>
-        <span className="w-[80px] shrink-0 font-mono text-sm text-muted-foreground">
+        <span className="text-muted-foreground w-[80px] shrink-0 font-mono text-sm">
           {highlightText(code, searchTerm)}
         </span>
 
@@ -147,7 +149,7 @@ export const ModuleListRow = ({
           {highlightText(moduleData.title, searchTerm)}
         </span>
 
-        <div className="hidden shrink-0 items-center gap-1 text-xs text-muted-foreground sm:flex">
+        <div className="text-muted-foreground hidden shrink-0 items-center gap-1 text-xs sm:flex">
           {categories.map((category, i) => (
             <span key={i} className="rounded-full border px-2 py-0">
               {MODULE_CATEGORY[category]}
@@ -155,11 +157,11 @@ export const ModuleListRow = ({
           ))}
         </div>
 
-        <span className="hidden shrink-0 text-xs text-muted-foreground sm:block">
+        <span className="text-muted-foreground hidden shrink-0 text-xs sm:block">
           {moduleData.au && `${moduleData.au} AU`}
         </span>
 
-        <span className="w-[40px] shrink-0 text-right text-xs text-muted-foreground">
+        <span className="text-muted-foreground w-[40px] shrink-0 text-right text-xs">
           {faculty}
         </span>
       </div>

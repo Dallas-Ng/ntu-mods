@@ -7,8 +7,11 @@ import { getModuleExamData } from "@/lib/server/get-module-exam-data"
  * Returns exam data for a specific module.
  * Query params: year, semester
  */
-export async function GET(request: NextRequest, props: { params: Promise<{ code: string }> }) {
-  const params = await props.params;
+export async function GET(
+  request: NextRequest,
+  props: { params: Promise<{ code: string }> }
+) {
+  const params = await props.params
   const searchParams = request.nextUrl.searchParams
 
   try {

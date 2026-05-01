@@ -19,20 +19,20 @@ export default function DebugPage() {
 
       {IS_DEV && (
         <div className="flex gap-2">
-          <div className="h-[50px] w-[200px] bg-background">bg-background</div>
-          <div className="h-[50px] w-[200px] bg-foreground text-white">
+          <div className="bg-background h-[50px] w-[200px]">bg-background</div>
+          <div className="bg-foreground h-[50px] w-[200px] text-white">
             bg-foreground
           </div>
-          <div className="h-[50px] w-[200px] bg-primary">bg-primary</div>
-          <div className="h-[50px] w-[200px] bg-secondary-foreground">
+          <div className="bg-primary h-[50px] w-[200px]">bg-primary</div>
+          <div className="bg-secondary-foreground h-[50px] w-[200px]">
             bg-secondary-foreground
           </div>
-          <div className="h-[50px] w-[200px] bg-secondary">bg-secondary</div>
-          <div className="h-[50px] w-[200px] bg-muted-foreground">
+          <div className="bg-secondary h-[50px] w-[200px]">bg-secondary</div>
+          <div className="bg-muted-foreground h-[50px] w-[200px]">
             bg-muted-foreground
           </div>
-          <div className="h-[50px] w-[200px] bg-muted">bg-muted</div>
-          <div className="h-[50px] w-[200px] bg-accent">bg-accent</div>
+          <div className="bg-muted h-[50px] w-[200px]">bg-muted</div>
+          <div className="bg-accent h-[50px] w-[200px]">bg-accent</div>
         </div>
       )}
       <DebugContent />

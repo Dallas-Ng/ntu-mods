@@ -67,7 +67,7 @@ const ArticleToc = ({ headings }: Props) => {
   return (
     <aside className="hidden lg:block">
       <div className="sticky top-24 space-y-3">
-        <p className="text-sm font-semibold text-foreground">On this page</p>
+        <p className="text-foreground text-sm font-semibold">On this page</p>
         <nav className="max-h-[calc(100vh-8rem)] space-y-1 overflow-y-auto border-l pr-1 text-sm">
           {visibleHeadings.map((heading) => {
             const isActive = heading.id === activeId
@@ -78,7 +78,7 @@ const ArticleToc = ({ headings }: Props) => {
                 href={`#${heading.id}`}
                 aria-current={isActive ? "true" : undefined}
                 className={cn(
-                  "block border-l-2 border-transparent py-1.5 pr-2 pl-3 leading-5 text-foreground/65 transition-colors hover:border-primary/50 hover:text-foreground",
+                  "text-foreground/65 hover:border-primary/50 hover:text-foreground block border-l-2 border-transparent py-1.5 pr-2 pl-3 leading-5 transition-colors",
                   isActive && "border-l-primary bg-primary/5 text-foreground"
                 )}>
                 <span className="line-clamp-2">{heading.text}</span>

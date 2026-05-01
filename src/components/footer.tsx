@@ -2,28 +2,28 @@ import Link from "next/link"
 
 const Footer = () => {
   return (
-    <footer className="mt-6 flex h-12 items-center justify-center gap-4 text-center text-sm text-muted-foreground">
+    <footer className="text-muted-foreground mt-6 flex h-12 items-center justify-center gap-4 text-center text-sm">
       <Link
         href="/privacy"
-        className="transition-colors hover:text-primary-alt">
+        className="hover:text-primary-alt transition-colors">
         Privacy
       </Link>
 
       <Link
         href="/changelog"
-        className="transition-colors hover:text-primary-alt">
+        className="hover:text-primary-alt transition-colors">
         Changelog
       </Link>
 
       <Link
         href="/settings#feedback"
-        className="transition-colors hover:text-primary-alt">
+        className="hover:text-primary-alt transition-colors">
         Report an Issue
       </Link>
 
       <Link
         href="/settings#feedback"
-        className="transition-colors hover:text-primary-alt">
+        className="hover:text-primary-alt transition-colors">
         Dallas &copy; {new Date().getFullYear()}
       </Link>
     </footer>

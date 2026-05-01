@@ -74,7 +74,7 @@ const Page = () => {
         </div>
       </div>
 
-      <p className="text-center text-sm text-muted-foreground">
+      <p className="text-muted-foreground text-center text-sm">
         This timetable is being shared by someone.{" "}
         <br className="block md:hidden" />
         Copy the timetable to edit!

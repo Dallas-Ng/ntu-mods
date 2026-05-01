@@ -22,7 +22,7 @@ const LandingFeatures = () => {
                 <h3 className="text-2xl font-bold">
                   Filter, Search and Manage
                 </h3>
-                <p className="text-lg text-muted-foreground">
+                <p className="text-muted-foreground text-lg">
                   Stop spamming each indexes to find the best timeslots and
                   start searching for indexes easier
                 </p>
@@ -40,7 +40,7 @@ const LandingFeatures = () => {
           <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
             <div className="absolute top-12 left-8 w-10/12 md:left-3 lg:left-8">
               <h3 className="text-2xl font-bold">Save as Photo or Calendar</h3>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-muted-foreground text-lg">
                 NTU Mods supports exporting your timetable for your lockscreen
                 photo to your calendar
               </p>
@@ -101,7 +101,7 @@ const LandingFeatures = () => {
           </Link>
 
           <Link href="/settings" className="cursor-pointer">
-            <div className="relative h-[300px] w-full overflow-hidden rounded-xl border bg-muted p-3 shadow">
+            <div className="bg-muted relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
               <div className="flex w-[500px] gap-1 md:w-[300px] lg:w-[500px]">
                 <DarkThemeIcon label={false} />
                 <LightThemeIcon label={false} />

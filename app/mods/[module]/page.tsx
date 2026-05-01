@@ -21,8 +21,10 @@ export const dynamic = "force-static"
 export const dynamicParams = true
 export const revalidate = false
 
-export default async function Page(props: { params: Promise<{ module: string }> }) {
-  const params = await props.params;
+export default async function Page(props: {
+  params: Promise<{ module: string }>
+}) {
+  const params = await props.params
   const rawKey = params.module
 
   // Normalise to uppercase
@@ -111,7 +113,7 @@ export default async function Page(props: { params: Promise<{ module: string }> 
                 <Link
                   key={`${s.year}-${s.semester}`}
                   href={getModuleVersionUrl(moduleKey, s.year, s.semester)}
-                  className="rounded-md border px-3 py-1 text-sm transition-colors hover:bg-accent">
+                  className="hover:bg-accent rounded-md border px-3 py-1 text-sm transition-colors">
                   {semesterLabel(s)}
                 </Link>
               ))}
@@ -129,7 +131,7 @@ export default async function Page(props: { params: Promise<{ module: string }> 
             emptyContent={
               <Link
                 href="/mods"
-                className="text-sm text-muted-foreground transition-colors hover:text-primary-alt">
+                className="text-muted-foreground hover:text-primary-alt text-sm transition-colors">
                 No Mods Found. Click here to see all Mods
               </Link>
             }
@@ -146,12 +148,10 @@ export async function generateStaticParams() {
   return Object.keys(allMeta).map((key) => ({ module: key }))
 }
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ module: string }>
-  }
-): Promise<Metadata | null> {
-  const params = await props.params;
+export async function generateMetadata(props: {
+  params: Promise<{ module: string }>
+}): Promise<Metadata | null> {
+  const params = await props.params
   const moduleKey = params.module.toUpperCase()
   const current = await getModuleCurrentSemester(moduleKey)
   if (!current) return null

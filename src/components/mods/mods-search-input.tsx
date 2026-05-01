@@ -43,7 +43,7 @@ const ModsSearchInput = ({ paramsValue }: { paramsValue: string }) => {
       ref={inputRef}
       className={cn(
         "md:flex-1",
-        value.length > 0 && "rounded-md ring-1 ring-ring"
+        value.length > 0 && "ring-ring rounded-md ring-1"
       )}
       name="searchTerm"
       placeholder="Search for module name or code"

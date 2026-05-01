@@ -22,7 +22,7 @@ interface Params {
 }
 
 export default async function Page(props: { params: Promise<Params> }) {
-  const params = await props.params;
+  const params = await props.params
   const rawCode = params.module
   const { year, semester } = params
 
@@ -90,9 +90,9 @@ export default async function Page(props: { params: Promise<Params> }) {
             ]}
           />
           <h1 className="mt-2 text-3xl">{formatTitle(moduleData.title)}</h1>
-          <p className="mt-1 text-sm text-muted-foreground">{semLabel}</p>
+          <p className="text-muted-foreground mt-1 text-sm">{semLabel}</p>
           {moduleData.description && (
-            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+            <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
               {moduleData.description}
             </p>
           )}
@@ -209,12 +209,10 @@ export default async function Page(props: { params: Promise<Params> }) {
   )
 }
 
-export async function generateMetadata(
-  props: {
-    params: Promise<Params>
-  }
-): Promise<Metadata | null> {
-  const params = await props.params;
+export async function generateMetadata(props: {
+  params: Promise<Params>
+}): Promise<Metadata | null> {
+  const params = await props.params
   const code = params.module.toUpperCase()
   const { year, semester } = params
 

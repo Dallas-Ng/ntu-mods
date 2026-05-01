@@ -51,7 +51,7 @@ export default function SettingsPage() {
 
         <div>
           <Link href="/changelog" className="block">
-            <Alert className="border transition-colors hover:bg-muted">
+            <Alert className="hover:bg-muted border transition-colors">
               <History className="size-5" />
 
               <AlertTitle>See what changed recently</AlertTitle>
@@ -65,11 +65,11 @@ export default function SettingsPage() {
 
         <div
           id="dark-mode"
-          className="space-y-4 rounded-md border bg-card px-4 pt-2 pb-4 shadow-lg">
+          className="bg-card space-y-4 rounded-md border px-4 pt-2 pb-4 shadow-lg">
           <div>
             <p>Appearance Settings</p>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Tune theme, radius, density, contrast, and timetable colour
               personality.
             </p>
@@ -82,11 +82,11 @@ export default function SettingsPage() {
 
         <div
           id="table-settings"
-          className="space-y-4 rounded-md border bg-card px-4 pt-2 pb-4 shadow-lg">
+          className="bg-card space-y-4 rounded-md border px-4 pt-2 pb-4 shadow-lg">
           <div>
             <p>Table Settings</p>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Customize the appearance of the stars table.
             </p>
           </div>
@@ -98,11 +98,11 @@ export default function SettingsPage() {
 
         <div
           id="feedback"
-          className="space-y-2 rounded-md border bg-card px-4 pt-2 pb-4 shadow-lg">
+          className="bg-card space-y-2 rounded-md border px-4 pt-2 pb-4 shadow-lg">
           <div>
             <p>Feedback </p>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Let us know of any problems or suggestions you have!
             </p>
           </div>

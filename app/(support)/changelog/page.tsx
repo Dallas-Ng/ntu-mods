@@ -98,7 +98,7 @@ const ChangelogFilters = ({
 )
 
 const ChangelogTable = ({ items }: { items: ChangelogItem[] }) => (
-  <table className="w-full border-collapse text-left text-sm text-muted-foreground">
+  <table className="text-muted-foreground w-full border-collapse text-left text-sm">
     <tbody>
       {items.map((item, i) => (
         <tr key={i} className="align-top">
@@ -118,11 +118,11 @@ const ChangelogReleaseSection = ({
 }: {
   release: ChangelogRelease
 }) => (
-  <section className="space-y-4 border-t border-border pt-6 first:border-t-0 first:pt-0">
+  <section className="border-border space-y-4 border-t pt-6 first:border-t-0 first:pt-0">
     <div className="flex flex-wrap items-baseline justify-between gap-2">
       <h2 className="text-xl font-semibold">{release.title}</h2>
 
-      <p className="text-sm text-muted-foreground">{release.date}</p>
+      <p className="text-muted-foreground text-sm">{release.date}</p>
     </div>
 
     <ChangelogTable items={release.items} />

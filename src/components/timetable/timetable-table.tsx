@@ -66,9 +66,9 @@ const TimetablePageTable = (props: Props) => {
 
   return (
     <div className="space-y-2">
-      <div className="flex flex-col gap-2 rounded-md border bg-card p-2 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0 text-xs text-muted-foreground">
-          <p className="font-medium text-foreground">Quick index switching</p>
+      <div className="bg-card flex flex-col gap-2 rounded-md border p-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="text-muted-foreground min-w-0 text-xs">
+          <p className="text-foreground font-medium">Quick index switching</p>
           <p>
             {indexPickerEnabled
               ? activeModuleKey

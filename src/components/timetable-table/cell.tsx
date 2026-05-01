@@ -77,8 +77,8 @@ export const TimetableTableCell = (props: Props) => {
           "flex h-full cursor-pointer items-center rounded-lg p-[var(--cell-padding)] break-words",
           indexStyle.background,
           previewCandidate &&
-            "opacity-50 ring-1 ring-foreground/30 hover:opacity-90",
-          previewActive && "ring-2 ring-primary/70",
+            "ring-foreground/30 opacity-50 ring-1 hover:opacity-90",
+          previewActive && "ring-primary/70 ring-2",
           dimmed && "opacity-30 dark:opacity-20"
         )}
         onClick={onClick}>

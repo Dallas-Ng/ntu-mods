@@ -33,7 +33,7 @@ const parseInline = (text: string): React.ReactNode[] => {
       nodes.push(
         <code
           key={match.index}
-          className="rounded bg-muted px-1 py-0.5 text-sm break-words text-foreground">
+          className="bg-muted text-foreground rounded px-1 py-0.5 text-sm break-words">
           {token.slice(1, -1)}
         </code>
       )
@@ -52,7 +52,7 @@ const parseInline = (text: string): React.ReactNode[] => {
             key={match.index}
             src={image[2]}
             alt={image[1]}
-            className="my-6 w-full rounded-md border bg-card object-cover"
+            className="bg-card my-6 w-full rounded-md border object-cover"
           />
         )
       }
@@ -64,7 +64,7 @@ const parseInline = (text: string): React.ReactNode[] => {
           <Link
             key={match.index}
             href={link[2]}
-            className="font-medium break-words text-primary underline-offset-4 hover:underline"
+            className="text-primary font-medium break-words underline-offset-4 hover:underline"
             target={isExternal ? "_blank" : undefined}
             rel={isExternal ? "noreferrer" : undefined}>
             {link[1]}
@@ -118,7 +118,7 @@ const renderTable = (
             <th
               key={headerIndex}
               className={cn(
-                "bg-muted px-3 py-2 font-semibold whitespace-nowrap text-foreground",
+                "bg-muted text-foreground px-3 py-2 font-semibold whitespace-nowrap",
                 alignments[headerIndex] === "center" && "text-center",
                 alignments[headerIndex] === "right" && "text-right"
               )}>
@@ -134,7 +134,7 @@ const renderTable = (
               <td
                 key={cellIndex}
                 className={cn(
-                  "px-3 py-2 leading-6 text-foreground/90",
+                  "text-foreground/90 px-3 py-2 leading-6",
                   alignments[cellIndex] === "center" && "text-center",
                   alignments[cellIndex] === "right" && "text-right"
                 )}>
@@ -154,7 +154,7 @@ const renderList = (lines: string[], ordered: boolean, key: string) => {
     <Tag
       key={key}
       className={cn(
-        "my-4 space-y-1 pl-6 leading-7 text-foreground/90",
+        "text-foreground/90 my-4 space-y-1 pl-6 leading-7",
         ordered ? "list-decimal" : "list-disc"
       )}>
       {lines.map((line, index) => {
@@ -210,7 +210,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
       blocks.push(
         <pre
           key={index}
-          className="my-5 max-w-full overflow-x-auto rounded-md border bg-muted p-3 text-sm text-foreground sm:my-6 sm:p-4">
+          className="bg-muted text-foreground my-5 max-w-full overflow-x-auto rounded-md border p-3 text-sm sm:my-6 sm:p-4">
           <code data-language={language} className="whitespace-pre">
             {code.join("\n")}
           </code>
@@ -230,7 +230,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
         blocks.push(
           <h1
             key={index}
-            className="mb-5 text-3xl leading-tight font-bold tracking-normal break-words text-foreground sm:mb-6 md:text-5xl">
+            className="text-foreground mb-5 text-3xl leading-tight font-bold tracking-normal break-words sm:mb-6 md:text-5xl">
             {text}
           </h1>
         )
@@ -239,7 +239,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
           <h2
             key={index}
             id={id}
-            className="scroll-mt-24 pt-10 text-2xl leading-tight font-semibold tracking-normal break-words text-foreground sm:pt-12 sm:text-3xl">
+            className="text-foreground scroll-mt-24 pt-10 text-2xl leading-tight font-semibold tracking-normal break-words sm:pt-12 sm:text-3xl">
             {text}
           </h2>
         )
@@ -248,7 +248,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
           <h3
             key={index}
             id={id}
-            className="scroll-mt-24 pt-8 text-xl leading-snug font-semibold tracking-normal break-words text-foreground sm:text-2xl">
+            className="text-foreground scroll-mt-24 pt-8 text-xl leading-snug font-semibold tracking-normal break-words sm:text-2xl">
             {text}
           </h3>
         )
@@ -256,7 +256,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
         blocks.push(
           <h4
             key={index}
-            className="scroll-mt-24 pt-6 text-lg leading-snug font-semibold tracking-normal break-words text-foreground sm:text-xl">
+            className="text-foreground scroll-mt-24 pt-6 text-lg leading-snug font-semibold tracking-normal break-words sm:text-xl">
             {text}
           </h4>
         )
@@ -310,7 +310,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
       blocks.push(
         <blockquote
           key={index}
-          className="my-5 rounded-md border border-l-4 border-primary/20 border-l-primary bg-primary/5 px-4 py-3 break-words text-foreground shadow-sm sm:my-6">
+          className="border-primary/20 border-l-primary bg-primary/5 text-foreground my-5 rounded-md border border-l-4 px-4 py-3 break-words shadow-sm sm:my-6">
           {parseInline(quote.join(" "))}
         </blockquote>
       )
@@ -338,7 +338,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
     }
 
     blocks.push(
-      <p key={index} className="my-4 leading-7 break-words text-foreground/90">
+      <p key={index} className="text-foreground/90 my-4 leading-7 break-words">
         {parseInline(paragraph.join(" "))}
       </p>
     )

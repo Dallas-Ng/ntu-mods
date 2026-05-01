@@ -98,7 +98,7 @@ const TimetableOverview = () => {
                 <td className="w-fit lg:w-[100px]">
                   <Link
                     href={`/mods/${moduleKey}`}
-                    className="transition-colors hover:text-primary-alt">
+                    className="hover:text-primary-alt transition-colors">
                     {moduleKey}
                   </Link>
                 </td>
@@ -106,7 +106,7 @@ const TimetableOverview = () => {
                 <td className="hidden text-left lg:table-cell">
                   <Link
                     href={`/mods/${moduleKey}`}
-                    className="transition-colors hover:text-primary-alt">
+                    className="hover:text-primary-alt transition-colors">
                     {moduleTitle}
                   </Link>
                 </td>

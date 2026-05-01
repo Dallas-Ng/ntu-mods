@@ -42,7 +42,7 @@ const ModsWorkloadTable = ({ indexes }: Props) => {
 
   return (
     <div className="space-y-1">
-      <div className="text-sm text-muted-foreground">
+      <div className="text-muted-foreground text-sm">
         Total hours per week: {totalHours} hrs
       </div>
 

@@ -9,7 +9,7 @@ interface Props {
 }
 
 const LayoutDefault = ({ children, containerClassName }: Props) => (
-  <div className="flex min-h-screen flex-col bg-background">
+  <div className="bg-background flex min-h-screen flex-col">
     <Navbar />
 
     <main

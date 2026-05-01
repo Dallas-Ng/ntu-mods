@@ -96,22 +96,6 @@ export default function SettingsPage() {
           <TableSettings />
         </div>
 
-        {/* <div
-          id="beta"
-          className="space-y-4 rounded-md border bg-card px-4 pb-4 pt-2 shadow-lg">
-          <div>
-            <p>Beta Settings</p>
-
-            <p className="text-sm text-muted-foreground">
-              Opt in for beta updates, see new content before we release it!
-            </p>
-          </div>
-
-          <hr />
-
-          <BetaSettings />
-        </div> */}
-
         <div
           id="feedback"
           className="space-y-2 rounded-md border bg-card px-4 pt-2 pb-4 shadow-lg">

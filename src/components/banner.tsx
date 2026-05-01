@@ -34,19 +34,6 @@ export const Banner = {
       </BannerWrapper>
     </Link>
   ),
-  inBeta: () => (
-    <BannerWrapper>
-      NTU Mods is in <strong className="font-semibold">Beta!</strong> Let us
-      know if you have any suggestions or problems.
-    </BannerWrapper>
-  ),
-  release: () => (
-    <Link href="/mods">
-      <BannerWrapper>
-        NTU Mods is out of Beta! Click here to visit Mods
-      </BannerWrapper>
-    </Link>
-  ),
   optimisedForWeb: () => (
     <BannerWrapper>
       Optimsed for website, mobile support coming soon!

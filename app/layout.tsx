@@ -10,8 +10,6 @@ import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import { Banner } from "@/components/banner"
-import BetaBanner from "@/components/beta-banner-dynamic"
-import BetaLock from "@/components/beta-lock"
 import ClarityTag from "@/components/clarity"
 import GTag from "@/components/gtag"
 import MobileTracker from "@/components/mobile-tracker"
@@ -81,9 +79,8 @@ export default function RootLayout({
       <body className={cn(inter.className, "antialiased")}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <AppearanceStyleProvider />
-          <BetaBanner />
           <Banner.updatedAy />
-          <BetaLock>{children}</BetaLock>
+          {children}
           <MobileTracker />
           <Toaster position="top-center" />
           <GTag />

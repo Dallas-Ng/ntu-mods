@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 
 /**
- * In the beta release, we used dabao-store key for persistent state.
+ * In an older release, we used dabao-store key for persistent state.
  * This component migrates the old state to the new state.
  *
  * TODO: remove this component in the future

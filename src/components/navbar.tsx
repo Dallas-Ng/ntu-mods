@@ -30,9 +30,6 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    /**
-     * Upon scrolling past the top beta header, it will create a shadow in the navigation menu
-     */
     const handleScroll = () => {
       const scrollPos = window.scrollY
       if (scrollPos > 50) setScrolled(true)

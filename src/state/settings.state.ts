@@ -17,7 +17,6 @@ const INIT_SETTINGS: Settings = {
     duration: false
   },
   isMobile: false,
-  isBeta: false,
   appearance: DEFAULT_APPEARANCE_SETTINGS,
   modsViewMode: "cards",
   modsGroupBy: "none"
@@ -35,7 +34,6 @@ export interface Settings {
     duration: boolean
   }
   isMobile: boolean
-  isBeta: boolean
   appearance: AppearanceSettings
   modsViewMode: "cards" | "list"
   modsGroupBy: "none" | "level" | "au" | "faculty" | "type"

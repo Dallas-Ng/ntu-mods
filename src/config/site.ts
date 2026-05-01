@@ -4,7 +4,7 @@ export const siteConfig = {
   ogImage: "https://ntumods.com/og-image.png",
   metatags: {
     default: {
-      title: "NTUMods",
+      title: "Plan your timetable and learn about modules | NTUMods",
       desc: "Build your timetable easier with NTU Mods. Create, customize, and manage your class schedule hassle-free",
       keywords: [
         "NTU",

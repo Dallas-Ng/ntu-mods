@@ -17,19 +17,22 @@ const LandingCTA = () => {
           />
 
           <h1 className="bg-gradient-to-l from-blue-700 to-blue-800 bg-clip-text text-5xl font-bold text-transparent md:text-6xl">
-            Dabao your <br />
+            Plan your <br />
             mods better
           </h1>
         </div>
 
         <p className="text-center">
-          Get access to all indexes including ICC modules and plan your
-          timetable with ease.
+          Plan, share and find out more about different modules in NTU.
         </p>
 
-        <div className="my-4 flex justify-center">
+        <div className="my-4 flex justify-center gap-2">
           <Link href="/timetable">
             <Button>Build My Timetable Now</Button>
+          </Link>
+
+          <Link href="/mods">
+            <Button variant="outline">Find a Module</Button>
           </Link>
         </div>
       </div>

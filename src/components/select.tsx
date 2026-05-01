@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons"
+import { CheckIcon, ChevronsUpDownIcon } from "lucide-react"
 
 import {
   Command,
@@ -77,7 +77,7 @@ const CustomSelect = (props: Props) => {
             <div className="min-w-0 flex-1 overflow-hidden text-left">
               {activeItemLabel?.label}
             </div>
-            <CaretSortIcon className="ml-2 size-4 shrink-0 opacity-50" />
+            <ChevronsUpDownIcon className="ml-2 size-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
 

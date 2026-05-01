@@ -80,12 +80,9 @@ const Navbar = () => {
             <NavigationMenuList>
               <NavigationMenuItem>
                 {siteConfig.navLinks.map((link) => (
-                  <Link
-                    href={link.route}
-                    key={link.route}
-                    passHref
-                    legacyBehavior>
-                    <NavigationMenuLink
+                  <NavigationMenuLink key={link.route} asChild>
+                    <Link
+                      href={link.route}
                       className={cn(
                         "mr-1 p-1 text-sm font-semibold hover:text-slate-950 md:p-3 dark:hover:text-slate-100",
                         pathname.includes(link.route)
@@ -93,8 +90,8 @@ const Navbar = () => {
                           : "text-slate-500 dark:text-slate-400"
                       )}>
                       {link.label}
-                    </NavigationMenuLink>
-                  </Link>
+                    </Link>
+                  </NavigationMenuLink>
                 ))}
               </NavigationMenuItem>
             </NavigationMenuList>
@@ -106,7 +103,7 @@ const Navbar = () => {
                 href={link.route}
                 key={link.route}
                 className={cn(
-                  "rounded-md px-2 py-1.5 text-sm font-semibold transition-colors hover:bg-accent hover:text-foreground",
+                  "hover:bg-accent hover:text-foreground rounded-md px-2 py-1.5 text-sm font-semibold transition-colors",
                   pathname.includes(link.route)
                     ? "text-foreground"
                     : "text-muted-foreground"

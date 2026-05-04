@@ -6,7 +6,6 @@ import { TrashIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTimetable } from "@/hooks/use-timetable"
 
-import { Skeleton } from "../ui/skeleton"
 import TimetableIndexModifier from "./timetable-index-modifier"
 import TimetableModulesSelect from "./timetable-modules-select"
 
@@ -24,7 +23,7 @@ const TimetableModifier = () => {
 
   return (
     <div className="flex size-full flex-col space-y-4">
-      <div className="relative z-[2] h-[40px] w-full rounded-lg">
+      <div className="relative z-2 h-10 w-full rounded-lg">
         <div className="absolute top-0 left-0 w-full">
           <TimetableModulesSelect />
         </div>
@@ -50,7 +49,7 @@ const TimetableModifier = () => {
                 )}>
                 <div className="flex w-full items-center justify-between">
                   <div className="flex gap-1">
-                    <div className="w-[60px]">{moduleKey}</div>
+                    <div className="w-15">{moduleKey}</div>
                     <div className="text-muted-foreground text-sm">
                       {indexKey}
                     </div>
@@ -81,26 +80,5 @@ const TimetableModifier = () => {
     </div>
   )
 }
-
-export const TimetableModifierLoader = () => (
-  <div className="space-y-4 opacity-30">
-    <Skeleton className="h-[40px]" />
-
-    <div className="relative max-h-[50vh] min-h-10 w-full overflow-y-auto rounded-lg border-2">
-      <div className="text-muted-foreground p-2 text-center text-xs">
-        Registered Modules
-      </div>
-
-      <hr />
-
-      <div className="p-2">
-        <div className="text-muted-foreground text-center text-sm">
-          You have not added modules
-          <br /> Click on the search bar above to add modules
-        </div>
-      </div>
-    </div>
-  </div>
-)
 
 export default TimetableModifier

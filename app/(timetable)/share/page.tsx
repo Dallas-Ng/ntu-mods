@@ -5,12 +5,12 @@ import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
-import { TimetableTableLoader } from "@/components/timetable-table/table"
-import { TimetableCopyButtonLoading } from "@/components/timetable/buttons/timetable-copy-button"
-import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button"
-import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button"
+import { TimetableTableLoader } from "@/components/timetable-table/table-loader"
+import { TimetableCopyButtonLoading } from "@/components/timetable/buttons/timetable-copy-button-loading"
+import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button-loading"
+import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button-loading"
 import TimetableLegend from "@/components/timetable/timetable-legend"
-import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview"
+import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview-loading"
 
 const TimetableOverview = dynamic(
   () => import("@/components/timetable/timetable-overview"),

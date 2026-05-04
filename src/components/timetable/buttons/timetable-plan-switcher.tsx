@@ -14,7 +14,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import { Skeleton } from "@/components/ui/skeleton"
 
 const TimetablePlanSwitcher = () => {
   const { timetables, timetableIndex, updateTimetableIndex } = useTimetable()
@@ -77,11 +76,5 @@ const TimetablePlanSwitcher = () => {
     </DropdownMenu>
   )
 }
-
-export const TimetablePlanSwitcherLoading = () => (
-  <div className="h-[36px] w-[93px] rounded-md border p-2">
-    <Skeleton className="size-full" />
-  </div>
-)
 
 export default TimetablePlanSwitcher

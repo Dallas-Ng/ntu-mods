@@ -8,7 +8,8 @@ import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableIndexes } from "@/hooks/use-timetable-indexes"
 
-import { TimetableTable, TimetableTableLoader } from "../timetable-table/table"
+import { TimetableTableLoader } from "../timetable-table/table-loader"
+import { TimetableTable } from "../timetable-table/table"
 import { Button } from "../ui/button"
 
 interface Props {

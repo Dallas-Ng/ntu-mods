@@ -18,13 +18,4 @@ const TimetableShareButton = () => {
   )
 }
 
-export const TimetableShareButtonLoading = () => (
-  <ShareButton
-    title="Look at my timetable from NTU Mods"
-    description="You can use this to plan your mods too!"
-    link=""
-    disabled
-  />
-)
-
 export default TimetableShareButton

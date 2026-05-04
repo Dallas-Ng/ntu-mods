@@ -67,8 +67,4 @@ const TimetableDownloadCalendarButton = () => {
   )
 }
 
-export const TimetableDownloadCalendarButtonLoading = () => (
-  <ButtonCollapsable icon={Calendar} text="Save to Calendar" disabled />
-)
-
 export default TimetableDownloadCalendarButton

@@ -2,7 +2,6 @@
 
 import { Fragment, useMemo, useState } from "react"
 
-import { TABLE_SETTINGS } from "@/config/table-settings"
 import { STARS_TIMESLOTS } from "@/lib/constants"
 import {
   generateTimetableMatrix,
@@ -12,18 +11,9 @@ import { getIndexType } from "@/lib/get-index-type"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 
+import { TimeSlotItem } from "./table-loader"
 import { TimetableTableCell } from "./cell"
 import { TimetableTableThead } from "./thead"
-
-const TimeSlotItem = ({ startTime }: { startTime: number }) => (
-  <td className="relative">
-    <span className="bg-card absolute top-[-8px] left-0 w-full px-1 text-center">
-      {startTime}
-    </span>
-
-    <div className={TABLE_SETTINGS.TIMESLOT_CLASS} />
-  </td>
-)
 
 interface Props {
   moduleIndexMap: TimetableWithIndex
@@ -192,7 +182,7 @@ export const TimetableTable = (props: Props) => {
 
                       {/* Generate empty cell based off the offset of max col span */}
                       {Array.from({ length: emptyArrayLength }, (_, i) => (
-                        <td key={`empty-${i}`} className="min-w-[40px]" />
+                        <td key={`empty-${i}`} className="min-w-10" />
                       ))}
                     </Fragment>
                   )
@@ -206,23 +196,3 @@ export const TimetableTable = (props: Props) => {
   )
 }
 
-export const TimetableTableLoader = () => (
-  <table className="table-fixed text-[0.6rem] opacity-30 lg:text-xs">
-    <TimetableTableThead
-      days={5}
-      maxDayColumns={{ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }} // default
-    />
-
-    <tbody>
-      {STARS_TIMESLOTS.slice(3, 21).map((x, i) => (
-        <tr key={i}>
-          <TimeSlotItem startTime={x.start} />
-
-          {Array.from({ length: 5 }, (_, i) => (
-            <td key={i} />
-          ))}
-        </tr>
-      ))}
-    </tbody>
-  </table>
-)

@@ -4,15 +4,14 @@ import dynamic from "next/dynamic"
 
 import Header from "@/components/header"
 import { Migration } from "@/components/migration"
-import { TimetableTableLoader } from "@/components/timetable-table/table"
-import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile-timetable-modifier-button"
-import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button"
-import { TimetablePlanSwitcherLoading } from "@/components/timetable/buttons/timetable-plan-switcher"
-import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button"
-import { TimetableShareButtonLoading } from "@/components/timetable/buttons/timetable-share-button"
+import { TimetableTableLoader } from "@/components/timetable-table/table-loader"
+import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button-loading"
+import { TimetablePlanSwitcherLoading } from "@/components/timetable/buttons/timetable-plan-switcher-loading"
+import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button-loading"
+import { TimetableShareButtonLoading } from "@/components/timetable/buttons/timetable-share-button-loading"
 import TimetableLegend from "@/components/timetable/timetable-legend"
-import { TimetableModifierLoader } from "@/components/timetable/timetable-modifier"
-import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview"
+import { TimetableModifierLoader } from "@/components/timetable/timetable-modifier-loading"
+import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview-loading"
 
 const TimetableHiddenContentHelper = dynamic(
   () => import("@/components/timetable/timetable-hidden-content-helper"),
@@ -68,6 +67,12 @@ const TimetableOverview = dynamic(
     ssr: false,
     loading: () => <TimetableOverviewLoading />
   }
+)
+
+const MobileTimetableModifierButton = dynamic(
+  () =>
+    import("@/components/timetable/buttons/mobile-timetable-modifier-button"),
+  { ssr: false }
 )
 
 const Page = () => {

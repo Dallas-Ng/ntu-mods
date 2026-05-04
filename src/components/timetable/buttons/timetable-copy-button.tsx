@@ -141,8 +141,4 @@ const TimetableCopyButton = () => {
   )
 }
 
-export const TimetableCopyButtonLoading = () => (
-  <ButtonCollapsable icon={Copy} text="Copy Timetable" disabled />
-)
-
 export default TimetableCopyButton

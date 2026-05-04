@@ -15,12 +15,18 @@ import { TimeSlotItem } from "./table-loader"
 import { TimetableTableCell } from "./cell"
 import { TimetableTableThead } from "./thead"
 
+export interface PrecomputedTimetableMatrix {
+  TABLE_MATRIX: { [tsIndex: number]: Index[][] }
+  TABLE_MAX_DAY_COLUMNS: { [dayIndex: number]: number }
+}
+
 interface Props {
   moduleIndexMap: TimetableWithIndex
   hideIndex?: boolean
   fullCell?: boolean
   showModuleKeyAsCommon?: boolean
   alwaysHighlightLectures?: boolean
+  precomputedMatrix?: PrecomputedTimetableMatrix
   indexPicker?: {
     enabled: boolean
     activeModuleKey: string | null
@@ -45,19 +51,28 @@ export const TimetableTable = (props: Props) => {
     fullCell = false,
     showModuleKeyAsCommon = false,
     alwaysHighlightLectures = false,
+    precomputedMatrix,
     indexPicker
   } = props
   const { isMobile } = useSettings()
 
   const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS, TABLE_OVERFLOW_THRESHOLD } =
-    useMemo(
-      () =>
-        generateTimetableMatrix(
-          cloneModuleIndexMap(moduleIndexMap),
-          isMobile ? 6 : 9
-        ),
-      [moduleIndexMap, isMobile]
-    )
+    useMemo(() => {
+      if (precomputedMatrix) {
+        const sumCols = Object.values(
+          precomputedMatrix.TABLE_MAX_DAY_COLUMNS
+        ).reduce((a, b) => a + b, 0)
+        return {
+          TABLE_MATRIX: precomputedMatrix.TABLE_MATRIX,
+          TABLE_MAX_DAY_COLUMNS: precomputedMatrix.TABLE_MAX_DAY_COLUMNS,
+          TABLE_OVERFLOW_THRESHOLD: sumCols > (isMobile ? 6 : 9)
+        }
+      }
+      return generateTimetableMatrix(
+        cloneModuleIndexMap(moduleIndexMap),
+        isMobile ? 6 : 9
+      )
+    }, [moduleIndexMap, isMobile, precomputedMatrix])
 
   const [currentHoverKey, setCurrentHoverKey] = useState("")
 
@@ -129,7 +144,8 @@ export const TimetableTable = (props: Props) => {
                           rowDayIndex === index.day
                         ) {
                           const moduleKey = Object.keys(moduleIndexMap).find(
-                            (x) => moduleIndexMap[x].some((y) => y === index)
+                            (x) =>
+                              moduleIndexMap[x].some((y) => y.key === index.key)
                           ) as string // Guaranteed to be defined
                           const indexPickerEnabled = indexPicker?.enabled
                           const previewActive =
@@ -195,4 +211,3 @@ export const TimetableTable = (props: Props) => {
     </div>
   )
 }
-

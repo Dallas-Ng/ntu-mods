@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
+import { generateTimetableMatrix } from "@/lib/generate-timetable-matrix"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import { getLatestSemester } from "@/lib/server/get-latest-semester"
 import {
@@ -49,6 +50,13 @@ export default async function Page(props: {
 
   const moduleData = allMeta[moduleKey]
   if (!moduleData) notFound()
+
+  const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS } = generateTimetableMatrix(
+    Object.fromEntries(
+      Object.entries(indexes).map(([k, v]) => [k, [...v]])
+    ) as Record<string, Index[]>,
+    9
+  )
 
   // Determine whether this module is offered in the current (latest) semester
   const latest = await getLatestSemester()
@@ -102,7 +110,10 @@ export default async function Page(props: {
       <div className="mt-10 space-y-6">
         <h2 className="text-lg">Available Indexes</h2>
 
-        <ModsIndexTable indexes={indexes} />
+        <ModsIndexTable
+          indexes={indexes}
+          precomputedMatrix={{ TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS }}
+        />
 
         {otherSemesters.length > 0 && (
           <div>

@@ -1,10 +1,22 @@
-import { TimetableTable } from "../timetable-table/table"
+import dynamic from "next/dynamic"
+
+import { TimetableTableLoader } from "../timetable-table/table-loader"
+import type { PrecomputedTimetableMatrix } from "../timetable-table/table"
+
+const TimetableTable = dynamic(
+  () =>
+    import("../timetable-table/table").then((m) => ({
+      default: m.TimetableTable
+    })),
+  { loading: () => <TimetableTableLoader />, ssr: true }
+)
 
 interface Props {
   indexes: Record<string, Index[]>
+  precomputedMatrix?: PrecomputedTimetableMatrix
 }
 
-const ModsIndexTable = ({ indexes }: Props) => {
+const ModsIndexTable = ({ indexes, precomputedMatrix }: Props) => {
   if (Object.values(indexes).length === 0) {
     return (
       <div className="rounded-md border p-2 py-5 text-center">
@@ -18,6 +30,7 @@ const ModsIndexTable = ({ indexes }: Props) => {
   return (
     <TimetableTable
       moduleIndexMap={indexes}
+      precomputedMatrix={precomputedMatrix}
       hideIndex
       fullCell
       showModuleKeyAsCommon

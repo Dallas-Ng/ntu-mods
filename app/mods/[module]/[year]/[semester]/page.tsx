@@ -222,8 +222,8 @@ export async function generateMetadata(props: {
   const semName = semester === "S" ? "Special Term" : `Semester ${semester}`
 
   return {
-    title: `${code} ${moduleData.title} — AY${year} ${semName}`,
-    description: `Historical snapshot of ${code} ${moduleData.title} for AY${year}/${parseInt(year) + 1} ${semName}.`,
+    title: `${code} ${moduleData.title} | AY${year} ${semName}`,
+    description: `View the AY${year}/${parseInt(year) + 1} ${semName} record for ${code} ${moduleData.title}, including module details, index schedules, class times, venues, and exams.`,
     alternates: { canonical: getModuleVersionUrl(code, year, semester) }
   }
 }

@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: siteConfig.url,
-    title: siteConfig.name,
+    title: defaults.title,
     description: defaults.desc,
     siteName: siteConfig.name,
     images: [
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: siteConfig.name,
+    title: defaults.title,
     description: defaults.desc,
     images: [siteConfig.ogImage]
     // creator: "@dallas-ng"

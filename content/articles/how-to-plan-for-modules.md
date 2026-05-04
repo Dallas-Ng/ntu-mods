@@ -1,6 +1,6 @@
 ---
 title: "How to Plan for Modules at NTU"
-description: "Learn how to plan NTU modules with NTUMods: choose core modules and BDEs, balance AUs and workload, check prerequisites and exclusions, avoid timetable clashes, prepare backup indexes for STARS registration, and build a semester plan that fits graduation requirements."
+description: "Learn how to plan NTU modules with NTUMods: balance AUs and workload, check prerequisites, avoid clashes, and prepare backup indexes for STARS."
 date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"

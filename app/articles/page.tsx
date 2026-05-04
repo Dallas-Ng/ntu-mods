@@ -1,9 +1,16 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 
+import { siteConfig } from "@/config/site"
 import { getAllArticles } from "@/lib/server/articles"
 
 export const dynamic = "force-static"
 export const revalidate = false
+export const metadata: Metadata = {
+  title: siteConfig.metatags.articles.title,
+  description: siteConfig.metatags.articles.desc,
+  alternates: { canonical: "/articles" }
+}
 
 export default function ArticlesPage() {
   const articles = getAllArticles()

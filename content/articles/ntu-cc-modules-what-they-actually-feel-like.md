@@ -1,6 +1,6 @@
 ---
 title: "NTU CC Modules: What They Actually Feel Like"
-description: "A student-first breakdown of NTU Common Core modules, what they are supposed to teach, and what students actually think they are like."
+description: "A student-first guide to NTU Common Core modules, what they are meant to teach, how they usually feel, and how to plan around the workload."
 date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"

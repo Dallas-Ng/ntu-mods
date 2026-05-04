@@ -1,6 +1,6 @@
 ---
 title: "What Is a BDE at NTU?"
-description: "Understand what a BDE is at NTU, how Broadening and Deepening Electives fit into your degree audit and graduation requirements, how BDEs differ from older UE or GERPE terms, and how to choose NTU electives that match your timetable, workload, minor, second major, career goals, and interests."
+description: "Understand what a BDE is at NTU, how it fits graduation requirements, and how to choose electives that match your timetable, workload, and interests."
 date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"

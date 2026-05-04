@@ -172,8 +172,8 @@ export async function generateMetadata(props: {
   if (!mod) return null
 
   return {
-    title: `${moduleKey} ${mod.title}`,
-    description: `Explore ${moduleKey} ${mod.title}. Find detailed information and schedules. Plan your academic journey with ease.`,
+    title: `${moduleKey} ${mod.title} | NTU Module Details`,
+    description: `View ${moduleKey} ${mod.title} on NTUMods: description, AU, prerequisites, exam details, index schedules, class times, venues, and related NTU modules.`,
     alternates: { canonical: getModuleUrl(moduleKey) }
   }
 }

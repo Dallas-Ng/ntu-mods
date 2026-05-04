@@ -9,6 +9,9 @@ import Roadmap from "@/components/landing/landing-roadmap"
 import LayoutDefault from "@/components/layout-default"
 
 export const metadata: Metadata = {
+  title: "NTUMods | NTU Timetable Planner and Module Finder",
+  description:
+    "Plan NTU timetables, browse modules, compare indexes, check exams, share schedules, and export calendars or wallpapers in one course planning tool.",
   alternates: { canonical: "/" }
 }
 

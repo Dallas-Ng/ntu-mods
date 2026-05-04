@@ -4,8 +4,8 @@ export const siteConfig = {
   ogImage: "https://ntumods.com/og-image.png",
   metatags: {
     default: {
-      title: "Plan your timetable and learn about modules | NTUMods",
-      desc: "Build your timetable easier with NTU Mods. Create, customize, and manage your class schedule hassle-free",
+      title: "NTU Timetable Planner and Module Finder | NTUMods",
+      desc: "Plan NTU timetables, browse modules, compare indexes, check exams, share schedules, and export calendars or wallpapers in one course planning tool.",
       keywords: [
         "NTU",
         "Nanyang Technological University",
@@ -23,44 +23,44 @@ export const siteConfig = {
       ]
     },
     timetable: {
-      title: "Timetable Planner",
-      desc: "Streamline your NTU schedule planning with our timetable maker. Create, customize, and manage your class schedule hassle-free"
+      title: "NTU Timetable Planner",
+      desc: "Build your NTU timetable by searching modules and indexes, checking clashes, comparing class times, and exporting your schedule to calendar, image, or share link."
     },
     share: {
-      title: "Shared with You",
-      desc: "View my timetable on NTU Mods!"
+      title: "Shared NTU Timetable",
+      desc: "Open a shared NTU timetable, review the modules and class times, then copy it into your own NTUMods planner to edit."
     },
     mods: {
-      title: "All NTU Modules",
-      desc: "View all the modules offered by NTU. Find out more about the modules you are interested in and plan your timetable with ease"
+      title: "NTU Modules and Indexes",
+      desc: "Search NTU modules by code, title, faculty, level, AU, and type. View descriptions, prerequisites, exams, indexes, class times, and venues."
     },
     help: {
-      title: "Help",
-      desc: "Find answers to frequently asked questions and get help using the NTU Timetable Generator. Learn how to optimize your schedule and make the most of our features"
+      title: "NTUMods Help",
+      desc: "Find quick answers for planning NTU timetables, browsing modules, choosing indexes, exporting schedules, sharing links, and fixing local app issues."
     },
     privacy: {
-      title: "Privacy",
-      desc: "Learn about how we handle and protect your privacy on the NTU Mods"
+      title: "NTUMods Privacy Policy",
+      desc: "Learn what NTUMods stores locally, what analytics may collect, how feedback submissions are handled, and how your timetable data stays on your device."
     },
     screenshot: {
-      title: "Timetable Screenshot",
-      desc: "Export a photo of your timetable to share with your friends or put as your lockscreen wallpaper"
+      title: "NTU Timetable Wallpaper Maker",
+      desc: "Compose your NTU timetable as a clean lockscreen wallpaper or shareable image, with presets for phone screens and simple positioning controls."
     },
     settings: {
-      title: "Settings",
-      desc: "Configure the NTU Mods to your liking. Change your theme, table settings, and more"
+      title: "NTUMods Settings",
+      desc: "Customize NTUMods themes, table density, timetable colors, class details, and feedback settings so your planner works the way you prefer."
     },
     changelog: {
-      title: "Changelog",
-      desc: "See the latest NTU Mods updates, fixes, and feature improvements"
+      title: "NTUMods Changelog",
+      desc: "See recent NTUMods updates, including timetable planning improvements, module browser changes, article guides, data refreshes, and export fixes."
     },
     articles: {
-      title: "Articles",
-      desc: "Read NTUMods guides, updates, and notes for planning your NTU timetable and understanding modules"
+      title: "NTU Module Planning Guides",
+      desc: "Read NTUMods guides on planning NTU modules, choosing BDEs, understanding Common Core modules, balancing workload, and preparing for STARS."
     },
     debug: {
-      title: "Debug",
-      desc: "Why study when you can just dabao your mods?"
+      title: "Reset NTUMods Data",
+      desc: "Inspect and reset local NTUMods timetable data when your planner, settings, or saved modules behave unexpectedly after an update."
     }
   },
   navLinks: [

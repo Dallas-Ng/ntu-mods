@@ -1,6 +1,6 @@
 ---
 title: "Most Popular BDEs at NTU"
-description: "Explore popular BDEs at NTU with real NTUMods module links, including language BDEs, psychology and social science electives, business and entrepreneurship modules, communication and writing BDEs, humanities and ethics electives, computing BDEs, and creative design modules. Compare why students take them, what to watch out for, and how to choose an easy or useful BDE that fits your semester."
+description: "Explore popular NTU BDEs, compare why students choose them, what to watch out for, and how to pick an elective that fits your workload and timetable."
 date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"

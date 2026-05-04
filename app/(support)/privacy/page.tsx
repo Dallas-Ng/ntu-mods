@@ -1,8 +1,16 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 
+import { siteConfig } from "@/config/site"
 import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import Header from "@/components/header"
+
+export const metadata: Metadata = {
+  title: siteConfig.metatags.privacy.title,
+  description: siteConfig.metatags.privacy.desc,
+  alternates: { canonical: "/privacy" }
+}
 
 export default function HelpPage() {
   return (

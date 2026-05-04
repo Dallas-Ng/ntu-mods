@@ -1,11 +1,19 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { History, ServerCrash } from "lucide-react"
 
+import { siteConfig } from "@/config/site"
 import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import FeedbackCard from "@/components/feedback-card"
 import Header from "@/components/header"
+
+export const metadata: Metadata = {
+  title: siteConfig.metatags.help.title,
+  description: siteConfig.metatags.help.desc,
+  alternates: { canonical: "/help" }
+}
 
 interface HelpConfig {
   question: React.ReactNode

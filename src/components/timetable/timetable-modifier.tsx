@@ -41,6 +41,7 @@ const TimetableModifier = () => {
             <TimetableIndexModifier
               key={moduleKey}
               moduleKey={moduleKey}
+              open={activeKey === moduleKey}
               onOpenChange={(moduleKey) => setActiveKey(moduleKey)}>
               <div
                 className={cn(

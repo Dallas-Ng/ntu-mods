@@ -18,7 +18,13 @@ import {
   CommandItem,
   CommandList
 } from "../ui/command"
-import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerTitle,
+  DrawerTrigger
+} from "../ui/drawer"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 
 type Indexes = Record<string, Index[]>
@@ -49,12 +55,13 @@ const IndexCommandItem = ({ index }: { index: Index }) => {
 
 interface Props {
   moduleKey: string
+  open?: boolean
   children: React.ReactNode
   onOpenChange: (moduleKey: string) => void
 }
 
 const TimetableIndexModifier = (props: Props) => {
-  const { moduleKey, onOpenChange } = props
+  const { moduleKey, onOpenChange, open = false } = props
   const { year, semester } = useLatestSemester()
   const [indexes, setIndexes] = useState<Indexes>({})
   const [filteredIndexes, setFilteredIndexes] = useState<Indexes>({})
@@ -127,10 +134,13 @@ const TimetableIndexModifier = (props: Props) => {
 
   const handleSelect = (val: string) => {
     updateItemIndex(moduleKey, val)
+    if (isMobile) onOpenChange("")
   }
 
   const items = (
-    <Command shouldFilter={false} className="border md:rounded-t-none">
+    <Command
+      shouldFilter={false}
+      className="h-full min-h-0 border md:rounded-t-none">
       <div className="h-fit w-full border-b">
         <CommandInput
           placeholder="Search for code, timing or tutorial group"
@@ -164,7 +174,7 @@ const TimetableIndexModifier = (props: Props) => {
 
       <CommandEmpty>No indexes code found</CommandEmpty>
 
-      <CommandList className="max-h-full md:max-h-[28rem]">
+      <CommandList className="max-h-none min-h-0 flex-1 overflow-y-auto md:max-h-[28rem]">
         {Object.entries(filteredIndexes).map(([indexKey, slots]) => {
           const active = timetable[moduleKey] === indexKey
 
@@ -212,13 +222,21 @@ const TimetableIndexModifier = (props: Props) => {
   if (isMobile)
     return (
       <Drawer
+        open={open}
         onOpenChange={(open) =>
           open ? onOpenChange(moduleKey) : onOpenChange("")
         }>
         <DrawerTrigger asChild>{props.children}</DrawerTrigger>
 
-        <DrawerContent className="h-full max-h-[85svh] p-2">
-          {items}
+        <DrawerContent className="border-primary h-[calc(100svh-6rem)] overflow-hidden p-2 focus:outline-none data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[calc(100svh-6rem)] data-[vaul-drawer-direction=bottom]:rounded-t-3xl data-[vaul-drawer-direction=bottom]:border-4 data-[vaul-drawer-direction=bottom]:border-b-0">
+          <DrawerTitle className="sr-only">Select module index</DrawerTitle>
+          <DrawerDescription className="sr-only">
+            Search and select an index for {moduleKey}.
+          </DrawerDescription>
+
+          <div className="mt-5 flex min-h-0 flex-1 flex-col overflow-hidden">
+            {items}
+          </div>
         </DrawerContent>
       </Drawer>
     )

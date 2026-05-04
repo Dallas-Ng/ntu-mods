@@ -4,7 +4,8 @@ import { siteConfig } from "@/config/site"
 
 export const metadata: Metadata = {
   title: siteConfig.metatags.help.title,
-  description: siteConfig.metatags.help.desc
+  description: siteConfig.metatags.help.desc,
+  alternates: { canonical: "/help" }
 }
 
 interface LayoutProps {

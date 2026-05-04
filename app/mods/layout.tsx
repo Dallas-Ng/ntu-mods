@@ -5,7 +5,8 @@ import LayoutDefault from "@/components/layout-default"
 
 export const metadata: Metadata = {
   title: siteConfig.metatags.mods.title,
-  description: siteConfig.metatags.mods.desc
+  description: siteConfig.metatags.mods.desc,
+  alternates: { canonical: "/mods" }
 }
 
 interface Props {

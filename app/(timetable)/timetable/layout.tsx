@@ -9,7 +9,8 @@ interface Props {
 
 export const metadata: Metadata = {
   title: siteConfig.metatags.timetable.title,
-  description: siteConfig.metatags.timetable.desc
+  description: siteConfig.metatags.timetable.desc,
+  alternates: { canonical: "/timetable" }
 }
 
 const Layout = ({ children }: Props) => {

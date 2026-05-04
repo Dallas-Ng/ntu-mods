@@ -4,7 +4,8 @@ import { siteConfig } from "@/config/site"
 
 export const metadata: Metadata = {
   title: siteConfig.metatags.debug.title,
-  description: siteConfig.metatags.debug.desc
+  description: siteConfig.metatags.debug.desc,
+  alternates: { canonical: "/debug" }
 }
 
 interface LayoutProps {

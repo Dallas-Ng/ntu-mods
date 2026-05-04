@@ -9,7 +9,8 @@ interface Props {
 
 export const metadata: Metadata = {
   title: siteConfig.metatags.share.title,
-  description: siteConfig.metatags.share.desc
+  description: siteConfig.metatags.share.desc,
+  alternates: { canonical: "/share" }
 }
 
 const Layout = ({ children }: Props) => {

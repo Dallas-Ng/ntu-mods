@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Image from "next/image"
 
 import Articles from "@/components/landing/landing-articles"
@@ -6,6 +7,10 @@ import Features from "@/components/landing/landing-features"
 import Product from "@/components/landing/landing-product"
 import Roadmap from "@/components/landing/landing-roadmap"
 import LayoutDefault from "@/components/layout-default"
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" }
+}
 
 export default function IndexPage() {
   return (

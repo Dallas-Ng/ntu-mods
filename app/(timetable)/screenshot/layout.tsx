@@ -4,7 +4,8 @@ import { siteConfig } from "@/config/site"
 
 export const metadata: Metadata = {
   title: siteConfig.metatags.screenshot.title,
-  description: siteConfig.metatags.screenshot.desc
+  description: siteConfig.metatags.screenshot.desc,
+  alternates: { canonical: "/screenshot" }
 }
 
 interface LayoutProps {

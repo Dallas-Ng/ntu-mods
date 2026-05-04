@@ -4,7 +4,8 @@ import { siteConfig } from "@/config/site"
 
 export const metadata: Metadata = {
   title: siteConfig.metatags.privacy.title,
-  description: siteConfig.metatags.privacy.desc
+  description: siteConfig.metatags.privacy.desc,
+  alternates: { canonical: "/privacy" }
 }
 
 interface LayoutProps {

@@ -76,6 +76,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.clarity.ms" />
+      </head>
       <body className={cn(inter.className, "antialiased")}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <AppearanceStyleProvider />
@@ -85,7 +90,7 @@ export default function RootLayout({
           <Toaster position="top-center" />
           <GTag />
           <ClarityTag />
-          <TailwindIndicator />
+          {process.env.NODE_ENV === "development" && <TailwindIndicator />}
         </ThemeProvider>
       </body>
     </html>

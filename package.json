@@ -69,7 +69,7 @@
     "typescript": "^5"
   },
   "browserslist": {
-    "production": [">0.3%", "not dead", "not op_mini all", "not IE 11"],
+    "production": ["baseline widely available"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",

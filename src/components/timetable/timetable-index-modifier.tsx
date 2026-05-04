@@ -253,7 +253,7 @@ const TimetableIndexModifier = (props: Props) => {
 
         <PopoverContent
           container={containerRef.current}
-          className="border-none"
+          className="rounded-t-none border p-0"
           sideOffset={0}
           style={{
             width: containerRef.current?.clientWidth

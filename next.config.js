@@ -25,6 +25,15 @@ const nextConfig = {
         source: "/(.*)",
         headers: [{ key: "X-Content-Type-Options", value: "nosniff" }]
       },
+      {
+        source: "/data/api/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=604800"
+          }
+        ]
+      }
     ]
   }
 }

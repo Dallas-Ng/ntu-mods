@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useModuleSearchApi } from "@/hooks/use-module-search-api"
 import { useOutsideClick } from "@/hooks/use-outside-click"
+import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import {
@@ -25,6 +26,7 @@ const TimetableModulesSelect = () => {
   const { year, semester } = useLatestSemester()
   const { results: searchResults } = useModuleSearchApi(inputValue, 300)
   const { isMobile } = useSettings()
+  const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const ref = useRef<HTMLDivElement>(null)
   const [disabled, setDisabled] = useState(false)
 
@@ -55,29 +57,8 @@ const TimetableModulesSelect = () => {
         return
       }
 
-      const params = new URLSearchParams({ year, semester })
-
-      // Fetch indexes for the new module and all existing timetable modules in parallel
-      const existingCodes = Object.keys(timetable)
-      const [newModuleRes, ...existingResponses] = await Promise.all([
-        fetch(`/api/data/modules/${moduleKey}/indexes?${params}`),
-        ...existingCodes.map((code) =>
-          fetch(`/api/data/modules/${code}/indexes?${params}`)
-            .then((res) => (res.ok ? res.json() : { indexes: {} }))
-            .then((data: { indexes: Record<string, Index[]> }) => ({
-              code,
-              indexes: data.indexes ?? {}
-            }))
-            .catch(() => ({ code, indexes: {} as Record<string, Index[]> }))
-        )
-      ])
-
-      if (!newModuleRes.ok) {
-        throw new Error("Failed to load module indexes")
-      }
-
-      const data = await newModuleRes.json()
-      const indexes = data.indexes
+      // Read indexes from already-fetched season cache (no API call)
+      const indexes = seasonIndexes[moduleKey]
 
       if (!indexes || Object.keys(indexes).length === 0) {
         throw new Error("No indexes available for this module")
@@ -85,9 +66,10 @@ const TimetableModulesSelect = () => {
 
       // Build flat existing index lookup: { indexKey: Index[] }
       const existingIndexLookup: Record<string, Index[]> = {}
-      for (const { code, indexes: moduleIndexes } of existingResponses) {
+      for (const code of Object.keys(timetable)) {
         const selectedKey = timetable[code]
-        if (selectedKey && moduleIndexes[selectedKey]) {
+        const moduleIndexes = seasonIndexes[code]
+        if (selectedKey && moduleIndexes?.[selectedKey]) {
           existingIndexLookup[selectedKey] = moduleIndexes[selectedKey]
         }
       }

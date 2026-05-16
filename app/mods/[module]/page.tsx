@@ -19,7 +19,7 @@ import ModsWorkloadTable from "@/components/mods/mods-workload-table"
 import RelatedModules from "@/components/related-modules"
 
 export const dynamic = "force-static"
-export const dynamicParams = true
+export const dynamicParams = false
 export const revalidate = false
 
 export default async function Page(props: {
@@ -154,9 +154,16 @@ export default async function Page(props: {
 }
 
 export async function generateStaticParams() {
-  const latest = await getLatestSemester()
-  const allMeta = await getAllModuleMetadata(latest.year, latest.semester)
-  return Object.keys(allMeta).map((key) => ({ module: key }))
+  // Use module-map to cover all 4,228 historical module codes, not just the current semester.
+  // Prevents ISR fallback writes for historical modules.
+  const fs = await import("fs/promises")
+  const path = await import("path")
+  const raw = await fs.readFile(
+    path.join(process.cwd(), "src/data/api/module-map.json"),
+    "utf-8"
+  )
+  const moduleMap = JSON.parse(raw) as Record<string, unknown>
+  return Object.keys(moduleMap).map((key) => ({ module: key }))
 }
 
 export async function generateMetadata(props: {

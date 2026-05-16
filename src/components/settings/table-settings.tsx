@@ -5,7 +5,6 @@ import { RefreshCcw } from "lucide-react"
 
 import { TRUN_DAY_MAP } from "@/lib/constants"
 import { cn } from "@/lib/utils"
-import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useSettings } from "@/hooks/use-settings"
 
 import TimetableCell from "../timetable/timetable-cell"
@@ -27,23 +26,28 @@ interface Props {
 const TableSettings = ({ toggleBorder = false }: Props) => {
   const { settings, updateSettings } = useSettings()
   const { tableCell } = settings
-  const { year, semester } = useLatestSemester()
+  const [samples, setSamples] = useState<RandomModuleData[]>([])
   const [randomData, setRandomData] = useState<RandomModuleData | null>(null)
   const [rerollKey, setRerollKey] = useState(0)
 
   useEffect(() => {
+    if (samples.length > 0) {
+      setRandomData(samples[rerollKey % samples.length])
+      return
+    }
     const controller = new AbortController()
-    const params = new URLSearchParams({ year, semester })
-
-    fetch(`/api/data/modules/random?${params}`, { signal: controller.signal })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data && data.code) setRandomData(data)
+    fetch("/data/api/random-samples.json", { signal: controller.signal })
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data: RandomModuleData[]) => {
+        if (data.length > 0) {
+          setSamples(data)
+          setRandomData(data[rerollKey % data.length])
+        }
       })
       .catch(() => {})
-
     return () => controller.abort()
-  }, [year, semester, rerollKey])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rerollKey])
 
   const reRollIndex = () => setRerollKey((k) => k + 1)
 

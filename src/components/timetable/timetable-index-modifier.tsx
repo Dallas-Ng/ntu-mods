@@ -8,6 +8,7 @@ import { getIndexType } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 import { cn } from "@/lib/utils"
 import { useLatestSemester } from "@/hooks/use-latest-semester"
+import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 
@@ -63,6 +64,7 @@ interface Props {
 const TimetableIndexModifier = (props: Props) => {
   const { moduleKey, onOpenChange, open = false } = props
   const { year, semester } = useLatestSemester()
+  const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const [indexes, setIndexes] = useState<Indexes>({})
   const [filteredIndexes, setFilteredIndexes] = useState<Indexes>({})
   const { isMobile } = useSettings()
@@ -70,25 +72,10 @@ const TimetableIndexModifier = (props: Props) => {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const controller = new AbortController()
-    const params = new URLSearchParams({ year, semester })
-    fetch(`/api/data/modules/${moduleKey}/indexes?${params}`, {
-      signal: controller.signal
-    })
-      .then((res) => (res.ok ? res.json() : { indexes: {} }))
-      .then((data) => {
-        const raw: Indexes = data.indexes ?? {}
-        const filtered: Indexes = {}
-        for (const [key, slots] of Object.entries(raw)) {
-          filtered[key] = slots as Index[]
-        }
-        setIndexes(filtered)
-        setFilteredIndexes(filtered)
-      })
-      .catch(() => {})
-
-    return () => controller.abort()
-  }, [moduleKey, year, semester])
+    const raw: Indexes = (seasonIndexes[moduleKey] as Indexes) ?? {}
+    setIndexes(raw)
+    setFilteredIndexes(raw)
+  }, [moduleKey, seasonIndexes])
 
   const randomLecture =
     Object.values(indexes)

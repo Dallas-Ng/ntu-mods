@@ -1,59 +1,26 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo } from "react"
 
-type AllModuleIndexes = Record<string, Record<string, Index[]>>
+import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 
 export const useTimetableIndexes = (
   timetable: Timetable,
   year: string,
   semester: string
 ) => {
-  const [allModuleIndexes, setAllModuleIndexes] = useState<AllModuleIndexes>({})
-  const [isLoading, setIsLoading] = useState(false)
+  const { indexes: seasonIndexes, isLoading } = useSeasonIndexes(year, semester)
 
-  const modulesKey = useMemo(
-    () => Object.keys(timetable).sort().join(","),
-    [timetable]
-  )
-
-  useEffect(() => {
-    if (!modulesKey) {
-      setAllModuleIndexes({})
-      return
+  const allModuleIndexes = useMemo(() => {
+    const result: Record<string, Record<string, Index[]>> = {}
+    for (const code of Object.keys(timetable)) {
+      const moduleIndexes = seasonIndexes[code]
+      if (moduleIndexes && Object.keys(moduleIndexes).length > 0) {
+        result[code] = moduleIndexes
+      }
     }
-
-    const controller = new AbortController()
-    setIsLoading(true)
-
-    const codes = modulesKey.split(",")
-    const params = new URLSearchParams({ year, semester })
-
-    Promise.all(
-      codes.map((code) =>
-        fetch(`/api/data/modules/${code}/indexes?${params}`, {
-          signal: controller.signal
-        })
-          .then((res) => (res.ok ? res.json() : { indexes: {} }))
-          .then(
-            (data: { indexes: Record<string, Index[]> }) =>
-              [code, data.indexes ?? {}] as const
-          )
-          .catch(() => [code, {}] as const)
-      )
-    )
-      .then((entries) => {
-        const result: AllModuleIndexes = {}
-        for (const [code, indexes] of entries) {
-          if (Object.keys(indexes).length > 0) result[code] = indexes
-        }
-        setAllModuleIndexes(result)
-      })
-      .catch(() => {})
-      .finally(() => setIsLoading(false))
-
-    return () => controller.abort()
-  }, [modulesKey, year, semester])
+    return result
+  }, [timetable, seasonIndexes])
 
   const moduleIndexMap = useMemo<TimetableWithIndex>(() => {
     const map: TimetableWithIndex = {}

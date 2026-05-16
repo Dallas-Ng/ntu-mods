@@ -4,78 +4,47 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 
 import { cn } from "@/lib/utils"
+import { useAllModules } from "@/hooks/use-all-modules"
 import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useTimetable } from "@/hooks/use-timetable"
 
 const TimetableOverview = () => {
   const { timetable } = useTimetable()
   const { year, semester } = useLatestSemester()
+  const { modules } = useAllModules()
   const [examMap, setExamMap] = useState<
     Record<string, { date: string; start_time: string; end_time: string }>
-  >({})
-  const [moduleMetaMap, setModuleMetaMap] = useState<
-    Record<string, { title: string; au: string }>
   >({})
 
   useEffect(() => {
     const controller = new AbortController()
-    const params = new URLSearchParams({ year, semester })
 
-    fetch(`/api/data/exams?${params}`, { signal: controller.signal })
-      .then((res) => (res.ok ? res.json() : { exams: {} }))
-      .then((data) => setExamMap(data.exams ?? {}))
+    fetch(`/data/api/exams/${year}_${semester}.json`, {
+      signal: controller.signal
+    })
+      .then((res) => (res.ok ? res.json() : {}))
+      .then((data) => setExamMap(data ?? {}))
       .catch(() => setExamMap({}))
 
     return () => controller.abort()
   }, [year, semester])
 
-  useEffect(() => {
-    const codes = Object.keys(timetable)
-    if (!codes.length) {
-      setModuleMetaMap({})
-      return
-    }
-
-    const controller = new AbortController()
-    const params = new URLSearchParams({ year, semester })
-
-    Promise.all(
-      codes.map((code) =>
-        fetch(`/api/data/modules/${code}?${params}`, {
-          signal: controller.signal
-        })
-          .then((res) => (res.ok ? res.json() : null))
-          .then((data) =>
-            data
-              ? ([
-                  code,
-                  { title: data.title ?? "", au: data.au ?? "0" }
-                ] as const)
-              : null
-          )
-          .catch(() => null)
-      )
-    ).then((results) => {
-      const map: Record<string, { title: string; au: string }> = {}
-      for (const entry of results) {
-        if (entry) map[entry[0]] = entry[1]
-      }
-      setModuleMetaMap(map)
-    })
-
-    return () => controller.abort()
-  }, [timetable, year, semester])
+  const moduleMetaMap = Object.fromEntries(
+    modules
+      .filter((m) => timetable[m.code])
+      .map((m) => [m.code, { title: m.title, au: m.au }])
+  )
 
   return (
     <div className="">
       <table className="table w-full table-fixed text-center text-xs">
         <thead>
           <tr className="border-b">
-            <th className="w-fit lg:w-[100px]">Index</th>
-            <th className="w-fit lg:w-[100px]">Module</th>
+            <th className="w-fit lg:w-25">Index</th>
+            <th className="w-fit lg:w-25">Module</th>
             <th className="hidden text-left lg:table-cell">Title</th>
             <th className="w-fit">AU</th>
-            <th className="w-fit lg:w-[220px]">Exam</th>
+            <th className="w-fit lg:w-55">Exam</th>
           </tr>
         </thead>
 
@@ -93,9 +62,9 @@ const TimetableOverview = () => {
               <tr
                 key={moduleIdx}
                 className={cn(moduleIdx % 2 == 1 && "bg-muted")}>
-                <td className="w-fit lg:w-[100px]">{indexKey}</td>
+                <td className="w-fit lg:w-25">{indexKey}</td>
 
-                <td className="w-fit lg:w-[100px]">
+                <td className="w-fit lg:w-25">
                   <Link
                     href={`/mods/${moduleKey}`}
                     className="hover:text-primary-alt transition-colors">

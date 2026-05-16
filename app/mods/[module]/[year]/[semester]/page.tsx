@@ -13,7 +13,32 @@ import { getModuleMetadata } from "@/lib/server/get-module-metadata"
 import Breadcrumbs from "@/components/breadcrumbs"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 
+export const dynamic = "force-static"
+export const dynamicParams = false
 export const revalidate = false
+
+export async function generateStaticParams() {
+  const fs = await import("fs/promises")
+  const path = await import("path")
+  const metadataDir = path.join(process.cwd(), "src/data/api/metadata")
+  const files = (await fs.readdir(metadataDir)).filter((f: string) =>
+    f.endsWith(".json")
+  )
+  const params: { module: string; year: string; semester: string }[] = []
+  for (const file of files) {
+    const stem = file.replace(".json", "")
+    const idx = stem.indexOf("_")
+    const year = stem.slice(0, idx)
+    const semester = stem.slice(idx + 1)
+    const data = JSON.parse(
+      await fs.readFile(path.join(metadataDir, file), "utf-8")
+    ) as Record<string, unknown>
+    for (const module of Object.keys(data)) {
+      params.push({ module, year, semester })
+    }
+  }
+  return params
+}
 
 interface Params {
   module: string

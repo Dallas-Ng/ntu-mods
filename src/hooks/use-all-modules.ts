@@ -18,7 +18,7 @@ let fetchPromise: Promise<AllModule[]> | null = null
 
 function fetchAllModules(): Promise<AllModule[]> {
   if (!fetchPromise) {
-    fetchPromise = fetch("/api/data/modules")
+    fetchPromise = fetch("/data/api/modules.json")
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch modules")
         return res.json()

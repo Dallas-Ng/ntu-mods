@@ -14,8 +14,13 @@ import Breadcrumbs from "@/components/breadcrumbs"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 
 export const dynamic = "force-static"
-export const dynamicParams = false
+export const dynamicParams = true
 export const revalidate = false
+
+// AY starts in August. Before Aug → current AY started last calendar year.
+const now = new Date()
+const currentAYStart = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1
+const STATIC_YEAR_CUTOFF = currentAYStart - 1 // pre-build current AY + 1 prior
 
 export async function generateStaticParams() {
   const fs = await import("fs/promises")
@@ -30,6 +35,7 @@ export async function generateStaticParams() {
     const idx = stem.indexOf("_")
     const year = stem.slice(0, idx)
     const semester = stem.slice(idx + 1)
+    if (parseInt(year) < STATIC_YEAR_CUTOFF) continue
     const data = JSON.parse(
       await fs.readFile(path.join(metadataDir, file), "utf-8")
     ) as Record<string, unknown>

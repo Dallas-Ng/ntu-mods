@@ -69,6 +69,16 @@ export default async function Page(props: {
     (s) => !(s.year === year && s.semester === semester)
   )
 
+  const offeringsByYear = otherSemesters.reduce<
+    Record<string, Array<{ year: string; semester: string }>>
+  >((acc, s) => {
+    ;(acc[s.year] ??= []).push(s)
+    return acc
+  }, {})
+  const sortedYears = Object.keys(offeringsByYear).sort((a, b) =>
+    b.localeCompare(a)
+  )
+
   const semesterLabel = (s: { year: string; semester: string }) => {
     const semName =
       s.semester === "S" ? "Special Term" : `Semester ${s.semester}`
@@ -117,17 +127,37 @@ export default async function Page(props: {
 
         {otherSemesters.length > 0 && (
           <div>
-            <h2 className="mb-2 text-lg">Other offerings</h2>
-
-            <div className="flex flex-wrap gap-2">
-              {otherSemesters.map((s) => (
-                <Link
-                  key={`${s.year}-${s.semester}`}
-                  href={getModuleVersionUrl(moduleKey, s.year, s.semester)}
-                  className="hover:bg-accent rounded-md border px-3 py-1 text-sm transition-colors">
-                  {semesterLabel(s)}
-                </Link>
-              ))}
+            <h2 className="mb-4 text-lg">Other offerings</h2>
+            <div className="flex gap-1 overflow-x-auto pb-1 xl:flex-wrap xl:overflow-x-visible xl:pb-0">
+              {sortedYears.map((yr) => {
+                const sems = offeringsByYear[yr]
+                const find = (sem: string) => sems.find((s) => s.semester === sem)
+                return (
+                  <div key={yr} className="bg-muted/40 flex min-w-27.5 flex-col rounded-lg overflow-hidden">
+                    <span className="text-muted-foreground px-3 py-2 text-xs font-medium border-b border-border/50">
+                      AY{yr.slice(2)}/{String(parseInt(yr) + 1).slice(2)}
+                    </span>
+                    <div className="flex flex-col gap-1 p-2">
+                      {(["1", "2", "S"] as const).map((sem) => {
+                        const s = find(sem)
+                        const label = sem === "S" ? "Sp. Term" : `Semester ${sem}`
+                        return s ? (
+                          <Link
+                            key={sem}
+                            href={getModuleVersionUrl(moduleKey, s.year, s.semester)}
+                            className="hover:bg-background border border-border/60 rounded-md px-2 py-1 text-sm transition-colors text-center">
+                            {label}
+                          </Link>
+                        ) : (
+                          <span key={sem} className="text-muted-foreground/35 px-2 py-1 text-sm text-center line-through">
+                            {label}
+                          </span>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         )}

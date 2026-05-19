@@ -4,16 +4,7 @@ description: "Understand what a BDE is at NTU, how it fits graduation requiremen
 date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"
-tags:
-  [
-    "NTU BDE",
-    "Broadening and Deepening Elective",
-    "NTU electives",
-    "NTUMods",
-    "NTU module planning"
-  ]
-thumbnail: ""
-thumbnailAlt: "NTUMods guide to Broadening and Deepening Electives"
+tags: ["NTU BDE", "Broadening and Deepening Elective", "NTU electives", "NTUMods", "NTU module planning", "BDE NTU guide", "NTU elective planning"]
 ---
 
 # What Is a BDE at NTU?
@@ -36,6 +27,8 @@ BDEs can be used to:
 - Study something you are genuinely interested in
 
 For most students, BDEs are the most flexible part of the NTU curriculum.
+
+Not sure which BDE to take? See [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu) for a breakdown by category.
 
 ## What BDE actually means
 
@@ -68,6 +61,8 @@ There is no universal BDE number across NTU.
 
 Always check your official curriculum structure and degree audit. NTUMods helps you browse and plan, but your school and official NTU systems decide what counts.
 
+If you are considering using some of your BDE space for a minor, the AU math changes significantly. See [BDE vs Minor at NTU](/articles/bde-vs-minor-at-ntu) for the full trade-off analysis.
+
 ## BDE, UE, and older terms
 
 You may still hear seniors mention UE, GERPE, or unrestricted electives. These terms are part of older curriculum language and may still appear in module notes, descriptions, or student advice.
@@ -89,6 +84,8 @@ BDEs can come from many schools and disciplines. Common areas students explore i
 
 Availability changes by semester, and not every module is open to every student.
 
+For a deeper look at language BDEs specifically — including how the level system works and what weekly commitment looks like — see [Language BDEs at NTU](/articles/language-bde-at-ntu).
+
 ## How to choose a good BDE
 
 Do not choose a BDE only because someone said it was easy. A good BDE should fit your semester, your learning style, and your graduation plan.
@@ -103,6 +100,8 @@ Use this checklist:
 - Does it help your degree, minor, career, or curiosity?
 
 If two BDEs look equally interesting, choose the one that balances the rest of your semester better.
+
+One useful lens is assessment type — some BDEs are exam-free, others are project-based or attendance-driven. See [Easy BDEs at NTU](/articles/easy-bde-at-ntu) for a breakdown by assessment structure.
 
 ## Final thoughts
 

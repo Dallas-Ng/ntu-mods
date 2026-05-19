@@ -31,12 +31,14 @@ const LandingArticles = () => {
             key={article.slug}
             href={`/articles/${article.slug}`}
             className="group bg-card hover:bg-accent rounded-lg border transition-colors">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={article.thumbnail}
-              alt={article.thumbnailAlt}
-              className="aspect-[16/9] w-full rounded-t-lg border-b object-cover"
-            />
+            {article.thumbnail && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={article.thumbnail}
+                alt={article.thumbnailAlt}
+                className="aspect-video w-full rounded-t-lg border-b object-cover"
+              />
+            )}
 
             <div className="p-4">
               <p className="text-foreground/65 text-xs">

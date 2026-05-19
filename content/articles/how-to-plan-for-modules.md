@@ -5,8 +5,6 @@ date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"
 tags: ["NTU modules", "NTU timetable", "STARS", "NTUMods", "module planning"]
-thumbnail: ""
-thumbnailAlt: "NTUMods module planning guide"
 ---
 
 # How to Plan for Modules at NTU

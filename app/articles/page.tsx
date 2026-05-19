@@ -33,12 +33,14 @@ export default function ArticlesPage() {
               key={article.slug}
               href={`/articles/${article.slug}`}
               className="group bg-card hover:bg-accent rounded-md border transition-colors">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={article.thumbnail}
-                alt={article.thumbnailAlt}
-                className="aspect-[16/9] w-full rounded-t-md border-b object-cover"
-              />
+              {article.thumbnail && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={article.thumbnail}
+                  alt={article.thumbnailAlt}
+                  className="aspect-video w-full rounded-t-md border-b object-cover"
+                />
+              )}
               <div className="p-4">
                 <div className="text-foreground/70 text-xs">
                   {new Date(article.date).toLocaleDateString("en-SG", {
@@ -48,10 +50,10 @@ export default function ArticlesPage() {
                   })}{" "}
                   · {article.readingTime}
                 </div>
-                <h2 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold break-words">
+                <h2 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold wrap-break-word">
                   {article.title}
                 </h2>
-                <p className="text-foreground/80 mt-2 line-clamp-3 text-sm leading-6 break-words">
+                <p className="text-foreground/80 mt-2 line-clamp-3 text-sm leading-6 wrap-break-word">
                   {article.description}
                 </p>
               </div>
@@ -59,7 +61,7 @@ export default function ArticlesPage() {
           ))}
         </div>
       ) : (
-        <div className="bg-card text-foreground/80 rounded-md border p-4 text-sm break-words sm:p-6">
+        <div className="bg-card text-foreground/80 rounded-md border p-4 text-sm wrap-break-word sm:p-6">
           No articles published yet. Copy{" "}
           <code className="bg-muted rounded px-1 py-0.5">
             content/articles/_template.md

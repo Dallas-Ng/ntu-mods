@@ -5,8 +5,6 @@ date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"
 tags: ["NTU", "NTUMods", "Common Core", "CC Modules"]
-thumbnail: ""
-thumbnailAlt: "NTUMods article thumbnail"
 ---
 
 # NTU CC Modules: What They Actually Feel Like

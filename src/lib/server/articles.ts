@@ -111,8 +111,7 @@ const getReadingTime = (content: string) => {
 }
 
 const normaliseImage = (src?: string) => {
-  const image = src ? parseScalar(src) : ""
-  return image || DEFAULT_THUMBNAIL
+  return src ? parseScalar(src) : ""
 }
 
 const getArticleFromFile = (filename: string): Article => {
@@ -160,7 +159,9 @@ export const getAllArticles = () => {
 export const getArticleBySlug = (slug: string) =>
   getAllArticles().find((article) => article.slug === slug)
 
-export const getArticleImageUrl = (thumbnail: string) =>
-  thumbnail.startsWith("http")
-    ? thumbnail
-    : `${siteConfig.url}${thumbnail.startsWith("/") ? thumbnail : `/${thumbnail}`}`
+export const getArticleImageUrl = (thumbnail: string) => {
+  const src = thumbnail || DEFAULT_THUMBNAIL
+  return src.startsWith("http")
+    ? src
+    : `${siteConfig.url}${src.startsWith("/") ? src : `/${src}`}`
+}

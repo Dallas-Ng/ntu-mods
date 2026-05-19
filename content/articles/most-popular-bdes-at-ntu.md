@@ -4,9 +4,7 @@ description: "Explore popular NTU BDEs, compare why students choose them, what t
 date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"
-tags: ["NTU BDE", "popular BDE NTU", "NTU electives", "NTUMods", "easy BDE NTU"]
-thumbnail: ""
-thumbnailAlt: "NTUMods guide to popular BDEs at NTU"
+tags: ["NTU BDE", "popular BDE NTU", "NTU electives", "NTUMods", "NTU electives guide"]
 ---
 
 # Most Popular BDEs at NTU
@@ -56,6 +54,8 @@ Students usually call a BDE popular when it has one or more of these traits:
 
 This is why popular BDEs tend to cluster around a few predictable categories.
 
+If you are looking for BDEs specifically by assessment type — exam-free, project-based, or low weekly commitment — see [Easy BDEs at NTU](/articles/easy-bde-at-ntu) for that angle.
+
 The linked modules below are real modules that appear in the current NTUMods data as BDE-style offerings. Availability, prerequisites, exclusions, and programme restrictions can still change, so always open the module page and check the latest details before planning around it.
 
 ## 1. Language BDEs
@@ -97,6 +97,8 @@ Language BDEs feel productive. Even if they are not always the easiest, students
 - Language modules can become surprisingly time-consuming if you fall behind
 
 Best for students who do not mind weekly consistency and want a skill they can actually use.
+
+For a full breakdown of how NTU's language level system works, which language to choose, and what the weekly commitment actually looks like, see [Language BDEs at NTU](/articles/language-bde-at-ntu).
 
 ## 2. Psychology and social science BDEs
 
@@ -338,7 +340,7 @@ A senior who loves essays will recommend very different BDEs from someone who ha
 
 ### Popular BDEs fill fast
 
-If everyone wants it, registration gets more competitive. Always shortlist backups.
+If everyone wants it, registration gets more competitive. Always shortlist backups. For STARS bidding strategy — when to bid, what to do if your first choice fills, and how add/drop works — see [How to Bid for a BDE at NTU](/articles/how-to-bid-for-bde-at-ntu).
 
 ### The best BDE is the one that fits your semester
 
@@ -349,3 +351,5 @@ A good BDE in one semester can be a terrible BDE in another.
 When NTU students talk about popular BDEs, they usually do not mean a secret list of free grades. They usually mean modules that are manageable, useful, interesting, or survivable.
 
 Do not just ask what is popular. Ask what fits your semester best.
+
+If you are an engineering student planning around a dense core schedule, see [BDE Guide for Engineering Students](/articles/bde-for-engineering-students-ntu) for programme-specific guidance.

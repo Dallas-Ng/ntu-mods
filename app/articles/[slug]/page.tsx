@@ -64,12 +64,14 @@ export default async function ArticlePage(props: {
 
       <div className="mt-5 grid min-w-0 justify-center gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
         <article className="max-w-full min-w-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={article.thumbnail}
-            alt={article.thumbnailAlt}
-            className="mb-5 aspect-[16/9] w-full rounded-md border object-cover sm:mb-6"
-          />
+          {article.thumbnail && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={article.thumbnail}
+              alt={article.thumbnailAlt}
+              className="mb-5 aspect-video w-full rounded-md border object-cover sm:mb-6"
+            />
+          )}
 
           <div className="text-foreground/70 mb-6 border-b pb-4 text-sm sm:mb-8 sm:pb-5">
             {new Date(article.date).toLocaleDateString("en-SG", {

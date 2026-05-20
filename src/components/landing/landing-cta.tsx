@@ -26,13 +26,15 @@ const LandingCTA = () => {
           Plan, share and find out more about different modules in NTU.
         </p>
 
-        <div className="my-4 flex justify-center gap-2">
+        <div className="my-4 flex flex-col justify-center gap-2 md:flex-row">
           <Link href="/timetable">
-            <Button>Build My Timetable Now</Button>
+            <Button className="w-full md:w-fit">Build My Timetable Now</Button>
           </Link>
 
           <Link href="/mods">
-            <Button variant="outline">Find a Module</Button>
+            <Button className="w-full md:w-fit" variant="outline">
+              Find a Module
+            </Button>
           </Link>
         </div>
       </div>

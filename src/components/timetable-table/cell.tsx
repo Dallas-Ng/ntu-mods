@@ -20,6 +20,7 @@ interface Props {
   onClick?: () => void
   previewCandidate?: boolean
   previewActive?: boolean
+  pickerDimmed?: boolean
 }
 
 export const TimetableTableCell = (props: Props) => {
@@ -37,7 +38,8 @@ export const TimetableTableCell = (props: Props) => {
     onMouseOut,
     onClick,
     previewCandidate = false,
-    previewActive = false
+    previewActive = false,
+    pickerDimmed = false
   } = props
 
   // Settings for cells
@@ -77,9 +79,11 @@ export const TimetableTableCell = (props: Props) => {
           "flex h-full cursor-pointer items-center rounded-lg p-[var(--cell-padding)] break-words",
           indexStyle.background,
           previewCandidate &&
-            "ring-foreground/30 opacity-50 ring-1 hover:opacity-90",
-          previewActive && "ring-primary/70 ring-2",
-          dimmed && "opacity-30 dark:opacity-20"
+            "ring-primary/80 hover:ring-primary shadow-md ring-1",
+          previewActive && "ring-primary shadow-lg ring-1",
+          dimmed && "opacity-30 dark:opacity-20",
+          pickerDimmed &&
+            "pointer-events-none opacity-[0.12] dark:opacity-[0.08]"
         )}
         onClick={onClick}>
         <div className="w-full">

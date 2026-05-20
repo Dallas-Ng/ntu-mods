@@ -156,6 +156,10 @@ export const TimetableTable = (props: Props) => {
                             !!indexPickerEnabled &&
                             indexPicker.activeModuleKey === moduleKey &&
                             index.key !== indexPicker.activeIndexKey
+                          const pickerDimmed =
+                            !!indexPickerEnabled &&
+                            !!indexPicker.activeModuleKey &&
+                            indexPicker.activeModuleKey !== moduleKey
 
                           return (
                             <TimetableTableCell
@@ -179,6 +183,7 @@ export const TimetableTable = (props: Props) => {
                               }
                               previewActive={previewActive}
                               previewCandidate={previewCandidate}
+                              pickerDimmed={pickerDimmed}
                               onClick={() =>
                                 handleIndexClick(
                                   moduleKey,

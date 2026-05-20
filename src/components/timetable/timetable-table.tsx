@@ -72,7 +72,7 @@ const TimetablePageTable = ({
           onActiveModuleChange: setActiveModuleKey,
           onIndexSelect: (moduleKey, indexKey) => {
             updateItemIndex(moduleKey, indexKey)
-            setActiveModuleKey(moduleKey)
+            setActiveModuleKey(null)
           }
         }}
       />

@@ -58,6 +58,10 @@ export const siteConfig = {
       title: "NTU Module Planning Guides",
       desc: "Read NTUMods guides on planning NTU modules, choosing BDEs, understanding Common Core modules, balancing workload, and preparing for STARS."
     },
+    sitemap: {
+      title: "NTUMods Sitemap",
+      desc: "Browse every major NTUMods page, planning guide, and NTU module detail page from one organized sitemap."
+    },
     debug: {
       title: "Reset NTUMods Data",
       desc: "Inspect and reset local NTUMods timetable data when your planner, settings, or saved modules behave unexpectedly after an update."

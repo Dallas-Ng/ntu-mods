@@ -104,3 +104,45 @@ interface Feedback {
   author: string
   created_at: Date
 }
+
+type TimetableCreationMode = "default" | "generation" | "ai"
+
+interface LunchBreak {
+  day: number
+  startTime: number
+  endTime: number
+}
+
+interface BlacklistedTimeslot {
+  day: number
+  startTime: number
+  endTime: number
+}
+
+interface GenerationConfig {
+  dayStartTime: number
+  dayEndTime: number
+  maxConsecutiveSlots: number
+  minGapBetweenClasses: number
+  lunchBreaks: LunchBreak[]
+  loadPreference: "compact" | "spread"
+  skippableTypes: IndexType[]
+  blacklistedTimeslots: BlacklistedTimeslot[]
+  preferredFreeDays: number[]
+  maxDailyHours: number
+  preferredDayOrder: "front-load" | "back-load" | "none"
+  avoidBackToBackTypes: [IndexType, IndexType][]
+}
+
+interface GeneratedCombination {
+  timetable: Timetable
+  score: number
+  freeDays: number
+  daysWithClass: number
+}
+
+interface ChatMessage {
+  id: string
+  role: "assistant" | "user"
+  content: string
+}

@@ -1,8 +1,26 @@
 import { StateCreator } from "zustand"
 
+const DEFAULT_GENERATION_CONFIG: GenerationConfig = {
+  dayStartTime: 800,
+  dayEndTime: 1800,
+  maxConsecutiveSlots: 6,
+  minGapBetweenClasses: 0,
+  lunchBreaks: [],
+  loadPreference: "spread",
+  skippableTypes: [],
+  blacklistedTimeslots: [],
+  preferredFreeDays: [],
+  maxDailyHours: 0,
+  preferredDayOrder: "none",
+  avoidBackToBackTypes: []
+}
+
 export interface TimetableSlice {
   timetables: Timetable[]
   timetableIndex: number
+  timetableCreationMode: TimetableCreationMode
+  generationConfig: GenerationConfig
+  hasOnboarded: boolean
   migrateTimetable: (timetable: Timetable) => void
   updateTimetable: (timetable: Timetable, timetableIndex: number) => void
   addItemToTimetable: (moduleKey: string, indexKey: string) => void
@@ -10,11 +28,17 @@ export interface TimetableSlice {
   removeItemFromTimetable: (moduleKey: string) => void
   updateTimetableIndex: (timetableIndex: number) => void
   resetTimetables: () => void
+  setTimetableCreationMode: (mode: TimetableCreationMode) => void
+  updateGenerationConfig: (config: Partial<GenerationConfig>) => void
+  setHasOnboarded: (value: boolean) => void
 }
 
 export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   timetables: [{}, {}, {}, {}, {}],
   timetableIndex: 0,
+  timetableCreationMode: "default",
+  generationConfig: DEFAULT_GENERATION_CONFIG,
+  hasOnboarded: false,
   migrateTimetable: (timetable: Timetable) =>
     set((state) => ({
       timetables: [{ ...timetable }, {}, {}, {}, {}]
@@ -77,5 +101,16 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   },
   resetTimetables: () => {
     set((_state) => ({ timetables: [{}, {}, {}, {}, {}], timetableIndex: 0 }))
+  },
+  setTimetableCreationMode: (mode: TimetableCreationMode) => {
+    set((_state) => ({ timetableCreationMode: mode }))
+  },
+  updateGenerationConfig: (config: Partial<GenerationConfig>) => {
+    set((state) => ({
+      generationConfig: { ...state.generationConfig, ...config }
+    }))
+  },
+  setHasOnboarded: (value: boolean) => {
+    set((_state) => ({ hasOnboarded: value }))
   }
 })

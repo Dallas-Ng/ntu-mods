@@ -44,7 +44,7 @@ const ScreenshotInfoButton = () => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-h-[90svh]">
+      <DialogContent className="max-h-[90svh]" aria-describedby={undefined}>
         <Tabs
           defaultValue="ios"
           value={tabValue}

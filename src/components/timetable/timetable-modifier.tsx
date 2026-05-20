@@ -4,13 +4,20 @@ import { useState, type MouseEvent } from "react"
 import { TrashIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { useBoundState } from "@/state/bound.state"
 import { useTimetable } from "@/hooks/use-timetable"
 
+import TimetableAiChat from "./mode-ai/timetable-ai-chat"
+import TimetableGenerationConfig from "./mode-generation/timetable-generation-config"
 import TimetableIndexModifier from "./timetable-index-modifier"
+import TimetableModeSelector from "./timetable-mode-selector"
 import TimetableModulesSelect from "./timetable-modules-select"
+import TimetableOnboarding from "./timetable-onboarding"
 
 const TimetableModifier = () => {
   const { timetable, removeItemFromTimetable } = useTimetable()
+  const mode = useBoundState((s) => s.timetableCreationMode)
+  const hasOnboarded = useBoundState((s) => s.hasOnboarded)
   const [activeKey, setActiveKey] = useState<string | null>(null)
 
   const handleRemoveClick = (
@@ -23,12 +30,19 @@ const TimetableModifier = () => {
 
   return (
     <div className="flex size-full flex-col space-y-4">
+      <TimetableModeSelector />
+
+      {/* Onboarding — shown as dialog/drawer, renders nothing inline */}
+      {!hasOnboarded && <TimetableOnboarding />}
+
+      {/* Module search — always shown */}
       <div className="relative z-2 h-10 w-full rounded-lg">
         <div className="absolute top-0 left-0 w-full">
           <TimetableModulesSelect />
         </div>
       </div>
 
+      {/* Module list — always shown */}
       <div className={cn("rounded-lg border-2", activeKey && "rounded-b-none")}>
         <div className="text-muted-foreground p-2 text-center text-xs">
           Registered Modules
@@ -82,6 +96,10 @@ const TimetableModifier = () => {
           </>
         )}
       </div>
+
+      {/* Mode-specific panels */}
+      {mode === "generation" && <TimetableGenerationConfig />}
+      {mode === "ai" && <TimetableAiChat />}
     </div>
   )
 }

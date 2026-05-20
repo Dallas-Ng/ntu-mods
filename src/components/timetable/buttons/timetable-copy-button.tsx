@@ -130,7 +130,7 @@ const TimetableCopyButton = () => {
         <div>{trigger}</div>
       </DialogTrigger>
 
-      <DialogContent className="p-2">
+      <DialogContent className="p-2" aria-describedby={undefined}>
         <DialogHeader className="p-2 pb-0">Copy to Timetable</DialogHeader>
 
         {Content}

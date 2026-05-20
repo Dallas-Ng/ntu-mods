@@ -1,14 +1,15 @@
 "use client"
 
+import { useState } from "react"
 import dynamic from "next/dynamic"
+import { MousePointerClick } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import { Migration } from "@/components/migration"
 import { TimetableTableLoader } from "@/components/timetable-table/table-loader"
-import { TimetableDownloadCalendarButtonLoading } from "@/components/timetable/buttons/timetable-download-calendar-button-loading"
+import { TimetableActionsDropdownLoading } from "@/components/timetable/buttons/timetable-actions-dropdown-loading"
 import { TimetablePlanSwitcherLoading } from "@/components/timetable/buttons/timetable-plan-switcher-loading"
-import { StarsScreenshotButtonLoading } from "@/components/timetable/buttons/timetable-screenshot-button-loading"
-import { TimetableShareButtonLoading } from "@/components/timetable/buttons/timetable-share-button-loading"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import { TimetableModifierLoader } from "@/components/timetable/timetable-modifier-loading"
 import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview-loading"
@@ -18,23 +19,9 @@ const TimetableHiddenContentHelper = dynamic(
   { ssr: false }
 )
 
-const TimetableScreenshotButton = dynamic(
-  () => import("@/components/timetable/buttons/timetable-screenshot-button"),
-  {
-    ssr: false,
-    loading: () => <StarsScreenshotButtonLoading />
-  }
-)
-
-const TimetableDownloadCalendarButton = dynamic(
-  () =>
-    import("@/components/timetable/buttons/timetable-download-calendar-button"),
-  { ssr: false, loading: () => <TimetableDownloadCalendarButtonLoading /> }
-)
-
-const TimetableShareButton = dynamic(
-  () => import("@/components/timetable/buttons/timetable-share-button"),
-  { ssr: false, loading: () => <TimetableShareButtonLoading /> }
+const TimetableActionsDropdown = dynamic(
+  () => import("@/components/timetable/buttons/timetable-actions-dropdown"),
+  { ssr: false, loading: () => <TimetableActionsDropdownLoading /> }
 )
 
 const TimetablePlanSwitcher = dynamic(
@@ -76,6 +63,8 @@ const MobileTimetableModifierButton = dynamic(
 )
 
 const Page = () => {
+  const [indexPickerEnabled, setIndexPickerEnabled] = useState(false)
+
   return (
     <>
       <Migration />
@@ -84,20 +73,32 @@ const Page = () => {
         <Header title="Timetable" />
 
         <div className="flex justify-between gap-2">
-          <TimetablePlanSwitcher />
-
           <div className="flex gap-2">
-            <TimetableScreenshotButton />
-            <TimetableDownloadCalendarButton />
-            <TimetableShareButton />
+            <TimetablePlanSwitcher />
+
+            <Button
+              variant={indexPickerEnabled ? "default" : "outline"}
+              className="w-35 gap-2"
+              onClick={() => setIndexPickerEnabled((v) => !v)}>
+              <MousePointerClick className="size-4" />
+              {indexPickerEnabled ? "Stop picking" : "Pick indexes"}
+            </Button>
+
+            {indexPickerEnabled && (
+              <span className="text-muted-foreground hidden self-center text-xs sm:inline">
+                Tap a block to see its other indexes
+              </span>
+            )}
           </div>
+
+          <TimetableActionsDropdown />
         </div>
 
         <div className="flex h-full items-start justify-between gap-4">
           <div className="size-full space-y-4 md:w-[60%] lg:w-[70%]">
             {/* Needs these divs to make space-y-4 work in loading time */}
             <div>
-              <TimetableTable />
+              <TimetableTable indexPickerEnabled={indexPickerEnabled} />
             </div>
 
             <div>

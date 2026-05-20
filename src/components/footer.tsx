@@ -44,7 +44,7 @@ const Footer = () => {
             {siteConfig.name}
           </Link>
 
-          <p className="text-muted-foreground max-w-xs leading-6">
+          <p className="text-muted-foreground leading-6">
             Plan NTU timetables, browse modules, compare indexes, and keep
             course planning links close at hand.
           </p>

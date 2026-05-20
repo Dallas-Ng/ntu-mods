@@ -48,7 +48,7 @@ export default function IndexPage() {
       <div className="relative z-[3] mt-10 space-y-10 p-3">
         <Features />
 
-        <div className="container py-20">
+        <div className="xl:container xl:py-20">
           <Articles />
         </div>
 

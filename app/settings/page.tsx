@@ -40,11 +40,8 @@ export default function SettingsPage() {
         <div>
           <Link href="/debug">
             <div className="flex items-center gap-2 text-sm hover:underline">
-              <ServerCrash className="size-4" />
-              <span>
-                Having Problems with the System? Click here if you need to reset
-                the application
-              </span>
+              <ServerCrash className="size-4 shrink-0" />
+              <span>Having problems? Click here to reset the application.</span>
             </div>
           </Link>
         </div>

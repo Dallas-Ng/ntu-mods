@@ -4,7 +4,8 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Menu, Settings, X } from "lucide-react"
+import { useTheme } from "next-themes"
+import { Menu, Moon, Settings, Sun, X } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -36,6 +37,7 @@ const RESOURCE_LINKS = [
 const Navbar = () => {
   const pathname = usePathname()
   const router = useRouter()
+  const { theme, setTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -157,7 +159,9 @@ const Navbar = () => {
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-1 sm:gap-2">
-          <ThemeToggle />
+          <div className="hidden md:block">
+            <ThemeToggle />
+          </div>
 
           <Button
             aria-label="Settings Button"
@@ -248,11 +252,21 @@ const Navbar = () => {
                 <DrawerClose asChild>
                   <button
                     onClick={() => router.push("/settings")}
-                    className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-3 text-sm font-semibold transition-colors">
+                    className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                     <Settings className="size-4" />
                     Settings
                   </button>
                 </DrawerClose>
+                <button
+                  onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                  className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                  {theme === "light" ? (
+                    <Sun className="size-4" />
+                  ) : (
+                    <Moon className="size-4" />
+                  )}
+                  Theme
+                </button>
               </div>
             </DrawerContent>
           </Drawer>

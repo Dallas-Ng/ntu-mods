@@ -4,25 +4,34 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Menu, Settings } from "lucide-react"
+import { Menu, Settings, X } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
+  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
-  NavigationMenuList
+  NavigationMenuList,
+  NavigationMenuTrigger
 } from "@/components/ui/navigation-menu"
 
 import ThemeToggle from "./theme-toggle"
 import { Button } from "./ui/button"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from "./ui/dropdown-menu"
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerTitle,
+  DrawerTrigger
+} from "./ui/drawer"
+
+const RESOURCE_LINKS = [
+  { label: "Changelog", route: "/changelog" },
+  { label: "Help", route: "/help" },
+  { label: "Sitemap", route: "/sitemap" }
+]
 
 const Navbar = () => {
   const pathname = usePathname()
@@ -42,7 +51,7 @@ const Navbar = () => {
   }, [])
 
   const primaryLinks = siteConfig.navLinks.slice(0, 2)
-  const menuLinks = siteConfig.navLinks.slice(2)
+  const resourcesActive = RESOURCE_LINKS.some((l) => pathname.startsWith(l.route))
 
   return (
     <header
@@ -58,7 +67,7 @@ const Navbar = () => {
               alt="Logo"
               width={30}
               height={30}
-              className="size-[30px] object-contain"
+              className="size-7.5 object-contain"
               priority
             />
 
@@ -73,11 +82,14 @@ const Navbar = () => {
             </span>
           </Link>
 
-          <NavigationMenu className="ml-2 hidden items-center md:flex">
+          {/* Desktop nav */}
+          <NavigationMenu
+            className="ml-2 hidden items-center md:flex"
+            viewport={false}>
             <NavigationMenuList>
               {siteConfig.navLinks.map((link) => (
                 <NavigationMenuItem key={link.route}>
-                  <NavigationMenuLink key={link.route} asChild>
+                  <NavigationMenuLink asChild>
                     <Link
                       href={link.route}
                       className={cn(
@@ -91,9 +103,42 @@ const Navbar = () => {
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               ))}
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger
+                  className={cn(
+                    "text-sm font-semibold",
+                    resourcesActive
+                      ? "text-slate-950 dark:text-slate-100"
+                      : "text-slate-500 dark:text-slate-400"
+                  )}>
+                  Resources
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="flex w-36 flex-col gap-1 p-1">
+                    {RESOURCE_LINKS.map((link) => (
+                      <li key={link.route}>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href={link.route}
+                            className={cn(
+                              "hover:bg-accent hover:text-accent-foreground block rounded-sm px-3 py-1.5 text-sm font-medium transition-colors",
+                              pathname.startsWith(link.route)
+                                ? "text-foreground"
+                                : "text-muted-foreground"
+                            )}>
+                            {link.label}
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
 
+          {/* Mobile inline quick links */}
           <nav className="ml-2 flex min-w-0 items-center gap-1 md:hidden">
             {primaryLinks.map((link) => (
               <Link
@@ -123,8 +168,9 @@ const Navbar = () => {
             <Settings className="size-5" />
           </Button>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          {/* Mobile drawer */}
+          <Drawer direction="right">
+            <DrawerTrigger asChild>
               <Button
                 aria-label="Open navigation menu"
                 size="icon"
@@ -132,27 +178,84 @@ const Navbar = () => {
                 className="md:hidden">
                 <Menu className="size-5" />
               </Button>
-            </DropdownMenuTrigger>
+            </DrawerTrigger>
 
-            <DropdownMenuContent align="end" className="w-44">
-              {menuLinks.map((link) => (
-                <DropdownMenuItem key={link.route} asChild>
-                  <Link
-                    href={link.route}
-                    className={cn(
-                      pathname.includes(link.route) && "text-foreground"
-                    )}>
-                    {link.label}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
+            <DrawerContent aria-describedby={undefined} className="flex flex-col p-0">
+              <DrawerTitle className="sr-only">Navigation menu</DrawerTitle>
+              {/* Header */}
+              <div className="flex items-center justify-between border-b px-5 py-4">
+                <Link href="/" className="flex items-center gap-2">
+                  <Image
+                    src="/logo.png"
+                    alt="Logo"
+                    width={24}
+                    height={24}
+                    className="size-6 object-contain"
+                  />
+                  <span className="font-bold">{siteConfig.name}</span>
+                </Link>
+                <DrawerClose asChild>
+                  <Button size="icon" variant="ghost">
+                    <X className="size-4" />
+                  </Button>
+                </DrawerClose>
+              </div>
 
-              <DropdownMenuItem onClick={() => router.push("/settings")}>
-                <Settings className="mr-2 size-4" />
-                Settings
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              {/* Nav links */}
+              <nav className="flex flex-col p-3">
+                <p className="text-muted-foreground/60 mb-1 px-4 text-[11px] font-semibold tracking-widest uppercase">
+                  Menu
+                </p>
+                {siteConfig.navLinks.map((link) => (
+                  <DrawerClose key={link.route} asChild>
+                    <Link
+                      href={link.route}
+                      className={cn(
+                        "hover:bg-accent rounded-md px-4 py-2.5 text-sm font-medium transition-colors",
+                        pathname.includes(link.route)
+                          ? "text-foreground"
+                          : "text-muted-foreground"
+                      )}>
+                      {link.label}
+                    </Link>
+                  </DrawerClose>
+                ))}
+
+                {/* Resources section */}
+                <div className="mt-4 border-t pt-4">
+                  <p className="text-muted-foreground/60 mb-1 px-4 text-[11px] font-semibold tracking-widest uppercase">
+                    Resources
+                  </p>
+                  {RESOURCE_LINKS.map((link) => (
+                    <DrawerClose key={link.route} asChild>
+                      <Link
+                        href={link.route}
+                        className={cn(
+                          "hover:bg-accent block rounded-md px-4 py-2.5 text-sm font-medium transition-colors",
+                          pathname.startsWith(link.route)
+                            ? "text-foreground"
+                            : "text-muted-foreground"
+                        )}>
+                        {link.label}
+                      </Link>
+                    </DrawerClose>
+                  ))}
+                </div>
+              </nav>
+
+              {/* Footer */}
+              <div className="mt-auto border-t p-3">
+                <DrawerClose asChild>
+                  <button
+                    onClick={() => router.push("/settings")}
+                    className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-3 text-sm font-semibold transition-colors">
+                    <Settings className="size-4" />
+                    Settings
+                  </button>
+                </DrawerClose>
+              </div>
+            </DrawerContent>
+          </Drawer>
         </div>
       </div>
     </header>

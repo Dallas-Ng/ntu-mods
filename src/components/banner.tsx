@@ -44,6 +44,13 @@ export const Banner = {
       <BannerWrapper>NTU Mods has new features!</BannerWrapper>
     </Link>
   ),
+  bdeGuides: () => (
+    <Link href="/articles">
+      <BannerWrapper>
+        New guides: BDE planning, easy BDEs, language BDEs and more →
+      </BannerWrapper>
+    </Link>
+  ),
   experienceProblems: () => (
     <BannerWrapper>
       Clicking of courses in the timetable has problems, please use the

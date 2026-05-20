@@ -70,8 +70,7 @@ export const siteConfig = {
   navLinks: [
     { label: "Timetable", route: "/timetable" },
     { label: "Mods", route: "/mods" },
-    { label: "Articles", route: "/articles" },
-    { label: "Help", route: "/help" }
+    { label: "Articles", route: "/articles" }
   ],
   links: {
     github: "https://github.com/Dallas-Ng",

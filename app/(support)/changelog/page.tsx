@@ -131,6 +131,72 @@ const ChangelogReleaseSection = ({
 
 const CHANGELOG: ChangelogRelease[] = [
   {
+    title: "Timetable modes and index picking",
+    date: "May 2026",
+    items: [
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Improved index picker focus on the{" "}
+            <ChangelogLink href="/timetable">timetable</ChangelogLink>: other
+            modules dim heavily when picking, alternate indexes are clearly
+            highlighted, and selecting resets immediately for the next pick.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Consolidated screenshot, calendar export, and share into a single{" "}
+            <ChangelogLink href="/timetable">timetable</ChangelogLink> actions
+            dropdown (•••).
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Added a mode selector to the{" "}
+            <ChangelogLink href="/timetable">timetable</ChangelogLink> —
+            Timetable, Generate, and AI modes (generation and AI coming soon).
+          </>
+        )
+      }
+    ]
+  },
+  {
+    title: "More BDE guides and navigation",
+    date: "May 2026",
+    items: [
+      {
+        category: "Content",
+        content: (
+          <>
+            Published 6 new BDE guides covering engineering BDEs, BDE vs minor,
+            easy BDEs, bidding, language BDEs, and an expanded overview — all in{" "}
+            <ChangelogLink href="/articles">Articles</ChangelogLink>.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Added a <ChangelogLink href="/sitemap">Sitemap</ChangelogLink> page
+            listing all pages on the site.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: "Updated footer with better interlinks across site sections."
+      }
+    ]
+  },
+  {
     title: "Better timetable planning",
     date: "Apr 2026",
     items: [

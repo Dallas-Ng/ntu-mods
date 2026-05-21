@@ -5,7 +5,7 @@ date: "2026-05-19"
 updated: "2026-05-19"
 author: "NTUMods"
 category: "STARS"
-tags: ["NTU BDE", "STARS bidding NTU", "BDE registration NTU", "NTUMods", "NTU STARS", "NTU electives"]
+tags: ["NTU BDE", "STARS bidding NTU", "BDE registration NTU", "NTUMods", "NTU STARS", "NTU electives", "ntu stars", "stars bidding ntu", "ntu module registration", "bde ntu registration"]
 ---
 
 # How to Bid for a BDE at NTU (STARS Registration Guide)
@@ -14,7 +14,7 @@ Most BDE advice is about which module to take. Almost none of it covers how to a
 
 For popular BDEs, this matters. A module that fills in the first round of bidding is gone regardless of how good your reasons are for wanting it. Knowing how STARS works and what to do when things go wrong makes a real difference.
 
-If you are still figuring out which BDE to take, start with [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu) or [Easy BDEs at NTU](/articles/easy-bde-at-ntu). Come back here once you have something to bid for.
+If you are still figuring out what a BDE is, start with [What Is a BDE at NTU](/articles/what-is-a-bde-at-ntu). If you know what a BDE is but not which one to pick, see [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu) or [Easy BDEs at NTU](/articles/easy-bde-at-ntu). Come back here once you have something to bid for.
 
 ## How BDE registration works at NTU
 
@@ -105,4 +105,4 @@ This is not a comfortable situation, but it works. Students who actively use add
 
 Registration is a preparation game. Students who go into STARS with a shortlist, verified indexes, and confirmed programme eligibility get their preferred BDE far more often than those who decide during the bidding window.
 
-Browse BDE options on [NTUMods](/mods) and build your shortlist before registration opens. For help with the broader module planning process, see [How to Plan Your NTU Modules](/articles/how-to-plan-for-modules).
+Browse BDE options on [NTUMods](/mods) or see [Complete NTU BDE List](/articles/complete-ntu-bde-list) for a full breakdown by category. Build your shortlist before registration opens. For help with the broader module planning process, see [How to Plan Your NTU Modules](/articles/how-to-plan-for-modules).

@@ -5,7 +5,7 @@ date: "2026-05-19"
 updated: "2026-05-19"
 author: "NTUMods"
 category: "BDE"
-tags: ["language BDE NTU", "NTU language elective", "NTU BDE", "Japanese BDE NTU", "Korean BDE NTU", "NTUMods", "NTU electives"]
+tags: ["language BDE NTU", "NTU language elective", "NTU BDE", "Japanese BDE NTU", "Korean BDE NTU", "NTUMods", "NTU electives", "bde ntu", "ntu bde language", "japanese ntu", "korean ntu"]
 ---
 
 # Language BDEs at NTU: What to Expect Before You Register
@@ -14,7 +14,7 @@ Language BDEs are popular for good reasons. They have a clear structure, you com
 
 But they also work differently from almost every other BDE you can take, and the differences catch a lot of students off guard. If you are looking at a language BDE and want to know what you are actually signing up for — attendance, time commitment, which language, whether your prior experience helps or disqualifies you — this guide covers it.
 
-For a broader overview of BDE categories, see [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu).
+New to BDEs entirely? See [What Is a BDE at NTU](/articles/what-is-a-bde-at-ntu) first. For a broader overview of BDE categories, see [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu).
 
 ## How the language BDE level system works
 

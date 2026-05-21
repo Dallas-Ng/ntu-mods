@@ -1,11 +1,11 @@
 ---
-title: "How to Plan for Modules at NTU"
-description: "Learn how to plan NTU modules with NTUMods: balance AUs and workload, check prerequisites, avoid clashes, and prepare backup indexes for STARS."
+title: "How to Plan Your NTU Modules: A Step-by-Step Guide"
+description: "Avoid timetable clashes, meet prerequisites, and lock in the best timetable before STARS opens. A step-by-step NTU module planning guide."
 date: "2026-04-29"
-updated: "2026-04-29"
+updated: "2026-05-21"
 author: "NTUMods"
 category: "Module Planning"
-tags: ["NTU modules", "NTU timetable", "STARS", "NTUMods", "module planning"]
+tags: ["NTU modules", "NTU timetable", "STARS", "NTUMods", "module planning", "ntu module selection", "ntu course planner", "module planning ntu"]
 ---
 
 # How to Plan for Modules at NTU
@@ -30,7 +30,7 @@ Good candidates to place first include:
 - Lab-heavy modules with limited slots
 - Final-year project or internship-adjacent requirements
 
-Once the fixed pieces are in place, use electives and BDEs to smooth out the rest of the timetable.
+Once the fixed pieces are in place, use electives and BDEs to smooth out the rest of the timetable. If you are still deciding which BDE to take, see [Easy BDEs at NTU](/articles/easy-bde-at-ntu) for a breakdown by assessment type, or [BDE vs Minor at NTU](/articles/bde-vs-minor-at-ntu) if you are weighing a minor.
 
 ## Check prerequisites and exclusions
 
@@ -76,7 +76,7 @@ Also watch coursework clustering. Project modules may not have final exams, but 
 
 ## Keep backup modules ready
 
-Module registration is not only about preference. Slots, indexes, waitlists, and clashes can change your plan quickly.
+Module registration is not only about preference. Slots, indexes, waitlists, and clashes can change your plan quickly. For a full walkthrough of how STARS bidding works and what to do if your first choice fills up, see [How to Bid for a BDE at NTU](/articles/how-to-bid-for-bde-at-ntu).
 
 Keep a short backup list before registration starts:
 
@@ -102,4 +102,4 @@ Then build the timetable in that order. After that, check prerequisites, restric
 
 ## Final thoughts
 
-Module planning is easier when you treat it as a system instead of a one-time scramble. Clear requirements first, protect future prerequisites, avoid workload pileups, and keep a backup plan. Your semester does not need to be perfect. It just needs to be sturdy enough to survive real life.
+Module planning is easier when you treat it as a system instead of a one-time scramble. Clear requirements first, protect future prerequisites, avoid workload pileups, and keep a backup plan. For a broader framework on choosing between module types, see [NTU Module Selection Guide](/articles/ntu-module-selection-guide). Your semester does not need to be perfect. It just needs to be sturdy enough to survive real life.

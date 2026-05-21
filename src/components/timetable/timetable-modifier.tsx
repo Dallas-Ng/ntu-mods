@@ -12,12 +12,9 @@ import TimetableGenerationConfig from "./mode-generation/timetable-generation-co
 import TimetableIndexModifier from "./timetable-index-modifier"
 import TimetableModeSelector from "./timetable-mode-selector"
 import TimetableModulesSelect from "./timetable-modules-select"
-import TimetableOnboarding from "./timetable-onboarding"
-
 const TimetableModifier = () => {
   const { timetable, removeItemFromTimetable } = useTimetable()
   const mode = useBoundState((s) => s.timetableCreationMode)
-  const hasOnboarded = useBoundState((s) => s.hasOnboarded)
   const [activeKey, setActiveKey] = useState<string | null>(null)
 
   const handleRemoveClick = (
@@ -31,9 +28,6 @@ const TimetableModifier = () => {
   return (
     <div className="flex size-full flex-col space-y-4">
       <TimetableModeSelector />
-
-      {/* Onboarding — shown as dialog/drawer, renders nothing inline */}
-      {!hasOnboarded && <TimetableOnboarding />}
 
       {/* Module search — always shown */}
       <div className="relative z-2 h-10 w-full rounded-lg">

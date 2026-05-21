@@ -168,6 +168,18 @@ export const getArticleCategories = () =>
     (a, b) => a.localeCompare(b)
   )
 
+export const slugifyCategory = (category: string) =>
+  category
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+
+export const getArticlesByCategory = (categorySlug: string) =>
+  getAllArticles().filter(
+    (article) => slugifyCategory(article.category) === categorySlug
+  )
+
 export const getArticleImageUrl = (thumbnail: string) => {
   const src = thumbnail || DEFAULT_THUMBNAIL
   return src.startsWith("http")

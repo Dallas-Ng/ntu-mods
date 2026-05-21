@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Image from "next/image"
 
+import { siteConfig } from "@/config/site"
 import Articles from "@/components/landing/landing-articles"
 import CTA from "@/components/landing/landing-cta"
 import Features from "@/components/landing/landing-features"
@@ -13,6 +14,23 @@ export const metadata: Metadata = {
   description:
     "Plan NTU timetables, browse modules, compare indexes, check exams, share schedules, and export calendars or wallpapers in one course planning tool.",
   alternates: { canonical: "/" }
+}
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: siteConfig.url,
+  description:
+    "NTU timetable planner and module browser for Nanyang Technological University students.",
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${siteConfig.url}/mods?searchTerm={search_term_string}`
+    },
+    "query-input": "required name=search_term_string"
+  }
 }
 
 export default function IndexPage() {
@@ -54,6 +72,11 @@ export default function IndexPage() {
 
         <Roadmap />
       </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
     </LayoutDefault>
   )
 }

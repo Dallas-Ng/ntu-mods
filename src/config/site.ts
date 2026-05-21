@@ -13,7 +13,11 @@ export const siteConfig = {
         "STARS",
         "ntumods",
         "ntu mods",
-        "ntu stars"
+        "ntu stars",
+        "ntu courses",
+        "ntu timetable",
+        "ntu modules",
+        "ntu course planner"
       ],
       authors: [
         {
@@ -23,16 +27,16 @@ export const siteConfig = {
       ]
     },
     timetable: {
-      title: "NTU Timetable Planner",
-      desc: "Build your NTU timetable by searching modules and indexes, checking clashes, comparing class times, and exporting your schedule to calendar, image, or share link."
+      title: "NTU Timetable Planner — Build Your STARS Schedule | NTUMods",
+      desc: "Plan your NTU timetable for STARS registration. Search modules and indexes, check clashes, compare class times, and export to calendar or share link. No login required."
     },
     share: {
       title: "Shared NTU Timetable",
       desc: "Open a shared NTU timetable, review the modules and class times, then copy it into your own NTUMods planner to edit."
     },
     mods: {
-      title: "NTU Modules and Indexes",
-      desc: "Search NTU modules by code, title, faculty, level, AU, and type. View descriptions, prerequisites, exams, indexes, class times, and venues."
+      title: "NTU Modules, Courses & Indexes | NTUMods",
+      desc: "Browse all NTU courses and modules. Search by code or title, compare indexes, check exam dates, view class times, venues, and prerequisites. Updated each semester."
     },
     help: {
       title: "NTUMods Help",

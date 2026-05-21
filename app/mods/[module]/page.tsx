@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
+import { siteConfig } from "@/config/site"
 import { generateTimetableMatrix } from "@/lib/generate-timetable-matrix"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import { getLatestSemester } from "@/lib/server/get-latest-semester"
@@ -179,6 +180,45 @@ export default async function Page(props: {
           />
         </div>
       </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "Course",
+              name: `${moduleKey} ${moduleData.title}`,
+              courseCode: moduleKey,
+              description: moduleData.description || moduleData.title,
+              numberOfCredits: String(moduleData.au),
+              provider: {
+                "@type": "CollegeOrUniversity",
+                name: "Nanyang Technological University",
+                sameAs: "https://www.ntu.edu.sg"
+              }
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Mods",
+                  item: `${siteConfig.url}/mods`
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: `${moduleKey} ${moduleData.title}`,
+                  item: `${siteConfig.url}/mods/${moduleKey}`
+                }
+              ]
+            }
+          ])
+        }}
+      />
     </>
   )
 }
@@ -208,9 +248,14 @@ export async function generateMetadata(props: {
   const mod = allMeta[moduleKey]
   if (!mod) return null
 
+  const baseDesc = mod.description?.trim()
+    ? `${mod.description.trim().slice(0, 100)}${mod.description.trim().length > 100 ? "…" : ""}`
+    : `${moduleKey} is a ${mod.au} AU NTU module. Check index schedules, class times, exam dates, venues, and prerequisites on NTUMods.`
+
   return {
-    title: `${moduleKey} ${mod.title} | NTU Module Details`,
-    description: `View ${moduleKey} ${mod.title} on NTUMods: description, AU, prerequisites, exam details, index schedules, class times, venues, and related NTU modules.`,
+    title: `${moduleKey} ${mod.title} (${mod.au} AU) | NTUMods`,
+    description: baseDesc,
+    keywords: [moduleKey, mod.title, "NTU", `${moduleKey} NTU`],
     alternates: { canonical: getModuleUrl(moduleKey) }
   }
 }

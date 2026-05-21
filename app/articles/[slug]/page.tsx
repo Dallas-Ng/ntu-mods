@@ -1,8 +1,9 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import type { Article as ArticleJsonLd, WithContext } from "schema-dts"
+import type { Article as ArticleJsonLd, BreadcrumbList, WithContext } from "schema-dts"
 
+import { siteConfig } from "@/config/site"
 import {
   getAllArticles,
   getArticleBySlug,
@@ -42,6 +43,25 @@ export default async function ArticlePage(props: {
     mainEntityOfPage: article.url
   }
 
+  const breadcrumbJsonLd: WithContext<BreadcrumbList> = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Articles",
+        item: `${siteConfig.url}/articles`
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: article.title,
+        item: article.url
+      }
+    ]
+  }
+
   return (
     <div className="min-w-0 py-4 sm:py-6">
       <Breadcrumbs
@@ -60,6 +80,11 @@ export default async function ArticlePage(props: {
         id="article-jsonld"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        id="article-breadcrumb-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       <div className="mt-5 grid min-w-0 justify-center gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">

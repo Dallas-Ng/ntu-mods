@@ -4,6 +4,7 @@ description: "Explore popular NTU BDEs, compare why students choose them, what t
 date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"
+category: "BDE"
 tags: ["NTU BDE", "popular BDE NTU", "NTU electives", "NTUMods", "NTU electives guide"]
 ---
 

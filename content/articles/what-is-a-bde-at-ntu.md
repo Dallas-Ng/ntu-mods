@@ -4,6 +4,7 @@ description: "Understand what a BDE is at NTU, how it fits graduation requiremen
 date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"
+category: "BDE"
 tags: ["NTU BDE", "Broadening and Deepening Elective", "NTU electives", "NTUMods", "NTU module planning", "BDE NTU guide", "NTU elective planning"]
 ---
 

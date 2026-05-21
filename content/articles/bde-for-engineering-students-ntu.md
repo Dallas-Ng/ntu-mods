@@ -4,6 +4,7 @@ description: "How NTU engineering students should approach BDE selection given d
 date: "2026-05-19"
 updated: "2026-05-19"
 author: "NTUMods"
+category: "BDE"
 tags: ["NTU BDE", "engineering BDE NTU", "NTU engineering electives", "NTUMods", "NTU electives", "NTU module planning"]
 ---
 

@@ -4,6 +4,7 @@ description: "One concise sentence that explains the article for search results 
 date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"
+category: "General"
 tags: ["NTU", "NTUMods"]
 thumbnail: ""
 thumbnailAlt: "NTUMods article thumbnail"

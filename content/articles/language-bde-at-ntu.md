@@ -4,6 +4,7 @@ description: "A practical guide to NTU language BDEs: how the level system works
 date: "2026-05-19"
 updated: "2026-05-19"
 author: "NTUMods"
+category: "BDE"
 tags: ["language BDE NTU", "NTU language elective", "NTU BDE", "Japanese BDE NTU", "Korean BDE NTU", "NTUMods", "NTU electives"]
 ---
 

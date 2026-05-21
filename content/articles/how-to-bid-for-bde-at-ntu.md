@@ -4,6 +4,7 @@ description: "Learn how NTU STARS bidding works for BDEs, when to bid, what to d
 date: "2026-05-19"
 updated: "2026-05-19"
 author: "NTUMods"
+category: "STARS"
 tags: ["NTU BDE", "STARS bidding NTU", "BDE registration NTU", "NTUMods", "NTU STARS", "NTU electives"]
 ---
 

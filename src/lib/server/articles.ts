@@ -5,6 +5,7 @@ import { siteConfig } from "@/config/site"
 
 const ARTICLES_DIR = path.join(process.cwd(), "content", "articles")
 const DEFAULT_THUMBNAIL = "/og-image.png"
+const DEFAULT_CATEGORY = "General"
 
 export interface ArticleHeading {
   id: string
@@ -19,6 +20,7 @@ export interface ArticleMeta {
   date: string
   updated?: string
   author: string
+  category: string
   tags: string[]
   thumbnail: string
   thumbnailAlt: string
@@ -126,6 +128,7 @@ const getArticleFromFile = (filename: string): Article => {
   const date = parseScalar(data.date || new Date().toISOString().slice(0, 10))
   const updated = data.updated ? parseScalar(data.updated) : undefined
   const author = parseScalar(data.author || siteConfig.name)
+  const category = parseScalar(data.category || DEFAULT_CATEGORY)
   const thumbnail = normaliseImage(data.thumbnail)
 
   return {
@@ -135,6 +138,7 @@ const getArticleFromFile = (filename: string): Article => {
     date,
     updated,
     author,
+    category,
     tags: parseTags(data.tags),
     thumbnail,
     thumbnailAlt: parseScalar(data.thumbnailAlt || title),
@@ -158,6 +162,11 @@ export const getAllArticles = () => {
 
 export const getArticleBySlug = (slug: string) =>
   getAllArticles().find((article) => article.slug === slug)
+
+export const getArticleCategories = () =>
+  Array.from(new Set(getAllArticles().map((article) => article.category))).sort(
+    (a, b) => a.localeCompare(b)
+  )
 
 export const getArticleImageUrl = (thumbnail: string) => {
   const src = thumbnail || DEFAULT_THUMBNAIL

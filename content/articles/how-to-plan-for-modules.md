@@ -4,6 +4,7 @@ description: "Learn how to plan NTU modules with NTUMods: balance AUs and worklo
 date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"
+category: "Module Planning"
 tags: ["NTU modules", "NTU timetable", "STARS", "NTUMods", "module planning"]
 ---
 

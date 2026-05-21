@@ -1,8 +1,9 @@
+import { Suspense } from "react"
 import type { Metadata } from "next"
-import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
-import { getAllArticles } from "@/lib/server/articles"
+import { getAllArticles, getArticleCategories } from "@/lib/server/articles"
+import ArticlesList from "@/components/articles/articles-list"
 
 export const dynamic = "force-static"
 export const revalidate = false
@@ -14,6 +15,30 @@ export const metadata: Metadata = {
 
 export default function ArticlesPage() {
   const articles = getAllArticles()
+  const categories = getArticleCategories()
+  const articleList = articles.map(
+    ({
+      slug,
+      title,
+      description,
+      date,
+      category,
+      tags,
+      thumbnail,
+      thumbnailAlt,
+      readingTime
+    }) => ({
+      slug,
+      title,
+      description,
+      date,
+      category,
+      tags,
+      thumbnail,
+      thumbnailAlt,
+      readingTime
+    })
+  )
 
   return (
     <div className="py-6 sm:py-8">
@@ -26,49 +51,9 @@ export default function ArticlesPage() {
         </p>
       </div>
 
-      {articles.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {articles.map((article) => (
-            <Link
-              key={article.slug}
-              href={`/articles/${article.slug}`}
-              className="group bg-card hover:bg-accent rounded-md border transition-colors">
-              {article.thumbnail && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={article.thumbnail}
-                  alt={article.thumbnailAlt}
-                  className="aspect-video w-full rounded-t-md border-b object-cover"
-                />
-              )}
-              <div className="p-4">
-                <div className="text-foreground/70 text-xs">
-                  {new Date(article.date).toLocaleDateString("en-SG", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric"
-                  })}{" "}
-                  · {article.readingTime}
-                </div>
-                <h2 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold wrap-break-word">
-                  {article.title}
-                </h2>
-                <p className="text-foreground/80 mt-2 line-clamp-3 text-sm leading-6 wrap-break-word">
-                  {article.description}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        <div className="bg-card text-foreground/80 rounded-md border p-4 text-sm wrap-break-word sm:p-6">
-          No articles published yet. Copy{" "}
-          <code className="bg-muted rounded px-1 py-0.5">
-            content/articles/_template.md
-          </code>{" "}
-          into the same folder without the leading underscore to publish one.
-        </div>
-      )}
+      <Suspense>
+        <ArticlesList articles={articleList} categories={categories} />
+      </Suspense>
     </div>
   )
 }

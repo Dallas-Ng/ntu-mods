@@ -4,6 +4,7 @@ description: "Not every BDE is equally demanding. Learn how to identify easy BDE
 date: "2026-05-19"
 updated: "2026-05-19"
 author: "NTUMods"
+category: "BDE"
 tags: ["easy BDE NTU", "NTU BDE", "NTU electives", "NTUMods", "NTU module planning"]
 ---
 

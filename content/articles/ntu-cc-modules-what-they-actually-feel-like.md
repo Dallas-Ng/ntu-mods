@@ -4,6 +4,7 @@ description: "A student-first guide to NTU Common Core modules, what they are me
 date: "2026-04-29"
 updated: "2026-04-29"
 author: "NTUMods"
+category: "Common Core"
 tags: ["NTU", "NTUMods", "Common Core", "CC Modules"]
 ---
 

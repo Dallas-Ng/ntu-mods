@@ -119,7 +119,7 @@ For what language BDEs actually feel like week to week, see [Language BDEs at NT
 | --- | --- |
 | [LS5001](/mods/LS5001) | Spanish Language Level 1 |
 | [LS5002](/mods/LS5002) | Spanish Language Level 2 |
-| [LS5003](/mods/LS5003) | Spanish Language Level 3 |
+| [LS5003](/mods/LS5003) | Spanish Language Level 3 — check availability, not offered every semester |
 | [LS5004](/mods/LS5004) | Spanish Language Level 4 |
 
 ### Other Languages

@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    parallelServerCompiles: true,
+    parallelServerBuildTraces: true,
+    optimizePackageImports: ["lucide-react", "radix-ui", "date-fns"]
+  },
   // productionBrowserSourceMaps: true,
   images: {
     formats: ["image/avif", "image/webp"]

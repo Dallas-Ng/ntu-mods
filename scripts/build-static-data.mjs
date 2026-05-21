@@ -38,14 +38,17 @@ async function buildModulesJson() {
   const modulesMap = new Map()
   const currentSemesterSet = new Set()
 
-  for (const file of files) {
+  const allData = await Promise.all(
+    files.map((f) => fs.readFile(path.join(metadataDir, f), "utf-8").then(JSON.parse))
+  )
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i]
     const stem = file.replace(".json", "")
     const idx = stem.indexOf("_")
     const fileYear = stem.slice(0, idx)
     const fileSemester = stem.slice(idx + 1)
-    const data = JSON.parse(
-      await fs.readFile(path.join(metadataDir, file), "utf-8")
-    )
+    const data = allData[i]
     const isCurrentFile =
       fileYear === latestYear && fileSemester === latestSemester
 

@@ -2,10 +2,10 @@
 title: "What Is a BDE at NTU?"
 description: "Understand what a BDE is at NTU, how it fits graduation requirements, and how to choose electives that match your timetable, workload, and interests."
 date: "2026-04-29"
-updated: "2026-04-29"
+updated: "2026-05-21"
 author: "NTUMods"
 category: "BDE"
-tags: ["NTU BDE", "Broadening and Deepening Elective", "NTU electives", "NTUMods", "NTU module planning", "BDE NTU guide", "NTU elective planning"]
+tags: ["NTU BDE", "Broadening and Deepening Elective", "NTU electives", "NTUMods", "NTU module planning", "BDE NTU guide", "NTU elective planning", "what is bde", "what bde means", "bde degree ntu", "bde ntu"]
 ---
 
 # What Is a BDE at NTU?
@@ -29,7 +29,7 @@ BDEs can be used to:
 
 For most students, BDEs are the most flexible part of the NTU curriculum.
 
-Not sure which BDE to take? See [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu) for a breakdown by category.
+Not sure which BDE to take? See [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu) for a breakdown by category, or [Complete NTU BDE List](/articles/complete-ntu-bde-list) for a full table of modules.
 
 ## What BDE actually means
 
@@ -60,7 +60,7 @@ There is no universal BDE number across NTU.
 | Minor or second major          | Some BDE space may be used to satisfy those requirements      |
 | Exemptions or credit transfers | Your remaining AU count may change                            |
 
-Always check your official curriculum structure and degree audit. NTUMods helps you browse and plan, but your school and official NTU systems decide what counts.
+Always check your official curriculum structure and degree audit. NTUMods helps you browse and plan, but your school and official NTU systems decide what counts. For answers to common BDE degree questions — including whether BDE affects your GPA and what happens if you take more than required — see [Does BDE Count Towards Your NTU Degree?](/articles/does-bde-count-towards-degree-ntu).
 
 If you are considering using some of your BDE space for a minor, the AU math changes significantly. See [BDE vs Minor at NTU](/articles/bde-vs-minor-at-ntu) for the full trade-off analysis.
 
@@ -104,8 +104,28 @@ If two BDEs look equally interesting, choose the one that balances the rest of y
 
 One useful lens is assessment type — some BDEs are exam-free, others are project-based or attendance-driven. See [Easy BDEs at NTU](/articles/easy-bde-at-ntu) for a breakdown by assessment structure.
 
+Engineering students should also see [BDE Guide for NTU Engineering Students](/articles/bde-for-engineering-students-ntu) for programme-specific advice on fitting BDEs around lab-heavy semesters.
+
 ## Final thoughts
 
 BDEs are one of the few flexible parts of an NTU degree. Use them deliberately. You can make your semester lighter, broader, deeper, or more career-focused depending on what you choose.
 
-Start by checking what you need to clear, then browse options on [NTUMods](https://ntumods.com/mods), and keep a backup list for registration.
+Start by checking what you need to clear, then browse options on [NTUMods](https://ntumods.com/mods), and keep a backup list for registration. Once you know which BDE you want, see [How to Bid for a BDE at NTU](/articles/how-to-bid-for-bde-at-ntu) for step-by-step STARS registration guidance.
+
+## Frequently asked questions about BDEs at NTU
+
+### What does BDE stand for?
+
+BDE stands for Broadening and Deepening Elective. These are elective modules in your NTU curriculum that give you freedom to explore beyond your compulsory core modules.
+
+### Does BDE count towards my NTU degree?
+
+Yes. BDE modules count as part of your official graduation requirements. The number of BDE AUs you need depends on your programme and school. Check your official curriculum structure and degree audit for your exact requirements.
+
+### How many BDE AUs do NTU students need?
+
+There is no single answer — it varies by programme, school, and matriculation year. Most programmes require between 9 and 21 AUs of BDE. The safest way to verify is to check your official curriculum structure for your cohort.
+
+### What is the difference between a BDE and a UE?
+
+UE (Unrestricted Elective) is an older term from previous NTU curriculum structures. If you are on the current curriculum, BDE is the relevant term. Some older module notes or senior advice may still use UE. For current planning, focus on what your own degree audit requires.

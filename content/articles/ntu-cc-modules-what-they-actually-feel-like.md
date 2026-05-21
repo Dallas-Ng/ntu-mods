@@ -1,16 +1,18 @@
 ---
-title: "NTU CC Modules: What They Actually Feel Like"
-description: "A student-first guide to NTU Common Core modules, what they are meant to teach, how they usually feel, and how to plan around the workload."
+title: "NTU CC Modules: What They Actually Feel Like (Student Honest Review)"
+description: "An honest student guide to NTU CC mods across all categories — AY, LA, BM, PE and more. What they feel like, which are worth taking, and how to plan around them."
 date: "2026-04-29"
-updated: "2026-04-29"
+updated: "2026-05-21"
 author: "NTUMods"
 category: "Common Core"
-tags: ["NTU", "NTUMods", "Common Core", "CC Modules"]
+tags: ["NTU", "NTUMods", "Common Core", "CC Modules", "ntu cc mods", "cc mods ntu", "best cc modules ntu", "ntu common core", "easy cc modules ntu"]
 ---
 
 # NTU CC Modules: What They Actually Feel Like
 
 Ask any NTU student about CC mods and you will usually get one of two answers:
+
+If you are looking for which CC mods are actually worth taking, see [Best CC Modules at NTU](/articles/best-cc-modules-ntu). This article covers what CC modules feel like — the experience, expectations, and honest reality.
 
 1. “Free GPA.”
 2. “Why am I doing this.”
@@ -212,6 +214,24 @@ CC mods do teach useful things:
 The problem is that these are useful _workplace_ skills disguised as _academic_ modules, which is why they feel irritating in school and weirdly relevant later.
 
 That is the real CC experience.
+
+## Which CC modules at NTU are worth taking?
+
+The honest answer: the ones with a professor who cares, an assessment design that is clear, and a group you get along with. Those three things matter more than the module code.
+
+That said, students consistently find that certain types of CC modules are easier to manage:
+
+**Wellness and reflection modules** — Low intellectual demand, steady small submissions. Easy to score if you stay consistent. Best for semesters where you are already stretched by core modules.
+
+**Communication and writing modules** — Higher upfront skill requirement if you are not a writer, but maps directly to workplace usefulness. Good choice if building communication skills is something you actually care about.
+
+**Interdisciplinary project modules** — Outcome depends heavily on your group. In a good group, these can be genuinely interesting. In a bad group, they are the most commonly cited reason students hate CC.
+
+**Ethics and society modules** — Content is often thoughtful in principle and variable in execution. Can be very good or very frustrating depending on how structured the module is and who teaches it.
+
+The most consistent advice: pick modules where you have heard something specific and positive about the professor, not just the module name. For CC, the professor matters more than it does for most other modules.
+
+If you are building your full semester plan around CC and BDE requirements, see [How to Plan Your NTU Modules](/articles/how-to-plan-for-modules) for the broader module planning workflow. If you are comparing CC space versus your BDE space in your curriculum, see [BDE vs Minor at NTU](/articles/bde-vs-minor-at-ntu).
 
 ## Final takeaway
 

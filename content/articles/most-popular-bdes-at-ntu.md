@@ -2,10 +2,10 @@
 title: "Most Popular BDEs at NTU"
 description: "Explore popular NTU BDEs, compare why students choose them, what to watch out for, and how to pick an elective that fits your workload and timetable."
 date: "2026-04-29"
-updated: "2026-04-29"
+updated: "2026-05-21"
 author: "NTUMods"
 category: "BDE"
-tags: ["NTU BDE", "popular BDE NTU", "NTU electives", "NTUMods", "NTU electives guide"]
+tags: ["NTU BDE", "popular BDE NTU", "NTU electives", "NTUMods", "NTU electives guide", "ntu bde list", "bde list ntu", "bde courses ntu", "bde ntu"]
 ---
 
 # Most Popular BDEs at NTU
@@ -15,6 +15,8 @@ If you are a freshman at NTU, one of the first things you will eventually hear f
 > Just take a popular BDE.
 
 That sounds useful until you realise nobody explains what that actually means.
+
+This is the NTU BDE list students actually use — a breakdown by category, with real module examples and honest context on what each type involves. For a full table of every BDE module organised by category, see [Complete NTU BDE List](/articles/complete-ntu-bde-list).
 
 What makes a BDE "popular" at NTU usually comes down to one or more of these reasons:
 

@@ -5,7 +5,7 @@ date: "2026-05-19"
 updated: "2026-05-19"
 author: "NTUMods"
 category: "BDE"
-tags: ["NTU BDE", "NTU minor", "BDE vs minor NTU", "NTU electives", "NTUMods", "NTU module planning"]
+tags: ["NTU BDE", "NTU minor", "BDE vs minor NTU", "NTU electives", "NTUMods", "NTU module planning", "bde degree ntu", "ntu minor vs bde", "bde ntu", "ntu bde requirements"]
 ---
 
 # BDE vs Minor at NTU: How to Decide Which Is Right for You

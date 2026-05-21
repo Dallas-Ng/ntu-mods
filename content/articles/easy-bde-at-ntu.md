@@ -5,7 +5,7 @@ date: "2026-05-19"
 updated: "2026-05-19"
 author: "NTUMods"
 category: "BDE"
-tags: ["easy BDE NTU", "NTU BDE", "NTU electives", "NTUMods", "NTU module planning"]
+tags: ["easy BDE NTU", "NTU BDE", "NTU electives", "NTUMods", "NTU module planning", "bde ntu", "ntu bde guide", "easy elective ntu"]
 ---
 
 # Easy BDEs at NTU: How to Find One That Actually Fits
@@ -120,6 +120,6 @@ There is no universally easy BDE. There are BDEs that fit your semester and ones
 
 Decide which kind of easy you actually need — no exam, low weekly hours, predictable grading — then check whether the module's assessment structure matches. That is it.
 
-Browse BDE options on [NTUMods](/mods) and look at the assessment breakdown before committing. Once you know which BDE you want, see [How to Bid for a BDE at NTU](/articles/how-to-bid-for-bde-at-ntu) for registration strategy.
+Browse BDE options on [NTUMods](/mods) and look at the assessment breakdown before committing. For a full table of all BDE modules by category, see [Complete NTU BDE List](/articles/complete-ntu-bde-list). Once you know which BDE you want, see [How to Bid for a BDE at NTU](/articles/how-to-bid-for-bde-at-ntu) for registration strategy.
 
 For a broader view of BDE categories, see [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu).

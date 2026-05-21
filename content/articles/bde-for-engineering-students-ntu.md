@@ -5,7 +5,7 @@ date: "2026-05-19"
 updated: "2026-05-19"
 author: "NTUMods"
 category: "BDE"
-tags: ["NTU BDE", "engineering BDE NTU", "NTU engineering electives", "NTUMods", "NTU electives", "NTU module planning"]
+tags: ["NTU BDE", "engineering BDE NTU", "NTU engineering electives", "NTUMods", "NTU electives", "NTU module planning", "bde ntu engineering", "ntu engineering modules", "bde guide ntu"]
 ---
 
 # BDE Guide for NTU Engineering Students
@@ -123,4 +123,4 @@ In heavy engineering semesters, the BDE's job is to be worth your time without a
 
 Start with your lab indexes. Then find a BDE that fits around them. Then check the assessment type before bidding. In that order.
 
-Browse BDE options on [NTUMods](/mods) and see [Easy BDEs at NTU](/articles/easy-bde-at-ntu) for a breakdown of which assessment types are lowest-pressure. For the broader module planning workflow, see [How to Plan Your NTU Modules](/articles/how-to-plan-for-modules).
+Browse BDE options on [NTUMods](/mods) and see [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu) for a breakdown of BDE categories. See [Easy BDEs at NTU](/articles/easy-bde-at-ntu) for a breakdown of which assessment types are lowest-pressure. For the broader module planning workflow, see [How to Plan Your NTU Modules](/articles/how-to-plan-for-modules).

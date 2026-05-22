@@ -56,6 +56,50 @@ const formatArticleDate = (date: string) =>
     year: "numeric"
   })
 
+function ArticleCard({
+  article,
+  showCategory
+}: {
+  article: ArticleListItem
+  showCategory: boolean
+}) {
+  return (
+    <Link
+      href={`/articles/${article.slug}`}
+      className="group bg-card hover:bg-accent rounded-md border transition-colors">
+      {article.thumbnail && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={article.thumbnail}
+          alt={article.thumbnailAlt}
+          className="aspect-video w-full rounded-t-md border-b object-cover"
+        />
+      )}
+      <div className="p-4">
+        <div className="text-foreground/70 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
+          <span>{formatArticleDate(article.date)}</span>
+          <span aria-hidden="true">·</span>
+          <span>{article.readingTime}</span>
+          {showCategory && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5">
+                {article.category}
+              </span>
+            </>
+          )}
+        </div>
+        <h2 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold wrap-break-word">
+          {article.title}
+        </h2>
+        <p className="text-foreground/80 mt-2 line-clamp-3 text-sm leading-6 wrap-break-word">
+          {article.description}
+        </p>
+      </div>
+    </Link>
+  )
+}
+
 export default function ArticlesList({
   articles,
   categories
@@ -128,6 +172,10 @@ export default function ArticlesList({
     return () => document.removeEventListener("keydown", handleKeyDown)
   }, [])
 
+  const hasSearch = queryParam.trim().length > 0
+  const hasCategory = activeCategory !== ALL_CATEGORIES
+  const hasActiveFilters = hasSearch || hasCategory
+
   const filteredArticles = useMemo(() => {
     const normalisedQuery = queryParam.trim().toLowerCase()
 
@@ -143,6 +191,21 @@ export default function ArticlesList({
     })
   }, [activeCategory, activeCategoryParam, articles, queryParam])
 
+  const shouldGroup = !hasCategory
+
+  const groupedArticles = useMemo(() => {
+    if (!shouldGroup) return null
+    const map = new Map<string, ArticleListItem[]>()
+    for (const article of filteredArticles) {
+      const group = map.get(article.category) ?? []
+      group.push(article)
+      map.set(article.category, group)
+    }
+    return categories
+      .filter((cat) => map.has(cat))
+      .map((cat) => ({ category: cat, articles: map.get(cat)! }))
+  }, [shouldGroup, filteredArticles, categories])
+
   if (articles.length === 0) {
     return (
       <div className="bg-card text-foreground/80 rounded-md border p-4 text-sm wrap-break-word sm:p-6">
@@ -154,10 +217,6 @@ export default function ArticlesList({
       </div>
     )
   }
-
-  const hasSearch = queryParam.trim().length > 0
-  const hasCategory = activeCategory !== ALL_CATEGORIES
-  const hasActiveFilters = hasSearch || hasCategory
 
   return (
     <div className="space-y-4">
@@ -250,40 +309,26 @@ export default function ArticlesList({
       </div>
 
       {filteredArticles.length > 0 ? (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {filteredArticles.map((article) => (
-            <Link
-              key={article.slug}
-              href={`/articles/${article.slug}`}
-              className="group bg-card hover:bg-accent rounded-md border transition-colors">
-              {article.thumbnail && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={article.thumbnail}
-                  alt={article.thumbnailAlt}
-                  className="aspect-video w-full rounded-t-md border-b object-cover"
-                />
-              )}
-              <div className="p-4">
-                <div className="text-foreground/70 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
-                  <span>{formatArticleDate(article.date)}</span>
-                  <span aria-hidden="true">·</span>
-                  <span>{article.readingTime}</span>
-                  <span aria-hidden="true">·</span>
-                  <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5">
-                    {article.category}
-                  </span>
+        shouldGroup && groupedArticles ? (
+          <div className="space-y-8">
+            {groupedArticles.map(({ category, articles: groupArticles }) => (
+              <section key={category}>
+                <h2 className="mb-4 text-lg font-semibold">{category}</h2>
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  {groupArticles.map((article) => (
+                    <ArticleCard key={article.slug} article={article} showCategory={false} />
+                  ))}
                 </div>
-                <h2 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold wrap-break-word">
-                  {article.title}
-                </h2>
-                <p className="text-foreground/80 mt-2 line-clamp-3 text-sm leading-6 wrap-break-word">
-                  {article.description}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
+              </section>
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {filteredArticles.map((article) => (
+              <ArticleCard key={article.slug} article={article} showCategory={false} />
+            ))}
+          </div>
+        )
       ) : (
         <div className="bg-card text-foreground/80 rounded-md border p-4 text-sm wrap-break-word sm:p-6">
           No articles match those filters.

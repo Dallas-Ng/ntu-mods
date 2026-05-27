@@ -3,6 +3,7 @@
 import { useState } from "react"
 import dynamic from "next/dynamic"
 import { MousePointerClick } from "lucide-react"
+import posthog from "posthog-js"
 
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
@@ -79,7 +80,12 @@ const Page = () => {
             <Button
               variant={indexPickerEnabled ? "default" : "outline"}
               className="w-35 gap-2"
-              onClick={() => setIndexPickerEnabled((v) => !v)}>
+              onClick={() => {
+                setIndexPickerEnabled((v) => {
+                  posthog.capture("index_picker_toggled", { enabled: !v })
+                  return !v
+                })
+              }}>
               <MousePointerClick className="size-4" />
               {indexPickerEnabled ? "Stop picking" : "Pick indexes"}
             </Button>

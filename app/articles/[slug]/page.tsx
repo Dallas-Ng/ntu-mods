@@ -16,6 +16,7 @@ import {
 import ArticleMarkdown from "@/components/articles/article-markdown"
 import ArticleToc from "@/components/articles/article-toc"
 import ArticlesList from "@/components/articles/articles-list"
+import ArticleViewTracker from "@/components/articles/article-view-tracker"
 import Breadcrumbs from "@/components/breadcrumbs"
 
 export const dynamic = "force-static"
@@ -241,6 +242,7 @@ export default async function ArticleOrCategoryPage(props: {
 
   return (
     <div className="min-w-0 py-4 sm:py-6">
+      <ArticleViewTracker slug={slug} />
       <Breadcrumbs
         breadcrumbs={[
           { href: "/", label: "Home", name: "Home" },

@@ -1,5 +1,7 @@
 "use client"
 
+import posthog from "posthog-js"
+
 import { MODULE_FACULTY } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
@@ -30,7 +32,10 @@ export const ModsFacultySelect = ({ paramsValue }: { paramsValue: string }) => {
       closeOnSelect
       value={value}
       selectItems={selectItems}
-      onChange={(value) => setValue(value as SearchModuleFaculty)}
+      onChange={(value) => {
+        setValue(value as SearchModuleFaculty)
+        posthog.capture("mods_filter_applied", { filter_type: "faculty", value })
+      }}
       divClassName={cn(
         "w-full",
         value !== "all" && "ring-ring rounded-md ring-1"

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
+import posthog from "posthog-js"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
@@ -60,6 +61,11 @@ const FeedbackCard = ({ divClassName }: Props) => {
         body: JSON.stringify(body)
       })
     }
+
+    posthog.capture("feedback_submitted", {
+      has_email: !!data.email,
+      feedback_length: data.feedback.length
+    })
 
     toast.promise(updateDb, {
       loading: "Submitting feedback...",

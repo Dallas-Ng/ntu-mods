@@ -1,5 +1,7 @@
 "use client"
 
+import posthog from "posthog-js"
+
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import CustomSelect from "@/components/select"
 
@@ -16,7 +18,10 @@ export const ModsCurrentOnlyToggle = ({
   const { value, setValue } = useModsSearchParams(paramsValue, "currentOnly")
 
   const handleChange = (nextValue: string | null) => {
-    if (nextValue !== null) setValue(nextValue)
+    if (nextValue !== null) {
+      setValue(nextValue)
+      posthog.capture("mods_filter_applied", { filter_type: "current_only", value: nextValue })
+    }
   }
 
   return (

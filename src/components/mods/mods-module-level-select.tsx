@@ -1,5 +1,7 @@
 "use client"
 
+import posthog from "posthog-js"
+
 import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import CustomSelect from "@/components/select"
@@ -39,7 +41,10 @@ export const ModsLevelSelect = ({ paramValue, searchTerm }: Props) => {
       closeOnSelect
       value={value}
       selectItems={selectItems}
-      onChange={(value) => setValue(value as SearchModuleLevel)}
+      onChange={(value) => {
+        setValue(value as SearchModuleLevel)
+        posthog.capture("mods_filter_applied", { filter_type: "module_level", value })
+      }}
       divClassName={cn(
         "w-full",
         value !== "all" && "ring-ring rounded-md ring-1"

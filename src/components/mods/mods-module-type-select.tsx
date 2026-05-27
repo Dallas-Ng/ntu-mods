@@ -1,5 +1,7 @@
 "use client"
 
+import posthog from "posthog-js"
+
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
@@ -25,7 +27,10 @@ export const ModsModuleTypeSelect = ({
   const { value, setValue } = useModsSearchParams(paramsValue, "moduleType")
 
   const handleChange = (nextValue: string | null) => {
-    if (nextValue !== null) setValue(nextValue)
+    if (nextValue !== null) {
+      setValue(nextValue)
+      posthog.capture("mods_filter_applied", { filter_type: "module_type", value: nextValue })
+    }
   }
 
   return (

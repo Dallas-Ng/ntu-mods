@@ -1,5 +1,7 @@
 "use client"
 
+import posthog from "posthog-js"
+
 import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import CustomSelect from "@/components/select"
@@ -22,7 +24,10 @@ export const ModsSemesterSelect = ({
         { value: "s1", label: "Sem 1" }
         // { value: "s2", label: "Sem 2" }
       ]}
-      onChange={(value) => setValue(value as Semester)}
+      onChange={(value) => {
+        setValue(value as Semester)
+        posthog.capture("mods_filter_applied", { filter_type: "semester", value })
+      }}
       divClassName={cn(
         "basis-1/2 lg:w-[200px]",
         value !== "all" && "ring-ring rounded-md ring-1"

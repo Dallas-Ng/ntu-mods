@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { Settings2Icon, WandIcon } from "lucide-react"
+import posthog from "posthog-js"
 
 import { InfoIcon } from "lucide-react"
 
@@ -306,6 +307,7 @@ const ConfigSummary = () => {
 const TimetableGenerationConfig = () => {
   const [open, setOpen] = useState(false)
   const { timetable } = useTimetable()
+  const generationConfig = useBoundState((s) => s.generationConfig)
   const {
     combinations,
     currentIdx,
@@ -351,7 +353,15 @@ const TimetableGenerationConfig = () => {
         </p>
       ) : (
         <Button
-          onClick={() => generate()}
+          onClick={() => {
+            generate()
+            posthog.capture("timetable_generation_started", {
+              module_count: Object.keys(timetable).length,
+              load_preference: generationConfig.loadPreference,
+              blacklisted_slots: generationConfig.blacklistedTimeslots.length,
+              lunch_break_days: generationConfig.lunchBreaks.length
+            })
+          }}
           disabled={isGenerating}
           className="w-full gap-2">
           <WandIcon className="size-4" />

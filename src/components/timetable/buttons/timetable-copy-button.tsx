@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Copy } from "lucide-react"
+import posthog from "posthog-js"
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
@@ -37,6 +38,10 @@ const TimetableCopyButton = () => {
     if (qsTimetable) {
       updateTimetable(qsTimetable, overrideIndex)
       updateTimetableIndex(overrideIndex)
+      posthog.capture("timetable_copied", {
+        target_plan: overrideIndex + 1,
+        module_count: Object.keys(qsTimetable).length
+      })
       router.push("/timetable")
       toast.success("Successfully copied timetable")
     }

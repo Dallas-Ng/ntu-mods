@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server"
 
+import { getPostHogClient } from "@/lib/posthog-server"
+
 interface Data {
   feedback: string
   author: string
@@ -23,6 +25,17 @@ export async function POST(req: Request) {
   })
 
   if (res.ok) {
+    const posthog = getPostHogClient()
+    posthog.capture({
+      distinctId: data.author || "anonymous",
+      event: "feedback_submitted",
+      properties: {
+        has_email: !!data.author && data.author !== "anon",
+        feedback_length: data.feedback.length
+      }
+    })
+    await posthog.shutdown()
+
     return NextResponse.json({ success: true }, { status: 200 })
   } else {
     const error = await res.json()

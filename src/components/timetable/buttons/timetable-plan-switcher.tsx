@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { ChevronDown } from "lucide-react"
+import posthog from "posthog-js"
 
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
@@ -22,6 +23,10 @@ const TimetablePlanSwitcher = () => {
   const [isContainerOpen, setIsContainerOpen] = useState(false)
 
   const handleClick = (index: number) => {
+    posthog.capture("timetable_plan_switched", {
+      from_plan: timetableIndex + 1,
+      to_plan: index + 1
+    })
     updateTimetableIndex(index)
   }
 

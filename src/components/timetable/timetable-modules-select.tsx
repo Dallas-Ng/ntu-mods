@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react"
 import { Check } from "lucide-react"
+import posthog from "posthog-js"
 
 import { parseTimeNumber } from "@/lib/parse-time"
 import { cn } from "@/lib/utils"
@@ -51,6 +52,7 @@ const TimetableModulesSelect = () => {
       // If module is already in timetable, remove it
       if (Object.keys(timetable).find((x) => x === moduleKey)) {
         removeItemFromTimetable(moduleKey)
+        posthog.capture("module_removed", { module_code: moduleKey })
         if (isMobile) setInputValue("")
         setDisabled(false)
         setIsLoadingModule(false)
@@ -124,6 +126,11 @@ const TimetableModulesSelect = () => {
       })
 
       addItemToTimetable(moduleKey, selectedIndexKey)
+      posthog.capture("module_added", {
+        module_code: moduleKey,
+        index_key: selectedIndexKey,
+        total_modules: Object.keys(timetable).length + 1
+      })
       if (isMobile) setInputValue("")
     } catch (error) {
       console.error("Error selecting module:", error)

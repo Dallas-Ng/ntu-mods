@@ -2,11 +2,17 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Calendar, ImageDown, Link as LinkIcon, MoreHorizontal } from "lucide-react"
+import {
+  Calendar,
+  ImageDown,
+  Link as LinkIcon,
+  MoreHorizontal
+} from "lucide-react"
+import posthog from "posthog-js"
 import { toast } from "sonner"
 
-import { getIcs } from "@/lib/get-ics"
 import { BASE_URL } from "@/lib/constants"
+import { getIcs } from "@/lib/get-ics"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
@@ -59,6 +65,10 @@ const TimetableActionsDropdown = () => {
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
+
+      posthog.capture("calendar_downloaded", {
+        module_count: Object.keys(timetable).length
+      })
     } catch {
       toast.error("Something went wrong, please try again later")
     }
@@ -72,6 +82,10 @@ const TimetableActionsDropdown = () => {
     const isMobile = /Mobi|Android/i.test(navigator.userAgent)
 
     if (isMobile && navigator.share) {
+      posthog.capture("timetable_shared", {
+        method: "native_share",
+        module_count: Object.keys(timetable).length
+      })
       navigator
         .share({
           title: "Look at my timetable from NTU Mods",
@@ -85,6 +99,10 @@ const TimetableActionsDropdown = () => {
       return
     }
 
+    posthog.capture("timetable_shared", {
+      method: "clipboard",
+      module_count: Object.keys(timetable).length
+    })
     navigator.clipboard.writeText(link)
     toast("Share link copied to clipboard")
   }

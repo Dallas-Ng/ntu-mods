@@ -1,7 +1,9 @@
 "use client"
 
+import { useEffect } from "react"
 import dynamic from "next/dynamic"
 import Link from "next/link"
+import posthog from "posthog-js"
 
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
@@ -50,6 +52,10 @@ const TimetableDownloadCalendarButton = dynamic(
 )
 
 const Page = () => {
+  useEffect(() => {
+    posthog.capture("shared_timetable_viewed")
+  }, [])
+
   return (
     <div className="space-y-4">
       <Header
@@ -61,7 +67,7 @@ const Page = () => {
 
       <div className="flex justify-between gap-2">
         <div className="flex gap-2">
-          <Link href="/timetable">
+          <Link href="/timetable" onClick={() => posthog.capture("make_my_timetable_clicked")}>
             <Button>Make My Timetable</Button>
           </Link>
 

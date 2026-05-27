@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useRef, useState } from "react"
 import { Check } from "lucide-react"
+import posthog from "posthog-js"
 
 import { DAY_MAP } from "@/lib/constants"
 import { getIndexType } from "@/lib/get-index-type"
@@ -121,6 +122,10 @@ const TimetableIndexModifier = (props: Props) => {
 
   const handleSelect = (val: string) => {
     updateItemIndex(moduleKey, val)
+    posthog.capture("timetable_index_changed", {
+      module_code: moduleKey,
+      index_key: val
+    })
     if (isMobile) onOpenChange("")
   }
 

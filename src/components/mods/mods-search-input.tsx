@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import posthog from "posthog-js"
 
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
@@ -16,6 +17,9 @@ const ModsSearchInput = ({ paramsValue }: { paramsValue: string }) => {
 
   useEffect(() => {
     setValue(dbSearchTerm)
+    if (dbSearchTerm.length > 0) {
+      posthog.capture("mod_searched", { search_term: dbSearchTerm })
+    }
   }, [dbSearchTerm])
 
   useEffect(() => {

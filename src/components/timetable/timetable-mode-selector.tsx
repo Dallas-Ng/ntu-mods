@@ -1,6 +1,7 @@
 "use client"
 
 import { BotIcon, CalendarDaysIcon, WandIcon } from "lucide-react"
+import posthog from "posthog-js"
 
 import { useBoundState } from "@/state/bound.state"
 import {
@@ -54,7 +55,11 @@ const TimetableModeSelector = () => {
             <Tooltip key={m.id}>
               <TooltipTrigger asChild>
                 <button
-                  onClick={() => !m.comingSoon && setMode(m.id)}
+                  onClick={() => {
+                    if (m.comingSoon) return
+                    setMode(m.id)
+                    posthog.capture("timetable_mode_changed", { mode: m.id })
+                  }}
                   disabled={m.comingSoon}
                   className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
                     m.comingSoon

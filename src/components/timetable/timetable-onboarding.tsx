@@ -1,6 +1,7 @@
 "use client"
 
 import { BotIcon, CalendarDaysIcon, WandIcon } from "lucide-react"
+import posthog from "posthog-js"
 
 import { useBoundState } from "@/state/bound.state"
 import { useSettings } from "@/hooks/use-settings"
@@ -77,12 +78,14 @@ const OnboardingContent = ({ onDone }: { onDone: () => void }) => {
   const setHasOnboarded = useBoundState((s) => s.setHasOnboarded)
 
   const handleSelect = (modeId: TimetableCreationMode) => {
+    posthog.capture("onboarding_mode_selected", { mode: modeId })
     setMode(modeId)
     setHasOnboarded(true)
     onDone()
   }
 
   const handleSkip = () => {
+    posthog.capture("onboarding_skipped")
     setHasOnboarded(true)
     onDone()
   }

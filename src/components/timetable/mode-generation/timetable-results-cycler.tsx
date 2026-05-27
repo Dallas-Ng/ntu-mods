@@ -1,6 +1,7 @@
 "use client"
 
 import { ChevronLeftIcon, ChevronRightIcon, SaveIcon } from "lucide-react"
+import posthog from "posthog-js"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -45,7 +46,18 @@ const TimetableResultsCycler = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             {[0, 1, 2, 3, 4].map((i) => (
-              <DropdownMenuItem key={i} onClick={() => onSaveToPlan(i)}>
+              <DropdownMenuItem
+                key={i}
+                onClick={() => {
+                  onSaveToPlan(i)
+                  posthog.capture("timetable_generation_result_saved", {
+                    plan_index: i + 1,
+                    free_days: current.freeDays,
+                    days_with_class: current.daysWithClass,
+                    result_index: currentIndex + 1,
+                    total_results: combinations.length
+                  })
+                }}>
                 Save to Plan {i + 1}
               </DropdownMenuItem>
             ))}
@@ -65,7 +77,15 @@ const TimetableResultsCycler = ({
           size="sm"
           className="h-7 w-7 p-0"
           disabled={currentIndex === 0}
-          onClick={() => onNavigate(currentIndex - 1)}
+          onClick={() => {
+            onNavigate(currentIndex - 1)
+            posthog.capture("generation_result_navigated", {
+              direction: "prev",
+              from_index: currentIndex + 1,
+              to_index: currentIndex,
+              total_results: combinations.length
+            })
+          }}
           aria-label="Previous combination">
           <ChevronLeftIcon className="size-3" />
         </Button>
@@ -79,7 +99,15 @@ const TimetableResultsCycler = ({
           size="sm"
           className="h-7 w-7 p-0"
           disabled={currentIndex === combinations.length - 1}
-          onClick={() => onNavigate(currentIndex + 1)}
+          onClick={() => {
+            onNavigate(currentIndex + 1)
+            posthog.capture("generation_result_navigated", {
+              direction: "next",
+              from_index: currentIndex + 1,
+              to_index: currentIndex + 2,
+              total_results: combinations.length
+            })
+          }}
           aria-label="Next combination">
           <ChevronRightIcon className="size-3" />
         </Button>

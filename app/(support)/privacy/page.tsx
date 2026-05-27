@@ -157,11 +157,10 @@ export default function HelpPage() {
       <h2 className="my-2 text-xl">Cookies</h2>
 
       <p>
-        We do not set our own cookies. Google Analytics and PostHog are
-        configured to operate without setting cookies. Microsoft Clarity may
-        set cookies on your device to distinguish users and sessions. You can
-        disable these through your browser settings or by using a browser
-        extension that blocks analytics trackers.
+        We do not set our own cookies. However, Google Analytics, Microsoft
+        Clarity, and PostHog may set cookies on your device to distinguish
+        users and sessions. You can disable these through your browser settings
+        or by using a browser extension that blocks analytics trackers.
       </p>
 
       <h2 className="my-2 text-xl">Data Retention</h2>

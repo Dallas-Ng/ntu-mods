@@ -20,7 +20,7 @@ export default function HelpPage() {
         "text-muted-foreground space-y-4"
       )}>
       <div className="text-foreground">
-        <Header title="Privacy Policy" subtitle="Last Updated: Feb 2026" />
+        <Header title="Privacy Policy" subtitle="Last Updated: May 2026" />
       </div>
 
       <br />
@@ -80,6 +80,18 @@ export default function HelpPage() {
             rel="external nofollow noopener"
             target="_blank">
             Microsoft&apos;s Privacy Statement
+          </Link>
+          .
+        </li>
+        <li>
+          <strong>PostHog</strong> — collects page views, custom events (e.g.
+          timetable interactions), and error reports to help us identify issues
+          and improve the Service. Data is processed by PostHog, Inc. See{" "}
+          <Link
+            href="https://posthog.com/privacy"
+            rel="external nofollow noopener"
+            target="_blank">
+            PostHog&apos;s Privacy Policy
           </Link>
           .
         </li>
@@ -145,10 +157,11 @@ export default function HelpPage() {
       <h2 className="my-2 text-xl">Cookies</h2>
 
       <p>
-        We do not set our own cookies. However, Google Analytics and Microsoft
-        Clarity may set cookies on your device to distinguish users and
-        sessions. You can disable these through your browser settings or by
-        using a browser extension that blocks analytics trackers.
+        We do not set our own cookies. Google Analytics and PostHog are
+        configured to operate without setting cookies. Microsoft Clarity may
+        set cookies on your device to distinguish users and sessions. You can
+        disable these through your browser settings or by using a browser
+        extension that blocks analytics trackers.
       </p>
 
       <h2 className="my-2 text-xl">Data Retention</h2>
@@ -163,8 +176,9 @@ export default function HelpPage() {
           processed and acted on them, or upon your request to delete them.
         </li>
         <li>
-          <strong>Analytics data</strong> — retained according to the retention
-          policies of Google Analytics and Microsoft Clarity respectively.
+          <strong>Analytics data</strong> — retained according to the
+          respective retention policies of Google Analytics, Microsoft Clarity,
+          and PostHog.
         </li>
       </ul>
 

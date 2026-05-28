@@ -3,6 +3,11 @@ const fs = require("fs")
 const path = require("path")
 const MODULE_MAP = require("./src/data/api/module-map.json")
 
+// Match the cutoff used in app/mods/[module]/[year]/[semester]/page.tsx
+const now = new Date()
+const currentAYStart = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1
+const SITEMAP_YEAR_CUTOFF = currentAYStart - 1
+
 module.exports = {
   siteUrl: process.env.SITE_URL || "https://ntumods.com",
   generateRobotsTxt: true,
@@ -29,8 +34,13 @@ module.exports = {
       const sep = stem.indexOf("_")
       const year = stem.slice(0, sep)
       const semester = stem.slice(sep + 1)
+      // Skip years older than cutoff — those pages are thin (no index data) and cause soft 404s
+      if (parseInt(year) < SITEMAP_YEAR_CUTOFF) continue
       const data = JSON.parse(fs.readFileSync(path.join(metadataDir, file), "utf-8"))
       for (const moduleCode of Object.keys(data)) {
+        const entry = MODULE_MAP[moduleCode]
+        // Skip current semester — page.tsx redirects versioned current-semester URLs to /mods/CODE
+        if (entry && entry.currentYear === year && entry.currentSemester === semester) continue
         versionedPaths.push({ loc: `/mods/${moduleCode}/${year}/${semester}`, ...defaults })
       }
     }

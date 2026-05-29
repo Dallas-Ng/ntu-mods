@@ -20,7 +20,7 @@ const CORE_LINKS = [
   { label: "Timetable", href: "/timetable" },
   { label: "Mods", href: "/mods" },
   { label: "Articles", href: "/articles" },
-  { label: "Help", href: "/help" }
+  { label: "FAQ", href: "/faq" }
 ]
 
 const TOOL_LINKS = [

@@ -26,7 +26,7 @@ import {
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { useLatestSemester } from "@/hooks/use-latest-semester"
+import { latestSemester, latestYear } from "@/lib/semesters"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableIndexes } from "@/hooks/use-timetable-indexes"
@@ -285,11 +285,10 @@ const WallpaperCanvas = ({
 
 const ScreenshotTimetable = () => {
   const { timetable } = useTimetable()
-  const { year, semester } = useLatestSemester()
   const { moduleIndexMap, isLoading } = useTimetableIndexes(
     timetable,
-    year,
-    semester
+    latestYear,
+    latestSemester
   )
 
   if (isLoading && !Object.keys(moduleIndexMap).length) {

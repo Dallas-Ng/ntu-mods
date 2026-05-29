@@ -36,3 +36,18 @@ export const GENERATION_INDEX_TYPES: IndexType[] = [
   "DES",
   "PRJ"
 ]
+
+export const DEFAULT_GENERATION_CONFIG: GenerationConfig = {
+  dayStartTime: 800,
+  dayEndTime: 1800,
+  maxConsecutiveSlots: 6,
+  minGapBetweenClasses: 0,
+  lunchBreaks: [],
+  loadPreference: "spread",
+  skippableTypes: [],
+  blacklistedTimeslots: [],
+  preferredFreeDays: [],
+  maxDailyHours: 0,
+  preferredDayOrder: "none",
+  avoidBackToBackTypes: []
+}

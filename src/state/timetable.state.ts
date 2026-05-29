@@ -1,19 +1,6 @@
 import { StateCreator } from "zustand"
 
-const DEFAULT_GENERATION_CONFIG: GenerationConfig = {
-  dayStartTime: 800,
-  dayEndTime: 1800,
-  maxConsecutiveSlots: 6,
-  minGapBetweenClasses: 0,
-  lunchBreaks: [],
-  loadPreference: "spread",
-  skippableTypes: [],
-  blacklistedTimeslots: [],
-  preferredFreeDays: [],
-  maxDailyHours: 0,
-  preferredDayOrder: "none",
-  avoidBackToBackTypes: []
-}
+import { DEFAULT_GENERATION_CONFIG } from "@/lib/generation-config"
 
 export interface TimetableSlice {
   timetables: Timetable[]

@@ -1,6 +1,6 @@
 import SEMESTERS_JSON from "@/data/api/semesters.json"
 
-const [latestYear, latestSemester] = (
+export const [latestYear, latestSemester] = (
   SEMESTERS_JSON[0]?.code ?? "2025;2"
 ).split(";")
 

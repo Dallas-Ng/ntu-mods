@@ -13,16 +13,9 @@ export const ModsFacultySelect = ({ paramsValue }: { paramsValue: string }) => {
 
   const selectItems = [
     { value: "all", label: "All Faculty" },
-    ...Object.entries(MODULE_FACULTY).map(([categoryKey, categoryName]) => ({
+    ...Object.entries(MODULE_FACULTY).map(([categoryKey]) => ({
       value: categoryKey,
       label: categoryKey
-      // (
-      //   <span className="text-muted-foreground">({categoryKey})</span>
-      //   // <div className="min-w-0 items-baseline gap-1 text-wrap">
-      //   // {/* <span>{categoryName}</span> */}
-      //   // <br />
-      //   // </div>
-      // )
     }))
   ]
 

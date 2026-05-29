@@ -2,6 +2,7 @@
 
 import { useMemo } from "react"
 
+import { CODE_QUERY_RE } from "@/lib/filter-modules"
 import type { AllModule } from "@/types/mods"
 import { useAllModules } from "./use-all-modules"
 import { useDebounce } from "./use-debounce"
@@ -13,7 +14,7 @@ function searchModules(modules: AllModule[], query: string): AllModule[] {
   if (!q) return []
 
   const currentModules = modules.filter((m) => m.isCurrentSemester)
-  const isCodeQuery = /^[a-z]{2,4}\d*/i.test(q)
+  const isCodeQuery = CODE_QUERY_RE.test(q)
 
   if (isCodeQuery) {
     const codeMatches = currentModules.filter((m) =>

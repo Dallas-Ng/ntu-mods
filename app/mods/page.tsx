@@ -5,8 +5,8 @@ import Link from "next/link"
 import { ChevronDown, LayoutGrid, List, SlidersHorizontal } from "lucide-react"
 
 import { filterModules, groupModules } from "@/lib/filter-modules"
+import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
-import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useSettings } from "@/hooks/use-settings"
 import type {
   AllModule,
@@ -58,7 +58,8 @@ const ModsPage = (props: Props) => {
     currentOnly = "true"
   } = searchParams
 
-  const { year, semester } = useLatestSemester()
+  const year = latestYear
+  const semester = latestSemester
   const nextYear = parseInt(year) + 1
   const { modules: allModules, isLoading } = useAllModules()
   const { modsViewMode, modsGroupBy, updateSettings } = useSettings()

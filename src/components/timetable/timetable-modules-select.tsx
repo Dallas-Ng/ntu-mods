@@ -6,7 +6,7 @@ import posthog from "posthog-js"
 
 import { parseTimeNumber } from "@/lib/parse-time"
 import { cn } from "@/lib/utils"
-import { useLatestSemester } from "@/hooks/use-latest-semester"
+import { latestSemester, latestYear } from "@/lib/semesters"
 import { useModuleSearchApi } from "@/hooks/use-module-search-api"
 import { useOutsideClick } from "@/hooks/use-outside-click"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
@@ -24,10 +24,9 @@ const TimetableModulesSelect = () => {
   const [isLoadingModule, setIsLoadingModule] = useState(false)
   const { timetable, addItemToTimetable, removeItemFromTimetable } =
     useTimetable()
-  const { year, semester } = useLatestSemester()
   const { results: searchResults } = useModuleSearchApi(inputValue, 300)
   const { isMobile } = useSettings()
-  const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
+  const { indexes: seasonIndexes } = useSeasonIndexes(latestYear, latestSemester)
   const ref = useRef<HTMLDivElement>(null)
   const [disabled, setDisabled] = useState(false)
 

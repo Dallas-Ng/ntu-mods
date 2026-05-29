@@ -6,8 +6,8 @@ import { RefreshCwIcon, SendIcon, WandIcon } from "lucide-react"
 import posthog from "posthog-js"
 
 import { TIMETABLE_AI_SYSTEM_PROMPT } from "@/lib/timetable-ai-system-prompt"
+import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
-import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useSeasonExams } from "@/hooks/use-season-exams"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableGeneration } from "@/hooks/use-timetable-generation"
@@ -85,9 +85,8 @@ function extractConfig(text: string): GenerationConfig | null {
 const TimetableAiChat = () => {
   const updateGenerationConfig = useBoundState((s) => s.updateGenerationConfig)
   const { timetable } = useTimetable()
-  const { year, semester } = useLatestSemester()
   const { modules: allModules } = useAllModules()
-  const { exams } = useSeasonExams(year, semester)
+  const { exams } = useSeasonExams(latestYear, latestSemester)
   const { initModel, chat, isLoading, loadingProgress, isReady, error } =
     useWebLLM()
   const {

@@ -131,6 +131,111 @@ const ChangelogReleaseSection = ({
 
 const CHANGELOG: ChangelogRelease[] = [
   {
+    title: "Articles search, categories, and new guides",
+    date: "May 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Added a search bar and category filter to the{" "}
+            <ChangelogLink href="/articles">Articles</ChangelogLink> page.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Added{" "}
+            <ChangelogLink href="/articles">article category pages</ChangelogLink>{" "}
+            for browsing guides by topic.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Articles now grouped by category in the default{" "}
+            <ChangelogLink href="/articles">list view</ChangelogLink>.
+          </>
+        )
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            Published 4 new guides:{" "}
+            <ChangelogLink href="/articles/complete-ntu-bde-list">
+              complete NTU BDE list
+            </ChangelogLink>
+            ,{" "}
+            <ChangelogLink href="/articles/best-cc-modules-ntu">
+              best CC modules
+            </ChangelogLink>
+            ,{" "}
+            <ChangelogLink href="/articles/ntu-module-selection-guide">
+              module selection guide
+            </ChangelogLink>
+            , and{" "}
+            <ChangelogLink href="/articles/does-bde-count-towards-degree-ntu">
+              whether BDEs count toward your degree
+            </ChangelogLink>
+            .
+          </>
+        )
+      },
+      {
+        category: "Bug Fix",
+        content: (
+          <>
+            Fixed a navigation error when browsing{" "}
+            <ChangelogLink href="/articles">articles</ChangelogLink> by category.
+          </>
+        )
+      }
+    ]
+  },
+  {
+    title: "Navigation updates and FAQ",
+    date: "May 2026",
+    items: [
+      {
+        category: "Improvement",
+        content:
+          "Replaced the Help link in the navbar with a Resources dropdown grouping Changelog, FAQ, and Sitemap."
+      },
+      {
+        category: "Improvement",
+        content:
+          "Redesigned mobile navigation with a right-side drawer for easier access."
+      },
+      {
+        category: "New Feature",
+        content:
+          "Current semester now shown prominently in the navbar and footer."
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Moved <ChangelogLink href="/faq">Help to /faq</ChangelogLink> with a
+            table of contents for quicker navigation.
+          </>
+        )
+      },
+      {
+        category: "Bug Fix",
+        content: (
+          <>
+            Fixed timetable onboarding modal not dismissing after initial setup.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Timetable modes and index picking",
     date: "May 2026",
     items: [

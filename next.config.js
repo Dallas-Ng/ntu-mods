@@ -38,6 +38,11 @@ const nextConfig = {
         source: "/mod",
         destination: "/mods",
         permanent: true
+      },
+      {
+        source: "/help",
+        destination: "/faq",
+        permanent: true
       }
     ]
   },

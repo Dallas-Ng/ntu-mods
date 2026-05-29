@@ -25,7 +25,7 @@ const FOOTER_GROUPS = [
       { label: "Sitemap", href: "/sitemap" },
       { label: "Changelog", href: "/changelog" },
       { label: "Report an Issue", href: "/settings#feedback" },
-      { label: "Help", href: "/help" }
+      { label: "FAQ", href: "/faq" }
     ]
   },
   {
@@ -42,7 +42,7 @@ const Footer = () => {
           Current semester
         </p>
 
-        <Link href="/help#current-semester" className="hover:underline">
+        <Link href="/faq#current-semester" className="hover:underline">
           <span className="inline-flex items-center rounded-md bg-blue-500/10 px-2.5 py-1 text-sm font-semibold text-blue-500 ring-1 ring-blue-500/20">
             {LATEST_SEMESTER_LABEL}
           </span>

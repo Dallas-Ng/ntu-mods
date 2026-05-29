@@ -51,6 +51,13 @@ export const Banner = {
       </BannerWrapper>
     </Link>
   ),
+  ay2026s1: () => (
+    <Link href="/mods">
+      <BannerWrapper>
+        AY2026 Semester 1 data is now available →
+      </BannerWrapper>
+    </Link>
+  ),
   experienceProblems: () => (
     <BannerWrapper>
       Clicking of courses in the timetable has problems, please use the

@@ -7,8 +7,8 @@ import posthog from "posthog-js"
 import { DAY_MAP } from "@/lib/constants"
 import { getIndexType } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
-import { cn } from "@/lib/utils"
 import { latestSemester, latestYear } from "@/lib/semesters"
+import { cn } from "@/lib/utils"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -64,7 +64,10 @@ interface Props {
 
 const TimetableIndexModifier = (props: Props) => {
   const { moduleKey, onOpenChange, open = false } = props
-  const { indexes: seasonIndexes } = useSeasonIndexes(latestYear, latestSemester)
+  const { indexes: seasonIndexes } = useSeasonIndexes(
+    latestYear,
+    latestSemester
+  )
   const [indexes, setIndexes] = useState<Indexes>({})
   const [filteredIndexes, setFilteredIndexes] = useState<Indexes>({})
   const { isMobile } = useSettings()

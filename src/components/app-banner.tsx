@@ -11,7 +11,7 @@ const AppBanner = () => {
 
   if (HIDDEN_BANNER_PATHS.has(pathname)) return null
 
-  return <Banner.bdeGuides />
+  return <Banner.ay2026s1 />
 }
 
 export default AppBanner

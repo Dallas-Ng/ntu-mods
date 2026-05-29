@@ -1,7 +1,7 @@
+import type { AllModule, ModsGroupBy } from "@/types/mods"
 import { MODULE_CATEGORY, MODULE_FACULTY } from "@/lib/constants"
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
-import type { AllModule, ModsGroupBy } from "@/types/mods"
 
 export const CODE_QUERY_RE = /^[a-z]{2,4}\d*/i
 

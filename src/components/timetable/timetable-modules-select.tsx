@@ -5,8 +5,8 @@ import { Check } from "lucide-react"
 import posthog from "posthog-js"
 
 import { parseTimeNumber } from "@/lib/parse-time"
-import { cn } from "@/lib/utils"
 import { latestSemester, latestYear } from "@/lib/semesters"
+import { cn } from "@/lib/utils"
 import { useModuleSearchApi } from "@/hooks/use-module-search-api"
 import { useOutsideClick } from "@/hooks/use-outside-click"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
@@ -26,7 +26,10 @@ const TimetableModulesSelect = () => {
     useTimetable()
   const { results: searchResults } = useModuleSearchApi(inputValue, 300)
   const { isMobile } = useSettings()
-  const { indexes: seasonIndexes } = useSeasonIndexes(latestYear, latestSemester)
+  const { indexes: seasonIndexes } = useSeasonIndexes(
+    latestYear,
+    latestSemester
+  )
   const ref = useRef<HTMLDivElement>(null)
   const [disabled, setDisabled] = useState(false)
 

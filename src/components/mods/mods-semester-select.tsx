@@ -2,9 +2,9 @@
 
 import posthog from "posthog-js"
 
+import type { Semester } from "@/types/mods"
 import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
-import type { Semester } from "@/types/mods"
 import CustomSelect from "@/components/select"
 
 export const ModsSemesterSelect = ({

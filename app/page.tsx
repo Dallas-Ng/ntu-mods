@@ -68,7 +68,6 @@ export default function IndexPage() {
         <div className="xl:container xl:py-20">
           <Articles />
         </div>
-
       </div>
 
       <script

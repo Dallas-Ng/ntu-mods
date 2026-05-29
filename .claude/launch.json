@@ -10,11 +10,10 @@
     },
     {
       "name": "Next.js Dev (Worktree)",
-      "runtimeExecutable": "bash",
-      "runtimeArgs": [".claude/worktree-dev.sh"],
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["dev"],
       "port": 3001,
-      "autoPort": true,
-      "url": "http://localhost:3001"
+      "autoPort": true
     },
     {
       "name": "Next.js Start (production)",

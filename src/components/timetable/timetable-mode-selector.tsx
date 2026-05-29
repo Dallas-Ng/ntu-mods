@@ -29,8 +29,7 @@ const MODES: {
     id: "generation",
     label: "Generate",
     icon: <WandIcon className="size-4" />,
-    description: "Configure preferences and auto-generate a timetable",
-    comingSoon: true
+    description: "Configure preferences and auto-generate a timetable"
   },
   {
     id: "ai",

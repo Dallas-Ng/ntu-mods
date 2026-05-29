@@ -38,8 +38,8 @@ export const siteConfig = {
       title: "NTU Modules, Courses & Indexes | NTUMods",
       desc: "Browse all NTU courses and modules. Search by code or title, compare indexes, check exam dates, view class times, venues, and prerequisites. Updated each semester."
     },
-    help: {
-      title: "NTUMods Help",
+    faq: {
+      title: "NTUMods FAQ — Frequently Asked Questions",
       desc: "Find quick answers for planning NTU timetables, browsing modules, choosing indexes, exporting schedules, sharing links, and fixing local app issues."
     },
     privacy: {

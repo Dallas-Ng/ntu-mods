@@ -32,7 +32,7 @@ import {
 
 const RESOURCE_LINKS = [
   { label: "Changelog", route: "/changelog" },
-  { label: "Help", route: "/help" },
+  { label: "FAQ", route: "/faq" },
   { label: "Sitemap", route: "/sitemap" }
 ]
 
@@ -163,7 +163,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-1 sm:gap-2">
-          <Link href="/help#current-semester" className="hover:underline">
+          <Link href="/faq#current-semester" className="hover:underline">
             <span className="text-sm">{LATEST_SEMESTER_LABEL_SHORT}</span>
           </Link>
 

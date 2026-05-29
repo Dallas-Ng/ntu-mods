@@ -21,8 +21,7 @@ import ModsWorkloadTable from "@/components/mods/mods-workload-table"
 import RelatedModules from "@/components/related-modules"
 
 export const dynamic = "force-static"
-export const dynamicParams =
-  process.env.VERCEL_ENV === "production" ? false : true
+export const dynamicParams = true
 export const revalidate = false
 
 export default async function Page(props: {

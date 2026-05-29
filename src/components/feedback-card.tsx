@@ -91,13 +91,13 @@ const FeedbackCard = ({ divClassName }: Props) => {
                 <FormControl>
                   <Input
                     autoComplete="off"
-                    placeholder="my@email.com"
+                    placeholder="your@email.com"
                     {...field}
                   />
                 </FormControl>
 
                 <FormDescription>
-                  We will use this to contact you.
+                  I&apos;ll use this to follow up with you.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -112,7 +112,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
                 <FormLabel>Feedback</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Your Feedback..."
+                    placeholder="Share your thoughts, report an issue, or suggest an improvement..."
                     {...field}
                     className="h-[200px] lg:h-[100px]"
                   />

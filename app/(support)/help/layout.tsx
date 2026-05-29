@@ -3,9 +3,9 @@ import { Metadata } from "next"
 import { siteConfig } from "@/config/site"
 
 export const metadata: Metadata = {
-  title: siteConfig.metatags.help.title,
-  description: siteConfig.metatags.help.desc,
-  alternates: { canonical: "/help" }
+  title: siteConfig.metatags.faq.title,
+  description: siteConfig.metatags.faq.desc,
+  alternates: { canonical: "/faq" }
 }
 
 interface LayoutProps {

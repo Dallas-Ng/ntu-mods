@@ -21,7 +21,7 @@ import ModsWorkloadTable from "@/components/mods/mods-workload-table"
 import RelatedModules from "@/components/related-modules"
 
 export const dynamic = "force-static"
-export const dynamicParams = false
+export const dynamicParams = true
 export const revalidate = false
 
 export default async function Page(props: {
@@ -226,6 +226,7 @@ export default async function Page(props: {
 }
 
 export async function generateStaticParams() {
+  if (process.env.VERCEL_ENV !== "production") return []
   // Use module-map to cover all 4,228 historical module codes, not just the current semester.
   // Prevents ISR fallback writes for historical modules.
   const fs = await import("fs/promises")

@@ -5,8 +5,8 @@ import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import type { ArticleHeading } from "@/lib/server/articles"
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 import ArticleToc from "@/components/articles/article-toc"
-import FeedbackCard from "@/components/feedback-card"
 import Header from "@/components/header"
 
 export const metadata: Metadata = {
@@ -184,11 +184,13 @@ export default function FaqPage() {
               <h2 className="text-xl font-semibold">Feedback</h2>
 
               <p className="text-muted-foreground text-sm">
-                Let us know of any problems or suggestions you have.
+                Have a problem or suggestion? Let us know.
               </p>
             </div>
 
-            <FeedbackCard divClassName="border" />
+            <Link href="/feedback">
+              <Button variant="outline">Share Feedback</Button>
+            </Link>
           </div>
         </div>
 

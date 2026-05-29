@@ -1,10 +1,11 @@
 "use client"
 
 import dynamic from "next/dynamic"
+import Link from "next/link"
 
 import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
 import { cn } from "@/lib/utils"
-import FeedbackCard from "@/components/feedback-card"
+import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import { AppearanceSettingsLoading } from "@/components/settings/appearance-settings"
 import { TableSettingsLoading } from "@/components/settings/table-settings"
@@ -72,14 +73,18 @@ export default function SettingsPage() {
           id="feedback"
           className="bg-card space-y-2 rounded-md border px-4 pt-2 pb-4 shadow-lg">
           <div>
-            <p>Feedback </p>
+            <p>Feedback</p>
 
             <p className="text-muted-foreground text-sm">
-              Let us know of any problems or suggestions you have!
+              Have a problem or suggestion? Let us know.
             </p>
           </div>
 
-          <FeedbackCard divClassName="border-none p-0 mt-5" />
+          <Link href="/feedback">
+            <Button variant="outline" className="w-full">
+              Share Feedback
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

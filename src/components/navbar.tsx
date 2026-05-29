@@ -31,8 +31,7 @@ import {
 
 const RESOURCE_LINKS = [
   { label: "Changelog", route: "/changelog" },
-  { label: "FAQ", route: "/faq" },
-  { label: "Sitemap", route: "/sitemap" }
+  { label: "FAQ", route: "/faq" }
 ]
 
 const Navbar = () => {

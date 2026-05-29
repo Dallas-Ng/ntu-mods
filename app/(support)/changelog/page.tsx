@@ -131,8 +131,127 @@ const ChangelogReleaseSection = ({
 
 const CHANGELOG: ChangelogRelease[] = [
   {
+    title: "AY 2026 Semester 1 now available",
+    date: "29 May 2026",
+    items: [
+      {
+        category: "Data",
+        content: (
+          <>
+            AY 2026 Semester 1 course data is now live — 1,126 courses and 4,842
+            indexes available in the{" "}
+            <ChangelogLink href="/timetable">timetable</ChangelogLink> and{" "}
+            <ChangelogLink href="/mods">module browser</ChangelogLink>.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content:
+          "Current semester now shown prominently in the navbar and footer."
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Moved <ChangelogLink href="/faq">Help to /faq</ChangelogLink> with a
+            table of contents for quicker navigation.
+          </>
+        )
+      }
+    ]
+  },
+  {
+    title: "Articles search, categories, and new guides",
+    date: "22 May 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Added a search bar and category filter to the{" "}
+            <ChangelogLink href="/articles">Articles</ChangelogLink> page.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Added{" "}
+            <ChangelogLink href="/articles">article category pages</ChangelogLink>{" "}
+            for browsing guides by topic.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Articles now grouped by category in the default{" "}
+            <ChangelogLink href="/articles">list view</ChangelogLink>.
+          </>
+        )
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            Published 4 new guides:{" "}
+            <ChangelogLink href="/articles/complete-ntu-bde-list">
+              complete NTU BDE list
+            </ChangelogLink>
+            ,{" "}
+            <ChangelogLink href="/articles/best-cc-modules-ntu">
+              best CC modules
+            </ChangelogLink>
+            ,{" "}
+            <ChangelogLink href="/articles/ntu-module-selection-guide">
+              module selection guide
+            </ChangelogLink>
+            , and{" "}
+            <ChangelogLink href="/articles/does-bde-count-towards-degree-ntu">
+              whether BDEs count toward your degree
+            </ChangelogLink>
+            .
+          </>
+        )
+      },
+      {
+        category: "Bug Fix",
+        content: (
+          <>
+            Fixed a navigation error when browsing{" "}
+            <ChangelogLink href="/articles">articles</ChangelogLink> by category.
+          </>
+        )
+      }
+    ]
+  },
+  {
+    title: "Resources dropdown and mobile navigation",
+    date: "21 May 2026",
+    items: [
+      {
+        category: "Improvement",
+        content:
+          "Replaced the Help link in the navbar with a Resources dropdown grouping Changelog, FAQ, and Sitemap."
+      },
+      {
+        category: "Improvement",
+        content:
+          "Redesigned mobile navigation with a right-side drawer for easier access."
+      },
+      {
+        category: "Bug Fix",
+        content:
+          "Fixed timetable onboarding modal not dismissing after initial setup."
+      }
+    ]
+  },
+  {
     title: "Timetable modes and index picking",
-    date: "May 2026",
+    date: "21 May 2026",
     items: [
       {
         category: "Improvement",
@@ -169,7 +288,7 @@ const CHANGELOG: ChangelogRelease[] = [
   },
   {
     title: "More BDE guides and navigation",
-    date: "May 2026",
+    date: "20 May 2026",
     items: [
       {
         category: "Content",
@@ -198,7 +317,7 @@ const CHANGELOG: ChangelogRelease[] = [
   },
   {
     title: "Better timetable planning",
-    date: "Apr 2026",
+    date: "29 Apr 2026",
     items: [
       {
         category: "New Feature",
@@ -232,7 +351,7 @@ const CHANGELOG: ChangelogRelease[] = [
   },
   {
     title: "Articles and planning guides",
-    date: "Apr 2026",
+    date: "29 Apr 2026",
     items: [
       {
         category: "New Feature",
@@ -276,7 +395,7 @@ const CHANGELOG: ChangelogRelease[] = [
   },
   {
     title: "Feedback and support",
-    date: "Mar 2026",
+    date: "22 Mar 2026",
     items: [
       {
         category: "Improvement",
@@ -295,8 +414,8 @@ const CHANGELOG: ChangelogRelease[] = [
         content: (
           <>
             Expanded{" "}
-            <ChangelogLink href="/help">help documentation</ChangelogLink> and
-            FAQ content.
+            <ChangelogLink href="/faq">FAQ documentation</ChangelogLink> and
+            help content.
           </>
         )
       }
@@ -315,7 +434,7 @@ const CHANGELOG: ChangelogRelease[] = [
   },
   {
     title: "Data, modules, and exams",
-    date: "Mar 2026",
+    date: "8 Mar 2026",
     items: [
       {
         category: "Improvement",
@@ -348,7 +467,7 @@ const CHANGELOG: ChangelogRelease[] = [
   },
   {
     title: "Sharing and exports",
-    date: "Mar 2026",
+    date: "22 Mar 2026",
     items: [
       {
         category: "Bug Fix",
@@ -374,6 +493,89 @@ const CHANGELOG: ChangelogRelease[] = [
         category: "Performance",
         content:
           "Improved static data delivery to reduce serverless function usage."
+      }
+    ]
+  },
+  {
+    title: "Multi-semester support",
+    date: "21 Feb 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Added multi-year and multi-semester support — browse modules and
+            plan timetables across different academic years and semesters in the{" "}
+            <ChangelogLink href="/mods">module browser</ChangelogLink>.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content:
+          "Current academic year and semester now shown in the page header with no layout shift."
+      }
+    ]
+  },
+  {
+    title: "AY 2024/2025 data",
+    date: "9 Jun 2024",
+    items: [
+      {
+        category: "Data",
+        content: (
+          <>
+            AY 2024/2025 course data added — all modules and indexes available
+            in the <ChangelogLink href="/timetable">timetable</ChangelogLink>{" "}
+            and <ChangelogLink href="/mods">module browser</ChangelogLink>.
+          </>
+        )
+      }
+    ]
+  },
+  {
+    title: "Workload info and module filtering",
+    date: "30 Mar 2024",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Added a workload breakdown table to each{" "}
+            <ChangelogLink href="/mods">module page</ChangelogLink> showing
+            lecture, tutorial, lab, and project hours.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Added module level filtering (1000–4000+) to the{" "}
+            <ChangelogLink href="/mods">module browser</ChangelogLink>.
+          </>
+        )
+      }
+    ]
+  },
+  {
+    title: "Timetable sharing",
+    date: "19 Dec 2023",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Share your{" "}
+            <ChangelogLink href="/timetable">timetable</ChangelogLink> with
+            friends via a link.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content:
+          "Indexes are now assigned without clashes automatically when picking modules."
       }
     ]
   }

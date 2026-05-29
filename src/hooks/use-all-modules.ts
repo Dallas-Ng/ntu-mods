@@ -2,16 +2,7 @@
 
 import { useEffect, useState } from "react"
 
-export interface AllModule {
-  code: string
-  title: string
-  au: string
-  searchKeys: string[]
-  notAvailableToProgramme?: string
-  isCurrentSemester?: boolean
-  latestYear?: string
-  latestSemester?: string
-}
+import type { AllModule } from "@/types/mods"
 
 let modulesCache: AllModule[] | null = null
 let fetchPromise: Promise<AllModule[]> | null = null

@@ -1,9 +1,8 @@
 "use client"
 
+import type { ModsGroupBy } from "@/types/mods"
 import { useSettings } from "@/hooks/use-settings"
 import CustomSelect from "@/components/select"
-
-export type ModsGroupBy = "none" | "level" | "au" | "faculty" | "type"
 
 const GROUP_BY_OPTIONS: { value: ModsGroupBy; label: string }[] = [
   { value: "none", label: "No Grouping" },

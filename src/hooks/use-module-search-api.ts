@@ -2,7 +2,8 @@
 
 import { useMemo } from "react"
 
-import { useAllModules, type AllModule } from "./use-all-modules"
+import type { AllModule } from "@/types/mods"
+import { useAllModules } from "./use-all-modules"
 import { useDebounce } from "./use-debounce"
 
 const MAX_RESULTS = 50

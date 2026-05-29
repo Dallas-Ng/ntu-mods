@@ -1,10 +1,11 @@
 export const formatTitle = (courseTitle: string) => {
-  return (
-    courseTitle
-      // .toLowerCase()
-      .replace(/[^a-zA-Z ]/g, "")
-      .replace(/\s+/g, " ")
-  )
+  return courseTitle.replace(/[^a-zA-Z ]/g, "").replace(/\s+/g, " ")
+}
+
+export function formatHhmm(hhmm: number): string {
+  const h = Math.floor(hhmm / 100)
+  const m = hhmm % 100
+  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`
 }
 
 export const formatRemarks = (remarks: string) => {

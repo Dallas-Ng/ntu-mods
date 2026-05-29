@@ -5,9 +5,8 @@ import posthog from "posthog-js"
 import { MODULE_FACULTY } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
+import type { SearchModuleFaculty } from "@/types/mods"
 import CustomSelect from "@/components/select"
-
-export type SearchModuleFaculty = ModuleFaculty | "all"
 
 export const ModsFacultySelect = ({ paramsValue }: { paramsValue: string }) => {
   const { value, setValue } = useModsSearchParams(paramsValue, "moduleFaculty")

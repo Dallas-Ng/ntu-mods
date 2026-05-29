@@ -23,6 +23,7 @@ const currentAYStart = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear
 const STATIC_YEAR_CUTOFF = currentAYStart - 1 // pre-build current AY + 1 prior
 
 export async function generateStaticParams() {
+  if (process.env.VERCEL_ENV !== "production") return []
   const fs = await import("fs/promises")
   const path = await import("path")
   const metadataDir = path.join(process.cwd(), "src/data/api/metadata")

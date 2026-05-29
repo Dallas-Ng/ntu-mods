@@ -109,14 +109,22 @@ export default function SitemapPage() {
 
       {articles.length > 0 && (
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Planning Guides</h2>
-          <LinkGrid
-            links={articles.map((article) => ({
-              label: article.title,
-              href: `/articles/${article.slug}`,
-              description: article.description
-            }))}
-          />
+          <h2 className="text-xl font-semibold">Articles</h2>
+          <div className="grid gap-x-4 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
+            {articles.map((article) => (
+              <Link
+                key={article.slug}
+                href={`/articles/${article.slug}`}
+                className="text-muted-foreground hover:text-blue-500 text-sm leading-6 transition-colors">
+                <span className="text-foreground font-medium">
+                  {article.title}
+                </span>
+                {article.description && (
+                  <> &mdash; {article.description}</>
+                )}
+              </Link>
+            ))}
+          </div>
         </section>
       )}
 

@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
 import { getAllArticles, getArticleCategories } from "@/lib/server/articles"
+import Header from "@/components/header"
 import ArticlesList from "@/components/articles/articles-list"
 
 export const dynamic = "force-static"
@@ -41,15 +42,11 @@ export default function ArticlesPage() {
   )
 
   return (
-    <div className="py-6 sm:py-8">
-      <div className="mb-6 max-w-3xl sm:mb-8">
-        <h1 className="text-2xl font-bold tracking-normal sm:text-3xl">
-          Articles
-        </h1>
-        <p className="text-foreground/80 mt-2">
-          Guides, updates, and notes from NTUMods.
-        </p>
-      </div>
+    <div className="relative space-y-3">
+      <Header
+        title="Articles"
+        subtitle="Guides, updates, and notes from NTUMods."
+      />
 
       <Suspense>
         <ArticlesList articles={articleList} categories={categories} />

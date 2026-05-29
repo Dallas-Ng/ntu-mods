@@ -22,7 +22,6 @@ const FOOTER_GROUPS = [
   {
     title: "Resources",
     links: [
-      { label: "Sitemap", href: "/sitemap" },
       { label: "Changelog", href: "/changelog" },
       { label: "Report an Issue", href: "/settings#feedback" },
       { label: "FAQ", href: "/faq" }
@@ -30,7 +29,10 @@ const FOOTER_GROUPS = [
   },
   {
     title: "Project",
-    links: [{ label: "Privacy", href: "/privacy" }]
+    links: [
+      { label: "Privacy", href: "/privacy" },
+      { label: "Sitemap", href: "/sitemap" }
+    ]
   }
 ] as const
 

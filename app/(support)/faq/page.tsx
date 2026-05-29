@@ -114,25 +114,6 @@ const FAQ_CONFIG: FaqConfig[] = [
     question: "Do you track my data?",
     answer:
       "We track general usage analytics (page views, number of visitors) via Vercel. We do not collect any personal data. Everything you add to your timetable is stored only in your browser and never sent to our servers."
-  },
-  {
-    id: "something-broken",
-    question: "Something looks broken!",
-    answer: (
-      <>
-        Try the{" "}
-        <Link
-          href="/debug"
-          className="text-blue-500 transition-colors hover:text-blue-600">
-          debug page
-        </Link>
-        , which lets you inspect and reset your local timetable data. This is
-        useful if the app behaves unexpectedly after an update. You can also
-        send us feedback below.
-      </>
-    ),
-    answerText:
-      "Try the debug page at /debug, which lets you inspect and reset your local timetable data. This is useful if the app behaves unexpectedly after an update. You can also send us feedback."
   }
 ]
 

@@ -1,7 +1,37 @@
+import hljs from "highlight.js/lib/core"
+import bash from "highlight.js/lib/languages/bash"
+import javascript from "highlight.js/lib/languages/javascript"
+import json from "highlight.js/lib/languages/json"
+import python from "highlight.js/lib/languages/python"
+import typescript from "highlight.js/lib/languages/typescript"
+import xml from "highlight.js/lib/languages/xml"
+import yaml from "highlight.js/lib/languages/yaml"
 import Link from "next/link"
 
 import type { ArticleHeading } from "@/lib/server/articles"
 import { cn } from "@/lib/utils"
+
+hljs.registerLanguage("bash", bash)
+hljs.registerLanguage("sh", bash)
+hljs.registerLanguage("javascript", javascript)
+hljs.registerLanguage("js", javascript)
+hljs.registerLanguage("json", json)
+hljs.registerLanguage("python", python)
+hljs.registerLanguage("py", python)
+hljs.registerLanguage("typescript", typescript)
+hljs.registerLanguage("ts", typescript)
+hljs.registerLanguage("html", xml)
+hljs.registerLanguage("xml", xml)
+hljs.registerLanguage("yaml", yaml)
+hljs.registerLanguage("yml", yaml)
+
+const escapeHtml = (str: string) =>
+  str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;")
 
 interface Props {
   content: string
@@ -207,13 +237,20 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
         index += 1
       }
 
+      const codeStr = code.join("\n")
+      const highlighted =
+        language && hljs.getLanguage(language)
+          ? hljs.highlight(codeStr, { language }).value
+          : escapeHtml(codeStr)
+
       blocks.push(
         <pre
           key={index}
           className="bg-muted text-foreground my-5 max-w-full overflow-x-auto rounded-md border p-3 text-sm sm:my-6 sm:p-4">
-          <code data-language={language} className="whitespace-pre">
-            {code.join("\n")}
-          </code>
+          <code
+            className={cn("whitespace-pre", language && "hljs")}
+            dangerouslySetInnerHTML={{ __html: highlighted }}
+          />
         </pre>
       )
       index += 1

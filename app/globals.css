@@ -230,6 +230,81 @@
   }
 }
 
+/* highlight.js token colours — light mode (GitHub theme) */
+.hljs-comment,
+.hljs-quote {
+  color: #6a737d;
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #d73a49;
+}
+.hljs-string,
+.hljs-attr {
+  color: #032f62;
+}
+.hljs-title,
+.hljs-section,
+.hljs-name {
+  color: #6f42c1;
+}
+.hljs-type,
+.hljs-literal,
+.hljs-number,
+.hljs-built_in,
+.hljs-bullet,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-meta {
+  color: #e36209;
+}
+.hljs-addition {
+  color: #22863a;
+  background: #f0fff4;
+}
+.hljs-deletion {
+  color: #b31d28;
+  background: #ffeef0;
+}
+
+/* highlight.js token colours — dark mode (GitHub Dark theme) */
+.dark .hljs-comment,
+.dark .hljs-quote {
+  color: #8b949e;
+}
+.dark .hljs-keyword,
+.dark .hljs-selector-tag {
+  color: #ff7b72;
+}
+.dark .hljs-string,
+.dark .hljs-attr {
+  color: #a5d6ff;
+}
+.dark .hljs-title,
+.dark .hljs-section,
+.dark .hljs-name {
+  color: #d2a8ff;
+}
+.dark .hljs-type,
+.dark .hljs-literal,
+.dark .hljs-number,
+.dark .hljs-built_in,
+.dark .hljs-bullet,
+.dark .hljs-variable,
+.dark .hljs-template-variable,
+.dark .hljs-meta {
+  color: #ffa657;
+}
+.dark .hljs-addition {
+  color: #aff5b4;
+  background: #033a16;
+}
+.dark .hljs-deletion {
+  color: #ffdcd7;
+  background: #67060c;
+}
+
 table {
   @apply bg-card size-full border-collapse border-2 border-slate-200 dark:border-slate-900;
 }

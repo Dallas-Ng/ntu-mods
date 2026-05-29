@@ -211,6 +211,13 @@ export default async function ArticleOrCategoryPage(props: {
 
   const moreArticles = getAllArticles()
     .filter((item) => item.slug !== article.slug)
+    .map((item) => ({
+      ...item,
+      score:
+        (item.category === article.category ? 10 : 0) +
+        item.tags.filter((t) => article.tags.includes(t)).length
+    }))
+    .sort((a, b) => b.score - a.score)
     .slice(0, 3)
 
   const jsonLd: WithContext<ArticleJsonLd> = {

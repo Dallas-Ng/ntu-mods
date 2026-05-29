@@ -55,10 +55,12 @@ const formatArticleDate = (date: string) =>
 
 function ArticleCard({
   article,
-  showCategory
+  showCategory,
+  onTagClick
 }: {
   article: ArticleListItem
   showCategory: boolean
+  onTagClick: (tag: string) => void
 }) {
   return (
     <Link
@@ -92,6 +94,22 @@ function ArticleCard({
         <p className="text-foreground/80 mt-2 line-clamp-3 text-sm leading-6 wrap-break-word">
           {article.description}
         </p>
+        {article.tags.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {article.tags.map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault()
+                  onTagClick(tag)
+                }}
+                className="bg-muted text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded px-1.5 py-0.5 text-xs transition-colors">
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </Link>
   )
@@ -108,8 +126,14 @@ export default function ArticlesList({
 
   const queryParam = searchParams.get("q") ?? ""
   const categoryParam = searchParams.get("category") ?? ALL_CATEGORIES
+  const tagParam = searchParams.get("tag") ?? ""
   const [searchQuery, setSearchQuery] = useState(queryParam)
   const debouncedSearchQuery = useDebounce(searchQuery, 250)
+
+  const allTags = useMemo(
+    () => Array.from(new Set(articles.flatMap((a) => a.tags))).sort(),
+    [articles]
+  )
 
   const activeCategory =
     categories.find(
@@ -119,6 +143,8 @@ export default function ArticlesList({
     activeCategory === ALL_CATEGORIES
       ? ALL_CATEGORIES
       : getCategoryParam(activeCategory)
+
+  const activeTag = allTags.find((t) => getCategoryParam(t) === tagParam) ?? ""
 
   const updateParams = useCallback(
     (updates: Record<string, string | null>) => {
@@ -170,9 +196,17 @@ export default function ArticlesList({
     return () => document.removeEventListener("keydown", handleKeyDown)
   }, [])
 
+  const handleTagClick = useCallback(
+    (tag: string) => {
+      updateParams({ tag: getCategoryParam(tag) })
+    },
+    [updateParams]
+  )
+
   const hasSearch = queryParam.trim().length > 0
   const hasCategory = activeCategory !== ALL_CATEGORIES
-  const hasActiveFilters = hasSearch || hasCategory
+  const hasTag = Boolean(activeTag)
+  const hasActiveFilters = hasSearch || hasCategory || hasTag
 
   const filteredArticles = useMemo(() => {
     const normalisedQuery = queryParam.trim().toLowerCase()
@@ -184,10 +218,12 @@ export default function ArticlesList({
       const matchesSearch =
         !normalisedQuery ||
         getSearchText(article).toLowerCase().includes(normalisedQuery)
+      const matchesTag =
+        !activeTag || article.tags.some((t) => t === activeTag)
 
-      return matchesCategory && matchesSearch
+      return matchesCategory && matchesSearch && matchesTag
     })
-  }, [activeCategory, activeCategoryParam, articles, queryParam])
+  }, [activeCategory, activeCategoryParam, activeTag, articles, queryParam])
 
   const shouldGroup = !hasCategory
 
@@ -302,6 +338,15 @@ export default function ArticlesList({
                 <X className="size-3" />
               </Button>
             )}
+            {hasTag && (
+              <Button
+                variant="secondary"
+                size="xs"
+                onClick={() => updateParams({ tag: null })}>
+                #{activeTag}
+                <X className="size-3" />
+              </Button>
+            )}
           </div>
         )}
       </div>
@@ -318,6 +363,7 @@ export default function ArticlesList({
                       key={article.slug}
                       article={article}
                       showCategory={false}
+                      onTagClick={handleTagClick}
                     />
                   ))}
                 </div>
@@ -330,7 +376,8 @@ export default function ArticlesList({
               <ArticleCard
                 key={article.slug}
                 article={article}
-                showCategory={false}
+                showCategory={!hasCategory}
+                onTagClick={handleTagClick}
               />
             ))}
           </div>

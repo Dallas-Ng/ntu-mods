@@ -60,30 +60,6 @@ function getModuleGroups() {
   }))
 }
 
-function LinkGrid({
-  links
-}: {
-  links: Array<{ label: string; href: string; description?: string }>
-}) {
-  return (
-    <div className="grid gap-2 sm:grid-cols-2">
-      {links.map((link) => (
-        <Link
-          key={link.href}
-          href={link.href}
-          className="hover:bg-muted rounded-md border p-3 transition-colors">
-          <span className="text-foreground font-medium">{link.label}</span>
-
-          {link.description && (
-            <span className="text-muted-foreground mt-1 block text-sm leading-6">
-              {link.description}
-            </span>
-          )}
-        </Link>
-      ))}
-    </div>
-  )
-}
 
 export default function SitemapPage() {
   const articles = getAllArticles()
@@ -99,12 +75,30 @@ export default function SitemapPage() {
 
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">Core Pages</h2>
-        <LinkGrid links={CORE_LINKS} />
+        <div className="flex flex-col gap-y-1 sm:flex-row sm:flex-wrap sm:gap-x-8">
+          {CORE_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-foreground hover:text-blue-500 text-sm font-medium leading-6 transition-colors">
+              {link.label}
+            </Link>
+          ))}
+        </div>
       </section>
 
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">Tools and Support</h2>
-        <LinkGrid links={TOOL_LINKS} />
+        <div className="flex flex-col gap-y-1 sm:flex-row sm:flex-wrap sm:gap-x-8">
+          {TOOL_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-foreground hover:text-blue-500 text-sm font-medium leading-6 transition-colors">
+              {link.label}
+            </Link>
+          ))}
+        </div>
       </section>
 
       {articles.length > 0 && (
@@ -115,13 +109,8 @@ export default function SitemapPage() {
               <Link
                 key={article.slug}
                 href={`/articles/${article.slug}`}
-                className="text-muted-foreground hover:text-blue-500 text-sm leading-6 transition-colors">
-                <span className="text-foreground font-medium">
-                  {article.title}
-                </span>
-                {article.description && (
-                  <> &mdash; {article.description}</>
-                )}
+                className="text-foreground hover:text-blue-500 text-sm font-medium leading-6 transition-colors">
+                {article.title}
               </Link>
             ))}
           </div>

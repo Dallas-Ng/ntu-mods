@@ -4,16 +4,17 @@ import { useState } from "react"
 import { Calendar } from "lucide-react"
 import { toast } from "sonner"
 
+import { latestSemester, latestYear } from "@/lib/semesters"
 import { getIcs } from "@/lib/get-ics"
 import { useAllModules } from "@/hooks/use-all-modules"
-import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 import ButtonCollapsable from "@/components/button-collapsable"
 
 const TimetableDownloadCalendarButton = () => {
   const { timetable } = useTimetable()
-  const { year, semester } = useLatestSemester()
+  const year = latestYear
+  const semester = latestSemester
   const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const { modules } = useAllModules()
   const [loading, setLoading] = useState(false)

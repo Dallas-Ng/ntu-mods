@@ -5,7 +5,14 @@ import { useBoundState } from "@/state/bound.state"
 import { InfoIcon, Settings2Icon, WandIcon } from "lucide-react"
 import posthog from "posthog-js"
 
-import { COURSE_TYPE, STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
+import { COURSE_TYPE, TRUN_DAY_MAP } from "@/lib/constants"
+import { formatHhmm } from "@/lib/format"
+import {
+  CONSECUTIVE_OPTIONS,
+  GAP_OPTIONS,
+  GENERATION_INDEX_TYPES,
+  TIME_OPTIONS
+} from "@/lib/generation-config"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableGeneration } from "@/hooks/use-timetable-generation"
 import { Button } from "@/components/ui/button"
@@ -33,41 +40,6 @@ import TimetableBlacklistEditor from "./timetable-blacklist-editor"
 import TimetableLunchEditor from "./timetable-lunch-editor"
 import TimetableResultsCycler from "./timetable-results-cycler"
 
-const TIME_OPTIONS = STARS_TIMESLOTS.filter(
-  (t) => t.start >= 700 && t.start <= 2200
-).map((t) => {
-  const h = Math.floor(t.start / 100)
-  const m = t.start % 100
-  return {
-    value: t.start,
-    label: `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`
-  }
-})
-
-const CONSECUTIVE_OPTIONS = [
-  { value: 2, label: "1 hour" },
-  { value: 3, label: "1.5 hours" },
-  { value: 4, label: "2 hours" },
-  { value: 6, label: "3 hours" },
-  { value: 8, label: "4 hours" },
-  { value: 0, label: "No limit" }
-]
-
-const GAP_OPTIONS = [
-  { value: 0, label: "None" },
-  { value: 1, label: "30 min" },
-  { value: 2, label: "1 hour" },
-  { value: 3, label: "1.5 hours" },
-  { value: 4, label: "2 hours" }
-]
-
-const INDEX_TYPES: IndexType[] = ["LEC", "TUT", "LAB", "SEM", "DES", "PRJ"]
-
-function formatHhmm(hhmm: number): string {
-  const h = Math.floor(hhmm / 100)
-  const m = hhmm % 100
-  return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`
-}
 
 const SectionLabel = ({
   children,
@@ -231,7 +203,7 @@ const SettingsForm = () => {
           Relax constraints for
         </SectionLabel>
         <div className="flex flex-wrap gap-1.5">
-          {INDEX_TYPES.map((type) => {
+          {GENERATION_INDEX_TYPES.map((type) => {
             const active = config.skippableTypes.includes(type)
             return (
               <button

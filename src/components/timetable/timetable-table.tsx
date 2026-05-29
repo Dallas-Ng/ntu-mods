@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 
-import { useLatestSemester } from "@/hooks/use-latest-semester"
+import { latestSemester, latestYear } from "@/lib/semesters"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableIndexes } from "@/hooks/use-timetable-indexes"
 
@@ -19,7 +19,8 @@ const TimetablePageTable = ({
   indexPickerEnabled = false
 }: Props) => {
   const { timetable, updateItemIndex } = useTimetable(timetableProp)
-  const { year, semester } = useLatestSemester()
+  const year = latestYear
+  const semester = latestSemester
   const [activeModuleKey, setActiveModuleKey] = useState<string | null>(null)
   const { moduleIndexMap, allModuleIndexes, isLoading } = useTimetableIndexes(
     timetable,

@@ -215,13 +215,6 @@ export default function HelpPage() {
         acceptance of the updated policy.
       </p>
 
-      {/* <h2 className="my-2 text-xl">Contact</h2>
-
-      <p>
-        If you have any questions about this Privacy Policy or wish to request
-        deletion of your data, please contact us at{" "}
-        <Link href="mailto:ngdallas1@gmail.com">ngdallas1@gmail.com</Link>.
-      </p> */}
     </div>
   )
 }

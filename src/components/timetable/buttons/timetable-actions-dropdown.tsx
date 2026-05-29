@@ -12,9 +12,9 @@ import posthog from "posthog-js"
 import { toast } from "sonner"
 
 import { BASE_URL } from "@/lib/constants"
+import { latestSemester, latestYear } from "@/lib/semesters"
 import { getIcs } from "@/lib/get-ics"
 import { useAllModules } from "@/hooks/use-all-modules"
-import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
@@ -27,7 +27,8 @@ import {
 
 const TimetableActionsDropdown = () => {
   const { timetable } = useTimetable()
-  const { year, semester } = useLatestSemester()
+  const year = latestYear
+  const semester = latestSemester
   const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const { modules } = useAllModules()
   const [calendarLoading, setCalendarLoading] = useState(false)

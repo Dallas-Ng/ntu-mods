@@ -6,7 +6,6 @@ import Articles from "@/components/landing/landing-articles"
 import CTA from "@/components/landing/landing-cta"
 import Features from "@/components/landing/landing-features"
 import Product from "@/components/landing/landing-product"
-import Roadmap from "@/components/landing/landing-roadmap"
 import LayoutDefault from "@/components/layout-default"
 
 export const metadata: Metadata = {
@@ -70,7 +69,6 @@ export default function IndexPage() {
           <Articles />
         </div>
 
-        <Roadmap />
       </div>
 
       <script

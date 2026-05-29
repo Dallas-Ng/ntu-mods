@@ -4,20 +4,17 @@ import { useEffect, useRef, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
 import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
+import { formatHhmm } from "@/lib/format"
 
 const WEEKDAYS = [1, 2, 3, 4, 5] as const
 
 const TIME_LABELS = STARS_TIMESLOTS.filter(
   (t) => t.start >= 800 && t.start <= 2000
-).map((t) => {
-  const h = Math.floor(t.start / 100)
-  const m = t.start % 100
-  return {
-    start: t.start,
-    end: t.end,
-    label: `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`
-  }
-})
+).map((t) => ({
+  start: t.start,
+  end: t.end,
+  label: formatHhmm(t.start)
+}))
 
 function toKey(day: number, start: number) {
   return `${day}-${start}`

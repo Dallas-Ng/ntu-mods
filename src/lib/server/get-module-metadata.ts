@@ -1,6 +1,11 @@
 import fs from "fs/promises"
 import path from "path"
 
+/**
+ * Server-side module data. Structurally overlaps with the global Module type
+ * but description is optional here (not all entries have it) and includes
+ * additional server/API-only fields.
+ */
 export interface ApiModule {
   code: string
   title: string
@@ -18,7 +23,6 @@ export interface ApiModule {
   notOfferedAsBde?: string
   notOfferedAsUe?: string
   extras?: Record<string, string>
-  // Present when returned by /api/data/modules
   isCurrentSemester?: boolean
   latestYear?: string
   latestSemester?: string

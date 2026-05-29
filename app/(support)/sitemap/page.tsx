@@ -28,7 +28,7 @@ const TOOL_LINKS = [
   { label: "Changelog", href: "/changelog" },
   { label: "Privacy", href: "/privacy" },
   { label: "Settings", href: "/settings" },
-  { label: "Report an Issue", href: "/settings#feedback" }
+  { label: "Feedback", href: "/feedback" }
 ]
 
 const moduleMap = moduleMapJson as Record<string, { title?: string }>

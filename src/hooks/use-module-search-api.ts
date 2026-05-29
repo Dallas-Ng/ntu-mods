@@ -2,8 +2,9 @@
 
 import { useMemo } from "react"
 
-import { CODE_QUERY_RE } from "@/lib/filter-modules"
 import type { AllModule } from "@/types/mods"
+import { CODE_QUERY_RE } from "@/lib/filter-modules"
+
 import { useAllModules } from "./use-all-modules"
 import { useDebounce } from "./use-debounce"
 

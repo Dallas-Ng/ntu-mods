@@ -3,14 +3,17 @@
 import { useCallback, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
-import { latestSemester, latestYear } from "@/lib/semesters"
 import { generateCombinations } from "@/lib/generate-timetable-combinations"
+import { latestSemester, latestYear } from "@/lib/semesters"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 
 export function useTimetableGeneration() {
   const { timetable, timetableIndex, updateTimetable } = useTimetable()
-  const { indexes: seasonIndexes } = useSeasonIndexes(latestYear, latestSemester)
+  const { indexes: seasonIndexes } = useSeasonIndexes(
+    latestYear,
+    latestSemester
+  )
   const generationConfig = useBoundState((s) => s.generationConfig)
 
   const [combinations, setCombinations] = useState<GeneratedCombination[]>([])

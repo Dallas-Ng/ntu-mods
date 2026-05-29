@@ -25,8 +25,8 @@ import {
   ZoomOut
 } from "lucide-react"
 
-import { cn } from "@/lib/utils"
 import { latestSemester, latestYear } from "@/lib/semesters"
+import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableIndexes } from "@/hooks/use-timetable-indexes"

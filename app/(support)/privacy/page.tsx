@@ -214,7 +214,6 @@ export default function HelpPage() {
         Continued use of the Service after changes are posted constitutes your
         acceptance of the updated policy.
       </p>
-
     </div>
   )
 }

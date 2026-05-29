@@ -4,10 +4,6 @@ import { use, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { ChevronDown, LayoutGrid, List, SlidersHorizontal } from "lucide-react"
 
-import { filterModules, groupModules } from "@/lib/filter-modules"
-import { latestSemester, latestYear } from "@/lib/semesters"
-import { useAllModules } from "@/hooks/use-all-modules"
-import { useSettings } from "@/hooks/use-settings"
 import type {
   AllModule,
   SearchModuleFaculty,
@@ -15,6 +11,10 @@ import type {
   SearchModuleType,
   Semester
 } from "@/types/mods"
+import { filterModules, groupModules } from "@/lib/filter-modules"
+import { latestSemester, latestYear } from "@/lib/semesters"
+import { useAllModules } from "@/hooks/use-all-modules"
+import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import { ModsActiveFilters } from "@/components/mods/mods-active-filters"
@@ -89,7 +89,14 @@ const ModsPage = (props: Props) => {
         moduleLevel,
         currentOnly: currentOnly === "true"
       }),
-    [allModules, searchTerm, moduleType, moduleFaculty, moduleLevel, currentOnly]
+    [
+      allModules,
+      searchTerm,
+      moduleType,
+      moduleFaculty,
+      moduleLevel,
+      currentOnly
+    ]
   )
 
   const displayedModules = useMemo(
@@ -99,7 +106,9 @@ const ModsPage = (props: Props) => {
 
   const groupedModules = useMemo(
     () =>
-      modsGroupBy !== "none" ? groupModules(filteredModules, modsGroupBy) : null,
+      modsGroupBy !== "none"
+        ? groupModules(filteredModules, modsGroupBy)
+        : null,
     [filteredModules, modsGroupBy]
   )
 
@@ -111,7 +120,14 @@ const ModsPage = (props: Props) => {
   useEffect(() => {
     setDisplayCount(PAGE_SIZE)
     setExpandedGroups(new Set())
-  }, [searchTerm, moduleType, moduleFaculty, moduleLevel, currentOnly, modsGroupBy])
+  }, [
+    searchTerm,
+    moduleType,
+    moduleFaculty,
+    moduleLevel,
+    currentOnly,
+    modsGroupBy
+  ])
 
   useEffect(() => {
     if (!loaderRef.current) return
@@ -311,7 +327,9 @@ function ModuleResults({
     ) : (
       <div className="overflow-hidden rounded-lg border-2">
         {Array.from({ length: LOADING_LIST_COUNT }).map((_, i) => (
-          <div key={i} className={i !== LOADING_LIST_COUNT - 1 ? "border-b" : ""}>
+          <div
+            key={i}
+            className={i !== LOADING_LIST_COUNT - 1 ? "border-b" : ""}>
             <ModuleListRowLoading />
           </div>
         ))}
@@ -344,7 +362,9 @@ function ModuleResults({
             <div key={key} className="space-y-3">
               <h3 className="text-sm font-medium">
                 {label}{" "}
-                <span className="text-muted-foreground">({modules.length})</span>
+                <span className="text-muted-foreground">
+                  ({modules.length})
+                </span>
               </h3>
               {renderModules(visible, footer)}
             </div>

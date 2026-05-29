@@ -40,7 +40,6 @@ import TimetableBlacklistEditor from "./timetable-blacklist-editor"
 import TimetableLunchEditor from "./timetable-lunch-editor"
 import TimetableResultsCycler from "./timetable-results-cycler"
 
-
 const SectionLabel = ({
   children,
   tip

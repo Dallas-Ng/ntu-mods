@@ -2,9 +2,9 @@
 
 import posthog from "posthog-js"
 
+import type { SearchModuleLevel } from "@/types/mods"
 import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
-import type { SearchModuleLevel } from "@/types/mods"
 import CustomSelect from "@/components/select"
 
 const LEVELS = ["1", "2", "3", "4", "5", "6", "7"]

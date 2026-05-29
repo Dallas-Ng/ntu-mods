@@ -1,12 +1,10 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { History, ServerCrash } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import type { ArticleHeading } from "@/lib/server/articles"
 import { cn } from "@/lib/utils"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import ArticleToc from "@/components/articles/article-toc"
 import FeedbackCard from "@/components/feedback-card"
 import Header from "@/components/header"
@@ -180,31 +178,6 @@ export default function FaqPage() {
             ))}
           </div>
 
-          <div className="grid gap-3">
-            <Link href="/debug" className="block">
-              <Alert className="hover:bg-muted border transition-colors">
-                <ServerCrash className="size-5" />
-
-                <AlertTitle>Having Problems with the System?</AlertTitle>
-
-                <AlertDescription>
-                  Reset local timetable data if the app behaves unexpectedly.
-                </AlertDescription>
-              </Alert>
-            </Link>
-
-            <Link href="/changelog" className="block">
-              <Alert className="hover:bg-muted border transition-colors">
-                <History className="size-5" />
-
-                <AlertTitle>See what changed recently</AlertTitle>
-
-                <AlertDescription>
-                  View the latest NTU Mods features, fixes, and data updates.
-                </AlertDescription>
-              </Alert>
-            </Link>
-          </div>
 
           <div id="feedback" className="space-y-3">
             <div>

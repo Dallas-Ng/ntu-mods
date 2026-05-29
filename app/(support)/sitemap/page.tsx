@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-
 import moduleMapJson from "@/data/api/module-map.json"
+
 import { siteConfig } from "@/config/site"
 import { getAllArticles } from "@/lib/server/articles"
 import Header from "@/components/header"
@@ -60,7 +60,6 @@ function getModuleGroups() {
   }))
 }
 
-
 export default function SitemapPage() {
   const articles = getAllArticles()
   const moduleGroups = getModuleGroups()
@@ -80,7 +79,7 @@ export default function SitemapPage() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-foreground hover:text-blue-500 text-sm font-medium leading-6 transition-colors">
+              className="text-foreground text-sm leading-6 font-medium transition-colors hover:text-blue-500">
               {link.label}
             </Link>
           ))}
@@ -94,7 +93,7 @@ export default function SitemapPage() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-foreground hover:text-blue-500 text-sm font-medium leading-6 transition-colors">
+              className="text-foreground text-sm leading-6 font-medium transition-colors hover:text-blue-500">
               {link.label}
             </Link>
           ))}
@@ -109,7 +108,7 @@ export default function SitemapPage() {
               <Link
                 key={article.slug}
                 href={`/articles/${article.slug}`}
-                className="text-foreground hover:text-blue-500 text-sm font-medium leading-6 transition-colors">
+                className="text-foreground text-sm leading-6 font-medium transition-colors hover:text-blue-500">
                 {article.title}
               </Link>
             ))}
@@ -149,7 +148,7 @@ export default function SitemapPage() {
                   <Link
                     key={moduleItem.code}
                     href={`/mods/${moduleItem.code}`}
-                    className="text-muted-foreground hover:text-blue-500 text-sm leading-6 transition-colors">
+                    className="text-muted-foreground text-sm leading-6 transition-colors hover:text-blue-500">
                     <span className="text-foreground font-medium">
                       {moduleItem.code}
                     </span>{" "}

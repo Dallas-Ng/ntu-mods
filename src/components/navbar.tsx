@@ -29,7 +29,6 @@ import {
   DrawerTrigger
 } from "./ui/drawer"
 
-
 const RESOURCE_LINKS = [
   { label: "Changelog", route: "/changelog" },
   { label: "FAQ", route: "/faq" },

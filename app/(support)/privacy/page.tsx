@@ -158,9 +158,9 @@ export default function HelpPage() {
 
       <p>
         We do not set our own cookies. However, Google Analytics, Microsoft
-        Clarity, and PostHog may set cookies on your device to distinguish
-        users and sessions. You can disable these through your browser settings
-        or by using a browser extension that blocks analytics trackers.
+        Clarity, and PostHog may set cookies on your device to distinguish users
+        and sessions. You can disable these through your browser settings or by
+        using a browser extension that blocks analytics trackers.
       </p>
 
       <h2 className="my-2 text-xl">Data Retention</h2>
@@ -175,9 +175,9 @@ export default function HelpPage() {
           processed and acted on them, or upon your request to delete them.
         </li>
         <li>
-          <strong>Analytics data</strong> — retained according to the
-          respective retention policies of Google Analytics, Microsoft Clarity,
-          and PostHog.
+          <strong>Analytics data</strong> — retained according to the respective
+          retention policies of Google Analytics, Microsoft Clarity, and
+          PostHog.
         </li>
       </ul>
 

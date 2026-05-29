@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic"
 
-import { TimetableTableLoader } from "../timetable-table/table-loader"
 import type { PrecomputedTimetableMatrix } from "../timetable-table/table"
+import { TimetableTableLoader } from "../timetable-table/table-loader"
 
 const TimetableTable = dynamic(
   () =>

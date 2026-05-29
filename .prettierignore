@@ -12,3 +12,4 @@ build
 .contentlayer
 src/data/**/*.json
 scraper/data/*
+.claude

@@ -41,8 +41,8 @@ import {
   SelectValue
 } from "@/components/ui/select"
 import ScreenshotInfoButton from "@/components/screenshot/screenshot-info-button"
-import { TimetableTableLoader } from "@/components/timetable-table/table-loader"
 import { TimetableTable } from "@/components/timetable-table/table"
+import { TimetableTableLoader } from "@/components/timetable-table/table-loader"
 
 type CanvasPreset = "viewport" | "iphoneTall" | "androidTall" | "classic"
 

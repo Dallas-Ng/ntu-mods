@@ -2,10 +2,8 @@
 
 import { useState } from "react"
 import { useBoundState } from "@/state/bound.state"
-import { Settings2Icon, WandIcon } from "lucide-react"
+import { InfoIcon, Settings2Icon, WandIcon } from "lucide-react"
 import posthog from "posthog-js"
-
-import { InfoIcon } from "lucide-react"
 
 import { COURSE_TYPE, STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -113,7 +111,9 @@ const SettingsForm = () => {
       {/* Row 1: Day hours + Schedule style */}
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
-          <SectionLabel tip="Only schedule classes within this time window. Classes outside these hours will be excluded.">Day hours</SectionLabel>
+          <SectionLabel tip="Only schedule classes within this time window. Classes outside these hours will be excluded.">
+            Day hours
+          </SectionLabel>
           <div className="flex items-center gap-1.5">
             <Select
               value={String(config.dayStartTime)}
@@ -150,7 +150,9 @@ const SettingsForm = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <SectionLabel tip="Spread: classes distributed across more days with lighter daily loads. Compact: pack classes into fewer days so you get full days off.">Schedule style</SectionLabel>
+          <SectionLabel tip="Spread: classes distributed across more days with lighter daily loads. Compact: pack classes into fewer days so you get full days off.">
+            Schedule style
+          </SectionLabel>
           <div className="flex gap-1.5">
             {(["spread", "compact"] as const).map((pref) => (
               <button
@@ -171,7 +173,9 @@ const SettingsForm = () => {
       {/* Row 2: Max consecutive + Min gap */}
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
-          <SectionLabel tip="Maximum duration of classes scheduled back-to-back without a break. e.g. '2 hours' means at most 4 consecutive 30-min slots before a gap is required.">Max back-to-back</SectionLabel>
+          <SectionLabel tip="Maximum duration of classes scheduled back-to-back without a break. e.g. '2 hours' means at most 4 consecutive 30-min slots before a gap is required.">
+            Max back-to-back
+          </SectionLabel>
           <Select
             value={String(config.maxConsecutiveSlots)}
             onValueChange={(v) =>
@@ -191,7 +195,9 @@ const SettingsForm = () => {
         </div>
 
         <div className="flex flex-col gap-2">
-          <SectionLabel tip="Minimum gap required between any two consecutive classes on the same day. Useful if you need travel time between venues.">Min break</SectionLabel>
+          <SectionLabel tip="Minimum gap required between any two consecutive classes on the same day. Useful if you need travel time between venues.">
+            Min break
+          </SectionLabel>
           <Select
             value={String(config.minGapBetweenClasses)}
             onValueChange={(v) =>
@@ -213,13 +219,17 @@ const SettingsForm = () => {
 
       {/* Lunch breaks */}
       <div className="flex flex-col gap-2">
-        <SectionLabel tip="Block a lunch window per day. Classes will not be scheduled during these times. Toggle each day on to set its window.">Lunch breaks</SectionLabel>
+        <SectionLabel tip="Block a lunch window per day. Classes will not be scheduled during these times. Toggle each day on to set its window.">
+          Lunch breaks
+        </SectionLabel>
         <TimetableLunchEditor />
       </div>
 
       {/* Skippable types */}
       <div className="flex flex-col gap-2">
-        <SectionLabel tip="Selected class types will ignore day/time constraints. Useful for classes like lectures that you have no control over scheduling.">Relax constraints for</SectionLabel>
+        <SectionLabel tip="Selected class types will ignore day/time constraints. Useful for classes like lectures that you have no control over scheduling.">
+          Relax constraints for
+        </SectionLabel>
         <div className="flex flex-wrap gap-1.5">
           {INDEX_TYPES.map((type) => {
             const active = config.skippableTypes.includes(type)
@@ -244,7 +254,9 @@ const SettingsForm = () => {
 
       {/* Blacklist */}
       <div className="flex flex-col gap-2">
-        <SectionLabel tip="Click or drag to mark specific day/time slots as unavailable. No classes will be scheduled during blocked slots.">Block time slots</SectionLabel>
+        <SectionLabel tip="Click or drag to mark specific day/time slots as unavailable. No classes will be scheduled during blocked slots.">
+          Block time slots
+        </SectionLabel>
         <TimetableBlacklistEditor />
       </div>
     </div>
@@ -339,7 +351,9 @@ const TimetableGenerationConfig = () => {
 
       {/* Settings modal — always Dialog (centered popup, not drawer) */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[85vh] max-w-lg overflow-y-auto" aria-describedby={undefined}>
+        <DialogContent
+          className="max-h-[85vh] max-w-lg overflow-y-auto"
+          aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Generation Settings</DialogTitle>
           </DialogHeader>

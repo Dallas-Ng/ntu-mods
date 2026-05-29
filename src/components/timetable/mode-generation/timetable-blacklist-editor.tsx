@@ -1,9 +1,9 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 
 import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
-import { useBoundState } from "@/state/bound.state"
 
 const WEEKDAYS = [1, 2, 3, 4, 5] as const
 
@@ -145,17 +145,16 @@ const TimetableBlacklistEditor = () => {
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("mouseup", handleMouseUp)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateGenerationConfig, blacklistedTimeslots])
 
-  const clearAll = () =>
-    updateGenerationConfig({ blacklistedTimeslots: [] })
+  const clearAll = () => updateGenerationConfig({ blacklistedTimeslots: [] })
 
   return (
     <div className="flex flex-col gap-2">
       <div className="overflow-x-auto">
         <table
-          className="w-full select-none text-xs"
+          className="w-full text-xs select-none"
           onDragStart={(e) => e.preventDefault()}>
           <thead>
             <tr>

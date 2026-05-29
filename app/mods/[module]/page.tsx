@@ -89,7 +89,10 @@ export default async function Page(props: {
 
   return (
     <>
-      <ModsViewTracker moduleCode={moduleKey} isCurrentOffering={isCurrentOffering} />
+      <ModsViewTracker
+        moduleCode={moduleKey}
+        isCurrentOffering={isCurrentOffering}
+      />
       {!isCurrentOffering && (
         <div className="mb-4 rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
           Not offered in the current semester · Last offered{" "}
@@ -134,25 +137,35 @@ export default async function Page(props: {
             <div className="flex gap-1 overflow-x-auto pb-1 xl:flex-wrap xl:overflow-x-visible xl:pb-0">
               {sortedYears.map((yr) => {
                 const sems = offeringsByYear[yr]
-                const find = (sem: string) => sems.find((s) => s.semester === sem)
+                const find = (sem: string) =>
+                  sems.find((s) => s.semester === sem)
                 return (
-                  <div key={yr} className="bg-muted/40 flex min-w-27.5 flex-col rounded-lg overflow-hidden">
-                    <span className="text-muted-foreground px-3 py-2 text-xs font-medium border-b border-border/50">
+                  <div
+                    key={yr}
+                    className="bg-muted/40 flex min-w-27.5 flex-col overflow-hidden rounded-lg">
+                    <span className="text-muted-foreground border-border/50 border-b px-3 py-2 text-xs font-medium">
                       AY{yr.slice(2)}/{String(parseInt(yr) + 1).slice(2)}
                     </span>
                     <div className="flex flex-col gap-1 p-2">
                       {(["1", "2", "S"] as const).map((sem) => {
                         const s = find(sem)
-                        const label = sem === "S" ? "Sp. Term" : `Semester ${sem}`
+                        const label =
+                          sem === "S" ? "Sp. Term" : `Semester ${sem}`
                         return s ? (
                           <Link
                             key={sem}
-                            href={getModuleVersionUrl(moduleKey, s.year, s.semester)}
-                            className="hover:bg-background border border-border/60 rounded-md px-2 py-1 text-sm transition-colors text-center">
+                            href={getModuleVersionUrl(
+                              moduleKey,
+                              s.year,
+                              s.semester
+                            )}
+                            className="hover:bg-background border-border/60 rounded-md border px-2 py-1 text-center text-sm transition-colors">
                             {label}
                           </Link>
                         ) : (
-                          <span key={sem} className="text-muted-foreground/35 px-2 py-1 text-sm text-center line-through">
+                          <span
+                            key={sem}
+                            className="text-muted-foreground/35 px-2 py-1 text-center text-sm line-through">
                             {label}
                           </span>
                         )

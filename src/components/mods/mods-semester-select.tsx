@@ -26,7 +26,10 @@ export const ModsSemesterSelect = ({
       ]}
       onChange={(value) => {
         setValue(value as Semester)
-        posthog.capture("mods_filter_applied", { filter_type: "semester", value })
+        posthog.capture("mods_filter_applied", {
+          filter_type: "semester",
+          value
+        })
       }}
       divClassName={cn(
         "basis-1/2 lg:w-[200px]",

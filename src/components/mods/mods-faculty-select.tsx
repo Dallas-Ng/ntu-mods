@@ -34,7 +34,10 @@ export const ModsFacultySelect = ({ paramsValue }: { paramsValue: string }) => {
       selectItems={selectItems}
       onChange={(value) => {
         setValue(value as SearchModuleFaculty)
-        posthog.capture("mods_filter_applied", { filter_type: "faculty", value })
+        posthog.capture("mods_filter_applied", {
+          filter_type: "faculty",
+          value
+        })
       }}
       divClassName={cn(
         "w-full",

@@ -42,12 +42,9 @@ const getCategoryParam = (category: string) =>
     .replace(/^-|-$/g, "")
 
 const getSearchText = (article: ArticleListItem) =>
-  [
-    article.title,
-    article.description,
-    article.category,
-    ...article.tags
-  ].join(" ")
+  [article.title, article.description, article.category, ...article.tags].join(
+    " "
+  )
 
 const formatArticleDate = (date: string) =>
   new Date(date).toLocaleDateString("en-SG", {
@@ -115,8 +112,9 @@ export default function ArticlesList({
   const debouncedSearchQuery = useDebounce(searchQuery, 250)
 
   const activeCategory =
-    categories.find((category) => getCategoryParam(category) === categoryParam) ??
-    ALL_CATEGORIES
+    categories.find(
+      (category) => getCategoryParam(category) === categoryParam
+    ) ?? ALL_CATEGORIES
   const activeCategoryParam =
     activeCategory === ALL_CATEGORIES
       ? ALL_CATEGORIES
@@ -316,7 +314,11 @@ export default function ArticlesList({
                 <h2 className="mb-4 text-lg font-semibold">{category}</h2>
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                   {groupArticles.map((article) => (
-                    <ArticleCard key={article.slug} article={article} showCategory={false} />
+                    <ArticleCard
+                      key={article.slug}
+                      article={article}
+                      showCategory={false}
+                    />
                   ))}
                 </div>
               </section>
@@ -325,7 +327,11 @@ export default function ArticlesList({
         ) : (
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {filteredArticles.map((article) => (
-              <ArticleCard key={article.slug} article={article} showCategory={false} />
+              <ArticleCard
+                key={article.slug}
+                article={article}
+                showCategory={false}
+              />
             ))}
           </div>
         )

@@ -67,7 +67,9 @@ const Page = () => {
 
       <div className="flex justify-between gap-2">
         <div className="flex gap-2">
-          <Link href="/timetable" onClick={() => posthog.capture("make_my_timetable_clicked")}>
+          <Link
+            href="/timetable"
+            onClick={() => posthog.capture("make_my_timetable_clicked")}>
             <Button>Make My Timetable</Button>
           </Link>
 

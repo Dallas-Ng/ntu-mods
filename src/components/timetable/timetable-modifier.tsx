@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, type MouseEvent } from "react"
+import { useBoundState } from "@/state/bound.state"
 import { TrashIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { useBoundState } from "@/state/bound.state"
 import { useTimetable } from "@/hooks/use-timetable"
 
 import TimetableAiChat from "./mode-ai/timetable-ai-chat"
@@ -12,6 +12,7 @@ import TimetableGenerationConfig from "./mode-generation/timetable-generation-co
 import TimetableIndexModifier from "./timetable-index-modifier"
 import TimetableModeSelector from "./timetable-mode-selector"
 import TimetableModulesSelect from "./timetable-modules-select"
+
 const TimetableModifier = () => {
   const { timetable, removeItemFromTimetable } = useTimetable()
   const mode = useBoundState((s) => s.timetableCreationMode)

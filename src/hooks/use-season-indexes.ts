@@ -7,7 +7,10 @@ export type SeasonIndexes = Record<string, Record<string, Index[]>>
 const cache = new Map<string, SeasonIndexes>()
 const pending = new Map<string, Promise<SeasonIndexes>>()
 
-function fetchSeasonIndexes(year: string, semester: string): Promise<SeasonIndexes> {
+function fetchSeasonIndexes(
+  year: string,
+  semester: string
+): Promise<SeasonIndexes> {
   const key = `${year}_${semester}`
   if (cache.has(key)) return Promise.resolve(cache.get(key)!)
   if (pending.has(key)) return pending.get(key)!
@@ -30,7 +33,9 @@ function fetchSeasonIndexes(year: string, semester: string): Promise<SeasonIndex
 
 export function useSeasonIndexes(year: string, semester: string) {
   const key = `${year}_${semester}`
-  const [indexes, setIndexes] = useState<SeasonIndexes>(() => cache.get(key) ?? {})
+  const [indexes, setIndexes] = useState<SeasonIndexes>(
+    () => cache.get(key) ?? {}
+  )
   const [isLoading, setIsLoading] = useState(!cache.has(key))
 
   useEffect(() => {

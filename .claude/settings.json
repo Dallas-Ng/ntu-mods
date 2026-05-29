@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /Users/dallasng/Work/ntu-mods && yarn format:write 2>/dev/null || true",
+            "timeout": 60,
+            "statusMessage": "Formatting..."
+          }
+        ]
+      }
+    ]
+  }
+}

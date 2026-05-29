@@ -7,7 +7,10 @@ export type SeasonExams = Record<string, Exam>
 const cache = new Map<string, SeasonExams>()
 const pending = new Map<string, Promise<SeasonExams>>()
 
-function fetchSeasonExams(year: string, semester: string): Promise<SeasonExams> {
+function fetchSeasonExams(
+  year: string,
+  semester: string
+): Promise<SeasonExams> {
   const key = `${year}_${semester}`
   if (cache.has(key)) return Promise.resolve(cache.get(key)!)
   if (pending.has(key)) return pending.get(key)!

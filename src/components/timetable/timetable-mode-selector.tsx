@@ -1,16 +1,16 @@
 "use client"
 
+import { useBoundState } from "@/state/bound.state"
 import { BotIcon, CalendarDaysIcon, WandIcon } from "lucide-react"
 import posthog from "posthog-js"
 
-import { useBoundState } from "@/state/bound.state"
+import { useSettings } from "@/hooks/use-settings"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger
 } from "@/components/ui/tooltip"
-import { useSettings } from "@/hooks/use-settings"
 
 const MODES: {
   id: TimetableCreationMode
@@ -63,10 +63,10 @@ const TimetableModeSelector = () => {
                   disabled={m.comingSoon}
                   className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
                     m.comingSoon
-                      ? "cursor-not-allowed text-muted-foreground/50"
+                      ? "text-muted-foreground/50 cursor-not-allowed"
                       : isActive
-                        ? "cursor-pointer bg-foreground text-background"
-                        : "cursor-pointer text-muted-foreground hover:text-foreground hover:bg-muted"
+                        ? "bg-foreground text-background cursor-pointer"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer"
                   }`}
                   aria-pressed={isActive}
                   aria-label={m.label}>

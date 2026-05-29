@@ -1,9 +1,9 @@
 "use client"
 
 import { useCallback, useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 
 import { generateCombinations } from "@/lib/generate-timetable-combinations"
-import { useBoundState } from "@/state/bound.state"
 import { useLatestSemester } from "@/hooks/use-latest-semester"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -43,7 +43,13 @@ export function useTimetableGeneration() {
         setIsGenerating(false)
       }, 10)
     },
-    [moduleKeys, seasonIndexes, generationConfig, timetableIndex, updateTimetable]
+    [
+      moduleKeys,
+      seasonIndexes,
+      generationConfig,
+      timetableIndex,
+      updateTimetable
+    ]
   )
 
   const navigateTo = useCallback(

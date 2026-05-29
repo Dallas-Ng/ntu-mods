@@ -46,7 +46,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
       })
       .catch(() => {})
     return () => controller.abort()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerollKey])
 
   const reRollIndex = () => setRerollKey((k) => k + 1)

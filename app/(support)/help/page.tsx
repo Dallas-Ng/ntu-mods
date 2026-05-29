@@ -3,13 +3,12 @@ import Link from "next/link"
 import { History, ServerCrash } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
-import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
+import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import FeedbackCard from "@/components/feedback-card"
 import Header from "@/components/header"
-
 
 export const metadata: Metadata = {
   title: siteConfig.metatags.faq.title,
@@ -35,9 +34,9 @@ const HELP_CONFIG: HelpConfig[] = [
     question: "What semester is currently available?",
     answer: (
       <>
-        The latest semester available is <strong>{LATEST_SEMESTER_LABEL}</strong>.
-        If this is outdated and you need data for a newer semester, feel free to
-        request it via the{" "}
+        The latest semester available is{" "}
+        <strong>{LATEST_SEMESTER_LABEL}</strong>. If this is outdated and you
+        need data for a newer semester, feel free to request it via the{" "}
         <Link
           href="#feedback"
           className="text-blue-500 transition-colors hover:text-blue-600">

@@ -11,8 +11,8 @@ import { getIndexType } from "@/lib/get-index-type"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 
-import { TimeSlotItem } from "./table-loader"
 import { TimetableTableCell } from "./cell"
+import { TimeSlotItem } from "./table-loader"
 import { TimetableTableThead } from "./thead"
 
 export interface PrecomputedTimetableMatrix {

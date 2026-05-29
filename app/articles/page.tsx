@@ -3,8 +3,8 @@ import type { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
 import { getAllArticles, getArticleCategories } from "@/lib/server/articles"
-import Header from "@/components/header"
 import ArticlesList from "@/components/articles/articles-list"
+import Header from "@/components/header"
 
 export const dynamic = "force-static"
 export const revalidate = false

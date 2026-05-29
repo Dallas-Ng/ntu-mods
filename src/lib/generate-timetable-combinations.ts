@@ -157,13 +157,12 @@ function countFreeDays(slots: Index[]): number {
 }
 
 function countDaysWithClass(slots: Index[]): number {
-  return new Set(slots.filter((s) => s.day >= 1 && s.day <= 5).map((s) => s.day)).size
+  return new Set(
+    slots.filter((s) => s.day >= 1 && s.day <= 5).map((s) => s.day)
+  ).size
 }
 
-function scoreCombination(
-  slots: Index[],
-  config: GenerationConfig
-): number {
+function scoreCombination(slots: Index[], config: GenerationConfig): number {
   const weekdaySlots = slots.filter((s) => s.day >= 1 && s.day <= 5)
   const daysUsed = new Set(weekdaySlots.map((s) => s.day))
 
@@ -179,7 +178,8 @@ function scoreCombination(
     : 0
   const stdDev = hoursArr.length
     ? Math.sqrt(
-        hoursArr.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / hoursArr.length
+        hoursArr.reduce((a, b) => a + Math.pow(b - mean, 2), 0) /
+          hoursArr.length
       )
     : 0
 

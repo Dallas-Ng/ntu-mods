@@ -10,7 +10,10 @@ interface Props {
 
 const ModsViewTracker = ({ moduleCode, isCurrentOffering }: Props) => {
   useEffect(() => {
-    posthog.capture("module_viewed", { module_code: moduleCode, is_current_offering: isCurrentOffering })
+    posthog.capture("module_viewed", {
+      module_code: moduleCode,
+      is_current_offering: isCurrentOffering
+    })
   }, [moduleCode, isCurrentOffering])
 
   return null

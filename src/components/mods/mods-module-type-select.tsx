@@ -29,7 +29,10 @@ export const ModsModuleTypeSelect = ({
   const handleChange = (nextValue: string | null) => {
     if (nextValue !== null) {
       setValue(nextValue)
-      posthog.capture("mods_filter_applied", { filter_type: "module_type", value: nextValue })
+      posthog.capture("mods_filter_applied", {
+        filter_type: "module_type",
+        value: nextValue
+      })
     }
   }
 

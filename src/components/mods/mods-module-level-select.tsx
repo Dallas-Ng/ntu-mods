@@ -43,7 +43,10 @@ export const ModsLevelSelect = ({ paramValue, searchTerm }: Props) => {
       selectItems={selectItems}
       onChange={(value) => {
         setValue(value as SearchModuleLevel)
-        posthog.capture("mods_filter_applied", { filter_type: "module_level", value })
+        posthog.capture("mods_filter_applied", {
+          filter_type: "module_level",
+          value
+        })
       }}
       divClassName={cn(
         "w-full",

@@ -1,9 +1,9 @@
 "use client"
 
+import { useBoundState } from "@/state/bound.state"
 import { BotIcon, CalendarDaysIcon, WandIcon } from "lucide-react"
 import posthog from "posthog-js"
 
-import { useBoundState } from "@/state/bound.state"
 import { useSettings } from "@/hooks/use-settings"
 import {
   Dialog,
@@ -119,7 +119,9 @@ const TimetableOnboarding = () => {
 
   if (isMobile) {
     return (
-      <Drawer open={!hasOnboarded} onOpenChange={(o) => !o && setHasOnboarded(true)}>
+      <Drawer
+        open={!hasOnboarded}
+        onOpenChange={(o) => !o && setHasOnboarded(true)}>
         <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>{title}</DrawerTitle>
@@ -133,7 +135,9 @@ const TimetableOnboarding = () => {
   }
 
   return (
-    <Dialog open={!hasOnboarded} onOpenChange={(o) => !o && setHasOnboarded(true)}>
+    <Dialog
+      open={!hasOnboarded}
+      onOpenChange={(o) => !o && setHasOnboarded(true)}>
       <DialogContent className="max-w-2xl" aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>

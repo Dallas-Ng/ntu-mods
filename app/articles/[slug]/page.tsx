@@ -2,7 +2,11 @@ import { Suspense } from "react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import type { Article as ArticleJsonLd, BreadcrumbList, WithContext } from "schema-dts"
+import type {
+  Article as ArticleJsonLd,
+  BreadcrumbList,
+  WithContext
+} from "schema-dts"
 
 import { siteConfig } from "@/config/site"
 import {
@@ -15,8 +19,8 @@ import {
 } from "@/lib/server/articles"
 import ArticleMarkdown from "@/components/articles/article-markdown"
 import ArticleToc from "@/components/articles/article-toc"
-import ArticlesList from "@/components/articles/articles-list"
 import ArticleViewTracker from "@/components/articles/article-view-tracker"
+import ArticlesList from "@/components/articles/articles-list"
 import Breadcrumbs from "@/components/breadcrumbs"
 
 export const dynamic = "force-static"
@@ -54,7 +58,9 @@ const CATEGORY_META: Record<
 }
 
 export function generateStaticParams() {
-  const articleParams = getAllArticles().map((article) => ({ slug: article.slug }))
+  const articleParams = getAllArticles().map((article) => ({
+    slug: article.slug
+  }))
   const categoryParams = getArticleCategories().map((category) => ({
     slug: slugifyCategory(category)
   }))
@@ -74,7 +80,8 @@ export async function generateMetadata(props: {
     const categoryName = categoryArticles[0].category
     return {
       title: meta?.title ?? `NTU ${categoryName} Articles | NTUMods`,
-      description: meta?.desc ?? `NTUMods guides on ${categoryName} for NTU students.`,
+      description:
+        meta?.desc ?? `NTUMods guides on ${categoryName} for NTU students.`,
       alternates: { canonical: `/articles/${slug}` }
     }
   }

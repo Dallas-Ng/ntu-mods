@@ -34,7 +34,8 @@ const TimetableResultsCycler = ({
     <div className="flex flex-col gap-2 rounded-lg border p-3">
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground text-xs">
-          {combinations.length} option{combinations.length !== 1 ? "s" : ""} found
+          {combinations.length} option{combinations.length !== 1 ? "s" : ""}{" "}
+          found
           {truncated && " (more exist — try relaxing constraints)"}
         </span>
         <DropdownMenu>
@@ -66,9 +67,14 @@ const TimetableResultsCycler = ({
       </div>
 
       <div className="text-muted-foreground flex gap-3 text-xs">
-        <span>{current.freeDays} free day{current.freeDays !== 1 ? "s" : ""}</span>
+        <span>
+          {current.freeDays} free day{current.freeDays !== 1 ? "s" : ""}
+        </span>
         <span>·</span>
-        <span>{current.daysWithClass} day{current.daysWithClass !== 1 ? "s" : ""} with class</span>
+        <span>
+          {current.daysWithClass} day{current.daysWithClass !== 1 ? "s" : ""}{" "}
+          with class
+        </span>
       </div>
 
       <div className="flex items-center justify-between">

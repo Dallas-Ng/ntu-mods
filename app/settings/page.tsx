@@ -1,12 +1,9 @@
 "use client"
 
 import dynamic from "next/dynamic"
-import Link from "next/link"
-import { History, ServerCrash } from "lucide-react"
 
 import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
 import { cn } from "@/lib/utils"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import FeedbackCard from "@/components/feedback-card"
 import Header from "@/components/header"
 import { AppearanceSettingsLoading } from "@/components/settings/appearance-settings"
@@ -37,28 +34,6 @@ export default function SettingsPage() {
       />
 
       <div className="space-y-5">
-        <div>
-          <Link href="/debug">
-            <div className="flex items-center gap-2 text-sm hover:underline">
-              <ServerCrash className="size-4 shrink-0" />
-              <span>Having problems? Click here to reset the application.</span>
-            </div>
-          </Link>
-        </div>
-
-        <div>
-          <Link href="/changelog" className="block">
-            <Alert className="hover:bg-muted border transition-colors">
-              <History className="size-5" />
-
-              <AlertTitle>See what changed recently</AlertTitle>
-
-              <AlertDescription>
-                View the latest NTU Mods features, fixes, and data updates.
-              </AlertDescription>
-            </Alert>
-          </Link>
-        </div>
 
         <div
           id="dark-mode"

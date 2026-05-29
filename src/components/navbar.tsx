@@ -4,10 +4,11 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useTheme } from "next-themes"
 import { Menu, Moon, Settings, Sun, X } from "lucide-react"
+import { useTheme } from "next-themes"
 
 import { siteConfig } from "@/config/site"
+import { LATEST_SEMESTER_LABEL_SHORT } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
@@ -27,6 +28,7 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "./ui/drawer"
+
 
 const RESOURCE_LINKS = [
   { label: "Changelog", route: "/changelog" },
@@ -53,7 +55,9 @@ const Navbar = () => {
   }, [])
 
   const primaryLinks = siteConfig.navLinks.slice(0, 2)
-  const resourcesActive = RESOURCE_LINKS.some((l) => pathname.startsWith(l.route))
+  const resourcesActive = RESOURCE_LINKS.some((l) =>
+    pathname.startsWith(l.route)
+  )
 
   return (
     <header
@@ -159,6 +163,10 @@ const Navbar = () => {
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-1 sm:gap-2">
+          <Link href="/help#current-semester" className="hover:underline">
+            <span className="text-sm">{LATEST_SEMESTER_LABEL_SHORT}</span>
+          </Link>
+
           <div className="hidden md:block">
             <ThemeToggle />
           </div>
@@ -184,7 +192,9 @@ const Navbar = () => {
               </Button>
             </DrawerTrigger>
 
-            <DrawerContent aria-describedby={undefined} className="flex flex-col p-0">
+            <DrawerContent
+              aria-describedby={undefined}
+              className="flex flex-col p-0">
               <DrawerTitle className="sr-only">Navigation menu</DrawerTitle>
               {/* Header */}
               <div className="flex items-center justify-between border-b px-5 py-4">

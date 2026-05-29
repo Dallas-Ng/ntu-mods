@@ -1,6 +1,7 @@
 import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
+import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 
 const FOOTER_GROUPS = [
   {
@@ -35,8 +36,20 @@ const FOOTER_GROUPS = [
 
 const Footer = () => {
   return (
-    <footer className="border-border/60 mt-10 border-t">
-      <div className="container grid gap-8 px-3 py-8 text-sm sm:grid-cols-2 lg:grid-cols-[1.2fr_repeat(4,1fr)] lg:px-5">
+    <footer className="border-border/60 mt-10 space-y-10 border-t px-3 py-10 lg:px-5">
+      <div className="container">
+        <p className="text-muted-foreground mb-1 text-xs font-medium tracking-wider uppercase">
+          Current semester
+        </p>
+
+        <Link href="/help#current-semester" className="hover:underline">
+          <span className="inline-flex items-center rounded-md bg-blue-500/10 px-2.5 py-1 text-sm font-semibold text-blue-500 ring-1 ring-blue-500/20">
+            {LATEST_SEMESTER_LABEL}
+          </span>
+        </Link>
+      </div>
+
+      <div className="container grid gap-8 text-sm sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
         <div className="space-y-2">
           <Link
             href="/"
@@ -47,10 +60,6 @@ const Footer = () => {
           <p className="text-muted-foreground leading-6">
             Plan NTU timetables, browse modules, compare indexes, and keep
             course planning links close at hand.
-          </p>
-
-          <p className="text-muted-foreground">
-            NTUmods.com &copy; {new Date().getFullYear()}
           </p>
         </div>
 
@@ -73,6 +82,12 @@ const Footer = () => {
             </ul>
           </nav>
         ))}
+      </div>
+
+      <div className="container">
+        <p className="text-muted-foreground text-center text-sm">
+          NTUmods.com &copy; {new Date().getFullYear()}
+        </p>
       </div>
     </footer>
   )

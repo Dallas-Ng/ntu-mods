@@ -23,7 +23,7 @@ const FOOTER_GROUPS = [
     title: "Resources",
     links: [
       { label: "Changelog", href: "/changelog" },
-      { label: "Report an Issue", href: "/settings#feedback" },
+      { label: "Feedback", href: "/feedback" },
       { label: "FAQ", href: "/faq" }
     ]
   },

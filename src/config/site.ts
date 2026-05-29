@@ -69,6 +69,10 @@ export const siteConfig = {
     debug: {
       title: "Reset NTUMods Data",
       desc: "Inspect and reset local NTUMods timetable data when your planner, settings, or saved modules behave unexpectedly after an update."
+    },
+    feedback: {
+      title: "Feedback — NTUMods",
+      desc: "Share feedback, report issues, or suggest improvements for NTUMods. This project is maintained by one person and all input is appreciated."
     }
   },
   navLinks: [

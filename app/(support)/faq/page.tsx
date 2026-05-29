@@ -1,14 +1,12 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { History, ServerCrash } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import type { ArticleHeading } from "@/lib/server/articles"
 import { cn } from "@/lib/utils"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
 import ArticleToc from "@/components/articles/article-toc"
-import FeedbackCard from "@/components/feedback-card"
 import Header from "@/components/header"
 
 export const metadata: Metadata = {
@@ -116,25 +114,6 @@ const FAQ_CONFIG: FaqConfig[] = [
     question: "Do you track my data?",
     answer:
       "We track general usage analytics (page views, number of visitors) via Vercel. We do not collect any personal data. Everything you add to your timetable is stored only in your browser and never sent to our servers."
-  },
-  {
-    id: "something-broken",
-    question: "Something looks broken!",
-    answer: (
-      <>
-        Try the{" "}
-        <Link
-          href="/debug"
-          className="text-blue-500 transition-colors hover:text-blue-600">
-          debug page
-        </Link>
-        , which lets you inspect and reset your local timetable data. This is
-        useful if the app behaves unexpectedly after an update. You can also
-        send us feedback below.
-      </>
-    ),
-    answerText:
-      "Try the debug page at /debug, which lets you inspect and reset your local timetable data. This is useful if the app behaves unexpectedly after an update. You can also send us feedback."
   }
 ]
 
@@ -180,42 +159,20 @@ export default function FaqPage() {
             ))}
           </div>
 
-          <div className="grid gap-3">
-            <Link href="/debug" className="block">
-              <Alert className="hover:bg-muted border transition-colors">
-                <ServerCrash className="size-5" />
-
-                <AlertTitle>Having Problems with the System?</AlertTitle>
-
-                <AlertDescription>
-                  Reset local timetable data if the app behaves unexpectedly.
-                </AlertDescription>
-              </Alert>
-            </Link>
-
-            <Link href="/changelog" className="block">
-              <Alert className="hover:bg-muted border transition-colors">
-                <History className="size-5" />
-
-                <AlertTitle>See what changed recently</AlertTitle>
-
-                <AlertDescription>
-                  View the latest NTU Mods features, fixes, and data updates.
-                </AlertDescription>
-              </Alert>
-            </Link>
-          </div>
+          <hr />
 
           <div id="feedback" className="space-y-3">
             <div>
               <h2 className="text-xl font-semibold">Feedback</h2>
 
               <p className="text-muted-foreground text-sm">
-                Let us know of any problems or suggestions you have.
+                Have a problem or suggestion? Let us know.
               </p>
             </div>
 
-            <FeedbackCard divClassName="border" />
+            <Link href="/feedback">
+              <Button variant="outline">Share Feedback</Button>
+            </Link>
           </div>
         </div>
 

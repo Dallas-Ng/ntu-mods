@@ -260,7 +260,10 @@ export function generateCombinations(
 
     for (const [indexKey, slots] of Object.entries(moduleIndexes)) {
       if (truncated) break
-      if (maxResults !== Infinity && results.length >= maxResults) break
+      if (maxResults !== Infinity && results.length >= maxResults) {
+        truncated = true
+        break
+      }
 
       if (violatesHardConstraints(slots, config)) continue
 

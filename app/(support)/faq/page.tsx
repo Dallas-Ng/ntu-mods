@@ -160,6 +160,21 @@ export default function FaqPage() {
           </div>
 
 
+          <div id="something-broken" className="space-y-3">
+            <div>
+              <h2 className="text-xl font-semibold">Something looks broken?</h2>
+
+              <p className="text-muted-foreground text-sm">
+                Use the debug page to inspect and reset your local timetable
+                data if the app behaves unexpectedly.
+              </p>
+            </div>
+
+            <Link href="/debug">
+              <Button variant="outline">Open Debug Page</Button>
+            </Link>
+          </div>
+
           <div id="feedback" className="space-y-3">
             <div>
               <h2 className="text-xl font-semibold">Feedback</h2>

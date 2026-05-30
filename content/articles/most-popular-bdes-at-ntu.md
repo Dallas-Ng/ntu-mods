@@ -2,7 +2,7 @@
 title: "Most Popular BDEs at NTU"
 description: "Explore popular NTU BDEs, compare why students choose them, what to watch out for, and how to pick an elective that fits your workload and timetable."
 date: "2026-04-29"
-updated: "2026-05-21"
+updated: "2026-05-30"
 author: "NTUMods"
 category: "BDE"
 tags: ["NTU BDE", "popular BDE NTU", "NTU electives", "NTUMods", "NTU electives guide", "ntu bde list", "bde list ntu", "bde courses ntu", "bde ntu"]
@@ -74,6 +74,10 @@ Common examples students usually look at include:
 - Malay
 - Arabic
 - Chinese
+- Spanish
+- Tamil (new from AY2026 Semester 1)
+
+Other languages offered include Italian, Thai, Vietnamese, Bahasa Indonesia, Hindi, and Singapore Sign Language. See [Language BDEs at NTU](/articles/language-bde-at-ntu) for the full breakdown.
 
 Real modules to browse:
 
@@ -83,6 +87,8 @@ Real modules to browse:
 - [LJ5001 Japanese Language Level 1](/mods/LJ5001)
 - [LK5001 Korean Language Level 1](/mods/LK5001)
 - [LM5001 Malay Language Level 1](/mods/LM5001)
+- [LS5001 Spanish Language Level 1](/mods/LS5001)
+- [LZ5001 Tamil Language Level 1](/mods/LZ5001)
 
 ### Why students take them
 

@@ -40,7 +40,7 @@ export const siteConfig = {
     },
     faq: {
       title: "NTUMods FAQ — Frequently Asked Questions",
-      desc: "Find quick answers for planning NTU timetables, browsing modules, choosing indexes, exporting schedules, sharing links, and fixing local app issues."
+      desc: "Find quick answers for planning NTU timetables, browsing modules, choosing indexes, exporting schedules, sharing links, and understanding how your data is stored."
     },
     privacy: {
       title: "NTUMods Privacy Policy",

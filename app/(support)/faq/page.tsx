@@ -30,25 +30,6 @@ const FAQ_CONFIG: FaqConfig[] = [
       "NTU Mods is a timetable planner and module browser for Nanyang Technological University (NTU) students. It lets you browse modules, compare indexes, and plan your schedule — without needing to log into STARS."
   },
   {
-    id: "is-it-free",
-    question: "Is NTU Mods free?",
-    answer: (
-      <>
-        Yes — NTU Mods is completely free and{" "}
-        <Link
-          href={siteConfig.links.repo}
-          className="text-blue-500 transition-colors hover:text-blue-600"
-          target="_blank"
-          rel="noopener noreferrer">
-          open-source
-        </Link>
-        . No account or login is required to use any feature.
-      </>
-    ),
-    answerText:
-      "Yes — NTU Mods is completely free and open-source. No account or login is required to use any feature."
-  },
-  {
     id: "ntu-affiliation",
     question: "Is NTU Mods affiliated with NTU?",
     answer:

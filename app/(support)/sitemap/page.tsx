@@ -4,6 +4,7 @@ import moduleMapJson from "@/data/api/module-map.json"
 
 import { siteConfig } from "@/config/site"
 import { getAllArticles } from "@/lib/server/articles"
+import Container from "@/components/container"
 import Header from "@/components/header"
 
 export const dynamic = "force-static"
@@ -66,7 +67,7 @@ export default function SitemapPage() {
   const moduleCount = Object.keys(moduleMap).length
 
   return (
-    <div className="mx-auto max-w-6xl space-y-10 py-6 lg:mt-5">
+    <Container size="sm" className="space-y-10">
       <Header
         title="Sitemap"
         subtitle={`Browse NTUMods pages, guides, and ${moduleCount.toLocaleString("en-SG")} NTU module pages from one place.`}
@@ -160,6 +161,6 @@ export default function SitemapPage() {
           ))}
         </div>
       </section>
-    </div>
+    </Container>
   )
 }

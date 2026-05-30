@@ -22,6 +22,7 @@ import ArticleToc from "@/components/articles/article-toc"
 import ArticleViewTracker from "@/components/articles/article-view-tracker"
 import ArticlesList from "@/components/articles/articles-list"
 import Breadcrumbs from "@/components/breadcrumbs"
+import Container from "@/components/container"
 
 export const dynamic = "force-static"
 export const dynamicParams = true
@@ -185,8 +186,8 @@ export default async function ArticleOrCategoryPage(props: {
     }
 
     return (
-      <div className="py-6 sm:py-8">
-        <div className="mb-6 max-w-3xl sm:mb-8">
+      <Container size="sm">
+        <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl font-bold tracking-normal sm:text-3xl">
             {heading}
           </h1>
@@ -201,7 +202,7 @@ export default async function ArticleOrCategoryPage(props: {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
-      </div>
+      </Container>
     )
   }
 
@@ -248,10 +249,10 @@ export default async function ArticleOrCategoryPage(props: {
   }
 
   return (
-    <div className="min-w-0 pb-4 sm:pb-6">
+    <Container size="md">
       <ArticleViewTracker slug={slug} />
 
-      <div className="grid min-w-0 justify-start gap-8 lg:grid-cols-[minmax(0,48rem)_16rem] lg:justify-center">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
         <Breadcrumbs
           breadcrumbs={[
             { href: "/", label: "Home", name: "Home" },
@@ -276,7 +277,7 @@ export default async function ArticleOrCategoryPage(props: {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <div className="mt-5 grid min-w-0 justify-center gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
+      <div className="mt-5 grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
         <article className="max-w-full min-w-0">
           {article.thumbnail && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -327,6 +328,6 @@ export default async function ArticleOrCategoryPage(props: {
           </div>
         </section>
       )}
-    </div>
+    </Container>
   )
 }

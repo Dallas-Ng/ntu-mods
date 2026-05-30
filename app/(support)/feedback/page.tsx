@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
+import Container from "@/components/container"
 import FeedbackCard from "@/components/feedback-card"
 import Header from "@/components/header"
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function FeedbackPage() {
   return (
-    <div className="mx-auto max-w-2xl space-y-8 px-4 py-6 sm:py-10">
+    <Container size="sm" className="space-y-8">
       <Header
         title="Feedback"
         subtitle="Share your thoughts, report issues, or suggest improvements."
@@ -32,6 +33,6 @@ export default function FeedbackPage() {
       </div>
 
       <FeedbackCard />
-    </div>
+    </Container>
   )
 }

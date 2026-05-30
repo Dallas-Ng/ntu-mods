@@ -132,6 +132,7 @@ interface GenerationConfig {
   maxDailyHours: number
   preferredDayOrder: "front-load" | "back-load" | "none"
   avoidBackToBackTypes: [IndexType, IndexType][]
+  collisionIgnoreTypes: Record<string, IndexType[]>
 }
 
 interface GeneratedCombination {

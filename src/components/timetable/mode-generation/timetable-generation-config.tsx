@@ -13,8 +13,10 @@ import {
   GENERATION_INDEX_TYPES,
   TIME_OPTIONS
 } from "@/lib/generation-config"
+import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableGeneration } from "@/hooks/use-timetable-generation"
+import { latestSemester, latestYear } from "@/lib/semesters"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -63,6 +65,83 @@ const SectionLabel = ({
     </div>
   </TooltipProvider>
 )
+
+const CollisionIgnoreSection = () => {
+  const { timetable } = useTimetable()
+  const { indexes: seasonIndexes } = useSeasonIndexes(latestYear, latestSemester)
+  const config = useBoundState((s) => s.generationConfig)
+  const updateConfig = useBoundState((s) => s.updateGenerationConfig)
+
+  const moduleKeys = Object.keys(timetable)
+  if (moduleKeys.length === 0) return null
+
+  const toggleType = (moduleKey: string, type: IndexType) => {
+    const current = config.collisionIgnoreTypes?.[moduleKey] ?? []
+    const updated = current.includes(type)
+      ? current.filter((t) => t !== type)
+      : [...current, type]
+    updateConfig({
+      collisionIgnoreTypes: {
+        ...config.collisionIgnoreTypes,
+        [moduleKey]: updated
+      }
+    })
+  }
+
+  const rows = moduleKeys
+    .map((moduleKey) => {
+      const moduleIndexes = seasonIndexes[moduleKey]
+      if (!moduleIndexes) return null
+      const types = [
+        ...new Set(
+          Object.values(moduleIndexes).flatMap((slots) =>
+            slots.map((s) => s.type)
+          )
+        )
+      ] as IndexType[]
+      return { moduleKey, types }
+    })
+    .filter(Boolean) as { moduleKey: string; types: IndexType[] }[]
+
+  if (rows.length === 0) return null
+
+  return (
+    <div className="flex flex-col gap-2">
+      <SectionLabel tip="Slots of the selected types won't block other classes and won't be blocked by them. Useful for online lectures where you can watch the recording later.">
+        Allow collisions per module
+      </SectionLabel>
+      <div className="flex flex-col gap-2">
+        {rows.map(({ moduleKey, types }) => {
+          const ignored = config.collisionIgnoreTypes?.[moduleKey] ?? []
+          return (
+            <div key={moduleKey} className="flex items-center gap-2">
+              <span className="text-muted-foreground w-20 shrink-0 text-xs font-medium">
+                {moduleKey}
+              </span>
+              <div className="flex flex-wrap gap-1">
+                {types.map((type) => {
+                  const active = ignored.includes(type)
+                  return (
+                    <button
+                      key={type}
+                      onClick={() => toggleType(moduleKey, type)}
+                      className={`h-6 rounded border px-2 text-xs font-medium transition-colors ${
+                        active
+                          ? "bg-foreground text-background border-transparent"
+                          : "text-muted-foreground hover:border-foreground"
+                      }`}>
+                      {COURSE_TYPE[type as keyof typeof COURSE_TYPE]}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 
 const SettingsForm = () => {
   const config = useBoundState((s) => s.generationConfig)
@@ -230,6 +309,9 @@ const SettingsForm = () => {
         </SectionLabel>
         <TimetableBlacklistEditor />
       </div>
+
+      {/* Per-module collision ignore */}
+      <CollisionIgnoreSection />
     </div>
   )
 }
@@ -271,6 +353,15 @@ const ConfigSummary = () => {
   if (config.blacklistedTimeslots.length > 0) {
     chips.push(
       `${config.blacklistedTimeslots.length} blocked slot${config.blacklistedTimeslots.length !== 1 ? "s" : ""}`
+    )
+  }
+
+  const collisionIgnoreCount = Object.values(
+    config.collisionIgnoreTypes ?? {}
+  ).filter((types) => types.length > 0).length
+  if (collisionIgnoreCount > 0) {
+    chips.push(
+      `Collisions allowed: ${collisionIgnoreCount} mod${collisionIgnoreCount !== 1 ? "s" : ""}`
     )
   }
 

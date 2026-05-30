@@ -194,6 +194,11 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .dark strong,
+  .dark b {
+    color: white;
+  }
 }
 
 @layer utilities {

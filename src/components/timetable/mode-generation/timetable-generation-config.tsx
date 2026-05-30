@@ -160,7 +160,7 @@ const SettingsForm = () => {
   return (
     <div className="flex flex-col gap-4">
       {/* Row 1: Day hours + Schedule style */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <SectionLabel tip="Only schedule classes within this time window. Classes outside these hours will be excluded.">
             Day hours
@@ -222,7 +222,7 @@ const SettingsForm = () => {
       </div>
 
       {/* Row 2: Max consecutive + Min gap */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <SectionLabel tip="Maximum duration of classes scheduled back-to-back without a break. e.g. '2 hours' means at most 4 consecutive 30-min slots before a gap is required.">
             Max back-to-back

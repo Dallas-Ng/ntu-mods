@@ -140,14 +140,19 @@ const TimetableBlacklistEditor = () => {
 
   // mousemove on window — catches fast moves that skip onMouseEnter
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => handlePointerMove(e.clientX, e.clientY)
-    const handleMouseUp = () => { if (isDragging.current) commitPending() }
+    const handleMouseMove = (e: MouseEvent) =>
+      handlePointerMove(e.clientX, e.clientY)
+    const handleMouseUp = () => {
+      if (isDragging.current) commitPending()
+    }
 
     const handleTouchMove = (e: TouchEvent) => {
       const t = e.touches[0]
       if (t) handlePointerMove(t.clientX, t.clientY)
     }
-    const handleTouchEnd = () => { if (isDragging.current) commitPending() }
+    const handleTouchEnd = () => {
+      if (isDragging.current) commitPending()
+    }
 
     window.addEventListener("mousemove", handleMouseMove)
     window.addEventListener("mouseup", handleMouseUp)
@@ -168,7 +173,7 @@ const TimetableBlacklistEditor = () => {
     <div className="flex flex-col gap-2">
       <div className="overflow-x-auto">
         <table
-          className="w-full text-xs select-none touch-none"
+          className="w-full touch-none text-xs select-none"
           onDragStart={(e) => e.preventDefault()}>
           <thead>
             <tr>
@@ -199,7 +204,9 @@ const TimetableBlacklistEditor = () => {
                         data-row={rowIdx}
                         data-col={colIdx}
                         onMouseDown={(e) => handleMouseDown(rowIdx, colIdx, e)}
-                        onTouchStart={(e) => handleTouchStart(rowIdx, colIdx, e)}
+                        onTouchStart={(e) =>
+                          handleTouchStart(rowIdx, colIdx, e)
+                        }
                         className={`h-5 w-full cursor-pointer rounded-sm transition-colors ${
                           active
                             ? "bg-destructive"

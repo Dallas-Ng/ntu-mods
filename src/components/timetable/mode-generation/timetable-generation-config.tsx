@@ -2,9 +2,9 @@
 
 import { useState } from "react"
 import { useBoundState } from "@/state/bound.state"
-import { XIcon, InfoIcon, Settings2Icon, WandIcon } from "lucide-react"
-import { Dialog as DialogPrimitive } from "radix-ui"
+import { InfoIcon, Settings2Icon, WandIcon, XIcon } from "lucide-react"
 import posthog from "posthog-js"
+import { Dialog as DialogPrimitive } from "radix-ui"
 
 import { COURSE_TYPE, TRUN_DAY_MAP } from "@/lib/constants"
 import { formatHhmm } from "@/lib/format"
@@ -14,11 +14,11 @@ import {
   GENERATION_INDEX_TYPES,
   TIME_OPTIONS
 } from "@/lib/generation-config"
+import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableGeneration } from "@/hooks/use-timetable-generation"
-import { latestSemester, latestYear } from "@/lib/semesters"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -93,7 +93,10 @@ const SectionLabel = ({
 
 const CollisionIgnoreSection = () => {
   const { timetable } = useTimetable()
-  const { indexes: seasonIndexes } = useSeasonIndexes(latestYear, latestSemester)
+  const { indexes: seasonIndexes } = useSeasonIndexes(
+    latestYear,
+    latestSemester
+  )
   const config = useBoundState((s) => s.generationConfig)
   const updateConfig = useBoundState((s) => s.updateGenerationConfig)
 

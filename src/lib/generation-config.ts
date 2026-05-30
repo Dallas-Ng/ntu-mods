@@ -49,5 +49,6 @@ export const DEFAULT_GENERATION_CONFIG: GenerationConfig = {
   preferredFreeDays: [],
   maxDailyHours: 0,
   preferredDayOrder: "none",
-  avoidBackToBackTypes: []
+  avoidBackToBackTypes: [],
+  collisionIgnoreTypes: {}
 }

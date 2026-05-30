@@ -2,8 +2,9 @@
 
 import { useState } from "react"
 import { useBoundState } from "@/state/bound.state"
-import { InfoIcon, Settings2Icon, WandIcon } from "lucide-react"
+import { InfoIcon, Settings2Icon, WandIcon, XIcon } from "lucide-react"
 import posthog from "posthog-js"
+import { Dialog as DialogPrimitive } from "radix-ui"
 
 import { COURSE_TYPE, TRUN_DAY_MAP } from "@/lib/constants"
 import { formatHhmm } from "@/lib/format"
@@ -13,13 +14,17 @@ import {
   GENERATION_INDEX_TYPES,
   TIME_OPTIONS
 } from "@/lib/generation-config"
+import { latestSemester, latestYear } from "@/lib/semesters"
+import { cn } from "@/lib/utils"
+import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableGeneration } from "@/hooks/use-timetable-generation"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
-  DialogContent,
   DialogHeader,
+  DialogOverlay,
+  DialogPortal,
   DialogTitle
 } from "@/components/ui/dialog"
 import {
@@ -39,6 +44,28 @@ import {
 import TimetableBlacklistEditor from "./timetable-blacklist-editor"
 import TimetableLunchEditor from "./timetable-lunch-editor"
 import TimetableResultsCycler from "./timetable-results-cycler"
+
+const ElevatedDialogContent = ({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Content>) => (
+  <DialogPortal>
+    <DialogOverlay className="z-50" />
+    <DialogPrimitive.Content
+      className={cn(
+        "bg-background data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 shadow-lg duration-200 outline-none sm:rounded-lg",
+        className
+      )}
+      {...props}>
+      {children}
+      <DialogPrimitive.Close className="ring-offset-background focus:ring-ring absolute top-2 right-2 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+        <XIcon />
+        <span className="sr-only">Close</span>
+      </DialogPrimitive.Close>
+    </DialogPrimitive.Content>
+  </DialogPortal>
+)
 
 const SectionLabel = ({
   children,
@@ -64,7 +91,88 @@ const SectionLabel = ({
   </TooltipProvider>
 )
 
+const CollisionIgnoreSection = () => {
+  const { timetable } = useTimetable()
+  const { indexes: seasonIndexes } = useSeasonIndexes(
+    latestYear,
+    latestSemester
+  )
+  const config = useBoundState((s) => s.generationConfig)
+  const updateConfig = useBoundState((s) => s.updateGenerationConfig)
+
+  const moduleKeys = Object.keys(timetable)
+  if (moduleKeys.length === 0) return null
+
+  const toggleType = (moduleKey: string, type: IndexType) => {
+    const current = config.collisionIgnoreTypes?.[moduleKey] ?? []
+    const updated = current.includes(type)
+      ? current.filter((t) => t !== type)
+      : [...current, type]
+    updateConfig({
+      collisionIgnoreTypes: {
+        ...config.collisionIgnoreTypes,
+        [moduleKey]: updated
+      }
+    })
+  }
+
+  const rows = moduleKeys
+    .map((moduleKey) => {
+      const moduleIndexes = seasonIndexes[moduleKey]
+      if (!moduleIndexes) return null
+      const types = [
+        ...new Set(
+          Object.values(moduleIndexes).flatMap((slots) =>
+            slots.map((s) => s.type)
+          )
+        )
+      ] as IndexType[]
+      return { moduleKey, types }
+    })
+    .filter(Boolean) as { moduleKey: string; types: IndexType[] }[]
+
+  if (rows.length === 0) return null
+
+  return (
+    <div className="flex flex-col gap-2">
+      <SectionLabel tip="Slots of the selected types won't block other classes and won't be blocked by them. Useful for online lectures where you can watch the recording later.">
+        Allow collisions per module
+      </SectionLabel>
+      <div className="flex flex-col gap-2">
+        {rows.map(({ moduleKey, types }) => {
+          const ignored = config.collisionIgnoreTypes?.[moduleKey] ?? []
+          return (
+            <div key={moduleKey} className="flex items-center gap-2">
+              <span className="text-muted-foreground w-20 shrink-0 text-xs font-medium">
+                {moduleKey}
+              </span>
+              <div className="flex flex-wrap gap-1">
+                {types.map((type) => {
+                  const active = ignored.includes(type)
+                  return (
+                    <button
+                      key={type}
+                      onClick={() => toggleType(moduleKey, type)}
+                      className={`h-6 rounded border px-2 text-xs font-medium transition-colors ${
+                        active
+                          ? "bg-foreground text-background border-transparent"
+                          : "text-muted-foreground hover:border-foreground"
+                      }`}>
+                      {COURSE_TYPE[type as keyof typeof COURSE_TYPE]}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 const SettingsForm = () => {
+  const [blockOpen, setBlockOpen] = useState(false)
   const config = useBoundState((s) => s.generationConfig)
   const updateConfig = useBoundState((s) => s.updateGenerationConfig)
 
@@ -80,7 +188,7 @@ const SettingsForm = () => {
   return (
     <div className="flex flex-col gap-4">
       {/* Row 1: Day hours + Schedule style */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <SectionLabel tip="Only schedule classes within this time window. Classes outside these hours will be excluded.">
             Day hours
@@ -142,7 +250,7 @@ const SettingsForm = () => {
       </div>
 
       {/* Row 2: Max consecutive + Min gap */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <SectionLabel tip="Maximum duration of classes scheduled back-to-back without a break. e.g. '2 hours' means at most 4 consecutive 30-min slots before a gap is required.">
             Max back-to-back
@@ -223,13 +331,36 @@ const SettingsForm = () => {
         </p>
       </div>
 
+      {/* Per-module collision ignore */}
+      <CollisionIgnoreSection />
+
       {/* Blacklist */}
       <div className="flex flex-col gap-2">
         <SectionLabel tip="Click or drag to mark specific day/time slots as unavailable. No classes will be scheduled during blocked slots.">
           Block time slots
         </SectionLabel>
-        <TimetableBlacklistEditor />
+        <button
+          onClick={() => setBlockOpen(true)}
+          className="text-muted-foreground hover:text-foreground flex w-full items-center justify-between rounded-md border px-3 py-2 text-xs transition-colors">
+          <span>
+            {config.blacklistedTimeslots.length > 0
+              ? `${config.blacklistedTimeslots.length} slot${config.blacklistedTimeslots.length !== 1 ? "s" : ""} blocked`
+              : "No slots blocked"}
+          </span>
+          <span className="text-muted-foreground/60">Edit</span>
+        </button>
       </div>
+
+      <Dialog open={blockOpen} onOpenChange={setBlockOpen}>
+        <ElevatedDialogContent
+          className="max-h-[calc(100dvh-2rem)] w-full overflow-y-auto sm:max-h-[85vh] sm:max-w-md"
+          aria-describedby={undefined}>
+          <DialogHeader>
+            <DialogTitle>Block time slots</DialogTitle>
+          </DialogHeader>
+          <TimetableBlacklistEditor />
+        </ElevatedDialogContent>
+      </Dialog>
     </div>
   )
 }
@@ -271,6 +402,15 @@ const ConfigSummary = () => {
   if (config.blacklistedTimeslots.length > 0) {
     chips.push(
       `${config.blacklistedTimeslots.length} blocked slot${config.blacklistedTimeslots.length !== 1 ? "s" : ""}`
+    )
+  }
+
+  const collisionIgnoreCount = Object.values(
+    config.collisionIgnoreTypes ?? {}
+  ).filter((types) => types.length > 0).length
+  if (collisionIgnoreCount > 0) {
+    chips.push(
+      `Collisions allowed: ${collisionIgnoreCount} mod${collisionIgnoreCount !== 1 ? "s" : ""}`
     )
   }
 
@@ -322,14 +462,14 @@ const TimetableGenerationConfig = () => {
 
       {/* Settings modal — always Dialog (centered popup, not drawer) */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent
-          className="max-h-[85vh] max-w-lg overflow-y-auto"
+        <ElevatedDialogContent
+          className="max-h-[calc(100dvh-2rem)] w-full overflow-y-auto sm:max-h-[85vh] sm:max-w-lg"
           aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Generation Settings</DialogTitle>
           </DialogHeader>
           <SettingsForm />
-        </DialogContent>
+        </ElevatedDialogContent>
       </Dialog>
 
       {noModules ? (

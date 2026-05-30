@@ -267,8 +267,14 @@ export function generateCombinations(
 
       if (violatesHardConstraints(slots, config)) continue
 
+      const ignoreTypes = config.collisionIgnoreTypes?.[moduleKey] ?? []
+      const collisionSlots =
+        ignoreTypes.length > 0
+          ? slots.filter((s) => !ignoreTypes.includes(s.type))
+          : slots
+
       let hasConflict = false
-      for (const newSlot of slots) {
+      for (const newSlot of collisionSlots) {
         for (const existing of chosenSlots) {
           if (timeslotsOverlap(newSlot, existing)) {
             hasConflict = true
@@ -279,7 +285,7 @@ export function generateCombinations(
       }
       if (hasConflict) continue
 
-      const combined = [...chosenSlots, ...slots]
+      const combined = [...chosenSlots, ...collisionSlots]
       if (violatesCombinationConstraints(combined, config)) continue
 
       backtrack(

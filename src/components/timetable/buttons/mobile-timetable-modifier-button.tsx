@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { useSettings } from "@/hooks/use-settings"
 import {
@@ -20,6 +20,11 @@ const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
   const [snap, setSnap] = useState<number | string | null>("85px")
   const { isMobile } = useSettings()
   const isExpanded = snap === 1
+
+  useEffect(() => {
+    document.body.style.overflow = isExpanded ? "hidden" : ""
+    return () => { document.body.style.overflow = "" }
+  }, [isExpanded])
 
   if (!isMobile || hidden) return null
 

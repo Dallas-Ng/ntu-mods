@@ -209,7 +209,7 @@ const TimetableBlacklistEditor = () => {
 
       <div className="overflow-x-auto">
         <table
-          className="w-full touch-none text-xs select-none"
+          className="w-full table-fixed touch-none text-xs select-none"
           onDragStart={(e) => e.preventDefault()}>
           <thead>
             <tr>

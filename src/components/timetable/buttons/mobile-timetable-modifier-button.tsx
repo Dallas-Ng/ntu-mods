@@ -12,25 +12,26 @@ import {
 
 import TimetableModifier from "../timetable-modifier"
 
-const MobileTimetableModifierButton = () => {
+interface Props {
+  hidden?: boolean
+}
+
+const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
   const [snap, setSnap] = useState<number | string | null>("85px")
   const { isMobile } = useSettings()
   const isExpanded = snap === 1
 
-  if (!isMobile) return null
+  if (!isMobile || hidden) return null
 
   return (
     <Drawer
-      key={isExpanded ? "expanded" : "collapsed"}
       open
       dismissible={false}
       modal={isExpanded}
       snapPoints={["85px", 1]}
       activeSnapPoint={snap}
       setActiveSnapPoint={setSnap}>
-      <DrawerContent
-        style={{ zIndex: 40 }}
-        className="border-primary h-[100svh] overflow-hidden p-2 focus:outline-none data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:max-h-[100svh] data-[vaul-drawer-direction=bottom]:rounded-t-3xl data-[vaul-drawer-direction=bottom]:border-4 data-[vaul-drawer-direction=bottom]:border-b-0">
+      <DrawerContent className="border-primary h-[100svh] overflow-hidden p-2 focus:outline-none data-[vaul-drawer-direction=bottom]:mt-0 data-[vaul-drawer-direction=bottom]:max-h-[100svh] data-[vaul-drawer-direction=bottom]:rounded-t-3xl data-[vaul-drawer-direction=bottom]:border-4 data-[vaul-drawer-direction=bottom]:border-b-0">
         <DrawerTitle className="sr-only">Timetable modifier</DrawerTitle>
         <DrawerDescription className="sr-only">
           Add, remove, and change timetable module indexes.

@@ -126,7 +126,7 @@ const Page = () => {
         </div>
       </div>
 
-      <MobileTimetableModifierButton />
+      <MobileTimetableModifierButton hidden={indexPickerEnabled} />
 
       {/* Buffer for button */}
       <div className="block h-16 md:hidden" />

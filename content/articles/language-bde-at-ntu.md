@@ -2,10 +2,10 @@
 title: "Language BDEs at NTU: What to Expect Before You Register"
 description: "A practical guide to NTU language BDEs: how the level system works, which language to choose, attendance requirements, weekly workload, and whether prior knowledge helps."
 date: "2026-05-19"
-updated: "2026-05-19"
+updated: "2026-05-30"
 author: "NTUMods"
 category: "BDE"
-tags: ["language BDE NTU", "NTU language elective", "NTU BDE", "Japanese BDE NTU", "Korean BDE NTU", "NTUMods", "NTU electives", "bde ntu", "ntu bde language", "japanese ntu", "korean ntu"]
+tags: ["language BDE NTU", "NTU language elective", "NTU BDE", "Japanese BDE NTU", "Korean BDE NTU", "NTUMods", "NTU electives", "bde ntu", "ntu bde language", "japanese ntu", "korean ntu", "tamil bde ntu", "spanish bde ntu"]
 ---
 
 # Language BDEs at NTU: What to Expect Before You Register
@@ -42,6 +42,9 @@ The Centre for Modern Languages offers a range of languages with established lev
 - [LG5001 German Language Level 1](/mods/LG5001) — available, less competitive than Japanese or Korean
 - [LM5001 Malay Language Level 1](/mods/LM5001) — relevant for regional career contexts, has some specific considerations for prior speakers (covered below)
 - [LA5001 Arabic Language Level 1](/mods/LA5001) — less common choice, different script investment required
+- [LS5001 Spanish Language Level 1](/mods/LS5001) — Latin alphabet, moderate demand
+- [LZ5001 Tamil Language Level 1](/mods/LZ5001) — new offering from AY2026 Semester 1
+- [LT5001 Thai Language Level 1](/mods/LT5001), [LI5001 Italian Language Level 1](/mods/LI5001), [LV5001 Vietnamese Language Level 1](/mods/LV5001), [LB5001 Bahasa Indonesia Level 1](/mods/LB5001), [LH5001 Hindi Language Level 1](/mods/LH5001), [LL5001 Singapore Sign Language Level 1](/mods/LL5001) — additional offerings, availability varies by semester
 
 Not every language runs every semester. Upper levels have smaller cohorts and may not run if there are not enough registered students. Always check [NTUMods](/mods) for what is actually available in your target semester before building your plan around a specific language.
 
@@ -111,6 +114,8 @@ The distinctive thing about language BDE workload is not how much total work the
 | German | German engineering companies, European manufacturing, academic research |
 | Malay | ASEAN-facing roles, regional business in Malaysia and Indonesia |
 | Arabic | Middle East markets, international trade |
+| Spanish | Latin American markets, Spanish multinationals, international organisations |
+| Tamil | South Asian regional contexts, community-facing roles in Singapore |
 
 ### If you care more about interest than career
 

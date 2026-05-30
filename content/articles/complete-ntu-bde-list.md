@@ -1,16 +1,18 @@
 ---
-title: "Complete NTU BDE List: Every BDE Category and Module (2026)"
-description: "A complete NTU BDE list by category — languages, business, computing, humanities, arts, science, engineering, and more. Browse all 800+ BDE modules on NTUMods."
+title: "Complete NTU BDE List: Every BDE Category and Module (AY2026 Semester 1)"
+description: "A complete NTU BDE list by category — languages, business, computing, humanities, arts, science, engineering, and more. Browse all 830+ BDE modules on NTUMods."
 date: "2026-05-21"
-updated: "2026-05-21"
+updated: "2026-05-30"
 author: "NTUMods"
 category: "BDE"
-tags: ["ntu bde list", "bde list ntu", "ntu bde 2026", "all bde ntu", "bde courses ntu", "NTU BDE", "NTU electives", "NTUMods", "bde ntu"]
+tags: ["ntu bde list", "bde list ntu", "ntu bde 2026", "all bde ntu", "bde courses ntu", "NTU BDE", "NTU electives", "NTUMods", "bde ntu", "ntu bde ay2026", "ntu bde semester 1 2026", "ntu bde ay2026 s1"]
 ---
 
-# Complete NTU BDE List: Every BDE Category and Module (2026)
+# Complete NTU BDE List: Every BDE Category and Module (AY2026 Semester 1)
 
-NTU has over 800 BDE modules available in the current semester across languages, business, computing, humanities, science, engineering, arts, and more. This page organises them by category so you can find what is available for your interests and programme.
+Updated for AY2026 Semester 1 (August 2026).
+
+NTU has over 830 BDE modules available in the current semester across languages, business, computing, humanities, science, engineering, arts, and more. This page organises them by category so you can find what is available for your interests and programme.
 
 Not sure what a BDE is or how many you need? Start with [What Is a BDE at NTU](/articles/what-is-a-bde-at-ntu). For the most popular BDEs and what students say about them, see [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu).
 
@@ -104,7 +106,7 @@ For what language BDEs actually feel like week to week, see [Language BDEs at NT
 | [LM5002](/mods/LM5002) | Malay Language Level 2 |
 | [LM5003](/mods/LM5003) | Malay Language Level 3 |
 | [LM5004](/mods/LM5004) | Malay Language Level 4 |
-| [LM5005](/mods/LM5005) | Malay Language Level 5 |
+| [LM5005](/mods/LM5005) | Malay Level 5 |
 
 ### Arabic
 | Module | Title |
@@ -121,6 +123,12 @@ For what language BDEs actually feel like week to week, see [Language BDEs at NT
 | [LS5002](/mods/LS5002) | Spanish Language Level 2 |
 | [LS5003](/mods/LS5003) | Spanish Language Level 3 — check availability, not offered every semester |
 | [LS5004](/mods/LS5004) | Spanish Language Level 4 |
+| [LS5005](/mods/LS5005) | Spanish Language Level 5 |
+
+### Tamil
+| Module | Title |
+| --- | --- |
+| [LZ5001](/mods/LZ5001) | Tamil Language Level 1 |
 
 ### Other Languages
 | Module | Title |
@@ -136,8 +144,23 @@ For what language BDEs actually feel like week to week, see [Language BDEs at NT
 | [LV5001](/mods/LV5001) | Vietnamese Language Level 1 |
 | [LV5002](/mods/LV5002) | Vietnamese Language Level 2 |
 | [LB5001](/mods/LB5001) | Bahasa Indonesia Level 1 |
+| [LB5002](/mods/LB5002) | Bahasa Indonesia Level 2 |
 | [LH5001](/mods/LH5001) | Hindi Language Level 1 |
+| [LH5002](/mods/LH5002) | Hindi Language Level 2 |
 | [LL5001](/mods/LL5001) | Singapore Sign Language Level 1 |
+| [LL5002](/mods/LL5002) | Singapore Sign Language Level 2 |
+
+### Cultural & Professional Language Modules
+Language BDEs also include culture-focused and professional modules beyond the standard levels. These count as BDEs and are offered alongside the progression levels.
+
+| Module | Title |
+| --- | --- |
+| [LA5101](/mods/LA5101) | Advanced Arabic Language |
+| [LJ5901](/mods/LJ5901) | Japanese Culture & Society 1 |
+| [LK5901](/mods/LK5901) | Korean Culture & Society I |
+| [LK5101](/mods/LK5101) | Business Korean 1 |
+| [LC5101](/mods/LC5101) | Business Chinese |
+| [LF5101](/mods/LF5101) | French for Professional Purposes |
 
 ---
 
@@ -160,7 +183,7 @@ A large category with options across general management, finance, marketing, ent
 | [BU5601](/mods/BU5601) | Fundamentals of Management |
 | [BU5603](/mods/BU5603) | Negotiation: Strategy & Practice |
 | [BU5604](/mods/BU5604) | Leadership in Organisations |
-| [BU5641](/mods/BU5641) | Cultural Intelligence |
+| [BU5641](/mods/BU5641) | Cultural Intelligence: How to Be an Explorer of the World |
 | [BU5703](/mods/BU5703) | International Business Environment |
 | [AB0403](/mods/AB0403) | Decision Making with Programming & Analytics |
 | [AB0603](/mods/AB0603) | Social Entrepreneurship |
@@ -169,7 +192,7 @@ A large category with options across general management, finance, marketing, ent
 | [AB1501](/mods/AB1501) | Marketing |
 | [AB1601](/mods/AB1601) | Organisational Behaviour & Design |
 | [AB5102](/mods/AB5102) | Forensic Accounting & Fraud Investigation |
-| [AB5601](/mods/AB5601) | Negotiate to Get What You Want |
+| [AB5601](/mods/AB5601) | Negotiate to Get What You Want: Strategy & Practice |
 | [AB5602](/mods/AB5602) | Leadership in Organisations |
 | [BE1401](/mods/BE1401) | Business Operations & Process |
 | [BE2601](/mods/BE2601) | Management Principles, Skills & Competencies |
@@ -240,8 +263,10 @@ For non-computing students who want technical exposure or career-relevant digita
 | [CE4046](/mods/CE4046) | Intelligent Agents |
 | [EE4285](/mods/EE4285) | Computational Intelligence |
 | [EE6405](/mods/EE6405) | Natural Language Processing |
+| [IE4422](/mods/IE4422) | Multimodal Large Language Models: Theory & Applications |
 | [IE4424](/mods/IE4424) | Machine Learning Design & Application |
 | [IE4497](/mods/IE4497) | Pattern Recognition & Deep Learning |
+| [SC2304](/mods/SC2304) | Ethical Artificial Intelligence |
 
 ---
 
@@ -303,18 +328,22 @@ Project-based and mostly exam-free. Good change of pace in a semester full of te
 | --- | --- |
 | [AAA08B](/mods/AAA08B) | Fashion & Design: Wearable Art |
 | [AAA08C](/mods/AAA08C) | Expressive Drawing |
+| [AAA08D](/mods/AAA08D) | Abstract Painting: Why It's Here & How It's Made |
 | [AAA18D](/mods/AAA18D) | Life Drawing |
 | [AAA18E](/mods/AAA18E) | Drawing |
 | [AAA18H](/mods/AAA18H) | Painting with Oil & Acrylic |
 | [AAA18J](/mods/AAA18J) | Painting with Watercolour |
+| [AAA18K](/mods/AAA18K) | Communication Design |
 | [AAA18L](/mods/AAA18L) | Silkscreen Printing |
 | [AAA18M](/mods/AAA18M) | Batik |
 | [AAA18Q](/mods/AAA18Q) | Printmaking |
 | [AAA18R](/mods/AAA18R) | Sculpture |
 | [AAA28C](/mods/AAA28C) | Digital Media & Visual Arts: Still Imaging |
 | [AAA28E](/mods/AAA28E) | Visual Arts in Asia |
+| [AAA28J](/mods/AAA28J) | Digital Media & Visual Arts: Moving Image |
 | [AAA28R](/mods/AAA28R) | Ceramics I |
 | [AAA28S](/mods/AAA28S) | Ceramics II |
+| [AAC18A](/mods/AAC18A) | Chinese Calligraphy |
 | [DA2004](/mods/DA2004) | Exhibition Design |
 | [DA5000](/mods/DA5000) | Applied Drawing |
 | [DA5001](/mods/DA5001) | Painting |
@@ -351,17 +380,27 @@ Project-based and mostly exam-free. Good change of pace in a semester full of te
 ### Music
 | Module | Title |
 | --- | --- |
-| [AAI08A](/mods/AAI08A) | Piano Ensemble |
-| [AAI08B](/mods/AAI08B) | Singing with Freedom |
 | [AAI08C](/mods/AAI08C) | Popular Music Arrangement with Technology |
+| [AAI16B](/mods/AAI16B) | Baroque & Classical Musical Practices |
+| [AAI16C](/mods/AAI16C) | Romantic & 20th Century Musical Practices |
+| [AAI16G](/mods/AAI16G) | Composing & Arranging |
 | [AAI16H](/mods/AAI16H) | Aural Skills for the 21st Century Musician |
+| [AAI16J](/mods/AAI16J) | Music Theory for Diverse Sonic Worlds I |
 | [AAI16K](/mods/AAI16K) | Ethnomusicology in the Singapore Context |
+| [AAI28C](/mods/AAI28C) | Percussion |
 | [AAI28D](/mods/AAI28D) | Studies in Indonesian Gamelan I |
+| [AAI38C](/mods/AAI38C) | Classical Guitar I |
+| [AAI38D](/mods/AAI38D) | Choir I |
 | [AAI38E](/mods/AAI38E) | Choir II |
+| [AAI38J](/mods/AAI38J) | Band I |
 | [AAI38K](/mods/AAI38K) | Band II |
 | [AAI38Q](/mods/AAI38Q) | Voice |
+| [AAI38R](/mods/AAI38R) | Conducting |
 | [AAI48A](/mods/AAI48A) | Studies in Chinese Music |
 | [AAI48B](/mods/AAI48B) | Studies in Malay Music |
+| [AAI48D](/mods/AAI48D) | Choir III |
+| [AAI48G](/mods/AAI48G) | Studies in Pop and Jazz |
+| [AAI48J](/mods/AAI48J) | Band III |
 
 ### Theatre & Performance
 | Module | Title |
@@ -369,6 +408,10 @@ Project-based and mostly exam-free. Good change of pace in a semester full of te
 | [ADP16A](/mods/ADP16A) | Introduction to Theatre & Performance |
 | [ADP26A](/mods/ADP26A) | Contemporary Theatre: Styles & Conventions |
 | [ADP26K](/mods/ADP26K) | Contemporary Theatre in Singapore & Southeast Asia |
+| [ADP26L](/mods/ADP26L) | Devising Theatre: Methods & Practices |
+| [ADP26M](/mods/ADP26M) | Applied Theatre: Theory, Practice & Pedagogy |
+| [AAU08A](/mods/AAU08A) | Theatre Games: Engagement Through Play |
+| [AAU28A](/mods/AAU28A) | Drama as Engaged & Collaborative Learning |
 | [AAU28C](/mods/AAU28C) | Twenty-First Century Learning Through Theatre & Drama |
 
 ---
@@ -469,7 +512,7 @@ Philosophy, history, literature, economics, linguistics, art history. Reading an
 | Module | Title |
 | --- | --- |
 | [HR1001](/mods/HR1001) | Ways of Seeing: Exploring Visual Culture |
-| [HR2001](/mods/HR2001) | Introduction to Histories of Southeast Asian Art |
+| [HR2001](/mods/HR2001) | Introduction to the Histories of Southeast Asian Art |
 | [HR2004](/mods/HR2004) | Survey of Modern Art, 1900–1945 |
 | [HR2007](/mods/HR2007) | Contemporary Southeast Asian Art |
 | [HR3002](/mods/HR3002) | Issues in Global Contemporary Art |
@@ -633,6 +676,14 @@ Physical activity BDEs offered through NTU. Usually attendance-driven — consis
 | [SS5107](/mods/SS5107) | Table Tennis |
 | [SS5202](/mods/SS5202) | Soccer |
 | [SS5203](/mods/SS5203) | Hockey |
+| [SS5204](/mods/SS5204) | Floorball |
+| [SS5205](/mods/SS5205) | Rugby |
+| [SS5206](/mods/SS5206) | Tchoukball |
+| [SS5303](/mods/SS5303) | Introduction to Hip-Hop & Its Dances |
+| [SS5305](/mods/SS5305) | Introduction to Dances of American Origin |
+| [SS5601](/mods/SS5601) | Human Anatomy & Physiology |
+| [SS5605](/mods/SS5605) | Psychosocial Aspects of Sport & Exercise |
+| [SS5611](/mods/SS5611) | Physical Activity in Life Course Wellness |
 
 ---
 

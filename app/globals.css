@@ -183,8 +183,13 @@
     --ring: 224.3 76.3% 48%;
   }
 
-  html {
-    scroll-behavior: smooth;
+  /* Only smooth-scroll during intentional anchor navigation, not browser scroll restoration.
+     html:focus-within is false when the browser restores scroll on back navigation (no element focused),
+     so scroll restoration is instant and doesn't look like the page "scrolled down" instead of navigating. */
+  @media (prefers-reduced-motion: no-preference) {
+    html:focus-within {
+      scroll-behavior: smooth;
+    }
   }
 
   * {

@@ -422,17 +422,6 @@ const CHANGELOG: ChangelogRelease[] = [
           </>
         )
       }
-      // Do not tell user
-      // {
-      //   category: "New Feature",
-      //   content: (
-      //     <>
-      //       Added{" "}
-      //       <ChangelogLink href="/debug">debug and reset helpers</ChangelogLink>{" "}
-      //       for recovering local timetable data.
-      //     </>
-      //   )
-      // }
     ]
   },
   {

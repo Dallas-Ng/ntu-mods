@@ -97,14 +97,6 @@ interface Exam {
   duration?: number
 }
 
-interface Feedback {
-  id: number
-  feedback: string
-  category: string
-  author: string
-  created_at: Date
-}
-
 type TimetableCreationMode = "default" | "generation" | "ai"
 
 interface LunchBreak {

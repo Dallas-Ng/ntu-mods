@@ -214,10 +214,6 @@ const TimetableAiChat = () => {
       }))
     ]
 
-    console.group("[TimetableAI] prompt")
-    console.log("messages in:", apiMessages)
-    console.groupEnd()
-
     let full = ""
     let detectedConfig: GenerationConfig | null = null
 
@@ -240,13 +236,9 @@ const TimetableAiChat = () => {
         }
       },
       () => {
-        console.group("[TimetableAI] response")
-        console.log("full response:", full)
         if (detectedConfig) {
-          console.log("extracted config:", detectedConfig)
           setPendingConfig(detectedConfig)
         }
-        console.groupEnd()
         setIsChatting(false)
         scrollToBottom()
       }

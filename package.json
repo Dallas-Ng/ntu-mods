@@ -40,7 +40,6 @@
     "react-dom": "19.2.5",
     "react-hook-form": "^7.74.0",
     "react-resizable-panels": "^4",
-    "react-schemaorg": "^2.0.1",
     "schema-dts": "^1.1.2",
     "sonner": "^2.0.7",
     "tailwind-merge": "^2.2.0",

@@ -3,8 +3,6 @@
 import dynamic from "next/dynamic"
 import Link from "next/link"
 
-import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import { AppearanceSettingsLoading } from "@/components/settings/appearance-settings"
@@ -28,14 +26,13 @@ const TableSettings = dynamic(
 
 export default function SettingsPage() {
   return (
-    <div className={cn(SUPPORT_PAGE_CONTAINER_CLASSNAME, "space-y-4")}>
+    <div className="space-y-4">
       <Header
         title="Settings"
         subtitle="Customise the look, feel, and timetable detail level."
       />
 
       <div className="space-y-5">
-
         <div
           id="dark-mode"
           className="bg-card space-y-4 rounded-md border px-4 pt-2 pb-4 shadow-lg">

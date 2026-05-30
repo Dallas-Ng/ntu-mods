@@ -2,8 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
-import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
-import { cn } from "@/lib/utils"
+import Container from "@/components/container"
 import Header from "@/components/header"
 
 export const metadata: Metadata = {
@@ -14,11 +13,7 @@ export const metadata: Metadata = {
 
 export default function HelpPage() {
   return (
-    <div
-      className={cn(
-        SUPPORT_PAGE_CONTAINER_CLASSNAME,
-        "text-muted-foreground space-y-4"
-      )}>
+    <Container size="sm" className="text-muted-foreground space-y-4">
       <div className="text-foreground">
         <Header title="Privacy Policy" subtitle="Last Updated: May 2026" />
       </div>
@@ -214,6 +209,6 @@ export default function HelpPage() {
         Continued use of the Service after changes are posted constitutes your
         acceptance of the updated policy.
       </p>
-    </div>
+    </Container>
   )
 }

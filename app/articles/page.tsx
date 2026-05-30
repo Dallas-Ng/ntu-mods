@@ -4,6 +4,7 @@ import type { Metadata } from "next"
 import { siteConfig } from "@/config/site"
 import { getAllArticles, getArticleCategories } from "@/lib/server/articles"
 import ArticlesList from "@/components/articles/articles-list"
+import Container from "@/components/container"
 import Header from "@/components/header"
 
 export const dynamic = "force-static"
@@ -42,7 +43,7 @@ export default function ArticlesPage() {
   )
 
   return (
-    <div className="relative space-y-3">
+    <Container size="md" className="space-y-3">
       <Header
         title="Articles"
         subtitle="Guides, updates, and notes from NTUMods."
@@ -51,6 +52,6 @@ export default function ArticlesPage() {
       <Suspense>
         <ArticlesList articles={articleList} categories={categories} />
       </Suspense>
-    </div>
+    </Container>
   )
 }

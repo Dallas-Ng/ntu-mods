@@ -53,9 +53,7 @@ export const Banner = {
   ),
   ay2026s1: () => (
     <Link href="/mods">
-      <BannerWrapper>
-        AY2026 Semester 1 data is now available →
-      </BannerWrapper>
+      <BannerWrapper>AY2026 Semester 1 data is now available →</BannerWrapper>
     </Link>
   ),
   experienceProblems: () => (

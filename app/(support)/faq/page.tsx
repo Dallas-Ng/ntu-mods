@@ -30,6 +30,31 @@ const FAQ_CONFIG: FaqConfig[] = [
       "NTU Mods is a timetable planner and module browser for Nanyang Technological University (NTU) students. It lets you browse modules, compare indexes, and plan your schedule — without needing to log into STARS."
   },
   {
+    id: "is-it-free",
+    question: "Is NTU Mods free?",
+    answer: (
+      <>
+        Yes — NTU Mods is completely free and{" "}
+        <Link
+          href={siteConfig.links.repo}
+          className="text-blue-500 transition-colors hover:text-blue-600"
+          target="_blank"
+          rel="noopener noreferrer">
+          open-source
+        </Link>
+        . No account or login is required to use any feature.
+      </>
+    ),
+    answerText:
+      "Yes — NTU Mods is completely free and open-source. No account or login is required to use any feature."
+  },
+  {
+    id: "ntu-affiliation",
+    question: "Is NTU Mods affiliated with NTU?",
+    answer:
+      "No. NTU Mods is an independent project and is not affiliated with, endorsed by, or connected to Nanyang Technological University. Module and timetable data is sourced from NTU's publicly accessible systems."
+  },
+  {
     id: "current-semester",
     question: "What semester is currently available?",
     answer: (
@@ -104,6 +129,12 @@ const FAQ_CONFIG: FaqConfig[] = [
       "Use the share button on the timetable page to generate a shareable URL. Anyone with the link can view your timetable, and they can copy it to their own planner to modify it."
   },
   {
+    id: "timetable-disappeared",
+    question: "Why did my timetable disappear?",
+    answer:
+      "Your timetable is saved in your browser's localStorage — it stays between visits on the same device and browser, but clears if you wipe your browser data, close an incognito window, or switch to a different device or browser. There is no account system, so nothing is synced to the cloud."
+  },
+  {
     id: "live-vacancies",
     question: "Can you show live vacancies for indexes?",
     answer:
@@ -112,8 +143,22 @@ const FAQ_CONFIG: FaqConfig[] = [
   {
     id: "data-tracking",
     question: "Do you track my data?",
-    answer:
-      "We track general usage analytics (page views, number of visitors) via Vercel. We do not collect any personal data. Everything you add to your timetable is stored only in your browser and never sent to our servers."
+    answer: (
+      <>
+        We use analytics tools — Google Analytics, Microsoft Clarity, and
+        PostHog — to collect page views, usage patterns, and session replays. No
+        personal data is collected. Everything you add to your timetable is
+        stored only in your browser and never sent to our servers. See the{" "}
+        <Link
+          href="/privacy"
+          className="text-blue-500 transition-colors hover:text-blue-600">
+          Privacy Policy
+        </Link>{" "}
+        for full details.
+      </>
+    ),
+    answerText:
+      "We use analytics tools — Google Analytics, Microsoft Clarity, and PostHog — to collect page views, usage patterns, and session replays. No personal data is collected. Everything you add to your timetable is stored only in your browser and never sent to our servers."
   }
 ]
 
@@ -143,7 +188,7 @@ export default function FaqPage() {
         <div className="space-y-8">
           <Header
             title="Frequently Asked Questions"
-            subtitle="Answers for planning timetables, browsing modules, exporting schedules, and fixing local app issues."
+            subtitle="Answers for planning timetables, browsing modules, exporting schedules, and understanding how your data is stored."
           />
 
           <div className="space-y-6">

@@ -23,7 +23,9 @@ const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
 
   useEffect(() => {
     document.body.style.overflow = isExpanded ? "hidden" : ""
-    return () => { document.body.style.overflow = "" }
+    return () => {
+      document.body.style.overflow = ""
+    }
   }, [isExpanded])
 
   if (!isMobile || hidden) return null

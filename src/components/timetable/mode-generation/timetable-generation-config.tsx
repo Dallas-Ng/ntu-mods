@@ -144,6 +144,7 @@ const CollisionIgnoreSection = () => {
 }
 
 const SettingsForm = () => {
+  const [blockOpen, setBlockOpen] = useState(false)
   const config = useBoundState((s) => s.generationConfig)
   const updateConfig = useBoundState((s) => s.updateGenerationConfig)
 
@@ -302,16 +303,36 @@ const SettingsForm = () => {
         </p>
       </div>
 
+      {/* Per-module collision ignore */}
+      <CollisionIgnoreSection />
+
       {/* Blacklist */}
       <div className="flex flex-col gap-2">
         <SectionLabel tip="Click or drag to mark specific day/time slots as unavailable. No classes will be scheduled during blocked slots.">
           Block time slots
         </SectionLabel>
-        <TimetableBlacklistEditor />
+        <button
+          onClick={() => setBlockOpen(true)}
+          className="text-muted-foreground hover:text-foreground flex w-full items-center justify-between rounded-md border px-3 py-2 text-xs transition-colors">
+          <span>
+            {config.blacklistedTimeslots.length > 0
+              ? `${config.blacklistedTimeslots.length} slot${config.blacklistedTimeslots.length !== 1 ? "s" : ""} blocked`
+              : "No slots blocked"}
+          </span>
+          <span className="text-muted-foreground/60">Edit</span>
+        </button>
       </div>
 
-      {/* Per-module collision ignore */}
-      <CollisionIgnoreSection />
+      <Dialog open={blockOpen} onOpenChange={setBlockOpen}>
+        <DialogContent
+          className="max-h-[calc(100dvh-2rem)] w-full overflow-y-auto sm:max-h-[85vh] sm:max-w-md"
+          aria-describedby={undefined}>
+          <DialogHeader>
+            <DialogTitle>Block time slots</DialogTitle>
+          </DialogHeader>
+          <TimetableBlacklistEditor />
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
@@ -414,7 +435,7 @@ const TimetableGenerationConfig = () => {
       {/* Settings modal — always Dialog (centered popup, not drawer) */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
-          className="max-h-[85vh] max-w-lg overflow-y-auto"
+          className="max-h-[calc(100dvh-2rem)] w-full overflow-y-auto sm:max-h-[85vh] sm:max-w-lg"
           aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Generation Settings</DialogTitle>

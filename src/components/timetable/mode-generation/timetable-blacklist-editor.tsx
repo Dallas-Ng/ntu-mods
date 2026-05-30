@@ -80,67 +80,84 @@ const TimetableBlacklistEditor = () => {
     }
   }
 
-  const handleMouseDown = (
-    rowIdx: number,
-    colIdx: number,
-    e: React.MouseEvent
-  ) => {
-    e.preventDefault()
+  const startDrag = (rowIdx: number, colIdx: number) => {
     isDragging.current = true
     lastCell.current = { rowIdx, colIdx }
-
-    // Seed from current Zustand state
     pendingKeys.current = new Set(
       blacklistedTimeslots.map((bl) => toKey(bl.day, bl.startTime))
     )
-
     const key = toKey(WEEKDAYS[colIdx], TIME_LABELS[rowIdx].start)
     dragMode.current = !pendingKeys.current.has(key)
     applyIdx(rowIdx, colIdx)
     bump()
   }
 
-  // mousemove on window — catches fast moves that skip onMouseEnter
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isDragging.current) return
-      const el = document.elementFromPoint(e.clientX, e.clientY)
-      const cur = getCellIdx(el)
-      if (!cur) return
+  const handleMouseDown = (
+    rowIdx: number,
+    colIdx: number,
+    e: React.MouseEvent
+  ) => {
+    e.preventDefault()
+    startDrag(rowIdx, colIdx)
+  }
 
-      const last = lastCell.current
-      if (last) {
-        if (cur.rowIdx !== last.rowIdx || cur.colIdx !== last.colIdx) {
-          interpolate(last, cur)
-          bump()
-        }
-      }
-      lastCell.current = cur
-    }
+  const handleTouchStart = (
+    rowIdx: number,
+    colIdx: number,
+    e: React.TouchEvent
+  ) => {
+    e.preventDefault()
+    startDrag(rowIdx, colIdx)
+  }
 
-    const handleMouseUp = () => {
-      if (!isDragging.current) return
-      isDragging.current = false
-      lastCell.current = null
+  const commitPending = () => {
+    isDragging.current = false
+    lastCell.current = null
+    const result = Array.from(pendingKeys.current)
+      .map((key) => {
+        const [day, start] = key.split("-").map(Number)
+        const slot = TIME_LABELS.find((t) => t.start === start)
+        if (!slot) return null
+        return { day, startTime: slot.start, endTime: slot.end }
+      })
+      .filter((v): v is NonNullable<typeof v> => v !== null)
+    updateGenerationConfig({ blacklistedTimeslots: result })
+    bump()
+  }
 
-      const result = Array.from(pendingKeys.current)
-        .map((key) => {
-          const [day, start] = key.split("-").map(Number)
-          const slot = TIME_LABELS.find((t) => t.start === start)
-          if (!slot) return null
-          return { day, startTime: slot.start, endTime: slot.end }
-        })
-        .filter((v): v is NonNullable<typeof v> => v !== null)
-
-      updateGenerationConfig({ blacklistedTimeslots: result })
+  const handlePointerMove = (x: number, y: number) => {
+    if (!isDragging.current) return
+    const el = document.elementFromPoint(x, y)
+    const cur = getCellIdx(el)
+    if (!cur) return
+    const last = lastCell.current
+    if (last && (cur.rowIdx !== last.rowIdx || cur.colIdx !== last.colIdx)) {
+      interpolate(last, cur)
       bump()
     }
+    lastCell.current = cur
+  }
+
+  // mousemove on window — catches fast moves that skip onMouseEnter
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => handlePointerMove(e.clientX, e.clientY)
+    const handleMouseUp = () => { if (isDragging.current) commitPending() }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const t = e.touches[0]
+      if (t) handlePointerMove(t.clientX, t.clientY)
+    }
+    const handleTouchEnd = () => { if (isDragging.current) commitPending() }
 
     window.addEventListener("mousemove", handleMouseMove)
     window.addEventListener("mouseup", handleMouseUp)
+    window.addEventListener("touchmove", handleTouchMove, { passive: true })
+    window.addEventListener("touchend", handleTouchEnd)
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("mouseup", handleMouseUp)
+      window.removeEventListener("touchmove", handleTouchMove)
+      window.removeEventListener("touchend", handleTouchEnd)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [updateGenerationConfig, blacklistedTimeslots])
@@ -151,7 +168,7 @@ const TimetableBlacklistEditor = () => {
     <div className="flex flex-col gap-2">
       <div className="overflow-x-auto">
         <table
-          className="w-full text-xs select-none"
+          className="w-full text-xs select-none touch-none"
           onDragStart={(e) => e.preventDefault()}>
           <thead>
             <tr>
@@ -182,6 +199,7 @@ const TimetableBlacklistEditor = () => {
                         data-row={rowIdx}
                         data-col={colIdx}
                         onMouseDown={(e) => handleMouseDown(rowIdx, colIdx, e)}
+                        onTouchStart={(e) => handleTouchStart(rowIdx, colIdx, e)}
                         className={`h-5 w-full cursor-pointer rounded-sm transition-colors ${
                           active
                             ? "bg-destructive"

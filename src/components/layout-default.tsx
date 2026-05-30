@@ -18,7 +18,7 @@ const LayoutDefault = ({
   <div className="bg-background flex min-h-screen flex-col">
     <Navbar />
 
-    <main className="relative flex-1 px-3 lg:px-5">
+    <main className="relative flex-1 px-3 py-4 sm:py-6 lg:px-5">
       <Container size={size} className={containerClassName}>
         {children}
       </Container>

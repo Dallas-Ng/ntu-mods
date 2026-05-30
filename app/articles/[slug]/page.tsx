@@ -248,19 +248,22 @@ export default async function ArticleOrCategoryPage(props: {
   }
 
   return (
-    <div className="min-w-0 py-4 sm:py-6">
+    <div className="min-w-0 pb-4 sm:pb-6">
       <ArticleViewTracker slug={slug} />
-      <Breadcrumbs
-        breadcrumbs={[
-          { href: "/", label: "Home", name: "Home" },
-          { href: "/articles", label: "Articles", name: "Articles" },
-          {
-            href: `/articles/${article.slug}`,
-            label: article.title,
-            name: article.title
-          }
-        ]}
-      />
+
+      <div className="grid min-w-0 justify-start gap-8 lg:grid-cols-[minmax(0,48rem)_16rem] lg:justify-center">
+        <Breadcrumbs
+          breadcrumbs={[
+            { href: "/", label: "Home", name: "Home" },
+            { href: "/articles", label: "Articles", name: "Articles" },
+            {
+              href: `/articles/${article.slug}`,
+              label: article.title,
+              name: article.title
+            }
+          ]}
+        />
+      </div>
 
       <script
         id="article-jsonld"

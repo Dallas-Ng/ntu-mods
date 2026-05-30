@@ -179,7 +179,9 @@ const CHANGELOG: ChangelogRelease[] = [
         content: (
           <>
             Added{" "}
-            <ChangelogLink href="/articles">article category pages</ChangelogLink>{" "}
+            <ChangelogLink href="/articles">
+              article category pages
+            </ChangelogLink>{" "}
             for browsing guides by topic.
           </>
         )
@@ -222,7 +224,8 @@ const CHANGELOG: ChangelogRelease[] = [
         content: (
           <>
             Fixed a navigation error when browsing{" "}
-            <ChangelogLink href="/articles">articles</ChangelogLink> by category.
+            <ChangelogLink href="/articles">articles</ChangelogLink> by
+            category.
           </>
         )
       }

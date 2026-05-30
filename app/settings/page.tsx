@@ -35,7 +35,6 @@ export default function SettingsPage() {
       />
 
       <div className="space-y-5">
-
         <div
           id="dark-mode"
           className="bg-card space-y-4 rounded-md border px-4 pt-2 pb-4 shadow-lg">

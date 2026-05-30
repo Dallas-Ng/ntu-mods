@@ -42,15 +42,17 @@ export default function ArticlesPage() {
   )
 
   return (
-    <div className="relative space-y-3">
-      <Header
-        title="Articles"
-        subtitle="Guides, updates, and notes from NTUMods."
-      />
+    <div className="relative flex justify-center space-y-3">
+      <div className="max-w-[66rem]">
+        <Header
+          title="Articles"
+          subtitle="Guides, updates, and notes from NTUMods."
+        />
 
-      <Suspense>
-        <ArticlesList articles={articleList} categories={categories} />
-      </Suspense>
+        <Suspense>
+          <ArticlesList articles={articleList} categories={categories} />
+        </Suspense>
+      </div>
     </div>
   )
 }

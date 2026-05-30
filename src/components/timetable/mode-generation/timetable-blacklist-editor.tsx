@@ -173,7 +173,13 @@ const TimetableBlacklistEditor = () => {
       window.removeEventListener("touchend", handleTouchEnd)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateGenerationConfig, blacklistedTimeslots, dayStartTime, dayEndTime, lunchBreaks])
+  }, [
+    updateGenerationConfig,
+    blacklistedTimeslots,
+    dayStartTime,
+    dayEndTime,
+    lunchBreaks
+  ])
 
   const clearAll = () => updateGenerationConfig({ blacklistedTimeslots: [] })
 
@@ -186,8 +192,10 @@ const TimetableBlacklistEditor = () => {
         <div className="flex flex-wrap items-center gap-3">
           {hasConstraints && (
             <div className="flex items-center gap-1.5">
-              <div className="bg-amber-400/60 h-3 w-3 rounded-sm" />
-              <span className="text-muted-foreground text-xs">Existing (lunch)</span>
+              <div className="h-3 w-3 rounded-sm bg-amber-400/60" />
+              <span className="text-muted-foreground text-xs">
+                Existing (lunch)
+              </span>
             </div>
           )}
           {hasUserBlocked && (
@@ -252,7 +260,7 @@ const TimetableBlacklistEditor = () => {
                           isUserBlocked
                             ? "bg-destructive cursor-pointer"
                             : isConstraint
-                              ? "bg-amber-400/60 cursor-default"
+                              ? "cursor-default bg-amber-400/60"
                               : "bg-muted hover:bg-muted-foreground/30 cursor-pointer"
                         }`}
                       />

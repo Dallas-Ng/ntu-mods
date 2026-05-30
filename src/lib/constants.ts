@@ -4,8 +4,6 @@ export const IS_PROD = process.env.NODE_ENV === "production"
 
 export const BASE_URL = IS_DEV ? "http://localhost:3000" : "https://ntumods.com"
 
-export const SUPPORT_PAGE_CONTAINER_CLASSNAME = "mx-auto max-w-3xl lg:mt-5"
-
 export const STARS_TIMESLOTS = [
   { start: 800, end: 830 },
   { start: 830, end: 900 },

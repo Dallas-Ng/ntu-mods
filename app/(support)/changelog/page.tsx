@@ -3,8 +3,8 @@
 import { useState } from "react"
 import Link from "next/link"
 
-import { SUPPORT_PAGE_CONTAINER_CLASSNAME } from "@/lib/constants"
 import { cn } from "@/lib/utils"
+import Container from "@/components/container"
 import Header from "@/components/header"
 
 type ChangelogCategory =
@@ -179,7 +179,9 @@ const CHANGELOG: ChangelogRelease[] = [
         content: (
           <>
             Added{" "}
-            <ChangelogLink href="/articles">article category pages</ChangelogLink>{" "}
+            <ChangelogLink href="/articles">
+              article category pages
+            </ChangelogLink>{" "}
             for browsing guides by topic.
           </>
         )
@@ -222,7 +224,8 @@ const CHANGELOG: ChangelogRelease[] = [
         content: (
           <>
             Fixed a navigation error when browsing{" "}
-            <ChangelogLink href="/articles">articles</ChangelogLink> by category.
+            <ChangelogLink href="/articles">articles</ChangelogLink> by
+            category.
           </>
         )
       }
@@ -593,7 +596,7 @@ export default function ChangelogPage() {
   })).filter((release) => release.items.length > 0)
 
   return (
-    <div className={cn(SUPPORT_PAGE_CONTAINER_CLASSNAME, "space-y-8")}>
+    <Container size="sm" className="space-y-8">
       <div className="space-y-5">
         <Header
           title="Changelog"
@@ -611,6 +614,6 @@ export default function ChangelogPage() {
           <ChangelogReleaseSection key={release.title} release={release} />
         ))}
       </div>
-    </div>
+    </Container>
   )
 }

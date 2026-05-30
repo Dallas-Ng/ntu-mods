@@ -4,9 +4,9 @@ import Link from "next/link"
 import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import type { ArticleHeading } from "@/lib/server/articles"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import ArticleToc from "@/components/articles/article-toc"
+import Container from "@/components/container"
 import Header from "@/components/header"
 
 export const metadata: Metadata = {
@@ -164,8 +164,8 @@ const faqJsonLd = {
 
 export default function FaqPage() {
   return (
-    <div className="min-w-0 py-4 sm:py-6">
-      <div className="mx-auto grid max-w-[66rem] gap-8 px-4 lg:grid-cols-[minmax(0,48rem)_16rem]">
+    <Container size="md">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
         <div className="space-y-8">
           <Header
             title="Frequently Asked Questions"
@@ -209,6 +209,6 @@ export default function FaqPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-    </div>
+    </Container>
   )
 }

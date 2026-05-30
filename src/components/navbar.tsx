@@ -97,7 +97,7 @@ const Navbar = () => {
                     <Link
                       href={link.route}
                       className={cn(
-                        "mr-1 px-1 text-sm font-semibold hover:text-slate-950 md:px-3 dark:hover:text-slate-100",
+                        "mr-1 px-1 text-sm font-semibold hover:bg-transparent hover:text-slate-950 md:px-3 dark:hover:text-slate-100",
                         pathname.includes(link.route)
                           ? "text-slate-950 dark:text-slate-100"
                           : "text-slate-500 dark:text-slate-400"
@@ -111,7 +111,7 @@ const Navbar = () => {
               <NavigationMenuItem>
                 <NavigationMenuTrigger
                   className={cn(
-                    "text-sm font-semibold",
+                    "hover:bg-accent bg-transparent text-sm font-semibold",
                     resourcesActive
                       ? "text-slate-950 dark:text-slate-100"
                       : "text-slate-500 dark:text-slate-400"

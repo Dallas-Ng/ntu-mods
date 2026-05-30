@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import { useBoundState } from "@/state/bound.state"
-import { InfoIcon, Settings2Icon, WandIcon } from "lucide-react"
+import { XIcon, InfoIcon, Settings2Icon, WandIcon } from "lucide-react"
+import { Dialog as DialogPrimitive } from "radix-ui"
 import posthog from "posthog-js"
 
 import { COURSE_TYPE, TRUN_DAY_MAP } from "@/lib/constants"
@@ -13,6 +14,7 @@ import {
   GENERATION_INDEX_TYPES,
   TIME_OPTIONS
 } from "@/lib/generation-config"
+import { cn } from "@/lib/utils"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableGeneration } from "@/hooks/use-timetable-generation"
@@ -20,8 +22,9 @@ import { latestSemester, latestYear } from "@/lib/semesters"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
-  DialogContent,
   DialogHeader,
+  DialogOverlay,
+  DialogPortal,
   DialogTitle
 } from "@/components/ui/dialog"
 import {
@@ -41,6 +44,28 @@ import {
 import TimetableBlacklistEditor from "./timetable-blacklist-editor"
 import TimetableLunchEditor from "./timetable-lunch-editor"
 import TimetableResultsCycler from "./timetable-results-cycler"
+
+const ElevatedDialogContent = ({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Content>) => (
+  <DialogPortal>
+    <DialogOverlay className="z-[60]" />
+    <DialogPrimitive.Content
+      className={cn(
+        "bg-background data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-[60] grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 shadow-lg duration-200 outline-none sm:rounded-lg",
+        className
+      )}
+      {...props}>
+      {children}
+      <DialogPrimitive.Close className="ring-offset-background focus:ring-ring absolute top-2 right-2 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+        <XIcon />
+        <span className="sr-only">Close</span>
+      </DialogPrimitive.Close>
+    </DialogPrimitive.Content>
+  </DialogPortal>
+)
 
 const SectionLabel = ({
   children,
@@ -324,14 +349,14 @@ const SettingsForm = () => {
       </div>
 
       <Dialog open={blockOpen} onOpenChange={setBlockOpen}>
-        <DialogContent
+        <ElevatedDialogContent
           className="max-h-[calc(100dvh-2rem)] w-full overflow-y-auto sm:max-h-[85vh] sm:max-w-md"
           aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Block time slots</DialogTitle>
           </DialogHeader>
           <TimetableBlacklistEditor />
-        </DialogContent>
+        </ElevatedDialogContent>
       </Dialog>
     </div>
   )
@@ -434,14 +459,14 @@ const TimetableGenerationConfig = () => {
 
       {/* Settings modal — always Dialog (centered popup, not drawer) */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent
+        <ElevatedDialogContent
           className="max-h-[calc(100dvh-2rem)] w-full overflow-y-auto sm:max-h-[85vh] sm:max-w-lg"
           aria-describedby={undefined}>
           <DialogHeader>
             <DialogTitle>Generation Settings</DialogTitle>
           </DialogHeader>
           <SettingsForm />
-        </DialogContent>
+        </ElevatedDialogContent>
       </Dialog>
 
       {noModules ? (

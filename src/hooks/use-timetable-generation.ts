@@ -3,7 +3,11 @@
 import { useCallback, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
-import { generateCombinations } from "@/lib/generate-timetable-combinations"
+import {
+  diagnoseConstraints,
+  generateCombinations,
+  type ConstraintSuggestion
+} from "@/lib/generate-timetable-combinations"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -21,6 +25,8 @@ export function useTimetableGeneration() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [truncated, setTruncated] = useState(false)
   const [hasGenerated, setHasGenerated] = useState(false)
+  const [suggestions, setSuggestions] = useState<ConstraintSuggestion[]>([])
+  const [isDiagnosing, setIsDiagnosing] = useState(false)
 
   const moduleKeys = Object.keys(timetable)
 
@@ -28,6 +34,8 @@ export function useTimetableGeneration() {
     (config = generationConfig, maxResults = 30) => {
       if (moduleKeys.length === 0) return
       setIsGenerating(true)
+      setSuggestions([])
+      setIsDiagnosing(false)
       setTimeout(() => {
         const result = generateCombinations(
           moduleKeys,
@@ -43,6 +51,14 @@ export function useTimetableGeneration() {
         }
         setCurrentIdx(0)
         setIsGenerating(false)
+        if (result.combinations.length === 0) {
+          setIsDiagnosing(true)
+          setTimeout(() => {
+            const diag = diagnoseConstraints(moduleKeys, seasonIndexes, config)
+            setSuggestions(diag)
+            setIsDiagnosing(false)
+          }, 10)
+        }
       }, 10)
     },
     [
@@ -76,14 +92,18 @@ export function useTimetableGeneration() {
     setCurrentIdx(0)
     setTruncated(false)
     setHasGenerated(false)
+    setSuggestions([])
+    setIsDiagnosing(false)
   }, [])
 
   return {
     combinations,
     currentIdx,
     isGenerating,
+    isDiagnosing,
     truncated,
     hasGenerated,
+    suggestions,
     moduleKeys,
     generate,
     navigateTo,

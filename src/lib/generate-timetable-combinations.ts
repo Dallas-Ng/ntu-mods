@@ -219,6 +219,57 @@ interface GenerationResult {
   truncated: boolean
 }
 
+export interface ConstraintSuggestion {
+  label: string
+}
+
+export function diagnoseConstraints(
+  moduleKeys: string[],
+  allIndexes: Record<string, Indexes>,
+  config: GenerationConfig
+): ConstraintSuggestion[] {
+  const suggestions: ConstraintSuggestion[] = []
+
+  const tryRelaxation = (label: string, relaxed: Partial<GenerationConfig>) => {
+    const { combinations } = generateCombinations(
+      moduleKeys,
+      allIndexes,
+      { ...config, ...relaxed },
+      1
+    )
+    if (combinations.length > 0) suggestions.push({ label })
+  }
+
+  if (config.dayStartTime > 800 || config.dayEndTime < 2200) {
+    tryRelaxation("Widen day hours to 08:00–22:00", {
+      dayStartTime: 800,
+      dayEndTime: 2200
+    })
+  }
+  if (config.maxConsecutiveSlots > 0) {
+    tryRelaxation("Remove back-to-back limit", { maxConsecutiveSlots: 0 })
+  }
+  if (config.minGapBetweenClasses > 0) {
+    tryRelaxation("Remove minimum gap requirement", { minGapBetweenClasses: 0 })
+  }
+  if (config.lunchBreaks.length > 0) {
+    tryRelaxation("Remove lunch break blocks", { lunchBreaks: [] })
+  }
+  if (config.blacklistedTimeslots.length > 0) {
+    tryRelaxation("Remove all blocked time slots", { blacklistedTimeslots: [] })
+  }
+  if ((config.maxDailyHours ?? 0) > 0) {
+    tryRelaxation("Remove daily hours limit", { maxDailyHours: 0 })
+  }
+  if ((config.avoidBackToBackTypes ?? []).length > 0) {
+    tryRelaxation("Remove back-to-back type restrictions", {
+      avoidBackToBackTypes: []
+    })
+  }
+
+  return suggestions
+}
+
 export function generateCombinations(
   moduleKeys: string[],
   allIndexes: Record<string, Indexes>,

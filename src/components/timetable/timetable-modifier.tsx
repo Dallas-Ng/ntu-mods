@@ -5,6 +5,7 @@ import { useBoundState } from "@/state/bound.state"
 import { TrashIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 
 import TimetableAiChat from "./mode-ai/timetable-ai-chat"
@@ -16,6 +17,7 @@ import TimetableModulesSelect from "./timetable-modules-select"
 const TimetableModifier = () => {
   const { timetable, removeItemFromTimetable } = useTimetable()
   const mode = useBoundState((s) => s.timetableCreationMode)
+  const { isMobile } = useSettings()
   const [activeKey, setActiveKey] = useState<string | null>(null)
 
   const handleRemoveClick = (
@@ -93,7 +95,7 @@ const TimetableModifier = () => {
       </div>
 
       {/* Mode-specific panels */}
-      {mode === "generation" && <TimetableGenerationConfig />}
+      {mode === "generation" && !isMobile && <TimetableGenerationConfig />}
       {mode === "ai" && <TimetableAiChat />}
     </div>
   )

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 
 import { useSettings } from "@/hooks/use-settings"
 import {
@@ -10,6 +11,7 @@ import {
   DrawerTitle
 } from "@/components/ui/drawer"
 
+import MobileGenerationPeek from "../mode-generation/mobile-generation-peek"
 import TimetableModifier from "../timetable-modifier"
 
 interface Props {
@@ -19,7 +21,9 @@ interface Props {
 const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
   const [snap, setSnap] = useState<number | string | null>("85px")
   const { isMobile } = useSettings()
+  const mode = useBoundState((s) => s.timetableCreationMode)
   const isExpanded = snap === 1
+  const isGenerateMode = mode === "generation"
 
   useEffect(() => {
     document.body.style.overflow = isExpanded ? "hidden" : ""
@@ -27,6 +31,10 @@ const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
       document.body.style.overflow = ""
     }
   }, [isExpanded])
+
+  useEffect(() => {
+    if (isGenerateMode) setSnap("85px")
+  }, [isGenerateMode])
 
   if (!isMobile || hidden) return null
 
@@ -40,7 +48,6 @@ const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
         />
       )}
       <Drawer
-        key={isExpanded ? "expanded" : "collapsed"}
         open
         dismissible={false}
         modal={false}
@@ -56,12 +63,16 @@ const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
           </DrawerDescription>
 
           <div className="flex h-full flex-col">
-            <button
-              type="button"
-              className="text-muted-foreground flex h-[59px] shrink-0 items-center justify-center text-sm"
-              onClick={() => setSnap(1)}>
-              Click here to add mods!
-            </button>
+            {isGenerateMode ? (
+              <MobileGenerationPeek onExpand={() => setSnap(1)} />
+            ) : (
+              <button
+                type="button"
+                className="text-muted-foreground flex h-[59px] shrink-0 items-center justify-center text-sm"
+                onClick={() => setSnap(1)}>
+                Click here to add mods!
+              </button>
+            )}
 
             <div className="min-h-0 flex-1 overflow-y-auto">
               <TimetableModifier />

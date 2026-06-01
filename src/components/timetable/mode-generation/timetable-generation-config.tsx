@@ -45,7 +45,7 @@ import TimetableBlacklistEditor from "./timetable-blacklist-editor"
 import TimetableLunchEditor from "./timetable-lunch-editor"
 import TimetableResultsCycler from "./timetable-results-cycler"
 
-const ElevatedDialogContent = ({
+export const ElevatedDialogContent = ({
   className,
   children,
   ...props
@@ -149,14 +149,23 @@ const CollisionIgnoreSection = () => {
               <div className="flex flex-wrap gap-1">
                 {types.map((type) => {
                   const active = ignored.includes(type)
+                  const globallyRelaxed = config.skippableTypes.includes(type)
                   return (
                     <button
                       key={type}
-                      onClick={() => toggleType(moduleKey, type)}
+                      onClick={
+                        globallyRelaxed ? undefined : () => toggleType(moduleKey, type)
+                      }
+                      disabled={globallyRelaxed}
+                      title={
+                        globallyRelaxed ? "Already relaxed globally" : undefined
+                      }
                       className={`h-6 rounded border px-2 text-xs font-medium transition-colors ${
-                        active
-                          ? "bg-foreground text-background border-transparent"
-                          : "text-muted-foreground hover:border-foreground"
+                        globallyRelaxed
+                          ? "cursor-not-allowed opacity-50"
+                          : active
+                            ? "bg-foreground text-background border-transparent"
+                            : "text-muted-foreground hover:border-foreground"
                       }`}>
                       {COURSE_TYPE[type as keyof typeof COURSE_TYPE]}
                     </button>
@@ -171,7 +180,7 @@ const CollisionIgnoreSection = () => {
   )
 }
 
-const SettingsForm = () => {
+export const SettingsForm = () => {
   const [blockOpen, setBlockOpen] = useState(false)
   const config = useBoundState((s) => s.generationConfig)
   const updateConfig = useBoundState((s) => s.updateGenerationConfig)

@@ -19,7 +19,9 @@ const LayoutDefault = ({
     <Navbar />
 
     <main className="relative flex-1 px-3 py-4 sm:py-6 lg:px-5">
-      <Container size={size} className={containerClassName}>
+      <Container
+        size={size}
+        className={cn(containerClassName, "px-0 md:px-[initial]")}>
         {children}
       </Container>
     </main>

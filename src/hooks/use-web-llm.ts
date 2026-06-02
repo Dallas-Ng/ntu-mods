@@ -109,7 +109,8 @@ export function useWebLLM() {
     async (
       messages: { role: "system" | "user" | "assistant"; content: string }[],
       onChunk: (chunk: string) => void,
-      onDone: () => void
+      onDone: () => void,
+      maxTokens = 512
     ) => {
       if (!globalEngine) return
       try {
@@ -117,7 +118,7 @@ export function useWebLLM() {
           messages,
           stream: true,
           temperature: 0.3,
-          max_tokens: 512
+          max_tokens: maxTokens
         })
         for await (const chunk of stream) {
           const delta = chunk.choices[0]?.delta?.content ?? ""

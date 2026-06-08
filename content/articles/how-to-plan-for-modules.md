@@ -1,14 +1,14 @@
 ---
-title: "How to Plan Your NTU Modules: A Step-by-Step Guide"
-description: "Avoid timetable clashes, meet prerequisites, and lock in the best timetable before STARS opens. A step-by-step NTU module planning guide."
+title: "How to Plan NTU Modules Before STARS Opens: Step-by-Step"
+description: "A step-by-step guide to planning NTU modules — map degree requirements, build around fixed modules, check prerequisites, balance workload, and lock in your timetable before STARS bidding starts."
 date: "2026-04-29"
-updated: "2026-05-21"
+updated: "2026-06-08"
 author: "NTUMods"
 category: "Module Planning"
 tags: ["NTU modules", "NTU timetable", "STARS", "NTUMods", "module planning", "ntu module selection", "ntu course planner", "module planning ntu"]
 ---
 
-# How to Plan for Modules at NTU
+# How to Plan NTU Modules Before STARS Opens
 
 Planning modules at NTU is partly about meeting graduation requirements and partly about protecting your week from becoming a beautifully arranged disaster. A good plan starts with your curriculum, but it should also account for workload, prerequisites, exam timing, commute gaps, and the way you actually study.
 

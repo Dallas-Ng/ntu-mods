@@ -1,14 +1,14 @@
 ---
-title: "NTU CC Modules: What They Actually Feel Like (Student Honest Review)"
-description: "An honest student guide to NTU CC mods across all categories — AY, LA, BM, PE and more. What they feel like, which are worth taking, and how to plan around them."
+title: "NTU CC Modules: What to Expect, What's Worth It, and How to Plan"
+description: "A guide to all NTU CC modules — AY, LA, BM, PE, and more. What each category is actually like, which ones are manageable, and how to plan your CC requirements without wrecking your semester."
 date: "2026-04-29"
-updated: "2026-05-21"
+updated: "2026-06-08"
 author: "NTUMods"
 category: "Common Core"
 tags: ["NTU", "NTUMods", "Common Core", "CC Modules", "ntu cc mods", "cc mods ntu", "best cc modules ntu", "ntu common core", "easy cc modules ntu", "CC0001", "CC0002", "CC0003", "CC0004", "CC0005", "CC0006", "CC0007", "NTU CC modules", "NTU common core requirements"]
 ---
 
-# NTU CC Modules: What They Actually Feel Like
+# NTU CC Modules: What to Expect, What's Worth It, and How to Plan
 
 Ask any NTU student about CC mods and you will usually get one of two answers:
 
@@ -22,6 +22,15 @@ Both are kind of true.
 CC (Common Core) modules are NTU’s university-wide compulsory mods. Everyone takes them, regardless of major. In theory, they are meant to make you more well-rounded. In practice, they are the mods most students complain about, mostly because they are project-heavy, vague, and sometimes feel painfully detached from your actual degree. ([reddit.com](https://www.reddit.com/r/NTU/comments/1oorbmn/i_really_cant_stand_icc_modules/?utm_source=chatgpt.com))
 
 That said, not all CC mods are useless. Some are genuinely manageable. Some are decent GPA buffers. Some are annoying but teach skills you will unfortunately need later.
+
+## CC module types at a glance
+
+| Type | Format | What to expect |
+| ---- | ------ | -------------- |
+| Wellness / reflection | Weekly small submissions, participation | Low intellectual demand; safe GPA if consistent; easy to lose marks by missing small components |
+| Group interdisciplinary project | Team project + presentation | Outcome depends heavily on your group; the most commonly cited frustration in CC |
+| Communication / writing | Essays, presentations, class discussion | Subjective grading; directly useful for internships; harder if writing is not your strength |
+| Ethics / society / interdisciplinary | Readings, discussion, reports | Quality varies most by professor; can be thoughtful or frustrating depending on execution |
 
 ## What CC mods are supposed to do
 

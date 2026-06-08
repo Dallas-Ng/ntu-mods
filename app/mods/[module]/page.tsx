@@ -13,9 +13,14 @@ import {
 import { getModuleExamData } from "@/lib/server/get-module-exam-data"
 import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
 import { getAllModuleMetadata } from "@/lib/server/get-module-metadata"
+import {
+  getModulePrerequisites,
+  getPrerequisiteGraph
+} from "@/lib/server/get-prerequisite-graph"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
+import ModsPrerequisiteGraph from "@/components/mods/mods-prerequisite-graph"
 import ModsViewTracker from "@/components/mods/mods-view-tracker"
 import ModsWorkloadTable from "@/components/mods/mods-workload-table"
 import RelatedModules from "@/components/related-modules"
@@ -44,10 +49,12 @@ export default async function Page(props: {
   const { year, semester } = current
 
   // Fetch module metadata and indexes
-  const [allMeta, indexes, exam] = await Promise.all([
+  const [allMeta, indexes, exam, prereqGraph, prereqNode] = await Promise.all([
     getAllModuleMetadata(year, semester),
     getModuleIndexesData(moduleKey, year, semester),
-    getModuleExamData(moduleKey, year, semester)
+    getModuleExamData(moduleKey, year, semester),
+    getPrerequisiteGraph(),
+    getModulePrerequisites(moduleKey)
   ])
 
   const moduleData = allMeta[moduleKey]
@@ -124,6 +131,14 @@ export default async function Page(props: {
       </div>
 
       <div className="mt-10 space-y-6">
+        {prereqNode && (
+          <ModsPrerequisiteGraph
+            moduleCode={moduleKey}
+            node={prereqNode}
+            graph={prereqGraph}
+          />
+        )}
+
         <h2 className="text-lg">Available Indexes</h2>
 
         <ModsIndexTable

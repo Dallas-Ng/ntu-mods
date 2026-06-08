@@ -118,6 +118,61 @@ async function buildRandomSamples() {
   console.log(`  Built random-samples.json (${samples.length} samples)`)
 }
 
+const MODULE_CODE_RE = /^[A-Z]{2,6}\d{4}[A-Z]?$/
+
+async function buildPrerequisiteGraph() {
+  const metadataDir = path.join(SRC_DATA, "metadata")
+  const files = (await fs.readdir(metadataDir))
+    .filter((f) => f.endsWith(".json"))
+    .sort()
+    .reverse() // newest first so latest version wins
+
+  // code → { title, requires: Set<string> }
+  const moduleInfo = new Map()
+
+  for (const file of files) {
+    const data = JSON.parse(await fs.readFile(path.join(metadataDir, file), "utf-8"))
+    for (const [code, mod] of Object.entries(data)) {
+      if (!moduleInfo.has(code)) {
+        const requires = new Set()
+        if (Array.isArray(mod.prerequisite)) {
+          for (const group of mod.prerequisite) {
+            for (const item of group) {
+              if (MODULE_CODE_RE.test(item)) requires.add(item)
+            }
+          }
+        }
+        moduleInfo.set(code, { title: mod.title, requires })
+      }
+    }
+  }
+
+  // Build requiredBy from requires
+  const requiredBy = new Map()
+  for (const [code, { requires }] of moduleInfo) {
+    for (const req of requires) {
+      if (!requiredBy.has(req)) requiredBy.set(req, new Set())
+      requiredBy.get(req).add(code)
+    }
+  }
+
+  const graph = {}
+  for (const [code, { title, requires }] of moduleInfo) {
+    const by = requiredBy.get(code) ?? new Set()
+    if (requires.size > 0 || by.size > 0) {
+      graph[code] = {
+        title,
+        requires: Array.from(requires).sort(),
+        requiredBy: Array.from(by).sort(),
+      }
+    }
+  }
+
+  const outPath = path.join(SRC_DATA, "prerequisite-graph.json")
+  await fs.writeFile(outPath, JSON.stringify(graph))
+  console.log(`  Built prerequisite-graph.json (${Object.keys(graph).length} modules)`)
+}
+
 async function main() {
   console.log("Building static data files...")
   await fs.mkdir(PUBLIC_DATA, { recursive: true })
@@ -131,6 +186,7 @@ async function main() {
     ).then(() => console.log("  Copied semesters.json")),
     buildModulesJson(),
     buildRandomSamples(),
+    buildPrerequisiteGraph(),
   ])
 
   console.log("Done.")

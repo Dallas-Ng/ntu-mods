@@ -43,12 +43,6 @@ const nextConfig = {
         source: "/help",
         destination: "/faq",
         permanent: true
-      },
-      {
-        source: "/mods",
-        has: [{ type: "query", key: "moduleType", value: "GLOAD" }],
-        destination: "/bde",
-        permanent: true
       }
     ]
   },

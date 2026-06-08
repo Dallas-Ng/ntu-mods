@@ -2,7 +2,7 @@
 title: "Most Popular BDEs at NTU"
 description: "Explore popular NTU BDEs, compare why students choose them, what to watch out for, and how to pick an elective that fits your workload and timetable."
 date: "2026-04-29"
-updated: "2026-05-30"
+updated: "2026-06-08"
 author: "NTUMods"
 category: "BDE"
 tags: ["NTU BDE", "popular BDE NTU", "NTU electives", "NTUMods", "NTU electives guide", "ntu bde list", "bde list ntu", "bde courses ntu", "bde ntu"]
@@ -63,7 +63,7 @@ The linked modules below are real modules that appear in the current NTUMods dat
 
 ## 1. Language BDEs
 
-Language modules are some of the most consistently popular BDEs at NTU.
+Language modules are some of the most consistently popular BDEs at NTU. NTU offers Japanese, Korean, French, German, Spanish, Malay, Arabic, Chinese, Tamil, and more — most at multiple proficiency levels from beginner upward. Most language BDEs run twice a week with formal attendance tracking, so they suit students who want consistent skill-building rather than a light or exam-free elective.
 
 Common examples students usually look at include:
 
@@ -111,7 +111,7 @@ For a full breakdown of how NTU's language level system works, which language to
 
 ## 2. Psychology and social science BDEs
 
-Psychology is one of the most popular "I want to take something interesting" BDE directions at NTU.
+Psychology is one of the most popular BDE directions at NTU, especially among students who want a contrast to their technical or business core. Modules cover educational psychology, developmental psychology, cognition, social behaviour, and decision-making. Assessment is typically essay or short-response based — individual work, no group projects — and the content feels more relatable than most degree modules.
 
 Students are usually drawn to modules related to:
 
@@ -148,7 +148,7 @@ Best for students who prefer understanding people over memorising formulas.
 
 ## 3. Business and entrepreneurship BDEs
 
-Business-related BDEs are popular even among non-business students.
+Business-related BDEs are popular even among non-business students who want practical career knowledge without committing to a business minor. Modules range from business finance and marketing to leadership, negotiation, and social entrepreneurship — skills that are immediately applicable in internships and early careers.
 
 Common areas students usually explore include:
 
@@ -184,7 +184,7 @@ Best for students who want practical workplace knowledge or business exposure.
 
 ## 4. Communication and writing BDEs
 
-These are popular among students who want something useful but less technical.
+These are popular among students who want something useful but less technical. Modules cover professional writing, news reporting, corporate communications, public relations, and media literacy — skills that map directly to internship usefulness in almost any field involving stakeholders, clients, or content.
 
 Common areas include:
 
@@ -219,7 +219,7 @@ Best for students who want practical career skills and do not mind participation
 
 ## 5. Philosophy, humanities, and ethics BDEs
 
-These are popular with students who want a break from rigid problem-solving modules.
+These are popular with students who want a break from rigid problem-solving modules. Modules include practical ethics, visual culture, history, children's literature, multicultural studies, and language in context. The format is more discussion-based and essay-driven — less structured than most degree content, and genuinely different in character.
 
 Common areas include:
 
@@ -255,7 +255,7 @@ Best for students who like ideas, discussion, and open-ended thinking.
 
 ## 6. Computing BDEs for non-computing students
 
-Computing-related BDEs are popular because many students want technical exposure without fully committing to computer science.
+Computing-related BDEs are popular because many students want technical exposure without fully committing to computer science. Modules include data analytics, computational thinking, AI fundamentals, and web design — all designed for beginners. Technical literacy is useful in almost every industry, which makes these BDEs feel like high-value investments even at the introductory level.
 
 Common areas include:
 

@@ -62,6 +62,17 @@ export const siteConfig = {
       title: "NTU Module Planning Guides",
       desc: "Read NTUMods guides on planning NTU modules, choosing BDEs, understanding Common Core modules, balancing workload, and preparing for STARS."
     },
+    bde: {
+      title: "NTU BDE Modules — Broadening & Deepening Electives | NTUMods",
+      desc: "Browse all NTU Broadening and Deepening Elective (BDE) modules available this semester. Search by code or title, compare indexes, and check exam dates.",
+      keywords: [
+        "NTU BDE modules",
+        "broadening deepening electives NTU",
+        "NTU GLOAD modules",
+        "BDE electives NTU",
+        "NTU electives"
+      ]
+    },
     sitemap: {
       title: "NTUMods Sitemap",
       desc: "Browse every major NTUMods page, planning guide, and NTU module detail page from one organized sitemap."
@@ -78,6 +89,7 @@ export const siteConfig = {
   navLinks: [
     { label: "Timetable", route: "/timetable" },
     { label: "Mods", route: "/mods" },
+    { label: "BDE", route: "/bde" },
     { label: "Articles", route: "/articles" }
   ],
   links: {

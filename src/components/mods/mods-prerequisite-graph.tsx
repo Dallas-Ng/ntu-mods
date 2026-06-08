@@ -25,7 +25,9 @@ const PillCard = ({ code, title, anchorRef }: CardProps) => (
     className="border-border bg-background hover:bg-muted inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors">
     <span className="font-semibold">{code}</span>
     {title && (
-      <span className="text-muted-foreground max-w-[120px] truncate">{title}</span>
+      <span className="text-muted-foreground max-w-[120px] truncate">
+        {title}
+      </span>
     )}
   </Link>
 )
@@ -35,7 +37,7 @@ type PathEntry = { d: string; color: "amber" | "green" }
 export default function ModsPrerequisiteGraph({
   moduleCode,
   node,
-  graph,
+  graph
 }: Props) {
   const hasRequires = node.requires.length > 0
   const hasRequiredBy = node.requiredBy.length > 0
@@ -66,10 +68,9 @@ export default function ModsPrerequisiteGraph({
 
       // Detect layout: column if center is roughly same x as top cards
       const firstTop = topRefs.current.find(Boolean)
-      const isColumn =
-        firstTop
-          ? Math.abs(firstTop.getBoundingClientRect().left - nr.left) < 100
-          : false
+      const isColumn = firstTop
+        ? Math.abs(firstTop.getBoundingClientRect().left - nr.left) < 100
+        : false
 
       const newPaths: PathEntry[] = []
 
@@ -85,7 +86,7 @@ export default function ModsPrerequisiteGraph({
           const my = (y1 + y2) / 2
           newPaths.push({
             d: `M ${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`,
-            color: "amber",
+            color: "amber"
           })
         })
         // Center bottom → bottom cards top
@@ -99,7 +100,7 @@ export default function ModsPrerequisiteGraph({
           const my = (y1 + y2) / 2
           newPaths.push({
             d: `M ${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`,
-            color: "green",
+            color: "green"
           })
         })
       } else {
@@ -114,7 +115,7 @@ export default function ModsPrerequisiteGraph({
           const mx = (x1 + x2) / 2
           newPaths.push({
             d: `M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`,
-            color: "amber",
+            color: "amber"
           })
         })
         // Center right → right cards left
@@ -128,7 +129,7 @@ export default function ModsPrerequisiteGraph({
           const mx = (x1 + x2) / 2
           newPaths.push({
             d: `M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`,
-            color: "green",
+            color: "green"
           })
         })
       }
@@ -173,10 +174,9 @@ export default function ModsPrerequisiteGraph({
         <div
           className="relative flex flex-col items-center gap-6 sm:flex-row sm:items-center"
           style={{ zIndex: 1 }}>
-
           {/* Top (mobile) / Left (desktop): prerequisites */}
           {hasRequires ? (
-            <div className="flex w-full flex-wrap justify-center gap-2 sm:w-auto sm:flex-col sm:flex-nowrap sm:items-end">
+            <div className="flex w-full flex-wrap justify-center gap-2 sm:flex-1 sm:flex-col sm:flex-nowrap sm:items-end">
               <p className="text-muted-foreground w-full text-center text-xs font-medium uppercase tracking-wide sm:text-right">
                 Required first
               </p>
@@ -185,7 +185,9 @@ export default function ModsPrerequisiteGraph({
                   key={code}
                   code={code}
                   title={graph[code]?.title}
-                  anchorRef={(el) => { topRefs.current[i] = el }}
+                  anchorRef={(el) => {
+                    topRefs.current[i] = el
+                  }}
                 />
               ))}
             </div>
@@ -209,8 +211,8 @@ export default function ModsPrerequisiteGraph({
 
           {/* Bottom (mobile) / Right (desktop): unlocked modules */}
           {hasRequiredBy ? (
-            <div className="flex w-full flex-wrap justify-center gap-2 sm:w-auto sm:flex-col sm:flex-nowrap sm:items-start">
-              <p className="text-muted-foreground w-full text-center text-xs font-medium uppercase tracking-wide sm:text-left">
+            <div className="flex w-full flex-wrap justify-center gap-2 sm:flex-1 sm:flex-col sm:flex-nowrap sm:items-start">
+              <p className="bg-background text-muted-foreground relative z-10 w-full text-center text-xs font-medium uppercase tracking-wide sm:text-left">
                 Unlocks
               </p>
               {rightModules.map((code, i) => (
@@ -218,7 +220,9 @@ export default function ModsPrerequisiteGraph({
                   key={code}
                   code={code}
                   title={graph[code]?.title}
-                  anchorRef={(el) => { bottomRefs.current[i] = el }}
+                  anchorRef={(el) => {
+                    bottomRefs.current[i] = el
+                  }}
                 />
               ))}
               {node.requiredBy.length > 15 && (

@@ -22,14 +22,18 @@ const PillCard = ({ code, title, anchorRef }: CardProps) => (
   <Link
     ref={anchorRef}
     href={getModuleUrl(code)}
-    className="border-border bg-background hover:bg-muted inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors">
+    className="border-border bg-background hover:bg-muted flex w-full items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors">
     <span className="font-semibold">{code}</span>
     {title && (
-      <span className="text-muted-foreground max-w-[120px] truncate">
-        {title}
-      </span>
+      <span className="text-muted-foreground min-w-0 flex-1 truncate">{title}</span>
     )}
   </Link>
+)
+
+const EmptyPill = ({ label }: { label: string }) => (
+  <div className="border-border/40 text-muted-foreground/50 flex w-full items-center justify-center rounded-full border border-dashed px-3 py-1.5 text-xs italic">
+    {label}
+  </div>
 )
 
 type PathEntry = { d: string; color: "amber" | "green" }
@@ -175,25 +179,23 @@ export default function ModsPrerequisiteGraph({
           className="relative flex flex-col items-center gap-6 sm:flex-row sm:items-center"
           style={{ zIndex: 1 }}>
           {/* Top (mobile) / Left (desktop): prerequisites */}
-          {hasRequires ? (
-            <div className="flex w-full flex-wrap justify-center gap-2 sm:flex-1 sm:flex-col sm:flex-nowrap sm:items-end">
-              <p className="text-muted-foreground w-full text-center text-xs font-medium uppercase tracking-wide sm:text-right">
-                Required first
-              </p>
-              {node.requires.map((code, i) => (
+          <div className="flex w-full flex-col gap-2 sm:flex-1 sm:items-end">
+            <p className="text-muted-foreground w-full text-center text-xs font-medium uppercase tracking-wide sm:text-right">
+              Required first
+            </p>
+            {hasRequires ? (
+              node.requires.map((code, i) => (
                 <PillCard
                   key={code}
                   code={code}
                   title={graph[code]?.title}
-                  anchorRef={(el) => {
-                    topRefs.current[i] = el
-                  }}
+                  anchorRef={(el) => { topRefs.current[i] = el }}
                 />
-              ))}
-            </div>
-          ) : (
-            <div className="hidden sm:block sm:flex-1" />
-          )}
+              ))
+            ) : (
+              <EmptyPill label="No prerequisite" />
+            )}
+          </div>
 
           {/* Center: current module */}
           <div className="flex shrink-0 flex-col items-center">
@@ -210,30 +212,30 @@ export default function ModsPrerequisiteGraph({
           </div>
 
           {/* Bottom (mobile) / Right (desktop): unlocked modules */}
-          {hasRequiredBy ? (
-            <div className="flex w-full flex-wrap justify-center gap-2 sm:flex-1 sm:flex-col sm:flex-nowrap sm:items-start">
-              <p className="bg-background text-muted-foreground relative z-10 w-full text-center text-xs font-medium uppercase tracking-wide sm:text-left">
-                Unlocks
-              </p>
-              {rightModules.map((code, i) => (
-                <PillCard
-                  key={code}
-                  code={code}
-                  title={graph[code]?.title}
-                  anchorRef={(el) => {
-                    bottomRefs.current[i] = el
-                  }}
-                />
-              ))}
-              {node.requiredBy.length > 15 && (
-                <span className="text-muted-foreground text-xs">
-                  +{node.requiredBy.length - 15} more
-                </span>
-              )}
-            </div>
-          ) : (
-            <div className="hidden sm:block sm:flex-1" />
-          )}
+          <div className="flex w-full flex-col gap-2 sm:flex-1 sm:items-start">
+            <p className="bg-background text-muted-foreground relative z-10 w-full text-center text-xs font-medium uppercase tracking-wide sm:text-left">
+              Unlocks
+            </p>
+            {hasRequiredBy ? (
+              <>
+                {rightModules.map((code, i) => (
+                  <PillCard
+                    key={code}
+                    code={code}
+                    title={graph[code]?.title}
+                    anchorRef={(el) => { bottomRefs.current[i] = el }}
+                  />
+                ))}
+                {node.requiredBy.length > 15 && (
+                  <span className="text-muted-foreground text-xs">
+                    +{node.requiredBy.length - 15} more
+                  </span>
+                )}
+              </>
+            ) : (
+              <EmptyPill label="No modules unlocked" />
+            )}
+          </div>
         </div>
       </div>
     </div>

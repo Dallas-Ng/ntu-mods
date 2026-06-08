@@ -12,7 +12,7 @@ tags: ["MOOC BDE NTU", "MOOC as BDE", "NTU MOOC credit", "NTU BDE alternatives",
 
 If you have heard that NTU students can take an online course and count it toward their BDE requirements, that is true — but it comes with conditions most students miss.
 
-MOOCs, or Massive Open Online Courses, are offered by platforms like Coursera, edX, and LinkedIn Learning. NTU has a formal pathway that lets approved MOOCs count as BDE credits, but the process requires upfront approval, and not every course qualifies.
+MOOCs, or Massive Open Online Courses, are offered by platforms like Coursera, edX, and FutureLearn. NTU has a formal pathway that lets approved MOOCs count as BDE credits, but the process requires upfront approval, and not every course qualifies.
 
 This article covers how the MOOC-as-BDE pathway works, what the approval process looks like, and whether it makes more sense than just taking a regular BDE.
 
@@ -20,16 +20,11 @@ This article covers how the MOOC-as-BDE pathway works, what the approval process
 
 ## What counts as a MOOC for BDE credit
 
-NTU uses MOOCs from selected platforms as part of its effort to broaden digital and interdisciplinary learning. The specific platforms and approved course lists are managed at the school or programme level, not universally across NTU.
+NTU has an official MOOC credit transfer programme. Three platforms are accepted: **Coursera**, **edX**, and **FutureLearn**. You register using your NTU email address.
 
-Courses that have qualified in the past typically:
+Courses that count must be on NTU's pre-approved list — these are selected courses from top universities offered through the three platforms. Not every course on Coursera or edX qualifies. A course you found yourself will not count unless it is on the approved list.
 
-- Come from an accredited platform (Coursera, edX, LinkedIn Learning, or similar)
-- Have a structured curriculum with assessments, not just video lectures
-- Cover topics that fit NTU's broadening or deepening intent for BDE slots
-- Are part of a curated or pre-approved list your school maintains
-
-Not every course on these platforms counts. A Coursera certificate in a random topic you found yourself is unlikely to qualify unless it appears on your school's approved list or you get explicit approval.
+You can transfer a maximum of **12 AUs** from MOOCs across your entire candidature at NTU. Plan accordingly if you intend to use MOOCs across multiple semesters.
 
 ## How the process works
 
@@ -53,25 +48,25 @@ Approved MOOCs are typically represented as a module in STARS, the same system u
 
 ### Step 4: Complete the MOOC and submit proof
 
-Once you are registered and have completed the MOOC, you submit proof of completion — usually a verified certificate from the platform — to your school. The grade or pass status is then recorded against the module in your degree audit.
+Once you complete the MOOC, submit a credit transfer application to your school with three things:
+
+- Your **eCertificate of Completion** from the platform
+- Your **enrollment confirmation email**
+- A **reflection report** on your learning
+
+Applications submitted by Teaching Week 11 are recorded in the same semester. Submit after that and the credit appears in the following semester.
 
 ## AU credit and grading
 
-The AU credit for a MOOC BDE is typically 3 AUs, but this can vary depending on the course and your school's policies.
+MOOC credits are recorded with a **Pass notation only** — they do not carry a letter grade and do not affect your CAP. This is true across the programme, not school-dependent.
 
-Grading policy also differs by school:
-
-- Some schools count MOOCs as Satisfactory/Unsatisfactory (S/U), meaning it does not affect your GPA
-- Others may assign a letter grade
-- Some cap the number of MOOC credits you can use toward your BDE requirement
-
-Check with your school before assuming a specific grading treatment. If you are trying to use MOOC credits to meet graduation requirements without affecting your GPA, confirm the S/U treatment applies to your specific programme.
+The AU credit per MOOC varies by course. NTU caps total MOOC credit transfers at **12 AUs** across your full candidature, regardless of how many individual MOOCs you complete.
 
 ## Cost
 
-MOOCs are not free if you want a verified certificate that NTU will accept. Most platform certificates cost money — a Coursera specialisation certificate, for example, typically requires a paid subscription or a one-time certificate fee.
+Most MOOCs through this programme are **free for NTU students**. NTU is a Coursera partner university — register with your NTU email to get a Campus account with free certificates for eligible courses. edX and FutureLearn courses under the approved list are similarly accessible through your NTU account.
 
-NTU does not generally subsidise the cost, though there may be institutional access to certain platforms through the library or IT services. Check whether your school provides any platform access before paying out of pocket.
+Use your NTU email when registering on these platforms to ensure you get the institutional access. If you registered with a personal email before matriculation, switch to your NTU email after you matriculate.
 
 ## MOOC vs regular BDE: how to decide
 
@@ -79,7 +74,7 @@ NTU does not generally subsidise the cost, though there may be institutional acc
 | ------ | ---- | ----------- |
 | Schedule flexibility | High — self-paced, no fixed timetable | Fixed lecture and tutorial slots |
 | Timetable conflict | None | Can clash with core modules |
-| Cost | Usually paid (certificate fee) | Covered by tuition |
+| Cost | Free via NTU institutional access | Covered by tuition |
 | Approval required | Yes, upfront | No — register through STARS normally |
 | GPA impact | Often S/U, sometimes graded | Counted in GPA unless S/U applied |
 | Social experience | Minimal — online, async | Classmates, discussions, campus experience |
@@ -97,7 +92,7 @@ A regular BDE makes more sense when:
 
 - You want the experience of being in a class
 - You are unsure about the topic and want structured guidance
-- You want to keep costs down
+- You want letter grades that can boost your CAP
 - You value the GPA buffer that S/U BDEs can offer
 
 ## Risks to watch out for
@@ -116,7 +111,7 @@ A regular BDE makes more sense when:
 2. Get the approved MOOC list from your general office or academic advisor
 3. Confirm pre-approval in writing before you start any course
 4. Check the STARS module code for MOOC registration in your semester
-5. Budget for the certificate cost if your school does not provide platform access
+5. Register on Coursera/edX/FutureLearn with your NTU email to get free institutional access
 
 If you are still deciding whether a MOOC or a traditional BDE fits your semester better, see [How to Choose a BDE at NTU](/articles/what-is-a-bde-at-ntu) for a broader framework, or [Easy BDEs at NTU](/articles/easy-bde-at-ntu) if you are looking for lower-workload options that do not involve the MOOC approval process.
 
@@ -132,12 +127,12 @@ Yes. Even if the course is online and self-paced, you still need to register a c
 
 ### Does a MOOC BDE affect my GPA?
 
-It depends on your school's policy. Many schools treat MOOC BDEs as S/U (Satisfactory/Unsatisfactory), which means they do not affect your CAP. Some may assign a letter grade. Confirm grading treatment with your school before you register.
+No. MOOC credits are recorded with a Pass notation only — there is no letter grade and no CAP impact. This applies universally under NTU's MOOC credit transfer programme.
 
 ### Can I start the MOOC first and then apply for BDE credit?
 
 This is not recommended. Most schools require pre-approval before you begin the course. Completing a MOOC first and then requesting credit is often rejected or requires a more complex ad-hoc appeal process with no guaranteed outcome.
 
-### How many AU can I get from a MOOC BDE?
+### How many AU can I get from MOOCs?
 
-Typically 3 AUs per approved MOOC, but this depends on the course and your school's policy. Some programmes cap the total number of MOOC AUs that can count toward your BDE requirement. Check your programme's rules.
+AU credit varies by course. NTU caps total MOOC credit transfers at **12 AUs across your entire candidature** — this is a hard university-wide limit, not a per-school policy. Plan your MOOC credits accordingly if you intend to use multiple courses across different semesters.

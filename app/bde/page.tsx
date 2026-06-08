@@ -1,3 +1,6 @@
+import { Suspense } from "react"
+import Link from "next/link"
+
 import { getBdeModules } from "@/lib/server/get-bde-modules"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import { siteConfig } from "@/config/site"
@@ -5,6 +8,45 @@ import Header from "@/components/header"
 import { BdeModuleList } from "@/components/mods/bde-module-list"
 
 export const dynamic = "force-static"
+
+const BDE_ARTICLES = [
+  {
+    href: "/articles/what-is-a-bde-at-ntu",
+    title: "What Is a BDE at NTU?"
+  },
+  {
+    href: "/articles/most-popular-bdes-at-ntu",
+    title: "Most Popular BDEs at NTU"
+  },
+  {
+    href: "/articles/easy-bde-at-ntu",
+    title: "Easy BDEs at NTU"
+  },
+  {
+    href: "/articles/how-to-bid-for-bde-at-ntu",
+    title: "How to Bid for a BDE at NTU"
+  },
+  {
+    href: "/articles/language-bde-at-ntu",
+    title: "Language BDEs at NTU"
+  },
+  {
+    href: "/articles/complete-ntu-bde-list",
+    title: "Complete NTU BDE List"
+  },
+  {
+    href: "/articles/bde-vs-minor-at-ntu",
+    title: "BDE vs Minor at NTU"
+  },
+  {
+    href: "/articles/does-bde-count-towards-degree-ntu",
+    title: "Does BDE Count Towards Your Degree?"
+  },
+  {
+    href: "/articles/bde-for-engineering-students-ntu",
+    title: "BDE Guide for Engineering Students"
+  }
+]
 
 const FAQ = [
   {
@@ -36,8 +78,7 @@ export default async function BdePage() {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: "NTU Broadening and Deepening Elective (BDE) Modules",
-    description:
-      "Complete list of NTU BDE modules available this semester",
+    description: "Complete list of NTU BDE modules available this semester",
     url: `${siteConfig.url}/bde`,
     numberOfItems: bdeModules.length,
     itemListElement: bdeModules.slice(0, 200).map((m, i) => ({
@@ -73,20 +114,39 @@ export default async function BdePage() {
       />
 
       <div className="space-y-6">
-        <Header
-          title="NTU BDE Modules"
-          subtitle={LATEST_SEMESTER_LABEL}
-        />
+        <Header title="NTU BDE Modules" subtitle={LATEST_SEMESTER_LABEL} />
 
         <p className="text-muted-foreground max-w-2xl text-sm leading-relaxed">
           Broadening and Deepening Electives (BDEs) are open to all NTU
           students regardless of programme. They let you explore subjects
           outside your major and count toward your graduation AU requirements.
           Browse all {bdeModules.length} BDE modules available this semester
-          below.
+          below, or{" "}
+          <Link href="/timetable" className="underline">
+            add them directly to your timetable
+          </Link>
+          .
         </p>
 
-        <BdeModuleList initialModules={bdeModules} />
+        <Suspense>
+          <BdeModuleList initialModules={bdeModules} />
+        </Suspense>
+
+        <hr />
+
+        <section className="space-y-3">
+          <h2 className="font-semibold">BDE Guides</h2>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {BDE_ARTICLES.map((a) => (
+              <Link
+                key={a.href}
+                href={a.href}
+                className="bg-card hover:bg-accent rounded-md border px-4 py-3 text-sm font-medium transition-colors">
+                {a.title}
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
     </>
   )

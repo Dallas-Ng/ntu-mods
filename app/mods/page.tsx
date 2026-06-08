@@ -15,6 +15,7 @@ import { filterModules, groupModules } from "@/lib/filter-modules"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useSettings } from "@/hooks/use-settings"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import { ModsActiveFilters } from "@/components/mods/mods-active-filters"
@@ -146,6 +147,18 @@ const ModsPage = (props: Props) => {
         title="NTU Modules"
         subtitle={`AY${year}/${nextYear} Semester ${semester}`}
       />
+
+      {moduleType === "GLOAD" && (
+        <Alert>
+          <AlertDescription>
+            Looking for BDE modules?{" "}
+            <Link href="/bde" className="font-medium underline">
+              Visit the dedicated BDE page
+            </Link>{" "}
+            — more filters, faculty breakdown, and BDE guides.
+          </AlertDescription>
+        </Alert>
+      )}
 
       <div className="flex w-full flex-col gap-2">
         <div className="flex gap-2">

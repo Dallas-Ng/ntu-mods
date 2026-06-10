@@ -60,7 +60,7 @@ const TimetableModulesSelect = () => {
         if (isMobile) setInputValue("")
         setDisabled(false)
         setIsLoadingModule(false)
-        return
+        return true
       }
 
       // Read indexes from already-fetched season cache (no API call)

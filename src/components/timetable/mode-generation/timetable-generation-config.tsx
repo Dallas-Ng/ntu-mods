@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useBoundState } from "@/state/bound.state"
-import { InfoIcon, Settings2Icon, WandIcon, XIcon } from "lucide-react"
+import { InfoIcon, LockIcon, LockOpenIcon, Settings2Icon, WandIcon, XIcon } from "lucide-react"
 import posthog from "posthog-js"
 import { Dialog as DialogPrimitive } from "radix-ui"
 
@@ -163,6 +163,50 @@ const CollisionIgnoreSection = () => {
                   )
                 })}
               </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+const LockedModulesSection = () => {
+  const { timetable } = useTimetable()
+  const lockedModules = useBoundState((s) => s.lockedModules)
+  const toggleModuleLock = useBoundState((s) => s.toggleModuleLock)
+
+  const moduleKeys = Object.keys(timetable)
+  if (moduleKeys.length === 0) return null
+
+  return (
+    <div className="flex flex-col gap-2">
+      <SectionLabel tip="Locked modules always use their current index. The generator won't try other indices for them. Useful when a module's index is pre-assigned by the school.">
+        Locked modules
+      </SectionLabel>
+      <div className="flex flex-col gap-2">
+        {moduleKeys.map((moduleKey) => {
+          const isLocked = lockedModules.includes(moduleKey)
+          const indexKey = timetable[moduleKey]
+          return (
+            <div key={moduleKey} className="flex items-center gap-2">
+              <span className="text-muted-foreground w-20 shrink-0 text-xs font-medium">
+                {moduleKey}
+              </span>
+              <button
+                onClick={() => toggleModuleLock(moduleKey)}
+                className={`flex h-6 items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors ${
+                  isLocked
+                    ? "bg-foreground text-background border-transparent"
+                    : "text-muted-foreground hover:border-foreground"
+                }`}>
+                {isLocked ? (
+                  <LockIcon className="size-3" />
+                ) : (
+                  <LockOpenIcon className="size-3" />
+                )}
+                {indexKey ?? "—"}
+              </button>
             </div>
           )
         })}
@@ -334,6 +378,9 @@ const SettingsForm = () => {
       {/* Per-module collision ignore */}
       <CollisionIgnoreSection />
 
+      {/* Per-module index locking */}
+      <LockedModulesSection />
+
       {/* Blacklist */}
       <div className="flex flex-col gap-2">
         <SectionLabel tip="Click or drag to mark specific day/time slots as unavailable. No classes will be scheduled during blocked slots.">
@@ -367,6 +414,9 @@ const SettingsForm = () => {
 
 const ConfigSummary = () => {
   const config = useBoundState((s) => s.generationConfig)
+  const lockedModules = useBoundState((s) => s.lockedModules)
+  const { timetable } = useTimetable()
+  const moduleKeys = Object.keys(timetable)
 
   const chips: string[] = [
     `${formatHhmm(config.dayStartTime)}–${formatHhmm(config.dayEndTime)}`
@@ -412,6 +462,11 @@ const ConfigSummary = () => {
     chips.push(
       `Collisions allowed: ${collisionIgnoreCount} mod${collisionIgnoreCount !== 1 ? "s" : ""}`
     )
+  }
+
+  const lockedCount = lockedModules.filter((m) => moduleKeys.includes(m)).length
+  if (lockedCount > 0) {
+    chips.push(`Locked: ${lockedCount} mod${lockedCount !== 1 ? "s" : ""}`)
   }
 
   return (

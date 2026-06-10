@@ -13,7 +13,8 @@ export const useTimetable = (argTimetable?: Timetable) => {
     removeItemFromTimetable,
     updateItemIndex,
     updateTimetableIndex,
-    migrateTimetable
+    migrateTimetable,
+    duplicateTimetable
   } = useBoundState()
 
   const qsTimetable = useQsTimetable()
@@ -34,6 +35,7 @@ export const useTimetable = (argTimetable?: Timetable) => {
     updateItemIndex,
     updateTimetable,
     updateTimetableIndex,
-    migrateTimetable
+    migrateTimetable,
+    duplicateTimetable
   }
 }

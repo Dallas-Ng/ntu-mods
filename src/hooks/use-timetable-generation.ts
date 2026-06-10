@@ -15,6 +15,7 @@ export function useTimetableGeneration() {
     latestSemester
   )
   const generationConfig = useBoundState((s) => s.generationConfig)
+  const lockedModules = useBoundState((s) => s.lockedModules)
 
   const [combinations, setCombinations] = useState<GeneratedCombination[]>([])
   const [currentIdx, setCurrentIdx] = useState(0)
@@ -33,7 +34,9 @@ export function useTimetableGeneration() {
           moduleKeys,
           seasonIndexes,
           config,
-          maxResults
+          maxResults,
+          lockedModules,
+          timetable
         )
         setCombinations(result.combinations)
         setTruncated(result.truncated)
@@ -49,6 +52,8 @@ export function useTimetableGeneration() {
       moduleKeys,
       seasonIndexes,
       generationConfig,
+      lockedModules,
+      timetable,
       timetableIndex,
       updateTimetable
     ]

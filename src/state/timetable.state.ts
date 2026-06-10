@@ -15,6 +15,7 @@ export interface TimetableSlice {
   updateItemIndex: (moduleKey: string, indexKey: string) => void
   removeItemFromTimetable: (moduleKey: string) => void
   updateTimetableIndex: (timetableIndex: number) => void
+  duplicateTimetable: (fromIndex: number, toIndex: number) => void
   resetTimetables: () => void
   setTimetableCreationMode: (mode: TimetableCreationMode) => void
   updateGenerationConfig: (config: Partial<GenerationConfig>) => void
@@ -89,6 +90,12 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   updateTimetableIndex: (timetableIndex: number) => {
     set((_state) => ({ timetableIndex }))
   },
+  duplicateTimetable: (fromIndex, toIndex) =>
+    set((state) => {
+      const updated = [...state.timetables]
+      updated[toIndex] = { ...state.timetables[fromIndex] }
+      return { timetables: updated, timetableIndex: toIndex }
+    }),
   resetTimetables: () => {
     set((_state) => ({ timetables: [{}, {}, {}, {}, {}], timetableIndex: 0 }))
   },

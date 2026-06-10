@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import {
   Calendar,
+  Copy,
   ImageDown,
   Link as LinkIcon,
   MoreHorizontal
@@ -22,11 +23,16 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 
 const TimetableActionsDropdown = () => {
-  const { timetable } = useTimetable()
+  const { timetable, timetables, timetableIndex, duplicateTimetable } =
+    useTimetable()
   const year = latestYear
   const semester = latestSemester
   const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
@@ -77,6 +83,15 @@ const TimetableActionsDropdown = () => {
     setCalendarLoading(false)
   }
 
+  const handleDuplicate = (toIndex: number) => {
+    duplicateTimetable(timetableIndex, toIndex)
+    posthog.capture("timetable_plan_duplicated", {
+      from_plan: timetableIndex + 1,
+      to_plan: toIndex + 1
+    })
+    toast(`Duplicated to Plan ${toIndex + 1}`)
+  }
+
   const handleShare = () => {
     const urlParams = new URLSearchParams(timetable)
     const link = `${BASE_URL}/share?${urlParams.toString()}`
@@ -117,6 +132,25 @@ const TimetableActionsDropdown = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="gap-2">
+            <Copy className="size-4" />
+            Duplicate to Plan
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            {timetables.map((_, index) => {
+              if (index === timetableIndex) return null
+              return (
+                <DropdownMenuItem
+                  key={index}
+                  onClick={() => handleDuplicate(index)}>
+                  Plan {index + 1}
+                </DropdownMenuItem>
+              )
+            })}
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/screenshot" className="flex items-center gap-2">
             <ImageDown className="size-4" />

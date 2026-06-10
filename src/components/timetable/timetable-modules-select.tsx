@@ -33,9 +33,11 @@ const TimetableModulesSelect = () => {
   const ref = useRef<HTMLDivElement>(null)
   const [disabled, setDisabled] = useState(false)
 
+  const isBulkInput = inputValue.includes(",")
   const isModuleWindowOpen =
-    searchResults.length > 0 ||
-    (searchResults.length === 0 && inputValue.length !== 0)
+    !isBulkInput &&
+    (searchResults.length > 0 ||
+      (searchResults.length === 0 && inputValue.length !== 0))
 
   useOutsideClick(ref, () => {
     /**
@@ -44,7 +46,7 @@ const TimetableModulesSelect = () => {
     setInputValue("")
   })
 
-  const handleSelect = async (moduleCode: string) => {
+  const handleSelect = async (moduleCode: string): Promise<boolean> => {
     setDisabled(true)
     setIsLoadingModule(true)
 
@@ -134,8 +136,10 @@ const TimetableModulesSelect = () => {
         total_modules: Object.keys(timetable).length + 1
       })
       if (isMobile) setInputValue("")
+      return true
     } catch (error) {
       console.error("Error selecting module:", error)
+      return false
     } finally {
       setDisabled(false)
       setIsLoadingModule(false)
@@ -146,24 +150,46 @@ const TimetableModulesSelect = () => {
     <div ref={ref} className="rounded-md border-2">
       <Command shouldFilter={false} className="bg-background">
         <CommandInput
-          placeholder="Search for Module"
+          placeholder="Search or paste AA1234, BB2345, ..."
           value={inputValue}
           onValueChange={(val) => setInputValue(val)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && inputValue.includes(",")) {
+              e.preventDefault()
+              const codes = inputValue
+                .split(",")
+                .map((s) => s.trim().toUpperCase())
+                .filter(
+                  (code) =>
+                    Boolean(code) && !Object.keys(timetable).includes(code)
+                )
+              ;(async () => {
+                const failed: string[] = []
+                for (const code of codes) {
+                  const ok = await handleSelect(code)
+                  if (!ok) failed.push(code)
+                }
+                setInputValue(failed.join(", "))
+              })()
+            }
+          }}
         />
 
         <CommandList className={cn(isModuleWindowOpen && "border-t")}>
-          {searchResults.length === 0 && inputValue.length !== 0 && (
-            <CommandItem
-              key="empty"
-              disabled
-              className="hover:bg-accent py-3 transition-colors lg:py-2">
-              <div className="text-muted-foreground flex w-full flex-col text-center text-xs">
-                <span className="pb-1">No Results Found</span>
-                <hr className="p-1" />
-                <span>Check the academic year, semester or search term</span>
-              </div>
-            </CommandItem>
-          )}
+          {searchResults.length === 0 &&
+            inputValue.length !== 0 &&
+            !isBulkInput && (
+              <CommandItem
+                key="empty"
+                disabled
+                className="hover:bg-accent py-3 transition-colors lg:py-2">
+                <div className="text-muted-foreground flex w-full flex-col text-center text-xs">
+                  <span className="pb-1">No Results Found</span>
+                  <hr className="p-1" />
+                  <span>Check the academic year, semester or search term</span>
+                </div>
+              </CommandItem>
+            )}
 
           {searchResults.map((module) => {
             const isActive = Object.keys(timetable).find(

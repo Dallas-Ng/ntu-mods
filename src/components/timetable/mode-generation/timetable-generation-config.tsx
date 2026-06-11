@@ -149,14 +149,25 @@ const CollisionIgnoreSection = () => {
               <div className="flex flex-wrap gap-1">
                 {types.map((type) => {
                   const active = ignored.includes(type)
+                  const globallyRelaxed = config.skippableTypes.includes(type)
                   return (
                     <button
                       key={type}
-                      onClick={() => toggleType(moduleKey, type)}
-                      className={`h-6 rounded border px-2 text-xs font-medium transition-colors ${
-                        active
-                          ? "bg-foreground text-background border-transparent"
-                          : "text-muted-foreground hover:border-foreground"
+                      onClick={
+                        globallyRelaxed
+                          ? undefined
+                          : () => toggleType(moduleKey, type)
+                      }
+                      disabled={globallyRelaxed}
+                      title={
+                        globallyRelaxed ? "Already relaxed globally" : undefined
+                      }
+                      className={`h-6 rounded border px-2 text-xs font-medium transition-[color,background-color,border-color,opacity] ${
+                        globallyRelaxed
+                          ? "cursor-not-allowed opacity-50"
+                          : active
+                            ? "bg-foreground text-background border-transparent"
+                            : "text-muted-foreground hover:border-foreground"
                       }`}>
                       {COURSE_TYPE[type as keyof typeof COURSE_TYPE]}
                     </button>
@@ -490,8 +501,10 @@ const TimetableGenerationConfig = () => {
     combinations,
     currentIdx,
     isGenerating,
+    isDiagnosing,
     truncated,
     hasGenerated,
+    suggestions,
     generate,
     navigateTo,
     saveToPlan
@@ -550,9 +563,32 @@ const TimetableGenerationConfig = () => {
       )}
 
       {hasGenerated && combinations.length === 0 && !isGenerating && (
-        <p className="text-muted-foreground text-center text-xs">
-          No valid combinations found. Try relaxing your constraints.
-        </p>
+        <div className="flex flex-col gap-1.5 text-center">
+          <p className="text-muted-foreground text-xs">
+            No valid combinations found.
+          </p>
+          {isDiagnosing && (
+            <p className="text-muted-foreground text-xs">
+              Analyzing constraints…
+            </p>
+          )}
+          {!isDiagnosing && suggestions.length > 0 && (
+            <div className="flex flex-col gap-1">
+              <p className="text-muted-foreground text-xs">Try:</p>
+              <ul className="text-muted-foreground flex flex-col gap-0.5 text-xs">
+                {suggestions.map((s) => (
+                  <li key={s.label}>· {s.label}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {!isDiagnosing && suggestions.length === 0 && (
+            <p className="text-muted-foreground text-xs">
+              No single constraint change would help — try relaxing multiple
+              settings.
+            </p>
+          )}
+        </div>
       )}
 
       {combinations.length > 0 && (

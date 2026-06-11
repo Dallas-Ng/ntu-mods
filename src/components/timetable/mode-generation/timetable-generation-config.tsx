@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { InfoIcon, LockIcon, LockOpenIcon, Settings2Icon, WandIcon, XIcon } from "lucide-react"
 import posthog from "posthog-js"
@@ -484,6 +484,7 @@ const ConfigSummary = () => {
 
 const TimetableGenerationConfig = () => {
   const [open, setOpen] = useState(false)
+  const [hideDuplicates, setHideDuplicates] = useState(false)
   const { timetable } = useTimetable()
   const generationConfig = useBoundState((s) => s.generationConfig)
   const {
@@ -492,12 +493,40 @@ const TimetableGenerationConfig = () => {
     isGenerating,
     truncated,
     hasGenerated,
+    diagnosisMessage,
     generate,
     navigateTo,
     saveToPlan
   } = useTimetableGeneration()
 
   const noModules = Object.keys(timetable).length === 0
+
+  const visibleCombinations = useMemo(() => {
+    if (!hideDuplicates) return combinations
+    const seen = new Set<string>()
+    return combinations.filter((c) => {
+      if (seen.has(c.timeslotSignature)) return false
+      seen.add(c.timeslotSignature)
+      return true
+    })
+  }, [combinations, hideDuplicates])
+
+  const hiddenCount = combinations.length - visibleCombinations.length
+
+  const visibleCurrentIdx = Math.max(
+    0,
+    visibleCombinations.findIndex((c) => c === combinations[currentIdx])
+  )
+
+  const visibleNavigateTo = useCallback(
+    (visIdx: number) => {
+      const combo = visibleCombinations[visIdx]
+      if (!combo) return
+      const rawIdx = combinations.indexOf(combo)
+      if (rawIdx !== -1) navigateTo(rawIdx)
+    },
+    [visibleCombinations, combinations, navigateTo]
+  )
 
   return (
     <div className="flex flex-col gap-3">
@@ -551,17 +580,20 @@ const TimetableGenerationConfig = () => {
 
       {hasGenerated && combinations.length === 0 && !isGenerating && (
         <p className="text-muted-foreground text-center text-xs">
-          No valid combinations found. Try relaxing your constraints.
+          {diagnosisMessage || "No valid combinations found. Try relaxing your constraints."}
         </p>
       )}
 
       {combinations.length > 0 && (
         <TimetableResultsCycler
-          combinations={combinations}
-          currentIndex={currentIdx}
-          onNavigate={navigateTo}
+          combinations={visibleCombinations}
+          currentIndex={visibleCurrentIdx}
+          onNavigate={visibleNavigateTo}
           onSaveToPlan={saveToPlan}
           truncated={truncated}
+          hideDuplicates={hideDuplicates}
+          onHideDuplicatesChange={setHideDuplicates}
+          hiddenCount={hiddenCount}
         />
       )}
     </div>

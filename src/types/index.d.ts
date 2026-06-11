@@ -132,6 +132,7 @@ interface GeneratedCombination {
   score: number
   freeDays: number
   daysWithClass: number
+  timeslotSignature: string
 }
 
 interface ChatMessage {

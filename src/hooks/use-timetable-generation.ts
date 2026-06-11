@@ -3,7 +3,10 @@
 import { useCallback, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
-import { generateCombinations } from "@/lib/generate-timetable-combinations"
+import {
+  diagnoseEmptyResult,
+  generateCombinations
+} from "@/lib/generate-timetable-combinations"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -22,6 +25,7 @@ export function useTimetableGeneration() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [truncated, setTruncated] = useState(false)
   const [hasGenerated, setHasGenerated] = useState(false)
+  const [diagnosisMessage, setDiagnosisMessage] = useState("")
 
   const moduleKeys = Object.keys(timetable)
 
@@ -43,6 +47,11 @@ export function useTimetableGeneration() {
         setHasGenerated(true)
         if (result.combinations.length > 0) {
           updateTimetable(result.combinations[0].timetable, timetableIndex)
+          setDiagnosisMessage("")
+        } else {
+          setDiagnosisMessage(
+            diagnoseEmptyResult(moduleKeys, seasonIndexes, config)
+          )
         }
         setCurrentIdx(0)
         setIsGenerating(false)
@@ -81,6 +90,7 @@ export function useTimetableGeneration() {
     setCurrentIdx(0)
     setTruncated(false)
     setHasGenerated(false)
+    setDiagnosisMessage("")
   }, [])
 
   return {
@@ -89,6 +99,7 @@ export function useTimetableGeneration() {
     isGenerating,
     truncated,
     hasGenerated,
+    diagnosisMessage,
     moduleKeys,
     generate,
     navigateTo,

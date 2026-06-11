@@ -274,11 +274,19 @@ export function generateCombinations(
     }
 
     if (moduleIdx === moduleKeys.length) {
+      const fullSlots = moduleKeys.flatMap(
+        (mk) => allIndexes[mk]?.[partialTimetable[mk]] ?? []
+      )
+      const timeslotSignature = fullSlots
+        .map((s) => `${s.day}|${s.time}|${s.type}`)
+        .sort()
+        .join(",")
       results.push({
         timetable: { ...partialTimetable },
         score: scoreCombination(chosenSlots, config),
         freeDays: countFreeDays(chosenSlots),
-        daysWithClass: countDaysWithClass(chosenSlots)
+        daysWithClass: countDaysWithClass(chosenSlots),
+        timeslotSignature
       })
       return
     }
@@ -315,4 +323,21 @@ export function generateCombinations(
   results.sort((a, b) => b.score - a.score)
 
   return { combinations: results, truncated }
+}
+
+export function diagnoseEmptyResult(
+  moduleKeys: string[],
+  allIndexes: Record<string, Indexes>,
+  config: GenerationConfig
+): string {
+  for (const mk of moduleKeys) {
+    if (!allIndexes[mk])
+      return `Module ${mk} has no data for the current semester.`
+    const hasValid = Object.values(allIndexes[mk]).some(
+      (slots) => !violatesHardConstraints(slots, config)
+    )
+    if (!hasValid)
+      return `${mk} has no available slots within your configured hours. Try extending day hours in Settings.`
+  }
+  return `All combinations have scheduling conflicts. If modules share lecture slots, use "Allow collisions" in Settings.`
 }

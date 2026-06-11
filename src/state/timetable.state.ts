@@ -7,6 +7,7 @@ export interface TimetableSlice {
   timetableIndex: number
   timetableCreationMode: TimetableCreationMode
   generationConfig: GenerationConfig
+  lockedModules: string[]
   hasOnboarded: boolean
   migrateTimetable: (timetable: Timetable) => void
   updateTimetable: (timetable: Timetable, timetableIndex: number) => void
@@ -14,9 +15,11 @@ export interface TimetableSlice {
   updateItemIndex: (moduleKey: string, indexKey: string) => void
   removeItemFromTimetable: (moduleKey: string) => void
   updateTimetableIndex: (timetableIndex: number) => void
+  duplicateTimetable: (fromIndex: number, toIndex: number) => void
   resetTimetables: () => void
   setTimetableCreationMode: (mode: TimetableCreationMode) => void
   updateGenerationConfig: (config: Partial<GenerationConfig>) => void
+  toggleModuleLock: (moduleKey: string) => void
   setHasOnboarded: (value: boolean) => void
 }
 
@@ -25,6 +28,7 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   timetableIndex: 0,
   timetableCreationMode: "default",
   generationConfig: DEFAULT_GENERATION_CONFIG,
+  lockedModules: [],
   hasOnboarded: false,
   migrateTimetable: (timetable: Timetable) =>
     set((state) => ({
@@ -86,6 +90,12 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   updateTimetableIndex: (timetableIndex: number) => {
     set((_state) => ({ timetableIndex }))
   },
+  duplicateTimetable: (fromIndex, toIndex) =>
+    set((state) => {
+      const updated = [...state.timetables]
+      updated[toIndex] = { ...state.timetables[fromIndex] }
+      return { timetables: updated, timetableIndex: toIndex }
+    }),
   resetTimetables: () => {
     set((_state) => ({ timetables: [{}, {}, {}, {}, {}], timetableIndex: 0 }))
   },
@@ -95,6 +105,13 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   updateGenerationConfig: (config: Partial<GenerationConfig>) => {
     set((state) => ({
       generationConfig: { ...state.generationConfig, ...config }
+    }))
+  },
+  toggleModuleLock: (moduleKey: string) => {
+    set((state) => ({
+      lockedModules: state.lockedModules.includes(moduleKey)
+        ? state.lockedModules.filter((k) => k !== moduleKey)
+        : [...state.lockedModules, moduleKey]
     }))
   },
   setHasOnboarded: (value: boolean) => {

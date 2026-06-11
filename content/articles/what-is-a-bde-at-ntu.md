@@ -1,20 +1,22 @@
 ---
-title: "What Is a BDE at NTU?"
-description: "Understand what a BDE is at NTU, how it fits graduation requirements, and how to choose electives that match your timetable, workload, and interests."
+title: "What Is a BDE at NTU? (AUs, Requirements & How to Choose)"
+description: "BDE stands for Broadening and Deepening Elective. NTU students typically need 9–21 BDE AUs to graduate depending on programme. Here's what BDEs are, how they count, and how to pick ones that fit your timetable."
 date: "2026-04-29"
-updated: "2026-05-21"
+updated: "2026-06-08"
 author: "NTUMods"
 category: "BDE"
 tags: ["NTU BDE", "Broadening and Deepening Elective", "NTU electives", "NTUMods", "NTU module planning", "BDE NTU guide", "NTU elective planning", "what is bde", "what bde means", "bde degree ntu", "bde ntu"]
 ---
 
-# What Is a BDE at NTU?
+# What Is a BDE at NTU? (AUs, Requirements & How to Choose)
 
 If you are new to NTU, one of the first confusing things you will probably see during course planning is the term BDE. It shows up in your curriculum, degree audit, and module planning, and most freshmen eventually ask the same question: what exactly is a BDE, and what am I supposed to do with it?
 
 BDE stands for Broadening and Deepening Elective. These are elective modules in your curriculum that give you room to explore beyond your compulsory core modules.
 
 In simple terms, BDEs are the part of your degree where you get the most freedom to choose what you want to study.
+
+> **At a glance:** BDE = Broadening and Deepening Elective. Most programmes require 9–21 BDE AUs to graduate (exact number depends on your programme and cohort). You choose BDEs from across the university — languages, business, computing, humanities, and more. [Browse the full BDE list →](/articles/complete-ntu-bde-list)
 
 ## What BDEs can be used for
 

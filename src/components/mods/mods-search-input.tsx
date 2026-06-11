@@ -23,7 +23,9 @@ const ModsSearchInput = ({ paramsValue }: { paramsValue: string }) => {
   }, [dbSearchTerm])
 
   useEffect(() => {
-    setCurrSearchTerm(paramsValue)
+    if (document.activeElement !== inputRef.current) {
+      setCurrSearchTerm(paramsValue)
+    }
   }, [paramsValue])
 
   useEffect(() => {

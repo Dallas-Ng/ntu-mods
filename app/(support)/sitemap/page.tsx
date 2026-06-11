@@ -28,6 +28,7 @@ const TOOL_LINKS = [
   { label: "Wallpaper Maker", href: "/screenshot" },
   { label: "Changelog", href: "/changelog" },
   { label: "Privacy", href: "/privacy" },
+  { label: "AI Instructions", href: "/ai-instructions" },
   { label: "Settings", href: "/settings" },
   { label: "Feedback", href: "/feedback" }
 ]

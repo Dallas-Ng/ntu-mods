@@ -1,22 +1,18 @@
 import { useBoundState } from "@/state/bound.state"
-import type { Settings } from "@/state/settings.state"
+import { INIT_SETTINGS } from "@/state/settings.state"
 
 import { useHydrated } from "@/hooks/use-hydrated"
 
 export const useSettings = () => {
   const { settings, updateSettings, resetSettings } = useBoundState()
   const hydrated = useHydrated()
-  const {
-    isMobile = false,
-    modsViewMode = "cards",
-    modsGroupBy = "none"
-  } = hydrated ? settings : ({} as Partial<Settings>)
+  const effectiveSettings = hydrated ? settings : INIT_SETTINGS
 
   return {
-    isMobile,
-    modsViewMode,
-    modsGroupBy,
-    settings,
+    isMobile: effectiveSettings.isMobile,
+    modsViewMode: effectiveSettings.modsViewMode,
+    modsGroupBy: effectiveSettings.modsGroupBy,
+    settings: effectiveSettings,
     updateSettings,
     resetSettings
   }

@@ -131,6 +131,59 @@ const ChangelogReleaseSection = ({
 
 const CHANGELOG: ChangelogRelease[] = [
   {
+    title: "Timetable generator improvements",
+    date: "12 Jun 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Generate timetables from a{" "}
+            <ChangelogLink href="/timetable">
+              comma-separated list of module codes
+            </ChangelogLink>{" "}
+            — paste them all at once instead of adding one by one. Requested by
+            anonymous students.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content:
+          "Lock a specific index for any module before generating — the generator will only consider that registration group. Requested by anonymous students."
+      },
+      {
+        category: "New Feature",
+        content:
+          'Hide duplicate timetable results that share identical timeslots but differ only by index number. Toggle "Hide same-timeslot duplicates" in the results panel. Requested by anonymous students.'
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            <ChangelogLink href="/mods">Module pages</ChangelogLink> now include
+            an interactive prerequisite graph so you can visualise dependency
+            chains at a glance. Requested by anonymous students.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content:
+          "When generation finds no results, the tool now analyses your constraints and suggests the specific setting to relax — instead of a generic error message."
+      },
+      {
+        category: "Improvement",
+        content: "Duplicate plan option added to the plan actions dropdown."
+      },
+      {
+        category: "Bug Fix",
+        content:
+          "Fixed module search input resetting mid-type after the debounce fired."
+      }
+    ]
+  },
+  {
     title: "AY 2026 Semester 1 now available",
     date: "29 May 2026",
     items: [

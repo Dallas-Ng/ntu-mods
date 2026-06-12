@@ -4,8 +4,9 @@ import { useCallback, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
 import {
-  diagnoseEmptyResult,
-  generateCombinations
+  diagnoseConstraints,
+  generateCombinations,
+  type ConstraintSuggestion
 } from "@/lib/generate-timetable-combinations"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
@@ -25,7 +26,8 @@ export function useTimetableGeneration() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [truncated, setTruncated] = useState(false)
   const [hasGenerated, setHasGenerated] = useState(false)
-  const [diagnosisMessage, setDiagnosisMessage] = useState("")
+  const [suggestions, setSuggestions] = useState<ConstraintSuggestion[]>([])
+  const [isDiagnosing, setIsDiagnosing] = useState(false)
 
   const moduleKeys = Object.keys(timetable)
 
@@ -33,6 +35,8 @@ export function useTimetableGeneration() {
     (config = generationConfig, maxResults = 30) => {
       if (moduleKeys.length === 0) return
       setIsGenerating(true)
+      setSuggestions([])
+      setIsDiagnosing(false)
       setTimeout(() => {
         const result = generateCombinations(
           moduleKeys,
@@ -47,14 +51,17 @@ export function useTimetableGeneration() {
         setHasGenerated(true)
         if (result.combinations.length > 0) {
           updateTimetable(result.combinations[0].timetable, timetableIndex)
-          setDiagnosisMessage("")
-        } else {
-          setDiagnosisMessage(
-            diagnoseEmptyResult(moduleKeys, seasonIndexes, config)
-          )
         }
         setCurrentIdx(0)
         setIsGenerating(false)
+        if (result.combinations.length === 0) {
+          setIsDiagnosing(true)
+          setTimeout(() => {
+            const diag = diagnoseConstraints(moduleKeys, seasonIndexes, config)
+            setSuggestions(diag)
+            setIsDiagnosing(false)
+          }, 10)
+        }
       }, 10)
     },
     [
@@ -90,16 +97,18 @@ export function useTimetableGeneration() {
     setCurrentIdx(0)
     setTruncated(false)
     setHasGenerated(false)
-    setDiagnosisMessage("")
+    setSuggestions([])
+    setIsDiagnosing(false)
   }, [])
 
   return {
     combinations,
     currentIdx,
     isGenerating,
+    isDiagnosing,
     truncated,
     hasGenerated,
-    diagnosisMessage,
+    suggestions,
     moduleKeys,
     generate,
     navigateTo,

@@ -2,7 +2,14 @@
 
 import { useCallback, useMemo, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
-import { InfoIcon, LockIcon, LockOpenIcon, Settings2Icon, WandIcon, XIcon } from "lucide-react"
+import {
+  InfoIcon,
+  LockIcon,
+  LockOpenIcon,
+  Settings2Icon,
+  WandIcon,
+  XIcon
+} from "lucide-react"
 import posthog from "posthog-js"
 import { Dialog as DialogPrimitive } from "radix-ui"
 

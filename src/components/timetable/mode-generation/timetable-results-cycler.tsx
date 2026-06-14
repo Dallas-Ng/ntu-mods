@@ -93,7 +93,9 @@ const TimetableResultsCycler = ({
           />
           <span className="text-muted-foreground">
             Hide same-timeslot duplicates
-            {hiddenCount != null && hiddenCount > 0 && ` (${hiddenCount} hidden)`}
+            {hiddenCount != null &&
+              hiddenCount > 0 &&
+              ` (${hiddenCount} hidden)`}
           </span>
         </label>
       )}

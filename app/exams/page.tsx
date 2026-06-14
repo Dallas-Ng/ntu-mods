@@ -1,6 +1,11 @@
 import SEMESTERS_JSON from "@/data/api/semesters.json"
+
+import {
+  LATEST_SEMESTER_LABEL,
+  latestSemester,
+  latestYear
+} from "@/lib/semesters"
 import { getSemesterExamsData } from "@/lib/server/get-module-exam-data"
-import { latestSemester, latestYear, LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import Container from "@/components/container"
 import ExamsList from "@/components/exams/exams-list"
 import Header from "@/components/header"
@@ -15,7 +20,9 @@ export default async function ExamsPage() {
   let label = LATEST_SEMESTER_LABEL
 
   if (Object.keys(exams).length === 0) {
-    for (const sem of (SEMESTERS_JSON as { code: string; name: string }[]).slice(1)) {
+    for (const sem of (
+      SEMESTERS_JSON as { code: string; name: string }[]
+    ).slice(1)) {
       const [y, s] = sem.code.split(";")
       const data = await getSemesterExamsData(y, s)
       if (Object.keys(data).length > 0) {

@@ -54,8 +54,8 @@ export const Banner = {
   ay2026s1: () => (
     <Link href="/changelog">
       <BannerWrapper>
-        Now you can bulk import modules, lock indexes, hide duplicate timetable
-        results, and more — see what&apos;s new →
+        New: exam schedule, bulk module import, index locking, prereq graphs,
+        and more →
       </BannerWrapper>
     </Link>
   ),

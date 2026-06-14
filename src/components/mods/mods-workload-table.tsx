@@ -41,11 +41,10 @@ const ModsWorkloadTable = ({ indexes }: Props) => {
   const { moduleWorkload, totalHours } = computeWorkload(indexes)
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       <div className="text-muted-foreground text-sm">
         Total hours per week: {totalHours} hrs
       </div>
-
       <div className="flex flex-wrap gap-[0.25rem] text-sm">
         {Object.entries(moduleWorkload)
           .filter(([_, v]) => v)

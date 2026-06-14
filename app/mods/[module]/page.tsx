@@ -111,7 +111,7 @@ export default async function Page(props: {
       )}
 
       <div className="flex flex-col gap-6 xl:flex-row">
-        <div className="w-full xl:w-3/6">
+        <div className="w-full space-y-4 xl:w-3/6">
           <ModsHeader
             module={moduleData}
             currentYear={year}
@@ -124,6 +124,7 @@ export default async function Page(props: {
               moduleKey={moduleKey}
               year={year}
               semester={semester}
+              showText={true}
             />
           )}
 

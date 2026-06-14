@@ -78,6 +78,10 @@ def _clean_description(text: str) -> str:
     """Fix common formatting issues in scraped description text."""
     text = re.sub(r"\.([A-Z])", r". \1", text)  # missing space after period
     text = _INLINE_LIST_SEP.sub("\n", text)       # split inline enumerated lists
+    # If continuation items exist, also detach preamble from the first marker
+    # e.g. "aims to (i) foo\n(ii) bar" -> "aims to\n(i) foo\n(ii) bar"
+    if re.search(r"\n\((?:ii|iii|[2-9]|[b-z])\)", text, re.IGNORECASE):
+        text = re.sub(r"(?<!\n)[ \t]+(\((?:i|1|a)\))[ \t]+", r"\n\1 ", text)
     text = re.sub(r" {2,}", " ", text)            # collapse multiple spaces
     return text.strip()
 

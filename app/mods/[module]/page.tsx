@@ -13,6 +13,7 @@ import {
 import { getModuleExamData } from "@/lib/server/get-module-exam-data"
 import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
 import { getAllModuleMetadata } from "@/lib/server/get-module-metadata"
+import ModsDescription from "@/components/mods/mods-description"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
@@ -110,11 +111,7 @@ export default async function Page(props: {
           />
 
           {moduleData.description && (
-            <div className="mt-4 space-y-3">
-              {moduleData.description.split("\n").filter(Boolean).map((para, i) => (
-                <p key={i} className="leading-relaxed">{para}</p>
-              ))}
-            </div>
+            <ModsDescription description={moduleData.description} />
           )}
         </div>
 

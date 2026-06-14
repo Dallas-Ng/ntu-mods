@@ -1,8 +1,8 @@
 ---
 title: "What Is a BDE at NTU? (AUs, Requirements & How to Choose)"
-description: "BDE stands for Broadening and Deepening Elective. NTU students typically need 9–21 BDE AUs to graduate depending on programme. Here's what BDEs are, how they count, and how to pick ones that fit your timetable."
+description: "BDE = Broadening and Deepening Elective. NTU students need 9–21 BDE AUs to graduate depending on programme. Here's what counts, what doesn't, and how to pick a BDE that fits your degree and timetable."
 date: "2026-04-29"
-updated: "2026-06-08"
+updated: "2026-06-14"
 author: "NTUMods"
 category: "BDE"
 tags: ["NTU BDE", "Broadening and Deepening Elective", "NTU electives", "NTUMods", "NTU module planning", "BDE NTU guide", "NTU elective planning", "what is bde", "what bde means", "bde degree ntu", "bde ntu"]
@@ -113,6 +113,25 @@ Engineering students should also see [BDE Guide for NTU Engineering Students](/a
 BDEs are one of the few flexible parts of an NTU degree. Use them deliberately. You can make your semester lighter, broader, deeper, or more career-focused depending on what you choose.
 
 Start by checking what you need to clear, then browse options on [NTUMods](https://ntumods.com/mods), and keep a backup list for registration. Once you know which BDE you want, see [How to Bid for a BDE at NTU](/articles/how-to-bid-for-bde-at-ntu) for step-by-step STARS registration guidance.
+
+## Which NTU courses count as BDEs?
+
+Not every NTU course is a BDE. What counts depends on your programme, your cohort year, and how the module is classified in your degree audit.
+
+**Generally, these count:**
+
+- Modules your curriculum lists under "Broadening and Deepening Electives"
+- Language modules from the Centre for Modern Languages (LJ, LK, LF series, etc.)
+- Modules from other schools and faculties that are open to your programme and listed as BDE-eligible
+
+**Generally, these do not count:**
+
+- Core modules or prescribed electives in your major
+- Modules your programme explicitly excludes
+- Free online courses or MOOCs (with limited exceptions — see [Using a MOOC as a BDE at NTU](/articles/mooc-as-bde-replacement-ntu))
+- Modules you have already taken under a different category
+
+The safest check is your official degree audit and curriculum structure. The NTUMods [module listing](/mods) shows BDE eligibility and prerequisites, but your school's records are the final authority on what counts for your graduation requirements.
 
 ## Frequently asked questions about BDEs at NTU
 

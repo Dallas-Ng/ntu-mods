@@ -19,8 +19,22 @@ function computeWorkload(indexes: Record<string, Index[]>) {
   const firstKey = Object.keys(indexes)[0]
   const slots = firstKey ? indexes[firstKey] : []
 
+  // Deduplicate slots that differ only by venue (same lecture broadcast to multiple rooms)
+  const deduped = slots.filter(
+    (s, i) =>
+      slots.findIndex(
+        (o) =>
+          o.type === s.type &&
+          o.group === s.group &&
+          o.day === s.day &&
+          o.time === s.time &&
+          o.remarks === s.remarks &&
+          o.duration === s.duration
+      ) === i
+  )
+
   const sum = (type: string) =>
-    slots
+    deduped
       .filter((s) => s.type.includes(type))
       .reduce((acc, s) => acc + s.duration, 0) / 2
 
@@ -33,7 +47,7 @@ function computeWorkload(indexes: Record<string, Index[]>) {
       sem: sum("SEM"),
       tut: sum("TUT")
     },
-    totalHours: slots.reduce((acc, s) => acc + s.duration, 0) / 2
+    totalHours: deduped.reduce((acc, s) => acc + s.duration, 0) / 2
   }
 }
 

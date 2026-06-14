@@ -20,6 +20,7 @@ const CORE_LINKS = [
   { label: "Home", href: "/" },
   { label: "Timetable", href: "/timetable" },
   { label: "Mods", href: "/mods" },
+  { label: "Exams", href: "/exams" },
   { label: "Articles", href: "/articles" },
   { label: "FAQ", href: "/faq" }
 ]

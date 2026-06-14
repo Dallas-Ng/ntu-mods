@@ -131,13 +131,55 @@ const ChangelogReleaseSection = ({
 
 const CHANGELOG: ChangelogRelease[] = [
   {
-    title: "Timetable generator improvements",
-    date: "12 Jun 2026",
+    title: "Exam schedule, timetable generator improvements, and module page polish",
+    date: "14 Jun 2026",
     items: [
       {
         category: "Improvement",
         content:
           "All features and improvements in this release are based on feedback from anonymous students. Thank you!"
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            New <ChangelogLink href="/exams">Exam Schedule</ChangelogLink> page
+            — search AY 2026/2027 Sem 1 exams by module code or name, group by
+            date or school, and click any row to go to the module page.
+          </>
+        )
+      },
+      {
+        category: "Data",
+        content: (
+          <>
+            AY 2026/2027 Sem 1 exam timetable data added — visible on{" "}
+            <ChangelogLink href="/exams">the exam page</ChangelogLink> and on
+            individual <ChangelogLink href="/mods">module pages</ChangelogLink>.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Restructured{" "}
+            <ChangelogLink href="/mods">module detail pages</ChangelogLink> —
+            workload moved to the top, additional info collapsed into an
+            expandable section, and exam disclaimer added below the timetable
+            overview.
+          </>
+        )
+      },
+      {
+        category: "Bug Fix",
+        content:
+          "Fixed Roman numerals in module titles being lowercased (e.g. \"Iii\" → \"III\") and missing spaces after sentence-ending periods in descriptions — applied retroactively across all semesters."
+      },
+      {
+        category: "Improvement",
+        content:
+          "Module descriptions with inline enumerated lists now render as proper bullet lists instead of one unbroken paragraph."
       },
       {
         category: "New Feature",

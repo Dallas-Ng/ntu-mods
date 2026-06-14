@@ -52,10 +52,9 @@ export const Banner = {
     </Link>
   ),
   ay2026s1: () => (
-    <Link href="/changelog">
+    <Link href="/exams">
       <BannerWrapper>
-        Now you can bulk import modules, lock indexes, hide duplicate timetable
-        results, and more — see what&apos;s new →
+        New: AY 2026/2027 Sem 1 exam schedule is now live →
       </BannerWrapper>
     </Link>
   ),

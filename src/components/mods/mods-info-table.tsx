@@ -74,16 +74,11 @@ const ModsInfoTable = ({ module, exam }: Props) => (
 
         <tr>
           <td
-            className={cn(
-              "p-2 font-medium",
-              !exam && "text-muted-foreground"
-            )}>
+            className={cn("p-2 font-medium", !exam && "text-muted-foreground")}>
             Exam
           </td>
           <td className="p-2">
-            {exam
-              ? `${exam.date}, ${exam.start_time} - ${exam.end_time}`
-              : ""}
+            {exam ? `${exam.date}, ${exam.start_time} - ${exam.end_time}` : ""}
           </td>
         </tr>
       </tbody>

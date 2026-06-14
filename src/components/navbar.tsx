@@ -19,6 +19,7 @@ import {
   NavigationMenuTrigger
 } from "@/components/ui/navigation-menu"
 
+import { NewDot } from "./new-dot"
 import ThemeToggle from "./theme-toggle"
 import { Button } from "./ui/button"
 import {
@@ -52,7 +53,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const primaryLinks = siteConfig.navLinks.slice(0, 2)
   const resourcesActive = RESOURCE_LINKS.some((l) =>
     pathname.startsWith(l.route)
   )
@@ -97,12 +97,19 @@ const Navbar = () => {
                     <Link
                       href={link.route}
                       className={cn(
-                        "mr-1 px-1 text-sm font-semibold hover:bg-transparent hover:text-slate-950 md:px-3 dark:hover:text-slate-100",
+                        "relative mr-1 px-1 text-sm font-semibold hover:bg-transparent hover:text-slate-950 md:px-3 dark:hover:text-slate-100",
                         pathname.includes(link.route)
                           ? "text-slate-950 dark:text-slate-100"
                           : "text-slate-500 dark:text-slate-400"
                       )}>
                       {link.label}
+                      {link.route === "/exams" && (
+                        <NewDot
+                          storageKey="seen-exams"
+                          triggerRoute="/exams"
+                          className="absolute top-0 right-0 hidden h-2 w-2 md:flex"
+                        />
+                      )}
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
@@ -143,13 +150,15 @@ const Navbar = () => {
           </NavigationMenu>
 
           {/* Mobile inline quick links */}
-          <nav className="ml-2 flex min-w-0 items-center gap-1 md:hidden">
-            {primaryLinks.map((link) => (
+          <nav className="ml-2 flex items-center gap-1 md:hidden">
+            {siteConfig.navLinks.map((link, i) => (
               <Link
                 href={link.route}
                 key={link.route}
                 className={cn(
                   "hover:bg-accent hover:text-foreground rounded-md px-2 py-1.5 text-sm font-semibold transition-colors",
+                  i === 2 && "hidden min-[420px]:flex",
+                  i === 3 && "hidden min-[520px]:flex",
                   pathname.includes(link.route)
                     ? "text-foreground"
                     : "text-muted-foreground"
@@ -223,7 +232,7 @@ const Navbar = () => {
                     <Link
                       href={link.route}
                       className={cn(
-                        "hover:bg-accent rounded-md px-4 py-2.5 text-sm font-medium transition-colors",
+                        "hover:bg-accent flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium transition-colors",
                         pathname.includes(link.route)
                           ? "text-foreground"
                           : "text-muted-foreground"

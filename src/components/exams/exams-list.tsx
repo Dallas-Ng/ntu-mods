@@ -140,7 +140,7 @@ function ExamTable({
             className="hover:bg-accent flex items-center gap-3 px-3 py-2.5 transition-colors">
             {/* Mobile: stacked */}
             <div className="min-w-0 flex-1 md:hidden">
-              <span className="text-blue-500 font-mono text-sm font-medium">
+              <span className="font-mono text-sm font-medium text-blue-500">
                 {exam.key}
               </span>
               <p className="text-muted-foreground mt-0.5 text-sm leading-snug">
@@ -160,9 +160,7 @@ function ExamTable({
               {toTitleCase(exam.name)}
             </span>
             <span className="text-muted-foreground hidden shrink-0 text-right text-xs tabular-nums md:block">
-              {showDate && (
-                <span className="block">{exam.date}</span>
-              )}
+              {showDate && <span className="block">{exam.date}</span>}
               {exam.start_time} – {exam.end_time}
             </span>
           </Link>
@@ -183,8 +181,7 @@ export default function ExamsList({ exams }: Props) {
     const q = search.trim().toLowerCase()
     if (!q) return exams
     return exams.filter(
-      (e) =>
-        e.key.toLowerCase().includes(q) || e.name.toLowerCase().includes(q)
+      (e) => e.key.toLowerCase().includes(q) || e.name.toLowerCase().includes(q)
     )
   }, [exams, search])
 
@@ -195,7 +192,7 @@ export default function ExamsList({ exams }: Props) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-amber-500/10 text-amber-700 dark:text-amber-400 rounded-lg border border-amber-500/20 px-4 py-3 text-sm leading-relaxed">
+      <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm leading-relaxed text-amber-700 dark:text-amber-400">
         {DISCLAIMER}
       </div>
 
@@ -210,9 +207,7 @@ export default function ExamsList({ exams }: Props) {
           />
         </div>
 
-        <Select
-          value={groupBy}
-          onValueChange={(v) => setGroupBy(v as GroupBy)}>
+        <Select value={groupBy} onValueChange={(v) => setGroupBy(v as GroupBy)}>
           <SelectTrigger className="w-full sm:w-44">
             <SelectValue />
           </SelectTrigger>

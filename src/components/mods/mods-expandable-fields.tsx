@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp } from "lucide-react"
 
 import type { ApiModule } from "@/lib/server/get-module-metadata"
 import { cn } from "@/lib/utils"
+
 import { hasValue, renderModuleValue } from "./mods-info-table"
 
 const FIELDS: Array<{ key: keyof ApiModule; label: string }> = [

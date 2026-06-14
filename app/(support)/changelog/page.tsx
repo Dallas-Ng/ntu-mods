@@ -25,6 +25,7 @@ interface ChangelogItem {
 interface ChangelogRelease {
   title: string
   date: string
+  note?: string
   items: ChangelogItem[]
 }
 
@@ -99,10 +100,20 @@ const ChangelogFilters = ({
 
 const ChangelogTable = ({ items }: { items: ChangelogItem[] }) => (
   <table className="text-muted-foreground w-full border-collapse text-left text-sm">
+    <thead>
+      <tr>
+        <th className="bg-muted/50 text-muted-foreground w-28 border px-3 py-1.5 text-center text-xs font-medium tracking-wide">
+          Type
+        </th>
+        <th className="bg-muted/50 text-muted-foreground border px-2 py-1.5 text-xs font-medium tracking-wide">
+          Description
+        </th>
+      </tr>
+    </thead>
     <tbody>
       {items.map((item, i) => (
         <tr key={i} className="align-top">
-          <td className="w-28 border py-1.5 pr-3">
+          <td className="w-28 border py-1.5 pr-3 text-center">
             <CategoryBadge category={item.category} />
           </td>
 
@@ -119,11 +130,16 @@ const ChangelogReleaseSection = ({
   release: ChangelogRelease
 }) => (
   <section className="border-border space-y-4 border-t pt-6 first:border-t-0 first:pt-0">
-    <div className="flex flex-wrap items-baseline justify-between gap-2">
+    <div className="space-y-0.5">
       <h2 className="text-xl font-semibold">{release.title}</h2>
-
       <p className="text-muted-foreground text-sm">{release.date}</p>
     </div>
+
+    {release.note && (
+      <p className="text-muted-foreground rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm dark:border-blue-900 dark:bg-blue-950">
+        {release.note}
+      </p>
+    )}
 
     <ChangelogTable items={release.items} />
   </section>
@@ -131,13 +147,52 @@ const ChangelogReleaseSection = ({
 
 const CHANGELOG: ChangelogRelease[] = [
   {
-    title: "Timetable generator improvements",
-    date: "12 Jun 2026",
+    title:
+      "Exam schedule, timetable generator improvements, and module page polish",
+    date: "14 Jun 2026",
+    note: "All features and improvements in this release are based on feedback from anonymous students. Thank you!",
     items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            New <ChangelogLink href="/exams">Exam Schedule</ChangelogLink> page
+            — search AY 2026/2027 Sem 1 exams by module code or name, group by
+            date or school, and click any row to go to the module page.
+          </>
+        )
+      },
+      {
+        category: "Data",
+        content: (
+          <>
+            AY 2026/2027 Sem 1 exam timetable data added — visible on{" "}
+            <ChangelogLink href="/exams">the exam page</ChangelogLink> and on
+            individual <ChangelogLink href="/mods">module pages</ChangelogLink>.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Restructured{" "}
+            <ChangelogLink href="/mods">module detail pages</ChangelogLink> —
+            workload moved to the top, additional info collapsed into an
+            expandable section, and exam disclaimer added below the timetable
+            overview.
+          </>
+        )
+      },
+      {
+        category: "Bug Fix",
+        content:
+          'Fixed Roman numerals in module titles being lowercased (e.g. "Iii" → "III") and missing spaces after sentence-ending periods in descriptions — applied retroactively across all semesters.'
+      },
       {
         category: "Improvement",
         content:
-          "All features and improvements in this release are based on feedback from anonymous students. Thank you!"
+          "Module descriptions with inline enumerated lists now render as proper bullet lists instead of one unbroken paragraph."
       },
       {
         category: "New Feature",

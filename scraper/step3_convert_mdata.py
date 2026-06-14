@@ -52,6 +52,36 @@ _KNOWN_FIELDS_RAW: dict[str, str] = {
     "description":                                         "description",
 }
 
+_ROMAN_NUMERALS = frozenset({
+    "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X",
+    "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX",
+})
+
+
+def smart_title(s: str) -> str:
+    """Title-case a string, keeping Roman numerals fully uppercase."""
+    def _fix(m: re.Match) -> str:
+        word = m.group(0).title()
+        return word.upper() if word.upper() in _ROMAN_NUMERALS else word
+    return re.sub(r"[A-Za-z]+", _fix, s)
+
+
+# Matches "; (ii)", "; (iii)", "; (2)", "; (3)", "; (b)" etc. — list item continuations.
+# Only semicolon-separated (commas are too ambiguous); already-newlined items handled by \n split.
+_INLINE_LIST_SEP = re.compile(
+    r"\s*;\s*(?=\((?:ii{1,3}|iv|vi{0,3}|ix|x{1,3}|[2-9]|\d{2,}|[b-z])\))",
+    re.IGNORECASE,
+)
+
+
+def _clean_description(text: str) -> str:
+    """Fix common formatting issues in scraped description text."""
+    text = re.sub(r"\.([A-Z])", r". \1", text)  # missing space after period
+    text = _INLINE_LIST_SEP.sub("\n", text)       # split inline enumerated lists
+    text = re.sub(r" {2,}", " ", text)            # collapse multiple spaces
+    return text.strip()
+
+
 def _lookup_field(label: str) -> str | None:
     """Return the camelCase output key for a raw label, case-insensitively."""
     return _KNOWN_FIELDS_RAW.get(label.lower())
@@ -158,7 +188,7 @@ def convert(input_path: Path, output_path: Path, indent: Optional[int] = None) -
                 entry: dict = {
                     "searchKeys": [],
                     "code": code,
-                    "title": course["course_title"].title(),
+                    "title": smart_title(course["course_title"]),
                     "au": str(course["credits"]),
                 }
                 extras: dict[str, str] = {}
@@ -174,7 +204,7 @@ def convert(input_path: Path, output_path: Path, indent: Optional[int] = None) -
                     entry.pop("notAvailableToProgramme", None)
                 _apply_fields(entry, content.get("fields", {}), extras, overwrite=True)
                 if content.get("description"):
-                    entry["description"] = content["description"]
+                    entry["description"] = _clean_description(content["description"])
 
                 if extras:
                     entry["extras"] = extras

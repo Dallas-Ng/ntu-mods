@@ -110,7 +110,11 @@ export default async function Page(props: {
           />
 
           {moduleData.description && (
-            <p className="mt-4 leading-relaxed">{moduleData.description}</p>
+            <div className="mt-4 space-y-3">
+              {moduleData.description.split("\n").filter(Boolean).map((para, i) => (
+                <p key={i} className="leading-relaxed">{para}</p>
+              ))}
+            </div>
           )}
         </div>
 

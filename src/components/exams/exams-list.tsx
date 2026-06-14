@@ -140,10 +140,10 @@ function ExamTable({
             className="hover:bg-accent flex items-center gap-3 px-3 py-2.5 transition-colors">
             {/* Mobile: stacked */}
             <div className="min-w-0 flex-1 md:hidden">
-              <span className="font-mono text-sm font-medium text-blue-500">
+              <span className="text-muted-foreground font-mono text-sm font-medium">
                 {exam.key}
               </span>
-              <p className="text-muted-foreground mt-0.5 text-sm leading-snug">
+              <p className="mt-0.5 text-sm leading-snug">
                 {toTitleCase(exam.name)}
               </p>
               <p className="text-muted-foreground mt-0.5 text-xs tabular-nums">

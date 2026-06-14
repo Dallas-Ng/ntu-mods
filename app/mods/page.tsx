@@ -72,7 +72,7 @@ const ModsPage = (props: Props) => {
     moduleType !== "all",
     moduleFaculty !== "all",
     moduleLevel !== "all",
-    true
+    currentOnly === "false"
   ].filter(Boolean).length
 
   const setViewMode = useCallback(
@@ -163,7 +163,7 @@ const ModsPage = (props: Props) => {
               </span>
             )}
             <ChevronDown
-              className={`size-3.5 transition-transform${filtersOpen ? "rotate-180" : ""}`}
+              className={`size-3.5 transition-transform${filtersOpen ? " rotate-180" : ""}`}
             />
           </Button>
         </div>
@@ -195,7 +195,7 @@ const ModsPage = (props: Props) => {
           <ModsGroupBySelect />
 
           {!isLoading && filteredModules.length > 0 && (
-            <p className="text-muted-foreground hidden text-sm sm:block">
+            <p className="text-muted-foreground hidden whitespace-nowrap text-sm sm:block">
               {moduleCountLabel}
             </p>
           )}
@@ -217,7 +217,7 @@ const ModsPage = (props: Props) => {
           </Button>
         </div>
         {!isLoading && filteredModules.length > 0 && (
-          <p className="text-muted-foreground col-start-1 text-sm sm:hidden">
+          <p className="text-muted-foreground col-start-1 whitespace-nowrap text-sm sm:hidden">
             {moduleCountLabel}
           </p>
         )}

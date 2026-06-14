@@ -1,8 +1,9 @@
 // Matches list item markers at the start of a line:
 //   (i), (ii), (1), (2), (a), (b)  — parenthesised
 //   1 Title, 2 Title                 — bare number followed by uppercase word (SC4050 style)
+//   - Title                          — dash-prefixed (SC3270 style)
 const LIST_MARKER_RE =
-  /^(?:\([ivxlcdm]+\)|\(\d+\)|\([a-z]\)|\d+\.?)\s+(?=[A-Z("])/i
+  /^(?:\([ivxlcdm]+\)|\(\d+\)|\([a-z]\)|\d+\.?|-)\s+(?=[A-Z("])/i
 
 type Group =
   | { list: true; items: string[] }

@@ -62,6 +62,7 @@ def _clean_description(text: str) -> str:
     text = _INLINE_LIST_SEP.sub("\n", text)
     if re.search(r"\n\((?:ii|iii|[2-9]|[b-z])\)", text, re.IGNORECASE):
         text = re.sub(r"(?<!\n)[ \t]+(\((?:i|1|a)\))[ \t]+", r"\n\1 ", text)
+    text = re.sub(r'(?<=[^\s\n-])-\s+(?=[A-Z("])', r'\n- ', text)
     text = re.sub(r" {2,}", " ", text)
     return text.strip()
 

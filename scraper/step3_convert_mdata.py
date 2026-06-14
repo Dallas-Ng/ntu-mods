@@ -76,13 +76,17 @@ _INLINE_LIST_SEP = re.compile(
 
 def _clean_description(text: str) -> str:
     """Fix common formatting issues in scraped description text."""
-    text = re.sub(r"\.([A-Z])", r". \1", text)  # missing space after period
-    text = _INLINE_LIST_SEP.sub("\n", text)       # split inline enumerated lists
+    text = re.sub(r"\.([A-Z])", r". \1", text)   # missing space after period
+    text = _INLINE_LIST_SEP.sub("\n", text)        # split inline "(i)...; (ii)..." lists
     # If continuation items exist, also detach preamble from the first marker
     # e.g. "aims to (i) foo\n(ii) bar" -> "aims to\n(i) foo\n(ii) bar"
     if re.search(r"\n\((?:ii|iii|[2-9]|[b-z])\)", text, re.IGNORECASE):
         text = re.sub(r"(?<!\n)[ \t]+(\((?:i|1|a)\))[ \t]+", r"\n\1 ", text)
-    text = re.sub(r" {2,}", " ", text)            # collapse multiple spaces
+    # Split inline dash lists: "text:- Item1- Item2" -> "text:\n- Item1\n- Item2"
+    # Lookbehind: non-whitespace, non-dash (excludes hyphenated words like "bug-finding")
+    # Lookahead: uppercase or "(" (excludes lowercase continuations)
+    text = re.sub(r'(?<=[^\s\n-])-\s+(?=[A-Z("])', r'\n- ', text)
+    text = re.sub(r" {2,}", " ", text)             # collapse multiple spaces
     return text.strip()
 
 

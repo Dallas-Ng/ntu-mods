@@ -219,15 +219,100 @@ interface GenerationResult {
   truncated: boolean
 }
 
+export interface ConstraintSuggestion {
+  label: string
+}
+
+export function diagnoseConstraints(
+  moduleKeys: string[],
+  allIndexes: Record<string, Indexes>,
+  config: GenerationConfig
+): ConstraintSuggestion[] {
+  const suggestions: ConstraintSuggestion[] = []
+
+  const tryRelaxation = (label: string, relaxed: Partial<GenerationConfig>) => {
+    const { combinations } = generateCombinations(
+      moduleKeys,
+      allIndexes,
+      { ...config, ...relaxed },
+      1
+    )
+    if (combinations.length > 0) suggestions.push({ label })
+  }
+
+  if (config.dayStartTime > 800 || config.dayEndTime < 2200) {
+    tryRelaxation("Widen day hours to 08:00–22:00", {
+      dayStartTime: 800,
+      dayEndTime: 2200
+    })
+  }
+  if (config.maxConsecutiveSlots > 0) {
+    tryRelaxation("Remove back-to-back limit", { maxConsecutiveSlots: 0 })
+  }
+  if (config.minGapBetweenClasses > 0) {
+    tryRelaxation("Remove minimum gap requirement", { minGapBetweenClasses: 0 })
+  }
+  if (config.lunchBreaks.length > 0) {
+    tryRelaxation("Remove lunch break blocks", { lunchBreaks: [] })
+  }
+  if (config.blacklistedTimeslots.length > 0) {
+    tryRelaxation("Remove all blocked time slots", { blacklistedTimeslots: [] })
+  }
+  if ((config.maxDailyHours ?? 0) > 0) {
+    tryRelaxation("Remove daily hours limit", { maxDailyHours: 0 })
+  }
+  if ((config.avoidBackToBackTypes ?? []).length > 0) {
+    tryRelaxation("Remove back-to-back type restrictions", {
+      avoidBackToBackTypes: []
+    })
+  }
+
+  return suggestions
+}
+
 export function generateCombinations(
   moduleKeys: string[],
   allIndexes: Record<string, Indexes>,
   config: GenerationConfig,
-  maxResults = 50
+  maxResults = 50,
+  lockedModules?: string[],
+  currentTimetable?: Timetable
 ): GenerationResult {
   const results: GeneratedCombination[] = []
   const startTime = performance.now()
   let truncated = false
+
+  function tryIndex(
+    moduleKey: string,
+    indexKey: string,
+    slots: Index[],
+    moduleIdx: number,
+    partialTimetable: Timetable,
+    chosenSlots: Index[]
+  ): void {
+    if (violatesHardConstraints(slots, config)) return
+
+    const ignoreTypes = config.collisionIgnoreTypes?.[moduleKey] ?? []
+    const collisionSlots =
+      ignoreTypes.length > 0
+        ? slots.filter((s) => !ignoreTypes.includes(s.type))
+        : slots
+
+    for (const newSlot of collisionSlots) {
+      for (const existing of chosenSlots) {
+        if (timeslotsOverlap(newSlot, existing)) return
+      }
+    }
+
+    const combined = [...chosenSlots, ...collisionSlots]
+    if (violatesCombinationConstraints(combined, config)) return
+
+    backtrack(
+      moduleIdx + 1,
+      { ...partialTimetable, [moduleKey]: indexKey },
+      combined
+    )
+  }
 
   function backtrack(
     moduleIdx: number,
@@ -240,11 +325,19 @@ export function generateCombinations(
     }
 
     if (moduleIdx === moduleKeys.length) {
+      const fullSlots = moduleKeys.flatMap(
+        (mk) => allIndexes[mk]?.[partialTimetable[mk]] ?? []
+      )
+      const timeslotSignature = fullSlots
+        .map((s) => `${s.day}|${s.time}|${s.type}`)
+        .sort()
+        .join(",")
       results.push({
         timetable: { ...partialTimetable },
         score: scoreCombination(chosenSlots, config),
         freeDays: countFreeDays(chosenSlots),
-        daysWithClass: countDaysWithClass(chosenSlots)
+        daysWithClass: countDaysWithClass(chosenSlots),
+        timeslotSignature
       })
       return
     }
@@ -258,41 +351,21 @@ export function generateCombinations(
     const moduleIndexes = allIndexes[moduleKey]
     if (!moduleIndexes) return
 
+    if (lockedModules?.includes(moduleKey)) {
+      const lockedIndexKey = currentTimetable?.[moduleKey]
+      const slots = lockedIndexKey ? moduleIndexes[lockedIndexKey] : undefined
+      if (!slots) return
+      tryIndex(moduleKey, lockedIndexKey!, slots, moduleIdx, partialTimetable, chosenSlots)
+      return
+    }
+
     for (const [indexKey, slots] of Object.entries(moduleIndexes)) {
       if (truncated) break
       if (maxResults !== Infinity && results.length >= maxResults) {
         truncated = true
         break
       }
-
-      if (violatesHardConstraints(slots, config)) continue
-
-      const ignoreTypes = config.collisionIgnoreTypes?.[moduleKey] ?? []
-      const collisionSlots =
-        ignoreTypes.length > 0
-          ? slots.filter((s) => !ignoreTypes.includes(s.type))
-          : slots
-
-      let hasConflict = false
-      for (const newSlot of collisionSlots) {
-        for (const existing of chosenSlots) {
-          if (timeslotsOverlap(newSlot, existing)) {
-            hasConflict = true
-            break
-          }
-        }
-        if (hasConflict) break
-      }
-      if (hasConflict) continue
-
-      const combined = [...chosenSlots, ...collisionSlots]
-      if (violatesCombinationConstraints(combined, config)) continue
-
-      backtrack(
-        moduleIdx + 1,
-        { ...partialTimetable, [moduleKey]: indexKey },
-        combined
-      )
+      tryIndex(moduleKey, indexKey, slots, moduleIdx, partialTimetable, chosenSlots)
     }
   }
 
@@ -301,4 +374,21 @@ export function generateCombinations(
   results.sort((a, b) => b.score - a.score)
 
   return { combinations: results, truncated }
+}
+
+export function diagnoseEmptyResult(
+  moduleKeys: string[],
+  allIndexes: Record<string, Indexes>,
+  config: GenerationConfig
+): string {
+  for (const mk of moduleKeys) {
+    if (!allIndexes[mk])
+      return `Module ${mk} has no data for the current semester.`
+    const hasValid = Object.values(allIndexes[mk]).some(
+      (slots) => !violatesHardConstraints(slots, config)
+    )
+    if (!hasValid)
+      return `${mk} has no available slots within your configured hours. Try extending day hours in Settings.`
+  }
+  return `All combinations have scheduling conflicts. If modules share lecture slots, use "Allow collisions" in Settings.`
 }

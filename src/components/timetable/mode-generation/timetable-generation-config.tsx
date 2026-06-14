@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
-import { InfoIcon, Settings2Icon, WandIcon, XIcon } from "lucide-react"
+import { InfoIcon, LockIcon, LockOpenIcon, Settings2Icon, WandIcon, XIcon } from "lucide-react"
 import posthog from "posthog-js"
 import { Dialog as DialogPrimitive } from "radix-ui"
 
@@ -149,20 +149,75 @@ const CollisionIgnoreSection = () => {
               <div className="flex flex-wrap gap-1">
                 {types.map((type) => {
                   const active = ignored.includes(type)
+                  const globallyRelaxed = config.skippableTypes.includes(type)
                   return (
                     <button
                       key={type}
-                      onClick={() => toggleType(moduleKey, type)}
-                      className={`h-6 rounded border px-2 text-xs font-medium transition-colors ${
-                        active
-                          ? "bg-foreground text-background border-transparent"
-                          : "text-muted-foreground hover:border-foreground"
+                      onClick={
+                        globallyRelaxed
+                          ? undefined
+                          : () => toggleType(moduleKey, type)
+                      }
+                      disabled={globallyRelaxed}
+                      title={
+                        globallyRelaxed ? "Already relaxed globally" : undefined
+                      }
+                      className={`h-6 rounded border px-2 text-xs font-medium transition-[color,background-color,border-color,opacity] ${
+                        globallyRelaxed
+                          ? "cursor-not-allowed opacity-50"
+                          : active
+                            ? "bg-foreground text-background border-transparent"
+                            : "text-muted-foreground hover:border-foreground"
                       }`}>
                       {COURSE_TYPE[type as keyof typeof COURSE_TYPE]}
                     </button>
                   )
                 })}
               </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+const LockedModulesSection = () => {
+  const { timetable } = useTimetable()
+  const lockedModules = useBoundState((s) => s.lockedModules)
+  const toggleModuleLock = useBoundState((s) => s.toggleModuleLock)
+
+  const moduleKeys = Object.keys(timetable)
+  if (moduleKeys.length === 0) return null
+
+  return (
+    <div className="flex flex-col gap-2">
+      <SectionLabel tip="Locked modules always use their current index. The generator won't try other indices for them. Useful when a module's index is pre-assigned by the school.">
+        Locked modules
+      </SectionLabel>
+      <div className="flex flex-col gap-2">
+        {moduleKeys.map((moduleKey) => {
+          const isLocked = lockedModules.includes(moduleKey)
+          const indexKey = timetable[moduleKey]
+          return (
+            <div key={moduleKey} className="flex items-center gap-2">
+              <span className="text-muted-foreground w-20 shrink-0 text-xs font-medium">
+                {moduleKey}
+              </span>
+              <button
+                onClick={() => toggleModuleLock(moduleKey)}
+                className={`flex h-6 items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors ${
+                  isLocked
+                    ? "bg-foreground text-background border-transparent"
+                    : "text-muted-foreground hover:border-foreground"
+                }`}>
+                {isLocked ? (
+                  <LockIcon className="size-3" />
+                ) : (
+                  <LockOpenIcon className="size-3" />
+                )}
+                {indexKey ?? "—"}
+              </button>
             </div>
           )
         })}
@@ -334,6 +389,9 @@ const SettingsForm = () => {
       {/* Per-module collision ignore */}
       <CollisionIgnoreSection />
 
+      {/* Per-module index locking */}
+      <LockedModulesSection />
+
       {/* Blacklist */}
       <div className="flex flex-col gap-2">
         <SectionLabel tip="Click or drag to mark specific day/time slots as unavailable. No classes will be scheduled during blocked slots.">
@@ -367,6 +425,9 @@ const SettingsForm = () => {
 
 const ConfigSummary = () => {
   const config = useBoundState((s) => s.generationConfig)
+  const lockedModules = useBoundState((s) => s.lockedModules)
+  const { timetable } = useTimetable()
+  const moduleKeys = Object.keys(timetable)
 
   const chips: string[] = [
     `${formatHhmm(config.dayStartTime)}–${formatHhmm(config.dayEndTime)}`
@@ -414,6 +475,11 @@ const ConfigSummary = () => {
     )
   }
 
+  const lockedCount = lockedModules.filter((m) => moduleKeys.includes(m)).length
+  if (lockedCount > 0) {
+    chips.push(`Locked: ${lockedCount} mod${lockedCount !== 1 ? "s" : ""}`)
+  }
+
   return (
     <div className="flex flex-wrap gap-1">
       {chips.map((chip) => (
@@ -429,20 +495,50 @@ const ConfigSummary = () => {
 
 const TimetableGenerationConfig = () => {
   const [open, setOpen] = useState(false)
+  const [hideDuplicates, setHideDuplicates] = useState(false)
   const { timetable } = useTimetable()
   const generationConfig = useBoundState((s) => s.generationConfig)
   const {
     combinations,
     currentIdx,
     isGenerating,
+    isDiagnosing,
     truncated,
     hasGenerated,
+    suggestions,
     generate,
     navigateTo,
     saveToPlan
   } = useTimetableGeneration()
 
   const noModules = Object.keys(timetable).length === 0
+
+  const visibleCombinations = useMemo(() => {
+    if (!hideDuplicates) return combinations
+    const seen = new Set<string>()
+    return combinations.filter((c) => {
+      if (seen.has(c.timeslotSignature)) return false
+      seen.add(c.timeslotSignature)
+      return true
+    })
+  }, [combinations, hideDuplicates])
+
+  const hiddenCount = combinations.length - visibleCombinations.length
+
+  const visibleCurrentIdx = Math.max(
+    0,
+    visibleCombinations.findIndex((c) => c === combinations[currentIdx])
+  )
+
+  const visibleNavigateTo = useCallback(
+    (visIdx: number) => {
+      const combo = visibleCombinations[visIdx]
+      if (!combo) return
+      const rawIdx = combinations.indexOf(combo)
+      if (rawIdx !== -1) navigateTo(rawIdx)
+    },
+    [visibleCombinations, combinations, navigateTo]
+  )
 
   return (
     <div className="flex flex-col gap-3">
@@ -495,18 +591,44 @@ const TimetableGenerationConfig = () => {
       )}
 
       {hasGenerated && combinations.length === 0 && !isGenerating && (
-        <p className="text-muted-foreground text-center text-xs">
-          No valid combinations found. Try relaxing your constraints.
-        </p>
+        <div className="flex flex-col gap-1.5 text-center">
+          <p className="text-muted-foreground text-xs">
+            No valid combinations found.
+          </p>
+          {isDiagnosing && (
+            <p className="text-muted-foreground text-xs">
+              Analyzing constraints…
+            </p>
+          )}
+          {!isDiagnosing && suggestions.length > 0 && (
+            <div className="flex flex-col gap-1">
+              <p className="text-muted-foreground text-xs">Try:</p>
+              <ul className="text-muted-foreground flex flex-col gap-0.5 text-xs">
+                {suggestions.map((s) => (
+                  <li key={s.label}>· {s.label}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {!isDiagnosing && suggestions.length === 0 && (
+            <p className="text-muted-foreground text-xs">
+              No single constraint change would help — try relaxing multiple
+              settings.
+            </p>
+          )}
+        </div>
       )}
 
       {combinations.length > 0 && (
         <TimetableResultsCycler
-          combinations={combinations}
-          currentIndex={currentIdx}
-          onNavigate={navigateTo}
+          combinations={visibleCombinations}
+          currentIndex={visibleCurrentIdx}
+          onNavigate={visibleNavigateTo}
           onSaveToPlan={saveToPlan}
           truncated={truncated}
+          hideDuplicates={hideDuplicates}
+          onHideDuplicatesChange={setHideDuplicates}
+          hiddenCount={hiddenCount}
         />
       )}
     </div>

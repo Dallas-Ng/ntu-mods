@@ -5,7 +5,7 @@ import {
   DEFAULT_APPEARANCE_SETTINGS
 } from "@/config/appearance-settings"
 
-const INIT_SETTINGS: Settings = {
+export const INIT_SETTINGS: Settings = {
   tableCell: {
     key: false,
     type: true,

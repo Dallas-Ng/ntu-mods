@@ -3,7 +3,11 @@
 import { useCallback, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
-import { generateCombinations } from "@/lib/generate-timetable-combinations"
+import {
+  diagnoseConstraints,
+  generateCombinations,
+  type ConstraintSuggestion
+} from "@/lib/generate-timetable-combinations"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -15,12 +19,15 @@ export function useTimetableGeneration() {
     latestSemester
   )
   const generationConfig = useBoundState((s) => s.generationConfig)
+  const lockedModules = useBoundState((s) => s.lockedModules)
 
   const [combinations, setCombinations] = useState<GeneratedCombination[]>([])
   const [currentIdx, setCurrentIdx] = useState(0)
   const [isGenerating, setIsGenerating] = useState(false)
   const [truncated, setTruncated] = useState(false)
   const [hasGenerated, setHasGenerated] = useState(false)
+  const [suggestions, setSuggestions] = useState<ConstraintSuggestion[]>([])
+  const [isDiagnosing, setIsDiagnosing] = useState(false)
 
   const moduleKeys = Object.keys(timetable)
 
@@ -28,12 +35,16 @@ export function useTimetableGeneration() {
     (config = generationConfig, maxResults = 30) => {
       if (moduleKeys.length === 0) return
       setIsGenerating(true)
+      setSuggestions([])
+      setIsDiagnosing(false)
       setTimeout(() => {
         const result = generateCombinations(
           moduleKeys,
           seasonIndexes,
           config,
-          maxResults
+          maxResults,
+          lockedModules,
+          timetable
         )
         setCombinations(result.combinations)
         setTruncated(result.truncated)
@@ -43,12 +54,22 @@ export function useTimetableGeneration() {
         }
         setCurrentIdx(0)
         setIsGenerating(false)
+        if (result.combinations.length === 0) {
+          setIsDiagnosing(true)
+          setTimeout(() => {
+            const diag = diagnoseConstraints(moduleKeys, seasonIndexes, config)
+            setSuggestions(diag)
+            setIsDiagnosing(false)
+          }, 10)
+        }
       }, 10)
     },
     [
       moduleKeys,
       seasonIndexes,
       generationConfig,
+      lockedModules,
+      timetable,
       timetableIndex,
       updateTimetable
     ]
@@ -76,14 +97,18 @@ export function useTimetableGeneration() {
     setCurrentIdx(0)
     setTruncated(false)
     setHasGenerated(false)
+    setSuggestions([])
+    setIsDiagnosing(false)
   }, [])
 
   return {
     combinations,
     currentIdx,
     isGenerating,
+    isDiagnosing,
     truncated,
     hasGenerated,
+    suggestions,
     moduleKeys,
     generate,
     navigateTo,

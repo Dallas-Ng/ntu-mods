@@ -39,8 +39,8 @@ export const GENERATION_INDEX_TYPES: IndexType[] = [
 
 export const DEFAULT_GENERATION_CONFIG: GenerationConfig = {
   dayStartTime: 800,
-  dayEndTime: 1800,
-  maxConsecutiveSlots: 6,
+  dayEndTime: 2200,
+  maxConsecutiveSlots: 0,
   minGapBetweenClasses: 0,
   lunchBreaks: [],
   loadPreference: "spread",

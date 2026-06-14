@@ -70,10 +70,10 @@ export default function ModsPrerequisiteGraph({
       const cmx = cx + nr.width / 2
       const cmy = cy + nr.height / 2
 
-      // Detect layout: column if center is roughly same x as top cards
+      // Detect layout: column if top cards are above the center node
       const firstTop = topRefs.current.find(Boolean)
       const isColumn = firstTop
-        ? Math.abs(firstTop.getBoundingClientRect().left - nr.left) < 100
+        ? firstTop.getBoundingClientRect().top < nr.top - 10
         : false
 
       const newPaths: PathEntry[] = []

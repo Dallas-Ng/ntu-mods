@@ -52,8 +52,11 @@ export const Banner = {
     </Link>
   ),
   ay2026s1: () => (
-    <Link href="/mods">
-      <BannerWrapper>AY2026 Semester 1 data is now available →</BannerWrapper>
+    <Link href="/changelog">
+      <BannerWrapper>
+        Now you can bulk import modules, lock indexes, hide duplicate timetable
+        results, and more — see what&apos;s new →
+      </BannerWrapper>
     </Link>
   ),
   experienceProblems: () => (

@@ -18,6 +18,7 @@ import {
   getModulePrerequisites,
   getPrerequisiteGraph
 } from "@/lib/server/get-prerequisite-graph"
+import ModsExpandableFields from "@/components/mods/mods-expandable-fields"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
@@ -122,22 +123,28 @@ export default async function Page(props: {
           )}
         </div>
 
-        <div className="h-fit w-full space-y-2 xl:w-3/6">
-          <ModsInfoTable module={moduleData} exam={exam} />
+        <div className="h-fit w-full space-y-4 xl:w-3/6">
+          <ModsWorkloadTable indexes={indexes} />
 
           <hr />
 
-          <ModsWorkloadTable indexes={indexes} />
+          <ModsInfoTable module={moduleData} exam={exam} />
+
+          <ModsExpandableFields module={moduleData} />
         </div>
       </div>
 
       <div className="mt-10 space-y-6">
         {prereqNode && (
-          <ModsPrerequisiteGraph
-            moduleCode={moduleKey}
-            node={prereqNode}
-            graph={prereqGraph}
-          />
+          <>
+            <hr />
+            <ModsPrerequisiteGraph
+              moduleCode={moduleKey}
+              node={prereqNode}
+              graph={prereqGraph}
+            />
+            <hr />
+          </>
         )}
 
         <h2 className="text-lg">Available Indexes</h2>
@@ -149,6 +156,7 @@ export default async function Page(props: {
 
         {otherSemesters.length > 0 && (
           <div>
+            <hr className="mb-6" />
             <h2 className="mb-4 text-lg">Other offerings</h2>
             <div className="flex gap-1 overflow-x-auto pb-1 xl:flex-wrap xl:overflow-x-visible xl:pb-0">
               {sortedYears.map((yr) => {
@@ -195,6 +203,7 @@ export default async function Page(props: {
         )}
 
         <div>
+          <hr className="mb-6" />
           <h2 className="mb-2 text-lg">Other Relevant Mods</h2>
           <RelatedModules
             limit={9}

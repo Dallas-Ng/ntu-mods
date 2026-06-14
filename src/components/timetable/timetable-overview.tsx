@@ -105,6 +105,12 @@ const TimetableOverview = () => {
           </tr>
         </tbody>
       </table>
+      <p className="text-muted-foreground mt-3 text-xs">
+        The Exam information shown may be subject to changes. Students are to
+        check the finalised exam timetable with exam seat information, which
+        will be available at the &apos;Examination Seating Arrangement&apos;
+        webpage, 2 weeks before start of examination.
+      </p>
     </div>
   )
 }

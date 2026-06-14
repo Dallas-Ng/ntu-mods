@@ -13,6 +13,7 @@ import {
 import { getModuleExamData } from "@/lib/server/get-module-exam-data"
 import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
 import { getAllModuleMetadata } from "@/lib/server/get-module-metadata"
+import ModsDescription from "@/components/mods/mods-description"
 import {
   getModulePrerequisites,
   getPrerequisiteGraph
@@ -118,7 +119,7 @@ export default async function Page(props: {
           />
 
           {moduleData.description && (
-            <p className="mt-4 leading-relaxed">{moduleData.description}</p>
+            <ModsDescription description={moduleData.description} />
           )}
         </div>
 

@@ -17,6 +17,7 @@ import {
   getModulePrerequisites,
   getPrerequisiteGraph
 } from "@/lib/server/get-prerequisite-graph"
+import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import ModsDescription from "@/components/mods/mods-description"
 import ModsExpandableFields from "@/components/mods/mods-expandable-fields"
 import ModsHeader from "@/components/mods/mods-header"
@@ -110,13 +111,22 @@ export default async function Page(props: {
       )}
 
       <div className="flex flex-col gap-6 xl:flex-row">
-        <div className="w-full xl:w-3/6">
+        <div className="w-full space-y-4 xl:w-3/6">
           <ModsHeader
             module={moduleData}
             currentYear={year}
             currentSemester={semester}
             isCurrentOffering={isCurrentOffering}
           />
+
+          {isCurrentOffering && (
+            <ModsAddToTimetableButton
+              moduleKey={moduleKey}
+              year={year}
+              semester={semester}
+              showText={true}
+            />
+          )}
 
           {moduleData.description && (
             <ModsDescription description={moduleData.description} />

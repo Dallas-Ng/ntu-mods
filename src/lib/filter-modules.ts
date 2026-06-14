@@ -77,12 +77,20 @@ export function filterModules(
     moduleFaculty: string
     moduleLevel: string
     currentOnly: boolean
+    favouritesOnly?: boolean
+    favouriteModules?: string[]
   }
 ): AllModule[] {
   let filtered = modules
 
   if (opts.currentOnly) {
     filtered = filtered.filter((m) => m.isCurrentSemester)
+  }
+
+  if (opts.favouritesOnly && opts.favouriteModules) {
+    filtered = filtered.filter((m) =>
+      opts.favouriteModules!.includes(m.code)
+    )
   }
 
   if (opts.moduleType !== "all") {

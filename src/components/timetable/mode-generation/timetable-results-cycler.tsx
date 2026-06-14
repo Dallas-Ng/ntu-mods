@@ -17,6 +17,9 @@ interface Props {
   onNavigate: (index: number) => void
   onSaveToPlan: (planIndex: number) => void
   truncated?: boolean
+  hideDuplicates?: boolean
+  onHideDuplicatesChange?: (v: boolean) => void
+  hiddenCount?: number
 }
 
 const TimetableResultsCycler = ({
@@ -24,7 +27,10 @@ const TimetableResultsCycler = ({
   currentIndex,
   onNavigate,
   onSaveToPlan,
-  truncated
+  truncated,
+  hideDuplicates,
+  onHideDuplicatesChange,
+  hiddenCount
 }: Props) => {
   if (combinations.length === 0) return null
 
@@ -76,6 +82,21 @@ const TimetableResultsCycler = ({
           with class
         </span>
       </div>
+
+      {onHideDuplicatesChange && (
+        <label className="flex cursor-pointer items-center gap-1.5 text-xs">
+          <input
+            type="checkbox"
+            checked={hideDuplicates}
+            onChange={(e) => onHideDuplicatesChange(e.target.checked)}
+            className="size-3"
+          />
+          <span className="text-muted-foreground">
+            Hide same-timeslot duplicates
+            {hiddenCount != null && hiddenCount > 0 && ` (${hiddenCount} hidden)`}
+          </span>
+        </label>
+      )}
 
       <div className="flex items-center justify-between">
         <Button

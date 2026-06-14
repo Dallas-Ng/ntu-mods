@@ -2,10 +2,10 @@
 title: "Language BDEs at NTU: What to Expect Before You Register"
 description: "A practical guide to NTU language BDEs: how the level system works, which language to choose, attendance requirements, weekly workload, and whether prior knowledge helps."
 date: "2026-05-19"
-updated: "2026-05-30"
+updated: "2026-06-14"
 author: "NTUMods"
 category: "BDE"
-tags: ["language BDE NTU", "NTU language elective", "NTU BDE", "Japanese BDE NTU", "Korean BDE NTU", "NTUMods", "NTU electives", "bde ntu", "ntu bde language", "japanese ntu", "korean ntu", "tamil bde ntu", "spanish bde ntu"]
+tags: ["language BDE NTU", "NTU language elective", "NTU BDE", "Japanese BDE NTU", "Korean BDE NTU", "NTUMods", "NTU electives", "bde ntu", "ntu bde language", "japanese ntu", "korean ntu", "tamil bde ntu", "spanish bde ntu", "chinese language bde ntu", "chinese creative writing ntu", "hf5101 ntu", "lc5001 ntu"]
 ---
 
 # Language BDEs at NTU: What to Expect Before You Register
@@ -130,6 +130,55 @@ This does not make Japanese or Korean a worse choice. It just means the first fe
 ### Whether you want to continue to Level 2
 
 If you are just going to take one semester and stop, the progression argument for choosing a language weakens. Pick whatever you are genuinely curious about. If you think you might continue, choose a language you can see yourself returning to each semester — because Level 2 exists, and stopping mid-progression is a more awkward outcome than finishing or never starting.
+
+## Chinese language BDEs at NTU
+
+Chinese language BDEs sit in a different category from the other languages at NTU. There are two distinct tracks: the standard Mandarin Chinese language progression and the Chinese creative writing and literature modules.
+
+### Mandarin Chinese progression
+
+The Centre for Modern Languages offers a Chinese language progression for students who have little or no Mandarin background:
+
+| Module | Title |
+| --- | --- |
+| [LC5001](/mods/LC5001) | Chinese Language Level 1 |
+| [LC5002](/mods/LC5002) | Chinese Language Level 2 |
+
+These follow the same structure as other language BDEs — two sessions per week, cumulative content, attendance requirements. They are designed for students who are not native or heritage Mandarin speakers.
+
+Heritage speakers or students with strong secondary school Chinese background should not take LC5001 — it is designed for genuine beginners. If you are uncertain about your level, check with the Centre for Modern Languages before registering.
+
+Business Chinese is also available as a standalone module:
+
+| Module | Title |
+| --- | --- |
+| [LC5101](/mods/LC5101) | Business Chinese |
+
+### Chinese creative writing and literature
+
+These modules are offered by the School of Humanities and are different in character from the language progression — they focus on writing, literature, and creative practice rather than language acquisition from zero.
+
+| Module | Title |
+| --- | --- |
+| [HF5101](/mods/HF5101) | Introduction to Chinese Creative Writing |
+| [HC2010](/mods/HC2010) | Classical Chinese Fiction |
+| [HC2031](/mods/HC2031) | Confucian Thought |
+
+**[HF5101 Introduction to Chinese Creative Writing](/mods/HF5101)** (华文写作入门) is the module that most commonly appears in search as "Chinese creative writing NTU." It is a humanities BDE taught in Mandarin, focused on developing writing craft rather than foundational language skills. Students who take this should already be comfortable reading and writing in Mandarin — it is not a language learning module.
+
+Assessment is essay and portfolio-based. There is no language acquisition component. If you are looking to learn Mandarin from scratch, this is not the module — start with LC5001 instead.
+
+### Who should take which
+
+| You want to... | Module to consider |
+| --- | --- |
+| Learn Mandarin from zero | [LC5001 Chinese Language Level 1](/mods/LC5001) |
+| Continue Mandarin from Level 1 | [LC5002 Chinese Language Level 2](/mods/LC5002) |
+| Improve professional/business Mandarin | [LC5101 Business Chinese](/mods/LC5101) |
+| Study Chinese creative writing (in Mandarin) | [HF5101 Introduction to Chinese Creative Writing](/mods/HF5101) |
+| Explore classical Chinese literature | [HC2010 Classical Chinese Fiction](/mods/HC2010) |
+
+Check the current semester's availability on [NTUMods](/mods) — not all Chinese language modules run every semester.
 
 ## Final thoughts
 

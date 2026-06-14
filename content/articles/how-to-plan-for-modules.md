@@ -1,11 +1,11 @@
 ---
 title: "How to Plan NTU Modules Before STARS Opens: Step-by-Step"
-description: "A step-by-step guide to planning NTU modules — map degree requirements, build around fixed modules, check prerequisites, balance workload, and lock in your timetable before STARS bidding starts."
+description: "Step-by-step guide to planning NTU modules using NTUMods — map degree requirements, build your timetable, check prerequisites, balance workload, and lock in your plan before STARS bidding starts."
 date: "2026-04-29"
-updated: "2026-06-08"
+updated: "2026-06-14"
 author: "NTUMods"
 category: "Module Planning"
-tags: ["NTU modules", "NTU timetable", "STARS", "NTUMods", "module planning", "ntu module selection", "ntu course planner", "module planning ntu"]
+tags: ["NTU modules", "NTU timetable", "STARS", "NTUMods", "module planning", "ntu module selection", "ntu course planner", "module planning ntu", "ntu planner", "ntu timetable planner", "ntu module planner"]
 ---
 
 # How to Plan NTU Modules Before STARS Opens
@@ -99,6 +99,21 @@ Start with a four-column list:
 4. Backup options
 
 Then build the timetable in that order. After that, check prerequisites, restrictions, exam dates, and workload. Finally, save a backup timetable with alternative indexes.
+
+## Using NTUMods as your NTU module planner
+
+[NTUMods](/timetable) has a built-in timetable planner that lets you add modules, pick indexes, and see clashes before STARS opens. You do not need to commit to anything — it is a planning tool, not a registration system.
+
+A few things it helps with:
+
+- **Index selection:** See all available session times for a module and pick ones that fit your existing schedule
+- **Clash detection:** The planner flags conflicts so you know before bidding which indexes actually work
+- **Timetable versions:** Try a compact layout and a spread-out layout to compare how each week feels
+- **Backup planning:** Build a backup timetable with alternative indexes before you need it
+
+For exam planning, the [NTU Exam Schedule](/exams) now lists AY2026/2027 Semester 1 exam dates. Cross-referencing your shortlisted modules against the exam schedule before you bid helps you avoid clustering several papers in the same two-day stretch. See [NTU Exam Schedule Guide](/articles/ntu-exam-schedule-ay2026) for how to use it.
+
+If you want a detailed walkthrough of how the timetable planner works, see [NTU Timetable Planner: How to Build Your Semester Schedule](/articles/ntu-timetable-planner-guide).
 
 ## Final thoughts
 

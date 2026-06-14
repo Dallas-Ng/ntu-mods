@@ -33,6 +33,7 @@ interface ArticlesListProps {
 }
 
 const ALL_CATEGORIES = "all"
+const GROUP_BY_CATEGORY = "category"
 
 const getCategoryParam = (category: string) =>
   category
@@ -108,6 +109,7 @@ export default function ArticlesList({
 
   const queryParam = searchParams.get("q") ?? ""
   const categoryParam = searchParams.get("category") ?? ALL_CATEGORIES
+  const groupParam = searchParams.get("group") ?? ""
   const [searchQuery, setSearchQuery] = useState(queryParam)
   const debouncedSearchQuery = useDebounce(searchQuery, 250)
 
@@ -172,7 +174,8 @@ export default function ArticlesList({
 
   const hasSearch = queryParam.trim().length > 0
   const hasCategory = activeCategory !== ALL_CATEGORIES
-  const hasActiveFilters = hasSearch || hasCategory
+  const isGrouped = groupParam === GROUP_BY_CATEGORY && !hasCategory
+  const hasActiveFilters = hasSearch || hasCategory || isGrouped
 
   const filteredArticles = useMemo(() => {
     const normalisedQuery = queryParam.trim().toLowerCase()
@@ -189,7 +192,7 @@ export default function ArticlesList({
     })
   }, [activeCategory, activeCategoryParam, articles, queryParam])
 
-  const shouldGroup = !hasCategory
+  const shouldGroup = isGrouped
 
   const groupedArticles = useMemo(() => {
     if (!shouldGroup) return null
@@ -235,7 +238,48 @@ export default function ArticlesList({
             <Button
               variant="outline"
               className={cn(
-                "justify-between sm:w-56",
+                "justify-between sm:w-44",
+                isGrouped && "ring-ring ring-1"
+              )}>
+              <span className="truncate">
+                {isGrouped ? "Group: Category" : "No Grouping"}
+              </span>
+              <ChevronDown className="size-4 opacity-60" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-48 p-1">
+            {(
+              [
+                ["", "None"],
+                [GROUP_BY_CATEGORY, "Category"]
+              ] as const
+            ).map(([value, label]) => {
+              const isSelected = groupParam === value
+              return (
+                <button
+                  key={label}
+                  type="button"
+                  className="hover:bg-accent flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors"
+                  onClick={() => updateParams({ group: value || null })}>
+                  <Check
+                    className={cn(
+                      "size-4",
+                      isSelected ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  <span className="truncate">{label}</span>
+                </button>
+              )
+            })}
+          </PopoverContent>
+        </Popover>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn(
+                "justify-between sm:w-48",
                 hasCategory && "ring-ring ring-1"
               )}>
               <span className="truncate">
@@ -293,6 +337,15 @@ export default function ArticlesList({
                 <X className="size-3" />
               </Button>
             )}
+            {isGrouped && (
+              <Button
+                variant="secondary"
+                size="xs"
+                onClick={() => updateParams({ group: null })}>
+                Group: Category
+                <X className="size-3" />
+              </Button>
+            )}
             {hasCategory && (
               <Button
                 variant="secondary"
@@ -330,7 +383,7 @@ export default function ArticlesList({
               <ArticleCard
                 key={article.slug}
                 article={article}
-                showCategory={false}
+                showCategory={!hasCategory}
               />
             ))}
           </div>

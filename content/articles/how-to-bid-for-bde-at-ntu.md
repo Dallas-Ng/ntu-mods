@@ -1,8 +1,8 @@
 ---
 title: "How to Bid for a BDE at NTU (STARS Registration Guide)"
-description: "Learn how NTU STARS bidding works for BDEs, when to bid, what to do during add/drop, and how to get your BDE even if your first choice fills up."
+description: "Step-by-step: how NTU STARS bidding works, what to do in Round 1 vs Round 2, and how to still get your BDE during add/drop if your first choice fills up."
 date: "2026-05-19"
-updated: "2026-05-19"
+updated: "2026-06-14"
 author: "NTUMods"
 category: "STARS"
 tags: ["NTU BDE", "STARS bidding NTU", "BDE registration NTU", "NTUMods", "NTU STARS", "NTU electives", "ntu stars", "stars bidding ntu", "ntu module registration", "bde ntu registration"]
@@ -22,9 +22,11 @@ NTU uses a system called STARS (Student Allocation of Registered Subjects) for m
 
 STARS runs in multiple rounds:
 
-- **Round 1:** First open bidding window. All eligible students can add modules. Popular BDEs can fill here.
-- **Round 2:** Second round. Remaining seats still available. Students can also drop modules they no longer want.
-- **Add/drop period:** Starts when the semester begins. Students drop modules, and those seats reopen immediately for anyone to take.
+| Round | When | What happens |
+| --- | --- | --- |
+| **Round 1** | Before semester starts | First open bidding window. All eligible students can add modules. Popular BDEs can fill here. |
+| **Round 2** | Shortly after Round 1 | Remaining seats still available. Students from Round 1 can also drop modules they no longer want, reopening seats. |
+| **Add/drop** | First 1–2 weeks of semester | Students drop modules they no longer want. Seats reopen immediately for anyone to take — no queue. |
 
 The exact dates change each academic year. Check the official NTU academic calendar for your semester's specific dates.
 
@@ -88,6 +90,20 @@ In the first few days of add/drop, module seats change rapidly. Students who reg
 The practical implication: if you did not get your BDE in Rounds 1 or 2, check the module in STARS every day during the first week of add/drop. There is no formal queue — seats go to whoever adds the module first. If you check once at the start and once at the end, you will miss seats that appeared and disappeared in between.
 
 This is not a comfortable situation, but it works. Students who actively use add/drop to pick up dropped BDEs are not doing anything unusual — it is just how the system works for popular modules.
+
+## What to do if your BDE fills up in Round 1
+
+Getting shut out of Round 1 is common for popular BDEs. It is not the end. Here is the sequence to work through:
+
+**1. Check every index of the same module.** Some BDEs have multiple indexes at different times. If one index is full, another might not be. Try all available indexes before concluding the module is gone.
+
+**2. Check again in Round 2.** Students drop modules between rounds. A module that was full at the end of Round 1 may have seats when Round 2 opens.
+
+**3. Check add/drop actively.** When the semester starts and students realise their timetable does not work or their workload is too heavy, they drop modules. Seats reopen immediately — first come, first served with no queue. Check the module in STARS every day during the first week of add/drop. Checking once at the start and once at the end means you will miss seats that appeared and disappeared in between.
+
+**4. Fall back to your backup shortlist.** This is why preparing backups before Round 1 matters. If add/drop does not come through, use the backup you already verified.
+
+**5. Consider deferring to next semester.** Some BDEs run every semester. If you have the graduation flexibility to wait, the next offering is a real option.
 
 ## Common mistakes
 

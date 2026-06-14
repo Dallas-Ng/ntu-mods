@@ -1,18 +1,20 @@
 ---
-title: "Complete NTU BDE List: Every BDE Category and Module (AY2026 Semester 1)"
-description: "A complete NTU BDE list by category — languages, business, computing, humanities, arts, science, engineering, and more. Browse all 830+ BDE modules on NTUMods."
+title: "Complete NTU BDE List: Every BDE Category and Module (AY2026/2027 Semester 1)"
+description: "A complete NTU BDE list by category — languages, business, computing, humanities, arts, science, engineering, and more. Updated for AY2026/2027 Semester 1. Browse all 830+ BDE modules on NTUMods."
 date: "2026-05-21"
-updated: "2026-05-30"
+updated: "2026-06-14"
 author: "NTUMods"
 category: "BDE"
-tags: ["ntu bde list", "bde list ntu", "ntu bde 2026", "all bde ntu", "bde courses ntu", "NTU BDE", "NTU electives", "NTUMods", "bde ntu", "ntu bde ay2026", "ntu bde semester 1 2026", "ntu bde ay2026 s1"]
+tags: ["ntu bde list", "bde list ntu", "ntu bde 2026", "all bde ntu", "bde courses ntu", "NTU BDE", "NTU electives", "NTUMods", "bde ntu", "ntu bde ay2026", "ntu bde semester 1 2026", "ntu bde ay2026 s1", "ntu bde ay2026/2027", "ntu bde list 2026"]
 ---
 
-# Complete NTU BDE List: Every BDE Category and Module (AY2026 Semester 1)
+# Complete NTU BDE List: Every BDE Category and Module (AY2026/2027 Semester 1)
 
-Updated for AY2026 Semester 1 (August 2026).
+Updated for AY2026/2027 Semester 1 (August 2026).
 
 NTU has over 830 BDE modules available in the current semester across languages, business, computing, humanities, science, engineering, arts, and more. This page organises them by category so you can find what is available for your interests and programme.
+
+> **Planning around exams?** The [NTU Exam Schedule](/exams) now shows AY2026/2027 Semester 1 exam dates. Check exam clashes before you finalise your BDE shortlist.
 
 Not sure what a BDE is or how many you need? Start with [What Is a BDE at NTU](/articles/what-is-a-bde-at-ntu). For the most popular BDEs and what students say about them, see [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu).
 

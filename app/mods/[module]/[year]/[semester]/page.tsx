@@ -17,11 +17,7 @@ export const dynamic = "force-static"
 export const dynamicParams = true
 export const revalidate = false
 
-// AY starts in August. Before Aug → current AY started last calendar year.
-const now = new Date()
-const currentAYStart =
-  now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1
-const STATIC_YEAR_CUTOFF = currentAYStart - 1 // pre-build current AY + 1 prior
+const STATIC_YEAR_CUTOFF = new Date().getFullYear() - 1
 
 export async function generateStaticParams() {
   if (process.env.VERCEL_ENV !== "production") return []

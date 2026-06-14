@@ -47,6 +47,8 @@ interface ModuleCardDetailProps {
   code: string
   moduleData: ApiModule
   searchTerm?: string
+  timetableButton?: React.ReactNode
+  favouriteButton?: React.ReactNode
 }
 
 function getHref(moduleData: ApiModule, code: string) {
@@ -65,52 +67,62 @@ function getHref(moduleData: ApiModule, code: string) {
 export const ModuleCardDetail = ({
   code,
   moduleData,
-  searchTerm = ""
+  searchTerm = "",
+  timetableButton,
+  favouriteButton
 }: ModuleCardDetailProps) => {
   const isCurrentSemester = moduleData.isCurrentSemester !== false
   const categories = getModuleCategories(moduleData.searchKeys)
   const faculty = getModuleFaculty(code, moduleData.searchKeys)
+  const hasActions = timetableButton || favouriteButton
 
   return (
-    <Link key={code} href={getHref(moduleData, code)}>
-      <div
-        className={cn(
-          "hover:bg-accent flex h-full flex-col rounded-lg border-2 p-3 transition-colors",
-          !isCurrentSemester && "opacity-75"
-        )}>
-        {!isCurrentSemester && (
-          <span className="bg-muted text-muted-foreground mb-1.5 self-start rounded-full px-2 py-0.5 text-xs">
-            Not offered this sem
-          </span>
-        )}
-
-        <p className="line-clamp-2 flex-1 leading-snug">
+    <div
+      className={cn(
+        "flex h-full overflow-hidden rounded-lg border-2",
+        !isCurrentSemester && "opacity-75"
+      )}>
+      {/* Left: navigable link area with its own hover */}
+      <Link
+        href={getHref(moduleData, code)}
+        className="hover:bg-accent flex min-w-0 flex-1 flex-col p-3 transition-colors"
+        aria-label={`${code} ${moduleData.title}`}>
+        <p className="line-clamp-1 flex-1 text-sm leading-tight">
           {highlightText(moduleData.title, searchTerm)}
         </p>
 
-        <div className="text-muted-foreground mt-3 flex items-center justify-between gap-2 text-xs">
-          <div className="flex min-w-0 items-center gap-2">
-            <span className="shrink-0 font-mono">
-              {highlightText(code, searchTerm)}
-            </span>
-            <div className="flex gap-1 overflow-hidden">
-              {categories.map((category, i) => (
-                <span
-                  key={i}
-                  className="shrink-0 truncate rounded-full border px-2 py-0">
-                  {MODULE_CATEGORY[category]}
-                </span>
-              ))}
-            </div>
+        <div className="text-muted-foreground mt-3 flex items-center gap-2 text-xs">
+          <span className="shrink-0 font-mono">
+            {highlightText(code, searchTerm)}
+          </span>
+          <div className="flex min-w-0 flex-1 gap-1 overflow-hidden">
+            {categories.map((category, i) => (
+              <span
+                key={i}
+                className="shrink-0 truncate rounded-full border px-2 py-0">
+                {MODULE_CATEGORY[category]}
+              </span>
+            ))}
           </div>
-
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1.5">
             {moduleData.au && <span>{moduleData.au} AU</span>}
             <span>{faculty}</span>
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+
+      {/* Right action column — two stacked buttons, no navigation */}
+      {hasActions && (
+        <div className="border-border/60 flex w-9 shrink-0 flex-col divide-y border-l">
+          {timetableButton && (
+            <div className="flex flex-1">{timetableButton}</div>
+          )}
+          {favouriteButton && (
+            <div className="flex flex-1">{favouriteButton}</div>
+          )}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -128,19 +140,21 @@ export const ModuleCardDetailLoading = () => (
 export const ModuleListRow = ({
   code,
   moduleData,
-  searchTerm = ""
+  searchTerm = "",
+  timetableButton,
+  favouriteButton
 }: ModuleCardDetailProps) => {
   const isCurrentSemester = moduleData.isCurrentSemester !== false
   const categories = getModuleCategories(moduleData.searchKeys)
   const faculty = getModuleFaculty(code, moduleData.searchKeys)
 
   return (
-    <Link key={code} href={getHref(moduleData, code)}>
-      <div
-        className={cn(
-          "hover:bg-accent flex items-center gap-3 px-3 py-2.5 transition-colors",
-          !isCurrentSemester && "opacity-60"
-        )}>
+    <div className={cn("flex overflow-hidden transition-colors", !isCurrentSemester && "opacity-60")}>
+      {/* Left: navigable link area */}
+      <Link
+        href={getHref(moduleData, code)}
+        className="hover:bg-accent flex min-w-0 flex-1 items-center gap-3 px-3 py-2.5 transition-colors"
+        aria-label={`${code} ${moduleData.title}`}>
         <span className="text-muted-foreground w-[80px] shrink-0 font-mono text-sm">
           {highlightText(code, searchTerm)}
         </span>
@@ -164,8 +178,16 @@ export const ModuleListRow = ({
         <span className="text-muted-foreground w-[40px] shrink-0 text-right text-xs">
           {faculty}
         </span>
-      </div>
-    </Link>
+      </Link>
+
+      {/* Right: separate icon buttons */}
+      {(timetableButton || favouriteButton) && (
+        <div className="border-border/60 flex shrink-0 divide-x border-l">
+          {timetableButton && <div className="flex w-9">{timetableButton}</div>}
+          {favouriteButton && <div className="flex w-9">{favouriteButton}</div>}
+        </div>
+      )}
+    </div>
   )
 }
 

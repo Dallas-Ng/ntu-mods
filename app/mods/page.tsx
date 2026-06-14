@@ -2,7 +2,7 @@
 
 import { use, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { ChevronDown, LayoutGrid, List, SlidersHorizontal } from "lucide-react"
+import { ChevronDown, Heart, LayoutGrid, List, SlidersHorizontal } from "lucide-react"
 
 import type {
   AllModule,
@@ -14,12 +14,16 @@ import type {
 import { filterModules, groupModules } from "@/lib/filter-modules"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
+import { useFavourites } from "@/hooks/use-favourites"
 import { useSettings } from "@/hooks/use-settings"
+import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import { ModsActiveFilters } from "@/components/mods/mods-active-filters"
 import { ModsCurrentOnlyToggle } from "@/components/mods/mods-current-only-toggle"
+import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
+import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
 import { ModsFacultySelect } from "@/components/mods/mods-faculty-select"
 import { ModsGroupBySelect } from "@/components/mods/mods-group-by-select"
 import { ModsLevelSelect } from "@/components/mods/mods-module-level-select"
@@ -40,6 +44,7 @@ interface Props {
     moduleFaculty?: SearchModuleFaculty
     moduleLevel?: SearchModuleLevel
     currentOnly?: string
+    favouritesOnly?: string
   }>
 }
 
@@ -55,7 +60,8 @@ const ModsPage = (props: Props) => {
     moduleType = "all",
     moduleFaculty = "all",
     moduleLevel = "all",
-    currentOnly = "true"
+    currentOnly = "true",
+    favouritesOnly = "false"
   } = searchParams
 
   const year = latestYear
@@ -63,6 +69,11 @@ const ModsPage = (props: Props) => {
   const nextYear = parseInt(year) + 1
   const { modules: allModules, isLoading } = useAllModules()
   const { modsViewMode, modsGroupBy, updateSettings } = useSettings()
+  const { favouriteModules } = useFavourites()
+  const { setValue: setFavouritesOnly } = useModsSearchParams(
+    favouritesOnly,
+    "favouritesOnly"
+  )
   const [displayCount, setDisplayCount] = useState(PAGE_SIZE)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
   const [filtersOpen, setFiltersOpen] = useState(true)
@@ -87,7 +98,9 @@ const ModsPage = (props: Props) => {
         moduleType,
         moduleFaculty,
         moduleLevel,
-        currentOnly: currentOnly === "true"
+        currentOnly: currentOnly === "true",
+        favouritesOnly: favouritesOnly === "true",
+        favouriteModules
       }),
     [
       allModules,
@@ -95,7 +108,9 @@ const ModsPage = (props: Props) => {
       moduleType,
       moduleFaculty,
       moduleLevel,
-      currentOnly
+      currentOnly,
+      favouritesOnly,
+      favouriteModules
     ]
   )
 
@@ -150,6 +165,19 @@ const ModsPage = (props: Props) => {
       <div className="flex w-full flex-col gap-2">
         <div className="flex gap-2">
           <ModsSearchInput paramsValue={searchTerm} />
+          <Button
+            variant={favouritesOnly === "true" ? "secondary" : "outline"}
+            size="sm"
+            className="h-9 w-9 shrink-0 gap-1.5 sm:w-auto"
+            onClick={() =>
+              setFavouritesOnly(favouritesOnly === "true" ? "false" : "true")
+            }
+            aria-label="Favourites only">
+            <Heart
+              className={`size-3.5 ${favouritesOnly === "true" ? "fill-rose-500 text-rose-500" : ""}`}
+            />
+            <span className="hidden sm:inline">Favourites</span>
+          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -235,6 +263,8 @@ const ModsPage = (props: Props) => {
           setExpandedGroups((prev) => new Set(Array.from(prev).concat(key)))
         }
         searchTerm={searchTerm}
+        year={year}
+        semester={semester}
       />
 
       {!isLoading && hasMore && modsGroupBy === "none" && (
@@ -262,6 +292,8 @@ interface ModuleResultsProps {
   expandedGroups: Set<string>
   onExpandGroup: (key: string) => void
   searchTerm: string
+  year: string
+  semester: string
 }
 
 function ModuleResults({
@@ -271,32 +303,56 @@ function ModuleResults({
   displayedModules,
   expandedGroups,
   onExpandGroup,
-  searchTerm
+  searchTerm,
+  year,
+  semester
 }: ModuleResultsProps) {
+  function timetableBtn(m: AllModule) {
+    if (m.isCurrentSemester === false) return undefined
+    return (
+      <ModsAddToTimetableButton
+        moduleKey={m.code}
+        year={year}
+        semester={semester}
+        showText={false}
+        triggerClassName="h-full w-full rounded-none"
+        triggerVariant="ghost"
+      />
+    )
+  }
+
+  function favouriteBtn(m: AllModule) {
+    return <ModsFavouriteButton moduleKey={m.code} />
+  }
+
   function renderModules(modules: AllModule[], footer?: React.ReactNode) {
     return viewMode === "cards" ? (
       footer ? (
         <div className="overflow-hidden rounded-lg border-2">
-          <div className="grid grid-cols-1 gap-4 p-3 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 p-3 md:grid-cols-2 lg:grid-cols-3">
             {modules.map((m, i) => (
               <ModuleCardDetail
                 key={i}
                 code={m.code}
                 moduleData={m}
                 searchTerm={searchTerm}
+                timetableButton={timetableBtn(m)}
+                favouriteButton={favouriteBtn(m)}
               />
             ))}
           </div>
           <div className="border-t">{footer}</div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {modules.map((m, i) => (
             <ModuleCardDetail
               key={i}
               code={m.code}
               moduleData={m}
               searchTerm={searchTerm}
+              timetableButton={timetableBtn(m)}
+              favouriteButton={favouriteBtn(m)}
             />
           ))}
         </div>
@@ -309,6 +365,8 @@ function ModuleResults({
               code={m.code}
               moduleData={m}
               searchTerm={searchTerm}
+              timetableButton={timetableBtn(m)}
+              favouriteButton={favouriteBtn(m)}
             />
           </div>
         ))}
@@ -319,7 +377,7 @@ function ModuleResults({
 
   if (isLoading) {
     return viewMode === "cards" ? (
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: LOADING_CARD_COUNT }).map((_, i) => (
           <ModuleCardDetailLoading key={i} />
         ))}

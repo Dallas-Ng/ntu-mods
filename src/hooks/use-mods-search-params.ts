@@ -8,6 +8,7 @@ type Key =
   | "moduleFaculty"
   | "moduleLevel"
   | "currentOnly"
+  | "favouritesOnly"
 
 export const useModsSearchParams = (paramValue: string, key: Key) => {
   const defaultValue =
@@ -17,7 +18,9 @@ export const useModsSearchParams = (paramValue: string, key: Key) => {
         ? "s2"
         : key === "currentOnly"
           ? "true"
-          : "all"
+          : key === "favouritesOnly"
+            ? "false"
+            : "all"
   const [value, setValue] = useState(defaultValue)
 
   const searchParams = useSearchParams()

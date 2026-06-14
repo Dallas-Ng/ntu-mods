@@ -17,6 +17,7 @@ import {
   getModulePrerequisites,
   getPrerequisiteGraph
 } from "@/lib/server/get-prerequisite-graph"
+import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import ModsDescription from "@/components/mods/mods-description"
 import ModsExpandableFields from "@/components/mods/mods-expandable-fields"
 import ModsHeader from "@/components/mods/mods-header"
@@ -117,6 +118,14 @@ export default async function Page(props: {
             currentSemester={semester}
             isCurrentOffering={isCurrentOffering}
           />
+
+          {isCurrentOffering && (
+            <ModsAddToTimetableButton
+              moduleKey={moduleKey}
+              year={year}
+              semester={semester}
+            />
+          )}
 
           {moduleData.description && (
             <ModsDescription description={moduleData.description} />

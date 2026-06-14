@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
   Popover,
+  PopoverClose,
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
@@ -174,8 +175,9 @@ export default function ArticlesList({
 
   const hasSearch = queryParam.trim().length > 0
   const hasCategory = activeCategory !== ALL_CATEGORIES
-  const isGrouped = groupParam === GROUP_BY_CATEGORY && !hasCategory
-  const hasActiveFilters = hasSearch || hasCategory || isGrouped
+  const hasGrouping = groupParam === GROUP_BY_CATEGORY
+  const isGrouped = hasGrouping && !hasCategory
+  const hasActiveFilters = hasSearch || hasCategory || hasGrouping
 
   const filteredArticles = useMemo(() => {
     const normalisedQuery = queryParam.trim().toLowerCase()
@@ -239,10 +241,10 @@ export default function ArticlesList({
               variant="outline"
               className={cn(
                 "justify-between sm:w-44",
-                isGrouped && "ring-ring rounded-md ring-1"
+                hasGrouping && "ring-ring rounded-md ring-1"
               )}>
               <span className="truncate">
-                {isGrouped ? "Group: Category" : "No Grouping"}
+                {hasGrouping ? "Category" : "No Grouping"}
               </span>
               <ChevronDown className="size-4 opacity-60" />
             </Button>
@@ -256,9 +258,8 @@ export default function ArticlesList({
             ).map(([value, label]) => {
               const isSelected = groupParam === value
               return (
-                <button
+                <PopoverClose
                   key={label}
-                  type="button"
                   className="hover:bg-accent flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors"
                   onClick={() => updateParams({ group: value || null })}>
                   <Check
@@ -268,7 +269,7 @@ export default function ArticlesList({
                     )}
                   />
                   <span className="truncate">{label}</span>
-                </button>
+                </PopoverClose>
               )
             })}
           </PopoverContent>
@@ -298,9 +299,8 @@ export default function ArticlesList({
                 : getCategoryParam(category) === activeCategoryParam
 
               return (
-                <button
+                <PopoverClose
                   key={category}
-                  type="button"
                   className="hover:bg-accent flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors"
                   onClick={() => updateParams({ category: value })}>
                   <Check
@@ -310,7 +310,7 @@ export default function ArticlesList({
                     )}
                   />
                   <span className="truncate">{label}</span>
-                </button>
+                </PopoverClose>
               )
             })}
           </PopoverContent>
@@ -337,7 +337,7 @@ export default function ArticlesList({
                 <X className="size-3" />
               </Button>
             )}
-            {isGrouped && (
+            {hasGrouping && (
               <Button
                 variant="secondary"
                 size="xs"

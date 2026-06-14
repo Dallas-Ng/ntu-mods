@@ -45,10 +45,13 @@ const ModsExpandableFields = ({ module }: Props) => {
   if (!hasContent) return null
 
   return (
-    <div className="border-border rounded-md border">
+    <div>
       <button
         onClick={() => setExpanded((v) => !v)}
-        className="hover:bg-muted/50 flex w-full cursor-pointer items-center justify-between px-4 py-3 transition-colors">
+        className={cn(
+          "hover:bg-muted/50 flex w-full cursor-pointer items-center justify-between rounded-t-md border-2 border-b-0 border-slate-200 px-4 py-3 dark:border-slate-900",
+          !expanded && "rounded-b-md border-b-2"
+        )}>
         <span className="text-sm font-medium">Additional Information</span>
         {expanded ? (
           <ChevronUp className="text-muted-foreground size-4" />
@@ -57,7 +60,8 @@ const ModsExpandableFields = ({ module }: Props) => {
         )}
       </button>
 
-      <table className={cn("bg-background w-full text-sm", !expanded && "hidden")}>
+      <table
+        className={cn("bg-background w-full text-sm", !expanded && "hidden")}>
         <tbody>
           {FIELDS.map(({ key, label }) => {
             const value = module[key]

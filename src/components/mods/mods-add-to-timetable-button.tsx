@@ -10,7 +10,12 @@ import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
-import { Drawer, DrawerContent, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTitle,
+  DrawerTrigger
+} from "@/components/ui/drawer"
 import {
   Popover,
   PopoverContent,
@@ -78,7 +83,8 @@ const ModsAddToTimetableButton = ({
   const [open, setOpen] = useState(false)
 
   const moduleIndexes = seasonIndexes[moduleKey]
-  const hasIndexes = !isLoading && moduleIndexes && Object.keys(moduleIndexes).length > 0
+  const hasIndexes =
+    !isLoading && moduleIndexes && Object.keys(moduleIndexes).length > 0
   const inAnyPlan = timetables.some((t) => t[moduleKey] != null)
 
   const handlePlanClick = (planIndex: number) => {

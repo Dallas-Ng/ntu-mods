@@ -88,9 +88,7 @@ export function filterModules(
   }
 
   if (opts.favouritesOnly && opts.favouriteModules) {
-    filtered = filtered.filter((m) =>
-      opts.favouriteModules!.includes(m.code)
-    )
+    filtered = filtered.filter((m) => opts.favouriteModules!.includes(m.code))
   }
 
   if (opts.moduleType !== "all") {

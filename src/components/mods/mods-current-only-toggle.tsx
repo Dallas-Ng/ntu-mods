@@ -2,6 +2,7 @@
 
 import posthog from "posthog-js"
 
+import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import CustomSelect from "@/components/select"
 
@@ -33,7 +34,10 @@ export const ModsCurrentOnlyToggle = ({
       value={value}
       selectItems={SELECT_ITEMS}
       onChange={handleChange}
-      divClassName="w-full ring-ring rounded-md ring-1"
+      divClassName={cn(
+        "w-full",
+        value === "false" && "ring-ring rounded-md ring-1"
+      )}
     />
   )
 }

@@ -48,7 +48,7 @@ const ModsExpandableFields = ({ module }: Props) => {
     <div className="border-border rounded-md border">
       <button
         onClick={() => setExpanded((v) => !v)}
-        className="hover:bg-muted/50 flex w-full items-center justify-between px-4 py-3 transition-colors">
+        className="hover:bg-muted/50 flex w-full cursor-pointer items-center justify-between px-4 py-3 transition-colors">
         <span className="text-sm font-medium">Additional Information</span>
         {expanded ? (
           <ChevronUp className="text-muted-foreground size-4" />
@@ -57,36 +57,34 @@ const ModsExpandableFields = ({ module }: Props) => {
         )}
       </button>
 
-      {expanded && (
-        <table className="bg-background w-full text-sm">
-          <tbody>
-            {FIELDS.map(({ key, label }) => {
-              const value = module[key]
-              const has = hasValue(value)
-              return (
-                <tr key={key} className="border-t">
-                  <td
-                    className={cn(
-                      "w-[200px] px-4 py-2 font-medium",
-                      !has && "text-muted-foreground"
-                    )}>
-                    {label}
-                  </td>
-                  <td className="px-4 py-2">
-                    {has && renderModuleValue(key, value)}
-                  </td>
-                </tr>
-              )
-            })}
-            {extrasRows.map(([label, value]) => (
-              <tr key={label} className="border-t">
-                <td className="w-[200px] px-4 py-2">{label}</td>
-                <td className="px-4 py-2">{value}</td>
+      <table className={cn("bg-background w-full text-sm", !expanded && "hidden")}>
+        <tbody>
+          {FIELDS.map(({ key, label }) => {
+            const value = module[key]
+            const has = hasValue(value)
+            return (
+              <tr key={key} className="border-t">
+                <td
+                  className={cn(
+                    "w-[200px] px-4 py-2 font-medium",
+                    !has && "text-muted-foreground"
+                  )}>
+                  {label}
+                </td>
+                <td className="px-4 py-2">
+                  {has && renderModuleValue(key, value)}
+                </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            )
+          })}
+          {extrasRows.map(([label, value]) => (
+            <tr key={label} className="border-t">
+              <td className="w-[200px] px-4 py-2">{label}</td>
+              <td className="px-4 py-2">{value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }

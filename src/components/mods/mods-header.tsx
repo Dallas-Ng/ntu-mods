@@ -31,7 +31,7 @@ const ModsHeader = ({
           }
         ]}
       />
-      <h1 className="text-3xl">{formatTitle(module.title)}</h1>
+      <h1 className="text-3xl font-semibold">{formatTitle(module.title)}</h1>
       <p className="text-muted-foreground text-sm">
         {isCurrentOffering ? "Current offering" : "Last offered"} — AY
         {currentYear}/{parseInt(currentYear) + 1} {semName}

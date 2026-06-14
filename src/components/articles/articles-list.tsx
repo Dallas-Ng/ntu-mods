@@ -227,7 +227,7 @@ export default function ArticlesList({
           <Input
             ref={inputRef}
             className={cn("pl-9", hasSearch && "ring-ring rounded-md ring-1")}
-            placeholder="Search articles"
+            placeholder="Search articles…"
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
           />
@@ -239,7 +239,7 @@ export default function ArticlesList({
               variant="outline"
               className={cn(
                 "justify-between sm:w-44",
-                isGrouped && "ring-ring ring-1"
+                isGrouped && "ring-ring rounded-md ring-1"
               )}>
               <span className="truncate">
                 {isGrouped ? "Group: Category" : "No Grouping"}
@@ -280,7 +280,7 @@ export default function ArticlesList({
               variant="outline"
               className={cn(
                 "justify-between sm:w-48",
-                hasCategory && "ring-ring ring-1"
+                hasCategory && "ring-ring rounded-md ring-1"
               )}>
               <span className="truncate">
                 {hasCategory ? activeCategory : "All categories"}

@@ -37,7 +37,7 @@ export default function SettingsPage() {
           id="dark-mode"
           className="bg-card space-y-4 rounded-md border px-4 pt-2 pb-4 shadow-lg">
           <div>
-            <p>Appearance Settings</p>
+            <p className="font-medium">Appearance</p>
 
             <p className="text-muted-foreground text-sm">
               Tune theme, radius, density, contrast, and timetable colour
@@ -54,10 +54,10 @@ export default function SettingsPage() {
           id="table-settings"
           className="bg-card space-y-4 rounded-md border px-4 pt-2 pb-4 shadow-lg">
           <div>
-            <p>Table Settings</p>
+            <p className="font-medium">Table Settings</p>
 
             <p className="text-muted-foreground text-sm">
-              Customize the appearance of the stars table.
+              Customise the appearance of the timetable table.
             </p>
           </div>
 
@@ -68,9 +68,9 @@ export default function SettingsPage() {
 
         <div
           id="feedback"
-          className="bg-card space-y-2 rounded-md border px-4 pt-2 pb-4 shadow-lg">
+          className="bg-card space-y-4 rounded-md border px-4 pt-2 pb-4 shadow-lg">
           <div>
-            <p>Feedback</p>
+            <p className="font-medium">Feedback</p>
 
             <p className="text-muted-foreground text-sm">
               Have a problem or suggestion? Let us know.

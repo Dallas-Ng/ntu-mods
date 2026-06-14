@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import posthog from "posthog-js"
+import { Search } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
@@ -45,17 +46,20 @@ const ModsSearchInput = ({ paramsValue }: { paramsValue: string }) => {
   }, [])
 
   return (
-    <Input
-      ref={inputRef}
-      className={cn(
-        "md:flex-1",
-        value.length > 0 && "ring-ring rounded-md ring-1"
-      )}
-      name="searchTerm"
-      placeholder="Search for module name or code"
-      value={currSearchTerm}
-      onChange={(e) => setCurrSearchTerm(e.target.value)}
-    />
+    <div className="relative min-w-0 flex-1">
+      <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+      <Input
+        ref={inputRef}
+        className={cn(
+          "pl-9",
+          value.length > 0 && "ring-ring rounded-md ring-1"
+        )}
+        name="searchTerm"
+        placeholder="Search by module name or code…"
+        value={currSearchTerm}
+        onChange={(e) => setCurrSearchTerm(e.target.value)}
+      />
+    </div>
   )
 }
 

@@ -73,11 +73,16 @@ export const siteConfig = {
     feedback: {
       title: "Feedback — NTUMods",
       desc: "Share feedback, report issues, or suggest improvements for NTUMods. This project is maintained by one person and all input is appreciated."
+    },
+    exams: {
+      title: "NTU Exam Schedule | NTUMods",
+      desc: "Browse the NTU exam schedule by date. Check exam times, duration, and module codes for the current semester."
     }
   },
   navLinks: [
     { label: "Timetable", route: "/timetable" },
     { label: "Mods", route: "/mods" },
+    { label: "Exams", route: "/exams" },
     { label: "Articles", route: "/articles" }
   ],
   links: {

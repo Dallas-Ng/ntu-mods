@@ -23,18 +23,14 @@ export const generateTimetableMatrix = (
     uniqueLecturesIgnoreIndexKey
   )
 
-  // Extract unique lecture keys
-  const uniqueLectureKeys = new Set(
-    uniqueLectures.map((lecture) => lecture.key)
-  )
-
-  // Flatten module indexes and filter out non-unique lectures
-  const moduleIndexesFlat = Object.values(moduleIndexes)
-    .flat()
-    .filter(
-      (index) =>
-        getIndexType(index.type) !== "LEC" || uniqueLectureKeys.has(index.key)
-    )
+  // Flatten module indexes: use uniqueLectures directly so their venues are
+  // already collapsed (e.g. "Multiple Venues"). Non-lecture slots from all indexes.
+  const moduleIndexesFlat = [
+    ...uniqueLectures,
+    ...Object.values(moduleIndexes)
+      .flat()
+      .filter((index) => getIndexType(index.type) !== "LEC")
+  ]
 
   /**
    * Remove LECTURE indexes that are not unique

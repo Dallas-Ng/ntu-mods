@@ -119,79 +119,55 @@ function ExamTable({
   showDate?: boolean
 }) {
   return (
-    <div className="overflow-hidden rounded-lg border">
-      {/* Mobile: stacked rows */}
-      <div className="divide-y md:hidden">
+    <div className="overflow-hidden rounded-lg border-2">
+      {/* Header — desktop only */}
+      <div className="bg-muted/50 hidden items-center gap-3 border-b px-3 py-2 md:flex">
+        <span className="text-muted-foreground w-[88px] shrink-0 text-xs font-medium tracking-wide uppercase">
+          Module
+        </span>
+        <span className="text-muted-foreground flex-1 text-xs font-medium tracking-wide uppercase">
+          Name
+        </span>
+        <span className="text-muted-foreground shrink-0 text-right text-xs font-medium tracking-wide uppercase">
+          {showDate ? "Date & Time" : "Time"}
+        </span>
+      </div>
+      <div className="divide-y">
         {items.map((exam) => (
-          <div key={exam.key} className="px-4 py-3 text-sm">
-            <Link
-              href={`/mods/${exam.key}`}
-              className="text-blue-500 font-medium hover:underline transition-colors">
+          <Link
+            key={exam.key}
+            href={`/mods/${exam.key}`}
+            className="hover:bg-accent flex items-center gap-3 px-3 py-2.5 transition-colors">
+            {/* Mobile: stacked */}
+            <div className="min-w-0 flex-1 md:hidden">
+              <span className="text-blue-500 font-mono text-sm font-medium">
+                {exam.key}
+              </span>
+              <p className="text-muted-foreground mt-0.5 text-sm leading-snug">
+                {toTitleCase(exam.name)}
+              </p>
+              <p className="text-muted-foreground mt-0.5 text-xs tabular-nums">
+                {showDate && <span>{exam.date} · </span>}
+                {exam.start_time} – {exam.end_time}
+              </p>
+            </div>
+
+            {/* Desktop: inline */}
+            <span className="text-muted-foreground hidden w-[88px] shrink-0 font-mono text-sm md:block">
               {exam.key}
-            </Link>
-            <p className="text-muted-foreground mt-0.5 leading-snug">
+            </span>
+            <span className="hidden min-w-0 flex-1 truncate text-sm md:block">
               {toTitleCase(exam.name)}
-            </p>
-            <p className="text-muted-foreground mt-0.5 text-xs">
-              {showDate && <span>{exam.date} · </span>}
+            </span>
+            <span className="text-muted-foreground hidden shrink-0 text-right text-xs tabular-nums md:block">
+              {showDate && (
+                <span className="block">{exam.date}</span>
+              )}
               {exam.start_time} – {exam.end_time}
-            </p>
-          </div>
+            </span>
+          </Link>
         ))}
       </div>
-
-      {/* Desktop: table */}
-      <table className="hidden w-full table-fixed text-sm md:table">
-        <colgroup>
-          <col className="w-24" />
-          <col />
-          <col className="w-44" />
-        </colgroup>
-        <thead>
-          <tr className="bg-muted/50 border-b">
-            <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium tracking-wide uppercase">
-              Module
-            </th>
-            <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium tracking-wide uppercase">
-              Name
-            </th>
-            <th className="text-muted-foreground px-4 py-2 text-left text-xs font-medium tracking-wide uppercase">
-              {showDate ? "Date & Time" : "Time"}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((exam, i) => (
-            <tr
-              key={exam.key}
-              className={cn(
-                "hover:bg-muted/30 transition-colors",
-                i !== items.length - 1 ? "border-b" : undefined
-              )}>
-              <td className="px-4 py-2.5 font-medium">
-                <Link
-                  href={`/mods/${exam.key}`}
-                  className="text-blue-500 hover:underline transition-colors">
-                  {exam.key}
-                </Link>
-              </td>
-              <td className="text-foreground px-4 py-2.5">
-                {toTitleCase(exam.name)}
-              </td>
-              <td className="text-muted-foreground px-4 py-2.5">
-                {showDate && (
-                  <div className="text-foreground text-xs font-medium">
-                    {exam.date}
-                  </div>
-                )}
-                <div className="tabular-nums">
-                  {exam.start_time} – {exam.end_time}
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   )
 }

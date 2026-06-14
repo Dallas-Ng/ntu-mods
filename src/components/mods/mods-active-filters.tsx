@@ -4,6 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { X } from "lucide-react"
 
 import { MODULE_CATEGORY, MODULE_FACULTY } from "@/lib/constants"
+import { Button } from "@/components/ui/button"
 
 interface ActiveFilter {
   key: string
@@ -54,9 +55,7 @@ export const ModsActiveFilters = ({
     })
   }
   if (currentOnly === "false") {
-    activeFilters.push({ key: "currentOnly", label: "All semesters" })
-  } else {
-    activeFilters.push({ key: "currentOnly", label: "Current Semester" })
+    activeFilters.push({ key: "currentOnly", label: "All Semesters" })
   }
 
   if (activeFilters.length === 0) return null
@@ -70,13 +69,14 @@ export const ModsActiveFilters = ({
   return (
     <div className="flex flex-wrap gap-2">
       {activeFilters.map(({ key, label }) => (
-        <button
+        <Button
           key={key}
-          onClick={() => clearFilter(key)}
-          className="bg-muted text-muted-foreground hover:bg-accent hover:text-foreground flex items-center gap-1 rounded-full border px-3 py-0.5 text-xs transition-colors">
+          variant="secondary"
+          size="xs"
+          onClick={() => clearFilter(key)}>
           {label}
-          <X className="h-3 w-3" />
-        </button>
+          <X />
+        </Button>
       ))}
     </div>
   )

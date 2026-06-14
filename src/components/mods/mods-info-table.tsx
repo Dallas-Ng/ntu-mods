@@ -1,18 +1,27 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
+import { ChevronDown, ChevronUp } from "lucide-react"
 
 import type { ApiExam } from "@/lib/server/get-module-exam-data"
 import type { ApiModule } from "@/lib/server/get-module-metadata"
+import { cn } from "@/lib/utils"
 
 const MODULE_CODE_RE = /^[A-Z]{2,6}\d{4}[A-Z]?$/
 
 interface Props {
   module: ApiModule
   exam?: ApiExam | null
+  totalHours?: number
 }
 
-const KNOWN_FIELD_LABELS: Array<{ key: keyof ApiModule; label: string }> = [
+const TOP_FIELDS: Array<{ key: keyof ApiModule; label: string }> = [
   { key: "gradeType", label: "Grade Type" },
-  { key: "prerequisite", label: "Prerequisite" },
+  { key: "prerequisite", label: "Prerequisite" }
+]
+
+const BOTTOM_FIELDS: Array<{ key: keyof ApiModule; label: string }> = [
   { key: "notAvailableToProgramme", label: "Not Available To Programme" },
   {
     key: "notAvailableToAllProgrammeWith",
@@ -35,74 +44,151 @@ const KNOWN_FIELD_LABELS: Array<{ key: keyof ApiModule; label: string }> = [
   { key: "notOfferedAsUe", label: "Not Offered As Unrestricted Elective" }
 ]
 
-const ModsInfoTable = ({ module, exam }: Props) => (
-  <table className="bg-background text-sm">
-    <tbody>
-      <tr>
-        <td className="w-[220px] p-2">AUs</td>
-        <td className="p-2">{module.au} AUs</td>
-      </tr>
+function hasValue(value: unknown): boolean {
+  if (value === null || value === undefined) return false
+  if (Array.isArray(value)) return value.length > 0
+  return true
+}
 
-      {KNOWN_FIELD_LABELS.map(({ key, label }) => {
-        const value = module[key]
+function renderValue(key: keyof ApiModule, value: unknown) {
+  if (key === "prerequisite" && Array.isArray(value)) {
+    const allCodes = (value as string[][]).flat()
+    const unique = Array.from(new Set(allCodes))
+    return unique.map((item, idx) => (
+      <span key={item}>
+        {MODULE_CODE_RE.test(item) ? (
+          <Link
+            href={`/mods/${item}`}
+            className="text-blue-500 transition-colors hover:text-blue-600">
+            {item}
+          </Link>
+        ) : (
+          item
+        )}
+        {idx < unique.length - 1 && ", "}
+      </span>
+    ))
+  }
+  if (Array.isArray(value)) return value.join(", ")
+  if (key === "notOfferedAsBde" || key === "notOfferedAsUe") return "Yes"
+  return String(value)
+}
 
-        const renderValue = () => {
-          // 1. Handle special case: Prerequisites
-          if (key === "prerequisite" && Array.isArray(value)) {
-            const allCodes = (value as string[][]).flat()
-            const unique = Array.from(new Set(allCodes))
+const ModsInfoTable = ({ module, exam, totalHours }: Props) => {
+  const [expanded, setExpanded] = useState(false)
 
-            return unique.map((item, idx) => (
-              <span key={item}>
-                {MODULE_CODE_RE.test(item) ? (
-                  <Link
-                    href={`/mods/${item}`}
-                    className="text-blue-500 transition-colors hover:text-blue-600">
-                    {item}
-                  </Link>
-                ) : (
-                  item
-                )}
-                {idx < unique.length - 1 && ", "}
-              </span>
-            ))
-          }
+  const extrasRows = module.extras ? Object.entries(module.extras) : []
+  const bottomRowsWithContent = BOTTOM_FIELDS.filter(({ key }) =>
+    hasValue(module[key])
+  )
+  const hasBottomContent =
+    bottomRowsWithContent.length > 0 || extrasRows.length > 0
 
-          // 2. Handle generic Arrays
-          if (Array.isArray(value)) return value.join(", ")
-
-          // 3. Handle boolean flag fields (stored as string "true" from scraper)
-          if (key === "notOfferedAsBde" || key === "notOfferedAsUe")
-            return "Yes"
-
-          // 4. Handle Strings/Numbers
-          return String(value)
-        }
-
-        return (
-          <tr key={key} className="border-b">
-            <td className="p-2 font-medium">{label}</td>
-            <td className="p-2">{value && renderValue()}</td>
+  return (
+    <div className="space-y-3">
+      {/* Top table: AU, Grade Type, Prerequisite, Exam */}
+      <table className="bg-background w-full text-sm">
+        <tbody>
+          <tr className="border-b">
+            <td className="w-[200px] p-2">AUs</td>
+            <td className="p-2">{module.au} AUs</td>
           </tr>
-        )
-      })}
 
-      {module.extras &&
-        Object.entries(module.extras).map(([label, value]) => (
-          <tr key={label}>
-            <td className="p-2">{label}</td>
-            <td className="p-2">{value}</td>
+          {TOP_FIELDS.map(({ key, label }) => {
+            const value = module[key]
+            const has = hasValue(value)
+            return (
+              <tr key={key} className="border-b">
+                <td
+                  className={cn(
+                    "p-2 font-medium",
+                    !has && "text-muted-foreground"
+                  )}>
+                  {label}
+                </td>
+                <td className="p-2">{has && renderValue(key, value)}</td>
+              </tr>
+            )
+          })}
+
+          <tr>
+            <td
+              className={cn(
+                "p-2 font-medium",
+                !exam && "text-muted-foreground"
+              )}>
+              Exam
+            </td>
+            <td className="p-2">
+              {exam
+                ? `${exam.date}, ${exam.start_time} - ${exam.end_time}`
+                : ""}
+            </td>
           </tr>
-        ))}
+        </tbody>
+      </table>
 
-      <tr>
-        <td className="p-2">Exam</td>
-        <td className="p-2">
-          {exam ? `${exam.date}, ${exam.start_time} - ${exam.end_time}` : ""}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-)
+      {exam && (
+        <p className="text-muted-foreground text-xs">
+          The Exam information shown may be subject to changes. Students are to
+          check the finalised exam timetable with exam seat information, which
+          will be available at the &apos;Examination Seating Arrangement&apos;
+          webpage, 2 weeks before start of examination.
+        </p>
+      )}
+
+      {totalHours !== undefined && (
+        <div className="text-muted-foreground text-sm">
+          Total hours per week: {totalHours} hrs
+        </div>
+      )}
+
+      {/* Bottom table: remaining fields with read more */}
+      {hasBottomContent && (
+        <div className="space-y-1">
+          {expanded && (
+            <table className="bg-background w-full text-sm">
+              <tbody>
+                {BOTTOM_FIELDS.map(({ key, label }) => {
+                  const value = module[key]
+                  const has = hasValue(value)
+                  return (
+                    <tr key={key} className="border-b">
+                      <td
+                        className={cn(
+                          "w-[200px] p-2 font-medium",
+                          !has && "text-muted-foreground"
+                        )}>
+                        {label}
+                      </td>
+                      <td className="p-2">{has && renderValue(key, value)}</td>
+                    </tr>
+                  )
+                })}
+                {extrasRows.map(([label, value]) => (
+                  <tr key={label} className="border-b">
+                    <td className="w-[200px] p-2">{label}</td>
+                    <td className="p-2">{value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+
+          <button
+            onClick={() => setExpanded((v) => !v)}
+            className="text-muted-foreground hover:text-foreground flex items-center gap-1 text-sm transition-colors">
+            {expanded ? (
+              <ChevronUp className="size-3" />
+            ) : (
+              <ChevronDown className="size-3" />
+            )}
+            {expanded ? "Show less" : "Show more"}
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default ModsInfoTable

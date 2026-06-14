@@ -60,6 +60,10 @@ export default async function Page(props: {
   const moduleData = allMeta[moduleKey]
   if (!moduleData) notFound()
 
+  const firstIndexKey = Object.keys(indexes)[0]
+  const firstSlots = firstIndexKey ? indexes[firstIndexKey] : []
+  const totalHours = firstSlots.reduce((acc, s) => acc + s.duration, 0) / 2
+
   const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS } = generateTimetableMatrix(
     Object.fromEntries(
       Object.entries(indexes).map(([k, v]) => [k, [...v]])
@@ -122,7 +126,7 @@ export default async function Page(props: {
         </div>
 
         <div className="h-fit w-full space-y-2 xl:w-3/6">
-          <ModsInfoTable module={moduleData} exam={exam} />
+          <ModsInfoTable module={moduleData} exam={exam} totalHours={totalHours} />
 
           <hr />
 

@@ -66,19 +66,14 @@ const Navbar = () => {
       <div className="container flex h-16 items-center gap-2 px-2 lg:px-4">
         <div className="flex min-w-0 items-center">
           <Link href="/" className="flex shrink-0 items-center">
-            <div className="relative">
-              <Image
-                src="/logo.png"
-                alt="Logo"
-                width={30}
-                height={30}
-                className="size-7.5 object-contain"
-                priority
-              />
-              <span className="absolute -top-2 right-0 translate-x-1/2 whitespace-nowrap rounded-full bg-blue-600 px-1 py-px text-[10px] leading-none font-medium text-white">
-                AY2026 S1
-              </span>
-            </div>
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              width={30}
+              height={30}
+              className="size-7.5 object-contain"
+              priority
+            />
 
             <span
               className={cn(

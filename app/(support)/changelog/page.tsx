@@ -135,6 +135,11 @@ const CHANGELOG: ChangelogRelease[] = [
     date: "12 Jun 2026",
     items: [
       {
+        category: "Improvement",
+        content:
+          "All features and improvements in this release are based on feedback from anonymous students. Thank you!"
+      },
+      {
         category: "New Feature",
         content: (
           <>
@@ -142,20 +147,19 @@ const CHANGELOG: ChangelogRelease[] = [
             <ChangelogLink href="/timetable">
               comma-separated list of module codes
             </ChangelogLink>{" "}
-            — paste them all at once instead of adding one by one. Requested by
-            anonymous students.
+            — paste them all at once instead of adding one by one.
           </>
         )
       },
       {
         category: "New Feature",
         content:
-          "Lock a specific index for any module before generating — the generator will only consider that registration group. Requested by anonymous students."
+          "Lock a specific index for any module before generating — the generator will only consider that registration group."
       },
       {
         category: "New Feature",
         content:
-          'Hide duplicate timetable results that share identical timeslots but differ only by index number. Toggle "Hide same-timeslot duplicates" in the results panel. Requested by anonymous students.'
+          'Hide duplicate timetable results that share identical timeslots but differ only by index number. Toggle "Hide same-timeslot duplicates" in the results panel.'
       },
       {
         category: "New Feature",
@@ -163,7 +167,7 @@ const CHANGELOG: ChangelogRelease[] = [
           <>
             <ChangelogLink href="/mods">Module pages</ChangelogLink> now include
             an interactive prerequisite graph so you can visualise dependency
-            chains at a glance. Requested by anonymous students.
+            chains at a glance.
           </>
         )
       },

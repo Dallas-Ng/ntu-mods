@@ -2,7 +2,13 @@
 
 import { use, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { ChevronDown, Heart, LayoutGrid, List, SlidersHorizontal } from "lucide-react"
+import {
+  ChevronDown,
+  Heart,
+  LayoutGrid,
+  List,
+  SlidersHorizontal
+} from "lucide-react"
 
 import type {
   AllModule,
@@ -15,16 +21,16 @@ import { filterModules, groupModules } from "@/lib/filter-modules"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useFavourites } from "@/hooks/use-favourites"
-import { useSettings } from "@/hooks/use-settings"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
+import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import { ModsActiveFilters } from "@/components/mods/mods-active-filters"
-import { ModsCurrentOnlyToggle } from "@/components/mods/mods-current-only-toggle"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
+import { ModsCurrentOnlyToggle } from "@/components/mods/mods-current-only-toggle"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
-import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
 import { ModsFacultySelect } from "@/components/mods/mods-faculty-select"
+import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
 import { ModsGroupBySelect } from "@/components/mods/mods-group-by-select"
 import { ModsLevelSelect } from "@/components/mods/mods-module-level-select"
 import { ModsModuleTypeSelect } from "@/components/mods/mods-module-type-select"
@@ -191,7 +197,7 @@ const ModsPage = (props: Props) => {
               </span>
             )}
             <ChevronDown
-              className={`size-3.5 transition-transform${filtersOpen ? " rotate-180" : ""}`}
+              className={`size-3.5 transition-transform${filtersOpen ? "rotate-180" : ""}`}
             />
           </Button>
         </div>
@@ -223,7 +229,7 @@ const ModsPage = (props: Props) => {
           <ModsGroupBySelect />
 
           {!isLoading && filteredModules.length > 0 && (
-            <p className="text-muted-foreground hidden whitespace-nowrap text-sm sm:block">
+            <p className="text-muted-foreground hidden text-sm whitespace-nowrap sm:block">
               {moduleCountLabel}
             </p>
           )}
@@ -245,7 +251,7 @@ const ModsPage = (props: Props) => {
           </Button>
         </div>
         {!isLoading && filteredModules.length > 0 && (
-          <p className="text-muted-foreground col-start-1 whitespace-nowrap text-sm sm:hidden">
+          <p className="text-muted-foreground col-start-1 text-sm whitespace-nowrap sm:hidden">
             {moduleCountLabel}
           </p>
         )}

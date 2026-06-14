@@ -149,7 +149,11 @@ export const ModuleListRow = ({
   const faculty = getModuleFaculty(code, moduleData.searchKeys)
 
   return (
-    <div className={cn("flex overflow-hidden transition-colors", !isCurrentSemester && "opacity-60")}>
+    <div
+      className={cn(
+        "flex overflow-hidden transition-colors",
+        !isCurrentSemester && "opacity-60"
+      )}>
       {/* Left: navigable link area */}
       <Link
         href={getHref(moduleData, code)}

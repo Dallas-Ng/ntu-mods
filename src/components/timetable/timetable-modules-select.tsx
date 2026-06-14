@@ -4,8 +4,8 @@ import { useRef, useState } from "react"
 import { Check } from "lucide-react"
 import posthog from "posthog-js"
 
-import { latestSemester, latestYear } from "@/lib/semesters"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
+import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useModuleSearchApi } from "@/hooks/use-module-search-api"
 import { useOutsideClick } from "@/hooks/use-outside-click"
@@ -70,7 +70,11 @@ const TimetableModulesSelect = () => {
         throw new Error("No indexes available for this module")
       }
 
-      const selectedIndexKey = resolveBestIndex(indexes, timetable, seasonIndexes)
+      const selectedIndexKey = resolveBestIndex(
+        indexes,
+        timetable,
+        seasonIndexes
+      )
 
       addItemToTimetable(moduleKey, selectedIndexKey)
       posthog.capture("module_added", {

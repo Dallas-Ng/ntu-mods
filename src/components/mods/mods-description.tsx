@@ -5,9 +5,7 @@
 const LIST_MARKER_RE =
   /^(?:\([ivxlcdm]+\)|\(\d+\)|\([a-z]\)|\d+\.?|-)\s+(?=[A-Z("])/i
 
-type Group =
-  | { list: true; items: string[] }
-  | { list: false; items: string[] }
+type Group = { list: true; items: string[] } | { list: false; items: string[] }
 
 function group(description: string): Group[] {
   const groups: Group[] = []
@@ -24,7 +22,7 @@ function group(description: string): Group[] {
 }
 
 export default function ModsDescription({
-  description,
+  description
 }: {
   description: string
 }) {

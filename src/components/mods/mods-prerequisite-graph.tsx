@@ -25,7 +25,9 @@ const PillCard = ({ code, title, anchorRef }: CardProps) => (
     className="border-border bg-background hover:bg-muted flex w-full items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors">
     <span className="font-semibold">{code}</span>
     {title && (
-      <span className="text-muted-foreground min-w-0 flex-1 truncate">{title}</span>
+      <span className="text-muted-foreground min-w-0 flex-1 truncate">
+        {title}
+      </span>
     )}
   </Link>
 )
@@ -180,7 +182,7 @@ export default function ModsPrerequisiteGraph({
           style={{ zIndex: 1 }}>
           {/* Top (mobile) / Left (desktop): prerequisites */}
           <div className="flex w-full flex-col gap-2 sm:flex-1 sm:items-end">
-            <p className="text-muted-foreground w-full text-center text-xs font-medium uppercase tracking-wide sm:text-right">
+            <p className="text-muted-foreground w-full text-center text-xs font-medium tracking-wide uppercase sm:text-right">
               Required first
             </p>
             {hasRequires ? (
@@ -189,7 +191,9 @@ export default function ModsPrerequisiteGraph({
                   key={code}
                   code={code}
                   title={graph[code]?.title}
-                  anchorRef={(el) => { topRefs.current[i] = el }}
+                  anchorRef={(el) => {
+                    topRefs.current[i] = el
+                  }}
                 />
               ))
             ) : (
@@ -213,7 +217,7 @@ export default function ModsPrerequisiteGraph({
 
           {/* Bottom (mobile) / Right (desktop): unlocked modules */}
           <div className="flex w-full flex-col gap-2 sm:flex-1 sm:items-start">
-            <p className="bg-background text-muted-foreground relative z-10 w-full text-center text-xs font-medium uppercase tracking-wide sm:text-left">
+            <p className="bg-background text-muted-foreground relative z-10 w-full text-center text-xs font-medium tracking-wide uppercase sm:text-left">
               Unlocks
             </p>
             {hasRequiredBy ? (
@@ -223,7 +227,9 @@ export default function ModsPrerequisiteGraph({
                     key={code}
                     code={code}
                     title={graph[code]?.title}
-                    anchorRef={(el) => { bottomRefs.current[i] = el }}
+                    anchorRef={(el) => {
+                      bottomRefs.current[i] = el
+                    }}
                   />
                 ))}
                 {node.requiredBy.length > 15 && (

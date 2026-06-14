@@ -25,6 +25,7 @@ interface ChangelogItem {
 interface ChangelogRelease {
   title: string
   date: string
+  note?: string
   items: ChangelogItem[]
 }
 
@@ -99,10 +100,20 @@ const ChangelogFilters = ({
 
 const ChangelogTable = ({ items }: { items: ChangelogItem[] }) => (
   <table className="text-muted-foreground w-full border-collapse text-left text-sm">
+    <thead>
+      <tr>
+        <th className="bg-muted/50 text-muted-foreground w-28 border px-3 py-1.5 text-center text-xs font-medium tracking-wide">
+          Type
+        </th>
+        <th className="bg-muted/50 text-muted-foreground border px-2 py-1.5 text-xs font-medium tracking-wide">
+          Description
+        </th>
+      </tr>
+    </thead>
     <tbody>
       {items.map((item, i) => (
         <tr key={i} className="align-top">
-          <td className="w-28 border py-1.5 pr-3">
+          <td className="w-28 border py-1.5 pr-3 text-center">
             <CategoryBadge category={item.category} />
           </td>
 
@@ -119,11 +130,16 @@ const ChangelogReleaseSection = ({
   release: ChangelogRelease
 }) => (
   <section className="border-border space-y-4 border-t pt-6 first:border-t-0 first:pt-0">
-    <div className="flex flex-wrap items-baseline justify-between gap-2">
+    <div className="space-y-0.5">
       <h2 className="text-xl font-semibold">{release.title}</h2>
-
       <p className="text-muted-foreground text-sm">{release.date}</p>
     </div>
+
+    {release.note && (
+      <p className="text-muted-foreground rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm dark:border-blue-900 dark:bg-blue-950">
+        {release.note}
+      </p>
+    )}
 
     <ChangelogTable items={release.items} />
   </section>
@@ -131,14 +147,11 @@ const ChangelogReleaseSection = ({
 
 const CHANGELOG: ChangelogRelease[] = [
   {
-    title: "Exam schedule, timetable generator improvements, and module page polish",
+    title:
+      "Exam schedule, timetable generator improvements, and module page polish",
     date: "14 Jun 2026",
+    note: "All features and improvements in this release are based on feedback from anonymous students. Thank you!",
     items: [
-      {
-        category: "Improvement",
-        content:
-          "All features and improvements in this release are based on feedback from anonymous students. Thank you!"
-      },
       {
         category: "New Feature",
         content: (
@@ -174,7 +187,7 @@ const CHANGELOG: ChangelogRelease[] = [
       {
         category: "Bug Fix",
         content:
-          "Fixed Roman numerals in module titles being lowercased (e.g. \"Iii\" → \"III\") and missing spaces after sentence-ending periods in descriptions — applied retroactively across all semesters."
+          'Fixed Roman numerals in module titles being lowercased (e.g. "Iii" → "III") and missing spaces after sentence-ending periods in descriptions — applied retroactively across all semesters.'
       },
       {
         category: "Improvement",

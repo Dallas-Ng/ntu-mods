@@ -13,11 +13,11 @@ import {
 import { getModuleExamData } from "@/lib/server/get-module-exam-data"
 import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
 import { getAllModuleMetadata } from "@/lib/server/get-module-metadata"
-import ModsDescription from "@/components/mods/mods-description"
 import {
   getModulePrerequisites,
   getPrerequisiteGraph
 } from "@/lib/server/get-prerequisite-graph"
+import ModsDescription from "@/components/mods/mods-description"
 import ModsExpandableFields from "@/components/mods/mods-expandable-fields"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"

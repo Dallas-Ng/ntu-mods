@@ -52,7 +52,7 @@ export const Banner = {
     </Link>
   ),
   ay2026s1: () => (
-    <Link href="/exams">
+    <Link href="/changelog">
       <BannerWrapper>
         New: AY 2026/2027 Sem 1 exam schedule is now live →
       </BannerWrapper>

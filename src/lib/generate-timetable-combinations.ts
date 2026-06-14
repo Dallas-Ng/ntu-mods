@@ -355,7 +355,14 @@ export function generateCombinations(
       const lockedIndexKey = currentTimetable?.[moduleKey]
       const slots = lockedIndexKey ? moduleIndexes[lockedIndexKey] : undefined
       if (!slots) return
-      tryIndex(moduleKey, lockedIndexKey!, slots, moduleIdx, partialTimetable, chosenSlots)
+      tryIndex(
+        moduleKey,
+        lockedIndexKey!,
+        slots,
+        moduleIdx,
+        partialTimetable,
+        chosenSlots
+      )
       return
     }
 
@@ -365,7 +372,14 @@ export function generateCombinations(
         truncated = true
         break
       }
-      tryIndex(moduleKey, indexKey, slots, moduleIdx, partialTimetable, chosenSlots)
+      tryIndex(
+        moduleKey,
+        indexKey,
+        slots,
+        moduleIdx,
+        partialTimetable,
+        chosenSlots
+      )
     }
   }
 

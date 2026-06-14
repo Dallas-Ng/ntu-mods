@@ -136,6 +136,7 @@ export default async function Page(props: {
       <div className="mt-10 space-y-6">
         {prereqNode && (
           <>
+            <hr />
             <ModsPrerequisiteGraph
               moduleCode={moduleKey}
               node={prereqNode}

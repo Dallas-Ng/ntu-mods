@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { X } from "lucide-react"
+import posthog from "posthog-js"
 
 import { MODULE_CATEGORY, MODULE_FACULTY } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
@@ -64,6 +65,7 @@ export const ModsActiveFilters = ({
     const params = new URLSearchParams(searchParams.toString())
     params.delete(key)
     router.push(`${pathname}?${params.toString()}`, { scroll: false })
+    posthog.capture("mods_filter_cleared", { filter_type: key })
   }
 
   return (

@@ -76,7 +76,15 @@ export const siteConfig = {
     },
     exams: {
       title: "NTU Exam Schedule | NTUMods",
-      desc: "Browse the NTU exam schedule by date. Check exam times, duration, and module codes for the current semester."
+      desc: "Browse the NTU exam schedule by date, time, and module code. Find exam durations and search by module for the current semester.",
+      keywords: [
+        "NTU exam schedule",
+        "NTU exam timetable",
+        "NTU exam dates",
+        "NTU final exams",
+        "Nanyang Technological University exam schedule",
+        "NTU exam times"
+      ]
     }
   },
   navLinks: [

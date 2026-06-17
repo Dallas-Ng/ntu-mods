@@ -1,5 +1,7 @@
-import SEMESTERS_JSON from "@/data/api/semesters.json"
+import type { Metadata } from "next"
+import Link from "next/link"
 
+import SEMESTERS_JSON from "@/data/api/semesters.json"
 import {
   LATEST_SEMESTER_LABEL,
   latestSemester,
@@ -15,7 +17,7 @@ export const revalidate = false
 
 const LAST_UPDATED = "14 June 2026"
 
-export default async function ExamsPage() {
+async function getExamData() {
   let exams = await getSemesterExamsData(latestYear, latestSemester)
   let label = LATEST_SEMESTER_LABEL
 
@@ -34,6 +36,20 @@ export default async function ExamsPage() {
     }
   }
 
+  return { exams, label }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { exams, label } = await getExamData()
+  const total = Object.keys(exams).length
+  return {
+    title: `NTU Exam Schedule ${label}`,
+    description: `Browse ${total} NTU exams for ${label}. Search by module code or name, and check exam dates, times, and durations.`
+  }
+}
+
+export default async function ExamsPage() {
+  const { exams, label } = await getExamData()
   const examList = Object.values(exams)
   const total = examList.length
 
@@ -51,6 +67,30 @@ export default async function ExamsPage() {
         <p className="text-muted-foreground shrink-0 pb-1 text-xs">
           Updated {LAST_UPDATED}
         </p>
+      </div>
+
+      <div className="space-y-3 rounded-lg border p-4">
+        <p className="text-muted-foreground text-sm">
+          Showing {total} NTU exams for {label}. Search by module code or name,
+          or group by date or school to plan your revision schedule. Exam data
+          is sourced from NTU&apos;s official timetable and updated each
+          semester.
+        </p>
+        <div className="space-y-1.5">
+          <p className="text-sm font-medium">Related guides</p>
+          <div className="flex flex-col gap-1">
+            <Link
+              href="/articles/ntu-exam-schedule-ay2026"
+              className="text-sm text-blue-500 hover:underline">
+              NTU Exam Schedule AY2026/2027 — How to Find Your Exam Dates →
+            </Link>
+            <Link
+              href="/articles/how-to-plan-for-modules"
+              className="text-sm text-blue-500 hover:underline">
+              How to Plan NTU Modules Before STARS Opens →
+            </Link>
+          </div>
+        </div>
       </div>
 
       <ExamsList exams={examList} />

@@ -18,6 +18,7 @@ import {
   getPrerequisiteGraph
 } from "@/lib/server/get-prerequisite-graph"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
+import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
 import ModsDescription from "@/components/mods/mods-description"
 import ModsExpandableFields from "@/components/mods/mods-expandable-fields"
 import ModsHeader from "@/components/mods/mods-header"
@@ -119,14 +120,20 @@ export default async function Page(props: {
             isCurrentOffering={isCurrentOffering}
           />
 
-          {isCurrentOffering && (
-            <ModsAddToTimetableButton
+          <div className="flex gap-2">
+            {isCurrentOffering && (
+              <ModsAddToTimetableButton
+                moduleKey={moduleKey}
+                year={year}
+                semester={semester}
+                showText={true}
+              />
+            )}
+            <ModsFavouriteButton
               moduleKey={moduleKey}
-              year={year}
-              semester={semester}
-              showText={true}
+              className="hover:bg-accent size-8 shrink-0 rounded-md border"
             />
-          )}
+          </div>
 
           {moduleData.description && (
             <ModsDescription description={moduleData.description} />

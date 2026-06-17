@@ -3,6 +3,7 @@
 import { useState, type MouseEvent } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { TrashIcon } from "lucide-react"
+import posthog from "posthog-js"
 
 import { cn } from "@/lib/utils"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -24,6 +25,10 @@ const TimetableModifier = () => {
   ) => {
     event.stopPropagation()
     removeItemFromTimetable(moduleKey)
+    posthog.capture("module_removed", {
+      module_code: moduleKey,
+      source: "timetable_sidebar"
+    })
   }
 
   return (

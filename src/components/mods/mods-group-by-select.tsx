@@ -1,5 +1,7 @@
 "use client"
 
+import posthog from "posthog-js"
+
 import type { ModsGroupBy } from "@/types/mods"
 import { useSettings } from "@/hooks/use-settings"
 import CustomSelect from "@/components/select"
@@ -20,9 +22,11 @@ export const ModsGroupBySelect = () => {
       closeOnSelect
       value={modsGroupBy}
       selectItems={GROUP_BY_OPTIONS}
-      onChange={(value) =>
-        updateSettings({ modsGroupBy: (value ?? "none") as ModsGroupBy })
-      }
+      onChange={(value) => {
+        const groupBy = (value ?? "none") as ModsGroupBy
+        updateSettings({ modsGroupBy: groupBy })
+        posthog.capture("mods_grouped", { group_by: groupBy })
+      }}
       divClassName="w-full lg:w-[170px]"
     />
   )

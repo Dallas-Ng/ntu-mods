@@ -17,21 +17,69 @@ export const metadata: Metadata = {
 }
 
 const CORE_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "Timetable", href: "/timetable" },
-  { label: "Mods", href: "/mods" },
-  { label: "Exams", href: "/exams" },
-  { label: "Articles", href: "/articles" },
-  { label: "FAQ", href: "/faq" }
+  {
+    label: "Home",
+    href: "/",
+    description: "Overview of NTUMods — timetable, modules, exams, and guides"
+  },
+  {
+    label: "Timetable",
+    href: "/timetable",
+    description: "Plan your NTU timetable, compare indexes, and export to calendar"
+  },
+  {
+    label: "Mods",
+    href: "/mods",
+    description: "Browse all NTU modules, view class times, venues, and prerequisites"
+  },
+  {
+    label: "Exams",
+    href: "/exams",
+    description: "Check NTU exam dates and times by module for the current semester"
+  },
+  {
+    label: "Articles",
+    href: "/articles",
+    description: "Guides on choosing modules, BDEs, Common Core, and STARS prep"
+  },
+  {
+    label: "FAQ",
+    href: "/faq",
+    description: "Quick answers about using NTUMods and how your data is stored"
+  }
 ]
 
 const TOOL_LINKS = [
-  { label: "Wallpaper Maker", href: "/screenshot" },
-  { label: "Changelog", href: "/changelog" },
-  { label: "Privacy", href: "/privacy" },
-  { label: "AI Instructions", href: "/ai-instructions" },
-  { label: "Settings", href: "/settings" },
-  { label: "Feedback", href: "/feedback" }
+  {
+    label: "Wallpaper Maker",
+    href: "/screenshot",
+    description: "Export your timetable as a phone wallpaper or shareable image"
+  },
+  {
+    label: "Changelog",
+    href: "/changelog",
+    description: "Recent updates and improvements to NTUMods"
+  },
+  {
+    label: "Privacy",
+    href: "/privacy",
+    description: "How NTUMods handles your data and what stays on your device"
+  },
+  {
+    label: "AI Instructions",
+    href: "/ai-instructions",
+    description: "Instructions for AI assistants to understand NTUMods"
+  },
+  {
+    label: "Settings",
+    href: "/settings",
+    description: "Customize themes, colors, density, and display preferences"
+  },
+  {
+    label: "Feedback",
+    href: "/feedback",
+    description: "Share feedback, report a bug, or suggest an improvement"
+  }
 ]
 
 const moduleMap = moduleMapJson as Record<string, { title?: string }>
@@ -72,18 +120,23 @@ export default function SitemapPage() {
     <Container size="sm" className="space-y-10">
       <Header
         title="Sitemap"
-        subtitle={`Browse NTUMods pages, guides, and ${moduleCount.toLocaleString("en-SG")} NTU module pages from one place.`}
+        subtitle="Everything on NTUMods, organized in one place. Explore the tools, guides, and module pages below."
       />
 
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">Core Pages</h2>
-        <div className="flex flex-col gap-y-1 sm:flex-row sm:flex-wrap sm:gap-x-8">
+        <div className="grid gap-3 sm:grid-cols-2">
           {CORE_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-foreground text-sm leading-6 font-medium transition-colors hover:text-blue-500">
-              {link.label}
+              className="group hover:bg-muted rounded-lg border p-4 transition-colors">
+              <p className="text-foreground text-sm font-medium group-hover:text-blue-500">
+                {link.label}
+              </p>
+              <p className="text-muted-foreground mt-0.5 text-sm">
+                {link.description}
+              </p>
             </Link>
           ))}
         </div>
@@ -91,13 +144,18 @@ export default function SitemapPage() {
 
       <section className="space-y-4">
         <h2 className="text-xl font-semibold">Tools and Support</h2>
-        <div className="flex flex-col gap-y-1 sm:flex-row sm:flex-wrap sm:gap-x-8">
+        <div className="grid gap-3 sm:grid-cols-2">
           {TOOL_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-foreground text-sm leading-6 font-medium transition-colors hover:text-blue-500">
-              {link.label}
+              className="group hover:bg-muted rounded-lg border p-4 transition-colors">
+              <p className="text-foreground text-sm font-medium group-hover:text-blue-500">
+                {link.label}
+              </p>
+              <p className="text-muted-foreground mt-0.5 text-sm">
+                {link.description}
+              </p>
             </Link>
           ))}
         </div>
@@ -106,13 +164,21 @@ export default function SitemapPage() {
       {articles.length > 0 && (
         <section className="space-y-4">
           <h2 className="text-xl font-semibold">Articles</h2>
-          <div className="grid gap-x-4 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2">
             {articles.map((article) => (
               <Link
                 key={article.slug}
                 href={`/articles/${article.slug}`}
-                className="text-foreground text-sm leading-6 font-medium transition-colors hover:text-blue-500">
-                {article.title}
+                className="group hover:bg-muted rounded-lg border p-4 transition-colors">
+                <p className="text-muted-foreground mb-1 text-xs">
+                  {article.category}
+                </p>
+                <p className="text-foreground text-sm font-medium group-hover:text-blue-500">
+                  {article.title}
+                </p>
+                <p className="text-muted-foreground mt-0.5 line-clamp-2 text-sm">
+                  {article.description}
+                </p>
               </Link>
             ))}
           </div>

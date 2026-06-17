@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Calendar } from "lucide-react"
+import posthog from "posthog-js"
 import { toast } from "sonner"
 
 import { getIcs } from "@/lib/get-ics"
@@ -54,6 +55,10 @@ const TimetableDownloadCalendarButton = () => {
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
+      posthog.capture("calendar_downloaded", {
+        module_count: Object.keys(timetable).length,
+        source: "standalone_button"
+      })
     } catch {
       toast.error("Something went wrong, please try again later")
     }

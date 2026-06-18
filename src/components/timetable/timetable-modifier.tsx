@@ -1,22 +1,17 @@
 "use client"
 
 import { useState, type MouseEvent } from "react"
-import { useBoundState } from "@/state/bound.state"
 import { TrashIcon } from "lucide-react"
 import posthog from "posthog-js"
 
 import { cn } from "@/lib/utils"
 import { useTimetable } from "@/hooks/use-timetable"
 
-import TimetableAiChat from "./mode-ai/timetable-ai-chat"
-import TimetableGenerationConfig from "./mode-generation/timetable-generation-config"
 import TimetableIndexModifier from "./timetable-index-modifier"
-import TimetableModeSelector from "./timetable-mode-selector"
 import TimetableModulesSelect from "./timetable-modules-select"
 
 const TimetableModifier = () => {
   const { timetable, removeItemFromTimetable } = useTimetable()
-  const mode = useBoundState((s) => s.timetableCreationMode)
   const [activeKey, setActiveKey] = useState<string | null>(null)
 
   const handleRemoveClick = (
@@ -33,16 +28,14 @@ const TimetableModifier = () => {
 
   return (
     <div className="flex size-full flex-col space-y-4">
-      <TimetableModeSelector />
-
-      {/* Module search — always shown */}
+      {/* Module search */}
       <div className="relative z-2 h-10 w-full rounded-lg">
         <div className="absolute top-0 left-0 w-full">
           <TimetableModulesSelect />
         </div>
       </div>
 
-      {/* Module list — always shown */}
+      {/* Module list */}
       <div className={cn("rounded-lg border-2", activeKey && "rounded-b-none")}>
         <div className="text-muted-foreground p-2 text-center text-xs">
           Registered Modules
@@ -86,20 +79,14 @@ const TimetableModifier = () => {
         </div>
 
         {Object.entries(timetable).length === 0 && (
-          <>
-            <div className="p-2">
-              <div className="text-muted-foreground text-center text-sm">
-                You have not added modules
-                <br /> Click on the search bar above to add modules
-              </div>
+          <div className="p-2">
+            <div className="text-muted-foreground text-center text-sm">
+              You have not added modules
+              <br /> Click on the search bar above to add modules
             </div>
-          </>
+          </div>
         )}
       </div>
-
-      {/* Mode-specific panels */}
-      {mode === "generation" && <TimetableGenerationConfig />}
-      {mode === "ai" && <TimetableAiChat />}
     </div>
   )
 }

@@ -11,13 +11,10 @@ import { TimetableTableLoader } from "../timetable-table/table-loader"
 
 interface Props {
   timetable?: Timetable
-  indexPickerEnabled?: boolean
 }
 
-const TimetablePageTable = ({
-  timetable: timetableProp,
-  indexPickerEnabled = false
-}: Props) => {
+const TimetablePageTable = ({ timetable: timetableProp }: Props) => {
+  const indexPickerEnabled = true
   const { timetable, updateItemIndex } = useTimetable(timetableProp)
   const year = latestYear
   const semester = latestSemester
@@ -29,15 +26,10 @@ const TimetablePageTable = ({
   )
 
   useEffect(() => {
-    if (!indexPickerEnabled) {
-      setActiveModuleKey(null)
-      return
-    }
-
     if (activeModuleKey && !timetable[activeModuleKey]) {
       setActiveModuleKey(null)
     }
-  }, [activeModuleKey, indexPickerEnabled, timetable])
+  }, [activeModuleKey, timetable])
 
   const previewModuleIndexMap = useMemo(() => {
     if (!indexPickerEnabled || !activeModuleKey) return moduleIndexMap

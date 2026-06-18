@@ -1,7 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import dynamic from "next/dynamic"
 
+import { useTimetable } from "@/hooks/use-timetable"
 import { useSettings } from "@/hooks/use-settings"
 import {
   Drawer,
@@ -12,14 +14,18 @@ import {
 
 import TimetableModifier from "../timetable-modifier"
 
-interface Props {
-  hidden?: boolean
-}
+const TimetableStatusStrip = dynamic(
+  () => import("../timetable-status-strip"),
+  { ssr: false }
+)
 
-const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
+const MobileTimetableModifierButton = () => {
   const [snap, setSnap] = useState<number | string | null>("85px")
   const { isMobile } = useSettings()
+  const { timetable } = useTimetable()
   const isExpanded = snap === 1
+
+  const moduleCount = Object.keys(timetable).length
 
   useEffect(() => {
     document.body.style.overflow = isExpanded ? "hidden" : ""
@@ -28,7 +34,7 @@ const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
     }
   }, [isExpanded])
 
-  if (!isMobile || hidden) return null
+  if (!isMobile) return null
 
   return (
     <>
@@ -56,11 +62,25 @@ const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
           </DrawerDescription>
 
           <div className="flex h-full flex-col">
+            {/* Status strip pinned above handle */}
+            <div className="shrink-0 px-1 pb-1">
+              <TimetableStatusStrip />
+            </div>
+
+            {/* Handle / collapsed label */}
             <button
               type="button"
-              className="text-muted-foreground flex h-[59px] shrink-0 items-center justify-center text-sm"
+              className="text-muted-foreground flex h-[44px] shrink-0 items-center justify-center gap-2 text-sm"
               onClick={() => setSnap(1)}>
-              Click here to add mods!
+              <span>Modules</span>
+              {moduleCount > 0 && (
+                <span className="bg-primary text-primary-foreground flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-semibold">
+                  {moduleCount}
+                </span>
+              )}
+              {moduleCount === 0 && (
+                <span className="text-xs opacity-60">tap to add</span>
+              )}
             </button>
 
             <div className="min-h-0 flex-1 overflow-y-auto">

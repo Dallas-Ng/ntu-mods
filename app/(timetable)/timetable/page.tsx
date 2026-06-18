@@ -1,16 +1,12 @@
 "use client"
 
-import { useState } from "react"
 import dynamic from "next/dynamic"
-import { MousePointerClick } from "lucide-react"
-import posthog from "posthog-js"
 
-import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import { Migration } from "@/components/migration"
 import { TimetableTableLoader } from "@/components/timetable-table/table-loader"
-import { TimetableActionsDropdownLoading } from "@/components/timetable/buttons/timetable-actions-dropdown-loading"
 import { TimetablePlanSwitcherLoading } from "@/components/timetable/buttons/timetable-plan-switcher-loading"
+import TimetableGenerateSheet from "@/components/timetable/timetable-generate-sheet"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import { TimetableModifierLoader } from "@/components/timetable/timetable-modifier-loading"
 import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview-loading"
@@ -22,7 +18,7 @@ const TimetableHiddenContentHelper = dynamic(
 
 const TimetableActionsDropdown = dynamic(
   () => import("@/components/timetable/buttons/timetable-actions-dropdown"),
-  { ssr: false, loading: () => <TimetableActionsDropdownLoading /> }
+  { ssr: false, loading: () => <div className="size-9" /> }
 )
 
 const TimetablePlanSwitcher = dynamic(
@@ -57,6 +53,11 @@ const TimetableOverview = dynamic(
   }
 )
 
+const TimetableStatusStrip = dynamic(
+  () => import("@/components/timetable/timetable-status-strip"),
+  { ssr: false }
+)
+
 const MobileTimetableModifierButton = dynamic(
   () =>
     import("@/components/timetable/buttons/mobile-timetable-modifier-button"),
@@ -64,8 +65,6 @@ const MobileTimetableModifierButton = dynamic(
 )
 
 const Page = () => {
-  const [indexPickerEnabled, setIndexPickerEnabled] = useState(false)
-
   return (
     <>
       <Migration />
@@ -73,47 +72,34 @@ const Page = () => {
       <div className="space-y-4">
         <Header title="Timetable" />
 
-        <div className="flex justify-between gap-2">
+        {/* Top bar: plan switcher + generate + actions */}
+        <div className="flex items-center justify-between gap-2">
           <div className="flex gap-2">
             <TimetablePlanSwitcher />
-
-            <Button
-              variant={indexPickerEnabled ? "default" : "outline"}
-              className="w-35 gap-2"
-              onClick={() => {
-                setIndexPickerEnabled((v) => {
-                  posthog.capture("index_picker_toggled", { enabled: !v })
-                  return !v
-                })
-              }}>
-              <MousePointerClick className="size-4" />
-              {indexPickerEnabled ? "Stop picking" : "Pick indexes"}
-            </Button>
-
-            {indexPickerEnabled && (
-              <span className="text-muted-foreground hidden self-center text-xs sm:inline">
-                Tap a block to see its other indexes
-              </span>
-            )}
+            <TimetableGenerateSheet />
           </div>
 
           <TimetableActionsDropdown />
         </div>
 
-        <div className="flex h-full items-start justify-between gap-4">
+        {/* Main layout: left panel (desktop) | grid + strip + overview */}
+        <div className="flex h-full items-start gap-4">
+          {/* Left sidebar — hidden on mobile (bottom sheet handles it) */}
+          <div className="hidden md:block md:w-[40%] lg:w-[30%]">
+            <TimetableModifier />
+          </div>
+
+          {/* Right content area */}
           <div className="size-full space-y-4 md:w-[60%] lg:w-[70%]">
-            {/* Needs these divs to make space-y-4 work in loading time */}
             <div>
-              <TimetableTable indexPickerEnabled={indexPickerEnabled} />
+              <TimetableTable />
             </div>
+
+            <TimetableStatusStrip />
 
             <div>
               <TimetableOverview />
             </div>
-          </div>
-
-          <div className="hidden md:block md:w-[40%] lg:w-[30%]">
-            <TimetableModifier />
           </div>
         </div>
 
@@ -126,9 +112,9 @@ const Page = () => {
         </div>
       </div>
 
-      <MobileTimetableModifierButton hidden={indexPickerEnabled} />
+      <MobileTimetableModifierButton />
 
-      {/* Buffer for button */}
+      {/* Buffer for mobile bottom sheet */}
       <div className="block h-16 md:hidden" />
     </>
   )

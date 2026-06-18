@@ -88,13 +88,13 @@ const Page = () => {
 
         {/* Main layout: left panel (desktop) | grid + strip + overview */}
         <div className="flex h-full items-start gap-4">
-          {/* Left sidebar — hidden on mobile (bottom sheet handles it) */}
-          <div className="hidden md:block md:w-[40%] lg:w-[30%]">
+          {/* Left sidebar — fixed width, hidden on mobile */}
+          <div className="hidden shrink-0 md:block md:w-64 lg:w-72">
             <TimetableModifier />
           </div>
 
-          {/* Right content area */}
-          <div className="size-full space-y-4 md:w-[60%] lg:w-[70%]">
+          {/* Right content area — takes remaining space */}
+          <div className="min-w-0 flex-1 space-y-4">
             <div>
               <TimetableTable />
             </div>

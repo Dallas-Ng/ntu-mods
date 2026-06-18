@@ -1,90 +1,81 @@
 "use client"
 
-import { useState, type MouseEvent } from "react"
-import { TrashIcon } from "lucide-react"
-import posthog from "posthog-js"
+import { useEffect, useState } from "react"
 
-import { cn } from "@/lib/utils"
+import { latestSemester, latestYear } from "@/lib/semesters"
+import { useAllModules } from "@/hooks/use-all-modules"
 import { useTimetable } from "@/hooks/use-timetable"
 
-import TimetableIndexModifier from "./timetable-index-modifier"
+import TimetableModuleCard from "./timetable-module-card"
 import TimetableModulesSelect from "./timetable-modules-select"
 
 const TimetableModifier = () => {
-  const { timetable, removeItemFromTimetable } = useTimetable()
-  const [activeKey, setActiveKey] = useState<string | null>(null)
+  const { timetable } = useTimetable()
+  const { modules } = useAllModules()
+  const year = latestYear
+  const semester = latestSemester
+  const [examMap, setExamMap] = useState<
+    Record<string, { date: string; start_time: string; end_time: string }>
+  >({})
 
-  const handleRemoveClick = (
-    event: MouseEvent<HTMLDivElement>,
-    moduleKey: string
-  ) => {
-    event.stopPropagation()
-    removeItemFromTimetable(moduleKey)
-    posthog.capture("module_removed", {
-      module_code: moduleKey,
-      source: "timetable_sidebar"
+  useEffect(() => {
+    const controller = new AbortController()
+    fetch(`/data/api/exams/${year}_${semester}.json`, {
+      signal: controller.signal
     })
-  }
+      .then((res) => (res.ok ? res.json() : {}))
+      .then((data) => setExamMap(data ?? {}))
+      .catch(() => setExamMap({}))
+    return () => controller.abort()
+  }, [year, semester])
+
+  const moduleMetaMap = Object.fromEntries(
+    modules.map((m) => [m.code, { title: m.title, au: m.au }])
+  )
+
+  const moduleCount = Object.keys(timetable).length
 
   return (
-    <div className="flex size-full flex-col space-y-4">
+    <div className="flex size-full flex-col gap-3">
+      {/* Panel header */}
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-semibold">
+          Modules
+          {moduleCount > 0 && (
+            <span className="bg-primary text-primary-foreground ml-1.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs">
+              {moduleCount}
+            </span>
+          )}
+        </span>
+      </div>
+
       {/* Module search */}
-      <div className="relative z-2 h-10 w-full rounded-lg">
-        <div className="absolute top-0 left-0 w-full">
-          <TimetableModulesSelect />
-        </div>
+      <div className="relative z-10 w-full">
+        <TimetableModulesSelect />
       </div>
 
       {/* Module list */}
-      <div className={cn("rounded-lg border-2", activeKey && "rounded-b-none")}>
-        <div className="text-muted-foreground p-2 text-center text-xs">
-          Registered Modules
-        </div>
-
-        <hr />
-
-        <div className="max-h-[40vh] overflow-y-auto">
-          {Object.entries(timetable).map(([moduleKey, indexKey]) => {
-            const isActive = activeKey === moduleKey
-
+      <div className="rounded-lg border">
+        {moduleCount === 0 ? (
+          <div className="text-muted-foreground p-4 text-center text-sm">
+            No modules added
+            <br />
+            <span className="text-xs">Search above to add modules</span>
+          </div>
+        ) : (
+          Object.keys(timetable).map((moduleKey) => {
+            const meta = moduleMetaMap[moduleKey]
+            const exam = examMap[moduleKey]
             return (
-              <TimetableIndexModifier
+              <TimetableModuleCard
                 key={moduleKey}
                 moduleKey={moduleKey}
-                open={isActive}
-                onOpenChange={(moduleKey) => setActiveKey(moduleKey)}>
-                <div
-                  className={cn(
-                    "hover:bg-accent cursor-pointer pr-1 pl-4 text-sm transition-colors",
-                    isActive && "bg-muted rounded-b-none"
-                  )}>
-                  <div className="flex w-full items-center justify-between">
-                    <div className="flex gap-1">
-                      <div className="w-15">{moduleKey}</div>
-                      <div className="text-muted-foreground text-sm">
-                        {indexKey}
-                      </div>
-                    </div>
-
-                    <div
-                      className="flex size-10 cursor-pointer items-center justify-center p-1"
-                      onClick={(e) => handleRemoveClick(e, moduleKey)}>
-                      <TrashIcon className="text-muted-foreground hover:text-foreground size-4" />
-                    </div>
-                  </div>
-                </div>
-              </TimetableIndexModifier>
+                title={meta?.title}
+                au={meta?.au}
+                examDate={exam?.date}
+              />
             )
-          })}
-        </div>
-
-        {Object.entries(timetable).length === 0 && (
-          <div className="p-2">
-            <div className="text-muted-foreground text-center text-sm">
-              You have not added modules
-              <br /> Click on the search bar above to add modules
-            </div>
-          </div>
+          })
         )}
       </div>
     </div>

@@ -6,7 +6,6 @@ import Header from "@/components/header"
 import { Migration } from "@/components/migration"
 import { TimetableTableLoader } from "@/components/timetable-table/table-loader"
 import { TimetablePlanSwitcherLoading } from "@/components/timetable/buttons/timetable-plan-switcher-loading"
-import TimetableGenerateSheet from "@/components/timetable/timetable-generate-sheet"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import { TimetableModifierLoader } from "@/components/timetable/timetable-modifier-loading"
 import { TimetableOverviewLoading } from "@/components/timetable/timetable-overview-loading"
@@ -14,6 +13,11 @@ import { TimetableOverviewLoading } from "@/components/timetable/timetable-overv
 const TimetableHiddenContentHelper = dynamic(
   () => import("@/components/timetable/timetable-hidden-content-helper"),
   { ssr: false }
+)
+
+const TimetableGenerateSheet = dynamic(
+  () => import("@/components/timetable/timetable-generate-sheet"),
+  { ssr: false, loading: () => <div className="h-8 w-24" /> }
 )
 
 const TimetableActionsDropdown = dynamic(

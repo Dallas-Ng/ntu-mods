@@ -32,15 +32,21 @@ NTU terminology used throughout this site: STARS (Student Allocation of Register
 - [Using a MOOC as a BDE at NTU](https://ntumods.com/articles/mooc-as-bde-replacement-ntu): Rules and requirements for substituting a MOOC for a BDE AU.
 - [NTU Unrestricted Electives](https://ntumods.com/articles/ntu-unrestricted-electives): What UEs are and how they differ from BDEs.
 
-## Articles — Module Planning, STARS & Common Core
+## Articles — Module Planning, STARS, Academic Calendar & Common Core
 
 - [How to Plan NTU Modules Before STARS Opens](https://ntumods.com/articles/how-to-plan-for-modules): Step-by-step guide to building a timetable with NTUMods before registration.
 - [NTU Timetable Planner Guide](https://ntumods.com/articles/ntu-timetable-planner-guide): How to use NTUMods to build your semester schedule.
 - [NTU Module Selection Guide](https://ntumods.com/articles/ntu-module-selection-guide): How to choose modules you won't regret.
+- [NTU Academic Calendar AY2026/2027](https://ntumods.com/articles/ntu-academic-calendar-ay2026): Key dates for AY2026/2027 — semester start/end, recess week, exam period, STARS round dates, and how the NTU semester structure works. Covers both Semester 1 (August–December 2026) and Semester 2 (January–May 2027).
 - [NTU Exam Schedule AY2026](https://ntumods.com/articles/ntu-exam-schedule-ay2026): How to find and interpret your exam dates for AY2026/2027 Semester 1.
-- [NTU STARS Guide](https://ntumods.com/articles/ntu-stars-guide): How the NTU module registration system works.
+- [NTU STARS Guide](https://ntumods.com/articles/ntu-stars-guide): How the NTU module registration system works — rounds, bidding, add/drop, and common mistakes.
 - [Best CC Modules at NTU](https://ntumods.com/articles/best-cc-modules-ntu): Honest student reviews of Common Core modules worth taking.
 - [NTU CC Modules: What to Expect](https://ntumods.com/articles/ntu-cc-modules-what-they-actually-feel-like): What CC modules are actually like, which are worth it, and how to plan them.
+
+## Articles — Module Listings by Faculty
+
+- [NTU Business Modules (NBS)](https://ntumods.com/articles/ntu-business-modules): Complete list of Nanyang Business School modules for AY2026/2027 Semester 1 — accountancy & business (AB prefix), and banking & finance (BF prefix). Covers all 59 NBS modules with AU values and links to module pages.
+- [NTU Humanities, Arts & Social Sciences Modules](https://ntumods.com/articles/ntu-humanities-arts-social-sciences-modules): Complete list of CoHASS modules for AY2026/2027 Semester 1 — English literature (HL), linguistics (HG), history (HH), philosophy (HY), and visual arts/design (AAA). Covers English modules, history course offerings, art history modules, and linguistics. Many are available as BDEs.
 
 ## Guides & Reference
 

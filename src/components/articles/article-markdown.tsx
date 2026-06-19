@@ -230,7 +230,7 @@ const ArticleMarkdown = ({ content, headings }: Props) => {
         blocks.push(
           <h1
             key={index}
-            className="text-foreground mb-5 text-3xl leading-tight font-bold tracking-normal break-words sm:mb-6 md:text-5xl">
+            className="text-foreground mb-5 text-2xl leading-tight font-bold tracking-normal break-words sm:mb-6 md:text-4xl">
             {text}
           </h1>
         )

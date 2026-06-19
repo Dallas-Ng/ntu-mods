@@ -2,10 +2,7 @@ import { Metadata } from "next"
 import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
-import {
-  LATEST_SEMESTER_LABEL,
-  LATEST_SEMESTER_LABEL_SHORT
-} from "@/lib/semesters"
+import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import LayoutDefault from "@/components/layout-default"
 
 interface Props {
@@ -18,55 +15,64 @@ export const metadata: Metadata = {
   alternates: { canonical: "/timetable" }
 }
 
+const GUIDES = [
+  {
+    href: "/articles/how-to-plan-for-modules",
+    title: "How to Plan NTU Modules Before STARS Opens",
+    description:
+      "Step-by-step workflow for building your semester plan — from mapping AU requirements to locking in lab indexes before bidding opens."
+  },
+  {
+    href: "/articles/ntu-stars-guide",
+    title: "NTU STARS: How the Registration System Works",
+    description:
+      "What happens in each STARS round, how to prepare your shortlist, and what to do when your first choice fills up."
+  },
+  {
+    href: "/articles/ntu-academic-calendar-ay2026",
+    title: "NTU Academic Calendar AY2026/2027",
+    description:
+      "Key dates for Semester 1 and 2 — semester start and end, recess week, exam period, and STARS round timing."
+  },
+  {
+    href: "/articles/ntu-timetable-planner-guide",
+    title: "NTU Timetable Planner Guide",
+    description:
+      "How to use NTUMods to search modules, compare indexes, detect clashes, and export your schedule to calendar."
+  }
+]
+
 const Layout = ({ children }: Props) => {
   return (
     <LayoutDefault>
       {children}
 
-      <div className="mt-8 space-y-3 rounded-lg border p-4 text-sm">
-        <p className="text-muted-foreground">
-          <strong className="text-foreground">
-            NTU class schedule for {LATEST_SEMESTER_LABEL}:
-          </strong>{" "}
-          4,846 class indexes across 1,134 modules. Each index is a specific
-          class group with fixed timeslots, venues, and a class number used
-          during STARS registration. Index types include lectures, tutorials,
-          labs, seminars, and recitations — most modules require registration
-          for more than one index type. The timetable planner above lets you
-          search modules, compare index timeslots, detect clashes, and build a
-          schedule before NTU STARS registration opens.
-        </p>
-        <div className="space-y-1.5">
-          <p className="font-medium">Related guides</p>
-          <div className="flex flex-col gap-1">
-            <Link
-              href="/articles/ntu-stars-guide"
-              className="text-blue-500 hover:underline">
-              NTU STARS: How the Module Registration System Works →
-            </Link>
-            <Link
-              href="/articles/how-to-plan-for-modules"
-              className="text-blue-500 hover:underline">
-              How to Plan NTU Modules Before STARS Opens →
-            </Link>
-            <Link
-              href="/articles/ntu-timetable-planner-guide"
-              className="text-blue-500 hover:underline">
-              NTU Timetable Planner Guide →
-            </Link>
-            <Link
-              href="/articles/ntu-academic-calendar-ay2026"
-              className="text-blue-500 hover:underline">
-              NTU Academic Calendar AY2026/2027 — Key Dates →
-            </Link>
-          </div>
+      <section className="mt-10 space-y-4 border-t pt-8">
+        <div>
+          <h2 className="text-lg font-semibold tracking-tight">
+            Planning guides
+          </h2>
+          <p className="text-muted-foreground mt-1 text-sm">
+            {LATEST_SEMESTER_LABEL} · 1,134 modules · 4,846 class indexes
+          </p>
         </div>
-        <p className="text-muted-foreground text-xs">
-          Module and index data sourced from NTU&apos;s official timetable.
-          Updated each semester. Current:{" "}
-          <span className="font-medium">{LATEST_SEMESTER_LABEL_SHORT}</span>.
-        </p>
-      </div>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          {GUIDES.map(({ href, title, description }) => (
+            <Link
+              key={href}
+              href={href}
+              className="bg-card hover:bg-accent group rounded-lg border p-4 transition-colors">
+              <p className="group-hover:text-primary text-sm font-medium leading-snug">
+                {title}
+              </p>
+              <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">
+                {description}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </section>
     </LayoutDefault>
   )
 }

@@ -196,7 +196,7 @@ export const extractFaqItems = (
         .join(" ")
         .replace(/!\[[^\]]*\]\([^)]+\)/g, "")
         .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
-        .replace(/[`*_~>#-]/g, "")
+        .replace(/[`*_~>#]/g, "")
         .replace(/\s+/g, " ")
         .trim()
       if (answer) items.push({ question: currentQuestion, answer })

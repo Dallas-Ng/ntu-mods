@@ -10,6 +10,7 @@ import type {
 
 import { siteConfig } from "@/config/site"
 import {
+  extractFaqItems,
   getAllArticles,
   getArticleBySlug,
   getArticleCategories,
@@ -214,6 +215,20 @@ export default async function ArticleOrCategoryPage(props: {
     .filter((item) => item.slug !== article.slug)
     .slice(0, 3)
 
+  const faqItems = extractFaqItems(article.content)
+  const faqJsonLd =
+    faqItems.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqItems.map(({ question, answer }) => ({
+            "@type": "Question",
+            name: question,
+            acceptedAnswer: { "@type": "Answer", text: answer }
+          }))
+        }
+      : null
+
   const jsonLd: WithContext<ArticleJsonLd> = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -271,6 +286,13 @@ export default async function ArticleOrCategoryPage(props: {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          id="article-faq-jsonld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <script
         id="article-breadcrumb-jsonld"
         type="application/ld+json"

@@ -180,6 +180,64 @@ export const getArticlesByCategory = (categorySlug: string) =>
     (article) => slugifyCategory(article.category) === categorySlug
   )
 
+export const extractFaqItems = (
+  content: string
+): { question: string; answer: string }[] => {
+  const lines = content.split("\n")
+  const items: { question: string; answer: string }[] = []
+
+  let inFaqSection = false
+  let currentQuestion: string | null = null
+  const currentAnswerLines: string[] = []
+
+  const pushCurrent = () => {
+    if (currentQuestion && currentAnswerLines.length > 0) {
+      const answer = currentAnswerLines
+        .join(" ")
+        .replace(/!\[[^\]]*\]\([^)]+\)/g, "")
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+        .replace(/[`*_~>#]/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+      if (answer) items.push({ question: currentQuestion, answer })
+    }
+    currentQuestion = null
+    currentAnswerLines.length = 0
+  }
+
+  for (const line of lines) {
+    const h2 = /^##\s+(.+)$/.exec(line)
+    const h3 = /^###\s+(.+)$/.exec(line)
+
+    if (h2) {
+      if (inFaqSection) {
+        pushCurrent()
+        break
+      }
+      if (/frequently asked questions|^faq$/i.test(h2[1].trim())) {
+        inFaqSection = true
+      }
+      continue
+    }
+
+    if (!inFaqSection) continue
+
+    if (h3) {
+      pushCurrent()
+      currentQuestion = stripMarkdown(h3[1])
+      continue
+    }
+
+    if (currentQuestion && line.trim() && !line.startsWith("#")) {
+      currentAnswerLines.push(line.trim())
+    }
+  }
+
+  if (inFaqSection) pushCurrent()
+
+  return items
+}
+
 export const getArticleImageUrl = (thumbnail: string) => {
   const src = thumbnail || DEFAULT_THUMBNAIL
   return src.startsWith("http")

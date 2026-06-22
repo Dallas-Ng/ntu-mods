@@ -1,96 +1,149 @@
 ---
-title: "NTU Student Portal Links: Every Website You Actually Need"
-description: "A guide to every NTU student portal — STARS, NTULearn, Degree Audit, CareerAxis, GEM, and more — with direct links so you stop hunting for them every semester."
+title: "NTU Student Portals: Complete List of Websites and Links"
+description: "Every NTU student portal you need — STARS for course registration, NTULearn for course materials, Degree Audit for grades, CareerAxis for jobs, GEM for exchange, and more. All with direct links."
 date: "2026-06-22"
 author: "NTUMods"
 category: "General"
-tags: ["NTU portals", "NTU student links", "STARS NTU", "NTULearn", "Degree Audit", "NTU student guide", "NTU resources", "NTU websites"]
+tags: ["NTU portals", "NTU student links", "NTU websites", "STARS NTU", "NTULearn", "Degree Audit NTU", "NTU student guide", "NTU resources", "NTU online portals", "NTU student portal list"]
 ---
 
-# NTU Student Portal Links: Every Website You Actually Need
+# NTU Student Portals: Complete List of Websites and Links
 
-NTU runs a lot of separate portals. Registration is on one system, grades on another, career stuff somewhere else entirely. Most students end up with a browser folder full of bookmarks or waste time Googling the same links every semester.
+NTU uses more than a dozen separate web portals for registration, grades, internships, exchange, library bookings, and financial aid. There is no single login that opens all of them.
 
-This guide covers the portals you will actually use — what each one does and when you need it. All of them are also collected on the [NTUMods Links page](/links) so you have one place to go.
+This guide lists every portal NTU students actually use, what each one does, and when you need it. All links are collected on the [NTUMods Links page](/links) so you have one place to return to each semester.
 
-## Academics
+## What are the main NTU student portals?
 
-These are the portals you will open most often throughout your degree.
+The core portals every NTU student uses are:
 
-### STARS
+| Portal | What it does |
+|--------|-------------|
+| [STARS](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/aus_stars_planner.main) | Course registration |
+| [NTULearn](https://ntulearn.ntu.edu.sg/ultra/institution-page) | Course materials and LMS |
+| [Degree Audit](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/dars_result_ro.main_display) | Grades and AU progress |
+| [Self-Help Transcript](https://wis.ntu.edu.sg/webexe/owa/request_transcript_und.LoginN?pType=SH) | Unofficial transcript |
+| [CareerAxis](https://careeraxis.ntu.edu.sg/students) | Jobs and internships |
+| [GEM Portal](https://gem.ntu.edu.sg/) | Student exchange |
 
-[STARS](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/aus_stars_planner.main) is where you register for modules and select your indexes. Registration opens in rounds — the system opens briefly, you pick what you want, it closes, results come out, repeat.
+The sections below cover each portal in full.
 
-Before registration opens, use [NTUMods Timetable Planner](/timetable) to find which indexes fit your schedule, check for clashes, and line up your alternatives. That way you are not figuring it out live when STARS opens.
+## Academic Portals
 
-### NTULearn
+### What website do NTU students use to register for modules?
 
-[NTULearn](https://ntulearn.ntu.edu.sg/ultra/institution-page) is the LMS (learning management system) where professors post slides, readings, assignment submissions, and announcements. Essentially the Google Classroom equivalent for NTU.
+**STARS** (Student Allocation of Registered Subjects) is NTU's official course registration system. You select modules and indexes here during the registration window each semester.
 
-Check it at the start of each week. Professors often post last-minute changes here rather than emailing.
+- **URL**: [wish.wis.ntu.edu.sg](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/aus_stars_planner.main)
+- **When to use**: During STARS registration rounds each semester
+- **Before STARS opens**: Use [NTUMods Timetable Planner](/timetable) to identify which indexes fit your schedule and prepare your shortlist
 
-### Degree Audit
+### What is NTULearn?
 
-[Degree Audit](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/dars_result_ro.main_display) shows your academic progress — which requirements you have fulfilled, how many AUs you have accumulated, and what is still outstanding. Think of it as your degree checklist.
+**NTULearn** is NTU's learning management system (LMS), equivalent to Google Classroom. Professors post lecture slides, readings, assignment submissions, quiz links, and course announcements here.
 
-Check this before each registration round to see which requirement buckets still need modules.
+- **URL**: [ntulearn.ntu.edu.sg](https://ntulearn.ntu.edu.sg/ultra/institution-page)
+- **When to use**: Weekly throughout the semester. Check at the start of each week for new postings or announcements
 
-### Transcript (Self-Help)
+### Where do NTU students check their grades?
 
-The [Self-Help Transcript](https://wis.ntu.edu.sg/webexe/owa/request_transcript_und.LoginN?pType=SH) lets you view your current grades and generate an unofficial transcript. Useful for scholarship applications, exchange programme applications, or just checking that your results were posted correctly.
+**Degree Audit** shows your academic progress — which graduation requirements you have met, how many AUs you have accumulated, and what is still outstanding. It is updated each semester after results are released.
 
-### Class Schedule
+- **URL**: [wish.wis.ntu.edu.sg (Degree Audit)](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/dars_result_ro.main_display)
+- **When to use**: After results release each semester; before each registration round to plan which requirements still need modules
 
-The [Class Schedule portal](https://wish.wis.ntu.edu.sg/webexe/owa/aus_schedule.main) lets you search any module and see all its available indexes with their timeslots and venues — without logging in. Use it alongside NTUMods to verify venue details or check indexes for modules you are considering picking up.
+The **Self-Help Transcript** shows the same grade data in transcript format — useful for scholarship applications or exchange programme applications.
 
-### FGO Portal
+- **URL**: [wis.ntu.edu.sg (Transcript)](https://wis.ntu.edu.sg/webexe/owa/request_transcript_und.LoginN?pType=SH)
 
-The [FGO Portal](https://sso.wis.ntu.edu.sg/webexe88/owa/sso_login1.asp?t=1&p2=https://wis.ntu.edu.sg/pls/webexe/aus_su_opt.display&extra=&pg=) is where you declare courses as S/U (satisfactory/unsatisfactory) under the Free General Option. You have a limited number of S/U options across your degree — check your remaining count here before using them.
+### What is the NTU Class Schedule portal?
 
-### Academic Calendar
+The **Class Schedule portal** lets you browse every module's available indexes — including timeslots, venues, and class sizes — without logging in. Use it alongside [NTUMods Module Browser](/mods) to compare indexes across modules.
 
-The [Academic Calendar](https://www.ntu.edu.sg/admissions/matriculation/academic-calendars) lists semester start and end dates, reading weeks, exam periods, public holidays, and recess week. Useful for planning leave, internships, or travel around your academic commitments.
+- **URL**: [wish.wis.ntu.edu.sg (Class Schedule)](https://wish.wis.ntu.edu.sg/webexe/owa/aus_schedule.main)
 
-## Library & Campus
+### What is the NTU FGO Portal?
 
-### Library Booking
+The **FGO (Free General Option) Portal** is where you declare S/U (satisfactory/unsatisfactory) for eligible modules. Most students get a fixed number of S/U declarations across their degree — check your remaining count here before using one.
 
-[Library Booking](https://libcalendar.ntu.edu.sg/) lets you reserve study rooms, discussion pods, and individual booths across NTU's libraries. Slots fill up fast during finals — book a few days in advance.
+- **URL**: [wis.ntu.edu.sg (FGO)](https://sso.wis.ntu.edu.sg/webexe88/owa/sso_login1.asp?t=1&p2=https://wis.ntu.edu.sg/pls/webexe/aus_su_opt.display&extra=&pg=)
+- **When to use**: Near the end of each semester before the S/U declaration deadline
 
-### Facilities Booking
+### NTU Academic Calendar
 
-[Facilities Booking](https://ntu.facilitiesbooking.com/bookings.aspx) covers everything outside the library: sports halls, courts, study areas, and other campus spaces. Useful for booking a badminton court or reserving a room for a group project.
+The **NTU Academic Calendar** lists semester start and end dates, recess week, reading week, exam periods, and public holidays.
 
-## Career & Exchange
+- **URL**: [ntu.edu.sg/admissions/matriculation/academic-calendars](https://www.ntu.edu.sg/admissions/matriculation/academic-calendars)
+- **When to use**: At the start of each academic year to plan internships, travel, and commitments around official semester dates
 
-### CareerAxis
+## Library and Campus
 
-[CareerAxis](https://careeraxis.ntu.edu.sg/students) is NTU's career portal — internship listings, full-time job postings, company talks, and career fairs. Set up job alerts early in Y2 or Y3 so you do not miss application windows.
+### How do NTU students book study rooms?
 
-### InPlace
+**Library Booking** lets you reserve discussion pods, study rooms, and individual booths across NTU's libraries (Lee Wee Nam Library, Chinese Library, and others). Slots fill up fast during finals — book at least two to three days ahead.
 
-[InPlace](https://inplace.ntu.edu.sg/) manages the administrative side of internships — submitting offers, tracking approvals, and logging hours if your internship is credit-bearing. You will need this once you have an internship locked down.
+- **URL**: [libcalendar.ntu.edu.sg](https://libcalendar.ntu.edu.sg/)
 
-### GEM Portal
+**Facilities Booking** covers campus spaces outside the library: sports halls, tennis courts, futsal courts, and outdoor spaces.
 
-[GEM](https://gem.ntu.edu.sg/) is where you apply for student exchange. Browse partner universities, check requirements, and submit your application. Applications typically open a full year before the exchange semester, so check early.
+- **URL**: [ntu.facilitiesbooking.com](https://ntu.facilitiesbooking.com/bookings.aspx)
 
-### Course Matching
+## Career and Exchange
 
-The [Course Matching tool](https://sso.wis.ntu.edu.sg/webexe88/owa/sso_login1.asp?t=1&p2=https://wis.ntu.edu.sg/pls/lms/instep_past_subj_matching.show_rec_INSTEP) lets you see which courses from host universities have been mapped to NTU modules by past exchange students. Essential for planning which courses to take overseas so they count toward your degree.
+### What is the NTU career portal?
 
-## Finance & Admin
+**CareerAxis** is NTU's official career platform for students — internship listings, full-time job postings, career fairs, and company information sessions. Most on-campus recruitment for NTU students goes through here.
 
-### Financial Aid
+- **URL**: [careeraxis.ntu.edu.sg/students](https://careeraxis.ntu.edu.sg/students)
+- **When to use**: Set up job alerts in Y2 or Y3. Application windows for competitive internships often open 6–9 months before the internship start date
 
-The [Financial Aid page](https://www.ntu.edu.sg/admissions/undergraduate/financial-matters/financial-aid) covers bursaries, study loans, and other financial assistance available to NTU students. Applications usually open at the start of each academic year — deadlines are strict.
+**InPlace** handles the administrative side of credit-bearing internships — offer submission, supervisor approvals, and hour logging.
 
-## Keep them in one place
+- **URL**: [inplace.ntu.edu.sg](https://inplace.ntu.edu.sg/)
 
-All of these links are on the [NTUMods Links page](/links), split between NTUMods tools and official NTU portals. Bookmark it and you will not need to search for any of these again.
+### How do NTU students apply for student exchange?
+
+**GEM** (Global Exchange and Mentorship) is NTU's exchange portal. Browse partner universities, read past students' reviews, and submit your application.
+
+- **URL**: [gem.ntu.edu.sg](https://gem.ntu.edu.sg/)
+- **When to use**: Applications open roughly one full year before the exchange semester. Check the portal early in Y2
+
+The **Course Matching tool** shows which courses from partner universities have been mapped to NTU modules for credit by previous exchange students. Essential for planning what to study overseas.
+
+- **URL**: [wis.ntu.edu.sg (Course Matching)](https://sso.wis.ntu.edu.sg/webexe88/owa/sso_login1.asp?t=1&p2=https://wis.ntu.edu.sg/pls/lms/instep_past_subj_matching.show_rec_INSTEP)
+
+## Finance and Admin
+
+### Where do NTU students apply for financial aid?
+
+The **NTU Financial Aid** page covers bursaries, study loans, Mendaki, and other financial assistance for NTU students. Applications open at the start of each academic year with strict deadlines.
+
+- **URL**: [ntu.edu.sg/admissions/undergraduate/financial-matters/financial-aid](https://www.ntu.edu.sg/admissions/undergraduate/financial-matters/financial-aid)
+
+## Frequently Asked Questions
+
+**What is the main NTU student portal?**
+NTU does not have a single unified portal. Students use different systems for different tasks: STARS for registration, NTULearn for course content, Degree Audit for grades, and CareerAxis for careers. The [NTUMods Links page](/links) lists all of them in one place.
+
+**Where do I find my NTU student ID?**
+Your student ID is printed on your NTU student card. It is also visible in Degree Audit and the Self-Help Transcript portal after you log in.
+
+**How do I access NTU portals off-campus?**
+Most NTU portals are publicly accessible. Some library eResources require you to log in with your NTU credentials or connect via VPN. Contact the NTU IT Help Centre for VPN setup instructions.
+
+**What portal does NTU use for course materials?**
+NTU uses NTULearn — accessible at [ntulearn.ntu.edu.sg](https://ntulearn.ntu.edu.sg/ultra/institution-page). It runs on Blackboard Ultra.
+
+**Is NTUMods an official NTU website?**
+No. NTUMods is an independent, student-built tool and is not affiliated with or endorsed by Nanyang Technological University. Module and timetable data is sourced from NTU's publicly accessible systems.
+
+## Keep all links in one place
+
+All of these portals are listed on the [NTUMods Links page](/links), organized by category. Bookmark it at the start of each semester.
 
 ## Related
 
 - [How to Plan NTU Modules Before STARS Opens](/articles/how-to-plan-for-modules)
 - [NTU STARS Registration Guide](/articles/ntu-stars-guide)
+- [NTU Academic Calendar AY2026/2027](/articles/ntu-academic-calendar-ay2026)
 - [How to Add Custom Courses to Your NTU Timetable](/articles/custom-courses-timetable-ntu)

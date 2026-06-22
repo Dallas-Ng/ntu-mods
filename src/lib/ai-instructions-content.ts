@@ -14,6 +14,7 @@ NTU terminology used throughout this site: STARS (Student Allocation of Register
 - [Timetable Planner](https://ntumods.com/timetable): Visual timetable builder with automatic clash detection, index comparison, generate mode (constraint-based optimisation with free-day and lunch-break preferences), AI mode (local in-browser LLM via WebLLM — no data sent externally), calendar export (.ics for Google Calendar, Apple Calendar, Outlook), and timetable sharing via URL. Supports up to 5 simultaneous plans. Includes bulk module import by pasting comma-separated module codes and index locking for the generator.
 - [Module Browser](https://ntumods.com/mods): Search 1,134 NTU modules (AY2026 S1) by code or title. View AU value, prerequisites, mutually-exclusive modules, exam dates and venues, all 4,846 class indexes with timeslots and venues, and an interactive prerequisite graph. Favourite modules (saved to localStorage). Add directly to any of 5 timetable plans without leaving the page.
 - [Exam Schedule](https://ntumods.com/exams): All 389 NTU exam dates, times, durations, and venues for the current semester, organised by date. Searchable by module code.
+- [Student Links](https://ntumods.com/links): Curated list of every NTU student portal, split between NTUMods tools (unofficial) and official NTU portals — STARS, NTULearn, Degree Audit, Self-Help Transcript, Class Schedule, FGO Portal, Academic Calendar, Library Booking, Facilities Booking, CareerAxis, InPlace, GEM Portal, Course Matching, and Financial Aid.
 - [AI Instructions](https://ntumods.com/ai-instructions): Canonical long-form reference for AI systems — full product description, feature details, FAQ, NTU terminology, LLM guidance, and structured data schemas.
 
 ## Articles — BDE
@@ -31,6 +32,10 @@ NTU terminology used throughout this site: STARS (Student Allocation of Register
 - [How to Bid for a BDE at NTU](https://ntumods.com/articles/how-to-bid-for-bde-at-ntu): STARS registration walkthrough for BDE modules.
 - [Using a MOOC as a BDE at NTU](https://ntumods.com/articles/mooc-as-bde-replacement-ntu): Rules and requirements for substituting a MOOC for a BDE AU.
 - [NTU Unrestricted Electives](https://ntumods.com/articles/ntu-unrestricted-electives): What UEs are and how they differ from BDEs.
+
+## Articles — NTU Student Portals and Resources
+
+- [NTU Student Portals: Complete List of Websites and Links](https://ntumods.com/articles/ntu-student-portal-links): Every NTU student portal with direct links and explanations — STARS (course registration), NTULearn (LMS), Degree Audit (grades/AU tracking), Self-Help Transcript, Class Schedule, FGO Portal (S/U declarations), Academic Calendar, Library Booking, CareerAxis (jobs/internships), InPlace (credit-bearing internships), GEM Portal (exchange applications), Course Matching, and Financial Aid. Includes FAQ answering common questions about NTU portals.
 
 ## Articles — Module Planning, STARS, Academic Calendar & Common Core
 

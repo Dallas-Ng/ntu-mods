@@ -225,6 +225,16 @@ export default function LinksPage() {
             subtitle="Quick links to the most-used NTU student portals — from course registration and grades to career, exchange, and campus facilities."
           />
 
+          <p className="text-muted-foreground text-sm">
+            Not sure what each portal does?{" "}
+            <Link
+              href="/articles/ntu-student-portal-links"
+              className="text-blue-500 transition-colors hover:text-blue-600">
+              Read the full guide
+            </Link>{" "}
+            for a breakdown of every portal and when to use it.
+          </p>
+
           <div className="space-y-10">
             {LINK_CATEGORIES.map(({ id, title, type, links }) => (
               <section id={id} key={id} className="scroll-mt-20 space-y-4">

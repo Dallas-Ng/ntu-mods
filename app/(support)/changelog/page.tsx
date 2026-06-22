@@ -147,7 +147,7 @@ const ChangelogReleaseSection = ({
 
 const CHANGELOG: ChangelogRelease[] = [
   {
-    title: "Student links page",
+    title: "Student links page and custom courses",
     date: "22 Jun 2026",
     items: [
       {
@@ -160,13 +160,7 @@ const CHANGELOG: ChangelogRelease[] = [
             portals and NTUMods tools.
           </>
         )
-      }
-    ]
-  },
-  {
-    title: "Custom courses",
-    date: "22 Jun 2026",
-    items: [
+      },
       {
         category: "New Feature",
         content: (

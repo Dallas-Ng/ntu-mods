@@ -1,12 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Check, Plus, Trash2 } from "lucide-react"
+import { Plus, Trash2 } from "lucide-react"
 
-import {
-  CUSTOM_COURSE_COLORS,
-  DEFAULT_CUSTOM_COURSE_COLOR
-} from "@/lib/custom-course-colors"
 import { STARS_TIMESLOTS } from "@/lib/constants"
 import { formatHhmm } from "@/lib/format"
 import { cn } from "@/lib/utils"
@@ -73,7 +69,6 @@ interface SessionRow {
 
 interface FormState {
   name: string
-  color: CustomCourseColor
   sessions: SessionRow[]
 }
 
@@ -91,13 +86,11 @@ const newSession = (
 
 const makeDefaultForm = (name = ""): FormState => ({
   name,
-  color: DEFAULT_CUSTOM_COURSE_COLOR,
   sessions: [newSession()]
 })
 
 const courseToForm = (course: CustomCourse): FormState => ({
   name: course.name,
-  color: course.color,
   sessions:
     course.sessions.length > 0
       ? course.sessions.map((s) => ({ ...s, _key: crypto.randomUUID() }))
@@ -106,7 +99,6 @@ const courseToForm = (course: CustomCourse): FormState => ({
 
 const formToCourse = (form: FormState): Omit<CustomCourse, "id"> => ({
   name: form.name.trim(),
-  color: form.color,
   sessions: form.sessions
     .map(({ _key: _k, ...s }) => ({ ...s, type: s.type.trim() }))
     .filter((s) => s.type.length > 0)
@@ -344,33 +336,6 @@ export const CourseModal = ({
             />
           </div>
 
-          {/* Colour */}
-          <div className="space-y-1.5">
-            <Label>Colour</Label>
-            <div className="flex gap-2.5">
-              {(Object.keys(CUSTOM_COURSE_COLORS) as CustomCourseColor[]).map(
-                (color) => (
-                  <button
-                    key={color}
-                    type="button"
-                    aria-label={CUSTOM_COURSE_COLORS[color].label}
-                    onClick={() => setForm((f) => ({ ...f, color }))}
-                    className={cn(
-                      "relative h-6 w-6 cursor-pointer rounded-full ring-2 ring-offset-2 ring-offset-background transition-all",
-                      CUSTOM_COURSE_COLORS[color].swatch,
-                      form.color === color
-                        ? "ring-foreground/50"
-                        : "ring-transparent opacity-50 hover:opacity-80"
-                    )}>
-                    {form.color === color && (
-                      <Check className="absolute inset-0 m-auto size-3 text-white drop-shadow" />
-                    )}
-                  </button>
-                )
-              )}
-            </div>
-          </div>
-
           {/* Sessions */}
           <div className="space-y-2">
             <Label>Sessions</Label>
@@ -459,7 +424,6 @@ const CustomCourseEditor = () => {
           </p>
         ) : (
           courses.map((course) => {
-            const colorStyle = CUSTOM_COURSE_COLORS[course.color]
             const sessionLabels = course.sessions.map((s) => s.type).join(" · ")
 
             return (
@@ -468,12 +432,6 @@ const CustomCourseEditor = () => {
                 className="hover:bg-accent flex cursor-pointer items-center justify-between py-1 pr-1 pl-3 text-sm transition-colors"
                 onClick={() => setEditingCourse(course)}>
                 <div className="flex min-w-0 items-baseline gap-2">
-                  <div
-                    className={cn(
-                      "mb-px h-2.5 w-2.5 shrink-0 self-center rounded-full",
-                      colorStyle.swatch
-                    )}
-                  />
                   <span className="max-w-[110px] truncate text-sm">{course.name}</span>
                   <span className="text-muted-foreground shrink-0 text-xs">
                     {sessionLabels}

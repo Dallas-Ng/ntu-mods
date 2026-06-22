@@ -1,5 +1,6 @@
 import {
-  CUSTOM_COURSE_COLORS,
+  CUSTOM_BLOCK_STYLE,
+  PRESET_INDEX_TYPES,
   isCustomCourseKey
 } from "@/lib/custom-course-colors"
 import { TRUN_DAY_MAP } from "@/lib/constants"
@@ -40,28 +41,28 @@ export const TimetableTableCellContent = (props: Props) => {
   } = props
 
   const isCustom = isCustomCourseKey(moduleKey)
-  const customStyle = isCustom
-    ? CUSTOM_COURSE_COLORS[(index.color as CustomCourseColor) ?? "violet"]
-    : null
   const indexStyle = getIndexTypeStyle(index.type)
 
   if (isCustom) {
     const sessionLabel = index.remarks.length > 0 ? index.remarks : null
+    const style = PRESET_INDEX_TYPES.has(index.remarks)
+      ? (getIndexTypeStyle(index.remarks) ?? CUSTOM_BLOCK_STYLE)
+      : CUSTOM_BLOCK_STYLE
     return (
       <>
         <p>
-          <span className={cn("font-bold", customStyle!.text)}>
+          <span className={cn("font-bold", style.text)}>
             {index.group}
           </span>
           {sessionLabel && (
-            <span className={cn("font-semibold", customStyle!.textAlt)}>
+            <span className={cn("font-semibold", style.textAlt)}>
               {" "}
               {sessionLabel}
             </span>
           )}
         </p>
         {tableCell.time && (
-          <p className={cn(customStyle!.textAlt)}>{index.time}</p>
+          <p className={cn(style.textAlt)}>{index.time}</p>
         )}
         {tableCell.venue && index.venue && <p>{index.venue}</p>}
       </>

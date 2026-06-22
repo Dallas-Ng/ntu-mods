@@ -83,18 +83,9 @@ interface Index {
   venue: string
   remarks: string // pre-reqs, etc
   duration: number // for row span, each unit is 30 minutes
-  color?: string // custom course color override
 }
 
 type IndexType = "LEC" | "LAB" | "SEM" | "TUT" | "DES" | "PRJ"
-
-type CustomCourseColor =
-  | "violet"
-  | "blue"
-  | "emerald"
-  | "rose"
-  | "orange"
-  | "amber"
 
 interface CustomCourseSession {
   type: string // preset (LEC/TUT/LAB/SEM/DES/PRJ) or user-defined label
@@ -107,7 +98,6 @@ interface CustomCourseSession {
 interface CustomCourse {
   id: string
   name: string
-  color: CustomCourseColor
   sessions: CustomCourseSession[]
 }
 

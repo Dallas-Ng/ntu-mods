@@ -96,14 +96,21 @@ type CustomCourseColor =
   | "orange"
   | "amber"
 
-interface CustomCourse {
-  id: string
-  name: string
+type CustomCourseSessionType = "LEC" | "TUT" | "LAB"
+
+interface CustomCourseSession {
+  type: CustomCourseSessionType
   day: number // 1-7
   startTime: number // e.g. 830
   endTime: number // e.g. 1030
   venue: string
+}
+
+interface CustomCourse {
+  id: string
+  name: string
   color: CustomCourseColor
+  sessions: CustomCourseSession[]
 }
 
 const CUSTOM_COURSE_KEY_PREFIX = "__CC__"

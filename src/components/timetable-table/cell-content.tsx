@@ -46,12 +46,21 @@ export const TimetableTableCellContent = (props: Props) => {
   const indexStyle = getIndexTypeStyle(index.type)
 
   if (isCustom) {
+    const sessionLabel = ["LEC", "TUT", "LAB"].includes(index.remarks)
+      ? index.remarks
+      : null
     return (
       <>
         <p>
           <span className={cn("font-bold", customStyle!.text)}>
             {index.group}
           </span>
+          {sessionLabel && (
+            <span className={cn("font-semibold", customStyle!.textAlt)}>
+              {" "}
+              {sessionLabel}
+            </span>
+          )}
         </p>
         {tableCell.time && (
           <p className={cn(customStyle!.textAlt)}>{index.time}</p>

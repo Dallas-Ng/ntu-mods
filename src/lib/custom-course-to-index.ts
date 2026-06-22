@@ -3,29 +3,29 @@ const toMinutes = (hhmm: number) =>
 
 const padHhmm = (n: number) => String(n).padStart(4, "0")
 
-export const customCourseToIndex = (course: CustomCourse): Index => {
-  const duration = (toMinutes(course.endTime) - toMinutes(course.startTime)) / 30
-
-  return {
-    key: course.id,
-    type: "LEC", // arbitrary; rendering is overridden by color
-    group: course.name,
-    day: course.day,
-    time: `${padHhmm(course.startTime)}-${padHhmm(course.endTime)}`,
-    venue: course.venue,
-    remarks: "",
-    duration,
-    color: course.color
-  }
-}
+const sessionToIndex = (
+  course: CustomCourse,
+  session: CustomCourseSession
+): Index => ({
+  key: `${course.id}_${session.type}`,
+  type: "LEC", // rendering overridden by color
+  group: course.name,
+  day: session.day,
+  time: `${padHhmm(session.startTime)}-${padHhmm(session.endTime)}`,
+  venue: session.venue,
+  remarks: session.type, // session type label shown in cell
+  duration: (toMinutes(session.endTime) - toMinutes(session.startTime)) / 30,
+  color: course.color
+})
 
 export const customCoursesToIndexMap = (
   courses: CustomCourse[]
 ): TimetableWithIndex => {
   const map: TimetableWithIndex = {}
   for (const course of courses) {
+    if (!course.sessions?.length) continue
     const moduleKey = `__CC__${course.id}`
-    map[moduleKey] = [customCourseToIndex(course)]
+    map[moduleKey] = course.sessions.map((s) => sessionToIndex(course, s))
   }
   return map
 }

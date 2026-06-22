@@ -2,6 +2,7 @@
 
 import {
   CUSTOM_BLOCK_STYLE,
+  PRESET_INDEX_TYPES,
   isCustomCourseKey
 } from "@/lib/custom-course-colors"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
@@ -54,9 +55,12 @@ export const TimetableTableCell = (props: Props) => {
   const isCustom = isCustomCourseKey(moduleKey)
   const indexStyle = getIndexTypeStyle(index.type)
 
-  // Custom blocks: look up remarks as a type; fall back to neutral style
+  // Custom blocks: preset types use their color scheme; custom-text gets purple
   const backgroundClass = isCustom
-    ? (getIndexTypeStyle(index.remarks) ?? CUSTOM_BLOCK_STYLE).background
+    ? (PRESET_INDEX_TYPES.has(index.remarks)
+        ? getIndexTypeStyle(index.remarks)!
+        : CUSTOM_BLOCK_STYLE
+      ).background
     : indexStyle.background
 
   // Variations

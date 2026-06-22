@@ -1,3 +1,12 @@
+export const PRESET_INDEX_TYPES = new Set([
+  "LEC",
+  "TUT",
+  "LAB",
+  "SEM",
+  "DES",
+  "PRJ"
+])
+
 export const CUSTOM_BLOCK_STYLE = {
   background:
     "bg-[hsl(var(--index-cus-bg))] hover:bg-[hsl(var(--index-cus-bg-hover))] dark:bg-[hsl(var(--index-cus-bg-dark)/var(--index-bg-opacity-dark))] dark:hover:bg-[hsl(var(--index-cus-bg-dark)/var(--index-bg-opacity-dark-hover))] transition-colors duration-300",

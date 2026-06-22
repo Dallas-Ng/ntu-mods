@@ -54,7 +54,7 @@ export const Banner = {
   ay2026s1: () => (
     <Link href="/changelog">
       <BannerWrapper>
-        New: custom courses — block out personal time on your timetable →
+        New: student links page, custom courses, exam schedule, and more →
       </BannerWrapper>
     </Link>
   ),

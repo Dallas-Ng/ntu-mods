@@ -74,6 +74,10 @@ export const siteConfig = {
       title: "Feedback — NTUMods",
       desc: "Share feedback, report issues, or suggest improvements for NTUMods. This project is maintained by one person and all input is appreciated."
     },
+    studentLinks: {
+      title: "NTU Student Links | NTUMods",
+      desc: "Quick links to the most-used NTU student portals — STARS, NTULearn, Degree Audit, CareerAxis, GEM, library booking, and more."
+    },
     exams: {
       title: "NTU Exam Schedule | NTUMods",
       desc: "Browse the NTU exam schedule by date, time, and module code. Find exam durations and search by module for the current semester.",
@@ -91,7 +95,8 @@ export const siteConfig = {
     { label: "Timetable", route: "/timetable" },
     { label: "Mods", route: "/mods" },
     { label: "Exams", route: "/exams" },
-    { label: "Articles", route: "/articles" }
+    { label: "Articles", route: "/articles" },
+    { label: "Links", route: "/links" }
   ],
   links: {
     github: "https://github.com/Dallas-Ng",

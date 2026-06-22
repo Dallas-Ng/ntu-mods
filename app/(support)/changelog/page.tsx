@@ -147,6 +147,23 @@ const ChangelogReleaseSection = ({
 
 const CHANGELOG: ChangelogRelease[] = [
   {
+    title: "Student links page",
+    date: "22 Jun 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            New <ChangelogLink href="/links">Links</ChangelogLink> page — quick
+            access to the top NTU student portals (STARS, NTULearn, Degree
+            Audit, CareerAxis, GEM, and more), split between official NTU
+            portals and NTUMods tools.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Custom courses",
     date: "22 Jun 2026",
     items: [

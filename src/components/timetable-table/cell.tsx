@@ -1,5 +1,10 @@
 "use client"
 
+import {
+  CUSTOM_BLOCK_STYLE,
+  PRESET_INDEX_TYPES,
+  isCustomCourseKey
+} from "@/lib/custom-course-colors"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
@@ -46,8 +51,17 @@ export const TimetableTableCell = (props: Props) => {
   const { settings } = useSettings()
   const { tableCell } = settings
 
-  // Sytling and Modifications
+  // Styling and Modifications
+  const isCustom = isCustomCourseKey(moduleKey)
   const indexStyle = getIndexTypeStyle(index.type)
+
+  // Custom blocks: preset types use their color scheme; custom-text gets purple
+  const backgroundClass = isCustom
+    ? (PRESET_INDEX_TYPES.has(index.remarks)
+        ? getIndexTypeStyle(index.remarks)!
+        : CUSTOM_BLOCK_STYLE
+      ).background
+    : indexStyle.background
 
   // Variations
   const variations = indexes.filter(
@@ -77,7 +91,7 @@ export const TimetableTableCell = (props: Props) => {
       <div
         className={cn(
           "flex h-full cursor-pointer items-center rounded-lg p-[var(--cell-padding)] break-words",
-          indexStyle.background,
+          backgroundClass,
           previewCandidate &&
             "ring-primary/80 hover:ring-primary shadow-md ring-1",
           previewActive && "ring-primary shadow-lg ring-1",

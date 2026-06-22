@@ -87,6 +87,22 @@ interface Index {
 
 type IndexType = "LEC" | "LAB" | "SEM" | "TUT" | "DES" | "PRJ"
 
+interface CustomCourseSession {
+  type: string // preset (LEC/TUT/LAB/SEM/DES/PRJ) or user-defined label
+  day: number // 1-7
+  startTime: number // e.g. 830
+  endTime: number // e.g. 1030
+  venue: string
+}
+
+interface CustomCourse {
+  id: string
+  name: string
+  sessions: CustomCourseSession[]
+}
+
+const CUSTOM_COURSE_KEY_PREFIX = "__CC__"
+
 interface Exam {
   date: string
   day: number

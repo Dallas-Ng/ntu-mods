@@ -9,6 +9,7 @@ export interface TimetableSlice {
   generationConfig: GenerationConfig
   lockedModules: string[]
   hasOnboarded: boolean
+  customCourses: CustomCourse[][]
   migrateTimetable: (timetable: Timetable) => void
   updateTimetable: (timetable: Timetable, timetableIndex: number) => void
   addItemToTimetable: (moduleKey: string, indexKey: string) => void
@@ -21,6 +22,9 @@ export interface TimetableSlice {
   updateGenerationConfig: (config: Partial<GenerationConfig>) => void
   toggleModuleLock: (moduleKey: string) => void
   setHasOnboarded: (value: boolean) => void
+  addCustomCourse: (course: Omit<CustomCourse, "id">) => void
+  updateCustomCourse: (id: string, updates: Partial<Omit<CustomCourse, "id">>) => void
+  removeCustomCourse: (id: string) => void
 }
 
 export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
@@ -30,6 +34,7 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   generationConfig: DEFAULT_GENERATION_CONFIG,
   lockedModules: [],
   hasOnboarded: false,
+  customCourses: [[], [], [], [], []],
   migrateTimetable: (timetable: Timetable) =>
     set((state) => ({
       timetables: [{ ...timetable }, {}, {}, {}, {}]
@@ -92,12 +97,25 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   },
   duplicateTimetable: (fromIndex, toIndex) =>
     set((state) => {
-      const updated = [...state.timetables]
-      updated[toIndex] = { ...state.timetables[fromIndex] }
-      return { timetables: updated, timetableIndex: toIndex }
+      const updatedTimetables = [...state.timetables]
+      updatedTimetables[toIndex] = { ...state.timetables[fromIndex] }
+      const updatedCustomCourses = [...state.customCourses]
+      updatedCustomCourses[toIndex] = state.customCourses[fromIndex].map((c) => ({
+        ...c,
+        id: crypto.randomUUID()
+      }))
+      return {
+        timetables: updatedTimetables,
+        customCourses: updatedCustomCourses,
+        timetableIndex: toIndex
+      }
     }),
   resetTimetables: () => {
-    set((_state) => ({ timetables: [{}, {}, {}, {}, {}], timetableIndex: 0 }))
+    set((_state) => ({
+      timetables: [{}, {}, {}, {}, {}],
+      timetableIndex: 0,
+      customCourses: [[], [], [], [], []]
+    }))
   },
   setTimetableCreationMode: (mode: TimetableCreationMode) => {
     set((_state) => ({ timetableCreationMode: mode }))
@@ -116,5 +134,32 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   },
   setHasOnboarded: (value: boolean) => {
     set((_state) => ({ hasOnboarded: value }))
+  },
+  addCustomCourse: (course) => {
+    set((state) => {
+      const id = crypto.randomUUID()
+      const updated = state.customCourses.map((list, i) =>
+        i === state.timetableIndex ? [...list, { ...course, id }] : list
+      )
+      return { customCourses: updated }
+    })
+  },
+  updateCustomCourse: (id, updates) => {
+    set((state) => {
+      const updated = state.customCourses.map((list, i) =>
+        i === state.timetableIndex
+          ? list.map((c) => (c.id === id ? { ...c, ...updates } : c))
+          : list
+      )
+      return { customCourses: updated }
+    })
+  },
+  removeCustomCourse: (id) => {
+    set((state) => {
+      const updated = state.customCourses.map((list, i) =>
+        i === state.timetableIndex ? list.filter((c) => c.id !== id) : list
+      )
+      return { customCourses: updated }
+    })
   }
 })

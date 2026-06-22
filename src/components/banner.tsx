@@ -54,8 +54,7 @@ export const Banner = {
   ay2026s1: () => (
     <Link href="/changelog">
       <BannerWrapper>
-        New: exam schedule, bulk module import, index locking, prereq graphs,
-        and more →
+        New: custom courses — block out personal time on your timetable →
       </BannerWrapper>
     </Link>
   ),

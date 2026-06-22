@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { PlusIcon, TrashIcon } from "lucide-react"
+import { Check, Plus, Trash2 } from "lucide-react"
 
 import {
   CUSTOM_COURSE_COLORS,
@@ -41,16 +41,21 @@ const END_TIME_OPTIONS = STARS_TIMESLOTS.filter(
   (t) => t.end >= 830 && t.end <= 2300
 ).map((t) => ({ value: t.end, label: formatHhmm(t.end) }))
 
-const SESSION_TYPES: { type: CustomCourseSessionType; label: string }[] = [
-  { type: "LEC", label: "Lecture" },
-  { type: "TUT", label: "Tutorial" },
-  { type: "LAB", label: "Lab" }
-]
+const SESSION_TYPE_OPTIONS: { value: CustomCourseSessionType; label: string }[] =
+  [
+    { value: "LEC", label: "Lecture" },
+    { value: "TUT", label: "Tutorial" },
+    { value: "LAB", label: "Lab" }
+  ]
+
+const SELECT_CLS =
+  "border-input bg-background focus:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm shadow-sm focus:ring-1 focus:outline-none"
 
 // ─── form types ──────────────────────────────────────────────────────────────
 
-interface SessionFormState {
-  enabled: boolean
+interface SessionRow {
+  _key: string // local react key only
+  type: CustomCourseSessionType
   day: number
   startTime: number
   endTime: number
@@ -60,81 +65,66 @@ interface SessionFormState {
 interface FormState {
   name: string
   color: CustomCourseColor
-  sessions: Record<CustomCourseSessionType, SessionFormState>
+  sessions: SessionRow[]
 }
 
-const DEFAULT_SESSION: SessionFormState = {
-  enabled: false,
+const newSession = (
+  defaults?: Partial<Omit<SessionRow, "_key">>
+): SessionRow => ({
+  _key: crypto.randomUUID(),
+  type: "LEC",
   day: 1,
   startTime: 900,
   endTime: 1000,
-  venue: ""
-}
+  venue: "",
+  ...defaults
+})
 
 const DEFAULT_FORM: FormState = {
   name: "",
   color: DEFAULT_CUSTOM_COURSE_COLOR,
-  sessions: {
-    LEC: { ...DEFAULT_SESSION, enabled: true },
-    TUT: { ...DEFAULT_SESSION },
-    LAB: { ...DEFAULT_SESSION }
-  }
+  sessions: [newSession()]
 }
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
-const courseToForm = (course: CustomCourse): FormState => {
-  const sessions: FormState["sessions"] = {
-    LEC: { ...DEFAULT_SESSION },
-    TUT: { ...DEFAULT_SESSION },
-    LAB: { ...DEFAULT_SESSION }
-  }
-  for (const s of course.sessions) {
-    sessions[s.type] = {
-      enabled: true,
-      day: s.day,
-      startTime: s.startTime,
-      endTime: s.endTime,
-      venue: s.venue
-    }
-  }
-  // If nothing was enabled, fall back to LEC on
-  const anyEnabled = Object.values(sessions).some((s) => s.enabled)
-  if (!anyEnabled) sessions.LEC.enabled = true
-
-  return { name: course.name, color: course.color, sessions }
-}
-
-const formToCourse = (
-  form: FormState
-): Omit<CustomCourse, "id"> => ({
-  name: form.name.trim(),
-  color: form.color,
-  sessions: SESSION_TYPES.flatMap(({ type }) => {
-    const s = form.sessions[type]
-    if (!s.enabled) return []
-    return [{ type, day: s.day, startTime: s.startTime, endTime: s.endTime, venue: s.venue }]
-  })
+const courseToForm = (course: CustomCourse): FormState => ({
+  name: course.name,
+  color: course.color,
+  sessions:
+    course.sessions.length > 0
+      ? course.sessions.map((s) => ({ ...s, _key: crypto.randomUUID() }))
+      : [newSession()]
 })
 
-// ─── session row ─────────────────────────────────────────────────────────────
+const formToCourse = (form: FormState): Omit<CustomCourse, "id"> => ({
+  name: form.name.trim(),
+  color: form.color,
+  sessions: form.sessions.map(({ _key: _, ...s }) => s)
+})
 
-const SELECT_CLS =
-  "border-input bg-background focus:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm shadow-sm focus:ring-1 focus:outline-none"
+// ─── session row component ────────────────────────────────────────────────────
 
 interface SessionRowProps {
-  label: string
-  type: CustomCourseSessionType
-  state: SessionFormState
-  onChange: (updates: Partial<SessionFormState>) => void
+  session: SessionRow
+  canRemove: boolean
+  onChange: (updates: Partial<SessionRow>) => void
+  onRemove: () => void
 }
 
-const SessionRow = ({ label, type, state, onChange }: SessionRowProps) => {
-  const validEndTimes = END_TIME_OPTIONS.filter((t) => t.value > state.startTime)
+const SessionRowEditor = ({
+  session,
+  canRemove,
+  onChange,
+  onRemove
+}: SessionRowProps) => {
+  const validEndTimes = END_TIME_OPTIONS.filter(
+    (t) => t.value > session.startTime
+  )
 
   const handleStartChange = (v: number) => {
-    const updates: Partial<SessionFormState> = { startTime: v }
-    if (state.endTime <= v) {
+    const updates: Partial<SessionRow> = { startTime: v }
+    if (session.endTime <= v) {
       const next = END_TIME_OPTIONS.find((t) => t.value > v)
       if (next) updates.endTime = next.value
     }
@@ -142,77 +132,87 @@ const SessionRow = ({ label, type, state, onChange }: SessionRowProps) => {
   }
 
   return (
-    <div className="space-y-2">
-      <label className="flex cursor-pointer items-center gap-2">
-        <input
-          type="checkbox"
-          checked={state.enabled}
-          onChange={(e) => onChange({ enabled: e.target.checked })}
-          className="accent-primary h-4 w-4 rounded"
-        />
-        <span className="text-sm font-medium">{label}</span>
-        <span className="text-muted-foreground text-xs">{type}</span>
-      </label>
+    <div className="bg-muted/40 rounded-lg border p-3">
+      <div className="mb-2 flex items-center justify-between">
+        <select
+          value={session.type}
+          onChange={(e) =>
+            onChange({ type: e.target.value as CustomCourseSessionType })
+          }
+          className="border-input bg-background focus:ring-ring h-8 rounded-md border px-2 text-xs font-medium shadow-sm focus:ring-1 focus:outline-none">
+          {SESSION_TYPE_OPTIONS.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </select>
 
-      {state.enabled && (
-        <div className="ml-6 grid grid-cols-2 gap-2">
-          <div className="space-y-1">
-            <Label className="text-xs">Day</Label>
-            <select
-              value={state.day}
-              onChange={(e) => onChange({ day: Number(e.target.value) })}
-              className={SELECT_CLS}>
-              {DAY_OPTIONS.map((d) => (
-                <option key={d.value} value={d.value}>
-                  {d.label}
-                </option>
-              ))}
-            </select>
-          </div>
+        <button
+          type="button"
+          disabled={!canRemove}
+          onClick={onRemove}
+          className="text-muted-foreground hover:text-destructive disabled:opacity-30 transition-colors">
+          <Trash2 className="size-3.5" />
+        </button>
+      </div>
 
-          <div className="space-y-1">
-            <Label className="text-xs">Venue (optional)</Label>
-            <Input
-              placeholder="e.g. LT2A"
-              value={state.venue}
-              onChange={(e) => onChange({ venue: e.target.value })}
-            />
-          </div>
-
-          <div className="space-y-1">
-            <Label className="text-xs">Start</Label>
-            <select
-              value={state.startTime}
-              onChange={(e) => handleStartChange(Number(e.target.value))}
-              className={SELECT_CLS}>
-              {TIME_OPTIONS.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="space-y-1">
-            <Label className="text-xs">End</Label>
-            <select
-              value={state.endTime}
-              onChange={(e) => onChange({ endTime: Number(e.target.value) })}
-              className={SELECT_CLS}>
-              {validEndTimes.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
-          </div>
+      <div className="grid grid-cols-2 gap-2">
+        <div className="space-y-1">
+          <Label className="text-xs">Day</Label>
+          <select
+            value={session.day}
+            onChange={(e) => onChange({ day: Number(e.target.value) })}
+            className={SELECT_CLS}>
+            {DAY_OPTIONS.map((d) => (
+              <option key={d.value} value={d.value}>
+                {d.label}
+              </option>
+            ))}
+          </select>
         </div>
-      )}
+
+        <div className="space-y-1">
+          <Label className="text-xs">Venue (optional)</Label>
+          <Input
+            placeholder="e.g. LT2A"
+            value={session.venue}
+            onChange={(e) => onChange({ venue: e.target.value })}
+          />
+        </div>
+
+        <div className="space-y-1">
+          <Label className="text-xs">Start</Label>
+          <select
+            value={session.startTime}
+            onChange={(e) => handleStartChange(Number(e.target.value))}
+            className={SELECT_CLS}>
+            {TIME_OPTIONS.map((t) => (
+              <option key={t.value} value={t.value}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="space-y-1">
+          <Label className="text-xs">End</Label>
+          <select
+            value={session.endTime}
+            onChange={(e) => onChange({ endTime: Number(e.target.value) })}
+            className={SELECT_CLS}>
+            {validEndTimes.map((t) => (
+              <option key={t.value} value={t.value}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
     </div>
   )
 }
 
-// ─── modal form ──────────────────────────────────────────────────────────────
+// ─── modal ───────────────────────────────────────────────────────────────────
 
 interface CourseModalProps {
   open: boolean
@@ -231,25 +231,31 @@ const CourseModal = ({
     initial ? courseToForm(initial) : DEFAULT_FORM
   )
 
-  // Reset form when modal opens with new initial value
   useEffect(() => {
     if (open) setForm(initial ? courseToForm(initial) : DEFAULT_FORM)
-  }, [open, initial])
+  }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const setSession = (
-    type: CustomCourseSessionType,
-    updates: Partial<SessionFormState>
-  ) =>
+  const setSession = (key: string, updates: Partial<SessionRow>) =>
     setForm((f) => ({
       ...f,
-      sessions: {
-        ...f.sessions,
-        [type]: { ...f.sessions[type], ...updates }
-      }
+      sessions: f.sessions.map((s) =>
+        s._key === key ? { ...s, ...updates } : s
+      )
     }))
 
-  const anyEnabled = Object.values(form.sessions).some((s) => s.enabled)
-  const isValid = form.name.trim().length > 0 && anyEnabled
+  const removeSession = (key: string) =>
+    setForm((f) => ({
+      ...f,
+      sessions: f.sessions.filter((s) => s._key !== key)
+    }))
+
+  const addSession = () =>
+    setForm((f) => ({
+      ...f,
+      sessions: [...f.sessions, newSession()]
+    }))
+
+  const isValid = form.name.trim().length > 0 && form.sessions.length > 0
 
   const handleSave = () => {
     onSave(formToCourse(form))
@@ -274,7 +280,9 @@ const CourseModal = ({
               placeholder="e.g. Gym, Lunch, CCA"
               value={form.name}
               maxLength={40}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, name: e.target.value }))
+              }
             />
           </div>
 
@@ -290,37 +298,42 @@ const CourseModal = ({
                     aria-label={CUSTOM_COURSE_COLORS[color].label}
                     onClick={() => setForm((f) => ({ ...f, color }))}
                     className={cn(
-                      "h-6 w-6 rounded-full transition-transform",
+                      "relative h-6 w-6 rounded-full transition-opacity",
                       CUSTOM_COURSE_COLORS[color].swatch,
-                      form.color === color
-                        ? "scale-125 ring-2 ring-offset-2 ring-current"
-                        : "hover:scale-110"
+                      form.color !== color && "opacity-50 hover:opacity-80"
+                    )}>
+                    {form.color === color && (
+                      <Check className="absolute inset-0 m-auto size-3.5 text-white drop-shadow" />
                     )}
-                  />
+                  </button>
                 )
               )}
             </div>
           </div>
 
           {/* Sessions */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <Label>Sessions</Label>
-            <div className="space-y-4">
-              {SESSION_TYPES.map(({ type, label }) => (
-                <SessionRow
-                  key={type}
-                  label={label}
-                  type={type}
-                  state={form.sessions[type]}
-                  onChange={(updates) => setSession(type, updates)}
+
+            <div className="space-y-2">
+              {form.sessions.map((session) => (
+                <SessionRowEditor
+                  key={session._key}
+                  session={session}
+                  canRemove={form.sessions.length > 1}
+                  onChange={(updates) => setSession(session._key, updates)}
+                  onRemove={() => removeSession(session._key)}
                 />
               ))}
             </div>
-            {!anyEnabled && (
-              <p className="text-destructive text-xs">
-                Enable at least one session.
-              </p>
-            )}
+
+            <button
+              type="button"
+              onClick={addSession}
+              className="text-muted-foreground hover:text-foreground flex items-center gap-1.5 text-sm transition-colors">
+              <Plus className="size-3.5" />
+              Add session
+            </button>
           </div>
 
           {/* Actions */}
@@ -374,34 +387,32 @@ const CustomCourseEditor = () => {
           const sessionLabels = course.sessions.map((s) => s.type).join(" · ")
 
           return (
-            <div key={course.id}>
-              <div
-                className="hover:bg-accent cursor-pointer pr-1 pl-3 text-sm transition-colors"
-                onClick={() => setEditingCourse(course)}>
-                <div className="flex w-full items-center justify-between py-1">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div
-                      className={cn(
-                        "h-2.5 w-2.5 flex-shrink-0 rounded-full",
-                        colorStyle.swatch
-                      )}
-                    />
-                    <span className="truncate max-w-[110px]">{course.name}</span>
-                    <span className="text-muted-foreground flex-shrink-0 text-xs">
-                      {sessionLabels}
-                    </span>
-                  </div>
-
+            <div
+              key={course.id}
+              className="hover:bg-accent cursor-pointer pr-1 pl-3 text-sm transition-colors"
+              onClick={() => setEditingCourse(course)}>
+              <div className="flex w-full items-center justify-between py-1">
+                <div className="flex min-w-0 items-center gap-2">
                   <div
-                    className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center p-1"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      removeCustomCourse(course.id)
-                      if (editingCourse?.id === course.id)
-                        setEditingCourse(null)
-                    }}>
-                    <TrashIcon className="text-muted-foreground hover:text-foreground size-3.5" />
-                  </div>
+                    className={cn(
+                      "h-2.5 w-2.5 flex-shrink-0 rounded-full",
+                      colorStyle.swatch
+                    )}
+                  />
+                  <span className="max-w-[110px] truncate">{course.name}</span>
+                  <span className="text-muted-foreground flex-shrink-0 text-xs">
+                    {sessionLabels}
+                  </span>
+                </div>
+
+                <div
+                  className="flex size-8 flex-shrink-0 cursor-pointer items-center justify-center p-1"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    removeCustomCourse(course.id)
+                    if (editingCourse?.id === course.id) setEditingCourse(null)
+                  }}>
+                  <Trash2 className="text-muted-foreground hover:text-foreground size-3.5" />
                 </div>
               </div>
             </div>
@@ -424,21 +435,21 @@ const CustomCourseEditor = () => {
       <button
         className="hover:bg-accent flex w-full cursor-pointer items-center justify-center gap-1.5 p-2 text-sm transition-colors"
         onClick={() => setAddOpen(true)}>
-        <PlusIcon className="size-3.5" />
+        <Plus className="size-3.5" />
         Add custom course
       </button>
 
-      {/* Add modal */}
       <CourseModal
         open={addOpen}
         onOpenChange={setAddOpen}
         onSave={(data) => addCustomCourse(data)}
       />
 
-      {/* Edit modal */}
       <CourseModal
         open={!!editingCourse}
-        onOpenChange={(open) => { if (!open) setEditingCourse(null) }}
+        onOpenChange={(open) => {
+          if (!open) setEditingCourse(null)
+        }}
         initial={editingCourse ?? undefined}
         onSave={(data) => {
           if (editingCourse) updateCustomCourse(editingCourse.id, data)

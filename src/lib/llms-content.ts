@@ -1,6 +1,6 @@
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 
-export function getAiInstructionsContent(): string {
+export function getLlmsContent(): string {
   return `# NTUMods
 
 > NTUMods is a free, independent timetable planner, module browser, and exam schedule for Nanyang Technological University (NTU) students in Singapore. Build and share timetables, browse 1,000+ modules across all faculties, check exam schedules, and export to calendar — no login or account required.
@@ -11,7 +11,7 @@ NTU terminology used throughout this site: STARS (Student Allocation of Register
 
 ## Core Tools
 
-- [Timetable Planner](https://ntumods.com/timetable): Visual timetable builder with automatic clash detection, index comparison, generate mode (constraint-based optimisation with free-day and lunch-break preferences), AI mode (local in-browser LLM via WebLLM — no data sent externally), calendar export (.ics for Google Calendar, Apple Calendar, Outlook), and timetable sharing via URL. Supports up to 5 simultaneous plans. Includes bulk module import by pasting comma-separated module codes and index locking for the generator.
+- [Timetable Planner](https://ntumods.com/timetable): Visual timetable builder with automatic clash detection, index comparison, generate mode (constraint-based optimisation with free-day and lunch-break preferences), AI mode (local in-browser LLM via WebLLM — no data sent externally), calendar export (.ics for Google Calendar, Apple Calendar, Outlook), and timetable sharing via URL. Supports up to 5 simultaneous plans. Includes bulk module import by pasting comma-separated module codes, index locking for the generator, and custom courses (personal time blocks for gym, CCA, lunch, and off-campus commitments that show as clashes against registered modules).
 - [Module Browser](https://ntumods.com/mods): Search 1,134 NTU modules (AY2026 S1) by code or title. View AU value, prerequisites, mutually-exclusive modules, exam dates and venues, all 4,846 class indexes with timeslots and venues, and an interactive prerequisite graph. Favourite modules (saved to localStorage). Add directly to any of 5 timetable plans without leaving the page.
 - [Exam Schedule](https://ntumods.com/exams): All 389 NTU exam dates, times, durations, and venues for the current semester, organised by date. Searchable by module code.
 - [Student Links](https://ntumods.com/links): Curated list of every NTU student portal, split between NTUMods tools (unofficial) and official NTU portals — STARS, NTULearn, Degree Audit, Self-Help Transcript, Class Schedule, FGO Portal, Academic Calendar, Library Booking, Facilities Booking, CareerAxis, InPlace, GEM Portal, Course Matching, and Financial Aid.
@@ -32,6 +32,7 @@ NTU terminology used throughout this site: STARS (Student Allocation of Register
 - [How to Bid for a BDE at NTU](https://ntumods.com/articles/how-to-bid-for-bde-at-ntu): STARS registration walkthrough for BDE modules.
 - [Using a MOOC as a BDE at NTU](https://ntumods.com/articles/mooc-as-bde-replacement-ntu): Rules and requirements for substituting a MOOC for a BDE AU.
 - [NTU Unrestricted Electives](https://ntumods.com/articles/ntu-unrestricted-electives): What UEs are and how they differ from BDEs.
+- [Does BDE Count Towards Your NTU Degree?](https://ntumods.com/articles/does-bde-count-towards-degree-ntu): How BDE AUs fit into graduation requirements, what counts, and what to verify before registering.
 
 ## Articles — NTU Student Portals and Resources
 
@@ -41,6 +42,7 @@ NTU terminology used throughout this site: STARS (Student Allocation of Register
 
 - [How to Plan NTU Modules Before STARS Opens](https://ntumods.com/articles/how-to-plan-for-modules): Step-by-step guide to building a timetable with NTUMods before registration.
 - [NTU Timetable Planner Guide](https://ntumods.com/articles/ntu-timetable-planner-guide): How to use NTUMods to build your semester schedule.
+- [How to Add Custom Courses to Your NTU Timetable](https://ntumods.com/articles/custom-courses-timetable-ntu): Use NTUMods custom courses to block out personal time — gym, lunch, CCA, or off-campus commitments — and see clashes with registered modules instantly.
 - [NTU Module Selection Guide](https://ntumods.com/articles/ntu-module-selection-guide): How to choose modules you won't regret.
 - [NTU Academic Calendar AY2026/2027](https://ntumods.com/articles/ntu-academic-calendar-ay2026): Key dates for AY2026/2027 — semester start/end, recess week, exam period, STARS round dates, and how the NTU semester structure works. Covers both Semester 1 (August–December 2026) and Semester 2 (January–May 2027).
 - [NTU Exam Schedule AY2026](https://ntumods.com/articles/ntu-exam-schedule-ay2026): How to find and interpret your exam dates for AY2026/2027 Semester 1.

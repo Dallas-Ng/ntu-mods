@@ -442,11 +442,8 @@ const CustomCourseEditor = () => {
 
   return (
     <div className="rounded-lg border-2">
-      <div className="p-2 text-center">
-        <p className="text-muted-foreground text-xs">Custom Blocks</p>
-        <p className="text-muted-foreground text-[10px] leading-tight">
-          Gym, CCA, custom mods, external courses&hellip;
-        </p>
+      <div className="text-muted-foreground p-2 text-center text-xs">
+        Custom Blocks
       </div>
 
       <hr />
@@ -456,7 +453,9 @@ const CustomCourseEditor = () => {
           <p className="text-muted-foreground p-3 text-center text-sm">
             No blocks yet.
             <br />
-            Add personal time slots below.
+            <span className="text-xs">
+              Gym, CCA, custom mods, external courses&hellip;
+            </span>
           </p>
         ) : (
           courses.map((course) => {

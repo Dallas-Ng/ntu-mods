@@ -12,11 +12,9 @@ import { LATEST_SEMESTER_LABEL_SHORT } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger
+  NavigationMenuList
 } from "@/components/ui/navigation-menu"
 
 import { NewDot } from "./new-dot"
@@ -29,11 +27,6 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "./ui/drawer"
-
-const RESOURCE_LINKS = [
-  { label: "Changelog", route: "/changelog" },
-  { label: "FAQ", route: "/faq" }
-]
 
 const Navbar = () => {
   const pathname = usePathname()
@@ -52,10 +45,6 @@ const Navbar = () => {
 
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
-  const resourcesActive = RESOURCE_LINKS.some((l) =>
-    pathname.startsWith(l.route)
-  )
 
   return (
     <header
@@ -115,37 +104,6 @@ const Navbar = () => {
                 </NavigationMenuItem>
               ))}
 
-              <NavigationMenuItem>
-                <NavigationMenuTrigger
-                  className={cn(
-                    "hover:bg-accent bg-transparent text-sm font-semibold",
-                    resourcesActive
-                      ? "text-slate-950 dark:text-slate-100"
-                      : "text-slate-500 dark:text-slate-400"
-                  )}>
-                  Resources
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="flex w-36 flex-col gap-1 p-1">
-                    {RESOURCE_LINKS.map((link) => (
-                      <li key={link.route}>
-                        <NavigationMenuLink asChild>
-                          <Link
-                            href={link.route}
-                            className={cn(
-                              "hover:bg-accent hover:text-accent-foreground block rounded-sm px-3 py-1.5 text-sm font-medium transition-colors",
-                              pathname.startsWith(link.route)
-                                ? "text-foreground"
-                                : "text-muted-foreground"
-                            )}>
-                            {link.label}
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
 
@@ -159,6 +117,7 @@ const Navbar = () => {
                   "hover:bg-accent hover:text-foreground rounded-md px-2 py-1.5 text-sm font-semibold transition-colors",
                   i === 2 && "hidden min-[420px]:flex",
                   i === 3 && "hidden min-[520px]:flex",
+                  i === 4 && "hidden min-[640px]:flex",
                   pathname.includes(link.route)
                     ? "text-foreground"
                     : "text-muted-foreground"
@@ -244,26 +203,6 @@ const Navbar = () => {
                   </DrawerClose>
                 ))}
 
-                {/* Resources section */}
-                <div className="mt-4 border-t pt-4">
-                  <p className="text-muted-foreground/60 mb-1 px-4 text-[11px] font-semibold tracking-widest uppercase">
-                    Resources
-                  </p>
-                  {RESOURCE_LINKS.map((link) => (
-                    <DrawerClose key={link.route} asChild>
-                      <Link
-                        href={link.route}
-                        className={cn(
-                          "hover:bg-accent block rounded-md px-4 py-2.5 text-sm font-medium transition-colors",
-                          pathname.startsWith(link.route)
-                            ? "text-foreground"
-                            : "text-muted-foreground"
-                        )}>
-                        {link.label}
-                      </Link>
-                    </DrawerClose>
-                  ))}
-                </div>
               </nav>
 
               {/* Footer */}

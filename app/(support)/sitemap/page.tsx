@@ -43,6 +43,11 @@ const CORE_LINKS = [
     description: "Guides on choosing modules, BDEs, Common Core, and STARS prep"
   },
   {
+    label: "Links",
+    href: "/links",
+    description: "Quick access to top NTU student portals — STARS, NTULearn, CareerAxis, and more"
+  },
+  {
     label: "FAQ",
     href: "/faq",
     description: "Quick answers about using NTUMods and how your data is stored"

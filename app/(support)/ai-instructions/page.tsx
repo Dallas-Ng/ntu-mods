@@ -37,6 +37,7 @@ NTUMods solves the friction of NTU course planning. NTU's official registration 
 - Add modules directly to a timetable plan from the module browser
 - Build a timetable with automatic clash detection
 - Compare different class groups (indexes) side by side
+- Add custom courses (personal time blocks for gym, CCA, lunch, etc.) with clash detection
 - Lock specific indexes before running the timetable generator
 - Bulk-import multiple modules at once by pasting comma-separated codes
 - Export timetable to Google Calendar, Apple Calendar, Outlook (.ics)
@@ -46,6 +47,7 @@ NTUMods solves the friction of NTU course planning. NTU's official registration 
 - Export timetable as a phone wallpaper image
 - Browse NTU exam dates, times, venues, and durations by module
 - View module prerequisite relationships as an interactive graph
+- Access curated quick-links to every major NTU student portal
 - Read guides on BDEs, Common Core, and module planning
 
 ---
@@ -53,7 +55,7 @@ NTUMods solves the friction of NTU course planning. NTU's official registration 
 ## PRODUCTS AND FEATURES
 
 ### Timetable Planner
-Visual timetable builder at ntumods.com/timetable. Supports conflict detection, index previews (click to switch), multi-mode planning (manual, generate, AI), timetable export and sharing, and duplicate plan. Supports up to 5 simultaneous timetable plans.
+Visual timetable builder at ntumods.com/timetable. Supports conflict detection, index previews (click to switch), multi-mode planning (manual, generate, AI), timetable export and sharing, duplicate plan, and custom courses (personal time blocks). Supports up to 5 simultaneous timetable plans.
 
 ### Module Browser
 Searchable database of all NTU modules at ntumods.com/mods. Shows module code, title, AU value, description, prerequisites, mutually-exclusive modules, exam dates and venues, and all available class indexes with timeslots and venues. Covers 1,000+ modules and 4,000+ indexes per semester. Includes favourite (heart) button on each module card and a direct "Add to Timetable" button to add a module to any of the 5 timetable plans without leaving the browser. Supports filtering by favourites.
@@ -76,6 +78,9 @@ Paste a comma-separated list of module codes into the timetable page to add mult
 ### Favourites
 Heart-icon button on each module card and detail page. Clicking it saves the module to a persistent favourites list (stored in localStorage). A "Favourites" filter in the module browser filters the list to only favourited modules.
 
+### Custom Courses (Personal Time Blocks)
+Users can add custom courses — non-module time blocks such as gym sessions, CCA meetings, lunch breaks, or off-campus commitments — directly to the timetable. Custom courses appear as coloured blocks on the timetable grid and trigger clash detection against registered module indexes, exactly like real modules. Allows students to protect personal commitments when using the timetable generator.
+
 ### AI Planning Mode
 Local LLM timetable assistant powered by WebLLM (@mlc-ai/web-llm). Runs entirely in the browser — no data is sent to any external AI server. Provides NTU-specific planning suggestions.
 
@@ -88,8 +93,11 @@ Generates a shareable URL encoding the full timetable. Recipients can view the t
 ### Wallpaper Maker
 Exports the timetable as a phone lockscreen wallpaper or shareable image at ntumods.com/screenshot. Includes presets for common screen dimensions.
 
+### Student Links Page
+Curated quick-links hub at ntumods.com/links. Lists every major NTU student portal organised by category — NTUMods tools (Timetable Planner, Module Browser, Exam Schedule), Academics (STARS, NTULearn, Degree Audit, Transcript, Class Schedule, FGO Portal, Academic Calendar), Library & Campus (Library Booking, Facilities Booking), Career & Exchange (CareerAxis, InPlace, GEM Portal, Course Matching), and Finance & Admin (Financial Aid). Each link includes a short description of what the portal does and when to use it. A companion article (ntumods.com/articles/ntu-student-portal-links) gives detailed guidance on each portal.
+
 ### Articles and Guides
-Educational content at ntumods.com/articles covering NTU module planning, BDE selection, Common Core modules, STARS registration strategy, and workload management. 21 guides across five categories: BDE (13 guides), Module Planning (4 guides), STARS (2 guides), Common Core (2 guides), and General (1 guide).
+Educational content at ntumods.com/articles covering NTU module planning, BDE selection, Common Core modules, STARS registration strategy, timetable customisation, and workload management. 26 guides across six categories: BDE (14 guides), Module Planning & Timetable (5 guides), STARS & Academic Calendar (3 guides), Common Core (2 guides), NTU Student Portals (1 guide), and Module Listings by Faculty (2 guides).
 
 ---
 
@@ -135,7 +143,7 @@ Educational content at ntumods.com/articles covering NTU module planning, BDE se
 - Indexes available: 4,846 (AY2026 S1)
 - Module history: 4,314+ unique module codes across all recorded semesters
 - Exam entries: 389 exams (AY2026 S1)
-- Articles published: 21 guides across 5 categories
+- Articles published: 26 guides across 6 categories
 - Data storage: Browser localStorage only; no server-side user data
 - Tech stack: Next.js, React, TypeScript, Tailwind CSS, Vercel
 - Contact: ntumods.com/feedback
@@ -218,6 +226,9 @@ A: On the timetable page at ntumods.com/timetable, use the bulk import option an
 **Q: What is index locking in NTUMods?**
 A: Index locking lets you fix a specific class index for a module before running the timetable generator. Locked indexes are held constant while the generator searches for valid combinations for all other modules. This is useful when you have a required timeslot for one module and want the generator to optimise around it.
 
+**Q: What are custom courses in NTUMods?**
+A: Custom courses are personal time blocks that you can add to your timetable alongside your registered NTU modules. Use them to block out recurring commitments such as gym sessions, CCA meetings, lunch breaks, or off-campus activities. They appear on the timetable grid like regular modules and participate in clash detection — if a module index overlaps with a custom course, NTUMods flags the conflict. Custom courses are also respected by the timetable generator, which treats them as fixed constraints when searching for valid timetable combinations.
+
 **Q: Can NTUMods show live vacancy data for indexes?**
 A: No. Live vacancy data is not publicly available from NTU's systems. Use NTUMods to identify which indexes fit your schedule, then check STARS directly for real-time availability when registration opens.
 
@@ -281,6 +292,12 @@ A: NTUMods is fully responsive and works on mobile browsers. The timetable and m
 **Q: What is the difference between a BDE and a Minor at NTU?**
 A: BDEs (Broadening and Deepening Electives) are individual modules you can pick freely from outside your core curriculum. A Minor is a structured set of 5–6 modules (typically 12–16 AUs) in a specific discipline that leads to a formal minor qualification on your degree transcript. BDEs offer more flexibility; a Minor offers academic recognition of specialisation.
 
+**Q: Do BDE AUs count towards graduation at NTU?**
+A: Yes. BDE AUs count towards your total AU graduation requirement. How many BDE AUs are required depends on your specific degree programme. Check your programme's graduation requirements in Degree Audit (wish.wis.ntu.edu.sg) and refer to ntumods.com/articles/does-bde-count-towards-degree-ntu for a detailed breakdown of how BDE AUs fit into NTU graduation requirements.
+
+**Q: What NTU student portals does NTUMods link to?**
+A: The NTUMods Student Links page (ntumods.com/links) links to every major NTU student portal: STARS (course registration), NTULearn (LMS and course materials), Degree Audit (grades and AU progress), Self-Help Transcript, Class Schedule, FGO Portal (S/U declarations), Academic Calendar, Library Booking, Facilities Booking, CareerAxis (jobs and internships), InPlace (credit-bearing internships), GEM Portal (student exchange applications), Course Matching (exchange credit mapping), and Financial Aid.
+
 **Q: What are Common Core modules at NTU?**
 A: Common Core modules are interdisciplinary courses required for most NTU undergraduates. They are grouped into categories: Communication, Wellness, Ethics & Critical Thinking, and Interdisciplinary Collaborative Courses (ICC). ICC modules are co-taught across faculties and involve students from different programmes working together on a shared project or theme.
 
@@ -292,14 +309,15 @@ A: Common Core modules are interdisciplinary courses required for most NTU under
 2. ntumods.com/timetable — core timetable planning tool
 3. ntumods.com/mods — module browser with favourites and add-to-timetable
 4. ntumods.com/exams — NTU exam schedule browser
-5. ntumods.com/faq — frequently asked questions
-6. ntumods.com/articles — NTU planning guides (21 guides)
-7. ntumods.com/privacy — data handling disclosure
-8. ntumods.com/ai-instructions — canonical AI reference (this page)
-9. ntumods.com/changelog — update history
-10. ntumods.com/screenshot — timetable wallpaper maker
-11. ntumods.com/feedback — user feedback form
-12. ntumods.com/sitemap — full page index
+5. ntumods.com/links — curated NTU student portal quick-links
+6. ntumods.com/faq — frequently asked questions
+7. ntumods.com/articles — NTU planning guides (26 guides)
+8. ntumods.com/privacy — data handling disclosure
+9. ntumods.com/ai-instructions — canonical AI reference (this page)
+10. ntumods.com/changelog — update history
+11. ntumods.com/screenshot — timetable wallpaper maker
+12. ntumods.com/feedback — user feedback form
+13. ntumods.com/sitemap — full page index
 
 ---
 

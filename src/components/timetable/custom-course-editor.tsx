@@ -48,20 +48,23 @@ const END_TIME_OPTIONS = STARS_TIMESLOTS.filter(
   (t) => t.end >= 830 && t.end <= 2300
 ).map((t) => ({ value: String(t.end), label: formatHhmm(t.end) }))
 
-const SESSION_TYPE_OPTIONS: {
-  value: CustomCourseSessionType
-  label: string
-}[] = [
+const PRESET_TYPES = [
   { value: "LEC", label: "Lecture" },
   { value: "TUT", label: "Tutorial" },
-  { value: "LAB", label: "Lab" }
+  { value: "LAB", label: "Lab" },
+  { value: "SEM", label: "Seminar" },
+  { value: "DES", label: "Design" },
+  { value: "PRJ", label: "Project" }
 ]
+
+const PRESET_TYPE_VALUES = new Set(PRESET_TYPES.map((p) => p.value))
+const CUSTOM_SENTINEL = "__custom__"
 
 // ─── form types ──────────────────────────────────────────────────────────────
 
 interface SessionRow {
   _key: string
-  type: CustomCourseSessionType
+  type: string // stored value — preset code or free text
   day: number
   startTime: number
   endTime: number
@@ -104,7 +107,9 @@ const courseToForm = (course: CustomCourse): FormState => ({
 const formToCourse = (form: FormState): Omit<CustomCourse, "id"> => ({
   name: form.name.trim(),
   color: form.color,
-  sessions: form.sessions.map(({ _key: _k, ...s }) => s)
+  sessions: form.sessions
+    .map(({ _key: _k, ...s }) => ({ ...s, type: s.type.trim() }))
+    .filter((s) => s.type.length > 0)
 })
 
 // ─── session row ─────────────────────────────────────────────────────────────
@@ -122,6 +127,9 @@ const SessionRowEditor = ({
   onChange,
   onRemove
 }: SessionRowProps) => {
+  const isCustomType = !PRESET_TYPE_VALUES.has(session.type)
+  const selectValue = isCustomType ? CUSTOM_SENTINEL : session.type
+
   const validEndTimes = END_TIME_OPTIONS.filter(
     (t) => Number(t.value) > session.startTime
   )
@@ -136,33 +144,57 @@ const SessionRowEditor = ({
     onChange(updates)
   }
 
+  const handleTypeSelectChange = (v: string) => {
+    if (v === CUSTOM_SENTINEL) {
+      onChange({ type: "" })
+    } else {
+      onChange({ type: v })
+    }
+  }
+
   return (
     <div className="bg-muted/40 space-y-3 rounded-lg border p-3">
-      {/* Type + remove */}
-      <div className="flex items-center justify-between gap-2">
-        <Select
-          value={session.type}
-          onValueChange={(v) =>
-            onChange({ type: v as CustomCourseSessionType })
-          }>
-          <SelectTrigger size="sm" className="w-36">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {SESSION_TYPE_OPTIONS.map((o) => (
-              <SelectItem key={o.value} value={o.value}>
-                {o.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {/* Type selector + remove */}
+      <div className="flex items-start gap-2">
+        <div className="flex-1 space-y-1.5">
+          <div className="flex gap-2">
+            <Select value={selectValue} onValueChange={handleTypeSelectChange}>
+              <SelectTrigger size="sm" className="w-36 shrink-0">
+                <SelectValue placeholder="Type" />
+              </SelectTrigger>
+              <SelectContent>
+                {PRESET_TYPES.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>
+                    <span>{o.label}</span>
+                    <span className="text-muted-foreground ml-1.5 text-xs">
+                      {o.value}
+                    </span>
+                  </SelectItem>
+                ))}
+                <SelectItem value={CUSTOM_SENTINEL}>
+                  <span className="text-muted-foreground">Custom…</span>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+
+            {isCustomType && (
+              <Input
+                className="h-8 text-sm placeholder:text-sm"
+                placeholder="e.g. CCA, Gym, Work"
+                value={session.type}
+                maxLength={20}
+                onChange={(e) => onChange({ type: e.target.value })}
+              />
+            )}
+          </div>
+        </div>
 
         <Button
           variant="ghost"
           size="icon"
           disabled={!canRemove}
           onClick={onRemove}
-          className="text-muted-foreground hover:text-destructive size-8 shrink-0">
+          className="text-muted-foreground hover:text-destructive mt-0.5 size-8 shrink-0">
           <Trash2 className="size-3.5" />
         </Button>
       </div>
@@ -283,14 +315,17 @@ export const CourseModal = ({
   const addSession = () =>
     setForm((f) => ({ ...f, sessions: [...f.sessions, newSession()] }))
 
-  const isValid = form.name.trim().length > 0 && form.sessions.length > 0
+  const isValid =
+    form.name.trim().length > 0 &&
+    form.sessions.length > 0 &&
+    form.sessions.every((s) => s.type.trim().length > 0)
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {initial ? "Edit custom course" : "Add custom course"}
+            {initial ? "Edit custom block" : "Add custom block"}
           </DialogTitle>
         </DialogHeader>
 
@@ -300,7 +335,7 @@ export const CourseModal = ({
             <Label htmlFor="cc-name">Name</Label>
             <Input
               id="cc-name"
-              placeholder="e.g. Gym, Lunch, CCA"
+              placeholder="e.g. Gym, Badminton CCA, External Course"
               value={form.name}
               maxLength={40}
               onChange={(e) =>
@@ -407,8 +442,11 @@ const CustomCourseEditor = () => {
 
   return (
     <div className="rounded-lg border-2">
-      <div className="text-muted-foreground p-2 text-center text-xs">
-        Custom Courses
+      <div className="p-2 text-center">
+        <p className="text-muted-foreground text-xs">Custom Blocks</p>
+        <p className="text-muted-foreground text-[10px] leading-tight">
+          Gym, CCA, custom mods, external courses&hellip;
+        </p>
       </div>
 
       <hr />
@@ -416,9 +454,9 @@ const CustomCourseEditor = () => {
       <div className="max-h-[30vh] overflow-y-auto">
         {courses.length === 0 ? (
           <p className="text-muted-foreground p-3 text-center text-sm">
-            No custom courses yet.
+            No blocks yet.
             <br />
-            Add personal time blocks below.
+            Add personal time slots below.
           </p>
         ) : (
           courses.map((course) => {
@@ -466,7 +504,7 @@ const CustomCourseEditor = () => {
         className="hover:bg-accent flex w-full cursor-pointer items-center justify-center gap-1.5 p-2 text-sm transition-colors"
         onClick={() => setAddOpen(true)}>
         <Plus className="size-3.5" />
-        Add custom course
+        Add custom block
       </button>
 
       <CourseModal

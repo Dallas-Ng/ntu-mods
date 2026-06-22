@@ -96,10 +96,8 @@ type CustomCourseColor =
   | "orange"
   | "amber"
 
-type CustomCourseSessionType = "LEC" | "TUT" | "LAB"
-
 interface CustomCourseSession {
-  type: CustomCourseSessionType
+  type: string // preset (LEC/TUT/LAB/SEM/DES/PRJ) or user-defined label
   day: number // 1-7
   startTime: number // e.g. 830
   endTime: number // e.g. 1030

@@ -46,9 +46,7 @@ export const TimetableTableCellContent = (props: Props) => {
   const indexStyle = getIndexTypeStyle(index.type)
 
   if (isCustom) {
-    const sessionLabel = ["LEC", "TUT", "LAB"].includes(index.remarks)
-      ? index.remarks
-      : null
+    const sessionLabel = index.remarks.length > 0 ? index.remarks : null
     return (
       <>
         <p>

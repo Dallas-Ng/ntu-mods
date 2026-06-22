@@ -153,7 +153,7 @@ const TimetableModulesSelect = () => {
                       setCustomCourseOpen(true)
                     }}
                     className="text-foreground hover:text-foreground/80 mt-2 cursor-pointer text-xs underline underline-offset-2 transition-colors">
-                    Add &quot;{inputValue}&quot; as a custom course →
+                    Add &quot;{inputValue}&quot; as a custom block →
                   </button>
                 </div>
               </CommandItem>

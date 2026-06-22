@@ -9,6 +9,7 @@ import {
   List,
   SlidersHorizontal
 } from "lucide-react"
+import posthog from "posthog-js"
 
 import type {
   AllModule,
@@ -93,7 +94,10 @@ const ModsPage = (props: Props) => {
   ].filter(Boolean).length
 
   const setViewMode = useCallback(
-    (mode: "cards" | "list") => updateSettings({ modsViewMode: mode }),
+    (mode: "cards" | "list") => {
+      updateSettings({ modsViewMode: mode })
+      posthog.capture("mods_view_changed", { view: mode })
+    },
     [updateSettings]
   )
 

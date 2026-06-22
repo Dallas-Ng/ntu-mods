@@ -1,11 +1,13 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { Search } from "lucide-react"
+import posthog from "posthog-js"
 
 import type { ApiExam } from "@/lib/server/get-module-exam-data"
 import { cn } from "@/lib/utils"
+import { useDebounce } from "@/hooks/use-debounce"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -176,6 +178,12 @@ const DISCLAIMER =
 export default function ExamsList({ exams }: Props) {
   const [search, setSearch] = useState("")
   const [groupBy, setGroupBy] = useState<GroupBy>("none")
+  const debouncedSearch = useDebounce(search, 500)
+
+  useEffect(() => {
+    const q = debouncedSearch.trim()
+    if (q) posthog.capture("exams_searched", { search_term: q })
+  }, [debouncedSearch])
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
@@ -207,7 +215,12 @@ export default function ExamsList({ exams }: Props) {
           />
         </div>
 
-        <Select value={groupBy} onValueChange={(v) => setGroupBy(v as GroupBy)}>
+        <Select
+          value={groupBy}
+          onValueChange={(v) => {
+            setGroupBy(v as GroupBy)
+            posthog.capture("exams_grouped", { group_by: v })
+          }}>
           <SelectTrigger className="w-full sm:w-44">
             <SelectValue />
           </SelectTrigger>

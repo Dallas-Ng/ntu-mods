@@ -587,7 +587,12 @@ const TimetableGenerationConfig = () => {
               module_count: Object.keys(timetable).length,
               load_preference: generationConfig.loadPreference,
               blacklisted_slots: generationConfig.blacklistedTimeslots.length,
-              lunch_break_days: generationConfig.lunchBreaks.length
+              lunch_break_days: generationConfig.lunchBreaks.length,
+              free_days_count: generationConfig.preferredFreeDays.length,
+              max_consecutive_slots: generationConfig.maxConsecutiveSlots,
+              min_gap: generationConfig.minGapBetweenClasses,
+              day_start: generationConfig.dayStartTime,
+              day_end: generationConfig.dayEndTime
             })
           }}
           disabled={isGenerating}

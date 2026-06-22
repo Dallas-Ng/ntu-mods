@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Plus, Trash2 } from "lucide-react"
+import posthog from "posthog-js"
 
 import { STARS_TIMESLOTS } from "@/lib/constants"
 import { formatHhmm } from "@/lib/format"
@@ -446,6 +447,7 @@ const CustomCourseEditor = () => {
                     e.stopPropagation()
                     removeCustomCourse(course.id)
                     if (editingCourse?.id === course.id) setEditingCourse(null)
+                    posthog.capture("custom_course_deleted")
                   }}>
                   <Trash2 className="size-3.5" />
                 </Button>
@@ -467,7 +469,15 @@ const CustomCourseEditor = () => {
       <CourseModal
         open={addOpen}
         onOpenChange={setAddOpen}
-        onSave={(data) => addCustomCourse(data)}
+        onSave={(data) => {
+          addCustomCourse(data)
+          posthog.capture("custom_course_created", {
+            name_length: data.name.length,
+            session_count: data.sessions.length,
+            days: [...new Set(data.sessions.map((s) => s.day))],
+            types: [...new Set(data.sessions.map((s) => s.type))]
+          })
+        }}
       />
 
       <CourseModal
@@ -477,7 +487,13 @@ const CustomCourseEditor = () => {
         }}
         initial={editingCourse ?? undefined}
         onSave={(data) => {
-          if (editingCourse) updateCustomCourse(editingCourse.id, data)
+          if (editingCourse) {
+            posthog.capture("custom_course_edited", {
+              session_count_delta:
+                data.sessions.length - editingCourse.sessions.length
+            })
+            updateCustomCourse(editingCourse.id, data)
+          }
         }}
       />
     </div>

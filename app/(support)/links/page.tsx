@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { ExternalLink } from "lucide-react"
 import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
@@ -7,6 +6,7 @@ import type { ArticleHeading } from "@/lib/server/articles"
 import ArticleToc from "@/components/articles/article-toc"
 import Container from "@/components/container"
 import Header from "@/components/header"
+import LinkCard from "@/components/links/link-card"
 
 export const metadata: Metadata = {
   title: siteConfig.metatags.studentLinks.title,
@@ -171,50 +171,6 @@ const linkHeadings: ArticleHeading[] = LINK_CATEGORIES.map(({ id, title }) => ({
   text: title
 }))
 
-const LinkCard = ({
-  name,
-  href,
-  desc,
-  external
-}: {
-  name: string
-  href: string
-  desc: string
-  external: boolean
-}) => {
-  const className =
-    "border-border hover:bg-accent flex items-start justify-between gap-2 rounded-lg border p-4 transition-colors"
-  const inner = (
-    <>
-      <div className="min-w-0 space-y-1">
-        <p className="font-semibold leading-none">{name}</p>
-        <p className="text-muted-foreground text-sm">{desc}</p>
-      </div>
-      {external && (
-        <ExternalLink className="text-muted-foreground mt-0.5 size-4 shrink-0" />
-      )}
-    </>
-  )
-
-  if (external) {
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={className}>
-        {inner}
-      </a>
-    )
-  }
-
-  return (
-    <Link href={href} className={className}>
-      {inner}
-    </Link>
-  )
-}
-
 export default function LinksPage() {
   return (
     <Container size="md">
@@ -253,6 +209,7 @@ export default function LinksPage() {
                       href={href}
                       desc={desc}
                       external={type === "external"}
+                      category={title}
                     />
                   ))}
                 </div>

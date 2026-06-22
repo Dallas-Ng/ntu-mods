@@ -1,6 +1,7 @@
 "use client"
 
 import { Check, RotateCcw } from "lucide-react"
+import posthog from "posthog-js"
 
 import {
   APPEARANCE_DENSITIES,
@@ -141,9 +142,10 @@ const AppearanceSettings = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() =>
+            onClick={() => {
               updateSettings({ appearance: DEFAULT_APPEARANCE_SETTINGS })
-            }
+              posthog.capture("settings_reset")
+            }}
             aria-label="Reset appearance">
             <RotateCcw className="size-4" />
           </Button>
@@ -188,6 +190,12 @@ const AppearanceSettings = () => {
             onChange={(event) =>
               updateAppearance({ radius: Number(event.target.value) })
             }
+            onMouseUp={(event) =>
+              posthog.capture("settings_appearance_changed", {
+                setting: "radius",
+                value: Number((event.target as HTMLInputElement).value)
+              })
+            }
             className="h-9 px-0 shadow-none"
           />
         </section>
@@ -204,12 +212,14 @@ const AppearanceSettings = () => {
             <ToggleGroup
               type="single"
               value={appearance.density}
-              onValueChange={(v) =>
-                v &&
-                updateAppearance({
-                  density: v as keyof typeof APPEARANCE_DENSITIES
+              onValueChange={(v) => {
+                if (!v) return
+                updateAppearance({ density: v as keyof typeof APPEARANCE_DENSITIES })
+                posthog.capture("settings_appearance_changed", {
+                  setting: "density",
+                  value: v
                 })
-              }
+              }}
               className="grid grid-cols-3">
               {Object.entries(APPEARANCE_DENSITIES).map(([key, value]) => (
                 <ToggleGroupItem key={key} value={key} className="px-1 text-xs">
@@ -230,12 +240,14 @@ const AppearanceSettings = () => {
             <ToggleGroup
               type="single"
               value={appearance.contrast}
-              onValueChange={(v) =>
-                v &&
-                updateAppearance({
-                  contrast: v as keyof typeof CONTRAST_PRESETS
+              onValueChange={(v) => {
+                if (!v) return
+                updateAppearance({ contrast: v as keyof typeof CONTRAST_PRESETS })
+                posthog.capture("settings_appearance_changed", {
+                  setting: "contrast",
+                  value: v
                 })
-              }
+              }}
               className="grid grid-cols-2">
               {Object.entries(CONTRAST_PRESETS).map(([key, value]) => (
                 <ToggleGroupItem key={key} value={key}>
@@ -260,11 +272,14 @@ const AppearanceSettings = () => {
               <button
                 key={key}
                 type="button"
-                onClick={() =>
+                onClick={() => {
                   updateAppearance({
                     timetableStyle: key as keyof typeof TIMETABLE_STYLE_PRESETS
                   })
-                }
+                  posthog.capture("settings_timetable_style_changed", {
+                    preset_name: key
+                  })
+                }}
                 className={cn(
                   "hover:bg-accent space-y-2 rounded-md border p-3 text-left transition-colors",
                   appearance.timetableStyle === key && "border-primary"

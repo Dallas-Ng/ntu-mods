@@ -8,6 +8,7 @@ import {
   type RefObject
 } from "react"
 import Link from "next/link"
+import posthog from "posthog-js"
 import {
   ArrowDown,
   ArrowLeft,
@@ -355,7 +356,12 @@ const EditorToolbar = ({
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
             <Select
               value={preset}
-              onValueChange={(value) => onPresetChange(value as CanvasPreset)}>
+              onValueChange={(value) => {
+                onPresetChange(value as CanvasPreset)
+                posthog.capture("screenshot_preset_selected", {
+                  preset: value
+                })
+              }}>
               <SelectTrigger
                 aria-label="Wallpaper canvas preset"
                 className="sm:w-[220px]">

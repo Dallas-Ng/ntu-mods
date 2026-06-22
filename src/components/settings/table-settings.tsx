@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { RefreshCcw } from "lucide-react"
+import posthog from "posthog-js"
 
 import { TRUN_DAY_MAP } from "@/lib/constants"
 import { cn } from "@/lib/utils"
@@ -56,6 +57,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
       ...settings,
       tableCell: { ...tableCell, [key]: checked }
     })
+    posthog.capture("settings_table_changed", { setting: key, value: checked })
   }
 
   if (!randomData) return <TableSettingsLoading />

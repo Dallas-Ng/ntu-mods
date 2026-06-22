@@ -467,14 +467,14 @@ const CustomCourseEditor = () => {
                 key={course.id}
                 className="hover:bg-accent flex cursor-pointer items-center justify-between py-1 pr-1 pl-3 text-sm transition-colors"
                 onClick={() => setEditingCourse(course)}>
-                <div className="flex min-w-0 items-center gap-2">
+                <div className="flex min-w-0 items-baseline gap-2">
                   <div
                     className={cn(
-                      "h-2.5 w-2.5 shrink-0 rounded-full",
+                      "mb-px h-2.5 w-2.5 shrink-0 self-center rounded-full",
                       colorStyle.swatch
                     )}
                   />
-                  <span className="max-w-[110px] truncate">{course.name}</span>
+                  <span className="max-w-[110px] truncate text-sm">{course.name}</span>
                   <span className="text-muted-foreground shrink-0 text-xs">
                     {sessionLabels}
                   </span>

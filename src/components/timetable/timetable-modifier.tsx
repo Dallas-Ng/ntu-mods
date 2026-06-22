@@ -98,6 +98,8 @@ const TimetableModifier = () => {
         )}
       </div>
 
+      <hr />
+
       {/* Custom courses — always shown */}
       <CustomCourseEditor />
 

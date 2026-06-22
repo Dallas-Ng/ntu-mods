@@ -86,11 +86,11 @@ const newSession = (
   ...defaults
 })
 
-const DEFAULT_FORM: FormState = {
-  name: "",
+const makeDefaultForm = (name = ""): FormState => ({
+  name,
   color: DEFAULT_CUSTOM_COURSE_COLOR,
   sessions: [newSession()]
-}
+})
 
 const courseToForm = (course: CustomCourse): FormState => ({
   name: course.name,
@@ -190,7 +190,7 @@ const SessionRowEditor = ({
         <div className="space-y-1">
           <Label className="text-xs">Venue</Label>
           <Input
-            className="h-8 text-sm"
+            className="h-8 text-sm placeholder:text-sm"
             placeholder="Optional"
             value={session.venue}
             onChange={(e) => onChange({ venue: e.target.value })}
@@ -242,25 +242,28 @@ const SessionRowEditor = ({
 
 // ─── modal ───────────────────────────────────────────────────────────────────
 
-interface CourseModalProps {
+export interface CourseModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   initial?: CustomCourse
+  initialName?: string
   onSave: (data: Omit<CustomCourse, "id">) => void
 }
 
-const CourseModal = ({
+export const CourseModal = ({
   open,
   onOpenChange,
   initial,
+  initialName,
   onSave
 }: CourseModalProps) => {
   const [form, setForm] = useState<FormState>(
-    initial ? courseToForm(initial) : DEFAULT_FORM
+    initial ? courseToForm(initial) : makeDefaultForm(initialName)
   )
 
   useEffect(() => {
-    if (open) setForm(initial ? courseToForm(initial) : DEFAULT_FORM)
+    if (open)
+      setForm(initial ? courseToForm(initial) : makeDefaultForm(initialName))
   }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const updateSession = (key: string, updates: Partial<SessionRow>) =>
@@ -309,7 +312,7 @@ const CourseModal = ({
           {/* Colour */}
           <div className="space-y-1.5">
             <Label>Colour</Label>
-            <div className="flex gap-2">
+            <div className="flex gap-2.5">
               {(Object.keys(CUSTOM_COURSE_COLORS) as CustomCourseColor[]).map(
                 (color) => (
                   <button
@@ -318,12 +321,14 @@ const CourseModal = ({
                     aria-label={CUSTOM_COURSE_COLORS[color].label}
                     onClick={() => setForm((f) => ({ ...f, color }))}
                     className={cn(
-                      "relative h-6 w-6 rounded-full transition-opacity",
+                      "relative h-6 w-6 cursor-pointer rounded-full ring-2 ring-offset-2 ring-offset-background transition-all",
                       CUSTOM_COURSE_COLORS[color].swatch,
-                      form.color !== color && "opacity-40 hover:opacity-70"
+                      form.color === color
+                        ? "ring-foreground/50"
+                        : "ring-transparent opacity-50 hover:opacity-80"
                     )}>
                     {form.color === color && (
-                      <Check className="absolute inset-0 m-auto size-3.5 text-white drop-shadow" />
+                      <Check className="absolute inset-0 m-auto size-3 text-white drop-shadow" />
                     )}
                   </button>
                 )
@@ -365,7 +370,13 @@ const CourseModal = ({
               onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button size="sm" disabled={!isValid} onClick={() => { onSave(formToCourse(form)); onOpenChange(false) }}>
+            <Button
+              size="sm"
+              disabled={!isValid}
+              onClick={() => {
+                onSave(formToCourse(form))
+                onOpenChange(false)
+              }}>
               Save
             </Button>
           </div>

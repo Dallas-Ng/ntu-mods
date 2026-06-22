@@ -99,6 +99,11 @@ const LINK_CATEGORIES: LinkCategory[] = [
         name: "FGO Portal",
         href: "https://sso.wis.ntu.edu.sg/webexe88/owa/sso_login1.asp?t=1&p2=https://wis.ntu.edu.sg/pls/webexe/aus_su_opt.display&extra=&pg=",
         desc: "Declare eligible courses under the Free General Option"
+      },
+      {
+        name: "Academic Calendar",
+        href: "https://www.ntu.edu.sg/admissions/matriculation/academic-calendars",
+        desc: "Semester dates, reading week, and exam period schedule"
       }
     ]
   },

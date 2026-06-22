@@ -1,9 +1,10 @@
 export const CUSTOM_BLOCK_STYLE = {
   background:
-    "bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/60 dark:hover:bg-slate-700/60 transition-colors duration-300",
-  text: "text-slate-700 dark:text-slate-200",
-  textAlt: "text-slate-500 dark:text-slate-400",
-  borderLeft: "border-l-slate-400"
+    "bg-[hsl(var(--index-cus-bg))] hover:bg-[hsl(var(--index-cus-bg-hover))] dark:bg-[hsl(var(--index-cus-bg-dark)/var(--index-bg-opacity-dark))] dark:hover:bg-[hsl(var(--index-cus-bg-dark)/var(--index-bg-opacity-dark-hover))] transition-colors duration-300",
+  text: "text-[hsl(var(--index-cus-text))] dark:text-[hsl(var(--index-cus-text-dark))]",
+  textAlt:
+    "text-[hsl(var(--index-cus-text-alt))] dark:text-[hsl(var(--index-cus-text-alt-dark))]",
+  borderLeft: "border-l-[hsl(var(--index-cus-border))]"
 } as const
 
 export const isCustomCourseKey = (moduleKey: string) =>

@@ -158,6 +158,14 @@
     --index-prj-text-dark: 346 77% 68%;
     --index-prj-text-alt-dark: 346 77% 59%;
     --index-prj-border: 346 77% 50%;
+    --index-cus-bg: 280 72% 90%;
+    --index-cus-bg-hover: 280 72% 84%;
+    --index-cus-bg-dark: 280 72% 70%;
+    --index-cus-text: 280 72% 30%;
+    --index-cus-text-alt: 280 72% 44%;
+    --index-cus-text-dark: 280 72% 70%;
+    --index-cus-text-alt-dark: 280 72% 61%;
+    --index-cus-border: 280 72% 44%;
   }
 
   .dark {

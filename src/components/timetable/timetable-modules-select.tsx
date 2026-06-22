@@ -12,6 +12,8 @@ import { useOutsideClick } from "@/hooks/use-outside-click"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
+import { useBoundState } from "@/state/bound.state"
+import { CourseModal } from "@/components/timetable/custom-course-editor"
 import {
   Command,
   CommandInput,
@@ -22,8 +24,10 @@ import {
 const TimetableModulesSelect = () => {
   const [inputValue, setInputValue] = useState("")
   const [isLoadingModule, setIsLoadingModule] = useState(false)
+  const [customCourseOpen, setCustomCourseOpen] = useState(false)
   const { timetable, addItemToTimetable, removeItemFromTimetable } =
     useTimetable()
+  const addCustomCourse = useBoundState((s) => s.addCustomCourse)
   const { results: searchResults } = useModuleSearchApi(inputValue, 300)
   const { isMobile } = useSettings()
   const { indexes: seasonIndexes } = useSeasonIndexes(
@@ -94,6 +98,13 @@ const TimetableModulesSelect = () => {
   }
 
   return (
+    <>
+    <CourseModal
+      open={customCourseOpen}
+      onOpenChange={setCustomCourseOpen}
+      initialName={inputValue}
+      onSave={(data) => addCustomCourse(data)}
+    />
     <div ref={ref} className="rounded-md border-2">
       <Command shouldFilter={false} className="bg-background">
         <CommandInput
@@ -129,11 +140,21 @@ const TimetableModulesSelect = () => {
               <CommandItem
                 key="empty"
                 disabled
-                className="hover:bg-accent py-3 transition-colors lg:py-2">
+                className="py-3 lg:py-2">
                 <div className="text-muted-foreground flex w-full flex-col text-center text-xs">
                   <span className="pb-1">No Results Found</span>
                   <hr className="p-1" />
                   <span>Check the academic year, semester or search term</span>
+                  <button
+                    type="button"
+                    onPointerDown={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                      setCustomCourseOpen(true)
+                    }}
+                    className="text-foreground hover:text-foreground/80 mt-2 cursor-pointer text-xs underline underline-offset-2 transition-colors">
+                    Add &quot;{inputValue}&quot; as a custom block →
+                  </button>
                 </div>
               </CommandItem>
             )}
@@ -168,6 +189,7 @@ const TimetableModulesSelect = () => {
         </CommandList>
       </Command>
     </div>
+    </>
   )
 }
 

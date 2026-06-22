@@ -70,6 +70,11 @@ const CustomSelect = (props: Props) => {
             disabled={disabled}
             variant="outline"
             role="combobox"
+            aria-label={
+              typeof activeItemLabel?.label === "string"
+                ? activeItemLabel.label
+                : undefined
+            }
             className={cn(
               "w-full justify-between overflow-hidden",
               divClassName
@@ -77,7 +82,7 @@ const CustomSelect = (props: Props) => {
             <div className="min-w-0 flex-1 overflow-hidden text-left">
               {activeItemLabel?.label}
             </div>
-            <ChevronsUpDownIcon className="ml-2 size-4 shrink-0 opacity-50" />
+            <ChevronsUpDownIcon aria-hidden="true" className="ml-2 size-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
 

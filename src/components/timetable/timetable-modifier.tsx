@@ -6,6 +6,7 @@ import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useTimetable } from "@/hooks/use-timetable"
 
+import CustomCourseEditor from "./custom-course-editor"
 import TimetableModuleCard from "./timetable-module-card"
 import TimetableModulesSelect from "./timetable-modules-select"
 
@@ -78,6 +79,10 @@ const TimetableModifier = () => {
           })
         )}
       </div>
+
+      <hr />
+
+      <CustomCourseEditor />
     </div>
   )
 }

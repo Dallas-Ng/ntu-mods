@@ -147,6 +147,42 @@ const ChangelogReleaseSection = ({
 
 const CHANGELOG: ChangelogRelease[] = [
   {
+    title: "Custom courses",
+    date: "22 Jun 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Add custom courses to your{" "}
+            <ChangelogLink href="/timetable">timetable</ChangelogLink> — block
+            out personal time slots like gym, lunch, or CCA with a name, colour,
+            and venue. Custom blocks appear on the timetable grid and flag
+            clashes with registered modules.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content:
+          "Custom courses are per-plan — each of your 5 timetable plans has its own set of blocks, and duplicating a plan copies them over."
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            New guide:{" "}
+            <ChangelogLink href="/articles/custom-courses-timetable-ntu">
+              How to use custom courses on NTUMods
+            </ChangelogLink>{" "}
+            — walkthrough with examples for planning personal time alongside
+            registered modules.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title:
       "Exam schedule, timetable generator improvements, and module page polish",
     date: "14 Jun 2026",

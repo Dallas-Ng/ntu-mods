@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 import { useTimetable } from "@/hooks/use-timetable"
 
 import TimetableAiChat from "./mode-ai/timetable-ai-chat"
+import CustomCourseEditor from "./custom-course-editor"
 import TimetableGenerationConfig from "./mode-generation/timetable-generation-config"
 import TimetableIndexModifier from "./timetable-index-modifier"
 import TimetableModeSelector from "./timetable-mode-selector"
@@ -96,6 +97,9 @@ const TimetableModifier = () => {
           </>
         )}
       </div>
+
+      {/* Custom courses — always shown */}
+      <CustomCourseEditor />
 
       {/* Mode-specific panels */}
       {mode === "generation" && <TimetableGenerationConfig />}

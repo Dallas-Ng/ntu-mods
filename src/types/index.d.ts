@@ -83,9 +83,30 @@ interface Index {
   venue: string
   remarks: string // pre-reqs, etc
   duration: number // for row span, each unit is 30 minutes
+  color?: string // custom course color override
 }
 
 type IndexType = "LEC" | "LAB" | "SEM" | "TUT" | "DES" | "PRJ"
+
+type CustomCourseColor =
+  | "violet"
+  | "blue"
+  | "emerald"
+  | "rose"
+  | "orange"
+  | "amber"
+
+interface CustomCourse {
+  id: string
+  name: string
+  day: number // 1-7
+  startTime: number // e.g. 830
+  endTime: number // e.g. 1030
+  venue: string
+  color: CustomCourseColor
+}
+
+const CUSTOM_COURSE_KEY_PREFIX = "__CC__"
 
 interface Exam {
   date: string

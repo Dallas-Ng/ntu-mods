@@ -1,3 +1,7 @@
+import {
+  CUSTOM_COURSE_COLORS,
+  isCustomCourseKey
+} from "@/lib/custom-course-colors"
 import { TRUN_DAY_MAP } from "@/lib/constants"
 import { formatRemarks } from "@/lib/format"
 import { getIndexType } from "@/lib/get-index-type"
@@ -35,7 +39,27 @@ export const TimetableTableCellContent = (props: Props) => {
     }
   } = props
 
+  const isCustom = isCustomCourseKey(moduleKey)
+  const customStyle = isCustom
+    ? CUSTOM_COURSE_COLORS[(index.color as CustomCourseColor) ?? "violet"]
+    : null
   const indexStyle = getIndexTypeStyle(index.type)
+
+  if (isCustom) {
+    return (
+      <>
+        <p>
+          <span className={cn("font-bold", customStyle!.text)}>
+            {index.group}
+          </span>
+        </p>
+        {tableCell.time && (
+          <p className={cn(customStyle!.textAlt)}>{index.time}</p>
+        )}
+        {tableCell.venue && index.venue && <p>{index.venue}</p>}
+      </>
+    )
+  }
 
   return (
     <>

@@ -152,15 +152,8 @@ const CHANGELOG: ChangelogRelease[] = [
     items: [
       {
         category: "New Feature",
-        content: (
-          <>
-            Filter the{" "}
-            <ChangelogLink href="/mods">module browser</ChangelogLink> by day and
-            time — select which days you&apos;re available and set a time window
-            (e.g. no classes after 6pm). Only modules with at least one viable
-            index that fits your constraints are shown.
-          </>
-        )
+        content:
+          "Filter the module browser by day and time — select which days you're available and set a time window (e.g. no classes after 6pm). Only modules with at least one viable index that fits your constraints are shown."
       }
     ]
   },

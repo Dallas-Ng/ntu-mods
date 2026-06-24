@@ -1,3 +1,4 @@
+import type { SeasonIndexes } from "@/hooks/use-season-indexes"
 import type { AllModule, ModsGroupBy } from "@/types/mods"
 import { MODULE_CATEGORY, MODULE_FACULTY } from "@/lib/constants"
 import { getModuleCategories } from "@/lib/get-module-category"
@@ -79,6 +80,10 @@ export function filterModules(
     currentOnly: boolean
     favouritesOnly?: boolean
     favouriteModules?: string[]
+    allowedDays?: number[]
+    timeStart?: number
+    timeEnd?: number
+    indexes?: SeasonIndexes
   }
 ): AllModule[] {
   let filtered = modules
@@ -107,6 +112,37 @@ export function filterModules(
 
   if (opts.moduleLevel !== "all") {
     filtered = filtered.filter((m) => m.code.slice(2, 3) === opts.moduleLevel)
+  }
+
+  if (opts.allowedDays && opts.allowedDays.length > 0 && opts.indexes) {
+    filtered = filtered.filter((m) => {
+      const mi = opts.indexes![m.code]
+      if (!mi) return true
+      return Object.values(mi).some((slots) =>
+        slots.every((s) => opts.allowedDays!.includes(s.day))
+      )
+    })
+  }
+
+  if (
+    (opts.timeStart !== undefined || opts.timeEnd !== undefined) &&
+    opts.indexes
+  ) {
+    filtered = filtered.filter((m) => {
+      const mi = opts.indexes![m.code]
+      if (!mi) return true
+      return Object.values(mi).some((slots) =>
+        slots.every((s) => {
+          const [startStr, endStr] = s.time.split("-")
+          const st = parseInt(startStr)
+          const en = parseInt(endStr)
+          return (
+            (opts.timeStart === undefined || st >= opts.timeStart) &&
+            (opts.timeEnd === undefined || en <= opts.timeEnd)
+          )
+        })
+      )
+    })
   }
 
   if (opts.searchTerm) {

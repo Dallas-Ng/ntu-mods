@@ -9,6 +9,9 @@ type Key =
   | "moduleLevel"
   | "currentOnly"
   | "favouritesOnly"
+  | "moduleDay"
+  | "moduleTimeStart"
+  | "moduleTimeEnd"
 
 export const useModsSearchParams = (paramValue: string, key: Key) => {
   const defaultValue =

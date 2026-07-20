@@ -1,8 +1,22 @@
-export const THEME_ORDER = ["light", "dark", "paper"] as const
+import {
+  CloudMoon,
+  Coffee,
+  type LucideIcon,
+  Moon,
+  Stars,
+  Sun,
+  TreePine
+} from "lucide-react"
 
-export type ThemeName = (typeof THEME_ORDER)[number]
+export const THEME_META = {
+  light: { label: "Light", icon: Sun },
+  paper: { label: "Paper", icon: Coffee },
+  forest: { label: "Forest", icon: TreePine },
+  dark: { label: "Dark", icon: Moon },
+  dim: { label: "Dim", icon: CloudMoon },
+  midnight: { label: "Midnight", icon: Stars }
+} satisfies Record<string, { label: string; icon: LucideIcon }>
 
-export const getNextTheme = (current?: string): ThemeName => {
-  const index = THEME_ORDER.indexOf(current as ThemeName)
-  return THEME_ORDER[(index + 1) % THEME_ORDER.length]
-}
+export const THEME_ORDER = Object.keys(THEME_META) as ThemeName[]
+
+export type ThemeName = keyof typeof THEME_META

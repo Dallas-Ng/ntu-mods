@@ -4,12 +4,13 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Coffee, Menu, Moon, Settings, Sun, X } from "lucide-react"
+import { Menu, Settings, X } from "lucide-react"
 import { useTheme } from "next-themes"
+import posthog from "posthog-js"
 
 import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL_SHORT } from "@/lib/semesters"
-import { getNextTheme } from "@/lib/theme-cycle"
+import { THEME_META, THEME_ORDER, type ThemeName } from "@/lib/theme-cycle"
 import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
@@ -21,6 +22,13 @@ import {
 import { NewDot } from "./new-dot"
 import ThemeToggle from "./theme-toggle"
 import { Button } from "./ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger
+} from "./ui/dropdown-menu"
 import {
   Drawer,
   DrawerClose,
@@ -34,6 +42,17 @@ const Navbar = () => {
   const router = useRouter()
   const { theme, setTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+
+  // Fall back to the layout's defaultTheme until mounted so the server and
+  // first client render agree on which icon to paint (avoids a hydration flash).
+  const currentTheme: ThemeName = mounted
+    ? ((theme as ThemeName) ?? "dark")
+    : "dark"
+  const CurrentThemeIcon =
+    THEME_META[currentTheme]?.icon ?? THEME_META.dark.icon
 
   useEffect(() => {
     const handleScroll = () => {
@@ -216,18 +235,35 @@ const Navbar = () => {
                     Settings
                   </button>
                 </DrawerClose>
-                <button
-                  onClick={() => setTheme(getNextTheme(theme))}
-                  className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
-                  {theme === "light" ? (
-                    <Sun className="size-4" />
-                  ) : theme === "paper" ? (
-                    <Coffee className="size-4" />
-                  ) : (
-                    <Moon className="size-4" />
-                  )}
-                  Theme
-                </button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                      <CurrentThemeIcon className="size-4" />
+                      Theme
+                    </button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent align="start">
+                    <DropdownMenuRadioGroup
+                      value={currentTheme}
+                      onValueChange={(next) => {
+                        setTheme(next)
+                        posthog.capture("settings_theme_changed", {
+                          theme: next
+                        })
+                      }}>
+                      {THEME_ORDER.map((key) => {
+                        const ItemIcon = THEME_META[key].icon
+                        return (
+                          <DropdownMenuRadioItem key={key} value={key}>
+                            <ItemIcon className="size-4" />
+                            {THEME_META[key].label}
+                          </DropdownMenuRadioItem>
+                        )
+                      })}
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </DrawerContent>
           </Drawer>

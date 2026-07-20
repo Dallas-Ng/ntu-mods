@@ -6,6 +6,7 @@ import "./globals.css"
 import { Author } from "next/dist/lib/metadata/types/metadata-types"
 
 import { siteConfig } from "@/config/site"
+import { THEME_ORDER } from "@/lib/theme-cycle"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
 import AppBanner from "@/components/app-banner"
@@ -86,7 +87,7 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="dark"
           enableSystem
-          themes={["light", "dark", "paper"]}>
+          themes={THEME_ORDER}>
           <AppearanceStyleProvider />
           <AppBanner />
           {children}

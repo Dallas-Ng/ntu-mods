@@ -235,6 +235,82 @@
     --input: 35 26% 84%;
     --ring: 221.2 83.2% 48%;
   }
+
+  .forest {
+    --background: 100 22% 95%;
+    --foreground: 130 25% 14%;
+    --card: 100 28% 97%;
+    --card-foreground: 130 25% 14%;
+    --popover: 100 28% 97%;
+    --popover-foreground: 130 25% 14%;
+    --primary: 152 45% 32%;
+    --primary-foreground: 100 28% 97%;
+    --primary-alt: 110 12% 42%;
+    --secondary: 100 20% 89%;
+    --secondary-foreground: 130 25% 18%;
+    --muted: 100 18% 90%;
+    --muted-foreground: 120 12% 38%;
+    --accent: 100 20% 89%;
+    --accent-foreground: 130 25% 18%;
+    --destructive: 6 65% 42%;
+    --destructive-foreground: 100 28% 97%;
+    --border: 100 18% 84%;
+    --input: 100 18% 84%;
+    --ring: 152 45% 32%;
+  }
+
+  .dim {
+    --background: 205 34% 13%;
+    --foreground: 210 20% 88%;
+    --card: 205 30% 16%;
+    --card-foreground: 210 20% 88%;
+    --popover: 205 30% 16%;
+    --popover-foreground: 210 20% 88%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary-alt: 210 10% 65%;
+    --secondary: 205 25% 22%;
+    --secondary-foreground: 210 20% 90%;
+    --muted: 205 22% 20%;
+    --muted-foreground: 210 14% 65%;
+    --accent: 205 25% 22%;
+    --accent-foreground: 210 20% 90%;
+    --destructive: 0 62.8% 40%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 205 22% 24%;
+    --input: 205 22% 24%;
+    --ring: 217.2 91.2% 59.8%;
+  }
+
+  .midnight {
+    --background: 230 45% 4%;
+    --foreground: 220 30% 96%;
+    --card: 230 40% 6%;
+    --card-foreground: 220 30% 96%;
+    --popover: 230 40% 6%;
+    --popover-foreground: 220 30% 96%;
+    --primary: 221.2 83.2% 60%;
+    --primary-foreground: 230 45% 6%;
+    --primary-alt: 220 15% 70%;
+    --secondary: 230 30% 12%;
+    --secondary-foreground: 220 30% 92%;
+    --muted: 230 28% 10%;
+    --muted-foreground: 220 15% 60%;
+    --accent: 230 30% 12%;
+    --accent-foreground: 220 30% 92%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 220 30% 96%;
+    --border: 230 28% 14%;
+    --input: 230 28% 14%;
+    --ring: 221.2 83.2% 60%;
+  }
+
+  .dim strong,
+  .dim b,
+  .midnight strong,
+  .midnight b {
+    color: white;
+  }
 }
 
 @layer utilities {
@@ -278,6 +354,28 @@
     background-color: #c9b896;
     border-radius: 10px;
     border: 2px solid #f2e9d8;
+  }
+
+  .forest *::-webkit-scrollbar-track {
+    background: #e3ecdd;
+  }
+
+  .forest *::-webkit-scrollbar-thumb {
+    background-color: #a8bd9c;
+    border-radius: 10px;
+    border: 2px solid #e3ecdd;
+  }
+
+  .dim *::-webkit-scrollbar-track,
+  .midnight *::-webkit-scrollbar-track {
+    background: #0f172a;
+  }
+
+  .dim *::-webkit-scrollbar-thumb,
+  .midnight *::-webkit-scrollbar-thumb {
+    background-color: #1e293b;
+    border-radius: 10px;
+    border: 2px solid #0f172a;
   }
 }
 

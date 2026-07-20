@@ -24,7 +24,7 @@ export const useModsSearchParams = (paramValue: string, key: Key) => {
           : key === "favouritesOnly"
             ? "false"
             : "all"
-  const [value, setValue] = useState(defaultValue)
+  const [value, setValue] = useState(paramValue)
 
   const searchParams = useSearchParams()
   const router = useRouter()

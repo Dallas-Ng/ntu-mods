@@ -82,7 +82,11 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.clarity.ms" />
       </head>
       <body className={cn(inter.className, "antialiased")}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          themes={["light", "dark", "paper"]}>
           <AppearanceStyleProvider />
           <AppBanner />
           {children}

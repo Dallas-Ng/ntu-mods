@@ -8,6 +8,7 @@ import { formatRemarks } from "@/lib/format"
 import { getIndexType } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 import { cn } from "@/lib/utils"
+import VenueLink from "@/components/venue-link"
 
 interface Props {
   index: Index
@@ -64,7 +65,11 @@ export const TimetableTableCellContent = (props: Props) => {
         {tableCell.time && (
           <p className={cn(style.textAlt)}>{index.time}</p>
         )}
-        {tableCell.venue && index.venue && <p>{index.venue}</p>}
+        {tableCell.venue && index.venue && (
+          <p>
+            <VenueLink venue={index.venue} />
+          </p>
+        )}
       </>
     )
   }
@@ -92,7 +97,11 @@ export const TimetableTableCellContent = (props: Props) => {
         )}
       </p>
 
-      {tableCell.venue && <p>{index.venue}</p>}
+      {tableCell.venue && index.venue && (
+        <p>
+          <VenueLink venue={index.venue} />
+        </p>
+      )}
 
       {tableCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
 

@@ -4,11 +4,12 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Menu, Moon, Settings, Sun, X } from "lucide-react"
+import { Coffee, Menu, Moon, Settings, Sun, X } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL_SHORT } from "@/lib/semesters"
+import { getNextTheme } from "@/lib/theme-cycle"
 import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
@@ -216,10 +217,12 @@ const Navbar = () => {
                   </button>
                 </DrawerClose>
                 <button
-                  onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                  onClick={() => setTheme(getNextTheme(theme))}
                   className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                   {theme === "light" ? (
                     <Sun className="size-4" />
+                  ) : theme === "paper" ? (
+                    <Coffee className="size-4" />
                   ) : (
                     <Moon className="size-4" />
                   )}

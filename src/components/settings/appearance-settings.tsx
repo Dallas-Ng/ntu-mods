@@ -1,6 +1,7 @@
 "use client"
 
 import { Check, RotateCcw } from "lucide-react"
+import { useTheme } from "next-themes"
 import posthog from "posthog-js"
 
 import {
@@ -10,6 +11,7 @@ import {
   INDEX_TYPE_COLOR_KEYS,
   TIMETABLE_STYLE_PRESETS
 } from "@/config/appearance-settings"
+import { THEME_ORDER } from "@/lib/theme-cycle"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 
@@ -118,7 +120,14 @@ export const DarkThemeIcon = (props: IconProps) => {
   )
 }
 
+const THEME_LABELS: Record<(typeof THEME_ORDER)[number], string> = {
+  light: "Light",
+  dark: "Dark",
+  paper: "Paper"
+}
+
 const AppearanceSettings = () => {
+  const { theme, setTheme } = useTheme()
   const { settings, updateSettings } = useSettings()
   const appearance = {
     ...DEFAULT_APPEARANCE_SETTINGS,
@@ -167,6 +176,32 @@ const AppearanceSettings = () => {
       </div>
 
       <div className="space-y-5">
+        <section className="space-y-3">
+          <div>
+            <p className="text-sm font-medium">Theme</p>
+            <p className="text-muted-foreground text-xs">
+              Light, dark, or a warmer paper palette that&apos;s easier on the
+              eyes.
+            </p>
+          </div>
+
+          <ToggleGroup
+            type="single"
+            value={theme}
+            onValueChange={(v) => {
+              if (!v) return
+              setTheme(v)
+              posthog.capture("settings_theme_changed", { theme: v })
+            }}
+            className="grid grid-cols-3">
+            {THEME_ORDER.map((key) => (
+              <ToggleGroupItem key={key} value={key}>
+                {THEME_LABELS[key]}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
+        </section>
+
         <section className="space-y-3">
           <div className="flex items-end justify-between gap-3">
             <div>

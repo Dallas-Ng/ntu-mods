@@ -1,10 +1,43 @@
-import { addDays, differenceInWeeks, format, startOfWeek } from "date-fns"
+import { addDays, format, startOfWeek } from "date-fns"
 import { createEvents, EventAttributes } from "ics"
 
-import { formatRemarks } from "./format"
 import { parseTime } from "./parse-time"
 
 const MIN_DATE = new Date("2026-08-10") // Start of AY26/27 Semester 1
+const WEEK_1_MONDAY = startOfWeek(MIN_DATE, { weekStartsOn: 1 })
+
+const TOTAL_TEACHING_WEEKS = 13
+// Recess Week always falls between Teaching Week 7 and Teaching Week 8,
+// so calendar dates for weeks 8-13 are shifted back by one extra week.
+const RECESS_AFTER_WEEK = 7
+
+const range = (start: number, end: number) =>
+  Array.from({ length: end - start + 1 }, (_, i) => start + i)
+
+/**
+ * Parse a remarks string (e.g. "Teaching Wk1,3-13") into the list of
+ * teaching week numbers (1-13) an index slot actually runs on.
+ */
+const parseTeachingWeeks = (remarks: string): number[] => {
+  if (remarks === "") return range(1, TOTAL_TEACHING_WEEKS)
+  if (remarks === "Not conducted during Teaching Weeks") return []
+
+  const match = remarks.match(/^Teaching Wk(.+)$/)
+  if (!match) return range(1, TOTAL_TEACHING_WEEKS)
+
+  const weeks = new Set<number>()
+  for (const token of match[1].split(",")) {
+    const [start, end] = token.split("-").map(Number)
+    for (let week = start; week <= (end ?? start); week++) weeks.add(week)
+  }
+  return [...weeks].sort((a, b) => a - b)
+}
+
+const teachingWeekMonday = (weekNumber: number) => {
+  const calendarWeekOffset =
+    weekNumber <= RECESS_AFTER_WEEK ? weekNumber - 1 : weekNumber
+  return addDays(WEEK_1_MONDAY, calendarWeekOffset * 7)
+}
 
 /**
  * Generate an ICS calendar from a timetable.
@@ -24,57 +57,25 @@ export const getIcs = (
     const title = titleLookup[moduleKey] ?? moduleKey
 
     for (const index of indexes) {
-      const formattedRemarks = formatRemarks(index.remarks)
-      const isEven = formattedRemarks === "Even Weeks"
-      const isOdd = formattedRemarks === "Odd Weeks"
-      const isAllWeeks = !isEven && !isOdd
-
-      let startingWeek = startOfWeek(MIN_DATE, { weekStartsOn: 1 })
-
       const { startTime, endTime } = parseTime(index)
+      const teachingWeeks = parseTeachingWeeks(index.remarks)
 
-      // Calculate start and end dates
-      const start = addDays(startingWeek, index.day - 1)
-      start.setHours(startTime.getHours(), startTime.getMinutes())
+      for (const weekNumber of teachingWeeks) {
+        const weekMonday = teachingWeekMonday(weekNumber)
 
-      const end = addDays(startingWeek, index.day - 1)
-      end.setHours(endTime.getHours(), endTime.getMinutes())
+        const start = addDays(weekMonday, index.day - 1)
+        start.setHours(startTime.getHours(), startTime.getMinutes())
 
-      const totalWeeks = 13 // The schedule lasts for 13 weeks
+        const end = addDays(weekMonday, index.day - 1)
+        end.setHours(endTime.getHours(), endTime.getMinutes())
 
-      // Map day numbers to iCalendar day abbreviations
-      const dayAbbreviations = ["SU", "MO", "TU", "WE", "TH", "FR", "SA"]
-      const dayAbbreviation = dayAbbreviations[start.getDay()]
-
-      // Adjust start date for even weeks
-      if (isEven && differenceInWeeks(start, MIN_DATE) % 2 === 0) {
-        start.setDate(start.getDate() + 7)
-        end.setDate(end.getDate() + 7)
+        events.push({
+          title: `[${moduleKey}] ${index.type} (${index.group})`,
+          start: format(start, "yyyyMMdd'T'HHmmss"),
+          end: format(end, "yyyyMMdd'T'HHmmss"),
+          description: `${title}\nLocation: ${index.venue}\nRemarks: ${index.remarks}`
+        })
       }
-
-      // Adjust start date for odd weeks
-      if (isOdd && differenceInWeeks(start, MIN_DATE) % 2 !== 0) {
-        start.setDate(start.getDate() + 7)
-        end.setDate(end.getDate() + 7)
-      }
-
-      let recurrenceRule = ``
-      if (isAllWeeks) {
-        recurrenceRule = `FREQ=WEEKLY;COUNT=${totalWeeks}`
-      } else if (isEven) {
-        recurrenceRule = `FREQ=WEEKLY;INTERVAL=2;COUNT=${Math.floor((totalWeeks + 1) / 2)};BYDAY=${dayAbbreviation}`
-      } else if (isOdd) {
-        recurrenceRule = `FREQ=WEEKLY;INTERVAL=2;COUNT=${Math.ceil(totalWeeks / 2)};BYDAY=${dayAbbreviation}`
-      }
-
-      const event: EventAttributes = {
-        title: `[${moduleKey}] ${index.type} (${index.group})`,
-        start: format(start, "yyyyMMdd'T'HHmmss"),
-        end: format(end, "yyyyMMdd'T'HHmmss"),
-        description: `${title}\nLocation: ${index.venue}\nRemarks: ${index.remarks}`,
-        recurrenceRule: recurrenceRule
-      }
-      events.push(event)
     }
   }
 

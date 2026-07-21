@@ -20,6 +20,7 @@ import type {
 } from "@/types/mods"
 import { filterModules, groupModules } from "@/lib/filter-modules"
 import { latestSemester, latestYear } from "@/lib/semesters"
+import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useFavourites } from "@/hooks/use-favourites"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
@@ -213,7 +214,10 @@ const ModsPage = (props: Props) => {
           <Button
             variant="outline"
             size="sm"
-            className={`h-9 w-9 shrink-0 gap-1.5 sm:w-auto${favouritesOnly === "true" ? " bg-secondary" : ""}`}
+            className={cn(
+              "h-9 w-9 shrink-0 gap-1.5 sm:w-auto",
+              favouritesOnly === "true" && "bg-secondary"
+            )}
             onClick={() =>
               setFavouritesOnly(favouritesOnly === "true" ? "false" : "true")
             }
@@ -236,7 +240,7 @@ const ModsPage = (props: Props) => {
               </span>
             )}
             <ChevronDown
-              className={`size-3.5 transition-transform${filtersOpen ? "rotate-180" : ""}`}
+              className={cn("size-3.5 transition-transform", filtersOpen && "rotate-180")}
             />
           </Button>
         </div>

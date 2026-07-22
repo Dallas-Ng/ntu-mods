@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import nextDynamic from "next/dynamic"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
@@ -18,16 +19,19 @@ import {
   getPrerequisiteGraph
 } from "@/lib/server/get-prerequisite-graph"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
-import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
 import ModsDescription from "@/components/mods/mods-description"
 import ModsExpandableFields from "@/components/mods/mods-expandable-fields"
+import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
-import ModsPrerequisiteGraph from "@/components/mods/mods-prerequisite-graph"
 import ModsViewTracker from "@/components/mods/mods-view-tracker"
 import ModsWorkloadTable from "@/components/mods/mods-workload-table"
 import RelatedModules from "@/components/related-modules"
+
+const ModsPrerequisiteGraph = nextDynamic(
+  () => import("@/components/mods/mods-prerequisite-graph")
+)
 
 export const dynamic = "force-static"
 export const dynamicParams = true
@@ -127,6 +131,7 @@ export default async function Page(props: {
                 year={year}
                 semester={semester}
                 showText={true}
+                moduleIndexes={indexes}
               />
             )}
             <ModsFavouriteButton

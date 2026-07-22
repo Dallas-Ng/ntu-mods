@@ -31,14 +31,19 @@ function fetchSeasonIndexes(
   return promise
 }
 
-export function useSeasonIndexes(year: string, semester: string) {
+export function useSeasonIndexes(
+  year: string,
+  semester: string,
+  enabled = true
+) {
   const key = `${year}_${semester}`
   const [indexes, setIndexes] = useState<SeasonIndexes>(
     () => cache.get(key) ?? {}
   )
-  const [isLoading, setIsLoading] = useState(!cache.has(key))
+  const [isLoading, setIsLoading] = useState(enabled && !cache.has(key))
 
   useEffect(() => {
+    if (!enabled) return
     if (cache.has(key)) {
       setIndexes(cache.get(key)!)
       setIsLoading(false)
@@ -49,7 +54,7 @@ export function useSeasonIndexes(year: string, semester: string) {
       setIndexes(data)
       setIsLoading(false)
     })
-  }, [key, year, semester])
+  }, [key, year, semester, enabled])
 
   return { indexes, isLoading }
 }

@@ -211,7 +211,7 @@ export default async function Page(props: {
                         ) : (
                           <span
                             key={sem}
-                            className="text-muted-foreground/35 px-2 py-1 text-center text-sm line-through">
+                            className="text-muted-foreground px-2 py-1 text-center text-sm line-through">
                             {label}
                           </span>
                         )

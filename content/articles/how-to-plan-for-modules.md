@@ -118,3 +118,21 @@ If you want a detailed walkthrough of how the timetable planner works, see [NTU 
 ## Final thoughts
 
 Module planning is easier when you treat it as a system instead of a one-time scramble. Clear requirements first, protect future prerequisites, avoid workload pileups, and keep a backup plan. For a broader framework on choosing between module types, see [NTU Module Selection Guide](/articles/ntu-module-selection-guide). Your semester does not need to be perfect. It just needs to be sturdy enough to survive real life.
+
+## Frequently asked questions
+
+### When should I start planning my NTU modules?
+
+As soon as your school publishes the next semester's module offerings — well before STARS Round 1 opens. Planning early gives you time to check prerequisites, compare indexes, and build a backup, instead of deciding under time pressure during bidding.
+
+### How many backup modules should I have?
+
+At minimum, one backup core/elective, one backup BDE, and a backup index for each module you care about. See the backup table above for the reasoning behind each.
+
+### Does NTUMods register my modules for me?
+
+No. [NTUMods](/timetable) is a planning tool — it helps you build and compare timetables before you bid, but registration itself happens in STARS.
+
+### What's the difference between planning and STARS bidding?
+
+Planning is exploratory and non-binding — you can try any combination of modules and indexes. STARS bidding is the actual registration event, where your choices become real (and often irreversible without going through your school). Do your exploring in the planner, then execute a decided shortlist in STARS.

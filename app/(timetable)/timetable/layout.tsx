@@ -45,6 +45,46 @@ const GUIDES = [
 const Layout = ({ children }: Props) => {
   return (
     <LayoutDefault>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: siteConfig.metatags.timetable.title,
+              description: siteConfig.metatags.timetable.desc,
+              url: `${siteConfig.url}/timetable`,
+              applicationCategory: "EducationApplication",
+              operatingSystem: "Web",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "USD"
+              }
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: siteConfig.url
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Timetable",
+                  item: `${siteConfig.url}/timetable`
+                }
+              ]
+            }
+          ])
+        }}
+      />
+
       {children}
 
       <section className="mt-10 space-y-4 border-t pt-8">
@@ -63,7 +103,7 @@ const Layout = ({ children }: Props) => {
               key={href}
               href={href}
               className="bg-card hover:bg-accent group rounded-lg border p-4 transition-colors">
-              <p className="group-hover:text-primary text-sm font-medium leading-snug">
+              <p className="group-hover:text-primary text-sm leading-snug font-medium">
                 {title}
               </p>
               <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">

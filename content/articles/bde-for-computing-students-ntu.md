@@ -119,3 +119,21 @@ Browse options on [NTUMods](/mods) (filter by "BDE" under module type) or use th
 Once you have a shortlist, use the [NTUMods timetable planner](/timetable) to check that your chosen BDE indexes fit around your core schedule — see [NTU Timetable Planner Guide](/articles/ntu-timetable-planner-guide).
 
 For STARS bidding strategy once you know what to bid for, see [How to Bid for a BDE at NTU](/articles/how-to-bid-for-bde-at-ntu).
+
+## Frequently asked questions
+
+### Do SC-prefix modules count as BDE for computing students?
+
+It depends entirely on your specific programme. The same SC-prefix module may be a prescribed elective for a CS student but a genuine BDE for a Mechanical Engineering student. Always verify in your degree audit before registering it as a BDE.
+
+### What's the best BDE category for a heavy computing semester?
+
+Psychology, humanities, or wellness-style BDEs tend to fit best — the workload is steady rather than spiky, and missing a lecture is recoverable in a way that missing a programming lab is not.
+
+### Should computing students take computing BDEs like AI or Data Science modules?
+
+These are usually designed for non-computing students seeking exposure, not for computing majors. If the content overlaps heavily with your core modules, you get less variety value from the BDE slot — a non-technical BDE is often the better trade for a change of pace.
+
+### When should computing students bid for popular BDEs like HP1000 or language modules?
+
+Round 1. High-demand BDEs (psychology, Japanese, Korean) regularly fill before Round 2 opens, so treat them as a Round 1 priority rather than a Round 2 backup plan.

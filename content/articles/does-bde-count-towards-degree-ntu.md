@@ -78,3 +78,21 @@ For current planning, focus on what your own degree audit shows. A module that s
 - Understand how BDE registration works: [How to Bid for a BDE at NTU](/articles/how-to-bid-for-bde-at-ntu)
 - Decide between BDE and minor: [BDE vs Minor at NTU](/articles/bde-vs-minor-at-ntu)
 - Find the right BDE for your semester: [Easy BDEs at NTU](/articles/easy-bde-at-ntu)
+
+## Frequently asked questions
+
+### Does BDE count towards my NTU degree?
+
+Yes. BDE is an officially required graduation component, not an optional extra. Your degree audit tracks your BDE AUs the same way it tracks core and major modules.
+
+### Does BDE affect my GPA?
+
+Yes. BDE modules are graded normally and count toward your cumulative GPA unless you specifically apply S/U to that module.
+
+### How many BDE AUs does a minor use?
+
+Most NTU minors are fulfilled using your BDE AU allocation, so a minor is not "extra" on top of your BDE requirement — it replaces part of your free choice. See [BDE vs Minor at NTU](/articles/bde-vs-minor-at-ntu) for the full trade-off.
+
+### Where do I check my exact BDE requirement?
+
+Your degree audit in the student portal and your official curriculum structure (published by your school for your cohort) are the two authoritative sources — not general advice from other students, since requirements vary by programme and matriculation year.

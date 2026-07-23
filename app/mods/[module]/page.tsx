@@ -18,9 +18,9 @@ import {
   getPrerequisiteGraph
 } from "@/lib/server/get-prerequisite-graph"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
-import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
 import ModsDescription from "@/components/mods/mods-description"
 import ModsExpandableFields from "@/components/mods/mods-expandable-fields"
+import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
@@ -306,8 +306,14 @@ export async function generateMetadata(props: {
   const mod = allMeta[moduleKey]
   if (!mod) return null
 
-  const baseDesc = mod.description?.trim()
-    ? `${mod.description.trim().slice(0, 100)}${mod.description.trim().length > 100 ? "…" : ""}`
+  const rawDesc = mod.description?.trim() ?? ""
+  const trimmedDesc =
+    rawDesc.length > 90
+      ? `${rawDesc.slice(0, rawDesc.lastIndexOf(" ", 90))}…`
+      : rawDesc
+
+  const baseDesc = trimmedDesc
+    ? `${trimmedDesc} See ${moduleKey} index schedules, class times, exam dates & venues on NTUMods.`
     : `${moduleKey} is a ${mod.au} AU NTU module. Check index schedules, class times, exam dates, venues, and prerequisites on NTUMods.`
 
   return {

@@ -13,7 +13,8 @@ export const revalidate = false
 export const metadata: Metadata = {
   title: siteConfig.metatags.sitemap.title,
   description: siteConfig.metatags.sitemap.desc,
-  alternates: { canonical: "/sitemap" }
+  alternates: { canonical: "/sitemap" },
+  robots: { index: false, follow: true }
 }
 
 const CORE_LINKS = [
@@ -25,17 +26,20 @@ const CORE_LINKS = [
   {
     label: "Timetable",
     href: "/timetable",
-    description: "Plan your NTU timetable, compare indexes, and export to calendar"
+    description:
+      "Plan your NTU timetable, compare indexes, and export to calendar"
   },
   {
     label: "Mods",
     href: "/mods",
-    description: "Browse all NTU modules, view class times, venues, and prerequisites"
+    description:
+      "Browse all NTU modules, view class times, venues, and prerequisites"
   },
   {
     label: "Exams",
     href: "/exams",
-    description: "Check NTU exam dates and times by module for the current semester"
+    description:
+      "Check NTU exam dates and times by module for the current semester"
   },
   {
     label: "Articles",
@@ -45,7 +49,8 @@ const CORE_LINKS = [
   {
     label: "Links",
     href: "/links",
-    description: "Quick access to top NTU student portals — STARS, NTULearn, CareerAxis, and more"
+    description:
+      "Quick access to top NTU student portals — STARS, NTULearn, CareerAxis, and more"
   },
   {
     label: "FAQ",

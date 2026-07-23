@@ -1,10 +1,11 @@
 ---
-title: "NTU STARS: How the Module Registration System Works"
-description: "A complete guide to NTU STARS — how the bidding system works, what happens in each round, how to prepare before registration opens, and what to do when a module fills up."
+title: "NTU STARS Guide 2026: Registration Rounds, Bidding & Planner Tips"
+description: "NTU STARS planner guide — how bidding rounds work, how to prepare a shortlist before registration opens, and what to do when a module fills up. Includes a free STARS planner tool."
 date: "2026-06-08"
+updated: "2026-07-23"
 author: "NTUMods"
 category: "STARS"
-tags: ["NTU STARS", "STARS NTU", "ntu module registration", "ntu stars system", "stars bidding ntu", "ntu stars guide", "ntu stars planner", "ntu stars dates", "ntu stars registration", "ntustars"]
+tags: ["NTU STARS", "STARS NTU", "ntu stars planner", "stars planner ntu", "ntu module registration", "ntu stars system", "stars bidding ntu", "ntu stars guide", "ntu stars dates", "ntu stars registration", "ntustars"]
 ---
 
 # NTU STARS: How the Module Registration System Works
@@ -56,6 +57,12 @@ Understanding what STARS actually controls helps avoid common mistakes.
 - How many total AUs you are allowed to take — NTU has per-semester AU limits that STARS enforces separately
 
 Check all of these before you bid. Being able to see a module in STARS does not confirm you can take it, count it, or will be allowed to complete registration.
+
+## Use a STARS planner before you bid
+
+Before your STARS window opens, build your shortlist on a proper planner instead of guessing from memory. The [NTUMods Timetable Planner](/timetable) lets you search every module and index, preview class times and venues, and instantly flag clashes — so when Round 1 opens, you already know exactly which index numbers to enter instead of improvising under time pressure.
+
+This matters most for labs and other index-scarce slots: check clashes across your full shortlist first, lock in the combination that works, then bid in that order the moment the window opens.
 
 ## Before you open STARS
 
@@ -132,3 +139,7 @@ Dropping after add/drop officially ends typically requires going through your sc
 ### What is the difference between Round 1 and Round 2?
 
 Round 1 is the first bidding window, where demand is highest. Round 2 is a follow-up window where remaining seats and seats dropped after Round 1 become available. For popular BDEs, Round 1 is the main chance — Round 2 often has limited availability for the most competitive modules.
+
+### Is there a STARS planner tool?
+
+Yes — the [NTUMods Timetable Planner](/timetable) works as a free STARS planner: search modules and indexes, preview class times and venues, and check clashes across your shortlist before the bidding window opens, so you can enter your choices immediately once STARS goes live.

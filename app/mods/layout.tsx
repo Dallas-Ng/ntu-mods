@@ -21,33 +21,13 @@ export default function Layout({ children }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify([
-            {
-              "@context": "https://schema.org",
-              "@type": "CollectionPage",
-              name: siteConfig.metatags.mods.title,
-              description: siteConfig.metatags.mods.desc,
-              url: `${siteConfig.url}/mods`
-            },
-            {
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  name: "Home",
-                  item: siteConfig.url
-                },
-                {
-                  "@type": "ListItem",
-                  position: 2,
-                  name: "Mods",
-                  item: `${siteConfig.url}/mods`
-                }
-              ]
-            }
-          ])
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: siteConfig.metatags.mods.title,
+            description: siteConfig.metatags.mods.desc,
+            url: `${siteConfig.url}/mods`
+          })
         }}
       />
     </>

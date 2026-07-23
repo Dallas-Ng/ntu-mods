@@ -306,15 +306,17 @@ export async function generateMetadata(props: {
   const mod = allMeta[moduleKey]
   if (!mod) return null
 
+  const cta = `${moduleKey} (${mod.au} AU): index schedules, class times, exam dates & venues.`
+
   const rawDesc = mod.description?.trim() ?? ""
   const trimmedDesc =
-    rawDesc.length > 90
-      ? `${rawDesc.slice(0, rawDesc.lastIndexOf(" ", 90))}…`
+    rawDesc.length > 60
+      ? `${rawDesc.slice(0, rawDesc.lastIndexOf(" ", 60))}…`
       : rawDesc
 
   const baseDesc = trimmedDesc
-    ? `${trimmedDesc} See ${moduleKey} index schedules, class times, exam dates & venues on NTUMods.`
-    : `${moduleKey} is a ${mod.au} AU NTU module. Check index schedules, class times, exam dates, venues, and prerequisites on NTUMods.`
+    ? `${cta} ${trimmedDesc}`
+    : `${cta} ${moduleKey} is a ${mod.au} AU NTU module on NTUMods.`
 
   return {
     title: `${moduleKey} ${mod.title} (${mod.au} AU) | NTUMods`,

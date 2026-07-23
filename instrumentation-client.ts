@@ -1,7 +1,7 @@
 import posthog from "posthog-js"
 
-// Deferred off the initial render so PostHog's init work (and session-replay
-// recorder) doesn't compete with hydration/LCP on first load.
+// Deferred off the initial render so PostHog's init work doesn't compete
+// with hydration/LCP on first load.
 function initPosthog() {
   posthog.init(process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN!, {
     api_host: "/ingest",

@@ -63,7 +63,7 @@ const Layout = ({ children }: Props) => {
               key={href}
               href={href}
               className="bg-card hover:bg-accent group rounded-lg border p-4 transition-colors">
-              <p className="group-hover:text-primary text-sm font-medium leading-snug">
+              <p className="group-hover:text-primary text-sm leading-snug font-medium">
                 {title}
               </p>
               <p className="text-muted-foreground mt-1.5 text-sm leading-relaxed">

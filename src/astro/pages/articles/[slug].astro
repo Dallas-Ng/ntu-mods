@@ -1,0 +1,315 @@
+---
+export const prerender = true
+
+import { render } from "astro:content"
+
+import { siteConfig } from "@/config/site"
+import {
+  getAllArticles,
+  getArticleCategories,
+  getArticleImageUrl,
+  getArticlesByCategory,
+  slugifyCategory
+} from "@/astro/lib/articles"
+import { extractFaqItems } from "@/lib/server/articles"
+import ArticleToc from "@/components/articles/article-toc"
+import ArticleViewTracker from "@/components/articles/article-view-tracker"
+import ArticlesList from "@/components/articles/articles-list"
+import Breadcrumbs from "@/components/breadcrumbs"
+import Container from "@/components/container"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+const CATEGORY_META: Record<
+  string,
+  { title: string; desc: string; heading: string; subheading: string }
+> = {
+  bde: {
+    title: "NTU BDE Guides | NTUMods",
+    desc: "Guides on choosing, bidding for, and planning NTU Broadening and Deepening Electives. Find easy BDEs, compare options, and plan around your timetable.",
+    heading: "NTU BDE Guides",
+    subheading: "Guides on choosing and planning your NTU electives."
+  },
+  stars: {
+    title: "NTU STARS Guides | NTUMods",
+    desc: "Guides on NTU STARS course registration: when to bid, how to plan indexes, add/drop strategies, and preparing your backup modules.",
+    heading: "NTU STARS Guides",
+    subheading: "Guides on STARS bidding and course registration."
+  },
+  "common-core": {
+    title: "NTU Common Core Module Guides | NTUMods",
+    desc: "Guides on NTU Common Core modules — what CC0001–CC0007 are like, how to plan your CC requirements, and what to expect from each category.",
+    heading: "NTU Common Core Guides",
+    subheading: "Guides on NTU Common Core modules and requirements."
+  },
+  "module-planning": {
+    title: "NTU Module Planning Guides | NTUMods",
+    desc: "Guides on planning NTU modules: balancing AUs and workload, checking prerequisites, avoiding clashes, and preparing for STARS registration.",
+    heading: "NTU Module Planning Guides",
+    subheading: "Guides on planning your NTU modules and timetable."
+  }
+}
+
+export async function getStaticPaths() {
+  const articles = await getAllArticles()
+  const categories = await getArticleCategories()
+
+  return [
+    ...articles.map((article) => ({
+      params: { slug: article.slug },
+      props: { kind: "article" as const, slug: article.slug }
+    })),
+    ...categories.map((category) => ({
+      params: { slug: slugifyCategory(category) },
+      props: { kind: "category" as const, slug: slugifyCategory(category) }
+    }))
+  ]
+}
+
+const { kind, slug } = Astro.props
+
+// Category branch
+let categoryHeading = ""
+let categorySubheading = ""
+let categoryArticleList: Awaited<ReturnType<typeof getArticlesByCategory>> = []
+let categoryJsonLd: Record<string, unknown> | null = null
+
+// Article branch
+let article: Awaited<ReturnType<typeof getAllArticles>>[number] | undefined
+let moreArticles: Awaited<ReturnType<typeof getAllArticles>> = []
+let articleJsonLd: Record<string, unknown> | null = null
+let faqJsonLd: Record<string, unknown> | null = null
+let breadcrumbJsonLd: Record<string, unknown> | null = null
+let ArticleContent: Awaited<ReturnType<typeof render>>["Content"] | null = null
+let articleHeadings: { id: string; depth: number; text: string }[] = []
+
+if (kind === "category") {
+  const categoryArticles = await getArticlesByCategory(slug)
+  const meta = CATEGORY_META[slug]
+  const categoryName = categoryArticles[0].category
+  categoryHeading = meta?.heading ?? `${categoryName} Articles`
+  categorySubheading = meta?.subheading ?? `NTUMods guides on ${categoryName}.`
+  categoryArticleList = categoryArticles
+
+  categoryJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Articles",
+        item: `${siteConfig.url}/articles`
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: categoryHeading,
+        item: `${siteConfig.url}/articles/${slug}`
+      }
+    ]
+  }
+} else {
+  const articles = await getAllArticles()
+  article = articles.find((item) => item.slug === slug)
+
+  if (article) {
+    moreArticles = articles.filter((item) => item.slug !== slug).slice(0, 3)
+
+    const rendered = await render(article.entry)
+    ArticleContent = rendered.Content
+    articleHeadings = rendered.headings.map(({ slug: headingSlug, depth, text }) => ({
+      id: headingSlug,
+      depth,
+      text
+    }))
+
+    const faqItems = extractFaqItems(article.content)
+    faqJsonLd =
+      faqItems.length > 0
+        ? {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqItems.map(({ question, answer }) => ({
+              "@type": "Question",
+              name: question,
+              acceptedAnswer: { "@type": "Answer", text: answer }
+            }))
+          }
+        : null
+
+    articleJsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: article.title,
+      description: article.description,
+      image: getArticleImageUrl(article.thumbnail),
+      datePublished: article.date,
+      dateModified: article.updated || article.date,
+      author: { "@type": "Person", name: article.author },
+      mainEntityOfPage: article.url
+    }
+
+    breadcrumbJsonLd = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Articles",
+          item: `${siteConfig.url}/articles`
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: article.title,
+          item: article.url
+        }
+      ]
+    }
+  }
+}
+
+if (kind === "article" && !article) {
+  return Astro.redirect("/404")
+}
+
+const pageTitle = kind === "category" ? CATEGORY_META[slug]?.title : article?.title
+const pageDescription =
+  kind === "category" ? CATEGORY_META[slug]?.desc : article?.description
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonical={`/articles/${slug}`}
+  size={kind === "category" ? "sm" : "md"}>
+  {
+    kind === "category" ? (
+      <>
+        <div class="mb-6 sm:mb-8">
+          <h1 class="text-2xl font-bold tracking-normal sm:text-3xl">
+            {categoryHeading}
+          </h1>
+          <p class="text-foreground/80 mt-2">{categorySubheading}</p>
+        </div>
+
+        <ArticlesList
+          client:load
+          articles={categoryArticleList.map(
+            ({
+              slug: articleSlug,
+              title,
+              description,
+              date,
+              category,
+              tags,
+              thumbnail,
+              thumbnailAlt,
+              readingTime
+            }) => ({
+              slug: articleSlug,
+              title,
+              description,
+              date,
+              category,
+              tags,
+              thumbnail,
+              thumbnailAlt,
+              readingTime
+            })
+          )}
+          categories={[]}
+        />
+
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(categoryJsonLd)}
+        />
+      </>
+    ) : (
+      article && (
+        <>
+          <ArticleViewTracker client:load slug={slug} />
+
+          <div class="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
+            <Breadcrumbs
+              breadcrumbs={[
+                { href: "/", label: "Home", name: "Home" },
+                { href: "/articles", label: "Articles", name: "Articles" },
+                {
+                  href: `/articles/${article.slug}`,
+                  label: article.title,
+                  name: article.title
+                }
+              ]}
+            />
+          </div>
+
+          <script
+            id="article-jsonld"
+            type="application/ld+json"
+            set:html={JSON.stringify(articleJsonLd)}
+          />
+          {faqJsonLd && (
+            <script
+              id="article-faq-jsonld"
+              type="application/ld+json"
+              set:html={JSON.stringify(faqJsonLd)}
+            />
+          )}
+          <script
+            id="article-breadcrumb-jsonld"
+            type="application/ld+json"
+            set:html={JSON.stringify(breadcrumbJsonLd)}
+          />
+
+          <div class="mt-5 grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
+            <article class="prose dark:prose-invert max-w-full min-w-0">
+              {article.thumbnail && (
+                <img
+                  src={article.thumbnail}
+                  alt={article.thumbnailAlt}
+                  class="mb-5 aspect-video w-full rounded-md border object-cover not-prose sm:mb-6"
+                />
+              )}
+
+              <div class="text-foreground/70 mb-6 border-b pb-4 text-sm not-prose sm:mb-8 sm:pb-5">
+                {new Date(article.date).toLocaleDateString("en-SG", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric"
+                })}{" "}
+                · {article.readingTime} · {article.author}
+              </div>
+
+              {ArticleContent && <ArticleContent />}
+            </article>
+
+            <ArticleToc client:load headings={articleHeadings} />
+          </div>
+
+          {moreArticles.length > 0 && (
+            <section class="mx-auto mt-10 max-w-3xl border-t pt-6 sm:mt-12 sm:pt-8">
+              <h2 class="text-xl font-semibold tracking-normal">More articles</h2>
+              <div class="mt-4 grid gap-3 sm:grid-cols-3">
+                {moreArticles.map((item) => (
+                  <a
+                    href={`/articles/${item.slug}`}
+                    class="bg-card hover:bg-accent rounded-md border p-3 transition-colors">
+                    <p class="line-clamp-2 text-sm font-medium break-words">
+                      {item.title}
+                    </p>
+                    <p class="text-foreground/70 mt-2 text-xs">
+                      {item.readingTime}
+                    </p>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+        </>
+      )
+    )
+  }
+</BaseLayout>

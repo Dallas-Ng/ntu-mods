@@ -1,0 +1,14 @@
+---
+export const prerender = true
+
+import { siteConfig } from "@/config/site"
+import SitemapContent from "@/components/sitemap/sitemap-content"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+---
+
+<BaseLayout
+  title={siteConfig.metatags.sitemap.title}
+  description={siteConfig.metatags.sitemap.desc}
+  canonical="/sitemap">
+  <SitemapContent />
+</BaseLayout>

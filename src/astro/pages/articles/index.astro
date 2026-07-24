@@ -1,0 +1,46 @@
+---
+export const prerender = true
+
+import { getAllArticles, getArticleCategories } from "@/astro/lib/articles"
+import { siteConfig } from "@/config/site"
+import ArticlesList from "@/components/articles/articles-list"
+import Container from "@/components/container"
+import Header from "@/components/header"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+const articles = await getAllArticles()
+const categories = await getArticleCategories()
+const articleList = articles.map(
+  ({
+    slug,
+    title,
+    description,
+    date,
+    category,
+    tags,
+    thumbnail,
+    thumbnailAlt,
+    readingTime
+  }) => ({
+    slug,
+    title,
+    description,
+    date,
+    category,
+    tags,
+    thumbnail,
+    thumbnailAlt,
+    readingTime
+  })
+)
+---
+
+<BaseLayout
+  title={siteConfig.metatags.articles.title}
+  description={siteConfig.metatags.articles.desc}
+  canonical="/articles"
+  size="md"
+  containerClassName="space-y-3">
+  <Header title="Articles" subtitle="Guides, updates, and notes from NTUMods." />
+  <ArticlesList articles={articleList} categories={categories} client:load />
+</BaseLayout>

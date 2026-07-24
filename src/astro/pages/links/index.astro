@@ -1,0 +1,14 @@
+---
+export const prerender = true
+
+import { siteConfig } from "@/config/site"
+import LinksContent from "@/components/links/links-content"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+---
+
+<BaseLayout
+  title={siteConfig.metatags.studentLinks.title}
+  description={siteConfig.metatags.studentLinks.desc}
+  canonical="/links">
+  <LinksContent client:load />
+</BaseLayout>

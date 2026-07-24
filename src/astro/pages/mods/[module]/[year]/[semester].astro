@@ -1,0 +1,211 @@
+---
+// Fully static — per the locked migration decision, every historic module
+// snapshot is generated at build time (no ISR-style fallback like the old
+// Next app had). Case-sensitive (only uppercase paths are generated) and no
+// current-semester redirect (a versioned URL that happens to match the
+// current semester just renders the same content without the "historical
+// snapshot" banner) — both are accepted trade-offs of going fully static.
+export const prerender = true
+
+import fs from "node:fs/promises"
+import path from "node:path"
+
+import { MODULE_CATEGORY } from "@/lib/constants"
+import { formatTitle } from "@/lib/format"
+import { getModuleCategories } from "@/lib/get-module-category"
+import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
+import { getModuleCurrentSemester } from "@/lib/server/get-module-current-semester"
+import { getModuleExamData } from "@/lib/server/get-module-exam-data"
+import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
+import { getModuleMetadata } from "@/lib/server/get-module-metadata"
+import Breadcrumbs from "@/components/breadcrumbs"
+import ModsIndexTable from "@/components/mods/mods-index-table"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export async function getStaticPaths() {
+  const metadataDir = path.join(process.cwd(), "src/data/api/metadata")
+  const files = (await fs.readdir(metadataDir)).filter((f) =>
+    f.endsWith(".json")
+  )
+
+  const paths: {
+    params: { module: string; year: string; semester: string }
+  }[] = []
+
+  for (const file of files) {
+    const stem = file.replace(".json", "")
+    const idx = stem.indexOf("_")
+    const year = stem.slice(0, idx)
+    const semester = stem.slice(idx + 1)
+    const data = JSON.parse(
+      await fs.readFile(path.join(metadataDir, file), "utf-8")
+    ) as Record<string, unknown>
+
+    for (const module of Object.keys(data)) {
+      paths.push({ params: { module, year, semester } })
+    }
+  }
+
+  return paths
+}
+
+const { module: code, year, semester } = Astro.params
+
+const moduleData = await getModuleMetadata(code, year, semester)
+if (!moduleData) return new Response(null, { status: 404 })
+
+const current = await getModuleCurrentSemester(code)
+const isCurrentOffering =
+  current && current.year === year && current.semester === semester
+
+const [indexes, exam] = await Promise.all([
+  getModuleIndexesData(code, year, semester),
+  getModuleExamData(code, year, semester)
+])
+const categories = getModuleCategories(moduleData.searchKeys)
+
+const semName = semester === "S" ? "Special Term" : `Semester ${semester}`
+const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
+---
+
+<BaseLayout
+  title={`${code} ${moduleData.title} | AY${year} ${semName}`}
+  description={`View the AY${year}/${parseInt(year) + 1} ${semName} record for ${code} ${moduleData.title}, including module details, index schedules, class times, venues, and exams.`}
+  canonical={getModuleVersionUrl(code, year, semester)}>
+  {
+    !isCurrentOffering && (
+      <div class="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
+        Historical snapshot — {semLabel}
+        {current && (
+          <>
+            {" "}
+            ·{" "}
+            <a
+              href={getModuleUrl(code)}
+              class="underline transition-colors hover:text-amber-600 dark:hover:text-amber-200">
+              View current offering →
+            </a>
+          </>
+        )}
+      </div>
+    )
+  }
+
+  <div class="mt-4 flex flex-col gap-6 xl:flex-row">
+    <div class="w-full xl:w-3/6">
+      <Breadcrumbs
+        breadcrumbs={[
+          { name: "Mods", label: "Mods", href: "/mods" },
+          { name: code, label: code, href: getModuleUrl(code) },
+          {
+            name: semLabel,
+            label: semLabel,
+            href: getModuleVersionUrl(code, year, semester)
+          }
+        ]}
+      />
+      <h1 class="mt-2 text-3xl">{formatTitle(moduleData.title)}</h1>
+      <p class="text-muted-foreground mt-1 text-sm">{semLabel}</p>
+      {moduleData.description && (
+        <p class="text-muted-foreground mt-4 text-sm leading-relaxed">
+          {moduleData.description}
+        </p>
+      )}
+    </div>
+
+    <div class="h-fit w-full xl:w-3/6">
+      <table class="bg-background text-sm">
+        <tbody>
+          <tr>
+            <td class="p-2">AUs</td>
+            <td class="p-2">{moduleData.au} AUs</td>
+          </tr>
+
+          {categories.length > 0 && (
+            <tr>
+              <td class="p-2">Categories</td>
+              <td class="flex flex-wrap gap-1 p-2">
+                {categories.map((cat) => (
+                  <span class="rounded-full border px-2 py-0 text-xs">
+                    {MODULE_CATEGORY[cat]}
+                  </span>
+                ))}
+              </td>
+            </tr>
+          )}
+
+          {moduleData.gradeType && (
+            <tr>
+              <td class="p-2">Grade Type</td>
+              <td class="p-2">{moduleData.gradeType}</td>
+            </tr>
+          )}
+
+          {moduleData.notAvailableToProgramme && (
+            <tr>
+              <td class="p-2">Not Available To Programme</td>
+              <td class="p-2">{moduleData.notAvailableToProgramme}</td>
+            </tr>
+          )}
+
+          {moduleData.notAvailableToAllProgrammeWith && (
+            <tr>
+              <td class="p-2">Not Available To All Programme With</td>
+              <td class="p-2">{moduleData.notAvailableToAllProgrammeWith}</td>
+            </tr>
+          )}
+
+          {moduleData.notAvailableAsBdeueToProgramme && (
+            <tr>
+              <td class="p-2">Not Available As BDE/UE To Programme</td>
+              <td class="p-2">{moduleData.notAvailableAsBdeueToProgramme}</td>
+            </tr>
+          )}
+
+          {moduleData.notAvailableAsCoreToProgramme && (
+            <tr>
+              <td class="p-2">Not Available As Core To Programme</td>
+              <td class="p-2">{moduleData.notAvailableAsCoreToProgramme}</td>
+            </tr>
+          )}
+
+          {moduleData.notAvailableAsPeToProgramme && (
+            <tr>
+              <td class="p-2">Not Available As PE To Programme</td>
+              <td class="p-2">{moduleData.notAvailableAsPeToProgramme}</td>
+            </tr>
+          )}
+
+          {moduleData.mutuallyExclusiveWith && (
+            <tr>
+              <td class="p-2">Mutually Exclusive With</td>
+              <td class="p-2">
+                {moduleData.mutuallyExclusiveWith.join(", ")}
+              </td>
+            </tr>
+          )}
+
+          {moduleData.extras &&
+            Object.entries(moduleData.extras).map(([label, value]) => (
+              <tr>
+                <td class="p-2">{label}</td>
+                <td class="p-2">{value}</td>
+              </tr>
+            ))}
+
+          <tr>
+            <td class="p-2">Exam</td>
+            <td class="p-2">
+              {exam ? `${exam.date}, ${exam.start_time} - ${exam.end_time}` : ""}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="mt-10 space-y-2">
+    <h2 class="text-lg">Available Indexes</h2>
+    <ModsIndexTable indexes={indexes} />
+  </div>
+</BaseLayout>

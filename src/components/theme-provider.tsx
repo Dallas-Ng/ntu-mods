@@ -1,14 +1,10 @@
 "use client"
 
-import {
-  ThemeProvider as NextThemesProvider,
-  type ThemeProviderProps
-} from "next-themes"
-
-const ThemeProvider = ({ children, ...props }: ThemeProviderProps) => (
-  <NextThemesProvider {...props} attribute="class" defaultTheme="dark">
-    {children}
-  </NextThemesProvider>
+// Theme state lives in localStorage + a DOM class, read independently by each
+// consumer via useTheme() (see @/hooks/use-theme) — no context provider needed,
+// so this component is just a passthrough kept for JSX call-site compatibility.
+const ThemeProvider = ({ children }: { children?: React.ReactNode }) => (
+  <>{children}</>
 )
 
 export default ThemeProvider

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-
 import SEMESTERS_JSON from "@/data/api/semesters.json"
+
 import {
   LATEST_SEMESTER_LABEL,
   latestSemester,

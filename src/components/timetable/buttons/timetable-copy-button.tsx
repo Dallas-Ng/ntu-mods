@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { Copy } from "lucide-react"
 import posthog from "posthog-js"
 import { toast } from "sonner"
@@ -32,7 +31,6 @@ const TimetableCopyButton = () => {
   const { isMobile } = useSettings()
   const [open, setOpen] = useState(false)
   const [overrideIndex, setOverrideIndex] = useState<number | null>(null)
-  const router = useRouter()
 
   const handleOverride = (overrideIndex: number) => {
     if (qsTimetable) {
@@ -42,7 +40,7 @@ const TimetableCopyButton = () => {
         target_plan: overrideIndex + 1,
         module_count: Object.keys(qsTimetable).length
       })
-      router.push("/timetable")
+      window.location.assign("/timetable")
       toast.success("Successfully copied timetable")
     }
 

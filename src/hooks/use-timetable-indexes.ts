@@ -1,10 +1,9 @@
 "use client"
 
 import { useMemo } from "react"
-
-import { customCoursesToIndexMap } from "@/lib/custom-course-to-index"
 import { useBoundState } from "@/state/bound.state"
 
+import { customCoursesToIndexMap } from "@/lib/custom-course-to-index"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 
 export const useTimetableIndexes = (

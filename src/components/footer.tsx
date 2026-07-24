@@ -1,5 +1,3 @@
-import Link from "next/link"
-
 import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 
@@ -46,20 +44,20 @@ const Footer = () => {
           Current semester
         </p>
 
-        <Link href="/faq#current-semester" className="hover:underline">
+        <a href="/faq#current-semester" className="hover:underline">
           <span className="inline-flex items-center rounded-md bg-blue-500/10 px-2.5 py-1 text-sm font-semibold text-blue-500 ring-1 ring-blue-500/20">
             {LATEST_SEMESTER_LABEL}
           </span>
-        </Link>
+        </a>
       </div>
 
       <div className="container grid gap-8 text-sm sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
         <div className="space-y-2">
-          <Link
+          <a
             href="/"
             className="text-foreground inline-flex font-semibold transition-colors hover:text-blue-500">
             {siteConfig.name}
-          </Link>
+          </a>
 
           <p className="text-muted-foreground leading-6">
             Plan NTU timetables, browse modules, compare indexes, and keep
@@ -76,11 +74,11 @@ const Footer = () => {
             <ul className="mt-3 space-y-2">
               {group.links.map((link) => (
                 <li key={link.href}>
-                  <Link
+                  <a
                     href={link.href}
                     className="text-muted-foreground transition-colors hover:text-blue-500">
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>

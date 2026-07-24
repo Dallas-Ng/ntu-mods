@@ -1,0 +1,15 @@
+---
+export const prerender = true
+
+import { siteConfig } from "@/config/site"
+import FaqContent, { faqJsonLd } from "@/components/faq/faq-content"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+---
+
+<BaseLayout
+  title={siteConfig.metatags.faq.title}
+  description={siteConfig.metatags.faq.desc}
+  canonical="/faq">
+  <FaqContent client:load />
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</BaseLayout>

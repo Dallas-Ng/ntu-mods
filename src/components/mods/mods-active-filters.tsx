@@ -1,11 +1,12 @@
 "use client"
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { X } from "lucide-react"
 import posthog from "posthog-js"
 
 import { MODULE_CATEGORY, MODULE_FACULTY, TRUN_DAY_MAP } from "@/lib/constants"
 import { TIME_OPTIONS } from "@/lib/generation-config"
+import { usePathname } from "@/hooks/use-pathname"
+import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { Button } from "@/components/ui/button"
 
 interface ActiveFilter {
@@ -34,7 +35,6 @@ export const ModsActiveFilters = ({
   moduleTimeStart,
   moduleTimeEnd
 }: Props) => {
-  const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -77,12 +77,14 @@ export const ModsActiveFilters = ({
 
   if (moduleTimeStart && moduleTimeStart !== "all") {
     const t = TIME_OPTIONS.find((o) => String(o.value) === moduleTimeStart)
-    if (t) activeFilters.push({ key: "moduleTimeStart", label: `From ${t.label}` })
+    if (t)
+      activeFilters.push({ key: "moduleTimeStart", label: `From ${t.label}` })
   }
 
   if (moduleTimeEnd && moduleTimeEnd !== "all") {
     const t = TIME_OPTIONS.find((o) => String(o.value) === moduleTimeEnd)
-    if (t) activeFilters.push({ key: "moduleTimeEnd", label: `Until ${t.label}` })
+    if (t)
+      activeFilters.push({ key: "moduleTimeEnd", label: `Until ${t.label}` })
   }
 
   if (activeFilters.length === 0) return null
@@ -90,7 +92,7 @@ export const ModsActiveFilters = ({
   const clearFilter = (key: string) => {
     const params = new URLSearchParams(searchParams.toString())
     params.delete(key)
-    router.push(`${pathname}?${params.toString()}`, { scroll: false })
+    pushSearchParams(pathname, params.toString())
     posthog.capture("mods_filter_cleared", { filter_type: key })
   }
 

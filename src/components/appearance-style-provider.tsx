@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect } from "react"
-import { useTheme } from "next-themes"
 
 import {
   APPEARANCE_DENSITIES,
@@ -11,6 +10,7 @@ import {
   TIMETABLE_STYLE_PRESETS
 } from "@/config/appearance-settings"
 import { useSettings } from "@/hooks/use-settings"
+import { useTheme } from "@/hooks/use-theme"
 
 const AppearanceStyleProvider = () => {
   const { resolvedTheme } = useTheme()

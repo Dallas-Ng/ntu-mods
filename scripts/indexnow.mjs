@@ -13,7 +13,9 @@ if (process.env.VERCEL_ENV !== "production") {
   process.exit(0)
 }
 
-const publicDir = path.join(__dirname, "../public")
+// Next writes sitemap-*.xml to public/; the Astro build writes them to
+// dist/client/ instead — pass that dir explicitly when running under Astro.
+const publicDir = path.join(__dirname, process.argv[2] || "../public")
 const files = (await fs.readdir(publicDir))
   .filter((f) => /^sitemap-\d+\.xml$/.test(f))
   .sort()

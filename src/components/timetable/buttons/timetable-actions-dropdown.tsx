@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import {
   Calendar,
   Copy,
@@ -152,10 +151,10 @@ const TimetableActionsDropdown = () => {
         </DropdownMenuSub>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/screenshot" className="flex items-center gap-2">
+          <a href="/screenshot" className="flex items-center gap-2">
             <ImageDown className="size-4" />
             Export as Image
-          </Link>
+          </a>
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={handleDownloadCalendar}

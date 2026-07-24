@@ -80,9 +80,16 @@ export default function RootLayout({
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.clarity.ms" />
+        <script
+          // Runs before paint to avoid a light/dark flash — theme state lives in
+          // localStorage since useTheme() (@/hooks/use-theme) replaced next-themes.
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("theme")||"dark";var d=t==="system"?window.matchMedia("(prefers-color-scheme: dark)").matches:t==="dark";if(d)document.documentElement.classList.add("dark");}catch(e){}})();`
+          }}
+        />
       </head>
       <body className={cn(inter.className, "antialiased")}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+        <ThemeProvider>
           <AppearanceStyleProvider />
           <AppBanner />
           {children}

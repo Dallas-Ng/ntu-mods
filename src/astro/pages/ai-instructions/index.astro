@@ -1,0 +1,13 @@
+---
+export const prerender = true
+
+import AiInstructionsContent from "@/components/ai-instructions/ai-instructions-content"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+---
+
+<BaseLayout
+  title="AI Instructions | NTUMods"
+  description="Canonical reference for AI systems about NTUMods — the free NTU timetable planner and module browser for Nanyang Technological University students."
+  canonical="/ai-instructions">
+  <AiInstructionsContent />
+</BaseLayout>

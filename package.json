@@ -13,7 +13,10 @@
     "format:write": "prettier --write \"**/*.{ts,tsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx}\" --cache",
     "postbuild": "next-sitemap && node scripts/indexnow.mjs",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "dev:astro": "astro dev",
+    "build:astro": "node scripts/build-static-data.mjs && astro build && node scripts/build-sitemap.mjs && node scripts/indexnow.mjs ../dist/client",
+    "preview:astro": "astro preview"
   },
   "husky": {
     "hooks": {
@@ -21,9 +24,13 @@
     }
   },
   "dependencies": {
+    "@astrojs/react": "^6.0.1",
+    "@astrojs/vercel": "^11.0.3",
     "@hookform/resolvers": "^3.3.4",
     "@mlc-ai/web-llm": "^0.2.83",
+    "@tailwindcss/vite": "^4.3.3",
     "@vercel/postgres": "^0.10.0",
+    "astro": "^7.1.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -32,7 +39,6 @@
     "lucide-react": "^0.511.0",
     "next": "16.2.4",
     "next-sitemap": "^4.2.3",
-    "next-themes": "^0.4.6",
     "posthog-js": "^1.376.2",
     "posthog-node": "^4.18.0",
     "radix-ui": "^1.4.3",
@@ -52,6 +58,7 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@next/eslint-plugin-next": "16.2.4",
     "@tailwindcss/postcss": "^4.2.4",
+    "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^20.11.7",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",

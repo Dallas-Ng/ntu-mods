@@ -1,17 +1,12 @@
 "use client"
 
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-
 import { Button } from "../ui/button"
 
 const ModsEmptyCard = () => {
-  const router = useRouter()
-
   return (
     <div className="w-full space-y-4 rounded-md border p-4 text-center">
       <div className="flex justify-center">
-        <Image
+        <img
           src="/empty.svg"
           alt="theres no search results, try changing your filters..."
           width={300}
@@ -25,7 +20,9 @@ const ModsEmptyCard = () => {
       </div>
 
       <div>
-        <Button variant="outline" onClick={() => router.push("/mods")}>
+        <Button
+          variant="outline"
+          onClick={() => window.location.assign("/mods")}>
           Click here to reset filters
         </Button>
       </div>

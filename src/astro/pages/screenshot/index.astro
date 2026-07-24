@@ -1,0 +1,14 @@
+---
+export const prerender = true
+
+import { siteConfig } from "@/config/site"
+import ScreenshotPageContent from "@/components/screenshot/screenshot-page-content"
+import MinimalLayout from "@/astro/layouts/MinimalLayout.astro"
+---
+
+<MinimalLayout
+  title={siteConfig.metatags.screenshot.title}
+  description={siteConfig.metatags.screenshot.desc}
+  canonical="/screenshot">
+  <ScreenshotPageContent client:only="react" />
+</MinimalLayout>

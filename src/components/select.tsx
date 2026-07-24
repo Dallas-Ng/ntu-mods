@@ -82,7 +82,10 @@ const CustomSelect = (props: Props) => {
             <div className="min-w-0 flex-1 overflow-hidden text-left">
               {activeItemLabel?.label}
             </div>
-            <ChevronsUpDownIcon aria-hidden="true" className="ml-2 size-4 shrink-0 opacity-50" />
+            <ChevronsUpDownIcon
+              aria-hidden="true"
+              className="ml-2 size-4 shrink-0 opacity-50"
+            />
           </Button>
         </PopoverTrigger>
 

@@ -18,9 +18,9 @@ import {
   getPrerequisiteGraph
 } from "@/lib/server/get-prerequisite-graph"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
-import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
 import ModsDescription from "@/components/mods/mods-description"
 import ModsExpandableFields from "@/components/mods/mods-expandable-fields"
+import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
@@ -227,13 +227,8 @@ export default async function Page(props: {
             moduleKey={moduleKey}
             currentYear={year}
             currentSemester={semester}
-            emptyContent={
-              <Link
-                href="/mods"
-                className="text-muted-foreground hover:text-primary-alt text-sm transition-colors">
-                No Mods Found. Click here to see all Mods
-              </Link>
-            }
+            emptyHref="/mods"
+            emptyLabel="No Mods Found. Click here to see all Mods"
           />
         </div>
       </div>

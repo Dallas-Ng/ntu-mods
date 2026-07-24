@@ -7,7 +7,6 @@ import { Author } from "next/dist/lib/metadata/types/metadata-types"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { Toaster } from "@/components/ui/sonner"
 import AppBanner from "@/components/app-banner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import ClarityTag from "@/components/clarity"
@@ -15,6 +14,7 @@ import GTag from "@/components/gtag"
 import MobileTracker from "@/components/mobile-tracker"
 import TailwindIndicator from "@/components/tailwind-indicator"
 import ThemeProvider from "@/components/theme-provider"
+import Toaster from "@/components/toaster-lazy"
 
 const inter = Inter({ subsets: ["latin"] })
 

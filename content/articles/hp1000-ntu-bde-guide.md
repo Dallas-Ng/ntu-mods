@@ -95,3 +95,21 @@ Psychology at NTU has multiple BDE options beyond HP1000. If HP1000 fills before
 The higher-level psychology BDEs (HP2000-level and above) may require HP1000 or equivalent as a prerequisite — check prerequisites on [NTUMods](/mods) before you bid.
 
 For a full list of psychology BDEs and other popular options, see [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu) or the [Complete NTU BDE List](/articles/complete-ntu-bde-list).
+
+## Frequently asked questions
+
+### Does HP1000 have exams?
+
+Yes. HP1000 is typically assessed with a midterm and a final examination, plus some in-class components depending on the semester. It is not an exam-free BDE — see [Easy BDEs at NTU](/articles/easy-bde-at-ntu) if that's what you're looking for.
+
+### Is HP1000 a good BDE for engineering or computing students?
+
+Yes, for most students. It's a common pick for STEM students who want a humanities-flavoured BDE without heavy essay writing — the assessment is mostly exam-based rather than coursework-based.
+
+### Do I need a prerequisite to take HP1000?
+
+No. HP1000 is the introductory psychology module and generally has no prerequisite. Higher-level psychology BDEs (HP2000-level and above) may require HP1000 or an equivalent — check the specific module page on [NTUMods](/mods) before bidding.
+
+### What happens if HP1000 is full when I bid?
+
+Check other indexes of the same module first, then try again in Round 2 and add/drop — HP1000 has high turnover as students finalise their shortlists. See the table above for other psychology BDEs to shortlist as backups.

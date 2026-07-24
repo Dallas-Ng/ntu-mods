@@ -116,3 +116,21 @@ When two modules look equally suitable:
 - BDE vs minor decision: [BDE vs Minor at NTU](/articles/bde-vs-minor-at-ntu)
 - CC module planning: [Best CC Modules at NTU](/articles/best-cc-modules-ntu)
 - STARS registration strategy: [How to Bid for a BDE at NTU](/articles/how-to-bid-for-bde-at-ntu)
+
+## Frequently asked questions
+
+### What's the biggest mistake in NTU module selection?
+
+Treating your BDE choice as an afterthought. Students who finalise core and CC modules first and add the BDE last often find the popular options already gone — plan your BDE with the same priority as the rest of your semester.
+
+### Should I choose modules by reputation or by fit?
+
+Fit. A module with a great reputation is still the wrong choice if its assessment type doesn't suit how you actually work — for example, an "easy" essay-based module is not easy for someone who finds writing difficult.
+
+### How do I avoid a semester that looks fine on paper but feels brutal?
+
+Check project and exam timing across all your modules together, not each module in isolation. A semester with reasonable AUs can still be intense if several deadlines land in the same week.
+
+### What should I check before finalising my module list?
+
+Prerequisites, programme restrictions, and exclusions for every module — not just the ones that seem obviously restricted. A missed prerequisite causes a registration rejection even when seats are available.

@@ -1,8 +1,8 @@
 ---
-title: "NTU CC Modules: What to Expect, What's Worth It, and How to Plan"
+title: "NTU CC Modules Guide: What Each Category Is Actually Like"
 description: "A guide to all NTU CC modules — AY, LA, BM, PE, and more. What each category is actually like, which ones are manageable, and how to plan your CC requirements without wrecking your semester."
 date: "2026-04-29"
-updated: "2026-06-08"
+updated: "2026-07-23"
 author: "NTUMods"
 category: "Common Core"
 tags: ["NTU", "NTUMods", "Common Core", "CC Modules", "ntu cc mods", "cc mods ntu", "best cc modules ntu", "ntu common core", "easy cc modules ntu", "CC0001", "CC0002", "CC0003", "CC0004", "CC0005", "CC0006", "CC0007", "NTU CC modules", "NTU common core requirements"]
@@ -258,3 +258,21 @@ That is the actual way to think about CC in NTU.
 
 Not hard enough to panic over.  
 Not free enough to ignore.
+
+## Frequently asked questions
+
+### Are NTU CC modules hard?
+
+Most CC modules are not intellectually difficult. What usually makes them feel hard is the coursework format — frequent small submissions, group projects, and subjective grading — not the underlying content. See [Best CC Modules at NTU](/articles/best-cc-modules-ntu) for which categories are easiest to manage.
+
+### How many CC modules do NTU students need to take?
+
+The number and mix of CC modules depends on your school and curriculum. Check your degree audit for your exact CC requirement rather than assuming it matches another student's course.
+
+### Can I choose which CC module I take?
+
+Some CC categories offer multiple module options; others are fixed by your intake batch. Check current availability on [NTUMods](/mods) and confirm against your curriculum structure before STARS opens.
+
+### Do CC modules affect my GPA?
+
+Yes. CC modules are graded and count toward your GPA the same way major modules do, unless you specifically apply an S/U (satisfactory/unsatisfactory) declaration through the FGO portal.

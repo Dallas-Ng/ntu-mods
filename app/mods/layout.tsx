@@ -14,5 +14,22 @@ interface Props {
 }
 
 export default function Layout({ children }: Props) {
-  return <LayoutDefault>{children}</LayoutDefault>
+  return (
+    <>
+      <LayoutDefault>{children}</LayoutDefault>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: siteConfig.metatags.mods.title,
+            description: siteConfig.metatags.mods.desc,
+            url: `${siteConfig.url}/mods`
+          })
+        }}
+      />
+    </>
+  )
 }

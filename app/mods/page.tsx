@@ -27,6 +27,7 @@ import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
+import Breadcrumbs from "@/components/breadcrumbs"
 import Header from "@/components/header"
 import { ModsActiveFilters } from "@/components/mods/mods-active-filters"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
@@ -203,6 +204,10 @@ const ModsPage = (props: Props) => {
 
   return (
     <div className="relative space-y-3">
+      <Breadcrumbs
+        breadcrumbs={[{ name: "Mods", label: "Mods", href: "/mods" }]}
+      />
+
       <Header
         title="NTU Modules"
         subtitle={`AY${year}/${nextYear} Semester ${semester}`}
@@ -240,7 +245,10 @@ const ModsPage = (props: Props) => {
               </span>
             )}
             <ChevronDown
-              className={cn("size-3.5 transition-transform", filtersOpen && "rotate-180")}
+              className={cn(
+                "size-3.5 transition-transform",
+                filtersOpen && "rotate-180"
+              )}
             />
           </Button>
         </div>
@@ -250,7 +258,10 @@ const ModsPage = (props: Props) => {
             <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4">
               <ModsModuleTypeSelect paramsValue={moduleType} />
               <ModsFacultySelect paramsValue={moduleFaculty} />
-              <ModsLevelSelect searchTerm={searchTerm} paramValue={moduleLevel} />
+              <ModsLevelSelect
+                searchTerm={searchTerm}
+                paramValue={moduleLevel}
+              />
               <ModsCurrentOnlyToggle paramsValue={currentOnly} />
             </div>
             <div className="grid grid-cols-1 gap-2 md:grid-cols-2">

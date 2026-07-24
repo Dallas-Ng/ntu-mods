@@ -2,6 +2,7 @@
 
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
+import posthog from "posthog-js"
 
 import { Button } from "@/components/ui/button"
 
@@ -12,7 +13,11 @@ const ThemeToggle = () => {
     <Button
       variant="ghost"
       size="icon"
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
+      onClick={() => {
+        const next = theme === "light" ? "dark" : "light"
+        setTheme(next)
+        posthog.capture("settings_theme_changed", { theme: next })
+      }}>
       <Moon className="block size-5 dark:hidden" />
       <Sun className="hidden size-5 dark:block" />
       <span className="sr-only">Toggle theme</span>

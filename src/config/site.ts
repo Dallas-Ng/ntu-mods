@@ -27,7 +27,7 @@ export const siteConfig = {
       ]
     },
     timetable: {
-      title: "NTU Timetable Planner — Build Your STARS Schedule | NTUMods",
+      title: "NTU Timetable Planner — Build Your STARS Schedule",
       desc: "Plan your NTU timetable for STARS registration. Search modules and indexes, check clashes, compare class times, and export to calendar or share link. No login required."
     },
     share: {
@@ -35,15 +35,15 @@ export const siteConfig = {
       desc: "Open a shared NTU timetable, review the modules and class times, then copy it into your own NTUMods planner to edit."
     },
     mods: {
-      title: "NTU Modules, Courses & Indexes | NTUMods",
+      title: "NTU Modules, Courses & Indexes",
       desc: "Browse all NTU courses and modules. Search by code or title, compare indexes, check exam dates, view class times, venues, and prerequisites. Updated each semester."
     },
     faq: {
-      title: "NTUMods FAQ — Frequently Asked Questions",
+      title: "FAQ — Frequently Asked Questions",
       desc: "Find quick answers for planning NTU timetables, browsing modules, choosing indexes, exporting schedules, sharing links, and understanding how your data is stored."
     },
     privacy: {
-      title: "NTUMods Privacy Policy",
+      title: "Privacy Policy",
       desc: "Learn what NTUMods stores locally, what analytics may collect, how feedback submissions are handled, and how your timetable data stays on your device."
     },
     screenshot: {
@@ -51,11 +51,11 @@ export const siteConfig = {
       desc: "Compose your NTU timetable as a clean lockscreen wallpaper or shareable image, with presets for phone screens and simple positioning controls."
     },
     settings: {
-      title: "NTUMods Settings",
+      title: "Settings",
       desc: "Customize NTUMods themes, table density, timetable colors, class details, and feedback settings so your planner works the way you prefer."
     },
     changelog: {
-      title: "NTUMods Changelog",
+      title: "Changelog",
       desc: "See recent NTUMods updates, including timetable planning improvements, module browser changes, article guides, data refreshes, and export fixes."
     },
     articles: {
@@ -63,19 +63,23 @@ export const siteConfig = {
       desc: "Read NTUMods guides on planning NTU modules, choosing BDEs, understanding Common Core modules, balancing workload, and preparing for STARS."
     },
     sitemap: {
-      title: "NTUMods Sitemap",
+      title: "Sitemap",
       desc: "Browse every major NTUMods page, planning guide, and NTU module detail page from one organized sitemap."
     },
     debug: {
-      title: "Reset NTUMods Data",
+      title: "Reset Data",
       desc: "Inspect and reset local NTUMods timetable data when your planner, settings, or saved modules behave unexpectedly after an update."
     },
     feedback: {
-      title: "Feedback — NTUMods",
+      title: "Feedback",
       desc: "Share feedback, report issues, or suggest improvements for NTUMods. This project is maintained by one person and all input is appreciated."
     },
+    studentLinks: {
+      title: "NTU Student Links",
+      desc: "Quick links to the most-used NTU student portals — STARS, NTULearn, Degree Audit, CareerAxis, GEM, library booking, and more."
+    },
     exams: {
-      title: "NTU Exam Schedule | NTUMods",
+      title: "NTU Exam Schedule",
       desc: "Browse the NTU exam schedule by date, time, and module code. Find exam durations and search by module for the current semester.",
       keywords: [
         "NTU exam schedule",
@@ -91,7 +95,8 @@ export const siteConfig = {
     { label: "Timetable", route: "/timetable" },
     { label: "Mods", route: "/mods" },
     { label: "Exams", route: "/exams" },
-    { label: "Articles", route: "/articles" }
+    { label: "Articles", route: "/articles" },
+    { label: "Links", route: "/links" }
   ],
   links: {
     github: "https://github.com/Dallas-Ng",

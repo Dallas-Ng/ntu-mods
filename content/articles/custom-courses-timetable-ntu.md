@@ -78,3 +78,21 @@ The same approach works for CCA commitments, work shifts, or anything else with 
 - [How to Plan NTU Modules Before STARS Opens](/articles/how-to-plan-for-modules)
 - [Easy BDEs at NTU](/articles/easy-bde-at-ntu)
 - [Complete NTU BDE List](/articles/complete-ntu-bde-list)
+
+## Frequently asked questions
+
+### Do custom courses appear in shared timetable links?
+
+No. Custom courses are stored locally in your browser and are not included when you share a timetable link — recipients only see your registered modules. Screenshots taken with the screenshot button do include custom courses as they appear on screen.
+
+### Do custom courses sync across devices?
+
+No. They are stored locally per browser, not synced to an account or server. If you switch devices or clear browser data, custom courses on that device are lost.
+
+### Can I add more than one custom course on the same day?
+
+Yes. Add as many blocks as you need — recurring commitments like gym, lunch, and CCA can all sit on the same day's grid, and each one is checked for clashes independently.
+
+### Does clash detection treat custom courses the same as registered modules?
+
+Yes. A custom course overlapping a tutorial or lecture displays side by side in the same grid column, exactly like two registered modules clashing with each other.

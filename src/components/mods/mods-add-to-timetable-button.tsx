@@ -38,6 +38,12 @@ interface Props {
   triggerClassName?: string
   /** Override the trigger Button variant. Defaults to outline/secondary based on plan state. */
   triggerVariant?: "outline" | "ghost" | "secondary"
+  /**
+   * This module's own indexes, when already available (e.g. server-fetched on the
+   * mod detail page). Lets the button render its enabled/disabled state without
+   * waiting on the full season indexes fetch.
+   */
+  moduleIndexes?: Record<string, Index[]>
 }
 
 function PlanItems({
@@ -75,14 +81,22 @@ const ModsAddToTimetableButton = ({
   semester,
   showText,
   triggerClassName,
-  triggerVariant
+  triggerVariant,
+  moduleIndexes: moduleIndexesProp
 }: Props) => {
   const { timetables, updateTimetable } = useTimetable()
-  const { indexes: seasonIndexes, isLoading } = useSeasonIndexes(year, semester)
   const { isMobile } = useSettings()
   const [open, setOpen] = useState(false)
+  // Other modules' indexes are only needed to resolve clashes once the user
+  // opens the plan picker, so defer the (large) season-wide fetch until then.
+  const { indexes: seasonIndexes, isLoading: seasonLoading } = useSeasonIndexes(
+    year,
+    semester,
+    moduleIndexesProp == null || open
+  )
 
-  const moduleIndexes = seasonIndexes[moduleKey]
+  const moduleIndexes = moduleIndexesProp ?? seasonIndexes[moduleKey]
+  const isLoading = moduleIndexesProp == null && seasonLoading
   const hasIndexes =
     !isLoading && moduleIndexes && Object.keys(moduleIndexes).length > 0
   const inAnyPlan = timetables.some((t) => t[moduleKey] != null)

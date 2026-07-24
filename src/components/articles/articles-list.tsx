@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Check, ChevronDown, Search, X } from "lucide-react"
+import posthog from "posthog-js"
 
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
@@ -151,6 +152,7 @@ export default function ArticlesList({
     const value = debouncedSearchQuery.trim()
     if (value === queryParam) return
     updateParams({ q: value || null })
+    if (value) posthog.capture("articles_searched", { search_term: value })
   }, [debouncedSearchQuery, queryParam, updateParams])
 
   useEffect(() => {
@@ -302,7 +304,11 @@ export default function ArticlesList({
                 <PopoverClose
                   key={category}
                   className="hover:bg-accent flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors"
-                  onClick={() => updateParams({ category: value })}>
+                  onClick={() => {
+                    updateParams({ category: value })
+                    if (value)
+                      posthog.capture("articles_category_filtered", { category })
+                  }}>
                   <Check
                     className={cn(
                       "size-4",

@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic"
 
+import Breadcrumbs from "@/components/breadcrumbs"
 import Header from "@/components/header"
 import { Migration } from "@/components/migration"
 import { TimetableTableLoader } from "@/components/timetable-table/table-loader"
@@ -74,6 +75,12 @@ const Page = () => {
       <Migration />
 
       <div className="space-y-4">
+        <Breadcrumbs
+          breadcrumbs={[
+            { name: "Timetable", label: "Timetable", href: "/timetable" }
+          ]}
+        />
+
         <Header title="Timetable" />
 
         {/* Top bar: plan switcher + generate + actions */}

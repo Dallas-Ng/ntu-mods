@@ -23,6 +23,7 @@ const FOOTER_GROUPS = [
   {
     title: "Resources",
     links: [
+      { label: "Links", href: "/links" },
       { label: "Changelog", href: "/changelog" },
       { label: "Feedback", href: "/feedback" },
       { label: "FAQ", href: "/faq" }

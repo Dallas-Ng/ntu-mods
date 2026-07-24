@@ -4,7 +4,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { X } from "lucide-react"
 import posthog from "posthog-js"
 
-import { MODULE_CATEGORY, MODULE_FACULTY } from "@/lib/constants"
+import { MODULE_CATEGORY, MODULE_FACULTY, TRUN_DAY_MAP } from "@/lib/constants"
+import { TIME_OPTIONS } from "@/lib/generation-config"
 import { Button } from "@/components/ui/button"
 
 interface ActiveFilter {
@@ -18,6 +19,9 @@ interface Props {
   moduleLevel: string
   moduleFaculty: string
   currentOnly: string
+  moduleDay?: string
+  moduleTimeStart?: string
+  moduleTimeEnd?: string
 }
 
 export const ModsActiveFilters = ({
@@ -25,7 +29,10 @@ export const ModsActiveFilters = ({
   moduleType,
   moduleLevel,
   moduleFaculty,
-  currentOnly
+  currentOnly,
+  moduleDay,
+  moduleTimeStart,
+  moduleTimeEnd
 }: Props) => {
   const router = useRouter()
   const pathname = usePathname()
@@ -57,6 +64,25 @@ export const ModsActiveFilters = ({
   }
   if (currentOnly === "false") {
     activeFilters.push({ key: "currentOnly", label: "All Semesters" })
+  }
+
+  if (moduleDay && moduleDay !== "all") {
+    const days = moduleDay
+      .split(",")
+      .map(Number)
+      .map((d) => TRUN_DAY_MAP[d as keyof typeof TRUN_DAY_MAP])
+      .join(", ")
+    activeFilters.push({ key: "moduleDay", label: `Days: ${days}` })
+  }
+
+  if (moduleTimeStart && moduleTimeStart !== "all") {
+    const t = TIME_OPTIONS.find((o) => String(o.value) === moduleTimeStart)
+    if (t) activeFilters.push({ key: "moduleTimeStart", label: `From ${t.label}` })
+  }
+
+  if (moduleTimeEnd && moduleTimeEnd !== "all") {
+    const t = TIME_OPTIONS.find((o) => String(o.value) === moduleTimeEnd)
+    if (t) activeFilters.push({ key: "moduleTimeEnd", label: `Until ${t.label}` })
   }
 
   if (activeFilters.length === 0) return null

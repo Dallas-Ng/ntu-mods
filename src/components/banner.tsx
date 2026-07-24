@@ -12,7 +12,7 @@ export const BannerWrapper = (props: BannerProps) => {
   return (
     <div
       className={cn(
-        "relative z-10 flex items-center justify-center bg-yellow-400 p-1",
+        "relative z-10 flex items-center justify-center bg-sky-300 p-1",
         props.divClass
       )}>
       <p
@@ -54,7 +54,7 @@ export const Banner = {
   ay2026s1: () => (
     <Link href="/changelog">
       <BannerWrapper>
-        New: custom courses — block out personal time on your timetable →
+        New: filter modules by day and time, student links, custom courses →
       </BannerWrapper>
     </Link>
   ),

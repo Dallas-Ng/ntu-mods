@@ -9,6 +9,7 @@ import {
   List,
   SlidersHorizontal
 } from "lucide-react"
+import posthog from "posthog-js"
 
 import type {
   AllModule,
@@ -19,15 +20,19 @@ import type {
 } from "@/types/mods"
 import { filterModules, groupModules } from "@/lib/filter-modules"
 import { latestSemester, latestYear } from "@/lib/semesters"
+import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useFavourites } from "@/hooks/use-favourites"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
+import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
+import Breadcrumbs from "@/components/breadcrumbs"
 import Header from "@/components/header"
 import { ModsActiveFilters } from "@/components/mods/mods-active-filters"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import { ModsCurrentOnlyToggle } from "@/components/mods/mods-current-only-toggle"
+import { ModsDaySelect } from "@/components/mods/mods-day-select"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import { ModsFacultySelect } from "@/components/mods/mods-faculty-select"
 import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
@@ -35,6 +40,7 @@ import { ModsGroupBySelect } from "@/components/mods/mods-group-by-select"
 import { ModsLevelSelect } from "@/components/mods/mods-module-level-select"
 import { ModsModuleTypeSelect } from "@/components/mods/mods-module-type-select"
 import ModsSearchInput from "@/components/mods/mods-search-input"
+import { ModsTimeRangeSelect } from "@/components/mods/mods-time-range-select"
 import {
   ModuleCardDetail,
   ModuleCardDetailLoading,
@@ -51,6 +57,9 @@ interface Props {
     moduleLevel?: SearchModuleLevel
     currentOnly?: string
     favouritesOnly?: string
+    moduleDay?: string
+    moduleTimeStart?: string
+    moduleTimeEnd?: string
   }>
 }
 
@@ -67,13 +76,17 @@ const ModsPage = (props: Props) => {
     moduleFaculty = "all",
     moduleLevel = "all",
     currentOnly = "true",
-    favouritesOnly = "false"
+    favouritesOnly = "false",
+    moduleDay = "all",
+    moduleTimeStart = "all",
+    moduleTimeEnd = "all"
   } = searchParams
 
   const year = latestYear
   const semester = latestSemester
   const nextYear = parseInt(year) + 1
   const { modules: allModules, isLoading } = useAllModules()
+  const { indexes } = useSeasonIndexes(year, semester)
   const { modsViewMode, modsGroupBy, updateSettings } = useSettings()
   const { favouriteModules } = useFavourites()
   const { setValue: setFavouritesOnly } = useModsSearchParams(
@@ -85,15 +98,32 @@ const ModsPage = (props: Props) => {
   const [filtersOpen, setFiltersOpen] = useState(true)
   const loaderRef = useRef<HTMLDivElement>(null)
 
+  const allowedDays =
+    moduleDay !== "all"
+      ? moduleDay
+          .split(",")
+          .map(Number)
+          .filter((d) => d >= 1 && d <= 7)
+      : undefined
+  const timeStart =
+    moduleTimeStart !== "all" ? parseInt(moduleTimeStart) : undefined
+  const timeEnd = moduleTimeEnd !== "all" ? parseInt(moduleTimeEnd) : undefined
+
   const activeFilterCount = [
     moduleType !== "all",
     moduleFaculty !== "all",
     moduleLevel !== "all",
-    currentOnly === "false"
+    currentOnly === "false",
+    moduleDay !== "all",
+    moduleTimeStart !== "all",
+    moduleTimeEnd !== "all"
   ].filter(Boolean).length
 
   const setViewMode = useCallback(
-    (mode: "cards" | "list") => updateSettings({ modsViewMode: mode }),
+    (mode: "cards" | "list") => {
+      updateSettings({ modsViewMode: mode })
+      posthog.capture("mods_view_changed", { view: mode })
+    },
     [updateSettings]
   )
 
@@ -106,7 +136,11 @@ const ModsPage = (props: Props) => {
         moduleLevel,
         currentOnly: currentOnly === "true",
         favouritesOnly: favouritesOnly === "true",
-        favouriteModules
+        favouriteModules,
+        allowedDays,
+        timeStart,
+        timeEnd,
+        indexes
       }),
     [
       allModules,
@@ -116,7 +150,11 @@ const ModsPage = (props: Props) => {
       moduleLevel,
       currentOnly,
       favouritesOnly,
-      favouriteModules
+      favouriteModules,
+      allowedDays,
+      timeStart,
+      timeEnd,
+      indexes
     ]
   )
 
@@ -147,7 +185,10 @@ const ModsPage = (props: Props) => {
     moduleFaculty,
     moduleLevel,
     currentOnly,
-    modsGroupBy
+    modsGroupBy,
+    moduleDay,
+    moduleTimeStart,
+    moduleTimeEnd
   ])
 
   useEffect(() => {
@@ -163,6 +204,10 @@ const ModsPage = (props: Props) => {
 
   return (
     <div className="relative space-y-3">
+      <Breadcrumbs
+        breadcrumbs={[{ name: "Mods", label: "Mods", href: "/mods" }]}
+      />
+
       <Header
         title="NTU Modules"
         subtitle={`AY${year}/${nextYear} Semester ${semester}`}
@@ -172,9 +217,12 @@ const ModsPage = (props: Props) => {
         <div className="flex gap-2">
           <ModsSearchInput paramsValue={searchTerm} />
           <Button
-            variant={favouritesOnly === "true" ? "secondary" : "outline"}
+            variant="outline"
             size="sm"
-            className="h-9 w-9 shrink-0 gap-1.5 sm:w-auto"
+            className={cn(
+              "h-9 w-9 shrink-0 gap-1.5 sm:w-auto",
+              favouritesOnly === "true" && "bg-secondary"
+            )}
             onClick={() =>
               setFavouritesOnly(favouritesOnly === "true" ? "false" : "true")
             }
@@ -197,17 +245,32 @@ const ModsPage = (props: Props) => {
               </span>
             )}
             <ChevronDown
-              className={`size-3.5 transition-transform${filtersOpen ? "rotate-180" : ""}`}
+              className={cn(
+                "size-3.5 transition-transform",
+                filtersOpen && "rotate-180"
+              )}
             />
           </Button>
         </div>
 
         {filtersOpen && (
-          <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4">
-            <ModsModuleTypeSelect paramsValue={moduleType} />
-            <ModsFacultySelect paramsValue={moduleFaculty} />
-            <ModsLevelSelect searchTerm={searchTerm} paramValue={moduleLevel} />
-            <ModsCurrentOnlyToggle paramsValue={currentOnly} />
+          <div className="flex flex-col gap-2">
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4">
+              <ModsModuleTypeSelect paramsValue={moduleType} />
+              <ModsFacultySelect paramsValue={moduleFaculty} />
+              <ModsLevelSelect
+                searchTerm={searchTerm}
+                paramValue={moduleLevel}
+              />
+              <ModsCurrentOnlyToggle paramsValue={currentOnly} />
+            </div>
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+              <ModsDaySelect paramsValue={moduleDay} />
+              <ModsTimeRangeSelect
+                startParamsValue={moduleTimeStart}
+                endParamsValue={moduleTimeEnd}
+              />
+            </div>
           </div>
         )}
       </div>
@@ -218,6 +281,9 @@ const ModsPage = (props: Props) => {
         moduleLevel={moduleLevel}
         moduleFaculty={moduleFaculty}
         currentOnly={currentOnly}
+        moduleDay={moduleDay}
+        moduleTimeStart={moduleTimeStart}
+        moduleTimeEnd={moduleTimeEnd}
       />
 
       <hr className="py-2" />

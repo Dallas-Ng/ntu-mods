@@ -1,17 +1,32 @@
 ---
-title: "NTU Academic Calendar AY2026/2027: Key Dates for Semester 1 and 2"
-description: "NTU academic calendar dates for AY2026/2027 — semester start and end dates, recess week, exam periods, STARS registration rounds, and how the NTU semester structure works."
+title: "NTU Academic Calendar 2026/2027 (AY2026/27): Semester Dates & Term Breaks"
+description: "NTU academic calendar 2026/2027 — semester 1 & 2 start/end dates, recess week, exam period dates, and STARS registration rounds. Updated for AY2026/27."
 date: "2026-06-20"
+updated: "2026-07-23"
 author: "NTUMods"
 category: "Module Planning"
-tags: ["ntu academic calendar", "ntu calendar 2026", "ntu semester dates", "ntu exam period 2026", "ntu stars dates", "ntu recess week", "ntu semester 1 2026", "ntu ay2026 dates", "ntu timetable dates", "ntu academic year 2026"]
+tags: ["ntu academic calendar", "ntu academic calendar 2026", "ntu calendar 26/27", "ntu calendar 2026/2027", "ntu term dates", "ntu semester calendar", "ntu semester dates", "ntu exam period 2026", "ntu stars dates", "ntu recess week", "ntu semester 1 2026", "ntu ay2026 dates", "ntu timetable dates", "ntu academic year 2026"]
 ---
 
 # NTU Academic Calendar AY2026/2027: Key Dates for Semester 1 and 2
 
-NTU's academic year is divided into two main semesters — Semester 1 (August to December) and Semester 2 (January to May) — plus a Special Term over the summer. This page covers how the NTU academic calendar is structured, what happens in each phase, and where to find the official dates for AY2026/2027.
+NTU's academic year 2026/2027 is divided into two main semesters — Semester 1 (August to December) and Semester 2 (January to May) — plus a Special Term over the summer. This page covers the NTU term dates for 2026/27, how the semester calendar is structured, what happens in each phase, and where to find the official dates for AY2026/2027.
 
 > **Official source:** Always confirm dates with the [NTU Academic Calendar](https://www.ntu.edu.sg/education/academic-calendar) on NTU's website. Dates are updated by NTU each academic year.
+
+## NTU term dates 2026/2027 at a glance
+
+| | Semester 1 | Semester 2 |
+|---|---|---|
+| STARS Round 1 | July 2026 | December 2026 |
+| STARS Round 2 | Late July / early Aug 2026 | Late Dec 2026 / early Jan 2027 |
+| Semester begins | Mid August 2026 | Mid January 2027 |
+| Recess Week | ~Week 8 (October) | ~Week 8 (March) |
+| Teaching ends | Early November 2026 | April 2027 |
+| Exam period | November–December 2026 | April–May 2027 |
+| Semester ends | Mid-December 2026 | Mid-May 2027 |
+
+Treat this table as a fast reference — the detailed breakdowns below cover STARS timing, Recess Week, and exam period in full, and the [NTU Academic Calendar](https://www.ntu.edu.sg/education/academic-calendar) remains the authoritative source for exact dates once NTU publishes them.
 
 ## AY2026/2027 Semester 1
 
@@ -83,6 +98,10 @@ NTUMods provides tools that align with each phase of the academic calendar:
 - **During add/drop** — Use the [Module Browser](/mods) to check whether alternative modules still have seats.
 - **Before exam period** — Use the [Exam Schedule](/exams) to check all your exam dates, identify any clashes, and plan your revision timetable around the exam period.
 
+## Export the calendar to your phone
+
+Once your timetable is built on the [Timetable Planner](/timetable), use **Save to Calendar** to download an `.ics` file with your semester's class times, recess week gap, and exam period already mapped to the correct dates. Import it into Google Calendar, Apple Calendar, or Outlook so your NTU semester schedule shows up alongside the rest of your calendar — no manual date entry needed.
+
 ## Frequently asked questions
 
 ### When does NTU Semester 1 AY2026/2027 start?
@@ -108,3 +127,7 @@ Each semester is approximately 17 weeks: 13 teaching weeks, one Recess Week, one
 ### What is NTU's academic year structure?
 
 NTU follows an academic year divided into Semester 1 (August–December) and Semester 2 (January–May), with an optional Special Term over the summer. Most undergraduate programmes span four academic years (eight semesters).
+
+### Is there an NTU calendar 2026/27 I can add to my phone?
+
+Yes — build your semester timetable on [NTUMods](/timetable) and use **Save to Calendar** to export an `.ics` file with your class times and semester dates already set, ready to import into Google Calendar, Apple Calendar, or Outlook.

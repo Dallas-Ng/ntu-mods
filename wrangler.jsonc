@@ -4,21 +4,23 @@
   // needed because the repo still has next.config.js alongside astro.config.mjs
   // (Next + Astro coexist during the migration), which made auto-detect bail
   // with "multiple frameworks were found: Astro, Next.js".
+  //
+  // Deliberately has no "main"/"assets"/"build" — @astrojs/cloudflare bundles
+  // @cloudflare/vite-plugin into the astro build pipeline, and that plugin
+  // auto-loads this file too. If "main" were set here (even correctly, to
+  // dist/server/entry.mjs), the plugin eagerly validates it exists during
+  // astro's sync step, which runs *before* astro build has generated that
+  // file — the build crashes trying to validate its own output as an input.
+  // Omitting "main" makes the plugin treat this as an assets-only config
+  // (see resolveWorkerType in @cloudflare/vite-plugin), which skips that
+  // check and lets the build finish normally.
+  //
+  // The adapter emits its own correct, self-contained wrangler.json in
+  // dist/server/ after a successful build (real main + assets paths,
+  // relative to dist/server/). Deploy using THAT file, not this one:
+  //   Build command:  yarn build:astro
+  //   Deploy command: npx wrangler deploy --config dist/server/wrangler.json
   "name": "ntu-mods",
-  // CF's deploy step here only runs "wrangler deploy" with no separate build
-  // step first, so dist/ doesn't exist yet — wrangler runs this command
-  // itself before bundling/uploading.
-  "build": {
-    "command": "yarn build:astro"
-  },
   "compatibility_date": "2025-11-01",
-  "compatibility_flags": ["nodejs_compat"],
-  // Matches the adapter's own generated dist/server/wrangler.json (paths
-  // re-rooted from repo root instead of dist/server/) — @astrojs/cloudflare
-  // with output:"server" emits a plain entry.mjs, not Pages-style _worker.js.
-  "main": "./dist/server/entry.mjs",
-  "assets": {
-    "binding": "ASSETS",
-    "directory": "./dist/client"
-  }
+  "compatibility_flags": ["nodejs_compat"]
 }

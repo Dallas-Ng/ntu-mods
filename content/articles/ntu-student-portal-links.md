@@ -1,15 +1,16 @@
 ---
-title: "NTU Student Portals: Complete List of Websites and Links"
-description: "Every NTU student portal you need — STARS for course registration, NTULearn for course materials, Degree Audit for grades, CareerAxis for jobs, GEM for exchange, and more. All with direct links."
+title: "NTU STARS, NTULearn & Student Portal Links (All-in-One List)"
+description: "Direct links to every NTU student portal — STARS for course registration, NTULearn for course materials, Degree Audit for grades, CareerAxis for jobs, GEM for exchange, and more."
 date: "2026-06-22"
+updated: "2026-07-23"
 author: "NTUMods"
 category: "General"
-tags: ["NTU portals", "NTU student links", "NTU websites", "STARS NTU", "NTULearn", "Degree Audit NTU", "NTU student guide", "NTU resources", "NTU online portals", "NTU student portal list"]
+tags: ["NTU portals", "ntu portal", "NTU student links", "NTU websites", "STARS NTU", "NTULearn", "Degree Audit NTU", "NTU student guide", "NTU resources", "NTU online portals", "NTU student portal list"]
 ---
 
 # NTU Student Portals: Complete List of Websites and Links
 
-NTU uses more than a dozen separate web portals for registration, grades, internships, exchange, library bookings, and financial aid. There is no single login that opens all of them.
+NTU uses more than a dozen separate web portals — STARS for module registration, NTULearn for course content, Degree Audit for grades, plus separate systems for internships, exchange, library bookings, and financial aid. There is no single login that opens all of them.
 
 This guide lists every portal NTU students actually use, what each one does, and when you need it. All links are collected on the [NTUMods Links page](/links) so you have one place to return to each semester.
 
@@ -136,6 +137,9 @@ NTU uses NTULearn — accessible at [ntulearn.ntu.edu.sg](https://ntulearn.ntu.e
 
 **Is NTUMods an official NTU website?**
 No. NTUMods is an independent, student-built tool and is not affiliated with or endorsed by Nanyang Technological University. Module and timetable data is sourced from NTU's publicly accessible systems.
+
+**What is "the NTU portal"?**
+There isn't one single "NTU portal" — the term usually refers to whichever system you need at the time: STARS for registration, NTULearn for course materials, or Degree Audit for grades. See the table above for the direct link to each one.
 
 ## Keep all links in one place
 

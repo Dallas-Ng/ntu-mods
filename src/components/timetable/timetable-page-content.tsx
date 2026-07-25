@@ -5,6 +5,7 @@ import { MousePointerClick } from "lucide-react"
 import posthog from "posthog-js"
 
 import { Button } from "@/components/ui/button"
+import Breadcrumbs from "@/components/breadcrumbs"
 import Header from "@/components/header"
 import { Migration } from "@/components/migration"
 import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile-timetable-modifier-button"
@@ -24,6 +25,12 @@ const TimetablePageContent = () => {
       <Migration />
 
       <div className="space-y-4">
+        <Breadcrumbs
+          breadcrumbs={[
+            { name: "Timetable", label: "Timetable", href: "/timetable" }
+          ]}
+        />
+
         <Header title="Timetable" />
 
         <div className="flex justify-between gap-2">

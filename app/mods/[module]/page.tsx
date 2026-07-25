@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import nextDynamic from "next/dynamic"
 import Link from "next/link"
 import { notFound, redirect } from "next/navigation"
 
@@ -24,10 +25,13 @@ import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
 import ModsHeader from "@/components/mods/mods-header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import ModsInfoTable from "@/components/mods/mods-info-table"
-import ModsPrerequisiteGraph from "@/components/mods/mods-prerequisite-graph"
 import ModsViewTracker from "@/components/mods/mods-view-tracker"
 import ModsWorkloadTable from "@/components/mods/mods-workload-table"
 import RelatedModules from "@/components/related-modules"
+
+const ModsPrerequisiteGraph = nextDynamic(
+  () => import("@/components/mods/mods-prerequisite-graph")
+)
 
 export const dynamic = "force-static"
 export const dynamicParams = true
@@ -127,6 +131,7 @@ export default async function Page(props: {
                 year={year}
                 semester={semester}
                 showText={true}
+                moduleIndexes={indexes}
               />
             )}
             <ModsFavouriteButton
@@ -206,7 +211,7 @@ export default async function Page(props: {
                         ) : (
                           <span
                             key={sem}
-                            className="text-muted-foreground/35 px-2 py-1 text-center text-sm line-through">
+                            className="text-muted-foreground px-2 py-1 text-center text-sm line-through">
                             {label}
                           </span>
                         )
@@ -301,9 +306,17 @@ export async function generateMetadata(props: {
   const mod = allMeta[moduleKey]
   if (!mod) return null
 
-  const baseDesc = mod.description?.trim()
-    ? `${mod.description.trim().slice(0, 100)}${mod.description.trim().length > 100 ? "…" : ""}`
-    : `${moduleKey} is a ${mod.au} AU NTU module. Check index schedules, class times, exam dates, venues, and prerequisites on NTUMods.`
+  const cta = `${moduleKey} (${mod.au} AU): index schedules, class times, exam dates & venues.`
+
+  const rawDesc = mod.description?.trim() ?? ""
+  const trimmedDesc =
+    rawDesc.length > 60
+      ? `${rawDesc.slice(0, rawDesc.lastIndexOf(" ", 60))}…`
+      : rawDesc
+
+  const baseDesc = trimmedDesc
+    ? `${cta} ${trimmedDesc}`
+    : `${cta} ${moduleKey} is a ${mod.au} AU NTU module on NTUMods.`
 
   return {
     title: `${moduleKey} ${mod.title} (${mod.au} AU) | NTUMods`,

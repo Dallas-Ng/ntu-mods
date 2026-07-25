@@ -95,3 +95,21 @@ Once your plan is ready:
 3. Go into STARS bidding with your list ready — see [How to Bid for a BDE at NTU](/articles/how-to-bid-for-bde-at-ntu) for the full STARS strategy
 
 For the broader module planning process before timetable building, start with [How to Plan NTU Modules Before STARS Opens](/articles/how-to-plan-for-modules).
+
+## Frequently asked questions
+
+### Does the NTUMods timetable planner register me for modules?
+
+No. The planner is for planning only — it does not connect to STARS or submit any registration. You still bid for your indexes in STARS once your plan is ready.
+
+### Can I save more than one timetable version?
+
+Yes. Build a primary plan and a backup plan with alternative indexes, so you have a verified fallback ready if your first choice fills up during bidding.
+
+### Can I export my planned timetable to my phone's calendar?
+
+Yes. Once your timetable is built, use **Save to Calendar** on the [timetable page](/timetable) to download an `.ics` file with your class times already mapped to the current semester's dates — import it into Google Calendar, Apple Calendar, or Outlook.
+
+### Does the planner show exam dates?
+
+Not directly on the grid, but you can cross-check your shortlisted modules against the [NTU Exam Schedule](/exams) before finalising your plan, so exam clustering doesn't surprise you later.

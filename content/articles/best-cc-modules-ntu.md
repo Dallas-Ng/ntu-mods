@@ -89,3 +89,21 @@ CC and BDE are separate requirements in most NTU degree programmes. You cannot u
 When building your semester plan, lock in your immovable core and lab modules first, then add CC and BDE to smooth out the week. See [How to Plan Your NTU Modules](/articles/how-to-plan-for-modules) for the full semester planning workflow.
 
 If you are working out how much elective space you have after CC requirements are accounted for, the relevant calculation for BDE space is in [BDE vs Minor at NTU](/articles/bde-vs-minor-at-ntu).
+
+## Frequently asked questions
+
+### What are the easiest CC modules at NTU?
+
+Wellness and self-development modules tend to be the most predictable — steady small submissions rather than one high-stakes deliverable. See the module-type breakdown above for why they work well in heavy semesters specifically.
+
+### Does the professor matter more than the module for CC?
+
+Yes, more than for most other module types. A good professor can make a mediocre CC module manageable, and a bad one can make an easy CC module miserable. Ask seniors about the specific professor teaching that semester, not just the module name.
+
+### Can I use a CC module to fulfil a BDE requirement?
+
+No. CC and BDE are separate requirements in most NTU degree programmes, and one does not substitute for the other.
+
+### Should I pick CC modules based on senior recommendations?
+
+Treat them as a starting point, not a guarantee — a senior's experience reflects a specific professor, assessment design, and group, none of which are guaranteed to repeat when you take the module.

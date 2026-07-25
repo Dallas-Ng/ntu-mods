@@ -9,7 +9,8 @@ export const revalidate = false
 export const metadata: Metadata = {
   title: siteConfig.metatags.sitemap.title,
   description: siteConfig.metatags.sitemap.desc,
-  alternates: { canonical: "/sitemap" }
+  alternates: { canonical: "/sitemap" },
+  robots: { index: false, follow: true }
 }
 
 export default function SitemapPage() {

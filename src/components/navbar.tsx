@@ -53,7 +53,7 @@ const Navbar = () => {
         <div className="flex min-w-0 items-center">
           <a href="/" className="flex shrink-0 items-center">
             <img
-              src="/logo.png"
+              src="/logo.webp"
               alt="Logo"
               width={30}
               height={30}
@@ -163,7 +163,7 @@ const Navbar = () => {
               <div className="flex items-center justify-between border-b px-5 py-4">
                 <a href="/" className="flex items-center gap-2">
                   <img
-                    src="/logo.png"
+                    src="/logo.webp"
                     alt="Logo"
                     width={24}
                     height={24}

@@ -31,9 +31,7 @@ export default defineConfig({
     "/help": "/faq"
   },
   vite: {
-    // Reuse the same NEXT_PUBLIC_* env vars Next already uses (e.g. the
-    // PostHog project token) instead of duplicating them under a PUBLIC_ name.
-    envPrefix: ["PUBLIC_", "NEXT_PUBLIC_"],
+    envPrefix: ["PUBLIC_"],
     plugins: [tailwindcss()],
     resolve: {
       alias: {

@@ -22,5 +22,23 @@
   //   Deploy command: npx wrangler deploy --config dist/server/wrangler.json
   "name": "ntu-mods",
   "compatibility_date": "2025-11-01",
-  "compatibility_flags": ["nodejs_compat"]
+  "compatibility_flags": ["nodejs_compat"],
+  "cache": {
+    "enabled": false
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": true,
+      "persist": true,
+      "head_sampling_rate": 1
+    }
+  }
 }

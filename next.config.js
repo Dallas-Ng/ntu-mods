@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // PUBLIC_POSTHOG_TOKEN lacks the NEXT_PUBLIC_ prefix Next requires to
+  // auto-inline env vars into the client bundle, so expose it explicitly.
+  env: {
+    PUBLIC_POSTHOG_TOKEN: process.env.PUBLIC_POSTHOG_TOKEN
+  },
   experimental: {
     parallelServerCompiles: true,
     parallelServerBuildTraces: true,

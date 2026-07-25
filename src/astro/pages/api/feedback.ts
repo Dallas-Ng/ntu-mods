@@ -16,7 +16,7 @@ export const POST: APIRoute = async ({ request }) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.RESEND_API_KEY}`
+      Authorization: `Bearer ${process.env.RESEND_KEY}`
     },
     body: JSON.stringify({
       from: "feedback@ntumods.com",

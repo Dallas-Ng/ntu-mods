@@ -1,7 +1,7 @@
 import { fileURLToPath } from "node:url"
 
+import cloudflare from "@astrojs/cloudflare"
 import react from "@astrojs/react"
-import vercel from "@astrojs/vercel"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
 
@@ -13,7 +13,16 @@ export default defineConfig({
   // via the "@/*" alias below, which is independent of srcDir.
   srcDir: "./src/astro",
   output: "server",
-  adapter: vercel(),
+  // Cloudflare Workers have no runtime filesystem, so every route must be
+  // prerender = true except /api/feedback and /ingest/* (fetch()/posthog-node
+  // only, no fs). prerenderEnvironment: "node" keeps *build-time* static
+  // generation running in plain Node (where all the fs-based data readers in
+  // src/lib/server/*.ts still work) instead of Cloudflare's workerd runtime,
+  // which has no fs at all — even at build time, by default.
+  adapter: cloudflare({
+    imageService: "passthrough",
+    prerenderEnvironment: "node"
+  }),
   integrations: [react()],
   trailingSlash: "never",
   redirects: {

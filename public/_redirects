@@ -1,0 +1,6 @@
+# /stars, /mod, /help are real redirects handled by Astro's own `redirects`
+# config in astro.config.mjs instead (adapter-agnostic, no file needed here).
+# The PostHog reverse-proxy (/ingest/*) can't be a plain Cloudflare Pages
+# _redirects rule — Cloudflare's 200-status "proxy" redirects only support
+# relative paths, not external domains — so it's a real SSR endpoint instead,
+# see src/astro/pages/ingest/[...path].ts.

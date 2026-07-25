@@ -1,8 +1,13 @@
 ---
-// SSR (not prerendered) — needed to redirect non-canonical-case URLs and to
-// redirect a versioned URL that turns out to be the current semester, both of
-// which require running per-request rather than at build time.
-export const prerender = false
+// Fully static — Cloudflare Workers have no runtime filesystem, so this can't
+// read module data per-request like it used to. Case-sensitive as a result:
+// only the canonical uppercase path is generated, lowercase URLs 404 instead
+// of redirecting (same trade-off already accepted for the versioned module
+// snapshot pages).
+export const prerender = true
+
+import fs from "node:fs/promises"
+import path from "node:path"
 
 import { siteConfig } from "@/config/site"
 import { generateTimetableMatrix } from "@/lib/generate-timetable-matrix"
@@ -32,13 +37,18 @@ import ModsWorkloadTable from "@/components/mods/mods-workload-table"
 import RelatedModules from "@/components/related-modules"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
-const rawKey = Astro.params.module ?? ""
+export async function getStaticPaths() {
+  const moduleMap = JSON.parse(
+    await fs.readFile(
+      path.join(process.cwd(), "src/data/api/module-map.json"),
+      "utf-8"
+    )
+  ) as Record<string, unknown>
 
-if (rawKey !== rawKey.toUpperCase()) {
-  return Astro.redirect(getModuleUrl(rawKey.toUpperCase()))
+  return Object.keys(moduleMap).map((key) => ({ params: { module: key } }))
 }
 
-const moduleKey = rawKey.toUpperCase()
+const moduleKey = Astro.params.module ?? ""
 
 const current = await getModuleCurrentSemester(moduleKey)
 if (!current) return new Response(null, { status: 404 })

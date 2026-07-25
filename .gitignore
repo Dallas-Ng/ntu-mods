@@ -16,6 +16,9 @@
 # astro
 /.astro/
 
+# cloudflare / wrangler
+/.wrangler/
+
 # production
 /build
 

@@ -1,16 +1,7 @@
 ---
-export const prerender = true
-
 import { render } from "astro:content"
 
 import { siteConfig } from "@/config/site"
-import {
-  getAllArticles,
-  getArticleCategories,
-  getArticleImageUrl,
-  getArticlesByCategory,
-  slugifyCategory
-} from "@/astro/lib/articles"
 import { extractFaqItems } from "@/lib/server/articles"
 import ArticleToc from "@/components/articles/article-toc"
 import ArticleViewTracker from "@/components/articles/article-view-tracker"
@@ -18,6 +9,15 @@ import ArticlesList from "@/components/articles/articles-list"
 import Breadcrumbs from "@/components/breadcrumbs"
 import Container from "@/components/container"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+import {
+  getAllArticles,
+  getArticleCategories,
+  getArticleImageUrl,
+  getArticlesByCategory,
+  slugifyCategory
+} from "@/astro/lib/articles"
+
+export const prerender = true
 
 const CATEGORY_META: Record<
   string,
@@ -117,11 +117,13 @@ if (kind === "category") {
 
     const rendered = await render(article.entry)
     ArticleContent = rendered.Content
-    articleHeadings = rendered.headings.map(({ slug: headingSlug, depth, text }) => ({
-      id: headingSlug,
-      depth,
-      text
-    }))
+    articleHeadings = rendered.headings.map(
+      ({ slug: headingSlug, depth, text }) => ({
+        id: headingSlug,
+        depth,
+        text
+      })
+    )
 
     const faqItems = extractFaqItems(article.content)
     faqJsonLd =
@@ -174,7 +176,8 @@ if (kind === "article" && !article) {
   return Astro.redirect("/404")
 }
 
-const pageTitle = kind === "category" ? CATEGORY_META[slug]?.title : article?.title
+const pageTitle =
+  kind === "category" ? CATEGORY_META[slug]?.title : article?.title
 const pageDescription =
   kind === "category" ? CATEGORY_META[slug]?.desc : article?.description
 ---
@@ -271,11 +274,11 @@ const pageDescription =
                 <img
                   src={article.thumbnail}
                   alt={article.thumbnailAlt}
-                  class="mb-5 aspect-video w-full rounded-md border object-cover not-prose sm:mb-6"
+                  class="not-prose mb-5 aspect-video w-full rounded-md border object-cover sm:mb-6"
                 />
               )}
 
-              <div class="text-foreground/70 mb-6 border-b pb-4 text-sm not-prose sm:mb-8 sm:pb-5">
+              <div class="text-foreground/70 not-prose mb-6 border-b pb-4 text-sm sm:mb-8 sm:pb-5">
                 {new Date(article.date).toLocaleDateString("en-SG", {
                   day: "numeric",
                   month: "long",
@@ -292,7 +295,9 @@ const pageDescription =
 
           {moreArticles.length > 0 && (
             <section class="mx-auto mt-10 max-w-3xl border-t pt-6 sm:mt-12 sm:pt-8">
-              <h2 class="text-xl font-semibold tracking-normal">More articles</h2>
+              <h2 class="text-xl font-semibold tracking-normal">
+                More articles
+              </h2>
               <div class="mt-4 grid gap-3 sm:grid-cols-3">
                 {moreArticles.map((item) => (
                   <a

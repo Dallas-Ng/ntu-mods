@@ -44,8 +44,17 @@ const CustomSelect = (props: Props) => {
 
   const activeItemLabel = selectItems.find((item) => item.value === activeItem)
 
+  // Held in a ref so the effect below fires only on activeItem changes —
+  // callers pass an inline onChange, which would otherwise retrigger it
+  // on every parent render.
+  const onChangeRef = useRef(onChange)
+
   useEffect(() => {
-    onChange && onChange(activeItem)
+    onChangeRef.current = onChange
+  })
+
+  useEffect(() => {
+    onChangeRef.current?.(activeItem)
   }, [activeItem])
 
   useEffect(() => {

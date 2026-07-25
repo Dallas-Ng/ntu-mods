@@ -1,11 +1,4 @@
 ---
-// Fully static — Cloudflare Workers have no runtime filesystem, so this can't
-// read module data per-request like it used to. Case-sensitive as a result:
-// only the canonical uppercase path is generated, lowercase URLs 404 instead
-// of redirecting (same trade-off already accepted for the versioned module
-// snapshot pages).
-export const prerender = true
-
 import fs from "node:fs/promises"
 import path from "node:path"
 
@@ -36,6 +29,13 @@ import ModsViewTracker from "@/components/mods/mods-view-tracker"
 import ModsWorkloadTable from "@/components/mods/mods-workload-table"
 import RelatedModules from "@/components/related-modules"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+// Fully static — Cloudflare Workers have no runtime filesystem, so this can't
+// read module data per-request like it used to. Case-sensitive as a result:
+// only the canonical uppercase path is generated, lowercase URLs 404 instead
+// of redirecting (same trade-off already accepted for the versioned module
+// snapshot pages).
+export const prerender = true
 
 export async function getStaticPaths() {
   const moduleMap = JSON.parse(
@@ -167,15 +167,17 @@ const jsonLd = [
       />
 
       <div class="flex gap-2">
-        {isCurrentOffering && (
-          <ModsAddToTimetableButton
-            client:load
-            moduleKey={moduleKey}
-            year={year}
-            semester={semester}
-            showText={true}
-          />
-        )}
+        {
+          isCurrentOffering && (
+            <ModsAddToTimetableButton
+              client:load
+              moduleKey={moduleKey}
+              year={year}
+              semester={semester}
+              showText={true}
+            />
+          )
+        }
         <ModsFavouriteButton
           client:load
           moduleKey={moduleKey}
@@ -183,9 +185,11 @@ const jsonLd = [
         />
       </div>
 
-      {moduleData.description && (
-        <ModsDescription description={moduleData.description} />
-      )}
+      {
+        moduleData.description && (
+          <ModsDescription description={moduleData.description} />
+        )
+      }
     </div>
 
     <div class="h-fit w-full space-y-4 xl:w-3/6">
@@ -200,18 +204,20 @@ const jsonLd = [
   </div>
 
   <div class="mt-10 space-y-6">
-    {prereqNode && (
-      <>
-        <hr />
-        <ModsPrerequisiteGraph
-          client:visible
-          moduleCode={moduleKey}
-          node={prereqNode}
-          graph={prereqGraph}
-        />
-        <hr />
-      </>
-    )}
+    {
+      prereqNode && (
+        <>
+          <hr />
+          <ModsPrerequisiteGraph
+            client:visible
+            moduleCode={moduleKey}
+            node={prereqNode}
+            graph={prereqGraph}
+          />
+          <hr />
+        </>
+      )
+    }
 
     <h2 class="text-lg">Available Indexes</h2>
 
@@ -220,44 +226,50 @@ const jsonLd = [
       precomputedMatrix={{ TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS }}
     />
 
-    {otherSemesters.length > 0 && (
-      <div>
-        <hr class="mb-6" />
-        <h2 class="mb-4 text-lg">Other offerings</h2>
-        <div class="flex gap-1 overflow-x-auto pb-1 xl:flex-wrap xl:overflow-x-visible xl:pb-0">
-          {sortedYears.map((yr) => {
-            const sems = offeringsByYear[yr]
-            const find = (sem: string) => sems.find((s) => s.semester === sem)
-            return (
-              <div
-                key={yr}
-                class="bg-muted/40 flex min-w-27.5 flex-col overflow-hidden rounded-lg">
-                <span class="text-muted-foreground border-border/50 border-b px-3 py-2 text-xs font-medium">
-                  AY{yr.slice(2)}/{String(parseInt(yr) + 1).slice(2)}
-                </span>
-                <div class="flex flex-col gap-1 p-2">
-                  {(["1", "2", "S"] as const).map((sem) => {
-                    const s = find(sem)
-                    const label = sem === "S" ? "Sp. Term" : `Semester ${sem}`
-                    return s ? (
-                      <a
-                        href={getModuleVersionUrl(moduleKey, s.year, s.semester)}
-                        class="hover:bg-background border-border/60 rounded-md border px-2 py-1 text-center text-sm transition-colors">
-                        {label}
-                      </a>
-                    ) : (
-                      <span class="text-muted-foreground/35 px-2 py-1 text-center text-sm line-through">
-                        {label}
-                      </span>
-                    )
-                  })}
+    {
+      otherSemesters.length > 0 && (
+        <div>
+          <hr class="mb-6" />
+          <h2 class="mb-4 text-lg">Other offerings</h2>
+          <div class="flex gap-1 overflow-x-auto pb-1 xl:flex-wrap xl:overflow-x-visible xl:pb-0">
+            {sortedYears.map((yr) => {
+              const sems = offeringsByYear[yr]
+              const find = (sem: string) => sems.find((s) => s.semester === sem)
+              return (
+                <div
+                  key={yr}
+                  class="bg-muted/40 flex min-w-27.5 flex-col overflow-hidden rounded-lg">
+                  <span class="text-muted-foreground border-border/50 border-b px-3 py-2 text-xs font-medium">
+                    AY{yr.slice(2)}/{String(parseInt(yr) + 1).slice(2)}
+                  </span>
+                  <div class="flex flex-col gap-1 p-2">
+                    {(["1", "2", "S"] as const).map((sem) => {
+                      const s = find(sem)
+                      const label = sem === "S" ? "Sp. Term" : `Semester ${sem}`
+                      return s ? (
+                        <a
+                          href={getModuleVersionUrl(
+                            moduleKey,
+                            s.year,
+                            s.semester
+                          )}
+                          class="hover:bg-background border-border/60 rounded-md border px-2 py-1 text-center text-sm transition-colors">
+                          {label}
+                        </a>
+                      ) : (
+                        <span class="text-muted-foreground/35 px-2 py-1 text-center text-sm line-through">
+                          {label}
+                        </span>
+                      )
+                    })}
+                  </div>
                 </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
-      </div>
-    )}
+      )
+    }
 
     <div>
       <hr class="mb-6" />

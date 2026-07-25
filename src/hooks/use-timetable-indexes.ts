@@ -15,7 +15,12 @@ export const useTimetableIndexes = (
   const customCourses = useBoundState((s) => s.customCourses)
   const timetableIndex = useBoundState((s) => s.timetableIndex)
 
-  const currentCustomCourses = customCourses[timetableIndex] ?? []
+  // Memoized so the `?? []` fallback doesn't hand moduleIndexMap a new array
+  // identity on every render when this slot is empty.
+  const currentCustomCourses = useMemo(
+    () => customCourses[timetableIndex] ?? [],
+    [customCourses, timetableIndex]
+  )
 
   const allModuleIndexes = useMemo(() => {
     const result: Record<string, Record<string, Index[]>> = {}

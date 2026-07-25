@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { usePathname } from "@/hooks/use-pathname"
 import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
@@ -35,16 +35,32 @@ export const useModsSearchParams = (paramValue: string, key: Key) => {
     setValue(paramValue)
   }, [paramValue])
 
+  // The write-to-URL effect below must fire on `value` changes only. Tracking
+  // searchParams/pathname would loop: pushing new params updates them, which
+  // would retrigger the push. Read them through a ref so the effect always
+  // sees current values without depending on them.
+  const latest = useRef({ searchParams, pathname, key, defaultValue })
+
   useEffect(() => {
-    const params = new URLSearchParams(searchParams)
+    latest.current = { searchParams, pathname, key, defaultValue }
+  })
+
+  useEffect(() => {
+    const {
+      searchParams: currentSearchParams,
+      pathname: currentPathname,
+      key: currentKey,
+      defaultValue: currentDefaultValue
+    } = latest.current
+    const params = new URLSearchParams(currentSearchParams)
 
     // Dont show default values on searchParams on initialisation
-    if (!params.get(key) && defaultValue === value) {
+    if (!params.get(currentKey) && currentDefaultValue === value) {
       return
     }
 
-    params.set(key, value)
-    pushSearchParams(pathname, params.toString())
+    params.set(currentKey, value)
+    pushSearchParams(currentPathname, params.toString())
   }, [value])
 
   return { value, setValue }

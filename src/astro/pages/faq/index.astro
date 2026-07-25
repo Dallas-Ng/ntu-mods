@@ -1,10 +1,13 @@
 ---
-export const prerender = true
-
 import { siteConfig } from "@/config/site"
 import ArticleToc from "@/components/articles/article-toc"
-import FaqContent, { faqHeadings, faqJsonLd } from "@/components/faq/faq-content"
+import FaqContent, {
+  faqHeadings,
+  faqJsonLd
+} from "@/components/faq/faq-content"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
 ---
 
 <BaseLayout

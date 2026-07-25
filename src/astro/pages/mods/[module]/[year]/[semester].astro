@@ -1,4 +1,13 @@
 ---
+import { MODULE_CATEGORY } from "@/lib/constants"
+import { formatTitle } from "@/lib/format"
+import { getModuleCategories } from "@/lib/get-module-category"
+import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
+import { getModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
+import Breadcrumbs from "@/components/breadcrumbs"
+import ModsIndexTable from "@/components/mods/mods-index-table"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
 // On-demand — Cloudflare Workers has no filesystem at all, even at build
 // time by default, so this can't stay in the "prerender everything" model
 // the module-level page uses. There are 28,000+ module/year/semester
@@ -11,16 +20,11 @@
 // the most-visited) don't re-render each time.
 export const prerender = false
 
-import { formatTitle } from "@/lib/format"
-import { getModuleCategories } from "@/lib/get-module-category"
-import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
-import { getModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
-import { MODULE_CATEGORY } from "@/lib/constants"
-import Breadcrumbs from "@/components/breadcrumbs"
-import ModsIndexTable from "@/components/mods/mods-index-table"
-import BaseLayout from "@/astro/layouts/BaseLayout.astro"
-
-const { module: code, year, semester } = Astro.params as {
+const {
+  module: code,
+  year,
+  semester
+} = Astro.params as {
   module: string
   year: string
   semester: string
@@ -75,11 +79,13 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
       />
       <h1 class="mt-2 text-3xl">{formatTitle(moduleData.title)}</h1>
       <p class="text-muted-foreground mt-1 text-sm">{semLabel}</p>
-      {moduleData.description && (
-        <p class="text-muted-foreground mt-4 text-sm leading-relaxed">
-          {moduleData.description}
-        </p>
-      )}
+      {
+        moduleData.description && (
+          <p class="text-muted-foreground mt-4 text-sm leading-relaxed">
+            {moduleData.description}
+          </p>
+        )
+      }
     </div>
 
     <div class="h-fit w-full xl:w-3/6">
@@ -90,82 +96,104 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
             <td class="p-2">{moduleData.au} AUs</td>
           </tr>
 
-          {categories.length > 0 && (
-            <tr>
-              <td class="p-2">Categories</td>
-              <td class="flex flex-wrap gap-1 p-2">
-                {categories.map((cat) => (
-                  <span class="rounded-full border px-2 py-0 text-xs">
-                    {MODULE_CATEGORY[cat]}
-                  </span>
-                ))}
-              </td>
-            </tr>
-          )}
-
-          {moduleData.gradeType && (
-            <tr>
-              <td class="p-2">Grade Type</td>
-              <td class="p-2">{moduleData.gradeType}</td>
-            </tr>
-          )}
-
-          {moduleData.notAvailableToProgramme && (
-            <tr>
-              <td class="p-2">Not Available To Programme</td>
-              <td class="p-2">{moduleData.notAvailableToProgramme}</td>
-            </tr>
-          )}
-
-          {moduleData.notAvailableToAllProgrammeWith && (
-            <tr>
-              <td class="p-2">Not Available To All Programme With</td>
-              <td class="p-2">{moduleData.notAvailableToAllProgrammeWith}</td>
-            </tr>
-          )}
-
-          {moduleData.notAvailableAsBdeueToProgramme && (
-            <tr>
-              <td class="p-2">Not Available As BDE/UE To Programme</td>
-              <td class="p-2">{moduleData.notAvailableAsBdeueToProgramme}</td>
-            </tr>
-          )}
-
-          {moduleData.notAvailableAsCoreToProgramme && (
-            <tr>
-              <td class="p-2">Not Available As Core To Programme</td>
-              <td class="p-2">{moduleData.notAvailableAsCoreToProgramme}</td>
-            </tr>
-          )}
-
-          {moduleData.notAvailableAsPeToProgramme && (
-            <tr>
-              <td class="p-2">Not Available As PE To Programme</td>
-              <td class="p-2">{moduleData.notAvailableAsPeToProgramme}</td>
-            </tr>
-          )}
-
-          {moduleData.mutuallyExclusiveWith && (
-            <tr>
-              <td class="p-2">Mutually Exclusive With</td>
-              <td class="p-2">
-                {moduleData.mutuallyExclusiveWith.join(", ")}
-              </td>
-            </tr>
-          )}
-
-          {moduleData.extras &&
-            Object.entries(moduleData.extras).map(([label, value]) => (
+          {
+            categories.length > 0 && (
               <tr>
-                <td class="p-2">{label}</td>
-                <td class="p-2">{value}</td>
+                <td class="p-2">Categories</td>
+                <td class="flex flex-wrap gap-1 p-2">
+                  {categories.map((cat) => (
+                    <span class="rounded-full border px-2 py-0 text-xs">
+                      {MODULE_CATEGORY[cat]}
+                    </span>
+                  ))}
+                </td>
               </tr>
-            ))}
+            )
+          }
+
+          {
+            moduleData.gradeType && (
+              <tr>
+                <td class="p-2">Grade Type</td>
+                <td class="p-2">{moduleData.gradeType}</td>
+              </tr>
+            )
+          }
+
+          {
+            moduleData.notAvailableToProgramme && (
+              <tr>
+                <td class="p-2">Not Available To Programme</td>
+                <td class="p-2">{moduleData.notAvailableToProgramme}</td>
+              </tr>
+            )
+          }
+
+          {
+            moduleData.notAvailableToAllProgrammeWith && (
+              <tr>
+                <td class="p-2">Not Available To All Programme With</td>
+                <td class="p-2">{moduleData.notAvailableToAllProgrammeWith}</td>
+              </tr>
+            )
+          }
+
+          {
+            moduleData.notAvailableAsBdeueToProgramme && (
+              <tr>
+                <td class="p-2">Not Available As BDE/UE To Programme</td>
+                <td class="p-2">{moduleData.notAvailableAsBdeueToProgramme}</td>
+              </tr>
+            )
+          }
+
+          {
+            moduleData.notAvailableAsCoreToProgramme && (
+              <tr>
+                <td class="p-2">Not Available As Core To Programme</td>
+                <td class="p-2">{moduleData.notAvailableAsCoreToProgramme}</td>
+              </tr>
+            )
+          }
+
+          {
+            moduleData.notAvailableAsPeToProgramme && (
+              <tr>
+                <td class="p-2">Not Available As PE To Programme</td>
+                <td class="p-2">{moduleData.notAvailableAsPeToProgramme}</td>
+              </tr>
+            )
+          }
+
+          {
+            moduleData.mutuallyExclusiveWith && (
+              <tr>
+                <td class="p-2">Mutually Exclusive With</td>
+                <td class="p-2">
+                  {moduleData.mutuallyExclusiveWith.join(", ")}
+                </td>
+              </tr>
+            )
+          }
+
+          {
+            moduleData.extras &&
+              Object.entries(moduleData.extras).map(([label, value]) => (
+                <tr>
+                  <td class="p-2">{label}</td>
+                  <td class="p-2">{value}</td>
+                </tr>
+              ))
+          }
 
           <tr>
             <td class="p-2">Exam</td>
             <td class="p-2">
-              {exam ? `${exam.date}, ${exam.start_time} - ${exam.end_time}` : ""}
+              {
+                exam
+                  ? `${exam.date}, ${exam.start_time} - ${exam.end_time}`
+                  : ""
+              }
             </td>
           </tr>
         </tbody>

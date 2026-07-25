@@ -1,12 +1,12 @@
 ---
-export const prerender = true
-
 import { siteConfig } from "@/config/site"
 import LandingArticles from "@/components/landing/landing-articles"
 import LandingCTA from "@/components/landing/landing-cta"
 import LandingFeatures from "@/components/landing/landing-features"
 import LandingProduct from "@/components/landing/landing-product"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
 
 const websiteJsonLd = {
   "@context": "https://schema.org",

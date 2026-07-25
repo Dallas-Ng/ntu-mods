@@ -7,9 +7,12 @@
   "name": "ntu-mods",
   "compatibility_date": "2025-11-01",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "./dist/_worker.js/index.js",
+  // Matches the adapter's own generated dist/server/wrangler.json (paths
+  // re-rooted from repo root instead of dist/server/) — @astrojs/cloudflare
+  // with output:"server" emits a plain entry.mjs, not Pages-style _worker.js.
+  "main": "./dist/server/entry.mjs",
   "assets": {
     "binding": "ASSETS",
-    "directory": "./dist"
+    "directory": "./dist/client"
   }
 }

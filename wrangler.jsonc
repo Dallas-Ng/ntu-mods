@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Presence of this file skips Cloudflare's framework auto-detect entirely —
+  // needed because the repo still has next.config.js alongside astro.config.mjs
+  // (Next + Astro coexist during the migration), which made auto-detect bail
+  // with "multiple frameworks were found: Astro, Next.js".
+  "name": "ntu-mods",
+  "compatibility_date": "2025-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "./dist/_worker.js/index.js",
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist"
+  }
+}

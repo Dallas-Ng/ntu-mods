@@ -36,6 +36,27 @@ export default defineConfig({
       // still-running Next.js app's webpack/turbopack pipeline) — Tailwind v4
       // is handled here by the dedicated @tailwindcss/vite plugin instead.
       postcss: {}
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          // Astro's default client output is one chunk per component/hook —
+          // dozens of sub-1KB files per page, each costing a full request.
+          // Bundle third-party deps and shared first-party building blocks
+          // (shadcn/ui primitives, hooks, lib, state) into a few cacheable
+          // chunks instead of one file per module.
+          manualChunks(id) {
+            if (id.includes("node_modules")) {
+              if (id.includes("@mlc-ai/web-llm")) return "vendor-webllm"
+              return "vendor"
+            }
+            if (id.includes("/src/components/ui/")) return "ui"
+            if (id.includes("/src/hooks/")) return "hooks"
+            if (id.includes("/src/state/")) return "state"
+            if (id.includes("/src/lib/")) return "lib"
+          }
+        }
+      }
     }
   }
 })

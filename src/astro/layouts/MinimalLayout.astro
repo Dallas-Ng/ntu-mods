@@ -3,7 +3,6 @@ import "@/styles/globals.css"
 
 import { siteConfig } from "@/config/site"
 import { IS_PROD } from "@/lib/constants"
-import AppBanner from "@/components/app-banner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import MobileTracker from "@/components/mobile-tracker"
 import { Toaster } from "@/components/ui/sonner"
@@ -87,10 +86,9 @@ const resolvedTitle =
   </head>
   <body class="antialiased">
     <AppearanceStyleProvider client:load />
-    <AppBanner client:load />
     <slot />
-    <MobileTracker client:load />
-    <Toaster client:load position="top-center" />
+    <MobileTracker client:idle />
+    <Toaster client:idle position="top-center" />
     {
       IS_PROD && (
         <>

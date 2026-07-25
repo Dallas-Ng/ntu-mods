@@ -104,7 +104,7 @@ const resolvedTitle =
   </head>
   <body class="antialiased">
     <AppearanceStyleProvider client:load />
-    <AppBanner client:load />
+    <AppBanner client:idle />
     <div class={`bg-background flex min-h-screen flex-col ${outerClassName ?? ""}`}>
       <Navbar client:load />
       <main class="relative flex-1 px-3 py-4 sm:py-6 lg:px-5">
@@ -114,8 +114,8 @@ const resolvedTitle =
       </main>
       <Footer />
     </div>
-    <MobileTracker client:load />
-    <Toaster client:load position="top-center" />
+    <MobileTracker client:idle />
+    <Toaster client:idle position="top-center" />
     {
       IS_PROD && (
         <>

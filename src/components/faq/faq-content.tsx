@@ -1,7 +1,6 @@
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import type { ArticleHeading } from "@/lib/server/articles"
 import { Button } from "@/components/ui/button"
-import ArticleToc from "@/components/articles/article-toc"
 import Container from "@/components/container"
 import Header from "@/components/header"
 
@@ -154,7 +153,14 @@ export const faqJsonLd = {
   }))
 }
 
-const FaqContent = () => {
+interface Props {
+  /** Rendered as the second grid column — the .astro page passes its own
+   * ArticleToc island here so this component can stay a zero-JS static
+   * render (it has no interactivity of its own). */
+  children?: React.ReactNode
+}
+
+const FaqContent = ({ children }: Props) => {
   return (
     <Container size="md">
       <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
@@ -194,7 +200,7 @@ const FaqContent = () => {
           </div>
         </div>
 
-        <ArticleToc headings={faqHeadings} />
+        {children}
       </div>
     </Container>
   )

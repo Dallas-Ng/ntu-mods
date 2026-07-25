@@ -2,7 +2,8 @@
 export const prerender = true
 
 import { siteConfig } from "@/config/site"
-import LinksContent from "@/components/links/links-content"
+import ArticleToc from "@/components/articles/article-toc"
+import LinksContent, { linkHeadings } from "@/components/links/links-content"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 ---
 
@@ -10,5 +11,7 @@ import BaseLayout from "@/astro/layouts/BaseLayout.astro"
   title={siteConfig.metatags.studentLinks.title}
   description={siteConfig.metatags.studentLinks.desc}
   canonical="/links">
-  <LinksContent client:load />
+  <LinksContent client:idle>
+    <ArticleToc client:idle headings={linkHeadings} />
+  </LinksContent>
 </BaseLayout>

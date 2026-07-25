@@ -134,7 +134,7 @@ const jsonLd = [
   canonical={getModuleUrl(moduleKey)}
   noTitleSuffix>
   <ModsViewTracker
-    client:load
+    client:idle
     moduleCode={moduleKey}
     isCurrentOffering={isCurrentOffering}
   />
@@ -185,7 +185,7 @@ const jsonLd = [
 
       <ModsInfoTable module={moduleData} exam={exam} />
 
-      <ModsExpandableFields client:load module={moduleData} />
+      <ModsExpandableFields client:idle module={moduleData} />
     </div>
   </div>
 

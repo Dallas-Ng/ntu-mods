@@ -1,5 +1,4 @@
 import type { ArticleHeading } from "@/lib/server/articles"
-import ArticleToc from "@/components/articles/article-toc"
 import Container from "@/components/container"
 import Header from "@/components/header"
 import LinkCard from "@/components/links/link-card"
@@ -155,13 +154,21 @@ const LINK_CATEGORIES: LinkCategory[] = [
   }
 ]
 
-const linkHeadings: ArticleHeading[] = LINK_CATEGORIES.map(({ id, title }) => ({
-  id,
-  depth: 2,
-  text: title
-}))
+export const linkHeadings: ArticleHeading[] = LINK_CATEGORIES.map(
+  ({ id, title }) => ({
+    id,
+    depth: 2,
+    text: title
+  })
+)
 
-const LinksContent = () => {
+interface Props {
+  /** Rendered as the second grid column — passed in so the ArticleToc
+   * island can be controlled independently from the .astro page. */
+  children?: React.ReactNode
+}
+
+const LinksContent = ({ children }: Props) => {
   return (
     <Container size="md">
       <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
@@ -210,7 +217,7 @@ const LinksContent = () => {
           </div>
         </div>
 
-        <ArticleToc headings={linkHeadings} />
+        {children}
       </div>
     </Container>
   )

@@ -231,7 +231,7 @@ const pageDescription =
     ) : (
       article && (
         <>
-          <ArticleViewTracker client:load slug={slug} />
+          <ArticleViewTracker client:idle slug={slug} />
 
           <div class="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
             <Breadcrumbs
@@ -287,7 +287,7 @@ const pageDescription =
               {ArticleContent && <ArticleContent />}
             </article>
 
-            <ArticleToc client:load headings={articleHeadings} />
+            <ArticleToc client:idle headings={articleHeadings} />
           </div>
 
           {moreArticles.length > 0 && (

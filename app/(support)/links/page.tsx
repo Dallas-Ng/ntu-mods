@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 
 import { siteConfig } from "@/config/site"
-import LinksContent from "@/components/links/links-content"
+import ArticleToc from "@/components/articles/article-toc"
+import LinksContent, { linkHeadings } from "@/components/links/links-content"
 
 export const metadata: Metadata = {
   title: siteConfig.metatags.studentLinks.title,
@@ -10,5 +11,9 @@ export const metadata: Metadata = {
 }
 
 export default function LinksPage() {
-  return <LinksContent />
+  return (
+    <LinksContent>
+      <ArticleToc headings={linkHeadings} />
+    </LinksContent>
+  )
 }

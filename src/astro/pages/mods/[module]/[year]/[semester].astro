@@ -71,7 +71,8 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
 <BaseLayout
   title={`${code} ${moduleData.title} | AY${year} ${semName}`}
   description={`View the AY${year}/${parseInt(year) + 1} ${semName} record for ${code} ${moduleData.title}, including module details, index schedules, class times, venues, and exams.`}
-  canonical={getModuleVersionUrl(code, year, semester)}>
+  canonical={getModuleVersionUrl(code, year, semester)}
+  noTitleSuffix>
   {
     !isCurrentOffering && (
       <div class="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">

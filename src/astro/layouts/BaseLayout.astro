@@ -19,6 +19,10 @@ interface Props {
   size?: "full" | "md" | "sm"
   containerClassName?: string
   outerClassName?: string
+  /** Next's title template skips dynamic-segment routes (article/module
+   * detail pages using generateMetadata) — set this on their Astro
+   * equivalents to match. */
+  noTitleSuffix?: boolean
 }
 
 const defaults = siteConfig.metatags.default
@@ -29,19 +33,28 @@ const {
   ogImage = siteConfig.ogImage,
   size = "full",
   containerClassName,
-  outerClassName
+  outerClassName,
+  noTitleSuffix = false
 } = Astro.props
 
 const canonicalUrl = canonical
-  ? new URL(canonical, siteConfig.url).toString()
+  ? canonical === "/"
+    ? siteConfig.url
+    : new URL(canonical, siteConfig.url).toString()
   : undefined
+
+// Matches Next's root-layout title template (`%s - ${siteConfig.name}`),
+// which applies to every static page but not the homepage or dynamic-segment
+// (generateMetadata) routes.
+const resolvedTitle =
+  canonical === "/" || noTitleSuffix ? title : `${title} - ${siteConfig.name}`
 ---
 
 <html lang="en" data-scroll-behavior="smooth">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>{resolvedTitle}</title>
     <meta name="description" content={description} />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 

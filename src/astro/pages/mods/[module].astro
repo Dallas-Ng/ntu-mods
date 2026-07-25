@@ -131,7 +131,8 @@ const jsonLd = [
 <BaseLayout
   title={`${moduleKey} ${moduleData.title} (${moduleData.au} AU) | NTUMods`}
   description={baseDesc}
-  canonical={getModuleUrl(moduleKey)}>
+  canonical={getModuleUrl(moduleKey)}
+  noTitleSuffix>
   <ModsViewTracker
     client:load
     moduleCode={moduleKey}

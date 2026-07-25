@@ -26,13 +26,18 @@ const {
 const canonicalUrl = canonical
   ? new URL(canonical, siteConfig.url).toString()
   : undefined
+
+// Matches Next's root-layout title template (`%s - ${siteConfig.name}`),
+// which applies to every page except the homepage.
+const resolvedTitle =
+  canonical === "/" ? title : `${title} - ${siteConfig.name}`
 ---
 
 <html lang="en" data-scroll-behavior="smooth">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
+    <title>{resolvedTitle}</title>
     <meta name="description" content={description} />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 

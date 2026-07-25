@@ -10,5 +10,5 @@ import BaseLayout from "@/astro/layouts/BaseLayout.astro"
   title={siteConfig.metatags.share.title}
   description={siteConfig.metatags.share.desc}
   canonical="/share">
-  <SharePageContent client:only="react" />
+  <SharePageContent client:load />
 </BaseLayout>

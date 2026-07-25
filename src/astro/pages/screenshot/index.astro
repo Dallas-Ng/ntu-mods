@@ -10,5 +10,5 @@ import MinimalLayout from "@/astro/layouts/MinimalLayout.astro"
   title={siteConfig.metatags.screenshot.title}
   description={siteConfig.metatags.screenshot.desc}
   canonical="/screenshot">
-  <ScreenshotPageContent client:only="react" />
+  <ScreenshotPageContent client:load />
 </MinimalLayout>

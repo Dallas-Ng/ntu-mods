@@ -6,11 +6,12 @@ const LandingCTA = () => {
       <div className="max-w-[800px]">
         <div className="mb-5 flex flex-col items-center justify-center text-center md:flex-row md:text-left">
           <img
-            src="/logo.png"
+            src="/logo-lg.webp"
             alt="Logo"
             height={200}
             width={200}
             loading="eager"
+            fetchPriority="high"
           />
 
           <h1 className="bg-gradient-to-l from-blue-700 to-blue-800 bg-clip-text text-5xl font-bold text-transparent md:text-6xl">

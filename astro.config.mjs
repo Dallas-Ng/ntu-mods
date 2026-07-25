@@ -5,15 +5,6 @@ import react from "@astrojs/react"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
 
-// prerenderEnvironment: "node" is build-only on purpose. In `astro dev` it
-// adds a fourth Vite dep-optimizer environment, and React then gets served
-// out of node_modules/.vite/deps under several different ?v= hashes at once.
-// Same file, different URLs — so the browser instantiates React more than
-// once and every island dies with "Invalid hook call", rendering blank.
-// Dev doesn't need the option anyway: the dev server already runs the
-// fs-based readers in plain Node.
-const isDev = process.argv.includes("dev")
-
 export default defineConfig({
   srcDir: "./src/astro",
   output: "server",
@@ -25,7 +16,7 @@ export default defineConfig({
   // which has no fs at all — even at build time, by default.
   adapter: cloudflare({
     imageService: "passthrough",
-    ...(isDev ? {} : { prerenderEnvironment: "node" })
+    prerenderEnvironment: "node"
   }),
   integrations: [react()],
   trailingSlash: "never",

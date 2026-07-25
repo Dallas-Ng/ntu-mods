@@ -21,7 +21,6 @@ import { useSearchParams } from "@/hooks/use-search-params"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
-import Breadcrumbs from "@/components/breadcrumbs"
 import Header from "@/components/header"
 import { ModsActiveFilters } from "@/components/mods/mods-active-filters"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
@@ -181,10 +180,6 @@ const ModsPage = () => {
 
   return (
     <div className="relative space-y-3">
-      <Breadcrumbs
-        breadcrumbs={[{ name: "Mods", label: "Mods", href: "/mods" }]}
-      />
-
       <Header
         title="NTU Modules"
         subtitle={`AY${year}/${nextYear} Semester ${semester}`}

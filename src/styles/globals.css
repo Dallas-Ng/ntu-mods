@@ -248,8 +248,13 @@
   }
 }
 
+/* Width-only on purpose. `size-full` also sets height:100%, which makes a
+   table stretch to its container's full height and divide that space evenly
+   between rows — fine for the timetable grid, but it left prose tables in
+   articles with rows over 1500px tall. Components that do want a full-height
+   table set `h-full` themselves. */
 table {
-  @apply bg-card size-full border-collapse border-2 border-slate-200 dark:border-slate-900;
+  @apply bg-card w-full border-collapse border-2 border-slate-200 dark:border-slate-900;
 }
 
 table th {

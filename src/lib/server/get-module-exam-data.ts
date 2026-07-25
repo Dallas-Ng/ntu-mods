@@ -13,18 +13,29 @@ export interface ApiExam {
   duration?: number
 }
 
+// This file is shared across every module offered in a semester — without
+// caching, generating all the historic snapshot pages for one semester
+// re-reads and re-parses the same file once per module.
+const fileCache = new Map<string, Record<string, ApiExam> | null>()
+
 async function readExamFile(
   year: string,
   semester: string
 ): Promise<Record<string, ApiExam> | null> {
+  const key = `${year}_${semester}`
+  if (fileCache.has(key)) return fileCache.get(key) ?? null
+
   const filePath = path.join(EXAMS_DIR, `${year}_${semester}.json`)
+  let result: Record<string, ApiExam> | null
   try {
     await fs.access(filePath)
     const data = await fs.readFile(filePath, "utf-8")
-    return JSON.parse(data) as Record<string, ApiExam>
+    result = JSON.parse(data) as Record<string, ApiExam>
   } catch {
-    return null
+    result = null
   }
+  fileCache.set(key, result)
+  return result
 }
 
 export async function getSemesterExamsData(

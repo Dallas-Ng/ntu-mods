@@ -30,18 +30,29 @@ export interface ApiModule {
 
 const METADATA_DIR = path.join(process.cwd(), "src/data/api/metadata")
 
+// This file is shared across every module offered in a semester (up to
+// ~1.2MB) — without caching, generating all the historic snapshot pages for
+// one semester re-reads and re-parses the same file once per module.
+const fileCache = new Map<string, Record<string, ApiModule> | null>()
+
 async function readMetadataFile(
   year: string,
   semester: string
 ): Promise<Record<string, ApiModule> | null> {
+  const key = `${year}_${semester}`
+  if (fileCache.has(key)) return fileCache.get(key) ?? null
+
   const filePath = path.join(METADATA_DIR, `${year}_${semester}.json`)
+  let result: Record<string, ApiModule> | null
   try {
     await fs.access(filePath)
     const data = await fs.readFile(filePath, "utf-8")
-    return JSON.parse(data) as Record<string, ApiModule>
+    result = JSON.parse(data) as Record<string, ApiModule>
   } catch {
-    return null
+    result = null
   }
+  fileCache.set(key, result)
+  return result
 }
 
 /** Read a specific semester file and return a single module, or null if not found. */

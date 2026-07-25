@@ -10,9 +10,32 @@ function parseFilename(filename: string): { year: string; semester: string } {
   return { year: stem.slice(0, idx), semester: stem.slice(idx + 1) }
 }
 
+let sortedFilesCache: string[] | null = null
+
 async function getSortedMetadataFiles(): Promise<string[]> {
+  if (sortedFilesCache) return sortedFilesCache
   const files = await fs.readdir(METADATA_DIR)
-  return files.filter((f) => f.endsWith(".json")).sort()
+  sortedFilesCache = files.filter((f) => f.endsWith(".json")).sort()
+  return sortedFilesCache
+}
+
+// Each file is shared across every module offered in that semester — without
+// caching, a reverse scan across all 45 files runs once per module (and this
+// function is called once per historic snapshot page), so the same files get
+// re-read and re-parsed from scratch tens of thousands of times.
+const fileCache = new Map<string, Record<string, unknown>>()
+
+async function readMetadataFileRaw(
+  file: string
+): Promise<Record<string, unknown>> {
+  const cached = fileCache.get(file)
+  if (cached) return cached
+
+  const filePath = path.join(METADATA_DIR, file)
+  const data = await fs.readFile(filePath, "utf-8")
+  const obj = JSON.parse(data) as Record<string, unknown>
+  fileCache.set(file, obj)
+  return obj
 }
 
 /**
@@ -24,9 +47,7 @@ export async function getModuleCurrentSemester(
 ): Promise<{ year: string; semester: string } | null> {
   const files = await getSortedMetadataFiles()
   for (const file of [...files].reverse()) {
-    const filePath = path.join(METADATA_DIR, file)
-    const data = await fs.readFile(filePath, "utf-8")
-    const obj = JSON.parse(data) as Record<string, unknown>
+    const obj = await readMetadataFileRaw(file)
     if (obj[code]) return parseFilename(file)
   }
   return null
@@ -41,9 +62,7 @@ export async function getModuleSemesters(
   const files = await getSortedMetadataFiles()
   const result: Array<{ year: string; semester: string }> = []
   for (const file of [...files].reverse()) {
-    const filePath = path.join(METADATA_DIR, file)
-    const data = await fs.readFile(filePath, "utf-8")
-    const obj = JSON.parse(data) as Record<string, unknown>
+    const obj = await readMetadataFileRaw(file)
     if (obj[code]) result.push(parseFilename(file))
   }
   return result

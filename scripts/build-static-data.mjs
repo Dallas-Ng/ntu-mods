@@ -180,6 +180,10 @@ async function main() {
   await Promise.all([
     copyDir(path.join(SRC_DATA, "indexes"), path.join(PUBLIC_DATA, "indexes")),
     copyDir(path.join(SRC_DATA, "exams"), path.join(PUBLIC_DATA, "exams")),
+    // Needed so historic module snapshot pages (rendered on-demand on
+    // Cloudflare Workers, which has no filesystem) can read per-semester
+    // metadata via the ASSETS binding fetch at request time instead of fs.
+    copyDir(path.join(SRC_DATA, "metadata"), path.join(PUBLIC_DATA, "metadata")),
     fs.copyFile(
       path.join(SRC_DATA, "semesters.json"),
       path.join(PUBLIC_DATA, "semesters.json")

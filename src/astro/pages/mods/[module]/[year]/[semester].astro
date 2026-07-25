@@ -1,67 +1,41 @@
 ---
-// Fully static — per the locked migration decision, every historic module
-// snapshot is generated at build time (no ISR-style fallback like the old
-// Next app had). Case-sensitive (only uppercase paths are generated) and no
-// current-semester redirect (a versioned URL that happens to match the
-// current semester just renders the same content without the "historical
-// snapshot" banner) — both are accepted trade-offs of going fully static.
-export const prerender = true
+// On-demand — Cloudflare Workers has no filesystem at all, even at build
+// time by default, so this can't stay in the "prerender everything" model
+// the module-level page uses. There are 28,000+ module/year/semester
+// combinations; prerendering all of them dominated build time (~18 of a
+// ~30 min build) for pages almost nobody visits. Data comes from the ASSETS
+// binding (same JSON files, fetched over HTTP instead of node:fs) rather
+// than the fs-based src/lib/server/*.ts readers used by prerendered routes.
+// Cache-Control lets Cloudflare's edge cache the rendered response after the
+// first hit, so repeat visits (especially to the current semester, by far
+// the most-visited) don't re-render each time.
+export const prerender = false
 
-import fs from "node:fs/promises"
-import path from "node:path"
-
-import { MODULE_CATEGORY } from "@/lib/constants"
 import { formatTitle } from "@/lib/format"
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
-import { getModuleCurrentSemester } from "@/lib/server/get-module-current-semester"
-import { getModuleExamData } from "@/lib/server/get-module-exam-data"
-import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
-import { getModuleMetadata } from "@/lib/server/get-module-metadata"
+import { getModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
+import { MODULE_CATEGORY } from "@/lib/constants"
 import Breadcrumbs from "@/components/breadcrumbs"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
-export async function getStaticPaths() {
-  const metadataDir = path.join(process.cwd(), "src/data/api/metadata")
-  const files = (await fs.readdir(metadataDir)).filter((f) =>
-    f.endsWith(".json")
-  )
-
-  const paths: {
-    params: { module: string; year: string; semester: string }
-  }[] = []
-
-  for (const file of files) {
-    const stem = file.replace(".json", "")
-    const idx = stem.indexOf("_")
-    const year = stem.slice(0, idx)
-    const semester = stem.slice(idx + 1)
-    const data = JSON.parse(
-      await fs.readFile(path.join(metadataDir, file), "utf-8")
-    ) as Record<string, unknown>
-
-    for (const module of Object.keys(data)) {
-      paths.push({ params: { module, year, semester } })
-    }
-  }
-
-  return paths
+const { module: code, year, semester } = Astro.params as {
+  module: string
+  year: string
+  semester: string
 }
 
-const { module: code, year, semester } = Astro.params
+const snapshot = await getModuleSnapshot(Astro.url, code, year, semester)
+if (!snapshot) return new Response(null, { status: 404 })
 
-const moduleData = await getModuleMetadata(code, year, semester)
-if (!moduleData) return new Response(null, { status: 404 })
+const { moduleData, indexes, exam, isCurrentOffering } = snapshot
 
-const current = await getModuleCurrentSemester(code)
-const isCurrentOffering =
-  current && current.year === year && current.semester === semester
+Astro.response.headers.set(
+  "Cache-Control",
+  "public, max-age=3600, s-maxage=86400"
+)
 
-const [indexes, exam] = await Promise.all([
-  getModuleIndexesData(code, year, semester),
-  getModuleExamData(code, year, semester)
-])
 const categories = getModuleCategories(moduleData.searchKeys)
 
 const semName = semester === "S" ? "Special Term" : `Semester ${semester}`
@@ -76,18 +50,12 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
   {
     !isCurrentOffering && (
       <div class="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
-        Historical snapshot — {semLabel}
-        {current && (
-          <>
-            {" "}
-            ·{" "}
-            <a
-              href={getModuleUrl(code)}
-              class="underline transition-colors hover:text-amber-600 dark:hover:text-amber-200">
-              View current offering →
-            </a>
-          </>
-        )}
+        Historical snapshot — {semLabel} ·{" "}
+        <a
+          href={getModuleUrl(code)}
+          class="underline transition-colors hover:text-amber-600 dark:hover:text-amber-200">
+          View current offering →
+        </a>
       </div>
     )
   }

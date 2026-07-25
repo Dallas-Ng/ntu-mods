@@ -7,7 +7,6 @@ import posthog from "posthog-js"
 
 import { STARS_TIMESLOTS } from "@/lib/constants"
 import { formatHhmm } from "@/lib/format"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,

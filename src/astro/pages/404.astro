@@ -1,0 +1,11 @@
+---
+export const prerender = true
+
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+---
+
+<BaseLayout title="Page not found" canonical="/404">
+  <h1 class="mb-2 text-xl">This page does not exists</h1>
+
+  <a href="/" class="hover:text-primary-alt">Click here to return Home</a>
+</BaseLayout>

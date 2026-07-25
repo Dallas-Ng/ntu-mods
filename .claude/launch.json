@@ -2,30 +2,16 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "Next.js Dev",
+      "name": "Astro Dev",
       "runtimeExecutable": "yarn",
       "runtimeArgs": ["dev"],
-      "port": 3000,
-      "url": "http://localhost:3000"
+      "port": 4321,
+      "url": "http://localhost:4321"
     },
     {
-      "name": "Next.js Dev (Worktree)",
-      "runtimeExecutable": "/Users/dallasng/Work/ntu-mods/node_modules/.bin/next",
-      "runtimeArgs": ["dev", "--turbo"],
-      "port": 3001,
-      "autoPort": true
-    },
-    {
-      "name": "Next.js Start (production)",
+      "name": "Astro Preview (production build)",
       "runtimeExecutable": "yarn",
-      "runtimeArgs": ["start"],
-      "port": 3000,
-      "url": "http://localhost:3000"
-    },
-    {
-      "name": "astro-dev",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["dev:astro"],
+      "runtimeArgs": ["preview"],
       "port": 4321,
       "url": "http://localhost:4321"
     }

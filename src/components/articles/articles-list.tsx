@@ -68,7 +68,6 @@ function ArticleCard({
       href={`/articles/${article.slug}`}
       className="group bg-card hover:bg-accent rounded-md border transition-colors">
       {article.thumbnail && (
-        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={article.thumbnail}
           alt={article.thumbnailAlt}

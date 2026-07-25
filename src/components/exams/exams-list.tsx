@@ -5,7 +5,6 @@ import { Search } from "lucide-react"
 import posthog from "posthog-js"
 
 import type { ApiExam } from "@/lib/server/get-module-exam-data"
-import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
 import { Input } from "@/components/ui/input"
 import {

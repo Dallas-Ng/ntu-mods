@@ -1,10 +1,5 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // Presence of this file skips Cloudflare's framework auto-detect entirely —
-  // needed because the repo still has next.config.js alongside astro.config.mjs
-  // (Next + Astro coexist during the migration), which made auto-detect bail
-  // with "multiple frameworks were found: Astro, Next.js".
-  //
   // Deliberately has no "main"/"assets"/"build" — @astrojs/cloudflare bundles
   // @cloudflare/vite-plugin into the astro build pipeline, and that plugin
   // auto-loads this file too. If "main" were set here (even correctly, to
@@ -18,7 +13,7 @@
   // The adapter emits its own correct, self-contained wrangler.json in
   // dist/server/ after a successful build (real main + assets paths,
   // relative to dist/server/). Deploy using THAT file, not this one:
-  //   Build command:  yarn build:astro
+  //   Build command:  yarn build
   //   Deploy command: npx wrangler deploy --config dist/server/wrangler.json
   "name": "ntu-mods",
   "compatibility_date": "2025-11-01",

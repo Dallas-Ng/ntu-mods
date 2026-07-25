@@ -5,6 +5,12 @@
   // (Next + Astro coexist during the migration), which made auto-detect bail
   // with "multiple frameworks were found: Astro, Next.js".
   "name": "ntu-mods",
+  // CF's deploy step here only runs "wrangler deploy" with no separate build
+  // step first, so dist/ doesn't exist yet — wrangler runs this command
+  // itself before bundling/uploading.
+  "build": {
+    "command": "yarn build:astro"
+  },
   "compatibility_date": "2025-11-01",
   "compatibility_flags": ["nodejs_compat"],
   // Matches the adapter's own generated dist/server/wrangler.json (paths

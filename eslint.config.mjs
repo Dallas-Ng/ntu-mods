@@ -1,4 +1,5 @@
 import prettier from "eslint-config-prettier"
+import astro from "eslint-plugin-astro"
 import jsxA11y from "eslint-plugin-jsx-a11y"
 import react from "eslint-plugin-react"
 import reactHooks from "eslint-plugin-react-hooks"
@@ -7,16 +8,28 @@ import unusedImports from "eslint-plugin-unused-imports"
 import globals from "globals"
 import tseslint from "typescript-eslint"
 
+// .astro templates are HTML-flavoured, not JSX — they use `class`, not
+// `className`, and have no React component scope. The React/Tailwind/a11y
+// configs are therefore scoped to .ts/.tsx and must never apply to .astro.
+const REACT_FILES = ["**/*.ts", "**/*.tsx"]
+
 const config = [
   {
-    ignores: [".astro/**", "dist/**", "node_modules/**"]
+    ignores: [".astro/**", ".next/**", "dist/**", "node_modules/**"]
   },
-  react.configs.flat.recommended,
-  reactHooks.configs.flat.recommended,
-  ...tailwindcss.configs["flat/recommended"],
+  { ...react.configs.flat.recommended, files: REACT_FILES },
+  { ...reactHooks.configs.flat.recommended, files: REACT_FILES },
+  ...tailwindcss.configs["flat/recommended"].map((c) => ({
+    ...c,
+    files: REACT_FILES
+  })),
+  // Without this every .astro file is silently skipped — eslint's flat config
+  // only picks up .js/.ts by default, and most page logic lives in .astro
+  // frontmatter.
+  ...astro.configs.recommended,
   prettier,
   {
-    files: ["**/*.ts", "**/*.tsx"],
+    files: REACT_FILES,
     languageOptions: {
       parser: tseslint.parser
     },
@@ -33,8 +46,8 @@ const config = [
     }
   },
   {
+    files: REACT_FILES,
     plugins: {
-      "unused-imports": unusedImports,
       "jsx-a11y": jsxA11y
     },
     rules: {
@@ -52,15 +65,22 @@ const config = [
       "jsx-a11y/role-has-required-aria-props": "warn",
       "jsx-a11y/role-supports-aria-props": "warn",
       "tailwindcss/classnames-order": "off",
-      "tailwindcss/no-custom-classname": "off",
-      "no-unused-vars": "off",
-      "unused-imports/no-unused-imports": "error"
+      "tailwindcss/no-custom-classname": "off"
     },
     settings: {
       tailwindcss: {
         callees: ["cn"],
         config: {}
       }
+    }
+  },
+  {
+    plugins: {
+      "unused-imports": unusedImports
+    },
+    rules: {
+      "no-unused-vars": "off",
+      "unused-imports/no-unused-imports": "error"
     }
   }
 ]

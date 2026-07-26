@@ -1,10 +1,9 @@
-// Replaces next-sitemap for the Astro build. Astro has no equivalent of
-// next-sitemap's auto-discovery of static pages from the build output, so
-// every route is enumerated explicitly here. Logic (module-map + metadata
-// directory walk, year cutoff, current-semester skip) is ported verbatim from
-// next-sitemap.config.js to keep the same SEO signal — thin/old versioned
-// module pages are excluded from the sitemap even though Astro now statically
-// generates all of them (a build-time decision, not an indexing one).
+// Astro has no equivalent of next-sitemap's auto-discovery of static pages
+// from the build output, so every route is enumerated explicitly here. The
+// logic (module-map + metadata directory walk, year cutoff, current-semester
+// skip) is ported from the old next-sitemap.config.js to keep the same SEO
+// signal — thin/old versioned module pages stay out of the sitemap even though
+// the routes still resolve (a crawl-budget decision, not a routing one).
 import fs from "fs/promises"
 import path from "path"
 import { fileURLToPath } from "url"
@@ -133,9 +132,9 @@ async function main() {
 
   await fs.mkdir(OUT_DIR, { recursive: true })
 
-  // Astro copies public/ verbatim into dist/client — clear out any stale
-  // sitemap-*.xml left behind by Next's own next-sitemap output (same public/
-  // dir is shared by both apps during the migration) before writing fresh ones.
+  // Astro copies public/ verbatim into dist/client, and an incremental build
+  // can leave a previous run's sitemap-*.xml behind — a shrinking URL set would
+  // otherwise keep serving orphaned chunks. Clear them before writing fresh.
   const existing = await fs.readdir(OUT_DIR)
   await Promise.all(
     existing

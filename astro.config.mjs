@@ -20,10 +20,18 @@ export default defineConfig({
   }),
   integrations: [react()],
   trailingSlash: "never",
+  // "file" emits /faq.html, not /faq/index.html. Cloudflare's asset server
+  // serves a directory-style build at /faq/ and 307s /faq to it — so with the
+  // default format every canonical, sitemap and internal URL (all slashless)
+  // would cost a redirect hop before rendering. "file" serves them directly.
+  build: { format: "file" },
+  // 301, not Astro's shorthand default of 302 — these were `permanent: true`
+  // redirects under Next, and demoting them would drop the accumulated link
+  // equity on /stars in particular.
   redirects: {
-    "/stars": "/timetable",
-    "/mod": "/mods",
-    "/help": "/faq"
+    "/stars": { status: 301, destination: "/timetable" },
+    "/mod": { status: 301, destination: "/mods" },
+    "/help": { status: 301, destination: "/faq" }
   },
   vite: {
     envPrefix: ["PUBLIC_"],

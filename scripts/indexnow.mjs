@@ -8,14 +8,23 @@ const HOST = "ntumods.com"
 const ENDPOINT = "https://api.indexnow.org/IndexNow"
 const BATCH_SIZE = 10_000
 
-if (process.env.VERCEL_ENV !== "production") {
-  console.log(`[IndexNow] Skipping — VERCEL_ENV="${process.env.VERCEL_ENV ?? "unset"}"`)
+// Only ping IndexNow from a real production deploy, never from a local build.
+// Cloudflare Workers Builds sets WORKERS_CI=1 (and Pages sets CF_PAGES=1);
+// INDEXNOW=1 forces it on for a manual deploy from a workstation.
+const isProductionBuild =
+  process.env.INDEXNOW === "1" ||
+  process.env.WORKERS_CI === "1" ||
+  process.env.CF_PAGES === "1"
+
+if (!isProductionBuild) {
+  console.log(
+    "[IndexNow] Skipping — not a production build (set INDEXNOW=1 to force)"
+  )
   process.exit(0)
 }
 
-// Next writes sitemap-*.xml to public/; the Astro build writes them to
-// dist/client/ instead — pass that dir explicitly when running under Astro.
-const publicDir = path.join(__dirname, process.argv[2] || "../public")
+// The build writes sitemap-*.xml to dist/client/ (see scripts/build-sitemap.mjs).
+const publicDir = path.join(__dirname, process.argv[2] || "../dist/client")
 const files = (await fs.readdir(publicDir))
   .filter((f) => /^sitemap-\d+\.xml$/.test(f))
   .sort()

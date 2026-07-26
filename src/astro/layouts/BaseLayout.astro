@@ -23,6 +23,8 @@ interface Props {
    * detail pages using generateMetadata) — set this on their Astro
    * equivalents to match. */
   noTitleSuffix?: boolean
+  /** Error/utility pages that should never be indexed or canonicalised. */
+  noindex?: boolean
 }
 
 const defaults = siteConfig.metatags.default
@@ -34,7 +36,8 @@ const {
   size = "full",
   containerClassName,
   outerClassName,
-  noTitleSuffix = false
+  noTitleSuffix = false,
+  noindex = false
 } = Astro.props
 
 const canonicalUrl = canonical
@@ -56,10 +59,12 @@ const resolvedTitle =
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{resolvedTitle}</title>
     <meta name="description" content={description} />
-    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {!noindex && canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteConfig.name} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />

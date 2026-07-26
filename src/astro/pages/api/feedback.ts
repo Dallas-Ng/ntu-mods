@@ -1,49 +1,85 @@
 import type { APIRoute } from "astro"
+import { env, waitUntil } from "cloudflare:workers"
 
-import { getPostHogClient } from "@/lib/posthog-server"
+import { createPostHogClient } from "@/lib/posthog-server"
 
 export const prerender = false
 
-interface Data {
-  feedback: string
-  author: string
+const MAX_FEEDBACK_LENGTH = 10_000
+
+function json(body: unknown, status: number) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json" }
+  })
 }
 
 export const POST: APIRoute = async ({ request }) => {
-  const data: Data = await request.json()
+  // Bindings, not process.env — Cloudflare only populates process.env through
+  // nodejs_compat's process shim, which this worker deliberately runs an older
+  // version of (see disable_nodejs_process_v2 in wrangler.jsonc). Astro v6
+  // removed Astro.locals.runtime.env, so cloudflare:workers is the way in.
+  const { RESEND_KEY, PUBLIC_POSTHOG_TOKEN } = env
+
+  let data: unknown
+  try {
+    data = await request.json()
+  } catch {
+    return json({ success: false, error: "Invalid JSON body" }, 400)
+  }
+
+  const { feedback, author } = (data ?? {}) as {
+    feedback?: unknown
+    author?: unknown
+  }
+
+  if (typeof feedback !== "string" || feedback.trim() === "") {
+    return json({ success: false, error: "Feedback is required" }, 400)
+  }
+  if (feedback.length > MAX_FEEDBACK_LENGTH) {
+    return json({ success: false, error: "Feedback is too long" }, 400)
+  }
+
+  const authorLine = typeof author === "string" ? author : ""
+
+  if (!RESEND_KEY) {
+    console.error("Feedback: RESEND_KEY is not bound")
+    return json({ success: false, error: "Feedback is not configured" }, 500)
+  }
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.RESEND_KEY}`
+      Authorization: `Bearer ${RESEND_KEY}`
     },
     body: JSON.stringify({
       from: "feedback@ntumods.com",
       to: "ngdallas1@gmail.com",
       subject: "New Feedback on NTU Mods",
-      text: `From: ${data.author}\n\n${data.feedback}`
+      text: `From: ${authorLine}\n\n${feedback}`
     })
   })
 
-  if (res.ok) {
-    const posthog = getPostHogClient()
+  if (!res.ok) {
+    const error = await res.text()
+    console.error("Resend error:", error)
+    return json({ success: false, error: "Failed to send feedback" }, 500)
+  }
+
+  if (PUBLIC_POSTHOG_TOKEN) {
+    const posthog = createPostHogClient(PUBLIC_POSTHOG_TOKEN)
     posthog.capture({
-      distinctId: data.author || "anonymous",
+      distinctId: authorLine || "anonymous",
       event: "feedback_submitted",
       properties: {
-        has_email: !!data.author && data.author !== "anon",
-        feedback_length: data.feedback.length
+        has_email: !!authorLine && authorLine !== "anon",
+        feedback_length: feedback.length
       }
     })
-    await posthog.shutdown()
-
-    return new Response(JSON.stringify({ success: true }), { status: 200 })
-  } else {
-    const error = await res.json()
-    console.error("Resend error:", error)
-    return new Response(JSON.stringify({ success: false, error }), {
-      status: 500
-    })
+    // Flush after the response is sent instead of blocking on it.
+    waitUntil(posthog.shutdown())
   }
+
+  return json({ success: true }, 200)
 }

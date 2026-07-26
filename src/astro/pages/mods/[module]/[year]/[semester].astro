@@ -31,7 +31,9 @@ const {
 }
 
 const snapshot = await getModuleSnapshot(Astro.url, code, year, semester)
-if (!snapshot) return new Response(null, { status: 404 })
+// Renders the real 404 page rather than a blank body — /404 is on-demand for
+// exactly this reason.
+if (!snapshot) return Astro.rewrite("/404")
 
 const { moduleData, indexes, exam, isCurrentOffering } = snapshot
 

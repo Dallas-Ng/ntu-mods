@@ -23,38 +23,65 @@ NTU Mods is a timetable planner for Nanyang Technological University (NTU) stude
 
 ## Tech Stack
 
-- **Framework:** [Next.js 14](https://nextjs.org/) (App Router)
+- **Framework:** [Astro](https://astro.build/) with React islands
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS + [shadcn/ui](https://ui.shadcn.com/)
 - **State:** Zustand
 - **Data:** Static JSON files (scraped from NTU STARS)
-- **Database:** Vercel Postgres (for feedback)
-- **Deployment:** Vercel
+- **Email:** Resend (for the feedback form)
+- **Deployment:** Cloudflare Workers (static assets + on-demand routes)
 
 ## Project Structure
 
 ```
-├── app/                    # Next.js App Router pages and API routes
-│   ├── mods/               # Module browser and individual module pages
-│   ├── timetable/          # Timetable builder
-│   ├── share/              # Shared timetable view
-│   ├── screenshot/         # Screenshot-optimised timetable view
-│   └── api/                # API routes serving module/index data
 ├── src/
-│   ├── components/         # React components
+│   ├── astro/              # Astro-only directories (see note below)
+│   │   ├── pages/          # Routes — .astro pages and API endpoints
+│   │   │   ├── mods/       # Module browser and individual module pages
+│   │   │   ├── timetable/  # Timetable builder
+│   │   │   ├── share/      # Shared timetable view
+│   │   │   ├── screenshot/ # Screenshot-optimised timetable view
+│   │   │   ├── api/        # Server endpoints (feedback)
+│   │   │   └── ingest/     # PostHog reverse proxy
+│   │   ├── layouts/        # Base and minimal page shells
+│   │   ├── middleware.ts   # Module-code case normalisation
+│   │   └── content.config.ts
+│   ├── components/         # React components (islands) and shared UI
 │   ├── data/api/           # Static JSON data (modules, indexes, exams)
 │   ├── hooks/              # React hooks
 │   ├── lib/                # Utility functions and server helpers
+│   │   └── server/edge/    # Runtime data readers (ASSETS binding, no fs)
 │   └── types/              # Global TypeScript types
-└── scripts/                # Data pipeline (scrapers + transforms)
-    └── scrapers/           # Python scrapers for NTU STARS data
+├── content/articles/       # Markdown articles (Astro content collection)
+├── scripts/                # Build steps + data pipeline
+└── scraper/                # Python scrapers for NTU STARS data
 ```
+
+Astro's special directories live under `src/astro/` rather than the top-level
+defaults, via `srcDir` in [`astro.config.mjs`](astro.config.mjs). Everything
+shared (`components/`, `hooks/`, `lib/`, `state/`) stays in `src/` and is
+imported through the `@/*` alias.
+
+### Rendering model
+
+Cloudflare Workers has no filesystem, so every route is prerendered at build
+time (in plain Node, via the adapter's `prerenderEnvironment`) except:
+
+| Route                          | Why on-demand                                                        |
+| ------------------------------ | -------------------------------------------------------------------- |
+| `/mods/:code/:year/:semester`  | ~28k combinations; prerendering them dominated build time             |
+| `/api/feedback`                | Sends mail through Resend at request time                             |
+| `/ingest/*`                    | PostHog reverse proxy                                                 |
+
+On-demand routes must not import the `node:fs`-based readers in
+`src/lib/server/*.ts` — use `src/lib/server/edge/*` instead, which reads the
+same JSON over the `ASSETS` binding.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 22+
 - Yarn
 
 ### Installation
@@ -71,14 +98,44 @@ yarn install
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:4321](http://localhost:4321) in your browser.
+
+### Checks
+
+```bash
+yarn lint
+```
+
+Runs ESLint (including `.astro` files), `astro check`, and `tsc`.
 
 ### Building for Production
 
 ```bash
 yarn build
-yarn start
 ```
+
+This runs the static-data build, `astro build`, the sitemap generator, and the
+IndexNow submission (skipped unless `WORKERS_CI`, `CF_PAGES`, or `INDEXNOW=1`
+is set). Preview the built output with `yarn preview`.
+
+## Deployment
+
+Deployed to Cloudflare Workers. The root [`wrangler.jsonc`](wrangler.jsonc) is
+deliberately assets-only — `@astrojs/cloudflare` emits the real, self-contained
+worker config after a successful build, so deploy with that one:
+
+```bash
+npx wrangler deploy --config dist/server/wrangler.json
+```
+
+### Secrets
+
+Set as Worker secrets (not `.env`), read via `locals.runtime.env`:
+
+| Name                    | Used by                                   |
+| ----------------------- | ----------------------------------------- |
+| `RESEND_KEY`            | `/api/feedback` — sends the feedback email |
+| `PUBLIC_POSTHOG_TOKEN`  | PostHog, client and server-side capture    |
 
 ## Data Pipeline
 

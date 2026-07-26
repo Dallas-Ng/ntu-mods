@@ -17,7 +17,13 @@
   //   Deploy command: npx wrangler deploy --config dist/server/wrangler.json
   "name": "ntu-mods",
   "compatibility_date": "2025-11-01",
-  "compatibility_flags": ["nodejs_compat"],
+  // disable_nodejs_process_v2 works around a known upstream bug (astro
+  // issues #14511, #15434): nodejs_compat's newer `process` shim ("process
+  // v2") makes Astro's internal isNode check misidentify workerd as Node,
+  // so on-demand pages render as a Node-style async iterable instead of a
+  // Web ReadableStream — Response can't accept that, and silently
+  // stringifies it to the literal text "[object Object]".
+  "compatibility_flags": ["nodejs_compat", "disable_nodejs_process_v2"],
   "cache": {
     "enabled": false
   },

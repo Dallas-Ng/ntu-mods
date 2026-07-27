@@ -153,7 +153,7 @@ const CHANGELOG: ChangelogRelease[] = [
         category: "Performance",
         content: (
           <>
-            We rebuilt the site on{" "}
+            NTUMods is now rebuilt on{" "}
             <a
               href="https://astro.build"
               target="_blank"
@@ -161,7 +161,7 @@ const CHANGELOG: ChangelogRelease[] = [
               className="text-blue-500 transition-colors hover:text-blue-600">
               Astro
             </a>{" "}
-            and moved hosting to{" "}
+            and now hosted on{" "}
             <a
               href="https://www.cloudflare.com/"
               target="_blank"

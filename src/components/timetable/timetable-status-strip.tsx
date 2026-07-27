@@ -1,18 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { AlertTriangleIcon, Calendar, ImageDown, LinkIcon } from "lucide-react"
 import Link from "next/link"
-import {
-  AlertTriangleIcon,
-  Calendar,
-  ImageDown,
-  LinkIcon
-} from "lucide-react"
 import posthog from "posthog-js"
 import { toast } from "sonner"
 
-import { BASE_URL } from "@/lib/constants"
-import { TRUN_DAY_MAP } from "@/lib/constants"
+import { BASE_URL, TRUN_DAY_MAP } from "@/lib/constants"
 import { getIcs } from "@/lib/get-ics"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
@@ -167,7 +161,7 @@ const TimetableStatusStrip = () => {
 
       {hasModules && freeDayCount > 0 && (
         <span className="text-muted-foreground flex items-center gap-1">
-          <span className="font-medium text-foreground">
+          <span className="text-foreground font-medium">
             {freeDayCount} free day{freeDayCount !== 1 ? "s" : ""}
           </span>
           <span className="hidden sm:inline">

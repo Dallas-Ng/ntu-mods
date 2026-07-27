@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react"
 import dynamic from "next/dynamic"
 
-import { useTimetable } from "@/hooks/use-timetable"
 import { useSettings } from "@/hooks/use-settings"
+import { useTimetable } from "@/hooks/use-timetable"
 import {
   Drawer,
   DrawerContent,

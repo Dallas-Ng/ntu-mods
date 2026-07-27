@@ -88,9 +88,7 @@ const TimetableOverview = () => {
                   : ""
 
                 return (
-                  <tr
-                    key={moduleKey}
-                    className={cn(i % 2 === 1 && "bg-muted")}>
+                  <tr key={moduleKey} className={cn(i % 2 === 1 && "bg-muted")}>
                     <td className="py-1">{indexKey}</td>
 
                     <td>

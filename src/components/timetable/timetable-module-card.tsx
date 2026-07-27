@@ -13,9 +13,18 @@ import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 
 const MONTH_SHORT: Record<string, string> = {
-  January: "Jan", February: "Feb", March: "Mar", April: "Apr",
-  May: "May", June: "Jun", July: "Jul", August: "Aug",
-  September: "Sep", October: "Oct", November: "Nov", December: "Dec"
+  January: "Jan",
+  February: "Feb",
+  March: "Mar",
+  April: "Apr",
+  May: "May",
+  June: "Jun",
+  July: "Jul",
+  August: "Aug",
+  September: "Sep",
+  October: "Oct",
+  November: "Nov",
+  December: "Dec"
 }
 
 function shortDate(dateStr: string): string {
@@ -34,7 +43,10 @@ interface Props {
 const TimetableModuleCard = ({ moduleKey, title, au, examDate }: Props) => {
   const { timetable, updateItemIndex, removeItemFromTimetable } = useTimetable()
   const indexKey = timetable[moduleKey]
-  const { indexes: seasonIndexes } = useSeasonIndexes(latestYear, latestSemester)
+  const { indexes: seasonIndexes } = useSeasonIndexes(
+    latestYear,
+    latestSemester
+  )
   const [open, setOpen] = useState(false)
 
   const moduleIndexes = seasonIndexes[moduleKey] ?? {}
@@ -61,9 +73,7 @@ const TimetableModuleCard = ({ moduleKey, title, au, examDate }: Props) => {
   const hasCommonLecture =
     allLectures.length > 0 && randomLecture.length > 0
       ? allLectures.every((item) =>
-          randomLecture.some(
-            (x) => x.day === item.day && x.time === item.time
-          )
+          randomLecture.some((x) => x.day === item.day && x.time === item.time)
         )
       : false
 
@@ -95,7 +105,9 @@ const TimetableModuleCard = ({ moduleKey, title, au, examDate }: Props) => {
         <div className="flex items-center justify-between gap-1">
           <div className="flex items-center gap-1.5 text-sm font-semibold">
             <span>{moduleKey}</span>
-            <span className="text-muted-foreground font-normal">{indexKey}</span>
+            <span className="text-muted-foreground font-normal">
+              {indexKey}
+            </span>
             {open ? (
               <ChevronUp className="text-muted-foreground size-3.5" />
             ) : (
@@ -120,7 +132,7 @@ const TimetableModuleCard = ({ moduleKey, title, au, examDate }: Props) => {
         {/* Row 3: exam + session types */}
         <div className="mt-0.5 flex items-center gap-2 text-xs">
           {examDate ? (
-            <span className="text-amber-600 dark:text-amber-400 font-medium">
+            <span className="font-medium text-amber-600 dark:text-amber-400">
               ⚠ {shortDate(examDate)}
             </span>
           ) : (

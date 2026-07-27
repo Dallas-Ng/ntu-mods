@@ -6,6 +6,8 @@ import posthog from "posthog-js"
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
+import { useBoundState } from "@/state/bound.state"
+import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
@@ -28,6 +30,8 @@ import ButtonCollapsable from "@/components/button-collapsable"
 const TimetableCopyButton = () => {
   const { timetables, updateTimetable, qsTimetable, updateTimetableIndex } =
     useTimetable()
+  const { qsCustomCourses } = useCustomCourses()
+  const setCustomCourses = useBoundState((s) => s.setCustomCourses)
   const { isMobile } = useSettings()
   const [open, setOpen] = useState(false)
   const [overrideIndex, setOverrideIndex] = useState<number | null>(null)
@@ -35,10 +39,14 @@ const TimetableCopyButton = () => {
   const handleOverride = (overrideIndex: number) => {
     if (qsTimetable) {
       updateTimetable(qsTimetable, overrideIndex)
+      // The plan is being overridden wholesale, so custom blocks follow the
+      // shared link — including when it carries none.
+      setCustomCourses(qsCustomCourses ?? [], overrideIndex)
       updateTimetableIndex(overrideIndex)
       posthog.capture("timetable_copied", {
         target_plan: overrideIndex + 1,
-        module_count: Object.keys(qsTimetable).length
+        module_count: Object.keys(qsTimetable).length,
+        custom_block_count: qsCustomCourses?.length ?? 0
       })
       window.location.assign("/timetable")
       toast.success("Successfully copied timetable")

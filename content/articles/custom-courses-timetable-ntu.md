@@ -29,25 +29,36 @@ Anything you would pencil into a physical planner can go here.
 ## How to add a custom course
 
 1. Open the [Timetable](https://ntumods.com/timetable) page.
-2. In the right sidebar (or via the mobile modifier button), scroll to **Custom Courses**.
-3. Click **Add custom course**.
+2. In the right sidebar (or via the mobile modifier button), scroll to **Custom Blocks**.
+3. Click **Add custom block**.
 4. Fill in the details:
    - **Name** — what this block is (e.g. "Gym", "Badminton CCA", "Lunch")
+   - **Session type** — a preset (Lecture, Tutorial, Lab, Seminar, Design, Project) or your own label like "Gym" or "Work"
    - **Day** — Monday through Sunday
    - **Start time** and **End time** — select from the standard 30-minute slots
    - **Venue** — optional, but useful for planning commutes
-   - **Colour** — pick from six options to visually distinguish blocks at a glance
-5. Click **Save**.
+5. Add more sessions if the commitment recurs on several days.
+6. Click **Save**.
 
 The block appears on the timetable grid immediately.
 
+## Options: letting the generator choose the timing
+
+A block can hold more than one **option** — alternative sets of days and times for the same commitment. Gym on Monday morning or Thursday evening; a work shift on Tuesday or Wednesday. Click **+ Option** in the editor to add one; it starts as a copy of the option you were looking at, so you only change what differs.
+
+Options behave exactly like module indexes. When you run **Generate**, the generator tries each option and keeps whichever fits your constraints and scores best — so you do not have to guess which gym slot leaves the most free days. You can also switch options by hand from the sidebar, or by clicking the block on the grid in **Pick indexes** mode.
+
+If a block should stay put during generation, lock it under **Generation Settings → Locked modules**.
+
 ## Editing and removing custom courses
 
-Click any custom course in the list to expand an inline editor. Change the name, time, venue, or colour, then click **Save**. To remove a block, click the trash icon on the right of the row.
+Click any custom block in the list to open the editor. Change the name, sessions, times, venue, or options, then click **Save**. To remove a block, click the trash icon on the right of the row.
 
 ## Clash detection
 
 Custom courses participate in the same grid layout as registered modules. If a custom block overlaps with a tutorial or lecture, the cells appear side by side in the same column — the same way registered modules clash with each other. There is no separate warning; the visual overlap makes it immediately obvious.
+
+Generate mode treats them as real obstacles: it will not hand you a timetable where a class sits on top of a custom block. Your own blocks are exempt from the day-hours, lunch-break and spacing settings, though — a 7am gym session is a commitment you already made, not something the generator gets to move.
 
 This is useful during planning. You can add a gym block, then try different indexes for a module to find one that does not clash with it — without any manual time arithmetic.
 
@@ -55,11 +66,19 @@ This is useful during planning. You can add a gym block, then try different inde
 
 Each of your five timetable plans has its own independent set of custom courses. Switching plans switches the blocks shown on the grid. If you duplicate a plan, the custom courses in that plan are copied to the new one with fresh IDs, so editing one does not affect the other.
 
+## Sharing custom blocks
+
+Custom blocks can travel with a shared timetable. Open the actions menu, choose **Share**, and leave **Include custom blocks** ticked — the blocks are packed into the link, and whoever opens it sees them on the grid. Untick it to share only your registered modules.
+
+Links have a practical length limit, so for many blocks use **Copy as text** instead. That gives you a code starting with `NTUMODS1-` that you can paste anywhere. The receiver pastes it into **Import from text** in the same menu and picks which of their five plans to import into. Import also accepts a pasted share link, so either form works.
+
+Both carriers keep every option of every block, along with which one is currently selected.
+
 ## Limitations to keep in mind
 
-Custom courses are stored locally in your browser alongside your timetable. They are not synced to a server and are not included in shared timetable links. If you share your timetable via the share button, recipients will see your registered modules but not your custom blocks.
+Custom courses are stored locally in your browser alongside your timetable. They are not synced to a server or an account.
 
-Screenshots taken via the screenshot button do include custom courses as they appear on screen.
+Calendar (.ics) export covers registered modules only — custom blocks are not included. Screenshots taken via the screenshot button do include custom courses as they appear on screen.
 
 ## Example: planning around a gym schedule
 
@@ -83,7 +102,11 @@ The same approach works for CCA commitments, work shifts, or anything else with 
 
 ### Do custom courses appear in shared timetable links?
 
-No. Custom courses are stored locally in your browser and are not included when you share a timetable link — recipients only see your registered modules. Screenshots taken with the screenshot button do include custom courses as they appear on screen.
+Yes, if you want them to. The share dialog has an **Include custom blocks** checkbox, ticked by default. Untick it and the link carries only your registered modules. For a lot of blocks, use **Copy as text** and have the receiver paste the code into **Import from text**.
+
+### Does the timetable generator avoid my custom blocks?
+
+Yes. Generate mode treats custom blocks as fixed obstacles and will not put a class on top of one. If a block has several options, the generator picks whichever one fits best. Your blocks are exempt from the day-hours, lunch-break and back-to-back settings, so an early or late block never makes generation impossible.
 
 ### Do custom courses sync across devices?
 

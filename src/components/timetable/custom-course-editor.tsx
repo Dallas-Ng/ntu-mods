@@ -1,12 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useBoundState } from "@/state/bound.state"
-import { Plus, Trash2 } from "lucide-react"
+import { Plus, Trash2, X } from "lucide-react"
 import posthog from "posthog-js"
 
 import { STARS_TIMESLOTS } from "@/lib/constants"
 import { formatHhmm } from "@/lib/format"
+import { cn } from "@/lib/utils"
+import { useBoundState } from "@/state/bound.state"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -55,6 +56,7 @@ const PRESET_TYPES = [
 
 const PRESET_TYPE_VALUES = new Set(PRESET_TYPES.map((p) => p.value))
 const CUSTOM_SENTINEL = "__custom__"
+const MAX_INDEXES = 10
 
 // ─── form types ──────────────────────────────────────────────────────────────
 
@@ -67,9 +69,16 @@ interface SessionRow {
   venue: string
 }
 
+interface IndexRow {
+  _key: string // doubles as the persisted CustomCourseIndex id
+  label: string
+  sessions: SessionRow[]
+}
+
 interface FormState {
   name: string
-  sessions: SessionRow[]
+  indexes: IndexRow[]
+  activeIndexKey: string
 }
 
 const newSession = (
@@ -84,25 +93,53 @@ const newSession = (
   ...defaults
 })
 
-const makeDefaultForm = (name = ""): FormState => ({
-  name,
-  sessions: [newSession()]
+const newIndex = (label: string, sessions?: SessionRow[]): IndexRow => ({
+  _key: crypto.randomUUID(),
+  label,
+  sessions: sessions ?? [newSession()]
 })
 
-const courseToForm = (course: CustomCourse): FormState => ({
-  name: course.name,
-  sessions:
-    course.sessions.length > 0
-      ? course.sessions.map((s) => ({ ...s, _key: crypto.randomUUID() }))
-      : [newSession()]
-})
+const makeDefaultForm = (name = ""): FormState => {
+  const index = newIndex("Option 1")
+  return { name, indexes: [index], activeIndexKey: index._key }
+}
 
-const formToCourse = (form: FormState): Omit<CustomCourse, "id"> => ({
-  name: form.name.trim(),
-  sessions: form.sessions
-    .map(({ _key: _k, ...s }) => ({ ...s, type: s.type.trim() }))
-    .filter((s) => s.type.length > 0)
-})
+const courseToForm = (course: CustomCourse): FormState => {
+  const indexes: IndexRow[] =
+    course.indexes?.length > 0
+      ? course.indexes.map((i) => ({
+          _key: i.id,
+          label: i.label,
+          sessions:
+            i.sessions.length > 0
+              ? i.sessions.map((s) => ({ ...s, _key: crypto.randomUUID() }))
+              : [newSession()]
+        }))
+      : [newIndex("Option 1")]
+
+  const activeIndexKey =
+    indexes.find((i) => i._key === course.selectedIndexId)?._key ??
+    indexes[0]._key
+
+  return { name: course.name, indexes, activeIndexKey }
+}
+
+const formToCourse = (form: FormState): Omit<CustomCourse, "id"> => {
+  const indexes = form.indexes
+    .map((index, i) => ({
+      id: index._key,
+      label: index.label.trim() || `Option ${i + 1}`,
+      sessions: index.sessions
+        .map(({ _key: _k, ...s }) => ({ ...s, type: s.type.trim() }))
+        .filter((s) => s.type.length > 0)
+    }))
+    .filter((index) => index.sessions.length > 0)
+
+  const selectedIndexId =
+    indexes.find((i) => i.id === form.activeIndexKey)?.id ?? indexes[0]?.id ?? ""
+
+  return { name: form.name.trim(), indexes, selectedIndexId }
+}
 
 // ─── session row ─────────────────────────────────────────────────────────────
 
@@ -290,27 +327,70 @@ export const CourseModal = ({
       setForm(initial ? courseToForm(initial) : makeDefaultForm(initialName))
   }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const updateSession = (key: string, updates: Partial<SessionRow>) =>
+  const activeIndex =
+    form.indexes.find((i) => i._key === form.activeIndexKey) ?? form.indexes[0]
+
+  const updateActiveIndex = (updates: Partial<Omit<IndexRow, "_key">>) =>
     setForm((f) => ({
       ...f,
-      sessions: f.sessions.map((s) =>
-        s._key === key ? { ...s, ...updates } : s
+      indexes: f.indexes.map((i) =>
+        i._key === activeIndex._key ? { ...i, ...updates } : i
       )
     }))
 
+  const updateSession = (key: string, updates: Partial<SessionRow>) =>
+    updateActiveIndex({
+      sessions: activeIndex.sessions.map((s) =>
+        s._key === key ? { ...s, ...updates } : s
+      )
+    })
+
   const removeSession = (key: string) =>
-    setForm((f) => ({
-      ...f,
-      sessions: f.sessions.filter((s) => s._key !== key)
-    }))
+    updateActiveIndex({
+      sessions: activeIndex.sessions.filter((s) => s._key !== key)
+    })
 
   const addSession = () =>
-    setForm((f) => ({ ...f, sessions: [...f.sessions, newSession()] }))
+    updateActiveIndex({ sessions: [...activeIndex.sessions, newSession()] })
+
+  const addIndex = () =>
+    setForm((f) => {
+      if (f.indexes.length >= MAX_INDEXES) return f
+      // Seed from the option on screen — most alternatives are small tweaks
+      const seed = f.indexes.find((i) => i._key === f.activeIndexKey)
+      const created = newIndex(
+        `Option ${f.indexes.length + 1}`,
+        seed?.sessions.map((s) => ({ ...s, _key: crypto.randomUUID() }))
+      )
+      return {
+        ...f,
+        indexes: [...f.indexes, created],
+        activeIndexKey: created._key
+      }
+    })
+
+  const removeIndex = (key: string) =>
+    setForm((f) => {
+      if (f.indexes.length <= 1) return f
+      const indexes = f.indexes.filter((i) => i._key !== key)
+      return {
+        ...f,
+        indexes,
+        activeIndexKey:
+          f.activeIndexKey === key ? indexes[0]._key : f.activeIndexKey
+      }
+    })
 
   const isValid =
     form.name.trim().length > 0 &&
-    form.sessions.length > 0 &&
-    form.sessions.every((s) => s.type.trim().length > 0)
+    form.indexes.length > 0 &&
+    form.indexes.every(
+      (index) =>
+        index.sessions.length > 0 &&
+        index.sessions.every((s) => s.type.trim().length > 0)
+    )
+
+  const hasMultipleIndexes = form.indexes.length > 1
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -330,20 +410,87 @@ export const CourseModal = ({
               placeholder="e.g. Gym, Badminton CCA, External Course"
               value={form.name}
               maxLength={40}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+              onChange={(e) =>
+                setForm((f) => ({ ...f, name: e.target.value }))
+              }
             />
           </div>
 
-          {/* Sessions */}
+          {/* Options (indexes) */}
+          <div className="space-y-2">
+            <div className="flex items-baseline justify-between gap-2">
+              <Label>Options</Label>
+              <span className="text-muted-foreground text-xs">
+                Generation picks whichever fits best
+              </span>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5">
+              {form.indexes.map((index) => {
+                const isActive = index._key === activeIndex._key
+                return (
+                  <div
+                    key={index._key}
+                    className={cn(
+                      "flex h-7 items-center rounded-md border text-xs font-medium transition-colors",
+                      isActive
+                        ? "bg-foreground text-background border-transparent"
+                        : "text-muted-foreground hover:border-foreground"
+                    )}>
+                    <button
+                      type="button"
+                      className="h-full cursor-pointer px-2.5"
+                      onClick={() =>
+                        setForm((f) => ({ ...f, activeIndexKey: index._key }))
+                      }>
+                      {index.label.trim() || "Untitled"}
+                    </button>
+                    {hasMultipleIndexes && (
+                      <button
+                        type="button"
+                        aria-label={`Remove ${index.label}`}
+                        className="h-full cursor-pointer pr-1.5 opacity-60 hover:opacity-100"
+                        onClick={() => removeIndex(index._key)}>
+                        <X className="size-3" />
+                      </button>
+                    )}
+                  </div>
+                )
+              })}
+
+              {form.indexes.length < MAX_INDEXES && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={addIndex}
+                  className="text-muted-foreground h-7 gap-1 px-2 text-xs">
+                  <Plus className="size-3.5" />
+                  Option
+                </Button>
+              )}
+            </div>
+
+            {hasMultipleIndexes && (
+              <Input
+                className="h-8 text-sm placeholder:text-sm"
+                placeholder="Option name"
+                value={activeIndex.label}
+                maxLength={30}
+                onChange={(e) => updateActiveIndex({ label: e.target.value })}
+              />
+            )}
+          </div>
+
+          {/* Sessions of the active option */}
           <div className="space-y-2">
             <Label>Sessions</Label>
 
             <div className="space-y-2">
-              {form.sessions.map((session) => (
+              {activeIndex.sessions.map((session) => (
                 <SessionRowEditor
                   key={session._key}
                   session={session}
-                  canRemove={form.sessions.length > 1}
+                  canRemove={activeIndex.sessions.length > 1}
                   onChange={(updates) => updateSession(session._key, updates)}
                   onRemove={() => removeSession(session._key)}
                 />
@@ -392,6 +539,7 @@ const CustomCourseEditor = () => {
   const addCustomCourse = useBoundState((s) => s.addCustomCourse)
   const updateCustomCourse = useBoundState((s) => s.updateCustomCourse)
   const removeCustomCourse = useBoundState((s) => s.removeCustomCourse)
+  const selectCustomCourseIndex = useBoundState((s) => s.selectCustomCourseIndex)
 
   const courses = customCourses[timetableIndex] ?? []
 
@@ -422,34 +570,64 @@ const CustomCourseEditor = () => {
           </p>
         ) : (
           courses.map((course) => {
-            const sessionLabels = course.sessions.map((s) => s.type).join(" · ")
+            const selected =
+              course.indexes.find((i) => i.id === course.selectedIndexId) ??
+              course.indexes[0]
+            const sessionLabels =
+              selected?.sessions.map((s) => s.type).join(" · ") ?? ""
 
             return (
-              <div
-                key={course.id}
-                className="hover:bg-accent flex cursor-pointer items-center justify-between py-1 pr-1 pl-3 text-sm transition-colors"
-                onClick={() => setEditingCourse(course)}>
-                <div className="flex min-w-0 items-baseline gap-2">
-                  <span className="max-w-[110px] truncate text-sm">
-                    {course.name}
-                  </span>
-                  <span className="text-muted-foreground shrink-0 text-xs">
-                    {sessionLabels}
-                  </span>
+              <div key={course.id} className="py-0.5">
+                <div
+                  className="hover:bg-accent flex cursor-pointer items-center justify-between py-1 pr-1 pl-3 text-sm transition-colors"
+                  onClick={() => setEditingCourse(course)}>
+                  <div className="flex min-w-0 items-baseline gap-2">
+                    <span className="max-w-[110px] truncate text-sm">
+                      {course.name}
+                    </span>
+                    <span className="text-muted-foreground shrink-0 text-xs">
+                      {sessionLabels}
+                    </span>
+                  </div>
+
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-muted-foreground hover:text-destructive size-8 shrink-0"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      removeCustomCourse(course.id)
+                      if (editingCourse?.id === course.id)
+                        setEditingCourse(null)
+                      posthog.capture("custom_course_deleted")
+                    }}>
+                    <Trash2 className="size-3.5" />
+                  </Button>
                 </div>
 
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-muted-foreground hover:text-destructive size-8 shrink-0"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    removeCustomCourse(course.id)
-                    if (editingCourse?.id === course.id) setEditingCourse(null)
-                    posthog.capture("custom_course_deleted")
-                  }}>
-                  <Trash2 className="size-3.5" />
-                </Button>
+                {course.indexes.length > 1 && (
+                  <div className="flex flex-wrap gap-1 px-3 pb-1">
+                    {course.indexes.map((courseIndex) => {
+                      const isActive = courseIndex.id === selected?.id
+                      return (
+                        <button
+                          key={courseIndex.id}
+                          type="button"
+                          onClick={() =>
+                            selectCustomCourseIndex(course.id, courseIndex.id)
+                          }
+                          className={cn(
+                            "h-5 cursor-pointer rounded border px-1.5 text-[0.65rem] font-medium transition-colors",
+                            isActive
+                              ? "bg-foreground text-background border-transparent"
+                              : "text-muted-foreground hover:border-foreground"
+                          )}>
+                          {courseIndex.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             )
           })
@@ -470,11 +648,15 @@ const CustomCourseEditor = () => {
         onOpenChange={setAddOpen}
         onSave={(data) => {
           addCustomCourse(data)
+          const selected =
+            data.indexes.find((i) => i.id === data.selectedIndexId) ??
+            data.indexes[0]
           posthog.capture("custom_course_created", {
             name_length: data.name.length,
-            session_count: data.sessions.length,
-            days: [...new Set(data.sessions.map((s) => s.day))],
-            types: [...new Set(data.sessions.map((s) => s.type))]
+            index_count: data.indexes.length,
+            session_count: selected?.sessions.length ?? 0,
+            days: [...new Set(selected?.sessions.map((s) => s.day) ?? [])],
+            types: [...new Set(selected?.sessions.map((s) => s.type) ?? [])]
           })
         }}
       />
@@ -488,8 +670,8 @@ const CustomCourseEditor = () => {
         onSave={(data) => {
           if (editingCourse) {
             posthog.capture("custom_course_edited", {
-              session_count_delta:
-                data.sessions.length - editingCourse.sessions.length
+              index_count_delta:
+                data.indexes.length - editingCourse.indexes.length
             })
             updateCustomCourse(editingCourse.id, data)
           }

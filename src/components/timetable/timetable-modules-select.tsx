@@ -1,13 +1,15 @@
 "use client"
 
-import { useRef, useState } from "react"
-import { useBoundState } from "@/state/bound.state"
+import { useMemo, useRef, useState } from "react"
 import { Check } from "lucide-react"
 import posthog from "posthog-js"
 
+import { customCoursesToIndexMap } from "@/lib/custom-course-to-index"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
+import { useBoundState } from "@/state/bound.state"
+import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useModuleSearchApi } from "@/hooks/use-module-search-api"
 import { useOutsideClick } from "@/hooks/use-outside-click"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
@@ -28,6 +30,7 @@ const TimetableModulesSelect = () => {
   const { timetable, addItemToTimetable, removeItemFromTimetable } =
     useTimetable()
   const addCustomCourse = useBoundState((s) => s.addCustomCourse)
+  const { customCourses } = useCustomCourses()
   const { results: searchResults } = useModuleSearchApi(inputValue, 300)
   const { isMobile } = useSettings()
   const { indexes: seasonIndexes } = useSeasonIndexes(
@@ -36,6 +39,12 @@ const TimetableModulesSelect = () => {
   )
   const ref = useRef<HTMLDivElement>(null)
   const [disabled, setDisabled] = useState(false)
+
+  // Picking a starting index should dodge the user's own blocks too
+  const customBlockSlots = useMemo(
+    () => Object.values(customCoursesToIndexMap(customCourses)).flat(),
+    [customCourses]
+  )
 
   const isBulkInput = inputValue.includes(",")
   const isModuleWindowOpen =
@@ -77,7 +86,8 @@ const TimetableModulesSelect = () => {
       const selectedIndexKey = resolveBestIndex(
         indexes,
         timetable,
-        seasonIndexes
+        seasonIndexes,
+        customBlockSlots
       )
 
       addItemToTimetable(moduleKey, selectedIndexKey)

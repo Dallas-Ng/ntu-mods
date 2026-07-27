@@ -15,7 +15,7 @@ import Header from "@/components/header"
 export const dynamic = "force-static"
 export const revalidate = false
 
-const LAST_UPDATED = "14 June 2026"
+const LAST_UPDATED = "27 July 2026"
 
 async function getExamData() {
   let exams = await getSemesterExamsData(latestYear, latestSemester)

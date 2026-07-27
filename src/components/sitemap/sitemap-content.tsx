@@ -1,0 +1,233 @@
+import moduleMapJson from "@/data/api/module-map.json"
+
+import { getAllArticles } from "@/lib/server/articles"
+import Container from "@/components/container"
+import Header from "@/components/header"
+
+const CORE_LINKS = [
+  {
+    label: "Home",
+    href: "/",
+    description: "Overview of NTUMods — timetable, modules, exams, and guides"
+  },
+  {
+    label: "Timetable",
+    href: "/timetable",
+    description:
+      "Plan your NTU timetable, compare indexes, and export to calendar"
+  },
+  {
+    label: "Mods",
+    href: "/mods",
+    description:
+      "Browse all NTU modules, view class times, venues, and prerequisites"
+  },
+  {
+    label: "Exams",
+    href: "/exams",
+    description:
+      "Check NTU exam dates and times by module for the current semester"
+  },
+  {
+    label: "Articles",
+    href: "/articles",
+    description: "Guides on choosing modules, BDEs, Common Core, and STARS prep"
+  },
+  {
+    label: "Links",
+    href: "/links",
+    description:
+      "Quick access to top NTU student portals — STARS, NTULearn, CareerAxis, and more"
+  },
+  {
+    label: "FAQ",
+    href: "/faq",
+    description: "Quick answers about using NTUMods and how your data is stored"
+  }
+]
+
+const TOOL_LINKS = [
+  {
+    label: "Wallpaper Maker",
+    href: "/screenshot",
+    description: "Export your timetable as a phone wallpaper or shareable image"
+  },
+  {
+    label: "Changelog",
+    href: "/changelog",
+    description: "Recent updates and improvements to NTUMods"
+  },
+  {
+    label: "Privacy",
+    href: "/privacy",
+    description: "How NTUMods handles your data and what stays on your device"
+  },
+  {
+    label: "AI Instructions",
+    href: "/ai-instructions",
+    description: "Instructions for AI assistants to understand NTUMods"
+  },
+  {
+    label: "Settings",
+    href: "/settings",
+    description: "Customize themes, colors, density, and display preferences"
+  },
+  {
+    label: "Feedback",
+    href: "/feedback",
+    description: "Share feedback, report a bug, or suggest an improvement"
+  }
+]
+
+const moduleMap = moduleMapJson as Record<string, { title?: string }>
+
+function getModulePrefix(code: string) {
+  return code.match(/^[A-Z]+/)?.[0] ?? "#"
+}
+
+function getModuleGroups() {
+  const groups = new Map<string, Array<{ code: string; title: string }>>()
+
+  Object.entries(moduleMap)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .forEach(([code, moduleItem]) => {
+      const prefix = getModulePrefix(code)
+      const modules = groups.get(prefix) ?? []
+
+      modules.push({
+        code,
+        title: moduleItem.title ?? code
+      })
+
+      groups.set(prefix, modules)
+    })
+
+  return Array.from(groups.entries()).map(([prefix, modules]) => ({
+    prefix,
+    modules
+  }))
+}
+
+const SitemapContent = () => {
+  const articles = getAllArticles()
+  const moduleGroups = getModuleGroups()
+  const moduleCount = Object.keys(moduleMap).length
+
+  return (
+    <Container size="sm" className="space-y-10">
+      <Header
+        title="Sitemap"
+        subtitle="Everything on NTUMods, organized in one place. Explore the tools, guides, and module pages below."
+      />
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold">Core Pages</h2>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {CORE_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="group hover:bg-muted rounded-lg border p-4 transition-colors">
+              <p className="text-foreground text-sm font-medium group-hover:text-blue-500">
+                {link.label}
+              </p>
+              <p className="text-muted-foreground mt-0.5 text-sm">
+                {link.description}
+              </p>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold">Tools and Support</h2>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {TOOL_LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="group hover:bg-muted rounded-lg border p-4 transition-colors">
+              <p className="text-foreground text-sm font-medium group-hover:text-blue-500">
+                {link.label}
+              </p>
+              <p className="text-muted-foreground mt-0.5 text-sm">
+                {link.description}
+              </p>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {articles.length > 0 && (
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold">Articles</h2>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {articles.map((article) => (
+              <a
+                key={article.slug}
+                href={`/articles/${article.slug}`}
+                className="group hover:bg-muted rounded-lg border p-4 transition-colors">
+                <p className="text-muted-foreground mb-1 text-xs">
+                  {article.category}
+                </p>
+                <p className="text-foreground text-sm font-medium group-hover:text-blue-500">
+                  {article.title}
+                </p>
+                <p className="text-muted-foreground mt-0.5 line-clamp-2 text-sm">
+                  {article.description}
+                </p>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className="space-y-4">
+        <div>
+          <h2 className="text-xl font-semibold">Modules</h2>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Module pages are grouped by course code prefix.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          {moduleGroups.map((group) => (
+            <a
+              key={group.prefix}
+              href={`#modules-${group.prefix.toLowerCase()}`}
+              className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-md border px-2 py-1 text-sm transition-colors">
+              {group.prefix}
+            </a>
+          ))}
+        </div>
+
+        <div className="space-y-8">
+          {moduleGroups.map((group) => (
+            <section
+              id={`modules-${group.prefix.toLowerCase()}`}
+              key={group.prefix}
+              className="scroll-mt-20 border-t pt-6">
+              <h3 className="text-lg font-semibold">{group.prefix}</h3>
+
+              <div className="mt-3 grid gap-x-4 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
+                {group.modules.map((moduleItem) => (
+                  <a
+                    key={moduleItem.code}
+                    href={`/mods/${moduleItem.code}`}
+                    className="text-muted-foreground text-sm leading-6 transition-colors hover:text-blue-500">
+                    <span className="text-foreground font-medium">
+                      {moduleItem.code}
+                    </span>{" "}
+                    {moduleItem.title}
+                  </a>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </section>
+    </Container>
+  )
+}
+
+export default SitemapContent

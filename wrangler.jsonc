@@ -1,0 +1,42 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Deliberately has no "main"/"assets"/"build" — @astrojs/cloudflare bundles
+  // @cloudflare/vite-plugin into the astro build pipeline, and that plugin
+  // auto-loads this file too. If "main" were set here (even correctly, to
+  // dist/server/entry.mjs), the plugin eagerly validates it exists during
+  // astro's sync step, which runs *before* astro build has generated that
+  // file — the build crashes trying to validate its own output as an input.
+  // Omitting "main" makes the plugin treat this as an assets-only config
+  // (see resolveWorkerType in @cloudflare/vite-plugin), which skips that
+  // check and lets the build finish normally.
+  //
+  // The adapter emits its own correct, self-contained wrangler.json in
+  // dist/server/ after a successful build (real main + assets paths,
+  // relative to dist/server/). Deploy using THAT file, not this one:
+  //   Build command:  yarn build
+  //   Deploy command: npx wrangler deploy --config dist/server/wrangler.json
+  "name": "ntu-mods",
+  "compatibility_date": "2025-11-01",
+  // disable_nodejs_process_v2 works around a known upstream bug (astro
+  // issues #14511, #15434): nodejs_compat's newer `process` shim ("process
+  // v2") makes Astro's internal isNode check misidentify workerd as Node,
+  // so on-demand pages render as a Node-style async iterable instead of a
+  // Web ReadableStream — Response can't accept that, and silently
+  // stringifies it to the literal text "[object Object]".
+  "compatibility_flags": ["nodejs_compat", "disable_nodejs_process_v2"],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": true,
+      "persist": true,
+      "head_sampling_rate": 1
+    }
+  }
+}

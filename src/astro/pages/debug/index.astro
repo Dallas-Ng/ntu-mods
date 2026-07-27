@@ -1,0 +1,43 @@
+---
+import { siteConfig } from "@/config/site"
+import DebugContent from "@/components/debug/debug-content"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
+
+const isDev = import.meta.env.DEV
+---
+
+<BaseLayout
+  title={siteConfig.metatags.debug.title}
+  description={siteConfig.metatags.debug.desc}
+  canonical="/debug">
+  <div class="flex flex-col gap-4">
+    <h1
+      class="bg-gradient-to-r from-rose-700 to-red-900 bg-clip-text text-3xl font-bold text-transparent">
+      Debug Page
+    </h1>
+
+    {
+      isDev && (
+        <div class="flex gap-2">
+          <div class="bg-background h-[50px] w-[200px]">bg-background</div>
+          <div class="bg-foreground h-[50px] w-[200px] text-white">
+            bg-foreground
+          </div>
+          <div class="bg-primary h-[50px] w-[200px]">bg-primary</div>
+          <div class="bg-secondary-foreground h-[50px] w-[200px]">
+            bg-secondary-foreground
+          </div>
+          <div class="bg-secondary h-[50px] w-[200px]">bg-secondary</div>
+          <div class="bg-muted-foreground h-[50px] w-[200px]">
+            bg-muted-foreground
+          </div>
+          <div class="bg-muted h-[50px] w-[200px]">bg-muted</div>
+          <div class="bg-accent h-[50px] w-[200px]">bg-accent</div>
+        </div>
+      )
+    }
+    <DebugContent client:load />
+  </div>
+</BaseLayout>

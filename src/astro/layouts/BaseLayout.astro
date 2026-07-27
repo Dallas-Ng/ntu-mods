@@ -1,0 +1,143 @@
+---
+import "@/styles/globals.css"
+
+import { Font } from "astro:assets"
+
+import { siteConfig } from "@/config/site"
+import { IS_PROD } from "@/lib/constants"
+import { Toaster } from "@/components/ui/sonner"
+import AppBanner from "@/components/app-banner"
+import AppearanceStyleProvider from "@/components/appearance-style-provider"
+import Container from "@/components/container"
+import Footer from "@/components/footer"
+import MobileTracker from "@/components/mobile-tracker"
+import Navbar from "@/components/navbar"
+import Analytics from "@/astro/components/Analytics.astro"
+
+interface Props {
+  title?: string
+  description?: string
+  canonical?: string
+  ogImage?: string
+  size?: "full" | "md" | "sm"
+  containerClassName?: string
+  outerClassName?: string
+  /** Next's title template skips dynamic-segment routes (article/module
+   * detail pages using generateMetadata) — set this on their Astro
+   * equivalents to match. */
+  noTitleSuffix?: boolean
+  /** Error/utility pages that should never be indexed or canonicalised. */
+  noindex?: boolean
+}
+
+const defaults = siteConfig.metatags.default
+const {
+  title = defaults.title,
+  description = defaults.desc,
+  canonical,
+  ogImage = siteConfig.ogImage,
+  size = "full",
+  containerClassName,
+  outerClassName,
+  noTitleSuffix = false,
+  noindex = false
+} = Astro.props
+
+const canonicalUrl = canonical
+  ? canonical === "/"
+    ? siteConfig.url
+    : new URL(canonical, siteConfig.url).toString()
+  : undefined
+
+// Matches Next's root-layout title template (`%s - ${siteConfig.name}`),
+// which applies to every static page but not the homepage or dynamic-segment
+// (generateMetadata) routes.
+const resolvedTitle =
+  canonical === "/" || noTitleSuffix ? title : `${title} - ${siteConfig.name}`
+
+const keywords = defaults.keywords.join(", ")
+const author = defaults.authors.map(({ name }) => name).join(", ")
+---
+
+<html lang="en" data-scroll-behavior="smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{resolvedTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content={author} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {!noindex && canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content={siteConfig.name} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={siteConfig.name} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="white"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="black"
+    />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.clarity.ms" />
+
+    <Font cssVariable="--font-inter" preload />
+
+    <script is:inline>
+      // Runs before paint to avoid a light/dark flash — theme state lives in
+      // localStorage, read by useTheme() (@/hooks/use-theme).
+      ;(function () {
+        try {
+          var t = localStorage.getItem("theme") || "dark"
+          var isDark =
+            t === "system"
+              ? window.matchMedia("(prefers-color-scheme: dark)").matches
+              : t === "dark"
+          if (isDark) document.documentElement.classList.add("dark")
+        } catch (e) {}
+      })()
+    </script>
+
+    <script>
+      import "@/astro/lib/posthog-client-init"
+    </script>
+  </head>
+  <body class="antialiased">
+    <AppearanceStyleProvider client:load />
+    <AppBanner client:idle />
+    <div
+      class={`bg-background flex min-h-screen flex-col ${outerClassName ?? ""}`}>
+      <Navbar client:load />
+      <main class="relative flex-1 px-3 py-4 sm:py-6 lg:px-5">
+        <Container
+          size={size}
+          className={`${containerClassName ?? ""} px-0 md:px-[initial]`}>
+          <slot />
+        </Container>
+      </main>
+      <Footer />
+    </div>
+    <MobileTracker client:idle />
+    <Toaster client:idle position="top-center" />
+    {IS_PROD && <Analytics />}
+  </body>
+</html>

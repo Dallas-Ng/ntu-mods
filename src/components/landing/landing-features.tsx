@@ -1,6 +1,3 @@
-import Image from "next/image"
-import Link from "next/link"
-
 import { DarkThemeIcon, LightThemeIcon } from "../settings/appearance-settings"
 import { Input } from "../ui/input"
 
@@ -16,7 +13,7 @@ const LandingFeatures = () => {
 
       <div className="mx-auto flex max-w-7xl flex-col gap-5">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <Link href="/timetable" className="cursor-pointer">
+          <a href="/timetable" className="cursor-pointer">
             <div className="relative h-[300px] w-full rounded-xl border p-3 shadow">
               <div className="absolute top-12 left-8 w-10/12 md:left-3 lg:left-8">
                 <h3 className="text-2xl font-bold">
@@ -35,7 +32,7 @@ const LandingFeatures = () => {
                 />
               </div>
             </div>
-          </Link>
+          </a>
 
           <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
             <div className="absolute top-12 left-8 w-10/12 md:left-3 lg:left-8">
@@ -46,7 +43,7 @@ const LandingFeatures = () => {
               </p>
             </div>
 
-            <Image
+            <img
               src="/landing/mobile.svg"
               alt="use on any devices"
               width={200}
@@ -57,9 +54,9 @@ const LandingFeatures = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          <Link href="/mods" className="cursor-pointer">
+          <a href="/mods" className="cursor-pointer">
             <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
-              <Image
+              <img
                 src="/landing/icc-mods.svg"
                 alt="share with your friends"
                 width={400}
@@ -77,11 +74,11 @@ const LandingFeatures = () => {
                 </p>
               </div>
             </div>
-          </Link>
+          </a>
 
-          <Link href="/timetable" className="cursor-pointer">
+          <a href="/timetable" className="cursor-pointer">
             <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
-              <Image
+              <img
                 src="/landing/share.svg"
                 alt="share with your friends"
                 width={200}
@@ -98,9 +95,9 @@ const LandingFeatures = () => {
                 </p>
               </div>
             </div>
-          </Link>
+          </a>
 
-          <Link href="/settings" className="cursor-pointer">
+          <a href="/settings" className="cursor-pointer">
             <div className="bg-muted relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
               <div className="flex w-[500px] gap-1 md:w-[300px] lg:w-[500px]">
                 <DarkThemeIcon label={false} />
@@ -117,7 +114,7 @@ const LandingFeatures = () => {
                 </p>
               </div>
             </div>
-          </Link>
+          </a>
         </div>
       </div>
     </div>

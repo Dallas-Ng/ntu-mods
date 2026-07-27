@@ -1,0 +1,14 @@
+---
+import { siteConfig } from "@/config/site"
+import SharePageContent from "@/components/timetable/share-page-content"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
+---
+
+<BaseLayout
+  title={siteConfig.metatags.share.title}
+  description={siteConfig.metatags.share.desc}
+  canonical="/share">
+  <SharePageContent client:load />
+</BaseLayout>

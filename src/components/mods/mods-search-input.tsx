@@ -21,7 +21,7 @@ const ModsSearchInput = ({ paramsValue }: { paramsValue: string }) => {
     if (dbSearchTerm.length > 0) {
       posthog.capture("mod_searched", { search_term: dbSearchTerm })
     }
-  }, [dbSearchTerm])
+  }, [dbSearchTerm, setValue])
 
   useEffect(() => {
     if (document.activeElement !== inputRef.current) {

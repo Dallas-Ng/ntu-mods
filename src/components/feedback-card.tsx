@@ -43,7 +43,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
     }
   })
 
-  const onSubmit = (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true)
 
     const body = {
@@ -52,14 +52,19 @@ const FeedbackCard = ({ divClassName }: Props) => {
       category: "feedback"
     }
 
-    const updateDb = async () => {
-      fetch("/api/feedback", {
+    // fetch only rejects on network failure — a 500 (bad Resend key, say)
+    // still resolves, so the status has to be checked explicitly or
+    // toast.promise reports success for a submission that never sent.
+    const submitFeedback = async () => {
+      const res = await fetch("/api/feedback", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(body)
       })
+
+      if (!res.ok) throw new Error(`Feedback request failed (${res.status})`)
     }
 
     posthog.capture("feedback_submitted", {
@@ -67,15 +72,21 @@ const FeedbackCard = ({ divClassName }: Props) => {
       feedback_length: data.feedback.length
     })
 
-    toast.promise(updateDb, {
-      loading: "Submitting feedback...",
-      success: "Feedback submitted!",
-      error: "Error submitting feedback. Please try again later"
-    })
+    try {
+      await toast
+        .promise(submitFeedback(), {
+          loading: "Submitting feedback...",
+          success: "Feedback submitted!",
+          error: "Error submitting feedback. Please try again later"
+        })
+        .unwrap()
 
-    form.reset()
-
-    setLoading(false)
+      form.reset()
+    } catch {
+      // Toast already surfaced it; keep the input so it isn't retyped.
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

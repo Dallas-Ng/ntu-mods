@@ -1,0 +1,17 @@
+---
+import { siteConfig } from "@/config/site"
+import ModsPage from "@/components/mods/mods-page"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+// Fully client-rendered already in the Next app (search/filter state lives in
+// the URL, read client-side) — mounts as one island rather than trying to
+// partially server-render it.
+export const prerender = true
+---
+
+<BaseLayout
+  title={siteConfig.metatags.mods.title}
+  description={siteConfig.metatags.mods.desc}
+  canonical="/mods">
+  <ModsPage client:load />
+</BaseLayout>

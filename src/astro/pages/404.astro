@@ -1,0 +1,15 @@
+---
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+// On-demand, not prerendered. Astro only runs middleware for requests that
+// match a route, so a prerendered 404 means every unmatched URL is answered
+// straight from the asset bundle and src/astro/middleware.ts never sees it —
+// which is exactly where the /mods/:code case-normalising redirect lives.
+export const prerender = false
+---
+
+<BaseLayout title="Page not found" noindex>
+  <h1 class="mb-2 text-xl">This page does not exist</h1>
+
+  <a href="/" class="hover:text-primary-alt">Click here to return home</a>
+</BaseLayout>

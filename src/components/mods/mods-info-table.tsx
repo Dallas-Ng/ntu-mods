@@ -1,5 +1,3 @@
-import Link from "next/link"
-
 import type { ApiExam } from "@/lib/server/get-module-exam-data"
 import type { ApiModule } from "@/lib/server/get-module-metadata"
 import { cn } from "@/lib/utils"
@@ -29,11 +27,11 @@ export function renderModuleValue(key: keyof ApiModule, value: unknown) {
     return unique.map((item, idx) => (
       <span key={item}>
         {MODULE_CODE_RE.test(item) ? (
-          <Link
+          <a
             href={`/mods/${item}`}
             className="text-blue-500 transition-colors hover:text-blue-600">
             {item}
-          </Link>
+          </a>
         ) : (
           item
         )}

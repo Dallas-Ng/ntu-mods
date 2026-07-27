@@ -1,0 +1,21 @@
+---
+import { siteConfig } from "@/config/site"
+import ArticleToc from "@/components/articles/article-toc"
+import FaqContent, {
+  faqHeadings,
+  faqJsonLd
+} from "@/components/faq/faq-content"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
+---
+
+<BaseLayout
+  title={siteConfig.metatags.faq.title}
+  description={siteConfig.metatags.faq.desc}
+  canonical="/faq">
+  <FaqContent>
+    <ArticleToc client:idle headings={faqHeadings} />
+  </FaqContent>
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</BaseLayout>

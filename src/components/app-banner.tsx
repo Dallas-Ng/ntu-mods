@@ -1,7 +1,6 @@
 "use client"
 
-import { usePathname } from "next/navigation"
-
+import { usePathname } from "@/hooks/use-pathname"
 import { Banner } from "@/components/banner"
 
 const HIDDEN_BANNER_PATHS = new Set(["/screenshot"])
@@ -11,7 +10,7 @@ const AppBanner = () => {
 
   if (HIDDEN_BANNER_PATHS.has(pathname)) return null
 
-  return <Banner.ay2026s1 />
+  return <Banner.performanceUpdate />
 }
 
 export default AppBanner

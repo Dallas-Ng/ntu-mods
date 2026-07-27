@@ -1,15 +1,5 @@
-import dynamic from "next/dynamic"
-
 import type { PrecomputedTimetableMatrix } from "../timetable-table/table"
-import { TimetableTableLoader } from "../timetable-table/table-loader"
-
-const TimetableTable = dynamic(
-  () =>
-    import("../timetable-table/table").then((m) => ({
-      default: m.TimetableTable
-    })),
-  { loading: () => <TimetableTableLoader />, ssr: true }
-)
+import { TimetableTable } from "../timetable-table/table"
 
 interface Props {
   indexes: Record<string, Index[]>

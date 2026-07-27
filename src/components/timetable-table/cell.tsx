@@ -2,8 +2,8 @@
 
 import {
   CUSTOM_BLOCK_STYLE,
-  PRESET_INDEX_TYPES,
-  isCustomCourseKey
+  isCustomCourseKey,
+  PRESET_INDEX_TYPES
 } from "@/lib/custom-course-colors"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 import { cn } from "@/lib/utils"

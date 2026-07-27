@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { ExternalLink } from "lucide-react"
 import posthog from "posthog-js"
 
@@ -18,7 +17,7 @@ const LinkCard = ({ name, href, desc, external, category }: LinkCardProps) => {
   const inner = (
     <>
       <div className="min-w-0 space-y-1">
-        <p className="font-semibold leading-none">{name}</p>
+        <p className="leading-none font-semibold">{name}</p>
         <p className="text-muted-foreground text-sm">{desc}</p>
       </div>
       {external && (
@@ -28,7 +27,11 @@ const LinkCard = ({ name, href, desc, external, category }: LinkCardProps) => {
   )
 
   const handleClick = () =>
-    posthog.capture("link_clicked", { link_name: name, link_category: category, is_external: external })
+    posthog.capture("link_clicked", {
+      link_name: name,
+      link_category: category,
+      is_external: external
+    })
 
   if (external) {
     return (
@@ -44,9 +47,9 @@ const LinkCard = ({ name, href, desc, external, category }: LinkCardProps) => {
   }
 
   return (
-    <Link href={href} className={className} onClick={handleClick}>
+    <a href={href} className={className} onClick={handleClick}>
       {inner}
-    </Link>
+    </a>
   )
 }
 

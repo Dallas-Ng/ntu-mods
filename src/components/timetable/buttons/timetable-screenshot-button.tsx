@@ -1,10 +1,9 @@
 "use client"
 
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
 import { ImageDown } from "lucide-react"
 import posthog from "posthog-js"
 
+import { useSearchParams } from "@/hooks/use-search-params"
 import ButtonCollapsable from "@/components/button-collapsable"
 
 interface Props {
@@ -25,9 +24,11 @@ const StarsScreenshotButton = ({ persistQuerystring }: Props) => {
   }
 
   return (
-    <Link href={href} onClick={() => posthog.capture("timetable_screenshot_clicked")}>
+    <a
+      href={href}
+      onClick={() => posthog.capture("timetable_screenshot_clicked")}>
       <ButtonCollapsable icon={ImageDown} text="Export as Image" />
-    </Link>
+    </a>
   )
 }
 

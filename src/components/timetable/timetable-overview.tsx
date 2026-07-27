@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Link from "next/link"
 import { ChevronDown, ChevronUp } from "lucide-react"
 
 import { latestSemester, latestYear } from "@/lib/semesters"
@@ -95,19 +94,19 @@ const TimetableOverview = () => {
                     <td className="py-1">{indexKey}</td>
 
                     <td>
-                      <Link
+                      <a
                         href={`/mods/${moduleKey}`}
                         className="hover:text-primary transition-colors">
                         {moduleKey}
-                      </Link>
+                      </a>
                     </td>
 
                     <td className="hidden text-left lg:table-cell">
-                      <Link
+                      <a
                         href={`/mods/${moduleKey}`}
                         className="hover:text-primary transition-colors">
                         {moduleTitle}
-                      </Link>
+                      </a>
                     </td>
 
                     <td>{au}</td>

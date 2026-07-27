@@ -83,6 +83,7 @@ interface Index {
   venue: string
   remarks: string // pre-reqs, etc
   duration: number // for row span, each unit is 30 minutes
+  isCustom?: boolean // slot comes from a user-defined custom block
 }
 
 type IndexType = "LEC" | "LAB" | "SEM" | "TUT" | "DES" | "PRJ"
@@ -95,13 +96,24 @@ interface CustomCourseSession {
   venue: string
 }
 
-interface CustomCourse {
+/**
+ * One alternative arrangement of a custom block, mirroring a module index:
+ * the generator is free to pick whichever variant scores best.
+ */
+interface CustomCourseIndex {
   id: string
-  name: string
+  label: string // e.g. "Option A"
   sessions: CustomCourseSession[]
 }
 
-const CUSTOM_COURSE_KEY_PREFIX = "__CC__"
+interface CustomCourse {
+  id: string
+  name: string
+  indexes: CustomCourseIndex[]
+  selectedIndexId: string
+  /** @deprecated pre-variant shape — migrated away on store rehydrate */
+  sessions?: CustomCourseSession[]
+}
 
 interface Exam {
   date: string
@@ -144,6 +156,10 @@ interface GenerationConfig {
 }
 
 interface GeneratedCombination {
+  /**
+   * Module code -> index key. Custom blocks appear here too, keyed by
+   * `__CC__<courseId>` mapped to the chosen CustomCourseIndex id.
+   */
   timetable: Timetable
   score: number
   freeDays: number

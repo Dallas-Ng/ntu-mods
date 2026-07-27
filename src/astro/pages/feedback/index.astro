@@ -1,0 +1,35 @@
+---
+import { siteConfig } from "@/config/site"
+import FeedbackCard from "@/components/feedback-card"
+import Header from "@/components/header"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
+---
+
+<BaseLayout
+  title={siteConfig.metatags.feedback.title}
+  description={siteConfig.metatags.feedback.desc}
+  canonical="/feedback"
+  size="sm"
+  containerClassName="space-y-8">
+  <Header
+    title="Feedback"
+    subtitle="Share your thoughts, report issues, or suggest improvements."
+  />
+
+  <div class="text-muted-foreground space-y-2 text-sm leading-relaxed">
+    <p>
+      NTUMods is built and maintained by a single person. There is no team —
+      just one developer juggling updates, data refreshes, and new features
+      alongside everything else.
+    </p>
+    <p>
+      If something is broken, confusing, or could be better, I genuinely want to
+      hear about it. Feedback and improvement ideas go a long way in keeping
+      this project alive and useful.
+    </p>
+  </div>
+
+  <FeedbackCard client:idle />
+</BaseLayout>

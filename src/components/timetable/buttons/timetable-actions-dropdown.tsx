@@ -1,10 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import {
   Calendar,
   Copy,
+  Download,
   ImageDown,
   Link as LinkIcon,
   MoreHorizontal
@@ -12,10 +12,10 @@ import {
 import posthog from "posthog-js"
 import { toast } from "sonner"
 
-import { BASE_URL } from "@/lib/constants"
 import { getIcs } from "@/lib/get-ics"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
+import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
@@ -30,14 +30,20 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 
+import TimetableImportDialog from "./timetable-import-dialog"
+import TimetableShareDialog from "./timetable-share-dialog"
+
 const TimetableActionsDropdown = () => {
   const { timetable, timetables, timetableIndex, duplicateTimetable } =
     useTimetable()
+  const { customCourses } = useCustomCourses()
   const year = latestYear
   const semester = latestSemester
   const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const { modules } = useAllModules()
   const [calendarLoading, setCalendarLoading] = useState(false)
+  const [shareOpen, setShareOpen] = useState(false)
+  const [importOpen, setImportOpen] = useState(false)
 
   const handleDownloadCalendar = async () => {
     if (Object.keys(timetable).length === 0) {
@@ -92,84 +98,71 @@ const TimetableActionsDropdown = () => {
     toast(`Duplicated to Plan ${toIndex + 1}`)
   }
 
-  const handleShare = () => {
-    const urlParams = new URLSearchParams(timetable)
-    const link = `${BASE_URL}/share?${urlParams.toString()}`
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent)
-
-    if (isMobile && navigator.share) {
-      posthog.capture("timetable_shared", {
-        method: "native_share",
-        module_count: Object.keys(timetable).length
-      })
-      navigator
-        .share({
-          title: "Look at my timetable from NTU Mods",
-          text: "You can use this to plan your mods too!",
-          url: link
-        })
-        .catch(() => {
-          navigator.clipboard.writeText(link)
-          toast("Share link copied to clipboard")
-        })
-      return
-    }
-
-    posthog.capture("timetable_shared", {
-      method: "clipboard",
-      module_count: Object.keys(timetable).length
-    })
-    navigator.clipboard.writeText(link)
-    toast("Share link copied to clipboard")
-  }
-
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <MoreHorizontal className="size-4" />
-          <span className="sr-only">More actions</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="gap-2">
-            <Copy className="size-4" />
-            Duplicate to Plan
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            {timetables.map((_, index) => {
-              if (index === timetableIndex) return null
-              return (
-                <DropdownMenuItem
-                  key={index}
-                  onClick={() => handleDuplicate(index)}>
-                  Plan {index + 1}
-                </DropdownMenuItem>
-              )
-            })}
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/screenshot" className="flex items-center gap-2">
-            <ImageDown className="size-4" />
-            Export as Image
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={handleDownloadCalendar}
-          disabled={calendarLoading}
-          className="gap-2">
-          <Calendar className="size-4" />
-          Save to Calendar
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleShare} className="gap-2">
-          <LinkIcon className="size-4" />
-          Share
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <TimetableShareDialog
+        open={shareOpen}
+        onOpenChange={setShareOpen}
+        timetable={timetable}
+        customCourses={customCourses}
+      />
+      <TimetableImportDialog open={importOpen} onOpenChange={setImportOpen} />
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="icon">
+            <MoreHorizontal className="size-4" />
+            <span className="sr-only">More actions</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="gap-2">
+              <Copy className="size-4" />
+              Duplicate to Plan
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              {timetables.map((_, index) => {
+                if (index === timetableIndex) return null
+                return (
+                  <DropdownMenuItem
+                    key={index}
+                    onClick={() => handleDuplicate(index)}>
+                    Plan {index + 1}
+                  </DropdownMenuItem>
+                )
+              })}
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <a href="/screenshot" className="flex items-center gap-2">
+              <ImageDown className="size-4" />
+              Export as Image
+            </a>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={handleDownloadCalendar}
+            disabled={calendarLoading}
+            className="gap-2">
+            <Calendar className="size-4" />
+            Save to Calendar
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => setShareOpen(true)}
+            className="gap-2">
+            <LinkIcon className="size-4" />
+            Share
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => setImportOpen(true)}
+            className="gap-2">
+            <Download className="size-4" />
+            Import from text
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   )
 }
 

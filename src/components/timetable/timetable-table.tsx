@@ -1,8 +1,14 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 
+import {
+  customCourseIdFromKey,
+  isCustomCourseKey
+} from "@/lib/custom-course-colors"
 import { latestSemester, latestYear } from "@/lib/semesters"
+import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableIndexes } from "@/hooks/use-timetable-indexes"
 
@@ -27,6 +33,10 @@ const TimetablePageTable = ({
     year,
     semester
   )
+  const { customCourses } = useCustomCourses()
+  const selectCustomCourseIndex = useBoundState(
+    (s) => s.selectCustomCourseIndex
+  )
 
   useEffect(() => {
     if (!indexPickerEnabled) {
@@ -34,10 +44,16 @@ const TimetablePageTable = ({
       return
     }
 
-    if (activeModuleKey && !timetable[activeModuleKey]) {
-      setActiveModuleKey(null)
-    }
-  }, [activeModuleKey, indexPickerEnabled, timetable])
+    if (!activeModuleKey) return
+
+    const stillPresent = isCustomCourseKey(activeModuleKey)
+      ? customCourses.some(
+          (c) => c.id === customCourseIdFromKey(activeModuleKey)
+        )
+      : Boolean(timetable[activeModuleKey])
+
+    if (!stillPresent) setActiveModuleKey(null)
+  }, [activeModuleKey, indexPickerEnabled, timetable, customCourses])
 
   const previewModuleIndexMap = useMemo(() => {
     if (!indexPickerEnabled || !activeModuleKey) return moduleIndexMap
@@ -54,9 +70,13 @@ const TimetablePageTable = ({
     }
   }, [activeModuleKey, allModuleIndexes, indexPickerEnabled, moduleIndexMap])
 
-  const activeIndexKey = activeModuleKey
-    ? timetable[activeModuleKey]
-    : undefined
+  const activeIndexKey = !activeModuleKey
+    ? undefined
+    : isCustomCourseKey(activeModuleKey)
+      ? customCourses.find(
+          (c) => c.id === customCourseIdFromKey(activeModuleKey)
+        )?.selectedIndexId
+      : timetable[activeModuleKey]
 
   if (isLoading && !Object.keys(moduleIndexMap).length) {
     return <TimetableTableLoader />
@@ -72,7 +92,14 @@ const TimetablePageTable = ({
           activeIndexKey,
           onActiveModuleChange: setActiveModuleKey,
           onIndexSelect: (moduleKey, indexKey) => {
-            updateItemIndex(moduleKey, indexKey)
+            if (isCustomCourseKey(moduleKey)) {
+              selectCustomCourseIndex(
+                customCourseIdFromKey(moduleKey),
+                indexKey
+              )
+            } else {
+              updateItemIndex(moduleKey, indexKey)
+            }
             setActiveModuleKey(null)
           }
         }}

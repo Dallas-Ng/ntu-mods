@@ -1,0 +1,16 @@
+---
+import { siteConfig } from "@/config/site"
+import SettingsPageContent from "@/components/settings/settings-page-content"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
+---
+
+<BaseLayout
+  title={siteConfig.metatags.settings.title}
+  description={siteConfig.metatags.settings.desc}
+  canonical="/settings"
+  size="sm"
+  outerClassName="bg-slate-100 dark:bg-slate-950">
+  <SettingsPageContent client:load />
+</BaseLayout>

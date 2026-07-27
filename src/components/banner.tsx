@@ -1,5 +1,3 @@
-import Link from "next/link"
-
 import { cn } from "@/lib/utils"
 
 interface BannerProps {
@@ -28,11 +26,11 @@ export const BannerWrapper = (props: BannerProps) => {
 
 export const Banner = {
   inAlpha: () => (
-    <Link href="/debug">
+    <a href="/debug">
       <BannerWrapper>
         <strong>ALPHA BUILD</strong> - Click here if you get stuck!
       </BannerWrapper>
-    </Link>
+    </a>
   ),
   optimisedForWeb: () => (
     <BannerWrapper>
@@ -40,23 +38,30 @@ export const Banner = {
     </BannerWrapper>
   ),
   updatedAy: () => (
-    <Link href="/changelog">
+    <a href="/changelog">
       <BannerWrapper>NTU Mods has new features!</BannerWrapper>
-    </Link>
+    </a>
   ),
   bdeGuides: () => (
-    <Link href="/articles">
+    <a href="/articles">
       <BannerWrapper>
         New guides: BDE planning, easy BDEs, language BDEs and more →
       </BannerWrapper>
-    </Link>
+    </a>
   ),
   ay2026s1: () => (
-    <Link href="/changelog">
+    <a href="/changelog">
       <BannerWrapper>
         New: filter modules by day and time, student links, custom courses →
       </BannerWrapper>
-    </Link>
+    </a>
+  ),
+  performanceUpdate: () => (
+    <a href="/changelog">
+      <BannerWrapper divClass="bg-yellow-300">
+        We&apos;ve improved performance — pages load faster than before →
+      </BannerWrapper>
+    </a>
   ),
   experienceProblems: () => (
     <BannerWrapper>

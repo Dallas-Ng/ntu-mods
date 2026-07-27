@@ -1,9 +1,9 @@
+import { TRUN_DAY_MAP } from "@/lib/constants"
 import {
   CUSTOM_BLOCK_STYLE,
-  PRESET_INDEX_TYPES,
-  isCustomCourseKey
+  isCustomCourseKey,
+  PRESET_INDEX_TYPES
 } from "@/lib/custom-course-colors"
-import { TRUN_DAY_MAP } from "@/lib/constants"
 import { formatRemarks } from "@/lib/format"
 import { getIndexType } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
@@ -51,9 +51,7 @@ export const TimetableTableCellContent = (props: Props) => {
     return (
       <>
         <p>
-          <span className={cn("font-bold", style.text)}>
-            {index.group}
-          </span>
+          <span className={cn("font-bold", style.text)}>{index.group}</span>
           {sessionLabel && (
             <span className={cn("font-semibold", style.textAlt)}>
               {" "}
@@ -61,9 +59,7 @@ export const TimetableTableCellContent = (props: Props) => {
             </span>
           )}
         </p>
-        {tableCell.time && (
-          <p className={cn(style.textAlt)}>{index.time}</p>
-        )}
+        {tableCell.time && <p className={cn(style.textAlt)}>{index.time}</p>}
         {tableCell.venue && index.venue && <p>{index.venue}</p>}
       </>
     )

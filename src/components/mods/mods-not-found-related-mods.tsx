@@ -1,10 +1,10 @@
 "use client"
 
 import { useMemo } from "react"
-import { usePathname } from "next/navigation"
 
 import type { ApiModule } from "@/lib/server/get-module-metadata"
 import { useAllModules } from "@/hooks/use-all-modules"
+import { usePathname } from "@/hooks/use-pathname"
 
 import ModuleCard from "../module-card"
 

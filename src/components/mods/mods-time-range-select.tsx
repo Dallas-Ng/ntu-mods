@@ -9,12 +9,18 @@ import CustomSelect from "@/components/select"
 
 const START_ITEMS = [
   { value: "all", label: "From any time" },
-  ...TIME_OPTIONS.map((t) => ({ value: String(t.value), label: `From ${t.label}` }))
+  ...TIME_OPTIONS.map((t) => ({
+    value: String(t.value),
+    label: `From ${t.label}`
+  }))
 ]
 
 const END_ITEMS = [
   { value: "all", label: "Until any time" },
-  ...TIME_OPTIONS.map((t) => ({ value: String(t.value), label: `Until ${t.label}` }))
+  ...TIME_OPTIONS.map((t) => ({
+    value: String(t.value),
+    label: `Until ${t.label}`
+  }))
 ]
 
 interface Props {
@@ -68,7 +74,10 @@ export const ModsTimeRangeSelect = ({
         selectItems={START_ITEMS}
         onChange={handleStartChange}
         disabled={disabled}
-        divClassName={cn("w-full", startActive && "ring-ring rounded-md ring-1")}
+        divClassName={cn(
+          "w-full",
+          startActive && "ring-ring rounded-md ring-1"
+        )}
       />
       <CustomSelect
         closeOnSelect

@@ -7,7 +7,6 @@
   "bracketSameLine": true,
   "importOrder": [
     "^(react/(.*)$)|^(react$)",
-    "^(next/(.*)$)|^(next$)",
     "<THIRD_PARTY_MODULES>",
     "",
     "^types$",
@@ -18,13 +17,20 @@
     "^@/components/ui/(.*)$",
     "^@/components/(.*)$",
     "^@/styles/(.*)$",
-    "^@/app/(.*)$",
+    "^@/astro/(.*)$",
     "",
     "^[./]"
   ],
   "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
   "plugins": [
     "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-astro",
     "prettier-plugin-tailwindcss"
+  ],
+  "overrides": [
+    {
+      "files": "*.astro",
+      "options": { "parser": "astro" }
+    }
   ]
 }

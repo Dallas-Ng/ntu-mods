@@ -1,5 +1,4 @@
 import { Fragment } from "react"
-import Link from "next/link"
 import { ChevronRight } from "lucide-react"
 import { BreadcrumbList } from "schema-dts"
 
@@ -47,11 +46,11 @@ const Breadcrumbs = (props: Props) => {
           return (
             <Fragment key={href}>
               {idx > 0 && <ChevronRight className="size-4 shrink-0" />}
-              <Link
+              <a
                 href={href}
                 className="hover:text-secondary-foreground max-w-[16rem] shrink-0 truncate sm:max-w-none">
                 {label}
-              </Link>
+              </a>
             </Fragment>
           )
         })}

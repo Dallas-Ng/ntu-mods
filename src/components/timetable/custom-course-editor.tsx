@@ -1,13 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 import { Plus, Trash2 } from "lucide-react"
 import posthog from "posthog-js"
 
 import { STARS_TIMESLOTS } from "@/lib/constants"
 import { formatHhmm } from "@/lib/format"
-import { cn } from "@/lib/utils"
-import { useBoundState } from "@/state/bound.state"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -331,9 +330,7 @@ export const CourseModal = ({
               placeholder="e.g. Gym, Badminton CCA, External Course"
               value={form.name}
               maxLength={40}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, name: e.target.value }))
-              }
+              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
             />
           </div>
 
@@ -433,7 +430,9 @@ const CustomCourseEditor = () => {
                 className="hover:bg-accent flex cursor-pointer items-center justify-between py-1 pr-1 pl-3 text-sm transition-colors"
                 onClick={() => setEditingCourse(course)}>
                 <div className="flex min-w-0 items-baseline gap-2">
-                  <span className="max-w-[110px] truncate text-sm">{course.name}</span>
+                  <span className="max-w-[110px] truncate text-sm">
+                    {course.name}
+                  </span>
                   <span className="text-muted-foreground shrink-0 text-xs">
                     {sessionLabels}
                   </span>

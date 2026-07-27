@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
-import { useTheme } from "next-themes"
+import { useEffect, useMemo } from "react"
 
 import {
   APPEARANCE_DENSITIES,
@@ -11,14 +10,20 @@ import {
   TIMETABLE_STYLE_PRESETS
 } from "@/config/appearance-settings"
 import { useSettings } from "@/hooks/use-settings"
+import { useTheme } from "@/hooks/use-theme"
 
 const AppearanceStyleProvider = () => {
   const { resolvedTheme } = useTheme()
   const { settings } = useSettings()
-  const appearance = {
-    ...DEFAULT_APPEARANCE_SETTINGS,
-    ...settings.appearance
-  }
+  // Memoized so the effect below runs on real appearance changes rather than
+  // on every render — a fresh object literal would change identity each time.
+  const appearance = useMemo(
+    () => ({
+      ...DEFAULT_APPEARANCE_SETTINGS,
+      ...settings.appearance
+    }),
+    [settings.appearance]
+  )
 
   useEffect(() => {
     const root = document.documentElement

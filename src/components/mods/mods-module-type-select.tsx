@@ -2,7 +2,6 @@
 
 import posthog from "posthog-js"
 
-import type { SearchModuleType } from "@/types/mods"
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"

@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { usePathname } from "next/navigation"
+
+import { usePathname } from "@/hooks/use-pathname"
 
 export function useNewDot(storageKey: string, triggerRoute: string) {
   const [isNew, setIsNew] = useState(false)

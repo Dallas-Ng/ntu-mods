@@ -1,12 +1,10 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import Link from "next/link"
 import { Search } from "lucide-react"
 import posthog from "posthog-js"
 
 import type { ApiExam } from "@/lib/server/get-module-exam-data"
-import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
 import { Input } from "@/components/ui/input"
 import {
@@ -136,7 +134,7 @@ function ExamTable({
       </div>
       <div className="divide-y">
         {items.map((exam) => (
-          <Link
+          <a
             key={exam.key}
             href={`/mods/${exam.key}`}
             className="hover:bg-accent flex items-center gap-3 px-3 py-2.5 transition-colors">
@@ -165,7 +163,7 @@ function ExamTable({
               {showDate && <span className="block">{exam.date}</span>}
               {exam.start_time} – {exam.end_time}
             </span>
-          </Link>
+          </a>
         ))}
       </div>
     </div>

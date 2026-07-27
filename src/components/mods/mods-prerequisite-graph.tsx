@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import Link from "next/link"
 
 import { getModuleUrl } from "@/lib/module-url"
 import type { PrerequisiteNode } from "@/lib/server/get-prerequisite-graph"
@@ -19,7 +18,7 @@ interface CardProps {
 }
 
 const PillCard = ({ code, title, anchorRef }: CardProps) => (
-  <Link
+  <a
     ref={anchorRef}
     href={getModuleUrl(code)}
     className="border-border bg-background hover:bg-muted flex w-full items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors">
@@ -29,7 +28,7 @@ const PillCard = ({ code, title, anchorRef }: CardProps) => (
         {title}
       </span>
     )}
-  </Link>
+  </a>
 )
 
 const EmptyPill = ({ label }: { label: string }) => (

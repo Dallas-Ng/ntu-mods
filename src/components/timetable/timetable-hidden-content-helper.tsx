@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { InfoIcon } from "lucide-react"
 
 import { useSettings } from "@/hooks/use-settings"
@@ -14,14 +13,14 @@ const TimetableHiddenContentHelper = () => {
   return (
     <>
       {threshold && (
-        <Link href="/settings#table-settings">
+        <a href="/settings#table-settings">
           <div className="text-muted-foreground flex items-start gap-1 text-sm hover:underline md:items-center">
             <span>
               <InfoIcon className="size-5" />
             </span>
             Some information are hidden in your table. Click to edit.
           </div>
-        </Link>
+        </a>
       )}
     </>
   )

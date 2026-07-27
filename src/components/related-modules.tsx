@@ -7,7 +7,8 @@ interface Props {
   currentYear: string
   currentSemester: string
   limit?: number
-  emptyContent?: React.ReactNode
+  emptyHref?: string
+  emptyLabel?: string
 }
 
 const RelatedModules = async ({
@@ -15,7 +16,8 @@ const RelatedModules = async ({
   currentYear,
   currentSemester,
   limit = 0,
-  emptyContent = undefined
+  emptyHref,
+  emptyLabel
 }: Props) => {
   const allMeta = await getAllModuleMetadata(currentYear, currentSemester)
   const prefix = moduleKey.slice(0, 2)
@@ -32,9 +34,13 @@ const RelatedModules = async ({
         <ModuleCard key={module.code} module={module} />
       ))}
     </div>
-  ) : (
-    <>{emptyContent}</>
-  )
+  ) : emptyHref && emptyLabel ? (
+    <a
+      href={emptyHref}
+      className="text-muted-foreground hover:text-primary-alt text-sm transition-colors">
+      {emptyLabel}
+    </a>
+  ) : null
 }
 
 export default RelatedModules

@@ -1,6 +1,3 @@
-import Image from "next/image"
-import Link from "next/link"
-
 import { Button } from "../ui/button"
 
 const LandingCTA = () => {
@@ -8,12 +5,13 @@ const LandingCTA = () => {
     <div className="z-10 flex items-center justify-center align-middle">
       <div className="max-w-[800px]">
         <div className="mb-5 flex flex-col items-center justify-center text-center md:flex-row md:text-left">
-          <Image
-            src="/logo.png"
+          <img
+            src="/logo-lg.webp"
             alt="Logo"
             height={200}
             width={200}
             loading="eager"
+            fetchPriority="high"
           />
 
           <h1 className="bg-gradient-to-l from-blue-700 to-blue-800 bg-clip-text text-5xl font-bold text-transparent md:text-6xl">
@@ -27,15 +25,15 @@ const LandingCTA = () => {
         </p>
 
         <div className="my-4 flex flex-col justify-center gap-2 md:flex-row">
-          <Link href="/timetable">
+          <a href="/timetable">
             <Button className="w-full md:w-fit">Build My Timetable Now</Button>
-          </Link>
+          </a>
 
-          <Link href="/mods">
+          <a href="/mods">
             <Button className="w-full md:w-fit" variant="outline">
               Find a Module
             </Button>
-          </Link>
+          </a>
         </div>
       </div>
     </div>

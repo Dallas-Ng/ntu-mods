@@ -1,5 +1,6 @@
 import { useMemo } from "react"
-import { useSearchParams } from "next/navigation"
+
+import { useSearchParams } from "@/hooks/use-search-params"
 
 export const useQsTimetable = (): Timetable | undefined => {
   const searchParams = useSearchParams()

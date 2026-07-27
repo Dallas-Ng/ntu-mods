@@ -214,7 +214,9 @@ const AppearanceSettings = () => {
               value={appearance.density}
               onValueChange={(v) => {
                 if (!v) return
-                updateAppearance({ density: v as keyof typeof APPEARANCE_DENSITIES })
+                updateAppearance({
+                  density: v as keyof typeof APPEARANCE_DENSITIES
+                })
                 posthog.capture("settings_appearance_changed", {
                   setting: "density",
                   value: v
@@ -242,7 +244,9 @@ const AppearanceSettings = () => {
               value={appearance.contrast}
               onValueChange={(v) => {
                 if (!v) return
-                updateAppearance({ contrast: v as keyof typeof CONTRAST_PRESETS })
+                updateAppearance({
+                  contrast: v as keyof typeof CONTRAST_PRESETS
+                })
                 posthog.capture("settings_appearance_changed", {
                   setting: "contrast",
                   value: v

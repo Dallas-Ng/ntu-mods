@@ -1,9 +1,9 @@
 "use client"
 
 import { Moon, Sun } from "lucide-react"
-import { useTheme } from "next-themes"
 import posthog from "posthog-js"
 
+import { useTheme } from "@/hooks/use-theme"
 import { Button } from "@/components/ui/button"
 
 const ThemeToggle = () => {

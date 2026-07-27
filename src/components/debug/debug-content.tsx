@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { useBoundState } from "@/state/bound.state"
 import { ArrowLeft } from "lucide-react"
 
@@ -24,7 +23,7 @@ const DebugContent = () => {
 
   return (
     <>
-      <Link href="/timetable">
+      <a href="/timetable">
         <Button
           variant="outline"
           size="sm"
@@ -32,7 +31,7 @@ const DebugContent = () => {
           <ArrowLeft className="size-5" />
           Go Back to Timetable
         </Button>
-      </Link>
+      </a>
 
       <div className="my-5">
         <p className="text-muted-foreground mb-2">

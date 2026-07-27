@@ -1,5 +1,3 @@
-import Link from "next/link"
-
 import { getAllArticles } from "@/lib/server/articles"
 
 const LandingArticles = () => {
@@ -18,21 +16,20 @@ const LandingArticles = () => {
           </p>
         </div>
 
-        <Link
+        <a
           href="/articles"
           className="text-primary text-sm font-medium underline-offset-4 hover:underline">
           View all articles
-        </Link>
+        </a>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
         {articles.map((article) => (
-          <Link
+          <a
             key={article.slug}
             href={`/articles/${article.slug}`}
             className="group bg-card hover:bg-accent rounded-lg border transition-colors">
             {article.thumbnail && (
-              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={article.thumbnail}
                 alt={article.thumbnailAlt}
@@ -58,7 +55,7 @@ const LandingArticles = () => {
                 {article.description}
               </p>
             </div>
-          </Link>
+          </a>
         ))}
       </div>
     </section>

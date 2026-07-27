@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import Link from "next/link"
 
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
@@ -66,19 +65,19 @@ const TimetableOverview = () => {
                 <td className="w-fit lg:w-25">{indexKey}</td>
 
                 <td className="w-fit lg:w-25">
-                  <Link
+                  <a
                     href={`/mods/${moduleKey}`}
                     className="hover:text-primary-alt transition-colors">
                     {moduleKey}
-                  </Link>
+                  </a>
                 </td>
 
                 <td className="hidden text-left lg:table-cell">
-                  <Link
+                  <a
                     href={`/mods/${moduleKey}`}
                     className="hover:text-primary-alt transition-colors">
                     {moduleTitle}
-                  </Link>
+                  </a>
                 </td>
 
                 <td>{au}</td>

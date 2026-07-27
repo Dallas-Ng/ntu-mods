@@ -83,7 +83,7 @@ const parseFrontmatter = (raw: string) => {
   return { data, content }
 }
 
-const getHeadings = (content: string): ArticleHeading[] => {
+export const getHeadings = (content: string): ArticleHeading[] => {
   const seen = new Map<string, number>()
 
   return content
@@ -106,7 +106,7 @@ const getHeadings = (content: string): ArticleHeading[] => {
     .filter(Boolean) as ArticleHeading[]
 }
 
-const getReadingTime = (content: string) => {
+export const getReadingTime = (content: string) => {
   const words = stripMarkdown(content).split(/\s+/).filter(Boolean).length
   const minutes = Math.max(1, Math.ceil(words / 220))
   return `${minutes} min read`

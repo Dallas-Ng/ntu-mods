@@ -1,5 +1,4 @@
-const toMinutes = (hhmm: number) =>
-  Math.floor(hhmm / 100) * 60 + (hhmm % 100)
+const toMinutes = (hhmm: number) => Math.floor(hhmm / 100) * 60 + (hhmm % 100)
 
 const padHhmm = (n: number) => String(n).padStart(4, "0")
 

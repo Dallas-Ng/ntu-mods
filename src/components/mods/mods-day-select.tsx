@@ -27,7 +27,10 @@ function parseDays(value: string): number[] {
 
 function encodeDays(days: number[]): string {
   if (days.length === ALL_DAYS.length) return "all"
-  return days.slice().sort((a, b) => a - b).join(",")
+  return days
+    .slice()
+    .sort((a, b) => a - b)
+    .join(",")
 }
 
 interface Props {

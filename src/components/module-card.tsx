@@ -1,5 +1,3 @@
-import Link from "next/link"
-
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleFaculty } from "@/lib/get-module-faculty"
@@ -15,7 +13,7 @@ interface ModuleCardProps {
 }
 
 export const ModuleCard = ({ module, cardClassName }: ModuleCardProps) => (
-  <Link key={module.code} href={`/mods/${module.code}`}>
+  <a key={module.code} href={`/mods/${module.code}`}>
     <div
       className={cn(
         "bg-card text-muted-foreground rounded-lg border p-2 text-sm",
@@ -25,7 +23,7 @@ export const ModuleCard = ({ module, cardClassName }: ModuleCardProps) => (
 
       <p className="text-foreground truncate">{module.title}</p>
     </div>
-  </Link>
+  </a>
 )
 
 function highlightText(text: string, query: string) {
@@ -83,7 +81,7 @@ export const ModuleCardDetail = ({
         !isCurrentSemester && "opacity-75"
       )}>
       {/* Left: navigable link area with its own hover */}
-      <Link
+      <a
         href={getHref(moduleData, code)}
         className="hover:bg-accent flex min-w-0 flex-1 flex-col p-3 transition-colors"
         aria-label={`${code} ${moduleData.title}`}>
@@ -109,7 +107,7 @@ export const ModuleCardDetail = ({
             <span>{faculty}</span>
           </div>
         </div>
-      </Link>
+      </a>
 
       {/* Right action column — two stacked buttons, no navigation */}
       {hasActions && (
@@ -155,7 +153,7 @@ export const ModuleListRow = ({
         !isCurrentSemester && "opacity-60"
       )}>
       {/* Left: navigable link area */}
-      <Link
+      <a
         href={getHref(moduleData, code)}
         className="hover:bg-accent flex min-w-0 flex-1 items-center gap-3 px-3 py-2.5 transition-colors"
         aria-label={`${code} ${moduleData.title}`}>
@@ -182,7 +180,7 @@ export const ModuleListRow = ({
         <span className="text-muted-foreground w-[40px] shrink-0 text-right text-xs">
           {faculty}
         </span>
-      </Link>
+      </a>
 
       {/* Right: separate icon buttons */}
       {(timetableButton || favouriteButton) && (

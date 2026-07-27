@@ -1,13 +1,13 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import Link from "next/link"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Check, ChevronDown, Search, X } from "lucide-react"
 import posthog from "posthog-js"
 
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
+import { usePathname } from "@/hooks/use-pathname"
+import { replaceSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -64,11 +64,10 @@ function ArticleCard({
   showCategory: boolean
 }) {
   return (
-    <Link
+    <a
       href={`/articles/${article.slug}`}
       className="group bg-card hover:bg-accent rounded-md border transition-colors">
       {article.thumbnail && (
-        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={article.thumbnail}
           alt={article.thumbnailAlt}
@@ -96,7 +95,7 @@ function ArticleCard({
           {article.description}
         </p>
       </div>
-    </Link>
+    </a>
   )
 }
 
@@ -104,7 +103,6 @@ export default function ArticlesList({
   articles,
   categories
 }: ArticlesListProps) {
-  const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -136,12 +134,9 @@ export default function ArticlesList({
         }
       })
 
-      const nextQuery = params.toString()
-      router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, {
-        scroll: false
-      })
+      replaceSearchParams(pathname, params.toString())
     },
-    [pathname, router, searchParams]
+    [pathname, searchParams]
   )
 
   useEffect(() => {
@@ -307,7 +302,9 @@ export default function ArticlesList({
                   onClick={() => {
                     updateParams({ category: value })
                     if (value)
-                      posthog.capture("articles_category_filtered", { category })
+                      posthog.capture("articles_category_filtered", {
+                        category
+                      })
                   }}>
                   <Check
                     className={cn(

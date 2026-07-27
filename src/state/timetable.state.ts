@@ -23,7 +23,10 @@ export interface TimetableSlice {
   toggleModuleLock: (moduleKey: string) => void
   setHasOnboarded: (value: boolean) => void
   addCustomCourse: (course: Omit<CustomCourse, "id">) => void
-  updateCustomCourse: (id: string, updates: Partial<Omit<CustomCourse, "id">>) => void
+  updateCustomCourse: (
+    id: string,
+    updates: Partial<Omit<CustomCourse, "id">>
+  ) => void
   removeCustomCourse: (id: string) => void
 }
 
@@ -100,10 +103,12 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
       const updatedTimetables = [...state.timetables]
       updatedTimetables[toIndex] = { ...state.timetables[fromIndex] }
       const updatedCustomCourses = [...state.customCourses]
-      updatedCustomCourses[toIndex] = state.customCourses[fromIndex].map((c) => ({
-        ...c,
-        id: crypto.randomUUID()
-      }))
+      updatedCustomCourses[toIndex] = state.customCourses[fromIndex].map(
+        (c) => ({
+          ...c,
+          id: crypto.randomUUID()
+        })
+      )
       return {
         timetables: updatedTimetables,
         customCourses: updatedCustomCourses,

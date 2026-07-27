@@ -163,4 +163,7 @@ async function main() {
   )
 }
 
-main()
+main().catch((err) => {
+  console.error("[build-sitemap] failed:", err)
+  process.exit(1)
+})

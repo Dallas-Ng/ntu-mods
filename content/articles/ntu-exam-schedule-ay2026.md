@@ -1,7 +1,7 @@
 ---
 title: "NTU Exam Schedule AY2026/2027 Semester 1: How to Find Your Exam Dates"
 description: "NTU exam dates for AY2026/2027 Semester 1 are now available on NTUMods. Here's how to find your exam timetable, spot clashes, and plan your modules around the exam period."
-date: "2026-06-14"
+date: "2026-07-27"
 author: "NTUMods"
 category: "Module Planning"
 tags: ["ntu exam schedule", "ntu exams ay2026", "ntu exam timetable", "ntu exam dates 2026", "ntumods exams", "ntu final exam schedule", "ntu exam ay2026 s1", "ntu exam period 2026"]
@@ -9,9 +9,11 @@ tags: ["ntu exam schedule", "ntu exams ay2026", "ntu exam timetable", "ntu exam 
 
 # NTU Exam Schedule AY2026/2027 Semester 1: How to Find Your Exam Dates
 
-AY2026/2027 Semester 1 exam dates are now available. If you are planning your modules for August 2026, you can check exam dates before you finalise your registration — which makes it much easier to avoid exam clashes and heavy exam stretches.
+AY2026/2027 Semester 1 exam dates are now available, covering 394 modules with a centrally scheduled exam. If you are planning your modules for August 2026, you can check exam dates before you finalise your registration — which makes it much easier to avoid exam clashes and heavy exam stretches.
 
 > **Go straight to the schedule:** [NTU Exam Schedule on NTUMods](/exams)
+>
+> **Last synced with NTU's official timetable:** 27 July 2026
 
 ## What the NTUMods exam schedule shows
 
@@ -42,7 +44,7 @@ This is especially relevant for BDE planning. Your core modules are often fixed,
 
 ### Know the exam period in advance
 
-The AY2026/2027 Semester 1 exam period typically falls in November–December 2026. Knowing which weeks are exam weeks helps you plan coursework deadlines, CCA commitments, and any part-time work around the intensive period.
+The AY2026/2027 Semester 1 exam period runs from 23 November to 3 December 2026. Knowing which weeks are exam weeks helps you plan coursework deadlines, CCA commitments, and any part-time work around the intensive period.
 
 Check the [NTU academic calendar](https://www.ntu.edu.sg/education/academic-calendar) for official term dates alongside the exam schedule.
 

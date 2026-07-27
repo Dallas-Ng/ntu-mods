@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { Search } from "lucide-react"
 import posthog from "posthog-js"
 
+import { CODE_QUERY_RE } from "@/lib/filter-modules"
 import type { ApiExam } from "@/lib/server/get-module-exam-data"
 import { useDebounce } from "@/hooks/use-debounce"
 import { Input } from "@/components/ui/input"
@@ -186,6 +187,20 @@ export default function ExamsList({ exams }: Props) {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
     if (!q) return exams
+
+    // Code-shaped queries (e.g. "SC") show every module whose code contains
+    // it before title-only matches, mirroring /mods search — otherwise
+    // searching "SC" buries SC-coded modules under unrelated titles that
+    // happen to contain "sc" somewhere in their name.
+    if (CODE_QUERY_RE.test(q)) {
+      const codeMatches = exams.filter((e) => e.key.toLowerCase().includes(q))
+      const nameMatches = exams.filter(
+        (e) =>
+          !e.key.toLowerCase().includes(q) && e.name.toLowerCase().includes(q)
+      )
+      return [...codeMatches, ...nameMatches]
+    }
+
     return exams.filter(
       (e) => e.key.toLowerCase().includes(q) || e.name.toLowerCase().includes(q)
     )

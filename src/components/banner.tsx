@@ -56,6 +56,13 @@ export const Banner = {
       </BannerWrapper>
     </a>
   ),
+  performanceUpdate: () => (
+    <a href="/changelog">
+      <BannerWrapper divClass="bg-yellow-300">
+        We&apos;ve improved performance — pages load faster than before →
+      </BannerWrapper>
+    </a>
+  ),
   experienceProblems: () => (
     <BannerWrapper>
       Clicking of courses in the timetable has problems, please use the

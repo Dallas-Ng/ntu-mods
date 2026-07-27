@@ -147,7 +147,7 @@ const ChangelogReleaseSection = ({
 const CHANGELOG: ChangelogRelease[] = [
   {
     title: "Custom blocks in generation and sharing",
-    date: "27 Jul 2026",
+    date: "28 Jul 2026",
     items: [
       {
         category: "Bug Fix",
@@ -165,11 +165,11 @@ const CHANGELOG: ChangelogRelease[] = [
         category: "New Feature",
         content: (
           <>
-            Custom blocks can hold multiple{" "}
-            <strong>options</strong> — different sets of days and times for the
-            same commitment. Generation picks whichever option fits best, just
-            like it picks module indexes. Switch options by hand from the
-            sidebar or by clicking the block in Pick indexes mode.
+            Custom blocks can hold multiple <strong>options</strong> — different
+            sets of days and times for the same commitment. Generation picks
+            whichever option fits best, just like it picks module indexes.
+            Switch options by hand from the sidebar or by clicking the block in
+            Pick indexes mode.
           </>
         )
       },

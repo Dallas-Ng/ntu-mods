@@ -10,7 +10,7 @@ const AppBanner = () => {
 
   if (HIDDEN_BANNER_PATHS.has(pathname)) return null
 
-  return <Banner.ay2026s1 />
+  return <Banner.performanceUpdate />
 }
 
 export default AppBanner

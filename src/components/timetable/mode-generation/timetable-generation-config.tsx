@@ -14,6 +14,7 @@ import posthog from "posthog-js"
 import { Dialog as DialogPrimitive } from "radix-ui"
 
 import { COURSE_TYPE, TRUN_DAY_MAP } from "@/lib/constants"
+import { customCourseModuleKey } from "@/lib/custom-course-colors"
 import { formatHhmm } from "@/lib/format"
 import {
   CONSECUTIVE_OPTIONS,
@@ -23,6 +24,7 @@ import {
 } from "@/lib/generation-config"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
+import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableGeneration } from "@/hooks/use-timetable-generation"
@@ -191,28 +193,53 @@ const CollisionIgnoreSection = () => {
 
 const LockedModulesSection = () => {
   const { timetable } = useTimetable()
+  const { customCourses } = useCustomCourses()
   const lockedModules = useBoundState((s) => s.lockedModules)
   const toggleModuleLock = useBoundState((s) => s.toggleModuleLock)
 
   const moduleKeys = Object.keys(timetable)
-  if (moduleKeys.length === 0) return null
+
+  // Custom blocks with more than one option are schedulable too, so they get
+  // the same lock treatment as modules.
+  const customRows = customCourses
+    .filter((course) => course.indexes.length > 1)
+    .map((course) => {
+      const selected =
+        course.indexes.find((i) => i.id === course.selectedIndexId) ??
+        course.indexes[0]
+      return {
+        key: customCourseModuleKey(course.id),
+        label: course.name,
+        indexLabel: selected?.label ?? "—"
+      }
+    })
+
+  const rows = [
+    ...moduleKeys.map((moduleKey) => ({
+      key: moduleKey,
+      label: moduleKey,
+      indexLabel: timetable[moduleKey] ?? "—"
+    })),
+    ...customRows
+  ]
+
+  if (rows.length === 0) return null
 
   return (
     <div className="flex flex-col gap-2">
-      <SectionLabel tip="Locked modules always use their current index. The generator won't try other indices for them. Useful when a module's index is pre-assigned by the school.">
+      <SectionLabel tip="Locked entries always keep their current index. The generator won't try other options for them. Useful when a module's index is pre-assigned by the school.">
         Locked modules
       </SectionLabel>
       <div className="flex flex-col gap-2">
-        {moduleKeys.map((moduleKey) => {
-          const isLocked = lockedModules.includes(moduleKey)
-          const indexKey = timetable[moduleKey]
+        {rows.map(({ key, label, indexLabel }) => {
+          const isLocked = lockedModules.includes(key)
           return (
-            <div key={moduleKey} className="flex items-center gap-2">
-              <span className="text-muted-foreground w-20 shrink-0 text-xs font-medium">
-                {moduleKey}
+            <div key={key} className="flex items-center gap-2">
+              <span className="text-muted-foreground w-20 shrink-0 truncate text-xs font-medium">
+                {label}
               </span>
               <button
-                onClick={() => toggleModuleLock(moduleKey)}
+                onClick={() => toggleModuleLock(key)}
                 className={`flex h-6 items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors ${
                   isLocked
                     ? "bg-foreground text-background border-transparent"
@@ -223,7 +250,7 @@ const LockedModulesSection = () => {
                 ) : (
                   <LockOpenIcon className="size-3" />
                 )}
-                {indexKey ?? "—"}
+                {indexLabel}
               </button>
             </div>
           )
@@ -434,7 +461,11 @@ const ConfigSummary = () => {
   const config = useBoundState((s) => s.generationConfig)
   const lockedModules = useBoundState((s) => s.lockedModules)
   const { timetable } = useTimetable()
-  const moduleKeys = Object.keys(timetable)
+  const { customCourses } = useCustomCourses()
+  const moduleKeys = [
+    ...Object.keys(timetable),
+    ...customCourses.map((c) => customCourseModuleKey(c.id))
+  ]
 
   const chips: string[] = [
     `${formatHhmm(config.dayStartTime)}–${formatHhmm(config.dayEndTime)}`
@@ -485,6 +516,12 @@ const ConfigSummary = () => {
   const lockedCount = lockedModules.filter((m) => moduleKeys.includes(m)).length
   if (lockedCount > 0) {
     chips.push(`Locked: ${lockedCount} mod${lockedCount !== 1 ? "s" : ""}`)
+  }
+
+  if (customCourses.length > 0) {
+    chips.push(
+      `${customCourses.length} custom block${customCourses.length !== 1 ? "s" : ""} avoided`
+    )
   }
 
   return (

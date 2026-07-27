@@ -16,5 +16,13 @@ export const CUSTOM_BLOCK_STYLE = {
   borderLeft: "border-l-[hsl(var(--index-cus-border))]"
 } as const
 
+export const CUSTOM_COURSE_KEY_PREFIX = "__CC__"
+
 export const isCustomCourseKey = (moduleKey: string) =>
-  moduleKey.startsWith("__CC__")
+  moduleKey.startsWith(CUSTOM_COURSE_KEY_PREFIX)
+
+export const customCourseModuleKey = (courseId: string) =>
+  `${CUSTOM_COURSE_KEY_PREFIX}${courseId}`
+
+export const customCourseIdFromKey = (moduleKey: string) =>
+  moduleKey.slice(CUSTOM_COURSE_KEY_PREFIX.length)

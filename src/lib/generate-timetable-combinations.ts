@@ -1,3 +1,5 @@
+import { isCustomCourseKey } from "@/lib/custom-course-colors"
+
 const TIME_BUDGET_MS = 300
 
 function hhmmToMinutes(hhmm: number): number {
@@ -48,6 +50,15 @@ function overlapsTimeslot(
   return iStart < tEnd && iEnd > tStart
 }
 
+/**
+ * Custom blocks are commitments the user has already made, not something the
+ * generator gets to schedule. They still take part in collision detection, but
+ * day-window / lunch / blacklist / spacing rules are about where *classes* may
+ * go — applying them to a 7am gym block would just make every combination
+ * invalid.
+ */
+const isSchedulable = (slot: Index) => !slot.isCustom
+
 function violatesHardConstraints(
   slots: Index[],
   config: GenerationConfig
@@ -56,6 +67,7 @@ function violatesHardConstraints(
   const dayEndMin = hhmmToMinutes(config.dayEndTime)
 
   for (const slot of slots) {
+    if (!isSchedulable(slot)) continue
     if (config.skippableTypes.includes(slot.type)) continue
 
     const startMin = slotStartMinutes(slot)
@@ -88,6 +100,7 @@ function violatesCombinationConstraints(
 
   const byDay: Record<number, Index[]> = {}
   for (const slot of allSlots) {
+    if (!isSchedulable(slot)) continue
     if (!byDay[slot.day]) byDay[slot.day] = []
     byDay[slot.day].push(slot)
   }
@@ -267,6 +280,23 @@ export function diagnoseConstraints(
     })
   }
 
+  const customKeys = moduleKeys.filter(isCustomCourseKey)
+  if (customKeys.length > 0) {
+    const withoutCustom = moduleKeys.filter((k) => !isCustomCourseKey(k))
+    const { combinations } = generateCombinations(
+      withoutCustom,
+      allIndexes,
+      config,
+      1
+    )
+    if (combinations.length > 0) {
+      suggestions.push({
+        label:
+          "Your custom blocks clash with every option — move them, or add another option to them"
+      })
+    }
+  }
+
   return suggestions
 }
 
@@ -396,6 +426,7 @@ export function diagnoseEmptyResult(
   config: GenerationConfig
 ): string {
   for (const mk of moduleKeys) {
+    if (isCustomCourseKey(mk)) continue
     if (!allIndexes[mk])
       return `Module ${mk} has no data for the current semester.`
     const hasValid = Object.values(allIndexes[mk]).some(

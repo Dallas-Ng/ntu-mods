@@ -2,9 +2,12 @@
 
 import { useMemo } from "react"
 
-import { customCoursesToIndexMap } from "@/lib/custom-course-to-index"
-import { useBoundState } from "@/state/bound.state"
+import {
+  customCoursesToAllIndexes,
+  customCoursesToIndexMap
+} from "@/lib/custom-course-to-index"
 
+import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 
 export const useTimetableIndexes = (
@@ -13,10 +16,7 @@ export const useTimetableIndexes = (
   semester: string
 ) => {
   const { indexes: seasonIndexes, isLoading } = useSeasonIndexes(year, semester)
-  const customCourses = useBoundState((s) => s.customCourses)
-  const timetableIndex = useBoundState((s) => s.timetableIndex)
-
-  const currentCustomCourses = customCourses[timetableIndex] ?? []
+  const { customCourses: currentCustomCourses } = useCustomCourses()
 
   const allModuleIndexes = useMemo(() => {
     const result: Record<string, Record<string, Index[]>> = {}
@@ -26,19 +26,21 @@ export const useTimetableIndexes = (
         result[code] = moduleIndexes
       }
     }
+    // Custom block variants are pickable on the grid too
+    Object.assign(result, customCoursesToAllIndexes(currentCustomCourses))
     return result
-  }, [timetable, seasonIndexes])
+  }, [timetable, seasonIndexes, currentCustomCourses])
 
   const moduleIndexMap = useMemo<TimetableWithIndex>(() => {
     const map: TimetableWithIndex = {}
     for (const [code, indexKey] of Object.entries(timetable)) {
-      const slots = allModuleIndexes[code]?.[indexKey]
+      const slots = seasonIndexes[code]?.[indexKey]
       if (slots?.length) map[code] = slots
     }
     // Merge custom courses
     Object.assign(map, customCoursesToIndexMap(currentCustomCourses))
     return map
-  }, [timetable, allModuleIndexes, currentCustomCourses])
+  }, [timetable, seasonIndexes, currentCustomCourses])
 
   return { moduleIndexMap, allModuleIndexes, isLoading }
 }

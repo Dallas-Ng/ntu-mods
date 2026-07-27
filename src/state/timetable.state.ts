@@ -1,5 +1,6 @@
 import { StateCreator } from "zustand"
 
+import { cloneCustomCourse } from "@/lib/custom-course-migrate"
 import { DEFAULT_GENERATION_CONFIG } from "@/lib/generation-config"
 
 export interface TimetableSlice {
@@ -25,6 +26,8 @@ export interface TimetableSlice {
   addCustomCourse: (course: Omit<CustomCourse, "id">) => void
   updateCustomCourse: (id: string, updates: Partial<Omit<CustomCourse, "id">>) => void
   removeCustomCourse: (id: string) => void
+  selectCustomCourseIndex: (courseId: string, courseIndexId: string) => void
+  setCustomCourses: (courses: CustomCourse[], timetableIndex: number) => void
 }
 
 export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
@@ -100,10 +103,9 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
       const updatedTimetables = [...state.timetables]
       updatedTimetables[toIndex] = { ...state.timetables[fromIndex] }
       const updatedCustomCourses = [...state.customCourses]
-      updatedCustomCourses[toIndex] = state.customCourses[fromIndex].map((c) => ({
-        ...c,
-        id: crypto.randomUUID()
-      }))
+      updatedCustomCourses[toIndex] = (
+        state.customCourses[fromIndex] ?? []
+      ).map(cloneCustomCourse)
       return {
         timetables: updatedTimetables,
         customCourses: updatedCustomCourses,
@@ -159,6 +161,27 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
       const updated = state.customCourses.map((list, i) =>
         i === state.timetableIndex ? list.filter((c) => c.id !== id) : list
       )
+      return { customCourses: updated }
+    })
+  },
+  selectCustomCourseIndex: (courseId, courseIndexId) => {
+    set((state) => {
+      const updated = state.customCourses.map((list, i) =>
+        i === state.timetableIndex
+          ? list.map((c) =>
+              c.id === courseId && c.indexes.some((x) => x.id === courseIndexId)
+                ? { ...c, selectedIndexId: courseIndexId }
+                : c
+            )
+          : list
+      )
+      return { customCourses: updated }
+    })
+  },
+  setCustomCourses: (courses, timetableIndex) => {
+    set((state) => {
+      const updated = [...state.customCourses]
+      updated[timetableIndex] = courses
       return { customCourses: updated }
     })
   }

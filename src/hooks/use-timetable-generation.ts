@@ -1,8 +1,14 @@
 "use client"
 
-import { useCallback, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
+import {
+  customCourseIdFromKey,
+  customCourseModuleKey,
+  isCustomCourseKey
+} from "@/lib/custom-course-colors"
+import { customCoursesToAllIndexes } from "@/lib/custom-course-to-index"
 import {
   diagnoseConstraints,
   generateCombinations,
@@ -20,6 +26,8 @@ export function useTimetableGeneration() {
   )
   const generationConfig = useBoundState((s) => s.generationConfig)
   const lockedModules = useBoundState((s) => s.lockedModules)
+  const customCourses = useBoundState((s) => s.customCourses)
+  const setCustomCourses = useBoundState((s) => s.setCustomCourses)
 
   const [combinations, setCombinations] = useState<GeneratedCombination[]>([])
   const [currentIdx, setCurrentIdx] = useState(0)
@@ -29,7 +37,82 @@ export function useTimetableGeneration() {
   const [suggestions, setSuggestions] = useState<ConstraintSuggestion[]>([])
   const [isDiagnosing, setIsDiagnosing] = useState(false)
 
-  const moduleKeys = Object.keys(timetable)
+  const currentCustomCourses = useMemo(
+    () => customCourses[timetableIndex] ?? [],
+    [customCourses, timetableIndex]
+  )
+
+  /**
+   * Custom blocks are fed to the generator as pseudo-modules keyed
+   * `__CC__<courseId>`, each of their variants acting as an index. Everything
+   * downstream — collision detection, scoring, locking — then treats them like
+   * any other module.
+   */
+  const customIndexes = useMemo(
+    () => customCoursesToAllIndexes(currentCustomCourses),
+    [currentCustomCourses]
+  )
+
+  const allIndexes = useMemo<Record<string, Indexes>>(
+    () => ({ ...seasonIndexes, ...customIndexes }),
+    [seasonIndexes, customIndexes]
+  )
+
+  const moduleKeys = useMemo(() => Object.keys(timetable), [timetable])
+
+  // Custom blocks go first: their slots are fixed, so they prune the search
+  // tree earliest.
+  const generationKeys = useMemo(
+    () => [...Object.keys(customIndexes), ...moduleKeys],
+    [customIndexes, moduleKeys]
+  )
+
+  const seededTimetable = useMemo<Timetable>(() => {
+    const seeded: Timetable = { ...timetable }
+    for (const course of currentCustomCourses) {
+      const key = customCourseModuleKey(course.id)
+      if (customIndexes[key]) seeded[key] = course.selectedIndexId
+    }
+    return seeded
+  }, [timetable, currentCustomCourses, customIndexes])
+
+  /**
+   * Split a generated result back into its two homes: module indexes into the
+   * timetable, custom block variants onto the custom courses themselves.
+   */
+  const applyCombination = useCallback(
+    (combination: GeneratedCombination, planIndex: number) => {
+      const moduleTimetable: Timetable = {}
+      const customSelections: Record<string, string> = {}
+
+      for (const [key, indexKey] of Object.entries(combination.timetable)) {
+        if (isCustomCourseKey(key)) {
+          customSelections[customCourseIdFromKey(key)] = indexKey
+        } else {
+          moduleTimetable[key] = indexKey
+        }
+      }
+
+      updateTimetable(moduleTimetable, planIndex)
+
+      const source = customCourses[timetableIndex] ?? []
+      if (source.length > 0) {
+        setCustomCourses(
+          source.map((course) => ({
+            ...course,
+            selectedIndexId: customSelections[course.id] ?? course.selectedIndexId
+          })),
+          planIndex
+        )
+      }
+    },
+    [
+      customCourses,
+      timetableIndex,
+      setCustomCourses,
+      updateTimetable
+    ]
+  )
 
   const generate = useCallback(
     (config = generationConfig, maxResults = 30) => {
@@ -39,25 +122,25 @@ export function useTimetableGeneration() {
       setIsDiagnosing(false)
       setTimeout(() => {
         const result = generateCombinations(
-          moduleKeys,
-          seasonIndexes,
+          generationKeys,
+          allIndexes,
           config,
           maxResults,
           lockedModules,
-          timetable
+          seededTimetable
         )
         setCombinations(result.combinations)
         setTruncated(result.truncated)
         setHasGenerated(true)
         if (result.combinations.length > 0) {
-          updateTimetable(result.combinations[0].timetable, timetableIndex)
+          applyCombination(result.combinations[0], timetableIndex)
         }
         setCurrentIdx(0)
         setIsGenerating(false)
         if (result.combinations.length === 0) {
           setIsDiagnosing(true)
           setTimeout(() => {
-            const diag = diagnoseConstraints(moduleKeys, seasonIndexes, config)
+            const diag = diagnoseConstraints(generationKeys, allIndexes, config)
             setSuggestions(diag)
             setIsDiagnosing(false)
           }, 10)
@@ -66,12 +149,13 @@ export function useTimetableGeneration() {
     },
     [
       moduleKeys,
-      seasonIndexes,
+      generationKeys,
+      allIndexes,
       generationConfig,
       lockedModules,
-      timetable,
+      seededTimetable,
       timetableIndex,
-      updateTimetable
+      applyCombination
     ]
   )
 
@@ -79,17 +163,17 @@ export function useTimetableGeneration() {
     (idx: number) => {
       if (!combinations[idx]) return
       setCurrentIdx(idx)
-      updateTimetable(combinations[idx].timetable, timetableIndex)
+      applyCombination(combinations[idx], timetableIndex)
     },
-    [combinations, timetableIndex, updateTimetable]
+    [combinations, timetableIndex, applyCombination]
   )
 
   const saveToPlan = useCallback(
     (planIndex: number) => {
       if (!combinations[currentIdx]) return
-      updateTimetable(combinations[currentIdx].timetable, planIndex)
+      applyCombination(combinations[currentIdx], planIndex)
     },
-    [combinations, currentIdx, updateTimetable]
+    [combinations, currentIdx, applyCombination]
   )
 
   const reset = useCallback(() => {

@@ -1,12 +1,12 @@
 "use client"
 
 import { useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 import { Copy } from "lucide-react"
 import posthog from "posthog-js"
 import { toast } from "sonner"
 
 import { cn } from "@/lib/utils"
-import { useBoundState } from "@/state/bound.state"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"

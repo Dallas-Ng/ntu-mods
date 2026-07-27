@@ -80,7 +80,10 @@ const TimetableShareDialog = ({
       return
     }
 
-    posthog.capture("timetable_shared", { method: "clipboard", ...captureProps })
+    posthog.capture("timetable_shared", {
+      method: "clipboard",
+      ...captureProps
+    })
     navigator.clipboard.writeText(link)
     toast("Share link copied to clipboard")
     onOpenChange(false)

@@ -159,8 +159,9 @@ const decodeCourses = (raw: unknown): CustomCourse[] => {
       name: parsedName,
       indexes,
       selectedIndexId:
-        indexes[selectedPos >= 0 && selectedPos < indexes.length ? selectedPos : 0]
-          .id
+        indexes[
+          selectedPos >= 0 && selectedPos < indexes.length ? selectedPos : 0
+        ].id
     })
   }
 

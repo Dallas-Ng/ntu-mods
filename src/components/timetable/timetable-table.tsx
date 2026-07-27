@@ -1,13 +1,13 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 
 import {
   customCourseIdFromKey,
   isCustomCourseKey
 } from "@/lib/custom-course-colors"
 import { latestSemester, latestYear } from "@/lib/semesters"
-import { useBoundState } from "@/state/bound.state"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableIndexes } from "@/hooks/use-timetable-indexes"
@@ -34,7 +34,9 @@ const TimetablePageTable = ({
     semester
   )
   const { customCourses } = useCustomCourses()
-  const selectCustomCourseIndex = useBoundState((s) => s.selectCustomCourseIndex)
+  const selectCustomCourseIndex = useBoundState(
+    (s) => s.selectCustomCourseIndex
+  )
 
   useEffect(() => {
     if (!indexPickerEnabled) {
@@ -91,7 +93,10 @@ const TimetablePageTable = ({
           onActiveModuleChange: setActiveModuleKey,
           onIndexSelect: (moduleKey, indexKey) => {
             if (isCustomCourseKey(moduleKey)) {
-              selectCustomCourseIndex(customCourseIdFromKey(moduleKey), indexKey)
+              selectCustomCourseIndex(
+                customCourseIdFromKey(moduleKey),
+                indexKey
+              )
             } else {
               updateItemIndex(moduleKey, indexKey)
             }

@@ -1,6 +1,6 @@
 import {
-  PRESET_INDEX_TYPES,
-  customCourseModuleKey
+  customCourseModuleKey,
+  PRESET_INDEX_TYPES
 } from "@/lib/custom-course-colors"
 
 const toMinutes = (hhmm: number) => Math.floor(hhmm / 100) * 60 + (hhmm % 100)

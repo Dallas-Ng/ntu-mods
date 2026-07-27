@@ -100,68 +100,68 @@ const TimetableActionsDropdown = () => {
 
   return (
     <>
-    <TimetableShareDialog
-      open={shareOpen}
-      onOpenChange={setShareOpen}
-      timetable={timetable}
-      customCourses={customCourses}
-    />
-    <TimetableImportDialog open={importOpen} onOpenChange={setImportOpen} />
+      <TimetableShareDialog
+        open={shareOpen}
+        onOpenChange={setShareOpen}
+        timetable={timetable}
+        customCourses={customCourses}
+      />
+      <TimetableImportDialog open={importOpen} onOpenChange={setImportOpen} />
 
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <MoreHorizontal className="size-4" />
-          <span className="sr-only">More actions</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuSub>
-          <DropdownMenuSubTrigger className="gap-2">
-            <Copy className="size-4" />
-            Duplicate to Plan
-          </DropdownMenuSubTrigger>
-          <DropdownMenuSubContent>
-            {timetables.map((_, index) => {
-              if (index === timetableIndex) return null
-              return (
-                <DropdownMenuItem
-                  key={index}
-                  onClick={() => handleDuplicate(index)}>
-                  Plan {index + 1}
-                </DropdownMenuItem>
-              )
-            })}
-          </DropdownMenuSubContent>
-        </DropdownMenuSub>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <a href="/screenshot" className="flex items-center gap-2">
-            <ImageDown className="size-4" />
-            Export as Image
-          </a>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={handleDownloadCalendar}
-          disabled={calendarLoading}
-          className="gap-2">
-          <Calendar className="size-4" />
-          Save to Calendar
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setShareOpen(true)}
-          className="gap-2">
-          <LinkIcon className="size-4" />
-          Share
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => setImportOpen(true)}
-          className="gap-2">
-          <Download className="size-4" />
-          Import from text
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="icon">
+            <MoreHorizontal className="size-4" />
+            <span className="sr-only">More actions</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="gap-2">
+              <Copy className="size-4" />
+              Duplicate to Plan
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              {timetables.map((_, index) => {
+                if (index === timetableIndex) return null
+                return (
+                  <DropdownMenuItem
+                    key={index}
+                    onClick={() => handleDuplicate(index)}>
+                    Plan {index + 1}
+                  </DropdownMenuItem>
+                )
+              })}
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <a href="/screenshot" className="flex items-center gap-2">
+              <ImageDown className="size-4" />
+              Export as Image
+            </a>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={handleDownloadCalendar}
+            disabled={calendarLoading}
+            className="gap-2">
+            <Calendar className="size-4" />
+            Save to Calendar
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => setShareOpen(true)}
+            className="gap-2">
+            <LinkIcon className="size-4" />
+            Share
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => setImportOpen(true)}
+            className="gap-2">
+            <Download className="size-4" />
+            Import from text
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </>
   )
 }

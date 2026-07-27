@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useRef, useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 import { Check } from "lucide-react"
 import posthog from "posthog-js"
 
@@ -8,7 +9,6 @@ import { customCoursesToIndexMap } from "@/lib/custom-course-to-index"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
-import { useBoundState } from "@/state/bound.state"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useModuleSearchApi } from "@/hooks/use-module-search-api"
 import { useOutsideClick } from "@/hooks/use-outside-click"

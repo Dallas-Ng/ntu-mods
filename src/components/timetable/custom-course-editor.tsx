@@ -1,13 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 import { Plus, Trash2, X } from "lucide-react"
 import posthog from "posthog-js"
 
 import { STARS_TIMESLOTS } from "@/lib/constants"
 import { formatHhmm } from "@/lib/format"
 import { cn } from "@/lib/utils"
-import { useBoundState } from "@/state/bound.state"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -136,7 +136,9 @@ const formToCourse = (form: FormState): Omit<CustomCourse, "id"> => {
     .filter((index) => index.sessions.length > 0)
 
   const selectedIndexId =
-    indexes.find((i) => i.id === form.activeIndexKey)?.id ?? indexes[0]?.id ?? ""
+    indexes.find((i) => i.id === form.activeIndexKey)?.id ??
+    indexes[0]?.id ??
+    ""
 
   return { name: form.name.trim(), indexes, selectedIndexId }
 }
@@ -410,9 +412,7 @@ export const CourseModal = ({
               placeholder="e.g. Gym, Badminton CCA, External Course"
               value={form.name}
               maxLength={40}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, name: e.target.value }))
-              }
+              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
             />
           </div>
 
@@ -539,7 +539,9 @@ const CustomCourseEditor = () => {
   const addCustomCourse = useBoundState((s) => s.addCustomCourse)
   const updateCustomCourse = useBoundState((s) => s.updateCustomCourse)
   const removeCustomCourse = useBoundState((s) => s.removeCustomCourse)
-  const selectCustomCourseIndex = useBoundState((s) => s.selectCustomCourseIndex)
+  const selectCustomCourseIndex = useBoundState(
+    (s) => s.selectCustomCourseIndex
+  )
 
   const courses = customCourses[timetableIndex] ?? []
 

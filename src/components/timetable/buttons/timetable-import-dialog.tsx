@@ -1,12 +1,12 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 import posthog from "posthog-js"
 import { toast } from "sonner"
 
 import { decodeTextBundle } from "@/lib/timetable-share"
 import { cn } from "@/lib/utils"
-import { useBoundState } from "@/state/bound.state"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,

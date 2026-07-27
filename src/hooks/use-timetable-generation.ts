@@ -100,18 +100,14 @@ export function useTimetableGeneration() {
         setCustomCourses(
           source.map((course) => ({
             ...course,
-            selectedIndexId: customSelections[course.id] ?? course.selectedIndexId
+            selectedIndexId:
+              customSelections[course.id] ?? course.selectedIndexId
           })),
           planIndex
         )
       }
     },
-    [
-      customCourses,
-      timetableIndex,
-      setCustomCourses,
-      updateTimetable
-    ]
+    [customCourses, timetableIndex, setCustomCourses, updateTimetable]
   )
 
   const generate = useCallback(

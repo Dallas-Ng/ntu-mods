@@ -17,7 +17,12 @@ export const normalizeCustomCourse = (course: CustomCourse): CustomCourse => {
   const indexes =
     course.indexes && course.indexes.length > 0
       ? course.indexes
-      : [makeCustomCourseIndex(DEFAULT_CUSTOM_INDEX_LABEL, course.sessions ?? [])]
+      : [
+          makeCustomCourseIndex(
+            DEFAULT_CUSTOM_INDEX_LABEL,
+            course.sessions ?? []
+          )
+        ]
 
   const selectedIndexId = indexes.some((i) => i.id === course.selectedIndexId)
     ? course.selectedIndexId

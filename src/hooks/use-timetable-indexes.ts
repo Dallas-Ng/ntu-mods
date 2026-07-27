@@ -6,7 +6,6 @@ import {
   customCoursesToAllIndexes,
   customCoursesToIndexMap
 } from "@/lib/custom-course-to-index"
-
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 

@@ -1,12 +1,11 @@
 import { useMemo } from "react"
 
-import { useSearchParams } from "@/hooks/use-search-params"
-
 import {
   CUSTOM_BLOCKS_PARAM,
-  RESERVED_SHARE_PARAMS,
-  decodeCustomBlocksParam
+  decodeCustomBlocksParam,
+  RESERVED_SHARE_PARAMS
 } from "@/lib/timetable-share"
+import { useSearchParams } from "@/hooks/use-search-params"
 
 export const useQsTimetable = (): Timetable | undefined => {
   const searchParams = useSearchParams()

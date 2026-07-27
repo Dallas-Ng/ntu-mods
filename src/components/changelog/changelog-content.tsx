@@ -146,8 +146,44 @@ const ChangelogReleaseSection = ({
 
 const CHANGELOG: ChangelogRelease[] = [
   {
-    title: "Custom blocks in generation and sharing",
+    title: "NTUMods runs on Astro now",
     date: "28 Jul 2026",
+    items: [
+      {
+        category: "Performance",
+        content: (
+          <>
+            We rebuilt the site on{" "}
+            <a
+              href="https://astro.build"
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-500 transition-colors hover:text-blue-600">
+              Astro
+            </a>{" "}
+            and moved hosting to{" "}
+            <a
+              href="https://www.cloudflare.com/"
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-500 transition-colors hover:text-blue-600">
+              Cloudflare
+            </a>
+            &apos;s global network — pages should feel snappier no matter where
+            in the world you&apos;re loading from.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content:
+          "No visible changes to how you use NTUMods — same features, same layout, just a faster foundation underneath."
+      }
+    ]
+  },
+  {
+    title: "Custom blocks in generation and sharing",
+    date: "27 Jul 2026",
     items: [
       {
         category: "Bug Fix",

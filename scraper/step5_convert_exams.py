@@ -115,7 +115,11 @@ def convert(year: str, semester: str, output_path: Path, indent: Optional[int] =
     with csv_path.open("r", encoding="utf-8-sig", newline="") as f:
         rows = [row for row in f if row.strip()]
         header_idx = next(
-            (idx for idx, row in enumerate(rows) if row.lower().startswith("date,")),
+            (
+                idx
+                for idx, row in enumerate(rows)
+                if next(csv.reader([row]))[:1] == ["Date"]
+            ),
             None,
         )
         if header_idx is None:

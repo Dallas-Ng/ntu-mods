@@ -7,7 +7,6 @@ import ArticleToc from "@/components/articles/article-toc"
 import ArticleViewTracker from "@/components/articles/article-view-tracker"
 import ArticlesList from "@/components/articles/articles-list"
 import Breadcrumbs from "@/components/breadcrumbs"
-import Container from "@/components/container"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 import {
   getAllArticles,
@@ -53,14 +52,29 @@ export async function getStaticPaths() {
   const articles = await getAllArticles()
   const categories = await getArticleCategories()
 
+  const articleSlugs = new Set(articles.map((article) => article.slug))
+
+  // Articles and category landing pages share the /articles/:slug namespace, so
+  // a category whose slug matches an article slug would emit a duplicate param
+  // and fail the build. Articles win; surface the clash rather than silently
+  // dropping the category page.
+  const categorySlugs = categories.map(slugifyCategory)
+  const colliding = categorySlugs.filter((slug) => articleSlugs.has(slug))
+  if (colliding.length > 0) {
+    throw new Error(
+      `Article slug(s) collide with category slug(s): ${colliding.join(", ")}. ` +
+        `Rename the article or the category so /articles/:slug stays unambiguous.`
+    )
+  }
+
   return [
     ...articles.map((article) => ({
       params: { slug: article.slug },
       props: { kind: "article" as const, slug: article.slug }
     })),
-    ...categories.map((category) => ({
-      params: { slug: slugifyCategory(category) },
-      props: { kind: "category" as const, slug: slugifyCategory(category) }
+    ...categorySlugs.map((slug) => ({
+      params: { slug },
+      props: { kind: "category" as const, slug }
     }))
   ]
 }

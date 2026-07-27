@@ -30,6 +30,13 @@ export async function getModuleSnapshot(
   year: string,
   semester: string
 ): Promise<ModuleSnapshot | null> {
+  // year/semester come straight off the URL and are interpolated into an asset
+  // path below. URL resolution collapses "..", so an unvalidated segment could
+  // point the fetch at an unrelated asset whose body then fails to parse as
+  // the expected shape. Reject anything that isn't a real term identifier.
+  if (!/^\d{4}$/.test(year) || !/^[12ST]$/.test(semester)) return null
+  if (!/^[A-Z0-9]{2,12}$/.test(code)) return null
+
   const [metadata, indexesFile, examsFile, semesters] = await Promise.all([
     fetchJson<Record<string, ApiModule>>(
       requestUrl,

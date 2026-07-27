@@ -17,25 +17,40 @@ function targetFor(path: string): string {
   return `https://us.i.posthog.com/${path}`
 }
 
+// Headers that describe *this* origin rather than the upstream request, and
+// must not be forwarded verbatim to PostHog.
+const STRIPPED_REQUEST_HEADERS = ["host", "cookie", "cf-connecting-ip"]
+// Upstream must not be able to set cookies on the ntumods.com origin through
+// the proxy.
+const STRIPPED_RESPONSE_HEADERS = ["set-cookie"]
+
 const handler: APIRoute = async ({ params, request }) => {
   const path = params.path ?? ""
   const url = new URL(request.url)
   const target = targetFor(path) + url.search
 
+  const headers = new Headers(request.headers)
+  for (const name of STRIPPED_REQUEST_HEADERS) headers.delete(name)
+
   const proxied = await fetch(target, {
     method: request.method,
-    headers: request.headers,
+    headers,
     body:
       request.method === "GET" || request.method === "HEAD"
         ? undefined
         : await request.arrayBuffer()
   })
 
+  const responseHeaders = new Headers(proxied.headers)
+  for (const name of STRIPPED_RESPONSE_HEADERS) responseHeaders.delete(name)
+
   return new Response(proxied.body, {
     status: proxied.status,
-    headers: proxied.headers
+    headers: responseHeaders
   })
 }
 
 export const GET = handler
 export const POST = handler
+export const HEAD = handler
+export const OPTIONS = handler

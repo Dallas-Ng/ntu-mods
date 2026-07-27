@@ -6,6 +6,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
+  /* --font-inter is emitted by Astro's <Font> component (see astro.config.mjs).
+     Overriding --font-sans makes it the default family site-wide, matching what
+     next/font's Inter did through the body className. */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --default-font-family: var(--font-sans);
+
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));

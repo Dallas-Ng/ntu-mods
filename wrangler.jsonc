@@ -24,9 +24,6 @@
   // Web ReadableStream — Response can't accept that, and silently
   // stringifies it to the literal text "[object Object]".
   "compatibility_flags": ["nodejs_compat", "disable_nodejs_process_v2"],
-  "cache": {
-    "enabled": false
-  },
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1,

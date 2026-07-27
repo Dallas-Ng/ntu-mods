@@ -9,12 +9,18 @@
 # testing
 /coverage
 
-# next.js
+# stale Next.js build output on checkouts that predate the Astro migration
 /.next/
 /out/
 
 # astro
 /.astro/
+
+# generated at build time into dist/client by scripts/build-sitemap.mjs —
+# never commit copies of these into public/
+/public/sitemap.xml
+/public/sitemap-*.xml
+/public/robots.txt
 
 # cloudflare / wrangler
 /.wrangler/
@@ -33,13 +39,14 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.dev.vars
+.dev.vars.*
 
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 
 ###################################################################################
 #                                     PYTHON                                      #

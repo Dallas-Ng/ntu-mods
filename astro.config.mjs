@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url"
 import cloudflare from "@astrojs/cloudflare"
 import react from "@astrojs/react"
 import tailwindcss from "@tailwindcss/vite"
-import { defineConfig } from "astro/config"
+import { defineConfig, fontProviders } from "astro/config"
 
 export default defineConfig({
   srcDir: "./src/astro",
@@ -19,11 +19,34 @@ export default defineConfig({
     prerenderEnvironment: "node"
   }),
   integrations: [react()],
+  // Replaces next/font's Inter. Same deal: downloaded and self-hosted at build
+  // time, so there's no render-blocking request to fonts.googleapis.com and no
+  // third-party origin in the critical path. Wired to Tailwind's --font-sans in
+  // src/styles/globals.css.
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: "Inter",
+      cssVariable: "--font-inter",
+      subsets: ["latin"],
+      weights: [400, 500, 600, 700],
+      styles: ["normal"],
+      fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"]
+    }
+  ],
   trailingSlash: "never",
+  // "file" emits /faq.html, not /faq/index.html. Cloudflare's asset server
+  // serves a directory-style build at /faq/ and 307s /faq to it — so with the
+  // default format every canonical, sitemap and internal URL (all slashless)
+  // would cost a redirect hop before rendering. "file" serves them directly.
+  build: { format: "file" },
+  // 301, not Astro's shorthand default of 302 — these were `permanent: true`
+  // redirects under Next, and demoting them would drop the accumulated link
+  // equity on /stars in particular.
   redirects: {
-    "/stars": "/timetable",
-    "/mod": "/mods",
-    "/help": "/faq"
+    "/stars": { status: 301, destination: "/timetable" },
+    "/mod": { status: 301, destination: "/mods" },
+    "/help": { status: 301, destination: "/faq" }
   },
   vite: {
     envPrefix: ["PUBLIC_"],

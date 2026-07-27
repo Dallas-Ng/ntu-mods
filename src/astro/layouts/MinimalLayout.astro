@@ -1,11 +1,14 @@
 ---
 import "@/styles/globals.css"
 
+import { Font } from "astro:assets"
+
 import { siteConfig } from "@/config/site"
 import { IS_PROD } from "@/lib/constants"
 import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import MobileTracker from "@/components/mobile-tracker"
+import Analytics from "@/astro/components/Analytics.astro"
 
 interface Props {
   title?: string
@@ -42,6 +45,7 @@ const resolvedTitle =
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteConfig.name} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
@@ -64,6 +68,8 @@ const resolvedTitle =
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://www.clarity.ms" />
+
+    <Font cssVariable="--font-inter" preload />
 
     <script is:inline>
       // Runs before paint to avoid a light/dark flash — theme state lives in
@@ -89,29 +95,6 @@ const resolvedTitle =
     <slot />
     <MobileTracker client:idle />
     <Toaster client:idle position="top-center" />
-    {
-      IS_PROD && (
-        <>
-          <script
-            is:inline
-            src="https://www.googletagmanager.com/gtag/js?id=G-70VD9Q58Y0"
-            async
-          />
-          <script is:inline id="google-analytics">
-            {`window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-70VD9Q58Y0');`}
-          </script>
-          <script is:inline id="microsoft-clarity">
-            {`(function(c,l,a,r,i,t,y){
-  c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-  y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-})(window,document,"clarity","script","k9d6cixduy");`}
-          </script>
-        </>
-      )
-    }
+    {IS_PROD && <Analytics />}
   </body>
 </html>

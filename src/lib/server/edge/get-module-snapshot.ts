@@ -53,6 +53,32 @@ async function fetchJson<T>(
   return promise
 }
 
+// Reads a single module's slice straight from KV (populated by
+// scripts/populate-module-kv.mjs) instead of fetching and parsing the whole
+// semester file just to key into it. Falls back to the whole-file path —
+// via wholeFileFallback — when the binding isn't configured (local dev) or
+// the key hasn't been populated yet, so the route keeps working either way.
+async function fetchModuleField<T>(
+  kvPrefix: "metadata" | "indexes",
+  year: string,
+  semester: string,
+  code: string,
+  wholeFileFallback: () => Promise<T | null>
+): Promise<T | null> {
+  if (env.MODULE_DATA) {
+    try {
+      const fromKv = await env.MODULE_DATA.get<T>(
+        `${kvPrefix}:${year}_${semester}:${code}`,
+        "json"
+      )
+      if (fromKv !== null) return fromKv
+    } catch {
+      // KV unavailable/erroring — fall through to the whole-file path below.
+    }
+  }
+  return wholeFileFallback()
+}
+
 export async function getModuleSnapshot(
   requestUrl: URL,
   code: string,
@@ -66,14 +92,25 @@ export async function getModuleSnapshot(
   if (!/^\d{4}$/.test(year) || !/^[12ST]$/.test(semester)) return null
   if (!/^[A-Z0-9]{2,12}$/.test(code)) return null
 
-  const [metadata, indexesFile, examsFile, semesters] = await Promise.all([
-    fetchJson<Record<string, ApiModule>>(
-      requestUrl,
-      `/data/api/metadata/${year}_${semester}.json`
-    ),
-    fetchJson<Record<string, Record<string, Index[]>>>(
-      requestUrl,
-      `/data/api/indexes/${year}_${semester}.json`
+  const [moduleData, indexes, examsFile, semesters] = await Promise.all([
+    fetchModuleField<ApiModule>("metadata", year, semester, code, async () => {
+      const metadata = await fetchJson<Record<string, ApiModule>>(
+        requestUrl,
+        `/data/api/metadata/${year}_${semester}.json`
+      )
+      return metadata?.[code] ?? null
+    }),
+    fetchModuleField<Record<string, Index[]>>(
+      "indexes",
+      year,
+      semester,
+      code,
+      async () => {
+        const indexesFile = await fetchJson<
+          Record<string, Record<string, Index[]>>
+        >(requestUrl, `/data/api/indexes/${year}_${semester}.json`)
+        return indexesFile?.[code] ?? null
+      }
     ),
     fetchJson<Record<string, ApiExam>>(
       requestUrl,
@@ -82,7 +119,6 @@ export async function getModuleSnapshot(
     fetchJson<Array<{ code: string }>>(requestUrl, "/data/api/semesters.json")
   ])
 
-  const moduleData = metadata?.[code]
   if (!moduleData) return null
 
   const latestCode = semesters?.[0]?.code
@@ -91,7 +127,7 @@ export async function getModuleSnapshot(
 
   return {
     moduleData: { ...moduleData, code },
-    indexes: indexesFile?.[code] ?? {},
+    indexes: indexes ?? {},
     exam: examsFile?.[code] ?? null,
     isCurrentOffering
   }

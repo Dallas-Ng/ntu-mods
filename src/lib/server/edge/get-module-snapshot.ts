@@ -14,14 +14,43 @@ export interface ModuleSnapshot {
   isCurrentOffering: boolean
 }
 
+// Semester data files (up to ~3MB for indexes) are shared across every
+// module offered that term. Without caching, rendering N historic snapshot
+// pages for the same semester re-fetches and re-parses the same file N
+// times on a warm isolate. Mirrors the fileCache pattern in
+// get-module-indexes-data.ts, adapted for the edge ASSETS-fetch path.
+// Capped (not per-semester unbounded) since a warm isolate can live across
+// many distinct semesters — an unbounded cache of ~4MB-per-semester entries
+// would eventually exhaust the 128MB isolate memory limit.
+const CACHE_LIMIT = 6
+const cache = new Map<string, unknown>()
+const pending = new Map<string, Promise<unknown>>()
+
 async function fetchJson<T>(
   requestUrl: URL,
   relativePath: string
 ): Promise<T | null> {
-  const assetUrl = new URL(relativePath, requestUrl)
-  const res = await env.ASSETS.fetch(assetUrl)
-  if (!res.ok) return null
-  return (await res.json()) as T
+  if (cache.has(relativePath)) return cache.get(relativePath) as T | null
+
+  const inFlight = pending.get(relativePath) as Promise<T | null> | undefined
+  if (inFlight) return inFlight
+
+  const promise = (async () => {
+    const assetUrl = new URL(relativePath, requestUrl)
+    const res = await env.ASSETS.fetch(assetUrl)
+    const result = res.ok ? ((await res.json()) as T) : null
+
+    if (cache.size >= CACHE_LIMIT) {
+      const oldestKey = cache.keys().next().value
+      if (oldestKey !== undefined) cache.delete(oldestKey)
+    }
+    cache.set(relativePath, result)
+    pending.delete(relativePath)
+    return result
+  })()
+
+  pending.set(relativePath, promise)
+  return promise
 }
 
 export async function getModuleSnapshot(

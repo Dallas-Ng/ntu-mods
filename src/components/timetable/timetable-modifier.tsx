@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, type MouseEvent } from "react"
+import { lazy, Suspense, useState, type MouseEvent } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { TrashIcon } from "lucide-react"
 import posthog from "posthog-js"
@@ -9,11 +9,17 @@ import { cn } from "@/lib/utils"
 import { useTimetable } from "@/hooks/use-timetable"
 
 import CustomCourseEditor from "./custom-course-editor"
-import TimetableAiChat from "./mode-ai/timetable-ai-chat"
-import TimetableGenerationConfig from "./mode-generation/timetable-generation-config"
 import TimetableIndexModifier from "./timetable-index-modifier"
 import TimetableModeSelector from "./timetable-mode-selector"
 import TimetableModulesSelect from "./timetable-modules-select"
+
+// Only rendered once the user switches mode — kept out of the initial
+// bundle since generation config + AI chat pull in ~800+ lines and their
+// own deps that the default "Calendar" mode never touches.
+const TimetableAiChat = lazy(() => import("./mode-ai/timetable-ai-chat"))
+const TimetableGenerationConfig = lazy(
+  () => import("./mode-generation/timetable-generation-config")
+)
 
 const TimetableModifier = () => {
   const { timetable, removeItemFromTimetable } = useTimetable()
@@ -104,8 +110,10 @@ const TimetableModifier = () => {
       <CustomCourseEditor />
 
       {/* Mode-specific panels */}
-      {mode === "generation" && <TimetableGenerationConfig />}
-      {mode === "ai" && <TimetableAiChat />}
+      <Suspense fallback={null}>
+        {mode === "generation" && <TimetableGenerationConfig />}
+        {mode === "ai" && <TimetableAiChat />}
+      </Suspense>
     </div>
   )
 }

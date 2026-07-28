@@ -1,5 +1,7 @@
-import fs from "fs/promises"
-import path from "path"
+import { query } from "./db/build-time"
+import { OFFERING_PREREQUISITES_SQL, OFFERING_SQL } from "./db/queries"
+import { toApiModule } from "./db/shape"
+import type { OfferingRow, PrerequisiteRow } from "./db/shape"
 
 /**
  * Server-side module data. Structurally overlaps with the global Module type
@@ -28,53 +30,62 @@ export interface ApiModule {
   latestSemester?: string
 }
 
-const METADATA_DIR = path.join(process.cwd(), "src/data/api/metadata")
-
-// This file is shared across every module offered in a semester (up to
-// ~1.2MB) — without caching, generating all the historic snapshot pages for
-// one semester re-reads and re-parses the same file once per module.
-const fileCache = new Map<string, Record<string, ApiModule> | null>()
-
-async function readMetadataFile(
-  year: string,
-  semester: string
-): Promise<Record<string, ApiModule> | null> {
-  const key = `${year}_${semester}`
-  if (fileCache.has(key)) return fileCache.get(key) ?? null
-
-  const filePath = path.join(METADATA_DIR, `${year}_${semester}.json`)
-  let result: Record<string, ApiModule> | null
-  try {
-    await fs.access(filePath)
-    const data = await fs.readFile(filePath, "utf-8")
-    result = JSON.parse(data) as Record<string, ApiModule>
-  } catch {
-    result = null
-  }
-  fileCache.set(key, result)
-  return result
-}
-
-/** Read a specific semester file and return a single module, or null if not found. */
+/** Read a single module's record for one semester. */
 export async function getModuleMetadata(
   code: string,
   year: string,
   semester: string
 ): Promise<ApiModule | null> {
-  const obj = await readMetadataFile(year, semester)
-  if (!obj) return null
-  const mod = obj[code]
-  return mod ? { ...mod, code } : null
+  const sem = `${year}_${semester}`
+  const row = query<OfferingRow>(OFFERING_SQL, code, sem)[0]
+  if (!row) return null
+  const prereqs = query<PrerequisiteRow>(OFFERING_PREREQUISITES_SQL, code, sem)
+  return toApiModule(row, prereqs)
 }
 
-/** Read a specific semester file and return all modules (for generateStaticParams). */
+/**
+ * Every module offered in one semester, keyed by code.
+ *
+ * Previously parsed a whole 1.2 MB semester file. Callers that only want one
+ * module should use getModuleMetadata — this one exists for the pages that
+ * genuinely enumerate a semester.
+ */
 export async function getAllModuleMetadata(
   year: string,
   semester: string
 ): Promise<Record<string, ApiModule>> {
-  const obj = await readMetadataFile(year, semester)
-  if (!obj) return {}
+  const sem = `${year}_${semester}`
+
+  const rows = query<OfferingRow>(
+    `SELECT o.*,
+            (SELECT json_group_array(key) FROM (
+               SELECT p.key AS key
+                 FROM offering_programmes op
+                 JOIN programmes p ON p.id = op.programme_id
+                WHERE op.code = o.code AND op.sem = o.sem
+                ORDER BY op.seq
+            )) AS search_keys
+       FROM offerings o
+      WHERE o.sem = ?
+      ORDER BY o.code`,
+    sem
+  )
+  if (rows.length === 0) return {}
+
+  const prereqRows = query<PrerequisiteRow & { code: string }>(
+    `SELECT code, group_no, item_no, raw_text
+       FROM prerequisites WHERE sem = ?
+      ORDER BY code, group_no, item_no`,
+    sem
+  )
+  const prereqsByCode = new Map<string, PrerequisiteRow[]>()
+  for (const p of prereqRows) {
+    let list = prereqsByCode.get(p.code)
+    if (!list) prereqsByCode.set(p.code, (list = []))
+    list.push(p)
+  }
+
   return Object.fromEntries(
-    Object.entries(obj).map(([code, mod]) => [code, { ...mod, code }])
+    rows.map((row) => [row.code, toApiModule(row, prereqsByCode.get(row.code) ?? [])])
   )
 }

@@ -1,10 +1,9 @@
 ---
-import fs from "node:fs/promises"
-import path from "node:path"
-
 import { siteConfig } from "@/config/site"
 import { generateTimetableMatrix } from "@/lib/generate-timetable-matrix"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
+import { query } from "@/lib/server/db/build-time"
+import { ALL_MODULE_CODES_SQL } from "@/lib/server/db/queries"
 import { getLatestSemester } from "@/lib/server/get-latest-semester"
 import {
   getModuleCurrentSemester,
@@ -38,14 +37,9 @@ import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 export const prerender = true
 
 export async function getStaticPaths() {
-  const moduleMap = JSON.parse(
-    await fs.readFile(
-      path.join(process.cwd(), "src/data/api/module-map.json"),
-      "utf-8"
-    )
-  ) as Record<string, unknown>
-
-  return Object.keys(moduleMap).map((key) => ({ params: { module: key } }))
+  return query<{ code: string }>(ALL_MODULE_CODES_SQL).map(({ code }) => ({
+    params: { module: code }
+  }))
 }
 
 const moduleKey = Astro.params.module ?? ""

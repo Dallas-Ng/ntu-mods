@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "build": "node scripts/build-static-data.mjs && astro build && node scripts/build-sitemap.mjs && node scripts/indexnow.mjs ../dist/client",
+    "data": "node scripts/db/ensure-db.mjs && tsx scripts/build-static-data.mts",
+    "dev": "yarn data && astro dev",
+    "build": "yarn data && astro build && tsx scripts/build-sitemap.mts && node scripts/indexnow.mjs ../dist/client",
     "preview": "astro preview",
     "db:build": "node scripts/db/build-db.mjs",
     "db:pull": "node scripts/db/pull-db.mjs",

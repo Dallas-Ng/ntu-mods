@@ -33,6 +33,44 @@ export const LATEST_SEMESTER_SQL = `
    LIMIT 1
 `
 
+/**
+ * Every module code that was ever offered — replaces module-map.json, which the
+ * scraper built by merging all 45 metadata files. Drives getStaticPaths for
+ * /mods/:code and the sitemap.
+ */
+export const ALL_MODULE_CODES_SQL = `
+  SELECT DISTINCT code FROM offerings ORDER BY code
+`
+
+/**
+ * Each module's code and title as of its most recent offering, for the sitemap
+ * page's alphabetical listing.
+ */
+export const MODULE_TITLES_SQL = `
+  WITH ranked AS (
+    SELECT o.code, o.title,
+           ROW_NUMBER() OVER (PARTITION BY o.code ORDER BY s.sort_key DESC) AS rn
+      FROM offerings o JOIN semesters s ON s.sem = o.sem
+  )
+  SELECT code, title FROM ranked WHERE rn = 1 ORDER BY code
+`
+
+/**
+ * Versioned module pages for the sitemap: every offering from `year_cutoff`
+ * onwards, excluding each module's current offering (which redirects to
+ * /mods/:code and so must stay out of the sitemap).
+ */
+export const SITEMAP_VERSIONED_OFFERINGS_SQL = `
+  WITH ranked AS (
+    SELECT o.code, o.sem, s.year, s.semester, s.sort_key,
+           ROW_NUMBER() OVER (PARTITION BY o.code ORDER BY s.sort_key DESC) AS rn
+      FROM offerings o JOIN semesters s ON s.sem = o.sem
+  )
+  SELECT code, year, semester FROM ranked
+   WHERE rn > 1 AND CAST(year AS INTEGER) >= ?
+   ORDER BY code, sort_key DESC
+`
+
 /** Latest semester that has at least one exam — replaces the exams page's fallback loop. */
 export const LATEST_EXAM_SEMESTER_SQL = `
   SELECT sem, code, year, semester, name

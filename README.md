@@ -139,35 +139,53 @@ Set as Worker secrets (not `.env`), read via `locals.runtime.env`:
 
 ## Data Pipeline
 
-Module and index data is sourced from NTU STARS and stored as static JSON in `src/data/api/`. The pipeline runs in order:
+Module and index data is sourced from NTU STARS and stored in a Cloudflare D1
+database, which is the single source of truth. The scraper writes to it, and
+both the build and the running Worker read from it.
+
+The scraper lives in `scraper/` and runs in order:
 
 ```
-scripts/scrapers/
-  1_academic_year.py   # Fetch available academic years
-  2_course.py          # Fetch course codes per year
-  3_module.py          # Fetch module metadata (title, AUs, prerequisites)
-  4_indexes.py         # Fetch class indexes and schedules
-  5_exams.py           # Fetch exam timetables
+scraper/
+  step1_fetch_semesters.py   # Discover available semesters
+  step2_scrape_courses.py    # Scrape course listings per semester
+  step2b_scrape_content.py   # Scrape the content portal (descriptions, restrictions)
+  step3_convert_mdata.py     # Normalise module metadata
+  step4_convert_indexes.py   # Normalise class indexes
+  step5_convert_exams.py     # Convert the exam CSV
+  stepfinal_upsync.py        # Copy the output into src/data/api
 ```
 
-After scraping, run the transform script to produce the final JSON format consumed by the app:
+### Working with the database
 
 ```bash
-node scripts/transform-api-data.js
+yarn db:build     # Rebuild the local SQLite file from src/data/api
+yarn db:pull      # Download the database from D1 instead (needs wrangler auth)
+yarn db:verify    # Assert the database reproduces every JSON file exactly
+yarn db:dump      # Emit SQL for `wrangler d1 execute --file`
+yarn data         # Regenerate the static artifacts the client fetches
 ```
 
-### Updating the Current Semester
+`yarn dev` and `yarn build` both run `yarn data` first, which creates the local
+database if it is missing and regenerates `public/data/api/`. Neither directory
+is committed — `public/data/api/` is build output, and `db/*.sqlite` is a
+derived read replica of D1.
 
-The current semester is controlled by the first entry in [`src/data/api/semesters.json`](src/data/api/semesters.json). When a new semester is available, add it to the top of the array:
+Loading a semester into D1 is **not** enough to change the live site: the
+prerendered pages and the client artifacts are published by a rebuild. Only the
+on-demand `/mods/:code/:year/:semester` route reflects D1 immediately.
 
-```json
-[
-  { "code": "2026;1", "name": "Acad Yr 2026 Semester 1" },
-  ...
-]
-```
+### The current semester
 
-Semester codes follow the format `{year};{semester}` where semester is `1`, `2`, `S` (Special Term), or `T` (Special Term II).
+The current semester is derived, not configured: it is the newest semester in
+the database that actually has offerings, ordered by `semesters.sort_key`. There
+is nothing to edit when a new semester arrives — load it and rebuild.
+
+Semester codes follow the format `{year};{semester}` where semester is `1`, `2`,
+`S` (Special Term), or `T` (Special Term II). `sort_key` is
+`int(year) * 10 + {1:1, 2:2, S:3, T:4}`, computed from the code — never from the
+portal's list order, which is not self-consistent (AY2025 lists `2,1,S` while
+AY2024 lists `1,2,S`).
 
 ## Maintenance
 
@@ -187,13 +205,9 @@ Download the exam timetable from NTU and place the CSV in `scraper/data/exams/` 
 exams-YYYY-YYYY-sX.csv   # e.g. exams-2025-2026-s2.csv
 ```
 
-Then re-run step 5 of the scraper (`5_exams.py`) to convert it to JSON.
+Then re-run `scraper/step5_convert_exams.py` to convert it.
 
-#### 3. Update `semesters.json`
-
-Add the new semester to the top of [`src/data/api/semesters.json`](src/data/api/semesters.json) (see [Updating the Current Semester](#updating-the-current-semester)).
-
-#### 4. Update ICS start date
+#### 3. Update ICS start date
 
 Update `MIN_DATE` in [`src/lib/get-ics.ts`](src/lib/get-ics.ts) to the **Monday of Week 1** of the new semester:
 
@@ -205,7 +219,7 @@ This date is used to calculate recurring calendar events in `.ics` exports. The 
 
 ### Each Academic Year
 
-#### 5. Update banner and landing page
+#### 4. Update banner and landing page
 
 - [`src/components/banner.tsx`](src/components/banner.tsx) — update the banner announcement text with the new academic year
 - [`src/components/landing/landing-product.tsx`](src/components/landing/landing-product.tsx) — update `LANDING_YEAR` and `LANDING_SEMESTER` constants

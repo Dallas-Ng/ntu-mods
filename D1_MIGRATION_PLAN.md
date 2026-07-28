@@ -464,6 +464,32 @@ correct definition. `offerings.categories` deliberately reproduces the *current*
 buggy behaviour so the migration is provably behaviour-preserving; fixing it is a
 separate, visible commit.
 
+## 9a. New blocker found during implementation: the build cannot reach D1
+
+Step 8 of the migration order ("delete the JSON trees") assumed the build can
+obtain the database. It cannot yet.
+
+`yarn build` reads `db/ntu-mods.sqlite`. Locally that comes from `yarn db:pull`
+(`wrangler d1 export`). **Cloudflare Workers Builds has no wrangler credentials**,
+so the same command fails there — and the SQLite file is 103 MB, far too large to
+commit.
+
+Until that is solved, `scripts/db/ensure-db.mjs` rebuilds the database from the
+JSON under `src/data/api` when the file is missing, which keeps CI green.
+**That fallback is the only remaining reason `src/data/api` exists.** Options,
+roughly in order of preference:
+
+1. Put a scoped Cloudflare API token in the Workers Builds environment and run
+   `yarn db:pull` in the build. Smallest change; the token needs D1 read only.
+2. Publish the SQLite file to R2 on each load and fetch it over HTTPS at build
+   time. No token needed if the bucket has a public route.
+3. Keep the JSON as the build input permanently, treating D1 purely as the
+   serving layer. Cheapest, but leaves the duplication this migration set out
+   to remove.
+
+`public/data/api` (67 MB) is already gone from git — it is regenerated from the
+database on every `yarn dev` and `yarn build`.
+
 ## 10. Constraints
 
 - Package manager is **yarn**, not npm/pnpm.

@@ -86,6 +86,9 @@ export async function getAllModuleMetadata(
   }
 
   return Object.fromEntries(
-    rows.map((row) => [row.code, toApiModule(row, prereqsByCode.get(row.code) ?? [])])
+    rows.map((row) => [
+      row.code,
+      toApiModule(row, prereqsByCode.get(row.code) ?? [])
+    ])
   )
 }

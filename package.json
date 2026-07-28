@@ -10,6 +10,7 @@
     "db:build": "node scripts/db/build-db.mjs",
     "db:pull": "node scripts/db/pull-db.mjs",
     "db:dump": "node scripts/db/dump-sql.mjs",
+    "db:load": "node scripts/db/load-semester.mjs",
     "db:verify": "node scripts/db/verify-parity.mjs",
     "lint": "eslint . && astro check && tsc",
     "lint:fix": "eslint . --fix",

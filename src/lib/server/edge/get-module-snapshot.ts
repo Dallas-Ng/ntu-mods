@@ -6,7 +6,7 @@ import {
   OFFERING_INDEX_KEYS_SQL,
   OFFERING_PREREQUISITES_SQL,
   OFFERING_SLOTS_SQL,
-  OFFERING_SQL,
+  OFFERING_SQL
 } from "@/lib/server/db/queries"
 import { toApiExam, toApiModule, toIndexes } from "@/lib/server/db/shape"
 import type {
@@ -14,7 +14,7 @@ import type {
   OfferingRow,
   PrerequisiteRow,
   SemesterRow,
-  SlotRow,
+  SlotRow
 } from "@/lib/server/db/shape"
 import type { ApiExam } from "@/lib/server/get-module-exam-data"
 import type { ApiModule } from "@/lib/server/get-module-metadata"
@@ -90,7 +90,7 @@ export async function getModuleSnapshot(
         .all<{ index_key: string }>(),
       db.prepare(OFFERING_SLOTS_SQL).bind(code, sem).all<SlotRow>(),
       db.prepare(OFFERING_EXAM_SQL).bind(code, sem).first<ExamRow>(),
-      getLatestSem(db),
+      getLatestSem(db)
     ])
 
   if (!offering) return null
@@ -106,6 +106,6 @@ export async function getModuleSnapshot(
     // source was scraped independently of whether any courses had been loaded,
     // so a newly listed but unscraped semester made every module render the
     // "historical snapshot" banner.
-    isCurrentOffering: latestSem === sem,
+    isCurrentOffering: latestSem === sem
   }
 }

@@ -464,6 +464,29 @@ correct definition. `offerings.categories` deliberately reproduces the *current*
 buggy behaviour so the migration is provably behaviour-preserving; fixing it is a
 separate, visible commit.
 
+## 8a. Deviation in step 9: steps 3/4/5 were kept
+
+The plan said steps 3/4/5 and `stepfinal_upsync.py` would all be replaced by "a
+single normalising loader". In practice only the aggregation half was replaced.
+
+Steps 3/4/5 stay as the normalisers. They carry a lot of hard-won parsing —
+`smart_title`, `_clean_description`, the inline-list and dash-list splitters, the
+label→field map, `parse_prerequisite`, the compound `LEC/STUDIO` type
+normalisation, and the "content portal is authoritative for restriction fields"
+precedence rule. Porting that to JavaScript would risk silent behaviour drift
+across 28,628 offerings for no benefit, since their output shape is already the
+loader's input shape.
+
+What *was* replaced is the hand-written data aggregation the plan actually
+objected to: `stepfinal_upsync.build_derived_files`, which merged all 45
+semesters into `module-map.json` and the dead `index-map.json`. Both files are
+deleted; the equivalent queries live in `src/lib/server/db/queries.ts`.
+
+`scripts/db/load-semester.mjs` shares its row construction with the bootstrap
+loader through `scripts/db/rows.mjs`, so `yarn db:verify` proving the backfill
+correct also covers the pipeline. `stepfinal_upsync.py` now only copies files
+into `src/data/api`, and exists purely as the CI fallback described below.
+
 ## 9a. New blocker found during implementation: the build cannot reach D1
 
 Step 8 of the migration order ("delete the JSON trees") assumed the build can

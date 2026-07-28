@@ -1,6 +1,6 @@
+import { getAllArticles } from "@/lib/server/articles"
 import { query } from "@/lib/server/db/build-time"
 import { MODULE_TITLES_SQL } from "@/lib/server/db/queries"
-import { getAllArticles } from "@/lib/server/articles"
 import Container from "@/components/container"
 import Header from "@/components/header"
 

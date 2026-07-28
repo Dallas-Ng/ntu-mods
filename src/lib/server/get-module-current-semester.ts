@@ -29,6 +29,6 @@ export async function getModuleSemesters(
 ): Promise<Array<{ year: string; semester: string }>> {
   return query<Row>(MODULE_SEMESTERS_SQL, code).map((r) => ({
     year: r.year,
-    semester: r.semester,
+    semester: r.semester
   }))
 }

@@ -153,8 +153,31 @@ scraper/
   step3_convert_mdata.py     # Normalise module metadata
   step4_convert_indexes.py   # Normalise class indexes
   step5_convert_exams.py     # Convert the exam CSV
-  stepfinal_upsync.py        # Copy the output into src/data/api
+                             # then --load runs scripts/db/load-semester.mjs
 ```
+
+```bash
+python scraper/main.py --semester "2025;2" --load             # scrape and publish
+python scraper/main.py --semester "2025;2" --load --dry-run   # check, don't apply
+python scraper/main.py --semester "2025;2" --load --scope exams
+python scraper/main.py --semester all --min-year 2025 --load  # rebuild a year
+```
+
+Everything after step 1 is scoped to a single semester, so a load replaces
+exactly one `(semester, scope)` — and rebuilding one year, one semester, or the
+whole corpus is the same operation repeated. The two scopes (`courses`, `exams`)
+are independent: re-running `courses` never deletes exam rows, which matters
+because the exam timetable arrives separately as a CSV.
+
+A load is a `DELETE` of that scope's rows followed by `INSERT`s, applied as one
+file through `wrangler d1 execute`, which is atomic — a failed load leaves the
+semester exactly as it was. Replace rather than merge, because merging cannot
+express deletion: a cancelled class index would otherwise linger forever.
+
+Before applying, the loader compares row counts against the previous load
+recorded in the `loads` table and refuses a drop of more than 20% without
+`--force`. An expired session or a portal error page yields zero courses, and a
+blind replace would wipe the semester.
 
 ### Working with the database
 

@@ -1,0 +1,379 @@
+/**
+ * Load one (semester, scope) from the scraper's output into D1.
+ *
+ * This replaces stepfinal_upsync.py — the copy-into-src/data/api step and the
+ * hand-written module-map / index-map aggregation that followed it. Those two
+ * derived files are gone: the equivalent queries live in
+ * src/lib/server/db/queries.ts.
+ *
+ *   node scripts/db/load-semester.mjs --sem 2025;2
+ *   node scripts/db/load-semester.mjs --sem 2025;2 --scope exams
+ *   node scripts/db/load-semester.mjs --sem all --from 2025;1
+ *   node scripts/db/load-semester.mjs --sem 2025;2 --dry-run
+ *   node scripts/db/load-semester.mjs --sem 2025;2 --database ntu-mods-dev
+ *
+ * The unit of work is (semester, scope), because courses and exams have
+ * independent sources and independent triggers — re-running `courses` must not
+ * delete the exams that were loaded from a separately downloaded CSV.
+ *
+ * Each load is a DELETE of that scope's tables for that semester followed by
+ * INSERTs, applied as ONE file through `wrangler d1 execute --file`, which is
+ * atomic across the whole file. A failed load leaves the semester exactly as it
+ * was; there is no half-loaded state.
+ */
+
+import { execFileSync } from "child_process"
+import fs from "fs"
+import path from "path"
+import { DatabaseSync } from "node:sqlite"
+
+import { d1Query } from "./d1.mjs"
+import { ROOT, SEM_ORDER, parseSem } from "./derive.mjs"
+import {
+  SCOPE_TABLES,
+  deleteScope,
+  hashOf,
+  prepareAll,
+  recordLoad,
+  upsertSemester,
+  writeCourses,
+  writeExams,
+} from "./rows.mjs"
+
+const argv = process.argv.slice(2)
+const arg = (name, fallback) => {
+  const i = argv.indexOf(`--${name}`)
+  return i > -1 ? argv[i + 1] : fallback
+}
+const flag = (name) => argv.includes(`--${name}`)
+
+const SCRAPER_DATA = path.resolve(ROOT, arg("source", "scraper/data"))
+const LOCAL_DB = path.resolve(ROOT, arg("db", "db/ntu-mods.sqlite"))
+const DATABASE = arg("database", process.env.NTU_MODS_D1 ?? "ntu-mods")
+const OUT_DIR = path.join(ROOT, "db/out")
+const DRY_RUN = flag("dry-run")
+const FORCE = flag("force")
+/** Refuse a load that shrinks a table by more than this against the last load. */
+const SHRINK_LIMIT = Number(arg("shrink-limit", 0.2))
+/** D1 rejects a single statement over ~100KB, so batch INSERTs by bytes. */
+const MAX_STMT_BYTES = 90_000
+const MAX_STMT_ROWS = 500
+
+const readJson = (p) => JSON.parse(fs.readFileSync(p, "utf-8"))
+const semKey = (code) => code.replace(";", "_")
+
+function sqlLiteral(v) {
+  if (v === null || v === undefined) return "NULL"
+  if (typeof v === "number") return Number.isFinite(v) ? String(v) : "NULL"
+  const s = String(v)
+  for (let i = 0; i < s.length; i++) {
+    if (s.charCodeAt(i) < 0x20) {
+      return `CAST(x'${Buffer.from(s, "utf8").toString("hex")}' AS TEXT)`
+    }
+  }
+  return `'${s.replaceAll("'", "''")}'`
+}
+
+function* insertStatements(db, table, where, params) {
+  const cols = db
+    .prepare(`SELECT name FROM pragma_table_info(?)`)
+    .all(table)
+    .map((r) => r.name)
+  const colList = cols.map((c) => `"${c}"`).join(", ")
+  const header = `INSERT INTO "${table}" (${colList}) VALUES\n`
+  const rows = db.prepare(`SELECT ${colList} FROM "${table}" ${where}`).all(...params)
+
+  let batch = []
+  let bytes = header.length
+  for (const row of rows) {
+    const tuple = `(${cols.map((c) => sqlLiteral(row[c])).join(",")})`
+    if (
+      batch.length > 0 &&
+      (bytes + tuple.length > MAX_STMT_BYTES || batch.length >= MAX_STMT_ROWS)
+    ) {
+      yield `${header}${batch.join(",\n")};\n`
+      batch = []
+      bytes = header.length
+    }
+    batch.push(tuple)
+    bytes += tuple.length + 2
+  }
+  if (batch.length > 0) yield `${header}${batch.join(",\n")};\n`
+}
+
+/**
+ * Blind replace plus automation is how a semester gets wiped: if the portal
+ * returns an error page or a session expires, the scraper yields zero courses
+ * and the load silently deletes everything. Compare against the last recorded
+ * load and refuse a large drop.
+ */
+function checkShrink(sem, scope, counts) {
+  let previous
+  try {
+    previous = d1Query(
+      `SELECT row_counts FROM loads WHERE sem = '${sem}' AND scope = '${scope}'`,
+      { database: DATABASE }
+    )[0]
+  } catch (err) {
+    console.warn(`  could not read previous load counts: ${err.message}`)
+    return
+  }
+  if (!previous?.row_counts) {
+    console.log("  no previous load recorded — nothing to compare against")
+    return
+  }
+
+  const before = JSON.parse(previous.row_counts)
+  const problems = []
+  for (const [table, was] of Object.entries(before)) {
+    const now = counts[table] ?? 0
+    if (was > 0 && now < was * (1 - SHRINK_LIMIT)) {
+      problems.push(
+        `${table}: ${was} -> ${now} (${(((was - now) / was) * 100).toFixed(0)}% drop)`
+      )
+    }
+  }
+  if (problems.length === 0) return
+
+  const message =
+    `Row counts dropped sharply for ${sem}/${scope}:\n` +
+    problems.map((p) => `    ${p}`).join("\n")
+  if (!FORCE) {
+    throw new Error(
+      `${message}\n  Refusing to load. This is what a failed scrape looks like ` +
+        `(expired session, portal error page). Re-run with --force if the drop is real.`
+    )
+  }
+  console.warn(`${message}\n  --force given, continuing.`)
+}
+
+function applyToD1(file) {
+  execFileSync(
+    "npx",
+    ["wrangler", "d1", "execute", DATABASE, "--remote", "--yes", "--file", file],
+    { stdio: "inherit" }
+  )
+}
+
+/**
+ * Stage the semester in the local SQLite file and emit that scope as SQL.
+ *
+ * The staging transaction is left OPEN. The SQL is generated by reading back
+ * the uncommitted rows, and the caller decides: commit only after D1 has
+ * accepted the load, roll back otherwise. The local file is a read replica of
+ * D1, so committing a load that D1 rejected — or one that was only a dry run —
+ * would silently desync the two.
+ */
+function buildSql(sem, scopes, sources, semesterLabel) {
+  const db = new DatabaseSync(LOCAL_DB)
+  const stmts = prepareAll(db)
+  const conflicts = []
+  const counts = {}
+  const loadedAt = new Date().toISOString()
+
+  db.exec("BEGIN")
+  upsertSemester(db, sem, semesterLabel)
+  for (const scope of scopes) {
+    deleteScope(db, sem, scope)
+    if (scope === "courses") {
+      counts.courses = writeCourses(db, sem, sources, { stmts, conflicts })
+      recordLoad(db, sem, "courses", counts.courses, hashOf(sources), loadedAt, { stmts })
+    } else {
+      counts.exams = writeExams(db, sem, sources.exams, { stmts })
+      recordLoad(db, sem, "exams", counts.exams, hashOf(sources.exams), loadedAt, { stmts })
+    }
+  }
+
+  fs.mkdirSync(OUT_DIR, { recursive: true })
+  const out = path.join(OUT_DIR, `${sem}_${scopes.join("-")}.sql`)
+  const chunks = []
+
+  // The semesters catalogue is the one table where upsert is correct: it is
+  // append-only reference data, and NTU does not un-publish past semesters.
+  const s = parseSem(sem)
+  chunks.push(
+    `INSERT INTO semesters (sem, code, year, semester, name, sort_key)\n` +
+      `VALUES (${[
+        s.sem,
+        s.code,
+        s.year,
+        s.semester,
+        semesterLabel ?? "",
+        s.sortKey,
+      ]
+        .map(sqlLiteral)
+        .join(", ")})\n` +
+      `ON CONFLICT(sem) DO UPDATE SET code = excluded.code, name = excluded.name,\n` +
+      `  year = excluded.year, semester = excluded.semester, sort_key = excluded.sort_key;\n`
+  )
+
+  // Programmes are global reference data keyed by a unique programme string;
+  // inserting the ones this semester uses is additive and idempotent.
+  for (const stmt of insertStatements(
+    db,
+    "programmes",
+    `WHERE id IN (SELECT DISTINCT programme_id FROM offering_programmes WHERE sem = ?)`,
+    [sem]
+  )) {
+    chunks.push(stmt.replace('INSERT INTO "programmes"', 'INSERT OR IGNORE INTO "programmes"'))
+  }
+
+  for (const scope of scopes) {
+    for (const table of SCOPE_TABLES[scope]) {
+      chunks.push(`DELETE FROM "${table}" WHERE sem = ${sqlLiteral(sem)};\n`)
+    }
+    chunks.push(
+      `DELETE FROM "loads" WHERE sem = ${sqlLiteral(sem)} AND scope = ${sqlLiteral(scope)};\n`
+    )
+  }
+  for (const scope of scopes) {
+    for (const table of SCOPE_TABLES[scope]) {
+      for (const stmt of insertStatements(db, table, `WHERE sem = ?`, [sem])) {
+        chunks.push(stmt)
+      }
+    }
+    for (const stmt of insertStatements(
+      db,
+      "loads",
+      `WHERE sem = ? AND scope = ?`,
+      [sem, scope]
+    )) {
+      chunks.push(stmt)
+    }
+  }
+
+  fs.writeFileSync(out, chunks.join(""))
+  return {
+    out,
+    counts,
+    conflicts,
+    commit: () => {
+      db.exec("COMMIT")
+      db.close()
+    },
+    rollback: () => {
+      db.exec("ROLLBACK")
+      db.close()
+    },
+  }
+}
+
+function loadOne(semCode, scopes) {
+  const sem = semKey(semCode)
+  console.log(`\n${sem}  scopes=${scopes.join(",")}`)
+
+  const sources = {}
+  if (scopes.includes("courses")) {
+    const metaPath = path.join(SCRAPER_DATA, `03_mdata_${sem}.json`)
+    const idxPath = path.join(SCRAPER_DATA, `04_indexes_${sem}.json`)
+    if (!fs.existsSync(metaPath) || !fs.existsSync(idxPath)) {
+      throw new Error(
+        `Missing scraper output for ${sem}. Expected:\n  ${metaPath}\n  ${idxPath}\n` +
+          `Run the scraper first: python scraper/main.py --semester "${semCode}"`
+      )
+    }
+    sources.metadata = readJson(metaPath)
+    sources.indexes = readJson(idxPath)
+  }
+  if (scopes.includes("exams")) {
+    const examPath = path.join(SCRAPER_DATA, `05_exams_${sem}.json`)
+    sources.exams = fs.existsSync(examPath) ? readJson(examPath) : {}
+  }
+
+  const label = semesterLabelFor(sem)
+  const staged = buildSql(sem, scopes, sources, label)
+
+  try {
+    for (const [scope, c] of Object.entries(staged.counts)) {
+      console.log(`  ${scope}: ${JSON.stringify(c)}`)
+      checkShrink(sem, scope, c)
+    }
+    if (staged.conflicts.length) {
+      console.warn(`  ${staged.conflicts.length} conflict(s):`)
+      for (const c of staged.conflicts.slice(0, 10)) console.warn(`    ${c}`)
+    }
+
+    console.log(
+      `  ${staged.out} (${(fs.statSync(staged.out).size / 1e6).toFixed(1)} MB)`
+    )
+
+    if (DRY_RUN) {
+      console.log("  --dry-run: not applied")
+      staged.rollback()
+      return
+    }
+
+    applyToD1(staged.out)
+    staged.commit()
+    console.log(`  applied to ${DATABASE}`)
+  } catch (err) {
+    staged.rollback()
+    throw err
+  }
+}
+
+/** Prefer the portal's own name for the semester when step 1 has been run. */
+function semesterLabelFor(sem) {
+  const p = path.join(SCRAPER_DATA, "01_semesters.json")
+  if (!fs.existsSync(p)) return undefined
+  const code = sem.replace("_", ";")
+  return readJson(p).find((s) => s.code === code)?.name
+}
+
+function main() {
+  const semArg = arg("sem")
+  if (!semArg) {
+    console.error(
+      "Usage: node scripts/db/load-semester.mjs --sem <YYYY;S|all> " +
+        "[--scope courses|exams] [--from YYYY;S] [--dry-run] [--force]"
+    )
+    process.exit(1)
+  }
+
+  const scopeArg = arg("scope")
+  const scopes = scopeArg ? [scopeArg] : ["courses", "exams"]
+  for (const s of scopes) {
+    if (!SCOPE_TABLES[s]) throw new Error(`Unknown scope: ${s}`)
+  }
+
+  if (!fs.existsSync(LOCAL_DB)) {
+    throw new Error(
+      `No local database at ${LOCAL_DB}. Run \`yarn db:pull\` first — the load ` +
+        `is staged locally before being applied, so it must start from the ` +
+        `current contents of D1.`
+    )
+  }
+
+  let semesters
+  if (semArg.toLowerCase() === "all") {
+    // Every semester the scraper has produced course output for. Ordering is
+    // by sort_key, never by the portal's list position — that list is not
+    // self-consistent (AY2025 lists 2,1,S while AY2024 lists 1,2,S), which is
+    // what made `main.py --from` silently skip semesters.
+    semesters = fs
+      .readdirSync(SCRAPER_DATA)
+      .map((f) => /^03_mdata_(\d{4}_[12ST])\.json$/.exec(f)?.[1])
+      .filter(Boolean)
+      .map((sem) => parseSem(sem))
+      .sort((a, b) => a.sortKey - b.sortKey)
+      .map((s) => s.code)
+
+    const from = arg("from")
+    if (from) {
+      const p = parseSem(semKey(from))
+      const cutoff = Number(p.year) * 10 + SEM_ORDER[p.semester]
+      semesters = semesters.filter((code) => {
+        const q = parseSem(semKey(code))
+        return Number(q.year) * 10 + SEM_ORDER[q.semester] >= cutoff
+      })
+    }
+    console.log(`${semesters.length} semester(s) to load`)
+  } else {
+    semesters = [semArg]
+  }
+
+  for (const code of semesters) loadOne(code, scopes)
+  console.log("\nDone.")
+}
+
+main()

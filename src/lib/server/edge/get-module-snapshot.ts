@@ -1,4 +1,4 @@
-import { env } from "cloudflare:workers"
+import { env, waitUntil } from "cloudflare:workers"
 
 import type { ApiExam } from "@/lib/server/get-module-exam-data"
 import type { ApiModule } from "@/lib/server/get-module-metadata"
@@ -53,11 +53,19 @@ async function fetchJson<T>(
   return promise
 }
 
-// Reads a single module's slice straight from KV (populated by
-// scripts/populate-module-kv.mjs) instead of fetching and parsing the whole
-// semester file just to key into it. Falls back to the whole-file path —
-// via wholeFileFallback — when the binding isn't configured (local dev) or
-// the key hasn't been populated yet, so the route keeps working either way.
+// Reads a single module's slice straight from KV instead of fetching and
+// parsing the whole semester file just to key into it. Falls back to the
+// whole-file path — via wholeFileFallback — when the binding isn't
+// configured (local dev) or the key hasn't been populated yet.
+//
+// On a miss, self-heals by writing the module the fallback just parsed back
+// to KV (fire-and-forget via waitUntil, doesn't block the response). Every
+// module/year/semester combo therefore only ever pays the full-file parse
+// cost once, on its first ever request — no separate population step to
+// remember when the scraper adds a new semester. Historic snapshot data is
+// immutable in practice (past semesters don't get re-scraped), so a written
+// key never goes stale; scripts/populate-module-kv.mjs remains available to
+// force-refresh KV in bulk if that assumption is ever wrong.
 async function fetchModuleField<T>(
   kvPrefix: "metadata" | "indexes",
   year: string,
@@ -65,18 +73,30 @@ async function fetchModuleField<T>(
   code: string,
   wholeFileFallback: () => Promise<T | null>
 ): Promise<T | null> {
+  const kvKey = `${kvPrefix}:${year}_${semester}:${code}`
+
   if (env.MODULE_DATA) {
     try {
-      const fromKv = await env.MODULE_DATA.get<T>(
-        `${kvPrefix}:${year}_${semester}:${code}`,
-        "json"
-      )
+      const fromKv = await env.MODULE_DATA.get<T>(kvKey, "json")
       if (fromKv !== null) return fromKv
     } catch {
       // KV unavailable/erroring — fall through to the whole-file path below.
     }
   }
-  return wholeFileFallback()
+
+  const value = await wholeFileFallback()
+
+  if (value !== null && env.MODULE_DATA) {
+    const kv = env.MODULE_DATA
+    waitUntil(
+      kv.put(kvKey, JSON.stringify(value)).catch(() => {
+        // Best-effort backfill — a failed write just means this combo keeps
+        // paying the parse cost until a later request succeeds.
+      })
+    )
+  }
+
+  return value
 }
 
 export async function getModuleSnapshot(

@@ -8,6 +8,11 @@ interface WorkerEnv {
   ASSETS: {
     fetch(input: string | URL | Request): Promise<Response>
   }
+  // Per-module slices of the semester indexes/metadata files — see
+  // src/lib/server/edge/get-module-snapshot.ts for the key shape.
+  MODULE_DATA?: {
+    get<T>(key: string, type: "json"): Promise<T | null>
+  }
   RESEND_KEY?: string
   PUBLIC_POSTHOG_TOKEN?: string
 }

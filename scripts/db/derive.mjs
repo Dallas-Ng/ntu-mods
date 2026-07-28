@@ -18,8 +18,8 @@ export const ROOT = path.join(__dirname, "../..")
 
 /**
  * Faculty keys, read straight out of src/lib/constants.ts rather than
- * duplicated, so the two can never drift. Order matters: getModuleFaculty is
- * last-match-wins, and the original iterates the object in insertion order.
+ * duplicated, so the two can never drift. Order matters: the rule is
+ * last-match-wins, and the original iterated the object in insertion order.
  */
 function readFacultyKeys() {
   const src = fs.readFileSync(
@@ -38,8 +38,12 @@ function readFacultyKeys() {
 export const FACULTY_KEYS = readFacultyKeys()
 
 /**
- * Byte-for-byte reproduction of src/lib/get-module-faculty.ts.
- * Last match across all segments of all searchKeys wins; "" when none match.
+ * A module's faculty, from its programme keys.
+ *
+ * This is now the only implementation — it replaced src/lib/get-module-faculty.ts,
+ * which ran in the browser on every card render. Behaviour is preserved exactly:
+ * the last matching segment across all searchKeys wins, and the result is "" if
+ * nothing matches.
  */
 export function deriveFaculty(searchKeys) {
   let result = ""
@@ -54,8 +58,10 @@ export function deriveFaculty(searchKeys) {
 }
 
 /**
- * Byte-for-byte reproduction of src/lib/get-module-category.ts, INCLUDING its
- * bugs, so the migration is provably behaviour-preserving:
+ * A module's categories, from its programme keys.
+ *
+ * This replaced src/lib/get-module-category.ts and reproduces it exactly,
+ * INCLUDING its bugs, so the migration is provably behaviour-preserving:
  *
  *   - The CORE test is `some searchKey has 4 semicolon-separated segments`, but
  *     all 744 distinct searchKeys in the corpus have exactly 4 segments. So

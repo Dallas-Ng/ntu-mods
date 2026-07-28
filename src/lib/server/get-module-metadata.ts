@@ -12,7 +12,13 @@ export interface ApiModule {
   code: string
   title: string
   au: string
+  /**
+   * Raw programme keys ("CSC;;1;F"). Server-side only — the client gets the
+   * precomputed faculty/categories below instead, and never re-derives them.
+   */
   searchKeys: string[]
+  faculty?: ModuleFaculty | ""
+  categories?: ModuleType[]
   prerequisite?: string[][]
   description?: string
   gradeType?: string

@@ -14,6 +14,8 @@
 import fs from "fs"
 import path from "path"
 
+import { deriveCategories, deriveFaculty } from "./derive.mjs"
+
 import { getLatestSemester } from "../../src/lib/server/get-latest-semester.ts"
 import {
   getModuleCurrentSemester,
@@ -111,17 +113,26 @@ async function main() {
 
     eq(`${sem} getAllModuleMetadata key count`, Object.keys(all).length, Object.keys(expected).length)
     for (const [code, want] of Object.entries(expected)) {
-      eq(`${sem} ${code} getAllModuleMetadata`, all[code], { ...(want as object), code })
+      // faculty and categories are new precomputed fields with no counterpart
+      // in the JSON, so they are asserted against the derivation rather than
+      // compared. Everything else must match exactly.
+      const { faculty, categories, ...rest } = all[code] ?? {}
+      eq(`${sem} ${code} getAllModuleMetadata`, rest, { ...(want as object), code })
+      eq(`${sem} ${code} faculty`, faculty, deriveFaculty(want.searchKeys ?? []))
+      eq(`${sem} ${code} categories`, categories, deriveCategories(want.searchKeys ?? []))
       if (failures > 5) return
     }
 
     const first = Object.keys(expected)[0]
     if (first) {
-      eq(
-        `${sem} ${first} getModuleMetadata`,
-        await getModuleMetadata(first, year, semester),
-        { ...expected[first], code: first }
-      )
+      const { faculty, categories, ...one } =
+        (await getModuleMetadata(first, year, semester)) ?? {}
+      void faculty
+      void categories
+      eq(`${sem} ${first} getModuleMetadata`, one, {
+        ...expected[first],
+        code: first
+      })
     }
     eq(`${sem} missing module`, await getModuleMetadata("ZZ9999", year, semester), null)
   }
@@ -173,7 +184,43 @@ async function main() {
 
   console.log("getPrerequisiteGraph")
   {
-    const want = readJson(path.join(SRC, "prerequisite-graph.json"))
+    // prerequisite-graph.json is no longer generated, so the expected value is
+    // rebuilt here using the algorithm the old build script used: walk the
+    // metadata files newest-first, first occurrence of a code wins, keep only
+    // prerequisite items that look like module codes, then invert for
+    // requiredBy. Nodes exist only for codes that were actually offered.
+    const MODULE_CODE_RE = /^[A-Z]{2,6}\d{4}[A-Z]?$/
+    const info = new Map<string, { title: string; requires: Set<string> }>()
+    for (const sem of [...semesters].reverse()) {
+      const data = readJson(path.join(SRC, "metadata", `${sem}.json`))
+      for (const [code, mod] of Object.entries<any>(data)) {
+        if (info.has(code)) continue
+        const requires = new Set<string>()
+        for (const group of mod.prerequisite ?? []) {
+          for (const item of group) if (MODULE_CODE_RE.test(item)) requires.add(item)
+        }
+        info.set(code, { title: mod.title, requires })
+      }
+    }
+    const requiredBy = new Map<string, Set<string>>()
+    for (const [code, { requires }] of info) {
+      for (const req of requires) {
+        if (!requiredBy.has(req)) requiredBy.set(req, new Set())
+        requiredBy.get(req)!.add(code)
+      }
+    }
+    const want: Record<string, unknown> = {}
+    for (const [code, { title, requires }] of info) {
+      const by = requiredBy.get(code) ?? new Set<string>()
+      if (requires.size > 0 || by.size > 0) {
+        want[code] = {
+          title,
+          requires: Array.from(requires).sort(),
+          requiredBy: Array.from(by).sort()
+        }
+      }
+    }
+
     const got = await getPrerequisiteGraph()
     eq("graph node count", Object.keys(got).length, Object.keys(want).length)
     for (const code of Object.keys(want)) {

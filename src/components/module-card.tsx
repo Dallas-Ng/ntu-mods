@@ -1,6 +1,5 @@
+import type { AllModule } from "@/types/mods"
 import { MODULE_CATEGORY } from "@/lib/constants"
-import { getModuleCategories } from "@/lib/get-module-category"
-import { getModuleFaculty } from "@/lib/get-module-faculty"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import type { ApiModule } from "@/lib/server/get-module-metadata"
 import { cn } from "@/lib/utils"
@@ -41,15 +40,17 @@ function highlightText(text: string, query: string) {
   )
 }
 
+// AllModule, not ApiModule: these render from the modules.json list payload,
+// which now carries only the fields the list view actually reads.
 interface ModuleCardDetailProps {
   code: string
-  moduleData: ApiModule
+  moduleData: AllModule
   searchTerm?: string
   timetableButton?: React.ReactNode
   favouriteButton?: React.ReactNode
 }
 
-function getHref(moduleData: ApiModule, code: string) {
+function getHref(moduleData: AllModule, code: string) {
   const isCurrentSemester = moduleData.isCurrentSemester !== false
   return isCurrentSemester ||
     !moduleData.latestYear ||
@@ -70,8 +71,8 @@ export const ModuleCardDetail = ({
   favouriteButton
 }: ModuleCardDetailProps) => {
   const isCurrentSemester = moduleData.isCurrentSemester !== false
-  const categories = getModuleCategories(moduleData.searchKeys)
-  const faculty = getModuleFaculty(code, moduleData.searchKeys)
+  const categories = moduleData.categories ?? []
+  const faculty = moduleData.faculty ?? ""
   const hasActions = timetableButton || favouriteButton
 
   return (
@@ -143,8 +144,8 @@ export const ModuleListRow = ({
   favouriteButton
 }: ModuleCardDetailProps) => {
   const isCurrentSemester = moduleData.isCurrentSemester !== false
-  const categories = getModuleCategories(moduleData.searchKeys)
-  const faculty = getModuleFaculty(code, moduleData.searchKeys)
+  const categories = moduleData.categories ?? []
+  const faculty = moduleData.faculty ?? ""
 
   return (
     <div

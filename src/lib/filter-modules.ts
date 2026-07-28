@@ -1,7 +1,5 @@
 import type { AllModule, ModsGroupBy } from "@/types/mods"
 import { MODULE_CATEGORY, MODULE_FACULTY } from "@/lib/constants"
-import { getModuleCategories } from "@/lib/get-module-category"
-import { getModuleFaculty } from "@/lib/get-module-faculty"
 import type { SeasonIndexes } from "@/hooks/use-season-indexes"
 
 export const CODE_QUERY_RE = /^[a-z]{2,4}\d*/i
@@ -22,9 +20,9 @@ export function getGroupKey(module: AllModule, groupBy: ModsGroupBy): string {
     case "au":
       return module.au ?? "?"
     case "faculty":
-      return getModuleFaculty(module.code, module.searchKeys ?? []) || "OTHER"
+      return module.faculty || "OTHER"
     case "type": {
-      const cats = getModuleCategories(module.searchKeys ?? [])
+      const cats = module.categories ?? []
       if (cats.length === 0) return "OTHER"
       return TYPE_PRIORITY.find((p) => cats.includes(p)) ?? cats[0]
     }
@@ -98,16 +96,12 @@ export function filterModules(
 
   if (opts.moduleType !== "all") {
     filtered = filtered.filter((m) =>
-      getModuleCategories(m.searchKeys ?? []).includes(
-        opts.moduleType as ModuleType
-      )
+      (m.categories ?? []).includes(opts.moduleType as ModuleType)
     )
   }
 
   if (opts.moduleFaculty !== "all") {
-    filtered = filtered.filter(
-      (m) => getModuleFaculty(m.code, m.searchKeys ?? []) === opts.moduleFaculty
-    )
+    filtered = filtered.filter((m) => m.faculty === opts.moduleFaculty)
   }
 
   if (opts.moduleLevel !== "all") {

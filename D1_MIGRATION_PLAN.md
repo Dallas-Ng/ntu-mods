@@ -464,6 +464,15 @@ correct definition. `offerings.categories` deliberately reproduces the *current*
 buggy behaviour so the migration is provably behaviour-preserving; fixing it is a
 separate, visible commit.
 
+Confirmed by measurement after the migration: the CORE filter matches
+**4,317 of 4,317** modules. For comparison, GLOAD matches 3,131, MLOAD 1,766,
+GERP 237 and CNY 98.
+
+A second, smaller bug in the same function: `USP` is mapped to `CNY`, so the
+`USP` bucket (6 programme keys) is indistinguishable from Chinese New Year
+modules. `TYPE_PRIORITY` in `filter-modules.ts` still lists `USP`, which
+therefore can never match.
+
 ## 8a. Deviation in step 9: steps 3/4/5 were kept
 
 The plan said steps 3/4/5 and `stepfinal_upsync.py` would all be replaced by "a

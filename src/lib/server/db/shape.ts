@@ -94,6 +94,11 @@ export function toApiModule(
     au: row.au
   }
 
+  // Precomputed at load. Callers use these rather than re-deriving them from
+  // searchKeys — see scripts/db/derive.mjs for the (bug-compatible) rules.
+  module.faculty = (row.faculty ?? "") as ApiModule["faculty"]
+  module.categories = parseJson<ModuleType[]>(row.categories) ?? []
+
   setOptional(module, "description", row.description)
   setOptional(module, "gradeType", row.grade_type)
   setOptional(module, "notAvailableToProgramme", row.not_available_to_programme)

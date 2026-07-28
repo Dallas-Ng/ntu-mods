@@ -416,19 +416,53 @@ the `MODULE_DATA` KV namespace, the self-heal block in `get-module-snapshot.ts`
 8. Delete the JSON trees, update `.gitignore`, fix the stale README §Data Pipeline.
 9. Rewrite the scraper's transform half against the new schema + scope model.
 
-## 9. Verify early (unresolved)
+## 9. Verify early — RESOLVED
 
-- **D1 transaction size.** One semester is ~30k rows. Check what a single
-  `batch()` / `execute --file` can do in one transaction. If it needs chunking,
-  per-semester atomicity gets harder — and "a failed load leaves half a semester" is
-  exactly the failure mode this design exists to prevent. **Resolve this before
-  writing the loader.**
-- **Plan tier.** A full 790k-row rebuild exceeds the free tier's 100k rows/day
-  written; per-semester loads (~30k) fit. Note `wrangler.jsonc` already enables
-  `observability.traces`, which requires Workers Paid — so the account is likely
-  already on Paid. Confirm.
-- **Prerequisite AND/OR semantics** (finding 8) — decide before the loader bakes an
-  interpretation in.
+Measured against a real dev database, `ntu-mods-dev`
+(`08aaa8e2-45a6-4598-b74d-3a7194bf1f36`, APAC/SIN). Production is untouched.
+
+**D1 transaction size — resolved, no chunking needed.**
+`wrangler d1 execute --remote --file` is **atomic across the entire file**. The
+whole 790k-row corpus loaded as one transaction: 1,823 statements, 784,922 row
+changes, 33.6 s of SQL time. Verified by deliberately appending a bad statement
+to a scoped load — the file's `DELETE`s and a sentinel `INSERT` both rolled back,
+leaving the semester exactly as it was. Per-semester atomicity is therefore free.
+The largest single semester (`2023_1`: 1,147 offerings / 7,797 indexes / 20,322
+slots) loads in 117 statements and 1.2 s.
+
+Three hard D1 limits found while getting there:
+
+| Limit | Value | Consequence |
+| --- | --- | --- |
+| Max SQL statement length | ~100 KB | Batch INSERT rows by **bytes**, not row count. A fixed 500-row batch of `offerings` (each with a full description) hit `statement too long: SQLITE_TOOBIG`. `scripts/db/dump-sql.mjs` targets 90 KB. |
+| Compound `SELECT` terms | fewer than 10 | A 10-term `UNION ALL` count query fails with `too many terms in compound SELECT [code: 7500]`. Use scalar subqueries. |
+| Import polling | flaky | One scoped load failed with `Not currently importing anything` and succeeded on retry. Loads are idempotent (replace, not append), so blind retry is safe — but the pipeline must retry rather than treat it as a data error. |
+
+**Plan tier — confirmed Paid, empirically.** The full load reported
+`rows_written: 3,023,108` (index writes included) in a single operation and was
+not throttled; the free tier caps at 100k written rows/day. Note that figure:
+a full rebuild costs ~3M billed writes, and even one semester costs ~230k, so
+routine per-semester loads also exceed the free daily allowance. Resulting
+database size: **108.9 MB**, against a 10 GB per-database limit.
+
+**Prerequisite AND/OR semantics — decided: store verbatim, interpret never.**
+`prerequisites` keeps `group_no` / `item_no` exactly as scraped and always
+populates `raw_text`. The loader bakes in no interpretation, so finding 8 stays
+fixable in the read layer without a rescrape.
+
+### Additional finding (11): every module is tagged CORE
+
+All 744 distinct `searchKeys` in the corpus have exactly 4 semicolon-separated
+segments, but `src/lib/get-module-category.ts` tests for exactly that to decide
+`CORE`. So every offering with at least one `searchKey` — which is all of them —
+is tagged `CORE`, and the CORE filter is a no-op.
+
+Segment 2 is the study year (`1`–`5`) for a real programme core listing and `X`
+for the `GLOAD` / `MLOAD` / `GERP` / `USP` / `CNY` / `EP` buckets, so the intended
+test was almost certainly "segment 2 is a digit". `programmes.is_core` stores that
+correct definition. `offerings.categories` deliberately reproduces the *current*
+buggy behaviour so the migration is provably behaviour-preserving; fixing it is a
+separate, visible commit.
 
 ## 10. Constraints
 

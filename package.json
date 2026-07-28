@@ -2,6 +2,10 @@
   "name": "ntu-mods",
   "version": "0.1.0",
   "private": true,
+  "//engines": "The build reads the module database through node:sqlite, which only exists from Node 22.5. See also .node-version, which is what Cloudflare Workers Builds reads.",
+  "engines": {
+    "node": ">=22.5"
+  },
   "scripts": {
     "data": "node scripts/db/ensure-db.mjs && tsx scripts/build-static-data.mts",
     "dev": "yarn data && astro dev",

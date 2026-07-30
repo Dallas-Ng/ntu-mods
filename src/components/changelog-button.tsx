@@ -1,6 +1,7 @@
 "use client"
 
 import { Sparkles } from "lucide-react"
+import posthog from "posthog-js"
 
 import { cn } from "@/lib/utils"
 import { useChangelogUnseenCount } from "@/hooks/use-changelog-unseen"
@@ -19,7 +20,9 @@ const ChangelogButton = () => {
       aria-label={
         unseen > 0 ? `Changelog, ${unseen} new updates` : "Changelog"
       }>
-      <a href="/changelog">
+      <a
+        href="/changelog"
+        onClick={() => posthog.capture("changelog_opened", { source: "navbar_icon" })}>
         <Sparkles className="size-5" />
         {unseen > 0 && (
           <span

@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
 import {
@@ -105,7 +105,7 @@ export function useTimetableGeneration() {
 
       updateTimetable(moduleTimetable, planIndex)
 
-      const source = customCourses[timetableIndex] ?? []
+      const source = customCourses[planIndex] ?? []
       if (source.length > 0) {
         setCustomCourses(
           source.map((course) => ({
@@ -117,7 +117,7 @@ export function useTimetableGeneration() {
         )
       }
     },
-    [customCourses, timetableIndex, setCustomCourses, updateTimetable]
+    [customCourses, setCustomCourses, updateTimetable]
   )
 
   const generate = useCallback(
@@ -201,6 +201,13 @@ export function useTimetableGeneration() {
     setSuggestions([])
     setIsDiagnosing(false)
   }, [])
+
+  // Generated results belong to whichever plan was viewed when generate()
+  // ran. Switching plans invalidates them, so cycling left/right must not
+  // silently apply a stale combination to the newly viewed plan.
+  useEffect(() => {
+    reset()
+  }, [timetableIndex, reset])
 
   return {
     combinations,

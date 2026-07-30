@@ -6,6 +6,7 @@ import {
   InfoIcon,
   LockIcon,
   LockOpenIcon,
+  RotateCcwIcon,
   Settings2Icon,
   WandIcon,
   XIcon
@@ -20,6 +21,7 @@ import {
   CONSECUTIVE_OPTIONS,
   GAP_OPTIONS,
   GENERATION_INDEX_TYPES,
+  isDefaultGenerationConfig,
   TIME_OPTIONS
 } from "@/lib/generation-config"
 import { latestSemester, latestYear } from "@/lib/semesters"
@@ -265,6 +267,11 @@ const SettingsForm = () => {
   const [blockOpen, setBlockOpen] = useState(false)
   const config = useBoundState((s) => s.generationConfig)
   const updateConfig = useBoundState((s) => s.updateGenerationConfig)
+  const resetConfig = useBoundState((s) => s.resetGenerationConfig)
+  const lockedModules = useBoundState((s) => s.lockedModules)
+
+  const isPristine =
+    isDefaultGenerationConfig(config) && lockedModules.length === 0
 
   const toggleSkippable = (type: IndexType) => {
     const current = config.skippableTypes
@@ -442,6 +449,29 @@ const SettingsForm = () => {
           </span>
           <span className="text-muted-foreground/60">Edit</span>
         </button>
+      </div>
+
+      {/* Reset */}
+      <div className="flex items-center justify-between border-t pt-3">
+        <span className="text-muted-foreground text-xs">
+          Restores every setting above, including blocked slots and index locks
+        </span>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={isPristine}
+          onClick={() => {
+            resetConfig()
+            posthog.capture("timetable_generation_settings_reset", {
+              locked_modules: lockedModules.length,
+              blacklisted_slots: config.blacklistedTimeslots.length,
+              lunch_break_days: config.lunchBreaks.length
+            })
+          }}
+          className="h-7 shrink-0 gap-1.5 text-xs">
+          <RotateCcwIcon className="size-3" />
+          Reset
+        </Button>
       </div>
 
       <Dialog open={blockOpen} onOpenChange={setBlockOpen}>

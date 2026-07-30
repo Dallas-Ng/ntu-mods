@@ -52,3 +52,28 @@ export const DEFAULT_GENERATION_CONFIG: GenerationConfig = {
   avoidBackToBackTypes: [],
   collisionIgnoreTypes: {}
 }
+
+/**
+ * Every default is either a scalar or an empty collection, so "is untouched"
+ * reduces to scalar equality plus emptiness checks — no deep compare needed.
+ */
+export function isDefaultGenerationConfig(config: GenerationConfig): boolean {
+  const d = DEFAULT_GENERATION_CONFIG
+  return (
+    config.dayStartTime === d.dayStartTime &&
+    config.dayEndTime === d.dayEndTime &&
+    config.maxConsecutiveSlots === d.maxConsecutiveSlots &&
+    config.minGapBetweenClasses === d.minGapBetweenClasses &&
+    config.loadPreference === d.loadPreference &&
+    (config.maxDailyHours ?? 0) === d.maxDailyHours &&
+    (config.preferredDayOrder ?? "none") === d.preferredDayOrder &&
+    config.lunchBreaks.length === 0 &&
+    config.skippableTypes.length === 0 &&
+    config.blacklistedTimeslots.length === 0 &&
+    (config.preferredFreeDays ?? []).length === 0 &&
+    (config.avoidBackToBackTypes ?? []).length === 0 &&
+    Object.values(config.collisionIgnoreTypes ?? {}).every(
+      (types) => types.length === 0
+    )
+  )
+}

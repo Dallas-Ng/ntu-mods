@@ -27,6 +27,7 @@ export interface TimetableSlice {
   resetTimetables: () => void
   setTimetableCreationMode: (mode: TimetableCreationMode) => void
   updateGenerationConfig: (config: Partial<GenerationConfig>) => void
+  resetGenerationConfig: () => void
   setUniqueTimeslotsOnly: (value: boolean) => void
   toggleModuleLock: (moduleKey: string) => void
   setHasOnboarded: (value: boolean) => void
@@ -136,6 +137,17 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   updateGenerationConfig: (config: Partial<GenerationConfig>) => {
     set((state) => ({
       generationConfig: { ...state.generationConfig, ...config }
+    }))
+  },
+  /**
+   * Index locks are edited inside the same settings modal, so a reset that left
+   * them pinned would keep constraining generation after the user asked for a
+   * clean slate.
+   */
+  resetGenerationConfig: () => {
+    set((_state) => ({
+      generationConfig: DEFAULT_GENERATION_CONFIG,
+      lockedModules: []
     }))
   },
   setUniqueTimeslotsOnly: (value: boolean) => {

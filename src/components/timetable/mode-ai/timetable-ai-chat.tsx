@@ -94,11 +94,13 @@ const TimetableAiChat = () => {
     currentIdx,
     isGenerating,
     truncated,
+    duplicatesSkipped,
     hasGenerated,
     generate,
     navigateTo,
     saveToPlan
   } = useTimetableGeneration()
+  const uniqueTimeslotsOnly = useBoundState((s) => s.uniqueTimeslotsOnly)
 
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState("")
@@ -376,6 +378,8 @@ const TimetableAiChat = () => {
           onNavigate={navigateTo}
           onSaveToPlan={saveToPlan}
           truncated={truncated}
+          uniqueTimeslotsOnly={uniqueTimeslotsOnly}
+          duplicatesSkipped={duplicatesSkipped}
         />
       )}
     </div>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import {
   InfoIcon,
@@ -43,6 +43,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
 import {
   Tooltip,
   TooltipContent,
@@ -537,17 +538,39 @@ const ConfigSummary = () => {
   )
 }
 
+const UniqueOnlyToggle = ({
+  checked,
+  onChange
+}: {
+  checked: boolean
+  onChange: (value: boolean) => void
+}) => (
+  <div className="flex items-center justify-between gap-2 rounded-lg border px-3 py-2">
+    <SectionLabel tip="Skip options that place classes in exactly the same slots and differ only by index number, so all 60 results are layouts you haven't seen.">
+      Unique layouts only
+    </SectionLabel>
+    <Switch
+      size="sm"
+      checked={checked}
+      onCheckedChange={onChange}
+      aria-label="Unique layouts only"
+    />
+  </div>
+)
+
 const TimetableGenerationConfig = () => {
   const [open, setOpen] = useState(false)
-  const [hideDuplicates, setHideDuplicates] = useState(false)
   const { timetable } = useTimetable()
   const generationConfig = useBoundState((s) => s.generationConfig)
+  const uniqueTimeslotsOnly = useBoundState((s) => s.uniqueTimeslotsOnly)
+  const setUniqueTimeslotsOnly = useBoundState((s) => s.setUniqueTimeslotsOnly)
   const {
     combinations,
     currentIdx,
     isGenerating,
     isDiagnosing,
     truncated,
+    duplicatesSkipped,
     hasGenerated,
     suggestions,
     generate,
@@ -557,31 +580,20 @@ const TimetableGenerationConfig = () => {
 
   const noModules = Object.keys(timetable).length === 0
 
-  const visibleCombinations = useMemo(() => {
-    if (!hideDuplicates) return combinations
-    const seen = new Set<string>()
-    return combinations.filter((c) => {
-      if (seen.has(c.timeslotSignature)) return false
-      seen.add(c.timeslotSignature)
-      return true
-    })
-  }, [combinations, hideDuplicates])
-
-  const hiddenCount = combinations.length - visibleCombinations.length
-
-  const visibleCurrentIdx = Math.max(
-    0,
-    visibleCombinations.findIndex((c) => c === combinations[currentIdx])
-  )
-
-  const visibleNavigateTo = useCallback(
-    (visIdx: number) => {
-      const combo = visibleCombinations[visIdx]
-      if (!combo) return
-      const rawIdx = combinations.indexOf(combo)
-      if (rawIdx !== -1) navigateTo(rawIdx)
+  /**
+   * Uniqueness is a search setting, not a display filter — flipping it has to
+   * re-run generation, otherwise the result budget stays spent on look-alikes.
+   */
+  const handleUniqueChange = useCallback(
+    (value: boolean) => {
+      setUniqueTimeslotsOnly(value)
+      if (hasGenerated) generate(generationConfig, undefined, value)
+      posthog.capture("timetable_generation_unique_toggled", {
+        unique_only: value,
+        regenerated: hasGenerated
+      })
     },
-    [visibleCombinations, combinations, navigateTo]
+    [setUniqueTimeslotsOnly, hasGenerated, generate, generationConfig]
   )
 
   return (
@@ -617,26 +629,33 @@ const TimetableGenerationConfig = () => {
           Add modules above before generating
         </p>
       ) : (
-        <Button
-          onClick={() => {
-            generate()
-            posthog.capture("timetable_generation_started", {
-              module_count: Object.keys(timetable).length,
-              load_preference: generationConfig.loadPreference,
-              blacklisted_slots: generationConfig.blacklistedTimeslots.length,
-              lunch_break_days: generationConfig.lunchBreaks.length,
-              free_days_count: generationConfig.preferredFreeDays.length,
-              max_consecutive_slots: generationConfig.maxConsecutiveSlots,
-              min_gap: generationConfig.minGapBetweenClasses,
-              day_start: generationConfig.dayStartTime,
-              day_end: generationConfig.dayEndTime
-            })
-          }}
-          disabled={isGenerating}
-          className="w-full gap-2">
-          <WandIcon className="size-4" />
-          {isGenerating ? "Generating…" : "Generate Timetable"}
-        </Button>
+        <>
+          <UniqueOnlyToggle
+            checked={uniqueTimeslotsOnly}
+            onChange={handleUniqueChange}
+          />
+          <Button
+            onClick={() => {
+              generate()
+              posthog.capture("timetable_generation_started", {
+                module_count: Object.keys(timetable).length,
+                unique_only: uniqueTimeslotsOnly,
+                load_preference: generationConfig.loadPreference,
+                blacklisted_slots: generationConfig.blacklistedTimeslots.length,
+                lunch_break_days: generationConfig.lunchBreaks.length,
+                free_days_count: generationConfig.preferredFreeDays.length,
+                max_consecutive_slots: generationConfig.maxConsecutiveSlots,
+                min_gap: generationConfig.minGapBetweenClasses,
+                day_start: generationConfig.dayStartTime,
+                day_end: generationConfig.dayEndTime
+              })
+            }}
+            disabled={isGenerating}
+            className="w-full gap-2">
+            <WandIcon className="size-4" />
+            {isGenerating ? "Generating…" : "Generate Timetable"}
+          </Button>
+        </>
       )}
 
       {hasGenerated && combinations.length === 0 && !isGenerating && (
@@ -670,14 +689,13 @@ const TimetableGenerationConfig = () => {
 
       {combinations.length > 0 && (
         <TimetableResultsCycler
-          combinations={visibleCombinations}
-          currentIndex={visibleCurrentIdx}
-          onNavigate={visibleNavigateTo}
+          combinations={combinations}
+          currentIndex={currentIdx}
+          onNavigate={navigateTo}
           onSaveToPlan={saveToPlan}
           truncated={truncated}
-          hideDuplicates={hideDuplicates}
-          onHideDuplicatesChange={setHideDuplicates}
-          hiddenCount={hiddenCount}
+          uniqueTimeslotsOnly={uniqueTimeslotsOnly}
+          duplicatesSkipped={duplicatesSkipped}
         />
       )}
     </div>

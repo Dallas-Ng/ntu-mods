@@ -97,7 +97,7 @@ const TimetableLunchEditor = () => {
             {/* Toggle button */}
             <button
               onClick={() => toggleDay(day)}
-              className={`h-5 w-5 shrink-0 rounded-sm border transition-colors ${
+              className={`focus-visible:ring-ring/50 h-5 w-5 shrink-0 cursor-pointer rounded-sm border transition-colors outline-none focus-visible:ring-[3px] ${
                 isEnabled
                   ? "bg-foreground border-transparent"
                   : "border-muted-foreground/40 hover:border-foreground"

@@ -45,7 +45,7 @@ const Footer = () => {
         </p>
 
         <a href="/faq#current-semester" className="hover:underline">
-          <span className="inline-flex items-center rounded-md bg-blue-500/10 px-2.5 py-1 text-sm font-semibold text-blue-500 ring-1 ring-blue-500/20">
+          <span className="bg-primary/10 ring-primary/20 text-primary inline-flex items-center rounded-md px-2.5 py-1 text-sm font-semibold ring-1">
             {LATEST_SEMESTER_LABEL}
           </span>
         </a>
@@ -55,7 +55,7 @@ const Footer = () => {
         <div className="space-y-2">
           <a
             href="/"
-            className="text-foreground inline-flex font-semibold transition-colors hover:text-blue-500">
+            className="text-foreground hover:text-primary inline-flex font-semibold transition-colors">
             {siteConfig.name}
           </a>
 
@@ -76,7 +76,7 @@ const Footer = () => {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="text-muted-foreground transition-colors hover:text-blue-500">
+                    className="text-muted-foreground hover:text-primary transition-colors">
                     {link.label}
                   </a>
                 </li>

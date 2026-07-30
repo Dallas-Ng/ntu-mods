@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
 import {
@@ -201,6 +201,13 @@ export function useTimetableGeneration() {
     setSuggestions([])
     setIsDiagnosing(false)
   }, [])
+
+  // Generated results belong to whichever plan was viewed when generate()
+  // ran. Switching plans invalidates them, so cycling left/right must not
+  // silently apply a stale combination to the newly viewed plan.
+  useEffect(() => {
+    reset()
+  }, [timetableIndex, reset])
 
   return {
     combinations,

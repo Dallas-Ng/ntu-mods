@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Menu, Moon, Settings, Sparkles, Sun, X } from "lucide-react"
+import { Megaphone, Menu, Moon, Settings, Sun, X } from "lucide-react"
 import posthog from "posthog-js"
 
 import { siteConfig } from "@/config/site"
@@ -208,7 +208,7 @@ const Navbar = () => {
                     }
                     className="hover:bg-accent text-muted-foreground flex w-full items-center justify-between gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                     <span className="flex items-center gap-3">
-                      <Sparkles className="size-4" />
+                      <Megaphone className="size-4" />
                       Changelog
                     </span>
                     {changelogUnseen > 0 && (

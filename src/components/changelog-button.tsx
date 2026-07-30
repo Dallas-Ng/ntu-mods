@@ -22,7 +22,9 @@ const ChangelogButton = () => {
       }>
       <a
         href="/changelog"
-        onClick={() => posthog.capture("changelog_opened", { source: "navbar_icon" })}>
+        onClick={() =>
+          posthog.capture("changelog_opened", { source: "navbar_icon" })
+        }>
         <Sparkles className="size-5" />
         {unseen > 0 && (
           <span

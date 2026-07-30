@@ -105,7 +105,7 @@ export function useTimetableGeneration() {
 
       updateTimetable(moduleTimetable, planIndex)
 
-      const source = customCourses[timetableIndex] ?? []
+      const source = customCourses[planIndex] ?? []
       if (source.length > 0) {
         setCustomCourses(
           source.map((course) => ({
@@ -117,7 +117,7 @@ export function useTimetableGeneration() {
         )
       }
     },
-    [customCourses, timetableIndex, setCustomCourses, updateTimetable]
+    [customCourses, setCustomCourses, updateTimetable]
   )
 
   const generate = useCallback(

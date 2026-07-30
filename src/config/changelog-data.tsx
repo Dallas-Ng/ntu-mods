@@ -49,6 +49,54 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Generate mode shows every distinct timetable",
+    date: "30 Jul 2026",
+    items: [
+      {
+        category: "Bug Fix",
+        content: (
+          <>
+            <ChangelogLink href="/timetable">Generate mode</ChangelogLink> no
+            longer wastes its results on look-alikes. It used to stop after 30
+            combinations and then hide the duplicates, so if 25 of those 30 put
+            your classes in the exact same slots you were left cycling through 5
+            timetables — even when far more genuinely different ones existed.
+            Uniqueness is now decided while generating, so you get up to 60
+            distinct layouts.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            A <em>Unique layouts only</em> switch sits above the Generate
+            button, on by default. Turn it off to cycle through every index
+            number combination, including ones that share the same timeslots —
+            useful when your first-choice index is full and you need a fallback
+            that keeps the same schedule.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Generation Settings has a <strong>Reset</strong> button. One click
+            restores the defaults — day hours, breaks, blocked slots, relaxed
+            class types and any index locks — instead of undoing each setting by
+            hand.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content:
+          "The colour legend and the hidden-information notice now sit directly under the timetable overview rather than in a separate row further down, and the exam disclaimer links to the exams page."
+      }
+    ]
+  },
+  {
     title: "NTUMods runs on Astro now",
     date: "28 Jul 2026",
     items: [

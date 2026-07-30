@@ -2,6 +2,8 @@
 
 ## Related issue
 
+## Notes for reviewer
+
 ## Checklist
 
 - [ ] `yarn lint` passes

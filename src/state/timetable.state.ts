@@ -8,6 +8,12 @@ export interface TimetableSlice {
   timetableIndex: number
   timetableCreationMode: TimetableCreationMode
   generationConfig: GenerationConfig
+  /**
+   * Generation-time toggle: count only distinct timeslot layouts towards the
+   * result limit, instead of filtering look-alikes out of an already-capped
+   * batch (which threw away the layouts that never got generated).
+   */
+  uniqueTimeslotsOnly: boolean
   lockedModules: string[]
   hasOnboarded: boolean
   customCourses: CustomCourse[][]
@@ -21,6 +27,8 @@ export interface TimetableSlice {
   resetTimetables: () => void
   setTimetableCreationMode: (mode: TimetableCreationMode) => void
   updateGenerationConfig: (config: Partial<GenerationConfig>) => void
+  resetGenerationConfig: () => void
+  setUniqueTimeslotsOnly: (value: boolean) => void
   toggleModuleLock: (moduleKey: string) => void
   setHasOnboarded: (value: boolean) => void
   addCustomCourse: (course: Omit<CustomCourse, "id">) => void
@@ -38,6 +46,7 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   timetableIndex: 0,
   timetableCreationMode: "default",
   generationConfig: DEFAULT_GENERATION_CONFIG,
+  uniqueTimeslotsOnly: true,
   lockedModules: [],
   hasOnboarded: false,
   customCourses: [[], [], [], [], []],
@@ -129,6 +138,20 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
     set((state) => ({
       generationConfig: { ...state.generationConfig, ...config }
     }))
+  },
+  /**
+   * Index locks are edited inside the same settings modal, so a reset that left
+   * them pinned would keep constraining generation after the user asked for a
+   * clean slate.
+   */
+  resetGenerationConfig: () => {
+    set((_state) => ({
+      generationConfig: DEFAULT_GENERATION_CONFIG,
+      lockedModules: []
+    }))
+  },
+  setUniqueTimeslotsOnly: (value: boolean) => {
+    set((_state) => ({ uniqueTimeslotsOnly: value }))
   },
   toggleModuleLock: (moduleKey: string) => {
     set((state) => ({

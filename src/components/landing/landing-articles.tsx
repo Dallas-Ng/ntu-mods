@@ -47,7 +47,7 @@ const LandingArticles = () => {
                 · {article.readingTime}
               </p>
 
-              <h3 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold">
+              <h3 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold transition-colors">
                 {article.title}
               </h3>
 

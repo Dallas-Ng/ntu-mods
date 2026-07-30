@@ -115,7 +115,7 @@ const TimetableModulesSelect = () => {
         initialName={inputValue}
         onSave={(data) => addCustomCourse(data)}
       />
-      <div ref={ref} className="rounded-md border-2">
+      <div ref={ref} className="rounded-lg border-2">
         <Command shouldFilter={false} className="bg-background">
           <CommandInput
             placeholder="Search or paste AA1234, BB2345, ..."

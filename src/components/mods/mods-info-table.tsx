@@ -29,7 +29,7 @@ export function renderModuleValue(key: keyof ApiModule, value: unknown) {
         {MODULE_CODE_RE.test(item) ? (
           <a
             href={`/mods/${item}`}
-            className="text-blue-500 transition-colors hover:text-blue-600">
+            className="text-primary hover:text-primary/80 transition-colors">
             {item}
           </a>
         ) : (

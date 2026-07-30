@@ -49,7 +49,7 @@ const ModsExpandableFields = ({ module }: Props) => {
       <button
         onClick={() => setExpanded((v) => !v)}
         className={cn(
-          "hover:bg-muted/50 flex w-full cursor-pointer items-center justify-between rounded-t-md border-2 border-b-0 border-slate-200 px-4 py-3 dark:border-slate-900",
+          "hover:bg-muted/50 flex w-full cursor-pointer items-center justify-between rounded-t-md border-2 border-b-0 px-4 py-3 transition-colors",
           !expanded && "rounded-b-md border-b-2"
         )}>
         <span className="text-sm font-medium">Additional Information</span>

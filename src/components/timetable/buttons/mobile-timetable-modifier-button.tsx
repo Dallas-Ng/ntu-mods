@@ -58,7 +58,7 @@ const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
           <div className="flex h-full flex-col">
             <button
               type="button"
-              className="text-muted-foreground flex h-[59px] shrink-0 items-center justify-center text-sm"
+              className="text-muted-foreground flex h-[59px] shrink-0 cursor-pointer items-center justify-center text-sm"
               onClick={() => setSnap(1)}>
               Click here to add mods!
             </button>
@@ -68,7 +68,7 @@ const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
             </div>
 
             <p
-              className="text-muted-foreground shrink-0 text-center text-sm"
+              className="text-muted-foreground shrink-0 cursor-pointer text-center text-sm"
               onClick={() => setSnap("85px")}>
               Swipe down or click here to close
             </p>

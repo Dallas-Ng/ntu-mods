@@ -182,7 +182,7 @@ const LinksContent = ({ children }: Props) => {
             Not sure what each portal does?{" "}
             <a
               href="/articles/ntu-student-portal-links"
-              className="text-blue-500 transition-colors hover:text-blue-600">
+              className="text-primary hover:text-primary/80 transition-colors">
               Read the full guide
             </a>{" "}
             for a breakdown of every portal and when to use it.

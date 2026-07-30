@@ -174,12 +174,12 @@ const CollisionIgnoreSection = () => {
                       title={
                         globallyRelaxed ? "Already relaxed globally" : undefined
                       }
-                      className={`h-6 rounded border px-2 text-xs font-medium transition-[color,background-color,border-color,opacity] ${
+                      className={`focus-visible:ring-ring/50 h-6 rounded border px-2 text-xs font-medium transition-[color,background-color,border-color,opacity] outline-none focus-visible:ring-[3px] ${
                         globallyRelaxed
                           ? "cursor-not-allowed opacity-50"
                           : active
-                            ? "bg-foreground text-background border-transparent"
-                            : "text-muted-foreground hover:border-foreground"
+                            ? "bg-foreground text-background cursor-pointer border-transparent"
+                            : "text-muted-foreground hover:border-foreground cursor-pointer"
                       }`}>
                       {COURSE_TYPE[type as keyof typeof COURSE_TYPE]}
                     </button>
@@ -243,7 +243,7 @@ const LockedModulesSection = () => {
               </span>
               <button
                 onClick={() => toggleModuleLock(key)}
-                className={`flex h-6 items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors ${
+                className={`focus-visible:ring-ring/50 flex h-6 cursor-pointer items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   isLocked
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:border-foreground"
@@ -334,7 +334,7 @@ const SettingsForm = () => {
               <button
                 key={pref}
                 onClick={() => updateConfig({ loadPreference: pref })}
-                className={`flex h-8 flex-1 items-center justify-center rounded-md border text-xs font-medium transition-colors ${
+                className={`focus-visible:ring-ring/50 flex h-8 flex-1 cursor-pointer items-center justify-center rounded-md border text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   config.loadPreference === pref
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:border-foreground"
@@ -413,7 +413,7 @@ const SettingsForm = () => {
               <button
                 key={type}
                 onClick={() => toggleSkippable(type)}
-                className={`h-7 rounded-md border px-2.5 text-xs font-medium transition-colors ${
+                className={`focus-visible:ring-ring/50 h-7 cursor-pointer rounded-md border px-2.5 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   active
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:border-foreground"
@@ -441,7 +441,7 @@ const SettingsForm = () => {
         </SectionLabel>
         <button
           onClick={() => setBlockOpen(true)}
-          className="text-muted-foreground hover:text-foreground flex w-full items-center justify-between rounded-md border px-3 py-2 text-xs transition-colors">
+          className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-between rounded-md border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
           <span>
             {config.blacklistedTimeslots.length > 0
               ? `${config.blacklistedTimeslots.length} slot${config.blacklistedTimeslots.length !== 1 ? "s" : ""} blocked`
@@ -631,7 +631,7 @@ const TimetableGenerationConfig = () => {
       {/* Settings trigger */}
       <button
         onClick={() => setOpen(true)}
-        className="text-muted-foreground hover:text-foreground flex w-full items-center justify-between rounded-lg border px-3 py-2 text-xs transition-colors">
+        className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-between rounded-lg border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
         <div className="flex items-center gap-1.5">
           <Settings2Icon className="size-3.5" />
           <span>Generation Settings</span>

@@ -116,7 +116,7 @@ const CustomSelect = (props: Props) => {
               {selectItems.map((item) => (
                 <CommandItem
                   key={item.value}
-                  className="hover:bg-accent cursor-pointer"
+                  className="hover:bg-accent cursor-pointer transition-colors"
                   onSelect={() => handleSelect(item.value)}>
                   <div className="flex items-center gap-2">
                     <CheckIcon

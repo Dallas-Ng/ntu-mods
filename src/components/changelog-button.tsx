@@ -1,6 +1,6 @@
 "use client"
 
-import { Sparkles } from "lucide-react"
+import { Megaphone } from "lucide-react"
 import posthog from "posthog-js"
 
 import { cn } from "@/lib/utils"
@@ -22,8 +22,10 @@ const ChangelogButton = () => {
       }>
       <a
         href="/changelog"
-        onClick={() => posthog.capture("changelog_opened", { source: "navbar_icon" })}>
-        <Sparkles className="size-5" />
+        onClick={() =>
+          posthog.capture("changelog_opened", { source: "navbar_icon" })
+        }>
+        <Megaphone className="size-5" />
         {unseen > 0 && (
           <span
             className={cn(

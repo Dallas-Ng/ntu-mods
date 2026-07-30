@@ -57,7 +57,7 @@ const ChangelogFilters = ({
         aria-pressed={activeFilter === filter}
         onClick={() => onFilterChange(filter)}
         className={cn(
-          "inline-flex h-6 w-fit items-center rounded-full border px-2 text-xs leading-none font-medium transition-opacity hover:opacity-80",
+          "inline-flex h-6 w-fit cursor-pointer items-center rounded-full border px-2 text-xs leading-none font-medium transition-opacity hover:opacity-80",
           activeFilter !== filter && "opacity-50",
           filter === "All"
             ? "border-border bg-muted text-foreground"
@@ -107,7 +107,7 @@ const ChangelogReleaseSection = ({
     </div>
 
     {release.note && (
-      <p className="text-muted-foreground rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-sm dark:border-blue-900 dark:bg-blue-950">
+      <p className="text-muted-foreground bg-primary/10 border-primary/20 rounded-lg border px-3 py-2 text-sm">
         {release.note}
       </p>
     )}

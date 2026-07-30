@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Menu, Moon, Settings, Sparkles, Sun, X } from "lucide-react"
+import { Megaphone, Menu, Moon, Settings, Sun, X } from "lucide-react"
 import posthog from "posthog-js"
 
 import { siteConfig } from "@/config/site"
@@ -66,10 +66,8 @@ const Navbar = () => {
 
             <span
               className={cn(
-                "ml-1 hidden font-bold hover:text-slate-950 md:inline-block dark:hover:text-slate-100",
-                pathname === "/"
-                  ? "text-slate-950 dark:text-slate-100"
-                  : "text-slate-500 dark:text-slate-400"
+                "hover:text-foreground ml-1 hidden font-bold transition-colors md:inline-block",
+                pathname === "/" ? "text-foreground" : "text-muted-foreground"
               )}>
               {siteConfig.name}
             </span>
@@ -86,10 +84,10 @@ const Navbar = () => {
                     <a
                       href={link.route}
                       className={cn(
-                        "relative mr-1 px-1 text-sm font-semibold hover:bg-transparent hover:text-slate-950 md:px-3 dark:hover:text-slate-100",
+                        "hover:text-foreground relative mr-1 px-1 text-sm font-semibold transition-colors hover:bg-transparent md:px-3",
                         pathname.includes(link.route)
-                          ? "text-slate-950 dark:text-slate-100"
-                          : "text-slate-500 dark:text-slate-400"
+                          ? "text-foreground"
+                          : "text-muted-foreground"
                       )}>
                       {link.label}
                       {link.route === "/exams" && (
@@ -210,7 +208,7 @@ const Navbar = () => {
                     }
                     className="hover:bg-accent text-muted-foreground flex w-full items-center justify-between gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                     <span className="flex items-center gap-3">
-                      <Sparkles className="size-4" />
+                      <Megaphone className="size-4" />
                       Changelog
                     </span>
                     {changelogUnseen > 0 && (
@@ -223,14 +221,14 @@ const Navbar = () => {
                 <DrawerClose asChild>
                   <button
                     onClick={() => window.location.assign("/settings")}
-                    className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                    className="hover:bg-accent text-muted-foreground flex w-full cursor-pointer items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                     <Settings className="size-4" />
                     Settings
                   </button>
                 </DrawerClose>
                 <button
                   onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                  className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                  className="hover:bg-accent text-muted-foreground flex w-full cursor-pointer items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                   {theme === "light" ? (
                     <Sun className="size-4" />
                   ) : (

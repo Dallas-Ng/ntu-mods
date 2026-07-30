@@ -48,7 +48,7 @@ const Breadcrumbs = (props: Props) => {
               {idx > 0 && <ChevronRight className="size-4 shrink-0" />}
               <a
                 href={href}
-                className="hover:text-secondary-foreground max-w-[16rem] shrink-0 truncate sm:max-w-none">
+                className="hover:text-secondary-foreground max-w-[16rem] shrink-0 truncate transition-colors sm:max-w-none">
                 {label}
               </a>
             </Fragment>

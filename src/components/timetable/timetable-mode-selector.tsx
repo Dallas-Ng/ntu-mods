@@ -60,7 +60,7 @@ const TimetableModeSelector = () => {
                     posthog.capture("timetable_mode_changed", { mode: m.id })
                   }}
                   disabled={m.comingSoon}
-                  className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
+                  className={`focus-visible:ring-ring/50 flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                     m.comingSoon
                       ? "text-muted-foreground/50 cursor-not-allowed"
                       : isActive

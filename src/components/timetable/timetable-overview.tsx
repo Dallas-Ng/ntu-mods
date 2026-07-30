@@ -111,7 +111,7 @@ const TimetableOverview = () => {
         webpage, 2 weeks before start of examination. You may visit{" "}
         <a
           href="/exams"
-          className="text-blue-500 transition-colors hover:text-blue-600">
+          className="text-primary hover:text-primary/80 transition-colors">
           NTU mods exams page
         </a>{" "}
         for more information.

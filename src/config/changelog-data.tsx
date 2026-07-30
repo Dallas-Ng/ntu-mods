@@ -42,7 +42,7 @@ export const ChangelogLink = ({
 }) => (
   <a
     href={href}
-    className="text-blue-500 transition-colors hover:text-blue-600">
+    className="text-primary hover:text-primary/80 transition-colors">
     {children}
   </a>
 )
@@ -109,7 +109,7 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
               href="https://astro.build"
               target="_blank"
               rel="noreferrer"
-              className="text-blue-500 transition-colors hover:text-blue-600">
+              className="text-primary hover:text-primary/80 transition-colors">
               Astro
             </a>{" "}
             and now hosted on{" "}
@@ -117,7 +117,7 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
               href="https://www.cloudflare.com/"
               target="_blank"
               rel="noreferrer"
-              className="text-blue-500 transition-colors hover:text-blue-600">
+              className="text-primary hover:text-primary/80 transition-colors">
               Cloudflare
             </a>
             &apos;s global network — pages should feel snappier no matter where

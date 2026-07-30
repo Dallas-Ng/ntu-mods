@@ -47,8 +47,16 @@ const LandingFeatures = () => {
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           <a href="/timetable" className="cursor-pointer">
             <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
+              <img
+                src="/landing/custom-courses.svg"
+                alt="Add custom blocks"
+                width={200}
+                height={110}
+                className="absolute top-0 left-1/2 w-[60%] -translate-x-1/2 p-5 md:top-[10%] md:w-[80%] lg:w-[65%]"
+              />
+
               <div className="absolute bottom-8 left-8 w-10/12 md:bottom-3 md:left-3 lg:bottom-3 lg:left-8">
-                <h3 className="mb-1 text-xl font-semibold">Custom Courses</h3>
+                <h3 className="mb-1 text-xl font-semibold">Custom Blocks</h3>
                 <p className="text-muted-foreground">
                   Block out CCAs, work shifts or gym sessions right alongside
                   your modules
@@ -59,6 +67,14 @@ const LandingFeatures = () => {
 
           <a href="/timetable" className="cursor-pointer">
             <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
+              <img
+                src="/landing/plans.svg"
+                alt="Create 5 different plans"
+                width={200}
+                height={110}
+                className="absolute top-0 left-1/2 w-[60%] -translate-x-1/2 p-5 md:top-[10%] md:w-[80%] lg:w-[65%]"
+              />
+
               <div className="absolute bottom-8 left-8 w-10/12 md:bottom-3 md:left-3 lg:bottom-3 lg:left-8">
                 <h3 className="mb-1 text-xl font-semibold">Multiple Plans</h3>
                 <p className="text-muted-foreground">
@@ -76,7 +92,7 @@ const LandingFeatures = () => {
                 alt="share with your friends"
                 width={200}
                 height={110}
-                className="absolute top-0 left-1/2 w-[60%] -translate-x-1/2 p-5 md:top-[10%] md:w-[80%] lg:top-0 lg:w-[55%]"
+                className="absolute top-0 left-1/2 w-[60%] -translate-x-1/2 p-5 md:top-[10%] md:w-[80%] lg:w-[65%]"
               />
 
               <div className="absolute bottom-8 left-8 w-10/12 md:bottom-3 md:left-3 lg:bottom-3 lg:left-8">

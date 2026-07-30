@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Menu, Moon, Settings, Sparkles, Sun, X } from "lucide-react"
+import posthog from "posthog-js"
 
 import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL_SHORT } from "@/lib/semesters"
@@ -202,6 +203,11 @@ const Navbar = () => {
                 <DrawerClose asChild>
                   <a
                     href="/changelog"
+                    onClick={() =>
+                      posthog.capture("changelog_opened", {
+                        source: "navbar_mobile_menu"
+                      })
+                    }
                     className="hover:bg-accent text-muted-foreground flex w-full items-center justify-between gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                     <span className="flex items-center gap-3">
                       <Sparkles className="size-4" />

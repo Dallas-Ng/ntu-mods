@@ -14,11 +14,11 @@ const TimetableHiddenContentHelper = () => {
     <>
       {threshold && (
         <a href="/settings#table-settings">
-          <div className="text-muted-foreground flex items-start gap-1 text-sm hover:underline md:items-center">
+          <div className="text-muted-foreground flex items-start gap-1 text-xs hover:underline md:items-center">
             <span>
-              <InfoIcon className="size-5" />
+              <InfoIcon className="size-4" />
             </span>
-            Some information are hidden in your table. Click to edit.
+            Some information are hidden in your table. Click to visit settings.
           </div>
         </a>
       )}

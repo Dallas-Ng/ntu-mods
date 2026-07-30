@@ -1,11 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Menu, Moon, Settings, Sun, X } from "lucide-react"
+import { Menu, Moon, Settings, Sparkles, Sun, X } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL_SHORT } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
+import { useChangelogUnseenCount } from "@/hooks/use-changelog-unseen"
 import { usePathname } from "@/hooks/use-pathname"
 import { useTheme } from "@/hooks/use-theme"
 import {
@@ -15,8 +16,9 @@ import {
   NavigationMenuList
 } from "@/components/ui/navigation-menu"
 
+import ChangelogButton from "./changelog-button"
 import { NewDot } from "./new-dot"
-import ThemeToggle from "./theme-toggle"
+import SettingsDropdown from "./settings-dropdown"
 import { Button } from "./ui/button"
 import {
   Drawer,
@@ -29,6 +31,7 @@ import {
 const Navbar = () => {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
+  const changelogUnseen = useChangelogUnseenCount()
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -131,17 +134,12 @@ const Navbar = () => {
           </a>
 
           <div className="hidden md:block">
-            <ThemeToggle />
+            <ChangelogButton />
           </div>
 
-          <Button
-            aria-label="Settings Button"
-            size="icon"
-            variant="ghost"
-            className="hidden md:inline-flex"
-            onClick={() => window.location.assign("/settings")}>
-            <Settings className="size-5" />
-          </Button>
+          <div className="hidden md:block">
+            <SettingsDropdown />
+          </div>
 
           {/* Mobile drawer */}
           <Drawer direction="right">
@@ -201,6 +199,21 @@ const Navbar = () => {
 
               {/* Footer */}
               <div className="mt-auto border-t p-3">
+                <DrawerClose asChild>
+                  <a
+                    href="/changelog"
+                    className="hover:bg-accent text-muted-foreground flex w-full items-center justify-between gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                    <span className="flex items-center gap-3">
+                      <Sparkles className="size-4" />
+                      Changelog
+                    </span>
+                    {changelogUnseen > 0 && (
+                      <span className="rounded-full bg-yellow-400 px-1.5 py-0.5 text-[10px] font-semibold text-black">
+                        {changelogUnseen > 9 ? "9+" : changelogUnseen}
+                      </span>
+                    )}
+                  </a>
+                </DrawerClose>
                 <DrawerClose asChild>
                   <button
                     onClick={() => window.location.assign("/settings")}

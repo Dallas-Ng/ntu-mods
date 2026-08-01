@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react"
 
 import { getModuleUrl } from "@/lib/module-url"
-import type { PrerequisiteNode } from "@/lib/server/db/types"
+import type { DbPrerequisiteNode } from "@/lib/server/db/types"
 
 interface Props {
   moduleCode: string
-  node: PrerequisiteNode
-  graph: Record<string, PrerequisiteNode>
+  node: DbPrerequisiteNode
+  graph: Record<string, DbPrerequisiteNode>
 }
 
 interface CardProps {

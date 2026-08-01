@@ -5,7 +5,7 @@ import { Search } from "lucide-react"
 import posthog from "posthog-js"
 
 import { CODE_QUERY_RE } from "@/lib/filter-modules"
-import type { ApiExam } from "@/lib/server/db/types"
+import type { DbExam } from "@/lib/server/db/types"
 import { useDebounce } from "@/hooks/use-debounce"
 import { Input } from "@/components/ui/input"
 import {
@@ -19,7 +19,7 @@ import {
 type GroupBy = "date" | "prefix" | "none"
 
 interface Props {
-  exams: ApiExam[]
+  exams: DbExam[]
 }
 
 const EXAM_PREFIX_LABELS: Record<string, string> = {
@@ -81,10 +81,10 @@ function parseDateForSort(dateStr: string): number {
   return new Date(dateStr).getTime()
 }
 
-function groupExams(exams: ApiExam[], groupBy: GroupBy) {
+function groupExams(exams: DbExam[], groupBy: GroupBy) {
   if (groupBy === "none") return null
 
-  const groups = new Map<string, ApiExam[]>()
+  const groups = new Map<string, DbExam[]>()
 
   exams.forEach((exam) => {
     const key =
@@ -116,7 +116,7 @@ function ExamTable({
   items,
   showDate = true
 }: {
-  items: ApiExam[]
+  items: DbExam[]
   showDate?: boolean
 }) {
   return (

@@ -5,7 +5,7 @@
  * but description is optional here (not all entries have it) and includes
  * additional server/API-only fields.
  */
-export interface ApiModule {
+export interface DbModule {
   code: string
   title: string
   au: string
@@ -33,7 +33,7 @@ export interface ApiModule {
   latestSemester?: string
 }
 
-export interface ApiExam {
+export interface DbExam {
   date: string
   day: number
   start_time: string
@@ -43,7 +43,7 @@ export interface ApiExam {
   duration?: number
 }
 
-export interface PrerequisiteNode {
+export interface DbPrerequisiteNode {
   title: string
   requires: string[]
   requiredBy: string[]

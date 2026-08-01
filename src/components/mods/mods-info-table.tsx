@@ -1,14 +1,13 @@
-import type { ApiExam, ApiModule } from "@/lib/server/db/types"
+import { MODULE_CODE_RE } from "@/lib/constants"
+import type { DbExam, DbModule } from "@/lib/server/db/types"
 import { cn } from "@/lib/utils"
 
-const MODULE_CODE_RE = /^[A-Z]{2,6}\d{4}[A-Z]?$/
-
 interface Props {
-  module: ApiModule
-  exam?: ApiExam | null
+  module: DbModule
+  exam?: DbExam | null
 }
 
-const FIELDS: Array<{ key: keyof ApiModule; label: string }> = [
+const FIELDS: Array<{ key: keyof DbModule; label: string }> = [
   { key: "gradeType", label: "Grade Type" },
   { key: "prerequisite", label: "Prerequisite" }
 ]
@@ -19,7 +18,7 @@ export function hasValue(value: unknown): boolean {
   return true
 }
 
-export function renderModuleValue(key: keyof ApiModule, value: unknown) {
+export function renderModuleValue(key: keyof DbModule, value: unknown) {
   if (key === "prerequisite" && Array.isArray(value)) {
     const allCodes = (value as string[][]).flat()
     const unique = Array.from(new Set(allCodes))

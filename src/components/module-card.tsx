@@ -1,13 +1,13 @@
 import type { AllModule } from "@/types/mods"
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
-import type { ApiModule } from "@/lib/server/db/types"
+import type { DbModule } from "@/lib/server/db/types"
 import { cn } from "@/lib/utils"
 
 import { Skeleton } from "./ui/skeleton"
 
 interface ModuleCardProps {
-  module: ApiModule
+  module: DbModule
   cardClassName?: string
 }
 
@@ -40,7 +40,7 @@ function highlightText(text: string, query: string) {
   )
 }
 
-// AllModule, not ApiModule: these render from the modules.json list payload,
+// AllModule, not DbModule: these render from the modules.json list payload,
 // which now carries only the fields the list view actually reads.
 interface ModuleCardDetailProps {
   code: string

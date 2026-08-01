@@ -8,15 +8,15 @@ import {
   OFFERING_SLOTS_SQL,
   OFFERING_SQL
 } from "@/lib/server/db/queries"
-import { toApiExam, toApiModule, toIndexes } from "@/lib/server/db/shape"
+import { toDbExam, toDbModule, toIndexes } from "@/lib/server/db/shape"
 import type {
-  ExamRow,
-  OfferingRow,
-  PrerequisiteRow,
-  SemesterRow,
-  SlotRow
+  DbExamRow,
+  DbOfferingRow,
+  DbPrerequisiteRow,
+  DbSemesterRow,
+  DbSlotRow
 } from "@/lib/server/db/shape"
-import type { ApiExam, ApiModule } from "@/lib/server/db/types"
+import type { DbExam, DbModule } from "@/lib/server/db/types"
 
 /**
  * Request-time counterpart to src/lib/server/db/repo.ts, for the one route
@@ -34,9 +34,9 @@ import type { ApiExam, ApiModule } from "@/lib/server/db/types"
  * needs reverting.
  */
 export interface ModuleSnapshot {
-  moduleData: ApiModule
+  moduleData: DbModule
   indexes: Record<string, Index[]>
-  exam: ApiExam | null
+  exam: DbExam | null
   isCurrentOffering: boolean
 }
 
@@ -50,7 +50,7 @@ let latestSemPromise: Promise<string | null> | null = null
 function getLatestSem(db: D1Database): Promise<string | null> {
   latestSemPromise ??= db
     .prepare(LATEST_SEMESTER_SQL)
-    .first<SemesterRow>()
+    .first<DbSemesterRow>()
     .then((row) => row?.sem ?? null)
     .catch(() => {
       latestSemPromise = null
@@ -78,29 +78,29 @@ export async function getModuleSnapshot(
 
   const [offering, prerequisites, indexKeys, slots, exam, latestSem] =
     await Promise.all([
-      db.prepare(OFFERING_SQL).bind(code, sem).first<OfferingRow>(),
+      db.prepare(OFFERING_SQL).bind(code, sem).first<DbOfferingRow>(),
       db
         .prepare(OFFERING_PREREQUISITES_SQL)
         .bind(code, sem)
-        .all<PrerequisiteRow>(),
+        .all<DbPrerequisiteRow>(),
       db
         .prepare(OFFERING_INDEX_KEYS_SQL)
         .bind(code, sem)
         .all<{ index_key: string }>(),
-      db.prepare(OFFERING_SLOTS_SQL).bind(code, sem).all<SlotRow>(),
-      db.prepare(OFFERING_EXAM_SQL).bind(code, sem).first<ExamRow>(),
+      db.prepare(OFFERING_SLOTS_SQL).bind(code, sem).all<DbSlotRow>(),
+      db.prepare(OFFERING_EXAM_SQL).bind(code, sem).first<DbExamRow>(),
       getLatestSem(db)
     ])
 
   if (!offering) return null
 
   return {
-    moduleData: toApiModule(offering, prerequisites.results ?? []),
+    moduleData: toDbModule(offering, prerequisites.results ?? []),
     indexes: toIndexes(
       slots.results ?? [],
       (indexKeys.results ?? []).map((r) => r.index_key)
     ),
-    exam: exam ? toApiExam(exam) : null,
+    exam: exam ? toDbExam(exam) : null,
     // Derived from the database, not from the portal's semesters.json. The old
     // source was scraped independently of whether any courses had been loaded,
     // so a newly listed but unscraped semester made every module render the

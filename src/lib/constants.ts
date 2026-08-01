@@ -81,6 +81,14 @@ export const MODULE_CATEGORY = {
   USP: "C N Yang Scholars"
 } as const
 
+/**
+ * Shape of an NTU module code: 2-6 letter school/subject prefix, a 4-digit
+ * level+serial, optional trailing letter (e.g. CZ2002, SC1005, AB1201A).
+ * Mirrored at scripts/db/lib/constants.mjs for the scripts that can't import
+ * a .ts file directly — keep the two in sync.
+ */
+export const MODULE_CODE_RE = /^[A-Z]{2,6}\d{4}[A-Z]?$/
+
 export const MODULE_FACULTY = {
   ACC: "Accountancy",
   ADM: "Art, Design & Media",

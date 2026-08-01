@@ -2,15 +2,15 @@
  * Row -> app shape mappers, shared by the build-time `node:sqlite` reader and
  * the request-time D1 reader.
  *
- * The app's existing types (ApiModule, Index, ApiExam) are the contract these
+ * The app's existing types (DbModule, Index, DbExam) are the contract these
  * must satisfy exactly — every consumer downstream of them is unchanged by the
  * migration, and scripts/db/verify-parity.mjs asserts the reconstruction is
  * byte-identical to the JSON it replaces.
  */
 
-import type { ApiExam, ApiModule } from "@/lib/server/db/types"
+import type { DbExam, DbModule } from "@/lib/server/db/types"
 
-export interface OfferingRow {
+export interface DbOfferingRow {
   code: string
   sem: string
   title: string
@@ -31,7 +31,7 @@ export interface OfferingRow {
   search_keys?: string | null
 }
 
-export interface SlotRow {
+export interface DbSlotRow {
   index_key: string
   slot_no: number
   type: string | null
@@ -43,13 +43,13 @@ export interface SlotRow {
   duration: number | null
 }
 
-export interface PrerequisiteRow {
+export interface DbPrerequisiteRow {
   group_no: number
   item_no: number
   raw_text: string
 }
 
-export interface ExamRow {
+export interface DbExamRow {
   code: string
   date: string | null
   day: number | null
@@ -59,7 +59,7 @@ export interface ExamRow {
   duration: number | null
 }
 
-export interface SemesterRow {
+export interface DbSemesterRow {
   sem: string
   code: string
   year: string
@@ -74,19 +74,19 @@ const parseJson = <T>(value: string | null | undefined): T | undefined =>
  * Absent optional fields are left unset rather than set to undefined, matching
  * the original JSON where the key simply was not present.
  */
-function setOptional<K extends keyof ApiModule>(
-  target: ApiModule,
+function setOptional<K extends keyof DbModule>(
+  target: DbModule,
   key: K,
-  value: ApiModule[K] | null | undefined
+  value: DbModule[K] | null | undefined
 ) {
   if (value !== null && value !== undefined) target[key] = value
 }
 
-export function toApiModule(
-  row: OfferingRow,
-  prerequisites: PrerequisiteRow[]
-): ApiModule {
-  const module: ApiModule = {
+export function toDbModule(
+  row: DbOfferingRow,
+  prerequisites: DbPrerequisiteRow[]
+): DbModule {
+  const module: DbModule = {
     searchKeys: parseJson<string[]>(row.search_keys) ?? [],
     code: row.code,
     title: row.title,
@@ -95,7 +95,7 @@ export function toApiModule(
 
   // Precomputed at load. Callers use these rather than re-deriving them from
   // searchKeys — see scripts/db/derive.mjs for the (bug-compatible) rules.
-  module.faculty = (row.faculty ?? "") as ApiModule["faculty"]
+  module.faculty = (row.faculty ?? "") as DbModule["faculty"]
   module.categories = parseJson<ModuleType[]>(row.categories) ?? []
 
   setOptional(module, "description", row.description)
@@ -150,7 +150,7 @@ export function toApiModule(
  * would silently change the shape the app sees.
  */
 export function toIndexes(
-  slots: SlotRow[],
+  slots: DbSlotRow[],
   indexKeys: string[]
 ): Record<string, Index[]> {
   const result: Record<string, Index[]> = {}
@@ -170,7 +170,7 @@ export function toIndexes(
   return result
 }
 
-export function toApiExam(row: ExamRow): ApiExam {
+export function toDbExam(row: DbExamRow): DbExam {
   return {
     date: row.date,
     day: row.day,
@@ -179,5 +179,5 @@ export function toApiExam(row: ExamRow): ApiExam {
     key: row.code,
     name: row.name,
     duration: row.duration
-  } as unknown as ApiExam
+  } as unknown as DbExam
 }

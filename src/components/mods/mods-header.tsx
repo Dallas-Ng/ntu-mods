@@ -1,10 +1,10 @@
 import { formatTitle } from "@/lib/format"
-import type { ApiModule } from "@/lib/server/db/types"
+import type { DbModule } from "@/lib/server/db/types"
 
 import Breadcrumbs from "../breadcrumbs"
 
 interface Props {
-  module: ApiModule
+  module: DbModule
   currentYear: string
   currentSemester: string
   isCurrentOffering?: boolean

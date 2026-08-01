@@ -13,6 +13,8 @@ import fs from "fs"
 import path from "path"
 import { fileURLToPath } from "url"
 
+import { SEM_LABEL } from "./constants.mjs"
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 export const ROOT = path.join(__dirname, "../../..")
 
@@ -35,7 +37,18 @@ function readFacultyKeys() {
   return keys
 }
 
-export const FACULTY_KEYS = readFacultyKeys()
+let facultyKeysCache = null
+/**
+ * Lazy and memoized, not a top-level `const FACULTY_KEYS = readFacultyKeys()`:
+ * that ran the file read + regex parse of src/lib/constants.ts the instant
+ * anything imported this module, so a formatting change in constants.ts (or
+ * running from a directory where it doesn't exist) broke every script that
+ * merely imports derive.mjs, not just the ones that call deriveFaculty.
+ */
+function getFacultyKeys() {
+  facultyKeysCache ??= readFacultyKeys()
+  return facultyKeysCache
+}
 
 /**
  * A module's faculty, from its programme keys.
@@ -49,7 +62,7 @@ export function deriveFaculty(searchKeys) {
   let result = ""
   for (const term of searchKeys) {
     for (const segment of term.split(";")) {
-      for (const faculty of FACULTY_KEYS) {
+      for (const faculty of getFacultyKeys()) {
         if (segment === faculty) result = segment
       }
     }
@@ -100,7 +113,11 @@ export function programmeFaculty(key) {
   return deriveFaculty([key]) || null
 }
 
-/** "1430-1720" -> { startMin: 870, endMin: 1040 }. "" -> nulls. */
+/**
+ * Parses a class time range in 24-hour "HHMM-HHMM" format (e.g. "1430-1720")
+ * into minutes since midnight for the start and end. Slots with no scheduled
+ * time carry an empty string instead, which returns nulls for both.
+ */
 export function parseTimeRange(time) {
   const m = /^(\d{2})(\d{2})-(\d{2})(\d{2})$/.exec(time ?? "")
   if (!m) return { startMin: null, endMin: null }
@@ -140,17 +157,9 @@ export function parseSem(sem) {
   }
 }
 
-const SEM_LABEL = {
-  1: "Semester 1",
-  2: "Semester 2",
-  S: "Special Term",
-  T: "Teaching Term",
-}
-
 /** Fallback name for semesters older than the portal's current catalogue. */
 export function semesterName(year, semester) {
   return `Acad Yr ${year} ${SEM_LABEL[semester] ?? `Semester ${semester}`}`
 }
 
-/** Same test build-static-data.mjs uses to decide if a prerequisite is a code. */
-export const MODULE_CODE_RE = /^[A-Z]{2,6}\d{4}[A-Z]?$/
+export { MODULE_CODE_RE } from "./constants.mjs"

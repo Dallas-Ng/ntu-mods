@@ -1,11 +1,11 @@
 /**
  * Writes one (semester, scope) into a SQLite database, with replace semantics.
  *
- * Shared by the whole-corpus bootstrap (build-db.mjs) and the per-semester
- * pipeline loader (load-semester.mjs) so there is exactly one implementation of
- * "what a semester looks like as rows". The bootstrap is parity-verified
- * against every JSON file by verify-parity.mjs, so the pipeline inherits that
- * guarantee rather than reimplementing it.
+ * Shared by the whole-corpus bootstrap (sync-db.mjs --from json) and the
+ * per-semester pipeline loader (load-semester.mjs) so there is exactly one
+ * implementation of "what a semester looks like as rows". The bootstrap is
+ * parity-verified against every JSON file by verify-parity.mjs, so the
+ * pipeline inherits that guarantee rather than reimplementing it.
  *
  * Replace, not upsert. Upsert cannot express deletion: if NTU cancels index
  * 10001, an upsert leaves the row in place and students see a phantom class

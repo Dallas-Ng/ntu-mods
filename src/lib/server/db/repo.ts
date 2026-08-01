@@ -23,15 +23,15 @@ import {
   SEMESTER_OFFERINGS_SQL,
   SEMESTER_PREREQUISITES_SQL
 } from "./queries"
-import { toApiExam, toApiModule, toIndexes } from "./shape"
+import { toDbExam, toDbModule, toIndexes } from "./shape"
 import type {
-  ExamRow,
-  OfferingRow,
-  PrerequisiteRow,
-  SemesterRow,
-  SlotRow
+  DbExamRow,
+  DbOfferingRow,
+  DbPrerequisiteRow,
+  DbSemesterRow,
+  DbSlotRow
 } from "./shape"
-import type { ApiExam, ApiModule, PrerequisiteNode } from "./types"
+import type { DbExam, DbModule, DbPrerequisiteNode } from "./types"
 
 let latestSemesterCache: { year: string; semester: string } | null = null
 
@@ -48,7 +48,7 @@ export async function getLatestSemester(): Promise<{
 }> {
   if (latestSemesterCache) return latestSemesterCache
 
-  const row = query<SemesterRow>(LATEST_SEMESTER_SQL)[0]
+  const row = query<DbSemesterRow>(LATEST_SEMESTER_SQL)[0]
   if (!row) throw new Error("No semester in the database has any offerings")
 
   latestSemesterCache = { year: row.year, semester: row.semester }
@@ -59,7 +59,7 @@ export async function getLatestExamSemester(): Promise<{
   year: string
   semester: string
 } | null> {
-  const row = query<SemesterRow>(LATEST_EXAM_SEMESTER_SQL)[0]
+  const row = query<DbSemesterRow>(LATEST_EXAM_SEMESTER_SQL)[0]
   return row ? { year: row.year, semester: row.semester } : null
 }
 
@@ -107,12 +107,16 @@ export async function getModuleMetadata(
   code: string,
   year: string,
   semester: string
-): Promise<ApiModule | null> {
+): Promise<DbModule | null> {
   const sem = `${year}_${semester}`
-  const row = query<OfferingRow>(OFFERING_SQL, code, sem)[0]
+  const row = query<DbOfferingRow>(OFFERING_SQL, code, sem)[0]
   if (!row) return null
-  const prereqs = query<PrerequisiteRow>(OFFERING_PREREQUISITES_SQL, code, sem)
-  return toApiModule(row, prereqs)
+  const prereqs = query<DbPrerequisiteRow>(
+    OFFERING_PREREQUISITES_SQL,
+    code,
+    sem
+  )
+  return toDbModule(row, prereqs)
 }
 
 /**
@@ -125,17 +129,17 @@ export async function getModuleMetadata(
 export async function getAllModuleMetadata(
   year: string,
   semester: string
-): Promise<Record<string, ApiModule>> {
+): Promise<Record<string, DbModule>> {
   const sem = `${year}_${semester}`
 
-  const rows = query<OfferingRow>(SEMESTER_OFFERINGS_SQL, sem)
+  const rows = query<DbOfferingRow>(SEMESTER_OFFERINGS_SQL, sem)
   if (rows.length === 0) return {}
 
-  const prereqRows = query<PrerequisiteRow & { code: string }>(
+  const prereqRows = query<DbPrerequisiteRow & { code: string }>(
     SEMESTER_PREREQUISITES_SQL,
     sem
   )
-  const prereqsByCode = new Map<string, PrerequisiteRow[]>()
+  const prereqsByCode = new Map<string, DbPrerequisiteRow[]>()
   for (const p of prereqRows) {
     let list = prereqsByCode.get(p.code)
     if (!list) prereqsByCode.set(p.code, (list = []))
@@ -145,7 +149,7 @@ export async function getAllModuleMetadata(
   return Object.fromEntries(
     rows.map((row) => [
       row.code,
-      toApiModule(row, prereqsByCode.get(row.code) ?? [])
+      toDbModule(row, prereqsByCode.get(row.code) ?? [])
     ])
   )
 }
@@ -170,27 +174,31 @@ export async function getModuleIndexesData(
     sem
   ).map((r) => r.index_key)
   if (keys.length === 0) return {}
-  return toIndexes(query<SlotRow>(OFFERING_SLOTS_SQL, code, sem), keys)
+  return toIndexes(query<DbSlotRow>(OFFERING_SLOTS_SQL, code, sem), keys)
 }
 
 export async function getModuleExamData(
   code: string,
   year: string,
   semester: string
-): Promise<ApiExam | null> {
-  const row = query<ExamRow>(OFFERING_EXAM_SQL, code, `${year}_${semester}`)[0]
-  return row ? toApiExam(row) : null
+): Promise<DbExam | null> {
+  const row = query<DbExamRow>(
+    OFFERING_EXAM_SQL,
+    code,
+    `${year}_${semester}`
+  )[0]
+  return row ? toDbExam(row) : null
 }
 
 export async function getSemesterExamsData(
   year: string,
   semester: string
-): Promise<Record<string, ApiExam>> {
-  const rows = query<ExamRow>(SEMESTER_EXAMS_SQL, `${year}_${semester}`)
-  return Object.fromEntries(rows.map((r) => [r.code, toApiExam(r)]))
+): Promise<Record<string, DbExam>> {
+  const rows = query<DbExamRow>(SEMESTER_EXAMS_SQL, `${year}_${semester}`)
+  return Object.fromEntries(rows.map((r) => [r.code, toDbExam(r)]))
 }
 
-type PrerequisiteGraph = Record<string, PrerequisiteNode>
+type PrerequisiteGraph = Record<string, DbPrerequisiteNode>
 
 let prerequisiteGraphCache: PrerequisiteGraph | null = null
 
@@ -223,7 +231,7 @@ export async function getPrerequisiteGraph(): Promise<PrerequisiteGraph> {
   // name a module that never appears in the corpus — that stays as an outgoing
   // edge but never becomes a node of its own, which is what the previous
   // artifact did.
-  const node = (code: string): PrerequisiteNode | null => {
+  const node = (code: string): DbPrerequisiteNode | null => {
     const title = titleByCode.get(code)
     if (title === undefined) return null
     return (graph[code] ??= { title, requires: [], requiredBy: [] })
@@ -244,7 +252,7 @@ export async function getPrerequisiteGraph(): Promise<PrerequisiteGraph> {
 
 export async function getModulePrerequisites(
   code: string
-): Promise<PrerequisiteNode | null> {
+): Promise<DbPrerequisiteNode | null> {
   const graph = await getPrerequisiteGraph()
   return graph[code] ?? null
 }

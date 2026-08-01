@@ -3,12 +3,12 @@
 import { useState } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 
-import type { ApiModule } from "@/lib/server/db/types"
+import type { DbModule } from "@/lib/server/db/types"
 import { cn } from "@/lib/utils"
 
 import { hasValue, renderModuleValue } from "./mods-info-table"
 
-const FIELDS: Array<{ key: keyof ApiModule; label: string }> = [
+const FIELDS: Array<{ key: keyof DbModule; label: string }> = [
   { key: "notAvailableToProgramme", label: "Not Available To Programme" },
   {
     key: "notAvailableToAllProgrammeWith",
@@ -32,7 +32,7 @@ const FIELDS: Array<{ key: keyof ApiModule; label: string }> = [
 ]
 
 interface Props {
-  module: ApiModule
+  module: DbModule
 }
 
 const ModsExpandableFields = ({ module }: Props) => {

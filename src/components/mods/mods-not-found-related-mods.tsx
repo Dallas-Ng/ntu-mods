@@ -2,7 +2,7 @@
 
 import { useMemo } from "react"
 
-import type { ApiModule } from "@/lib/server/db/types"
+import type { DbModule } from "@/lib/server/db/types"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { usePathname } from "@/hooks/use-pathname"
 
@@ -18,7 +18,7 @@ const ModsNotFoundRelatedMods = () => {
     const prefix = moduleKey.slice(0, 2)
     return modules
       .filter((m) => m.code.startsWith(prefix) && m.code !== moduleKey)
-      .slice(0, 9) as ApiModule[]
+      .slice(0, 9) as DbModule[]
   }, [modules, moduleKey])
 
   if (related.length === 0) return null

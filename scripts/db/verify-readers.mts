@@ -14,6 +14,7 @@
 import fs from "fs"
 import path from "path"
 
+import { MODULE_CODE_RE } from "./lib/constants.mjs"
 import { deriveCategories, deriveFaculty } from "./lib/derive.mjs"
 
 import {
@@ -185,7 +186,6 @@ async function main() {
     // metadata files newest-first, first occurrence of a code wins, keep only
     // prerequisite items that look like module codes, then invert for
     // requiredBy. Nodes exist only for codes that were actually offered.
-    const MODULE_CODE_RE = /^[A-Z]{2,6}\d{4}[A-Z]?$/
     const info = new Map<string, { title: string; requires: Set<string> }>()
     for (const sem of [...semesters].reverse()) {
       const data = readJson(path.join(SRC, "metadata", `${sem}.json`))

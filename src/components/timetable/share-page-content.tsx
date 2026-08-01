@@ -22,7 +22,7 @@ const SharePageContent = () => {
       <Header
         title="Timetable"
         subtitle={
-          <span className="font-semibold text-rose-600">Read Only</span>
+          <span className="text-destructive font-semibold">Read Only</span>
         }
       />
 

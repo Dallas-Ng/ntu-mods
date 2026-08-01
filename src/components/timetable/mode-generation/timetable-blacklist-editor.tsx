@@ -276,7 +276,7 @@ const TimetableBlacklistEditor = () => {
       <button
         onClick={clearAll}
         disabled={!hasUserBlocked}
-        className="text-muted-foreground hover:text-foreground self-end text-xs underline transition-colors disabled:pointer-events-none disabled:opacity-40">
+        className="text-muted-foreground hover:text-foreground cursor-pointer self-end text-xs underline transition-colors disabled:pointer-events-none disabled:opacity-40">
         Clear all
       </button>
     </div>

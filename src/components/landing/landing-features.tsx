@@ -1,6 +1,3 @@
-import { DarkThemeIcon, LightThemeIcon } from "../settings/appearance-settings"
-import { Input } from "../ui/input"
-
 const LandingFeatures = () => {
   return (
     <div>
@@ -14,22 +11,16 @@ const LandingFeatures = () => {
       <div className="mx-auto flex max-w-7xl flex-col gap-5">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <a href="/timetable" className="cursor-pointer">
-            <div className="relative h-[300px] w-full rounded-xl border p-3 shadow">
+            <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
               <div className="absolute top-12 left-8 w-10/12 md:left-3 lg:left-8">
                 <h3 className="text-2xl font-bold">
-                  Filter, Search and Manage
+                  Auto-Generate Your Timetable
                 </h3>
                 <p className="text-muted-foreground text-lg">
-                  Stop spamming each indexes to find the best timeslots and
-                  start searching for indexes easier
+                  Pick your modules, set constraints like no mornings or free
+                  Fridays, and let NTU Mods build every clash-free option for
+                  you
                 </p>
-              </div>
-
-              <div className="absolute bottom-8 left-8 w-10/12 md:bottom-3 md:left-3 lg:bottom-3 lg:left-8">
-                <Input
-                  className="w-full"
-                  placeholder="Search for Indexes, Modules and more"
-                />
               </div>
             </div>
           </a>
@@ -54,11 +45,74 @@ const LandingFeatures = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          <a href="/timetable" className="cursor-pointer">
+            <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
+              <img
+                src="/landing/custom-courses.svg"
+                alt="Add custom blocks"
+                width={200}
+                height={110}
+                className="absolute top-0 left-1/2 w-[60%] -translate-x-1/2 p-5 md:top-[10%] md:w-[80%] lg:w-[65%]"
+              />
+
+              <div className="absolute bottom-8 left-8 w-10/12 md:bottom-3 md:left-3 lg:bottom-3 lg:left-8">
+                <h3 className="mb-1 text-xl font-semibold">Custom Blocks</h3>
+                <p className="text-muted-foreground">
+                  Block out CCAs, work shifts or gym sessions right alongside
+                  your modules
+                </p>
+              </div>
+            </div>
+          </a>
+
+          <a href="/timetable" className="cursor-pointer">
+            <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
+              <img
+                src="/landing/plans.svg"
+                alt="Create 5 different plans"
+                width={200}
+                height={110}
+                className="absolute top-0 left-1/2 w-[60%] -translate-x-1/2 p-5 md:top-[10%] md:w-[80%] lg:w-[65%]"
+              />
+
+              <div className="absolute bottom-8 left-8 w-10/12 md:bottom-3 md:left-3 lg:bottom-3 lg:left-8">
+                <h3 className="mb-1 text-xl font-semibold">Multiple Plans</h3>
+                <p className="text-muted-foreground">
+                  Keep backup timetables side by side and switch between them
+                  before you commit on STARS
+                </p>
+              </div>
+            </div>
+          </a>
+
+          <a href="/timetable" className="cursor-pointer">
+            <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
+              <img
+                src="/landing/share.svg"
+                alt="share with your friends"
+                width={200}
+                height={110}
+                className="absolute top-0 left-1/2 w-[60%] -translate-x-1/2 p-5 md:top-[10%] md:w-[80%] lg:w-[65%]"
+              />
+
+              <div className="absolute bottom-8 left-8 w-10/12 md:bottom-3 md:left-3 lg:bottom-3 lg:left-8">
+                <h3 className="mb-1 text-xl font-semibold">
+                  Share with Friends
+                </h3>
+                <p className="text-muted-foreground">
+                  With a simple link, you can share your timetable with anyone
+                </p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
           <a href="/mods" className="cursor-pointer">
             <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
               <img
                 src="/landing/icc-mods.svg"
-                alt="share with your friends"
+                alt="view all courses and indexes"
                 width={400}
                 height={110}
                 className="absolute right-[10%] bottom-[-20%] w-[70%] -rotate-45 p-5 invert dark:invert-0"
@@ -77,40 +131,14 @@ const LandingFeatures = () => {
           </a>
 
           <a href="/timetable" className="cursor-pointer">
-            <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
-              <img
-                src="/landing/share.svg"
-                alt="share with your friends"
-                width={200}
-                height={110}
-                className="absolute top-0 left-1/2 w-[60%] -translate-x-1/2 p-5 md:top-[10%] md:w-[80%] lg:top-0 lg:w-[55%]"
-              />
-
-              <div className="absolute bottom-8 left-8 w-10/12 md:bottom-3 md:left-3 lg:bottom-3 lg:left-8">
-                <h3 className="mb-1 text-xl font-semibold">
-                  Share with Friends
+            <div className="relative h-[300px] w-full rounded-xl border p-3 shadow">
+              <div className="absolute top-12 left-8 w-10/12 md:left-3 lg:left-8">
+                <h3 className="text-2xl font-bold">
+                  Filter, Search and Manage
                 </h3>
-                <p className="text-muted-foreground">
-                  With a simple link, you can share your timetable with anyone
-                </p>
-              </div>
-            </div>
-          </a>
-
-          <a href="/settings" className="cursor-pointer">
-            <div className="bg-muted relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
-              <div className="flex w-[500px] gap-1 md:w-[300px] lg:w-[500px]">
-                <DarkThemeIcon label={false} />
-                <LightThemeIcon label={false} />
-              </div>
-
-              <div className="absolute bottom-8 left-8 w-10/12 md:bottom-3 md:left-3 lg:bottom-3 lg:left-8">
-                <h3 className="mb-1 text-xl font-semibold">
-                  Customise Your Experience
-                </h3>
-                <p className="text-muted-foreground">
-                  Hide details of indexes and modules in the table, switch
-                  themes and more
+                <p className="text-muted-foreground text-lg">
+                  Stop spamming each indexes to find the best timeslots and
+                  start searching for indexes easier
                 </p>
               </div>
             </div>

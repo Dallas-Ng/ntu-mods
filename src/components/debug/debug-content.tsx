@@ -36,7 +36,7 @@ const DebugContent = () => {
       <div className="my-5">
         <p className="text-muted-foreground mb-2">
           If you encountered problems press the button below, it will{" "}
-          <strong className="text-red-600">delete</strong> all your data
+          <strong className="text-destructive">delete</strong> all your data
           (including the courses you added)
         </p>
 

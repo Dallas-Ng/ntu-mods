@@ -64,7 +64,7 @@ const TimetableCopyButton = () => {
 
   const Content = (
     <>
-      <p className="p-2 text-center text-sm text-rose-800">
+      <p className="text-destructive p-2 text-center text-sm">
         You will override your existing data
       </p>
       <div className="overflow-y-auto">
@@ -74,7 +74,7 @@ const TimetableCopyButton = () => {
               key={timetableIdx}
               onClick={() => setOverrideIndex(timetableIdx)}
               className={cn(
-                "hover:bg-accent rounded-md p-2 transition-colors hover:cursor-pointer",
+                "hover:bg-accent cursor-pointer rounded-md p-2 transition-colors",
                 overrideIndex === timetableIdx && "bg-muted"
               )}>
               <p>Plan {timetableIdx + 1}</p>

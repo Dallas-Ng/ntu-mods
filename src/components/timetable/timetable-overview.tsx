@@ -108,7 +108,13 @@ const TimetableOverview = () => {
         The Exam information shown may be subject to changes. Students are to
         check the finalised exam timetable with exam seat information, which
         will be available at the &apos;Examination Seating Arrangement&apos;
-        webpage, 2 weeks before start of examination.
+        webpage, 2 weeks before start of examination. You may visit{" "}
+        <a
+          href="/exams"
+          className="text-primary hover:text-primary/80 transition-colors">
+          NTU mods exams page
+        </a>{" "}
+        for more information.
       </p>
     </div>
   )

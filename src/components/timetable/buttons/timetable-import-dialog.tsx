@@ -111,7 +111,7 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
                 </button>
               ))}
             </div>
-            <p className="text-xs text-rose-600">
+            <p className="text-destructive text-xs">
               Plan {targetPlan + 1} will be overwritten.
             </p>
           </div>

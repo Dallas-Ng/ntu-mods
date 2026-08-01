@@ -17,8 +17,18 @@ data/01_semesters.json  →  data/02_courses_YYYY_S.json  →  data/03_mdata_YYY
 ```bash
 python3 -m venv venv
 source venv/bin/activate      # Windows: venv\Scripts\activate
-pip install requests beautifulsoup4
+pip install -r requirements.txt
 ```
+
+### Optional: validation agent
+
+`compare_agent.py` cross-checks scraped output against the live NTU portal using Claude. Requires an `ANTHROPIC_API_KEY`:
+
+```bash
+echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
+```
+
+Not needed for the core scraping pipeline (steps 1–5).
 
 ---
 

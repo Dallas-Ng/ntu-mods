@@ -1,6 +1,6 @@
 import { isCustomCourseKey } from "@/lib/custom-course-colors"
 
-const TIME_BUDGET_MS = 300
+const DEFAULT_TIME_BUDGET_MS = 300
 
 function hhmmToMinutes(hhmm: number): number {
   const h = Math.floor(hhmm / 100)
@@ -230,6 +230,47 @@ function scoreCombination(slots: Index[], config: GenerationConfig): number {
 interface GenerationResult {
   combinations: GeneratedCombination[]
   truncated: boolean
+  /** Leaves discarded because an earlier result had the same timeslot layout. */
+  duplicatesSkipped: number
+}
+
+export interface GenerateOptions {
+  maxResults?: number
+  lockedModules?: string[]
+  currentTimetable?: Timetable
+  /**
+   * Count only distinct timeslot layouts against `maxResults`. Two combinations
+   * that put classes in exactly the same slots differ only in index numbers,
+   * so without this the result budget gets eaten by look-alikes and the user
+   * never sees the layouts further down the search tree.
+   */
+  uniqueTimeslotsOnly?: boolean
+  timeBudgetMs?: number
+}
+
+function timeslotShape(slots: Index[]): string {
+  return slots
+    .map((s) => `${s.day}|${s.time}|${s.type}`)
+    .sort()
+    .join(",")
+}
+
+/**
+ * Keep one index per distinct slot shape. NTU modules routinely carry dozens of
+ * index numbers sharing the same lecture/tutorial slots; in unique mode those
+ * are interchangeable, so exploring one of each shrinks the branching factor
+ * enough to reach genuinely different layouts inside the time budget.
+ */
+function collapseIndexShapes(indexes: Indexes): Indexes {
+  const seen = new Set<string>()
+  const collapsed: Indexes = {}
+  for (const [indexKey, slots] of Object.entries(indexes)) {
+    const shape = timeslotShape(slots)
+    if (seen.has(shape)) continue
+    seen.add(shape)
+    collapsed[indexKey] = slots
+  }
+  return collapsed
 }
 
 export interface ConstraintSuggestion {
@@ -248,7 +289,7 @@ export function diagnoseConstraints(
       moduleKeys,
       allIndexes,
       { ...config, ...relaxed },
-      1
+      { maxResults: 1 }
     )
     if (combinations.length > 0) suggestions.push({ label })
   }
@@ -287,7 +328,9 @@ export function diagnoseConstraints(
       withoutCustom,
       allIndexes,
       config,
-      1
+      {
+        maxResults: 1
+      }
     )
     if (combinations.length > 0) {
       suggestions.push({
@@ -304,13 +347,33 @@ export function generateCombinations(
   moduleKeys: string[],
   allIndexes: Record<string, Indexes>,
   config: GenerationConfig,
-  maxResults = 50,
-  lockedModules?: string[],
-  currentTimetable?: Timetable
+  options: GenerateOptions = {}
 ): GenerationResult {
+  const {
+    maxResults = 50,
+    lockedModules,
+    currentTimetable,
+    uniqueTimeslotsOnly = false,
+    timeBudgetMs = DEFAULT_TIME_BUDGET_MS
+  } = options
+
   const results: GeneratedCombination[] = []
   const startTime = performance.now()
   let truncated = false
+  let duplicatesSkipped = 0
+  const seenSignatures = new Set<string>()
+  const collapsedCache: Record<string, Indexes> = {}
+
+  /**
+   * Unique mode searches over one index per slot shape; locked modules keep
+   * their exact index, so that branch reads `allIndexes` directly.
+   */
+  function searchableIndexes(moduleKey: string): Indexes | undefined {
+    const source = allIndexes[moduleKey]
+    if (!source || !uniqueTimeslotsOnly) return source
+    collapsedCache[moduleKey] ??= collapseIndexShapes(source)
+    return collapsedCache[moduleKey]
+  }
 
   function tryIndex(
     moduleKey: string,
@@ -349,7 +412,7 @@ export function generateCombinations(
     partialTimetable: Timetable,
     chosenSlots: Index[]
   ): void {
-    if (performance.now() - startTime > TIME_BUDGET_MS) {
+    if (performance.now() - startTime > timeBudgetMs) {
       truncated = true
       return
     }
@@ -358,10 +421,14 @@ export function generateCombinations(
       const fullSlots = moduleKeys.flatMap(
         (mk) => allIndexes[mk]?.[partialTimetable[mk]] ?? []
       )
-      const timeslotSignature = fullSlots
-        .map((s) => `${s.day}|${s.time}|${s.type}`)
-        .sort()
-        .join(",")
+      const timeslotSignature = timeslotShape(fullSlots)
+      if (uniqueTimeslotsOnly) {
+        if (seenSignatures.has(timeslotSignature)) {
+          duplicatesSkipped++
+          return
+        }
+        seenSignatures.add(timeslotSignature)
+      }
       results.push({
         timetable: { ...partialTimetable },
         score: scoreCombination(chosenSlots, config),
@@ -378,12 +445,14 @@ export function generateCombinations(
     }
 
     const moduleKey = moduleKeys[moduleIdx]
-    const moduleIndexes = allIndexes[moduleKey]
+    const moduleIndexes = searchableIndexes(moduleKey)
     if (!moduleIndexes) return
 
     if (lockedModules?.includes(moduleKey)) {
       const lockedIndexKey = currentTimetable?.[moduleKey]
-      const slots = lockedIndexKey ? moduleIndexes[lockedIndexKey] : undefined
+      const slots = lockedIndexKey
+        ? allIndexes[moduleKey]?.[lockedIndexKey]
+        : undefined
       if (!slots) return
       tryIndex(
         moduleKey,
@@ -417,7 +486,7 @@ export function generateCombinations(
 
   results.sort((a, b) => b.score - a.score)
 
-  return { combinations: results, truncated }
+  return { combinations: results, truncated, duplicatesSkipped }
 }
 
 export function diagnoseEmptyResult(

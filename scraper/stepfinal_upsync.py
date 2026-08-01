@@ -9,13 +9,21 @@ Mapping:
     scraper/data/04_indexes_YYYY_S.json ->  src/data/api/indexes/YYYY_S.json
     scraper/data/05_exams_YYYY_S.json   ->  src/data/api/exams/YYYY_S.json
 
-The app no longer reads any of these — D1 is the source of truth, and
-``step6_load_d1`` (scripts/db/load-semester.mjs) is what actually publishes a
-semester. Workers Builds now has a scoped API token and pulls the database
-straight from D1 (``scripts/db/sync-db.mjs --from d1``, the default), so this
-copy is no longer load-bearing for the build. It stays as a fallback path
-(``--from json``) that needs no network access or credentials, and as the
-comparison baseline ``verify-parity.mjs`` diffs D1 against.
+The app doesn't read these directly anymore — D1 is what
+``step6_load_d1`` (scripts/db/load-semester.mjs) publishes a semester to, and
+the on-demand snapshot route queries D1 live. But prerendered pages and the
+client's bulk JSON artifacts are built from a local SQLite copy
+(``scripts/db/sync-db.mjs --from json``, the build's default), which is
+rebuilt from *this* directory — not pulled from D1 on every build, since a
+Workers Build fires on every push regardless of whether the data changed, and
+a fresh `wrangler d1 export` of the whole ~100MB database on each one would
+be wasted work.
+
+So this copy is the actual publish step for prerendered/client data: after
+``--load`` writes to D1, run this script, then commit and push the result.
+That push is what should trigger a rebuild with the new data — running
+``--load`` alone does not. ``scripts/db/sync-db.mjs --from d1`` (``yarn
+db:pull``) stays available to pull fresh from D1 by hand if this ever drifts.
 
 Two files this used to generate are gone:
     module-map.json  -- replaced by ALL_MODULE_CODES_SQL / MODULE_TITLES_SQL

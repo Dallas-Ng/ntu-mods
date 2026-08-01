@@ -1,20 +1,22 @@
 /**
- * Get a local copy of db/ntu-mods.sqlite, either by downloading it from D1
- * or by rebuilding it from src/data/api JSON.
+ * Get a local copy of db/ntu-mods.sqlite, either by rebuilding it from
+ * src/data/api JSON or by downloading it from D1.
  *
  * `--if-missing` is what `yarn data` uses before every build, so a database
  * already on disk is reused rather than re-pulled on every `yarn dev`/build.
- * The default source is D1 (`--from d1`) — Workers Builds has a scoped
- * `CLOUDFLARE_API_TOKEN` so it can `wrangler d1 export` directly.
  *
- * `--from json` stays as a manual fallback: it needs no network access or
- * credentials, it's what verify-parity.mjs's comparison baseline depends on,
- * and it's what keeps working if the API token is ever revoked or misscoped.
- * That's also why src/data/api is still in the repo.
+ * The default source is JSON, deliberately — every push to main triggers a
+ * Workers Build regardless of whether the underlying data changed, and
+ * `wrangler d1 export` pulls the whole ~100MB database over the network each
+ * time. Publishing new scraper data is a separate, explicit step: after
+ * `main.py --load` writes to D1, run `python stepfinal_upsync.py` to refresh
+ * src/data/api, then commit and push it — that commit is what a build should
+ * actually react to. `--from d1` (`yarn db:pull`) stays available to pull
+ * fresh from D1 by hand, e.g. to resync src/data/api if it's drifted.
  *
- *   node scripts/db/sync-db.mjs --from d1 [--database ntu-mods-dev] [--out db/ntu-mods.sqlite]
  *   node scripts/db/sync-db.mjs --from json
- *   node scripts/db/sync-db.mjs --from d1 --if-missing
+ *   node scripts/db/sync-db.mjs --from json --if-missing
+ *   node scripts/db/sync-db.mjs --from d1 [--database ntu-mods-dev] [--out db/ntu-mods.sqlite]
  */
 
 import { execFileSync } from "child_process"

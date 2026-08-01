@@ -13,6 +13,11 @@ Steps
 5. Convert exam CSVs to exam JSON      ->  data/05_exams_{YYYY}_{S}.json
 6. Load into D1 (with --load)          ->  scripts/db/load-semester.mjs
 
+--load publishes to D1, which the on-demand snapshot route reads live. It
+does NOT update what prerendered pages or the client ship, which build from
+src/data/api — run stepfinal_upsync.py afterwards and commit the result to
+actually publish a semester to the rest of the site.
+
 Everything from step 2 onwards is scoped to one semester: whatever is pulled
 down for 2025;2 only ever describes 2025;2. That is why a load is a replace of
 exactly one (semester, scope) rather than a merge — and why re-running a single

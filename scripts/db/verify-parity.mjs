@@ -1,5 +1,5 @@
 /**
- * Parity gate (D1_MIGRATION_PLAN.md §8 step 3).
+ * Parity gate.
  *
  * Reconstructs the original JSON shapes out of the database and diffs them
  * against src/data/api/*.json — every module, every semester, not a sample.

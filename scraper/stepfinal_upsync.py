@@ -11,11 +11,11 @@ Mapping:
 
 The app no longer reads any of these — D1 is the source of truth, and
 ``step6_load_d1`` (scripts/db/load-semester.mjs) is what actually publishes a
-semester. This copy exists solely because Cloudflare Workers Builds has no
-wrangler credentials and therefore cannot ``wrangler d1 export``; scripts/db/
-sync-db.mjs rebuilds the database from these files when the build has no
-other way to get one. Once the build environment can pull from D1 directly
-(a scoped API token, or the file staged in R2), this whole step goes away.
+semester. Workers Builds now has a scoped API token and pulls the database
+straight from D1 (``scripts/db/sync-db.mjs --from d1``, the default), so this
+copy is no longer load-bearing for the build. It stays as a fallback path
+(``--from json``) that needs no network access or credentials, and as the
+comparison baseline ``verify-parity.mjs`` diffs D1 against.
 
 Two files this used to generate are gone:
     module-map.json  -- replaced by ALL_MODULE_CODES_SQL / MODULE_TITLES_SQL

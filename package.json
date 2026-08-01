@@ -7,7 +7,7 @@
     "node": ">=22.5"
   },
   "scripts": {
-    "data": "node scripts/db/sync-db.mjs --from json --if-missing && tsx scripts/build-static-data.mts",
+    "data": "node scripts/db/sync-db.mjs --from d1 --if-missing && tsx scripts/build-static-data.mts",
     "dev": "yarn data && astro dev",
     "build": "yarn data && astro build && tsx scripts/build-sitemap.mts && node scripts/indexnow.mjs ../dist/client",
     "preview": "astro preview",

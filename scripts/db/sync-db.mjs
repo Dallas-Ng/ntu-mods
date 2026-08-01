@@ -1,18 +1,20 @@
 /**
- * Get a local copy of db/ntu-mods.sqlite, either by rebuilding it from
- * src/data/api JSON or by downloading it from D1.
+ * Get a local copy of db/ntu-mods.sqlite, either by downloading it from D1
+ * or by rebuilding it from src/data/api JSON.
  *
- * `--if-missing` is what `yarn data` uses before every build: CI has no
- * wrangler credentials, so it can't `wrangler d1 export`, and rebuilding from
- * JSON on every build would be wasted work once a database is already checked
- * out. That fallback is the only reason src/data/api is still in the repo —
- * once the build can pull from D1 directly (an API token in the Workers
- * Builds environment, or the file staged in R2), `--from json` and the JSON
- * tree it reads can both be deleted.
+ * `--if-missing` is what `yarn data` uses before every build, so a database
+ * already on disk is reused rather than re-pulled on every `yarn dev`/build.
+ * The default source is D1 (`--from d1`) — Workers Builds has a scoped
+ * `CLOUDFLARE_API_TOKEN` so it can `wrangler d1 export` directly.
  *
- *   node scripts/db/sync-db.mjs --from json
- *   node scripts/db/sync-db.mjs --from json --if-missing
+ * `--from json` stays as a manual fallback: it needs no network access or
+ * credentials, it's what verify-parity.mjs's comparison baseline depends on,
+ * and it's what keeps working if the API token is ever revoked or misscoped.
+ * That's also why src/data/api is still in the repo.
+ *
  *   node scripts/db/sync-db.mjs --from d1 [--database ntu-mods-dev] [--out db/ntu-mods.sqlite]
+ *   node scripts/db/sync-db.mjs --from json
+ *   node scripts/db/sync-db.mjs --from d1 --if-missing
  */
 
 import { execFileSync } from "child_process"

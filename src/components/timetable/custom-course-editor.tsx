@@ -619,7 +619,7 @@ const CustomCourseEditor = () => {
                             selectCustomCourseIndex(course.id, courseIndex.id)
                           }
                           className={cn(
-                            "h-5 cursor-pointer rounded border px-1.5 text-[0.65rem] font-medium transition-colors",
+                            "focus-visible:ring-ring/50 h-5 cursor-pointer rounded border px-1.5 text-[0.65rem] font-medium transition-colors outline-none focus-visible:ring-[3px]",
                             isActive
                               ? "bg-foreground text-background border-transparent"
                               : "text-muted-foreground hover:border-foreground"
@@ -639,7 +639,7 @@ const CustomCourseEditor = () => {
       <hr />
 
       <button
-        className="hover:bg-accent flex w-full cursor-pointer items-center justify-center gap-1.5 p-2 text-sm transition-colors"
+        className="hover:bg-accent focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-center gap-1.5 p-2 text-sm transition-colors outline-none focus-visible:ring-[3px]"
         onClick={() => setAddOpen(true)}>
         <Plus className="size-3.5" />
         Add custom block

@@ -17,9 +17,8 @@ interface Props {
   onNavigate: (index: number) => void
   onSaveToPlan: (planIndex: number) => void
   truncated?: boolean
-  hideDuplicates?: boolean
-  onHideDuplicatesChange?: (v: boolean) => void
-  hiddenCount?: number
+  uniqueTimeslotsOnly?: boolean
+  duplicatesSkipped?: number
 }
 
 const TimetableResultsCycler = ({
@@ -28,9 +27,8 @@ const TimetableResultsCycler = ({
   onNavigate,
   onSaveToPlan,
   truncated,
-  hideDuplicates,
-  onHideDuplicatesChange,
-  hiddenCount
+  uniqueTimeslotsOnly,
+  duplicatesSkipped
 }: Props) => {
   if (combinations.length === 0) return null
 
@@ -40,8 +38,9 @@ const TimetableResultsCycler = ({
     <div className="flex flex-col gap-2 rounded-lg border p-3">
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground text-xs">
-          {combinations.length} option{combinations.length !== 1 ? "s" : ""}{" "}
-          found
+          {combinations.length}{" "}
+          {uniqueTimeslotsOnly ? "unique layout" : "option"}
+          {combinations.length !== 1 ? "s" : ""} found
           {truncated && " (more exist — try relaxing constraints)"}
         </span>
         <DropdownMenu>
@@ -83,21 +82,11 @@ const TimetableResultsCycler = ({
         </span>
       </div>
 
-      {onHideDuplicatesChange && (
-        <label className="flex cursor-pointer items-center gap-1.5 text-xs">
-          <input
-            type="checkbox"
-            checked={hideDuplicates}
-            onChange={(e) => onHideDuplicatesChange(e.target.checked)}
-            className="size-3"
-          />
-          <span className="text-muted-foreground">
-            Hide same-timeslot duplicates
-            {hiddenCount != null &&
-              hiddenCount > 0 &&
-              ` (${hiddenCount} hidden)`}
-          </span>
-        </label>
+      {uniqueTimeslotsOnly && !!duplicatesSkipped && (
+        <p className="text-muted-foreground text-xs">
+          {duplicatesSkipped} same-timeslot variant
+          {duplicatesSkipped !== 1 ? "s" : ""} collapsed
+        </p>
       )}
 
       <div className="flex items-center justify-between">

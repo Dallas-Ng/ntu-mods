@@ -83,7 +83,7 @@ const TimetableModifier = () => {
                     <div
                       className="flex size-10 cursor-pointer items-center justify-center p-1"
                       onClick={(e) => handleRemoveClick(e, moduleKey)}>
-                      <TrashIcon className="text-muted-foreground hover:text-foreground size-4" />
+                      <TrashIcon className="text-muted-foreground hover:text-foreground size-4 transition-colors" />
                     </div>
                   </div>
                 </div>

@@ -177,7 +177,7 @@ const TimetableIndexModifier = (props: Props) => {
               <CommandItem
                 value={indexKey}
                 onSelect={handleSelect}
-                className="hover:bg-accent rounded-none transition-colors hover:cursor-pointer">
+                className="hover:bg-accent cursor-pointer transition-colors">
                 <div className="flex w-full justify-between gap-2 text-sm">
                   <span className="flex items-center gap-1">
                     <Check

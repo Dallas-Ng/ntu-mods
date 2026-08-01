@@ -1,11 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Menu, Moon, Settings, Sun, X } from "lucide-react"
+import { Megaphone, Menu, Moon, Settings, Sun, X } from "lucide-react"
+import posthog from "posthog-js"
 
 import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL_SHORT } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
+import { useChangelogUnseenCount } from "@/hooks/use-changelog-unseen"
 import { usePathname } from "@/hooks/use-pathname"
 import { useTheme } from "@/hooks/use-theme"
 import {
@@ -15,8 +17,9 @@ import {
   NavigationMenuList
 } from "@/components/ui/navigation-menu"
 
+import ChangelogButton from "./changelog-button"
 import { NewDot } from "./new-dot"
-import ThemeToggle from "./theme-toggle"
+import SettingsDropdown from "./settings-dropdown"
 import { Button } from "./ui/button"
 import {
   Drawer,
@@ -29,6 +32,7 @@ import {
 const Navbar = () => {
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
+  const changelogUnseen = useChangelogUnseenCount()
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -62,10 +66,8 @@ const Navbar = () => {
 
             <span
               className={cn(
-                "ml-1 hidden font-bold hover:text-slate-950 md:inline-block dark:hover:text-slate-100",
-                pathname === "/"
-                  ? "text-slate-950 dark:text-slate-100"
-                  : "text-slate-500 dark:text-slate-400"
+                "hover:text-foreground ml-1 hidden font-bold transition-colors md:inline-block",
+                pathname === "/" ? "text-foreground" : "text-muted-foreground"
               )}>
               {siteConfig.name}
             </span>
@@ -82,10 +84,10 @@ const Navbar = () => {
                     <a
                       href={link.route}
                       className={cn(
-                        "relative mr-1 px-1 text-sm font-semibold hover:bg-transparent hover:text-slate-950 md:px-3 dark:hover:text-slate-100",
+                        "hover:text-foreground relative mr-1 px-1 text-sm font-semibold transition-colors hover:bg-transparent md:px-3",
                         pathname.includes(link.route)
-                          ? "text-slate-950 dark:text-slate-100"
-                          : "text-slate-500 dark:text-slate-400"
+                          ? "text-foreground"
+                          : "text-muted-foreground"
                       )}>
                       {link.label}
                       {link.route === "/exams" && (
@@ -131,17 +133,12 @@ const Navbar = () => {
           </a>
 
           <div className="hidden md:block">
-            <ThemeToggle />
+            <ChangelogButton />
           </div>
 
-          <Button
-            aria-label="Settings Button"
-            size="icon"
-            variant="ghost"
-            className="hidden md:inline-flex"
-            onClick={() => window.location.assign("/settings")}>
-            <Settings className="size-5" />
-          </Button>
+          <div className="hidden md:block">
+            <SettingsDropdown />
+          </div>
 
           {/* Mobile drawer */}
           <Drawer direction="right">
@@ -202,16 +199,36 @@ const Navbar = () => {
               {/* Footer */}
               <div className="mt-auto border-t p-3">
                 <DrawerClose asChild>
+                  <a
+                    href="/changelog"
+                    onClick={() =>
+                      posthog.capture("changelog_opened", {
+                        source: "navbar_mobile_menu"
+                      })
+                    }
+                    className="hover:bg-accent text-muted-foreground flex w-full items-center justify-between gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                    <span className="flex items-center gap-3">
+                      <Megaphone className="size-4" />
+                      Changelog
+                    </span>
+                    {changelogUnseen > 0 && (
+                      <span className="rounded-full bg-yellow-400 px-1.5 py-0.5 text-[10px] font-semibold text-black">
+                        {changelogUnseen > 9 ? "9+" : changelogUnseen}
+                      </span>
+                    )}
+                  </a>
+                </DrawerClose>
+                <DrawerClose asChild>
                   <button
                     onClick={() => window.location.assign("/settings")}
-                    className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                    className="hover:bg-accent text-muted-foreground flex w-full cursor-pointer items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                     <Settings className="size-4" />
                     Settings
                   </button>
                 </DrawerClose>
                 <button
                   onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                  className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                  className="hover:bg-accent text-muted-foreground flex w-full cursor-pointer items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                   {theme === "light" ? (
                     <Sun className="size-4" />
                   ) : (

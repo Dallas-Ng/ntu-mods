@@ -1,11 +1,12 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import {
   InfoIcon,
   LockIcon,
   LockOpenIcon,
+  RotateCcwIcon,
   Settings2Icon,
   WandIcon,
   XIcon
@@ -20,6 +21,7 @@ import {
   CONSECUTIVE_OPTIONS,
   GAP_OPTIONS,
   GENERATION_INDEX_TYPES,
+  isDefaultGenerationConfig,
   TIME_OPTIONS
 } from "@/lib/generation-config"
 import { latestSemester, latestYear } from "@/lib/semesters"
@@ -43,6 +45,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
 import {
   Tooltip,
   TooltipContent,
@@ -171,12 +174,12 @@ const CollisionIgnoreSection = () => {
                       title={
                         globallyRelaxed ? "Already relaxed globally" : undefined
                       }
-                      className={`h-6 rounded border px-2 text-xs font-medium transition-[color,background-color,border-color,opacity] ${
+                      className={`focus-visible:ring-ring/50 h-6 rounded border px-2 text-xs font-medium transition-[color,background-color,border-color,opacity] outline-none focus-visible:ring-[3px] ${
                         globallyRelaxed
                           ? "cursor-not-allowed opacity-50"
                           : active
-                            ? "bg-foreground text-background border-transparent"
-                            : "text-muted-foreground hover:border-foreground"
+                            ? "bg-foreground text-background cursor-pointer border-transparent"
+                            : "text-muted-foreground hover:border-foreground cursor-pointer"
                       }`}>
                       {COURSE_TYPE[type as keyof typeof COURSE_TYPE]}
                     </button>
@@ -240,7 +243,7 @@ const LockedModulesSection = () => {
               </span>
               <button
                 onClick={() => toggleModuleLock(key)}
-                className={`flex h-6 items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors ${
+                className={`focus-visible:ring-ring/50 flex h-6 cursor-pointer items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   isLocked
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:border-foreground"
@@ -264,6 +267,11 @@ const SettingsForm = () => {
   const [blockOpen, setBlockOpen] = useState(false)
   const config = useBoundState((s) => s.generationConfig)
   const updateConfig = useBoundState((s) => s.updateGenerationConfig)
+  const resetConfig = useBoundState((s) => s.resetGenerationConfig)
+  const lockedModules = useBoundState((s) => s.lockedModules)
+
+  const isPristine =
+    isDefaultGenerationConfig(config) && lockedModules.length === 0
 
   const toggleSkippable = (type: IndexType) => {
     const current = config.skippableTypes
@@ -326,7 +334,7 @@ const SettingsForm = () => {
               <button
                 key={pref}
                 onClick={() => updateConfig({ loadPreference: pref })}
-                className={`flex h-8 flex-1 items-center justify-center rounded-md border text-xs font-medium transition-colors ${
+                className={`focus-visible:ring-ring/50 flex h-8 flex-1 cursor-pointer items-center justify-center rounded-md border text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   config.loadPreference === pref
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:border-foreground"
@@ -405,7 +413,7 @@ const SettingsForm = () => {
               <button
                 key={type}
                 onClick={() => toggleSkippable(type)}
-                className={`h-7 rounded-md border px-2.5 text-xs font-medium transition-colors ${
+                className={`focus-visible:ring-ring/50 h-7 cursor-pointer rounded-md border px-2.5 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   active
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:border-foreground"
@@ -433,7 +441,7 @@ const SettingsForm = () => {
         </SectionLabel>
         <button
           onClick={() => setBlockOpen(true)}
-          className="text-muted-foreground hover:text-foreground flex w-full items-center justify-between rounded-md border px-3 py-2 text-xs transition-colors">
+          className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-between rounded-md border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
           <span>
             {config.blacklistedTimeslots.length > 0
               ? `${config.blacklistedTimeslots.length} slot${config.blacklistedTimeslots.length !== 1 ? "s" : ""} blocked`
@@ -441,6 +449,29 @@ const SettingsForm = () => {
           </span>
           <span className="text-muted-foreground/60">Edit</span>
         </button>
+      </div>
+
+      {/* Reset */}
+      <div className="flex items-center justify-between border-t pt-3">
+        <span className="text-muted-foreground text-xs">
+          Restores every setting above, including blocked slots and index locks
+        </span>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={isPristine}
+          onClick={() => {
+            resetConfig()
+            posthog.capture("timetable_generation_settings_reset", {
+              locked_modules: lockedModules.length,
+              blacklisted_slots: config.blacklistedTimeslots.length,
+              lunch_break_days: config.lunchBreaks.length
+            })
+          }}
+          className="h-7 shrink-0 gap-1.5 text-xs">
+          <RotateCcwIcon className="size-3" />
+          Reset
+        </Button>
       </div>
 
       <Dialog open={blockOpen} onOpenChange={setBlockOpen}>
@@ -537,17 +568,39 @@ const ConfigSummary = () => {
   )
 }
 
+const UniqueOnlyToggle = ({
+  checked,
+  onChange
+}: {
+  checked: boolean
+  onChange: (value: boolean) => void
+}) => (
+  <div className="flex items-center justify-between gap-2 rounded-lg border px-3 py-2">
+    <SectionLabel tip="Skip options that place classes in exactly the same slots and differ only by index number, so all 60 results are layouts you haven't seen.">
+      Unique layouts only
+    </SectionLabel>
+    <Switch
+      size="sm"
+      checked={checked}
+      onCheckedChange={onChange}
+      aria-label="Unique layouts only"
+    />
+  </div>
+)
+
 const TimetableGenerationConfig = () => {
   const [open, setOpen] = useState(false)
-  const [hideDuplicates, setHideDuplicates] = useState(false)
   const { timetable } = useTimetable()
   const generationConfig = useBoundState((s) => s.generationConfig)
+  const uniqueTimeslotsOnly = useBoundState((s) => s.uniqueTimeslotsOnly)
+  const setUniqueTimeslotsOnly = useBoundState((s) => s.setUniqueTimeslotsOnly)
   const {
     combinations,
     currentIdx,
     isGenerating,
     isDiagnosing,
     truncated,
+    duplicatesSkipped,
     hasGenerated,
     suggestions,
     generate,
@@ -557,31 +610,20 @@ const TimetableGenerationConfig = () => {
 
   const noModules = Object.keys(timetable).length === 0
 
-  const visibleCombinations = useMemo(() => {
-    if (!hideDuplicates) return combinations
-    const seen = new Set<string>()
-    return combinations.filter((c) => {
-      if (seen.has(c.timeslotSignature)) return false
-      seen.add(c.timeslotSignature)
-      return true
-    })
-  }, [combinations, hideDuplicates])
-
-  const hiddenCount = combinations.length - visibleCombinations.length
-
-  const visibleCurrentIdx = Math.max(
-    0,
-    visibleCombinations.findIndex((c) => c === combinations[currentIdx])
-  )
-
-  const visibleNavigateTo = useCallback(
-    (visIdx: number) => {
-      const combo = visibleCombinations[visIdx]
-      if (!combo) return
-      const rawIdx = combinations.indexOf(combo)
-      if (rawIdx !== -1) navigateTo(rawIdx)
+  /**
+   * Uniqueness is a search setting, not a display filter — flipping it has to
+   * re-run generation, otherwise the result budget stays spent on look-alikes.
+   */
+  const handleUniqueChange = useCallback(
+    (value: boolean) => {
+      setUniqueTimeslotsOnly(value)
+      if (hasGenerated) generate(generationConfig, undefined, value)
+      posthog.capture("timetable_generation_unique_toggled", {
+        unique_only: value,
+        regenerated: hasGenerated
+      })
     },
-    [visibleCombinations, combinations, navigateTo]
+    [setUniqueTimeslotsOnly, hasGenerated, generate, generationConfig]
   )
 
   return (
@@ -589,7 +631,7 @@ const TimetableGenerationConfig = () => {
       {/* Settings trigger */}
       <button
         onClick={() => setOpen(true)}
-        className="text-muted-foreground hover:text-foreground flex w-full items-center justify-between rounded-lg border px-3 py-2 text-xs transition-colors">
+        className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-between rounded-lg border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
         <div className="flex items-center gap-1.5">
           <Settings2Icon className="size-3.5" />
           <span>Generation Settings</span>
@@ -617,26 +659,33 @@ const TimetableGenerationConfig = () => {
           Add modules above before generating
         </p>
       ) : (
-        <Button
-          onClick={() => {
-            generate()
-            posthog.capture("timetable_generation_started", {
-              module_count: Object.keys(timetable).length,
-              load_preference: generationConfig.loadPreference,
-              blacklisted_slots: generationConfig.blacklistedTimeslots.length,
-              lunch_break_days: generationConfig.lunchBreaks.length,
-              free_days_count: generationConfig.preferredFreeDays.length,
-              max_consecutive_slots: generationConfig.maxConsecutiveSlots,
-              min_gap: generationConfig.minGapBetweenClasses,
-              day_start: generationConfig.dayStartTime,
-              day_end: generationConfig.dayEndTime
-            })
-          }}
-          disabled={isGenerating}
-          className="w-full gap-2">
-          <WandIcon className="size-4" />
-          {isGenerating ? "Generating…" : "Generate Timetable"}
-        </Button>
+        <>
+          <UniqueOnlyToggle
+            checked={uniqueTimeslotsOnly}
+            onChange={handleUniqueChange}
+          />
+          <Button
+            onClick={() => {
+              generate()
+              posthog.capture("timetable_generation_started", {
+                module_count: Object.keys(timetable).length,
+                unique_only: uniqueTimeslotsOnly,
+                load_preference: generationConfig.loadPreference,
+                blacklisted_slots: generationConfig.blacklistedTimeslots.length,
+                lunch_break_days: generationConfig.lunchBreaks.length,
+                free_days_count: generationConfig.preferredFreeDays.length,
+                max_consecutive_slots: generationConfig.maxConsecutiveSlots,
+                min_gap: generationConfig.minGapBetweenClasses,
+                day_start: generationConfig.dayStartTime,
+                day_end: generationConfig.dayEndTime
+              })
+            }}
+            disabled={isGenerating}
+            className="w-full gap-2">
+            <WandIcon className="size-4" />
+            {isGenerating ? "Generating…" : "Generate Timetable"}
+          </Button>
+        </>
       )}
 
       {hasGenerated && combinations.length === 0 && !isGenerating && (
@@ -670,14 +719,13 @@ const TimetableGenerationConfig = () => {
 
       {combinations.length > 0 && (
         <TimetableResultsCycler
-          combinations={visibleCombinations}
-          currentIndex={visibleCurrentIdx}
-          onNavigate={visibleNavigateTo}
+          combinations={combinations}
+          currentIndex={currentIdx}
+          onNavigate={navigateTo}
           onSaveToPlan={saveToPlan}
           truncated={truncated}
-          hideDuplicates={hideDuplicates}
-          onHideDuplicatesChange={setHideDuplicates}
-          hiddenCount={hiddenCount}
+          uniqueTimeslotsOnly={uniqueTimeslotsOnly}
+          duplicatesSkipped={duplicatesSkipped}
         />
       )}
     </div>

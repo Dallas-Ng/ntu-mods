@@ -38,7 +38,7 @@ const ScreenshotInfoButton = () => {
   return (
     <Dialog open={dialogOpen} onOpenChange={(val) => setDialogOpen(val)}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon" className="text-blue-600">
+        <Button variant="outline" size="icon" className="text-primary">
           <BadgeInfo className="size-5" />
         </Button>
       </DialogTrigger>
@@ -81,7 +81,7 @@ const ScreenshotInfoButton = () => {
               <a
                 rel="noopener noreferrer"
                 href="https://support.apple.com/en-ie/guide/iphone/iphc872c0115/ios"
-                className="font-semibold text-blue-600">
+                className="text-primary hover:text-primary/80 font-semibold transition-colors">
                 here
               </a>
             </p>
@@ -110,7 +110,7 @@ const ScreenshotInfoButton = () => {
               <a
                 rel="noopener noreferrer"
                 href="https://support.google.com/android/answer/9075928?hl=en"
-                className="font-semibold text-blue-600">
+                className="text-primary hover:text-primary/80 font-semibold transition-colors">
                 here
               </a>
             </p>
@@ -137,7 +137,7 @@ const ScreenshotInfoButton = () => {
                 <a
                   rel="noopener noreferrer"
                   href="https://support.apple.com/en-sg/102646"
-                  className="font-semibold text-blue-600">
+                  className="text-primary hover:text-primary/80 font-semibold transition-colors">
                   here
                 </a>
               </p>
@@ -168,7 +168,7 @@ const ScreenshotInfoButton = () => {
                 <a
                   rel="noopener noreferrer"
                   href="https://support.microsoft.com/en-us/windows/use-snipping-tool-to-capture-screenshots-00246869-1843-655f-f220-97299b865f6b"
-                  className="font-semibold text-blue-600">
+                  className="text-primary hover:text-primary/80 font-semibold transition-colors">
                   here
                 </a>
               </p>

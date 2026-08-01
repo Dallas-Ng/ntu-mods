@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
 import {
@@ -18,6 +18,14 @@ import { latestSemester, latestYear } from "@/lib/semesters"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 
+const RESULT_LIMIT = 60
+const TIME_BUDGET_MS = 300
+/**
+ * Unique mode throws away look-alike leaves, so it needs a bigger budget to
+ * reach the same number of usable results.
+ */
+const UNIQUE_TIME_BUDGET_MS = 700
+
 export function useTimetableGeneration() {
   const { timetable, timetableIndex, updateTimetable } = useTimetable()
   const { indexes: seasonIndexes } = useSeasonIndexes(
@@ -25,6 +33,7 @@ export function useTimetableGeneration() {
     latestSemester
   )
   const generationConfig = useBoundState((s) => s.generationConfig)
+  const uniqueTimeslotsOnly = useBoundState((s) => s.uniqueTimeslotsOnly)
   const lockedModules = useBoundState((s) => s.lockedModules)
   const customCourses = useBoundState((s) => s.customCourses)
   const setCustomCourses = useBoundState((s) => s.setCustomCourses)
@@ -33,6 +42,7 @@ export function useTimetableGeneration() {
   const [currentIdx, setCurrentIdx] = useState(0)
   const [isGenerating, setIsGenerating] = useState(false)
   const [truncated, setTruncated] = useState(false)
+  const [duplicatesSkipped, setDuplicatesSkipped] = useState(0)
   const [hasGenerated, setHasGenerated] = useState(false)
   const [suggestions, setSuggestions] = useState<ConstraintSuggestion[]>([])
   const [isDiagnosing, setIsDiagnosing] = useState(false)
@@ -95,7 +105,7 @@ export function useTimetableGeneration() {
 
       updateTimetable(moduleTimetable, planIndex)
 
-      const source = customCourses[timetableIndex] ?? []
+      const source = customCourses[planIndex] ?? []
       if (source.length > 0) {
         setCustomCourses(
           source.map((course) => ({
@@ -107,11 +117,15 @@ export function useTimetableGeneration() {
         )
       }
     },
-    [customCourses, timetableIndex, setCustomCourses, updateTimetable]
+    [customCourses, setCustomCourses, updateTimetable]
   )
 
   const generate = useCallback(
-    (config = generationConfig, maxResults = 30) => {
+    (
+      config = generationConfig,
+      maxResults = RESULT_LIMIT,
+      unique = uniqueTimeslotsOnly
+    ) => {
       if (moduleKeys.length === 0) return
       setIsGenerating(true)
       setSuggestions([])
@@ -121,12 +135,17 @@ export function useTimetableGeneration() {
           generationKeys,
           allIndexes,
           config,
-          maxResults,
-          lockedModules,
-          seededTimetable
+          {
+            maxResults,
+            lockedModules,
+            currentTimetable: seededTimetable,
+            uniqueTimeslotsOnly: unique,
+            timeBudgetMs: unique ? UNIQUE_TIME_BUDGET_MS : TIME_BUDGET_MS
+          }
         )
         setCombinations(result.combinations)
         setTruncated(result.truncated)
+        setDuplicatesSkipped(result.duplicatesSkipped)
         setHasGenerated(true)
         if (result.combinations.length > 0) {
           applyCombination(result.combinations[0], timetableIndex)
@@ -148,6 +167,7 @@ export function useTimetableGeneration() {
       generationKeys,
       allIndexes,
       generationConfig,
+      uniqueTimeslotsOnly,
       lockedModules,
       seededTimetable,
       timetableIndex,
@@ -176,10 +196,18 @@ export function useTimetableGeneration() {
     setCombinations([])
     setCurrentIdx(0)
     setTruncated(false)
+    setDuplicatesSkipped(0)
     setHasGenerated(false)
     setSuggestions([])
     setIsDiagnosing(false)
   }, [])
+
+  // Generated results belong to whichever plan was viewed when generate()
+  // ran. Switching plans invalidates them, so cycling left/right must not
+  // silently apply a stale combination to the newly viewed plan.
+  useEffect(() => {
+    reset()
+  }, [timetableIndex, reset])
 
   return {
     combinations,
@@ -187,6 +215,7 @@ export function useTimetableGeneration() {
     isGenerating,
     isDiagnosing,
     truncated,
+    duplicatesSkipped,
     hasGenerated,
     suggestions,
     moduleKeys,

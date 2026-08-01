@@ -56,6 +56,30 @@ export default defineConfig({
         "@": fileURLToPath(new URL("./src", import.meta.url))
       }
     },
+    // client:only islands are hydrated via Astro's own runtime import calls,
+    // which esbuild's dependency scanner can't see statically. Without this,
+    // vite discovers these deps lazily on first mount and re-optimizes mid-
+    // session — the reload can leave two live React module instances in the
+    // page (mismatched hook contexts -> "Invalid hook call").
+    optimizeDeps: {
+      include: [
+        "react",
+        "react-dom",
+        "react-dom/client",
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime",
+        "posthog-js",
+        "class-variance-authority",
+        "clsx",
+        "lucide-react",
+        "radix-ui",
+        "sonner",
+        "tailwind-merge",
+        "vaul",
+        "zustand",
+        "zustand/middleware"
+      ]
+    },
     build: {
       rollupOptions: {
         output: {

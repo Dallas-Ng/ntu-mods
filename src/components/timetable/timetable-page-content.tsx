@@ -59,22 +59,22 @@ const TimetablePageContent = () => {
               <TimetableTable indexPickerEnabled={indexPickerEnabled} />
             </div>
 
-            <div>
-              <TimetableOverview />
+            <div className="space-y-8">
+              <div className="space-y-2">
+                <TimetableOverview />
+
+                <div className="w-fit">
+                  <TimetableLegend />
+                </div>
+              </div>
+
+              <TimetableHiddenContentHelper />
             </div>
           </div>
 
           <div className="hidden md:block md:w-[40%] lg:w-[30%]">
             <TimetableModifier />
           </div>
-        </div>
-
-        <div className="flex w-full flex-col gap-2">
-          <div className="w-fit">
-            <TimetableLegend />
-          </div>
-
-          <TimetableHiddenContentHelper />
         </div>
       </div>
 

@@ -94,11 +94,13 @@ const TimetableAiChat = () => {
     currentIdx,
     isGenerating,
     truncated,
+    duplicatesSkipped,
     hasGenerated,
     generate,
     navigateTo,
     saveToPlan
   } = useTimetableGeneration()
+  const uniqueTimeslotsOnly = useBoundState((s) => s.uniqueTimeslotsOnly)
 
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState("")
@@ -286,7 +288,7 @@ const TimetableAiChat = () => {
           <span className="text-xs font-medium">AI Assistant</span>
           <button
             onClick={handleReset}
-            className="text-muted-foreground hover:text-foreground transition-colors"
+            className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
             aria-label="New chat">
             <RefreshCwIcon className="size-3.5" />
           </button>
@@ -339,7 +341,7 @@ const TimetableAiChat = () => {
           <button
             onClick={sendMessage}
             disabled={isChatting || !input.trim()}
-            className="text-muted-foreground hover:text-foreground transition-colors disabled:opacity-40"
+            className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors disabled:pointer-events-none disabled:opacity-40"
             aria-label="Send">
             <SendIcon className="size-3.5" />
           </button>
@@ -376,6 +378,8 @@ const TimetableAiChat = () => {
           onNavigate={navigateTo}
           onSaveToPlan={saveToPlan}
           truncated={truncated}
+          uniqueTimeslotsOnly={uniqueTimeslotsOnly}
+          duplicatesSkipped={duplicatesSkipped}
         />
       )}
     </div>

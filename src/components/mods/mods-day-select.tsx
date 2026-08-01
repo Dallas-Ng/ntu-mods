@@ -98,7 +98,7 @@ export const ModsDaySelect = ({ paramsValue, disabled }: Props) => {
                     key={day}
                     onClick={() => toggleDay(day)}
                     className={cn(
-                      "h-7 min-w-0 flex-1 cursor-pointer rounded border text-xs font-medium transition-[color,background-color,border-color]",
+                      "focus-visible:ring-ring/50 h-7 min-w-0 flex-1 cursor-pointer rounded border text-xs font-medium transition-[color,background-color,border-color] outline-none focus-visible:ring-[3px]",
                       active
                         ? "bg-foreground text-background border-transparent"
                         : "text-muted-foreground hover:border-foreground"
@@ -115,7 +115,7 @@ export const ModsDaySelect = ({ paramsValue, disabled }: Props) => {
                   filter_type: "module_day"
                 })
               }}
-              className="text-muted-foreground hover:text-foreground mt-1 cursor-pointer text-left text-xs transition-colors">
+              className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 mt-1 cursor-pointer text-left text-xs transition-colors outline-none focus-visible:ring-[3px]">
               Reset
             </button>
           </div>

@@ -120,7 +120,7 @@ const SitemapContent = async () => {
               key={link.href}
               href={link.href}
               className="group hover:bg-muted rounded-lg border p-4 transition-colors">
-              <p className="text-foreground text-sm font-medium group-hover:text-blue-500">
+              <p className="text-foreground group-hover:text-primary text-sm font-medium transition-colors">
                 {link.label}
               </p>
               <p className="text-muted-foreground mt-0.5 text-sm">
@@ -139,7 +139,7 @@ const SitemapContent = async () => {
               key={link.href}
               href={link.href}
               className="group hover:bg-muted rounded-lg border p-4 transition-colors">
-              <p className="text-foreground text-sm font-medium group-hover:text-blue-500">
+              <p className="text-foreground group-hover:text-primary text-sm font-medium transition-colors">
                 {link.label}
               </p>
               <p className="text-muted-foreground mt-0.5 text-sm">
@@ -162,7 +162,7 @@ const SitemapContent = async () => {
                 <p className="text-muted-foreground mb-1 text-xs">
                   {article.category}
                 </p>
-                <p className="text-foreground text-sm font-medium group-hover:text-blue-500">
+                <p className="text-foreground group-hover:text-primary text-sm font-medium transition-colors">
                   {article.title}
                 </p>
                 <p className="text-muted-foreground mt-0.5 line-clamp-2 text-sm">
@@ -206,7 +206,7 @@ const SitemapContent = async () => {
                   <a
                     key={moduleItem.code}
                     href={`/mods/${moduleItem.code}`}
-                    className="text-muted-foreground text-sm leading-6 transition-colors hover:text-blue-500">
+                    className="text-muted-foreground hover:text-primary text-sm leading-6 transition-colors">
                     <span className="text-foreground font-medium">
                       {moduleItem.code}
                     </span>{" "}

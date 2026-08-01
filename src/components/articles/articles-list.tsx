@@ -66,7 +66,7 @@ function ArticleCard({
   return (
     <a
       href={`/articles/${article.slug}`}
-      className="group bg-card hover:bg-accent rounded-md border transition-colors">
+      className="group bg-card hover:bg-accent rounded-lg border transition-colors">
       {article.thumbnail && (
         <img
           src={article.thumbnail}
@@ -88,7 +88,7 @@ function ArticleCard({
             </>
           )}
         </div>
-        <h2 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold wrap-break-word">
+        <h2 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold wrap-break-word transition-colors">
           {article.title}
         </h2>
         <p className="text-foreground/80 mt-2 line-clamp-3 text-sm leading-6 wrap-break-word">
@@ -257,7 +257,7 @@ export default function ArticlesList({
               return (
                 <PopoverClose
                   key={label}
-                  className="hover:bg-accent flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors"
+                  className="hover:bg-accent flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors"
                   onClick={() => updateParams({ group: value || null })}>
                   <Check
                     className={cn(
@@ -298,7 +298,7 @@ export default function ArticlesList({
               return (
                 <PopoverClose
                   key={category}
-                  className="hover:bg-accent flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors"
+                  className="hover:bg-accent flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors"
                   onClick={() => {
                     updateParams({ category: value })
                     if (value)

@@ -8,8 +8,7 @@
  * byte-identical to the JSON it replaces.
  */
 
-import type { ApiExam } from "@/lib/server/get-module-exam-data"
-import type { ApiModule } from "@/lib/server/get-module-metadata"
+import type { ApiExam, ApiModule } from "@/lib/server/db/types"
 
 export interface OfferingRow {
   code: string

@@ -13,7 +13,7 @@ The app no longer reads any of these — D1 is the source of truth, and
 ``step6_load_d1`` (scripts/db/load-semester.mjs) is what actually publishes a
 semester. This copy exists solely because Cloudflare Workers Builds has no
 wrangler credentials and therefore cannot ``wrangler d1 export``; scripts/db/
-ensure-db.mjs rebuilds the database from these files when the build has no
+sync-db.mjs rebuilds the database from these files when the build has no
 other way to get one. See section 9a of D1_MIGRATION_PLAN.md — once the build
 can pull from D1, this whole step goes away.
 

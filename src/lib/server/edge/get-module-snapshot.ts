@@ -16,13 +16,12 @@ import type {
   SemesterRow,
   SlotRow
 } from "@/lib/server/db/shape"
-import type { ApiExam } from "@/lib/server/get-module-exam-data"
-import type { ApiModule } from "@/lib/server/get-module-metadata"
+import type { ApiExam, ApiModule } from "@/lib/server/db/types"
 
 /**
- * Request-time counterpart to src/lib/server/get-module-*.ts, for the one route
+ * Request-time counterpart to src/lib/server/db/repo.ts, for the one route
  * that renders historic module snapshots on-demand rather than prerendering
- * them. Those readers use `node:sqlite` against a local file, which Cloudflare
+ * them. repo.ts uses `node:sqlite` against a local file, which Cloudflare
  * Workers cannot load; this one runs the same SQL from
  * src/lib/server/db/queries.ts through the D1 binding.
  *

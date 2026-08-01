@@ -434,7 +434,7 @@ Three hard D1 limits found while getting there:
 
 | Limit | Value | Consequence |
 | --- | --- | --- |
-| Max SQL statement length | ~100 KB | Batch INSERT rows by **bytes**, not row count. A fixed 500-row batch of `offerings` (each with a full description) hit `statement too long: SQLITE_TOOBIG`. `scripts/db/dump-sql.mjs` targets 90 KB. |
+| Max SQL statement length | ~100 KB | Batch INSERT rows by **bytes**, not row count. A fixed 500-row batch of `offerings` (each with a full description) hit `statement too long: SQLITE_TOOBIG`. `scripts/db/load-semester.mjs` targets 90 KB. |
 | Compound `SELECT` terms | fewer than 10 | A 10-term `UNION ALL` count query fails with `too many terms in compound SELECT [code: 7500]`. Use scalar subqueries. |
 | Import polling | flaky | One scoped load failed with `Not currently importing anything` and succeeded on retry. Loads are idempotent (replace, not append), so blind retry is safe — but the pipeline must retry rather than treat it as a data error. |
 
@@ -506,7 +506,7 @@ obtain the database. It cannot yet.
 so the same command fails there — and the SQLite file is 103 MB, far too large to
 commit.
 
-Until that is solved, `scripts/db/ensure-db.mjs` rebuilds the database from the
+Until that is solved, `scripts/db/sync-db.mjs` rebuilds the database from the
 JSON under `src/data/api` when the file is missing, which keeps CI green.
 **That fallback is the only remaining reason `src/data/api` exists.** Options,
 roughly in order of preference:

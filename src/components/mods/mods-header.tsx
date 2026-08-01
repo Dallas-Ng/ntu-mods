@@ -1,5 +1,5 @@
 import { formatTitle } from "@/lib/format"
-import type { ApiModule } from "@/lib/server/get-module-metadata"
+import type { ApiModule } from "@/lib/server/db/types"
 
 import Breadcrumbs from "../breadcrumbs"
 

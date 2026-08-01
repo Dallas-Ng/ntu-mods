@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 
-import type { ApiModule } from "@/lib/server/get-module-metadata"
+import type { ApiModule } from "@/lib/server/db/types"
 import { cn } from "@/lib/utils"
 
 import { hasValue, renderModuleValue } from "./mods-info-table"

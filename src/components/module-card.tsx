@@ -1,7 +1,7 @@
 import type { AllModule } from "@/types/mods"
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
-import type { ApiModule } from "@/lib/server/get-module-metadata"
+import type { ApiModule } from "@/lib/server/db/types"
 import { cn } from "@/lib/utils"
 
 import { Skeleton } from "./ui/skeleton"

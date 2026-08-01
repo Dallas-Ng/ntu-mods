@@ -13,8 +13,8 @@ import fs from "fs"
 import path from "path"
 import { DatabaseSync } from "node:sqlite"
 
-import { d1Query } from "./d1.mjs"
-import { ROOT, deriveCategories, deriveFaculty } from "./derive.mjs"
+import { d1Query } from "./lib/d1.mjs"
+import { ROOT, deriveCategories, deriveFaculty } from "./lib/derive.mjs"
 
 const SRC = path.join(ROOT, "src/data/api")
 const DB = path.join(ROOT, "db/ntu-mods.sqlite")

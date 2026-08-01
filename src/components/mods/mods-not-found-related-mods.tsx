@@ -2,7 +2,7 @@
 
 import { useMemo } from "react"
 
-import type { ApiModule } from "@/lib/server/get-module-metadata"
+import type { ApiModule } from "@/lib/server/db/types"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { usePathname } from "@/hooks/use-pathname"
 

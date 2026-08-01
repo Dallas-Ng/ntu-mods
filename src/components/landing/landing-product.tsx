@@ -1,4 +1,4 @@
-import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
+import { getModuleIndexesData } from "@/lib/server/db/repo"
 
 import { TimetableTable } from "../timetable-table/table"
 

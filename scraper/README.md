@@ -348,9 +348,8 @@ python -c "import json; print(json.dumps(json.load(open('data/03_mdata_2025_2.js
 | `scraper/data/03_mdata_YYYY_S.json`   | `src/data/api/metadata/YYYY_S.json` |
 | `scraper/data/04_indexes_YYYY_S.json` | `src/data/api/indexes/YYYY_S.json`  |
 | `scraper/data/05_exams_YYYY_S.json`   | `src/data/api/exams/YYYY_S.json`    |
-| `scraper/data/01_semesters.json`      | `src/data/api/semesters.json`       |
-| _(derived)_                           | `src/data/api/module-map.json`      |
-| _(derived)_                           | `src/data/api/index-map.json`       |
+
+`src/data/api/semesters.json` is not copied from the scraper — `scripts/build-static-data.mts` generates it from the database, so "the current semester" means the newest semester that actually has offerings loaded rather than whatever the portal happens to list.
 
 ### Data invariants (quality rules)
 

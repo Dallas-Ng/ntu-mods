@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 
 import { getModuleUrl } from "@/lib/module-url"
-import type { PrerequisiteNode } from "@/lib/server/get-prerequisite-graph"
+import type { PrerequisiteNode } from "@/lib/server/db/types"
 
 interface Props {
   moduleCode: string

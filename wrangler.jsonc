@@ -24,18 +24,17 @@
   // Web ReadableStream — Response can't accept that, and silently
   // stringifies it to the literal text "[object Object]".
   "compatibility_flags": ["nodejs_compat", "disable_nodejs_process_v2"],
-  // Source of truth for all module data. The historic snapshot route
-  // (src/lib/server/edge/get-module-snapshot.ts) queries this at request
-  // time; prerendered routes query the same schema at build time through
-  // node:sqlite against a local copy pulled with `yarn db:pull`.
+  // Source of truth for all module data. The on-demand snapshot route
+  // (src/lib/server/edge/get-module-snapshot.ts) queries it at request time
+  // through this binding; prerendered routes query the same schema at build
+  // time through node:sqlite against a local copy pulled with `yarn db:pull`.
   //
-  // ntu-mods-dev (08aaa8e2-45a6-4598-b74d-3a7194bf1f36) is the development
-  // database. It holds identical data and is what the loader scripts default
-  // to, so experiments never touch what is serving traffic.
-  // "remote": true makes `astro dev` query the real database rather than an
-  // empty local one — without it the on-demand snapshot route errors in dev
-  // with "no such table: offerings". This route only ever reads, so pointing
-  // local dev at live data is safe.
+  // "remote": true makes `astro dev` query this binding over the network
+  // rather than an empty local D1 — without it the on-demand route errors in
+  // dev with "no such table: offerings". Safe because that route only ever
+  // reads. (Unrelated: the loader scripts default writes to a separate
+  // ntu-mods-dev database, so experiments never touch what is serving
+  // traffic — that database has no binding here.)
   "d1_databases": [
     {
       "binding": "DB",

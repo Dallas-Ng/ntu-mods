@@ -2,20 +2,17 @@
 import { siteConfig } from "@/config/site"
 import { generateTimetableMatrix } from "@/lib/generate-timetable-matrix"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
-import { query } from "@/lib/server/db/build-time"
-import { ALL_MODULE_CODES_SQL } from "@/lib/server/db/queries"
-import { getLatestSemester } from "@/lib/server/get-latest-semester"
 import {
+  getAllModuleCodes,
+  getAllModuleMetadata,
+  getLatestSemester,
   getModuleCurrentSemester,
-  getModuleSemesters
-} from "@/lib/server/get-module-current-semester"
-import { getModuleExamData } from "@/lib/server/get-module-exam-data"
-import { getModuleIndexesData } from "@/lib/server/get-module-indexes-data"
-import { getAllModuleMetadata } from "@/lib/server/get-module-metadata"
-import {
+  getModuleExamData,
+  getModuleIndexesData,
   getModulePrerequisites,
+  getModuleSemesters,
   getPrerequisiteGraph
-} from "@/lib/server/get-prerequisite-graph"
+} from "@/lib/server/db/repo"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import ModsDescription from "@/components/mods/mods-description"
 import ModsExpandableFields from "@/components/mods/mods-expandable-fields"
@@ -37,7 +34,7 @@ import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 export const prerender = true
 
 export async function getStaticPaths() {
-  return query<{ code: string }>(ALL_MODULE_CODES_SQL).map(({ code }) => ({
+  return (await getAllModuleCodes()).map((code) => ({
     params: { module: code }
   }))
 }

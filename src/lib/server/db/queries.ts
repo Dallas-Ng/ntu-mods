@@ -6,8 +6,25 @@
  * by both lives here rather than being written twice.
  *
  * These are plain strings with `?` placeholders, which is the intersection of
- * what `node:sqlite` and D1 both accept.
+ * what `node:sqlite` and D1 both accept. Every export here is called through a
+ * named function in db/repo.ts (or, for the one on-demand route,
+ * edge/get-module-snapshot.ts) — not from a page or component directly.
  */
+
+/**
+ * Ranks each module's offerings newest-first so a query can filter to `rn = 1`
+ * for "as of its most recent offering." Five call sites need exactly this
+ * shape with different column lists, so the shape is shared and the columns
+ * are not.
+ */
+const latestOfferingRanked = (columns: string) => `
+  ranked AS (
+    SELECT ${columns},
+           ROW_NUMBER() OVER (PARTITION BY o.code ORDER BY s.sort_key DESC) AS rn
+      FROM offerings o
+      JOIN semesters s ON s.sem = o.sem
+  )
+`
 
 /**
  * The latest semester means *the newest semester that actually has data*,
@@ -47,11 +64,7 @@ export const ALL_MODULE_CODES_SQL = `
  * page's alphabetical listing.
  */
 export const MODULE_TITLES_SQL = `
-  WITH ranked AS (
-    SELECT o.code, o.title,
-           ROW_NUMBER() OVER (PARTITION BY o.code ORDER BY s.sort_key DESC) AS rn
-      FROM offerings o JOIN semesters s ON s.sem = o.sem
-  )
+  WITH ${latestOfferingRanked("o.code, o.title")}
   SELECT code, title FROM ranked WHERE rn = 1 ORDER BY code
 `
 
@@ -61,11 +74,7 @@ export const MODULE_TITLES_SQL = `
  * /mods/:code and so must stay out of the sitemap).
  */
 export const SITEMAP_VERSIONED_OFFERINGS_SQL = `
-  WITH ranked AS (
-    SELECT o.code, o.sem, s.year, s.semester, s.sort_key,
-           ROW_NUMBER() OVER (PARTITION BY o.code ORDER BY s.sort_key DESC) AS rn
-      FROM offerings o JOIN semesters s ON s.sem = o.sem
-  )
+  WITH ${latestOfferingRanked("o.code, o.sem, s.year, s.semester, s.sort_key")}
   SELECT code, year, semester FROM ranked
    WHERE rn > 1 AND CAST(year AS INTEGER) >= ?
    ORDER BY code, sort_key DESC
@@ -112,12 +121,35 @@ export const OFFERING_SQL = `
    WHERE o.code = ? AND o.sem = ?
 `
 
+/** Every offering in one semester — same shape as OFFERING_SQL, unfiltered by code. */
+export const SEMESTER_OFFERINGS_SQL = `
+  SELECT o.*,
+         (SELECT json_group_array(key) FROM (
+            SELECT p.key AS key
+              FROM offering_programmes op
+              JOIN programmes p ON p.id = op.programme_id
+             WHERE op.code = o.code AND op.sem = o.sem
+             ORDER BY op.seq
+         )) AS search_keys
+    FROM offerings o
+   WHERE o.sem = ?
+   ORDER BY o.code
+`
+
 /** Prerequisite groups for one offering, ordered so they rebuild the source nesting. */
 export const OFFERING_PREREQUISITES_SQL = `
   SELECT group_no, item_no, raw_text
     FROM prerequisites
    WHERE code = ? AND sem = ?
    ORDER BY group_no, item_no
+`
+
+/** Prerequisite groups for every offering in one semester — same shape as OFFERING_PREREQUISITES_SQL, unfiltered by code. */
+export const SEMESTER_PREREQUISITES_SQL = `
+  SELECT code, group_no, item_no, raw_text
+    FROM prerequisites
+   WHERE sem = ?
+   ORDER BY code, group_no, item_no
 `
 
 /** Every class slot for one offering, ordered so they rebuild the source arrays. */
@@ -139,22 +171,46 @@ export const OFFERING_EXAM_SQL = `
    WHERE code = ? AND sem = ?
 `
 
+/** Every exam in one semester, keyed by module code. */
+export const SEMESTER_EXAMS_SQL = `
+  SELECT code, date, day, start_time, end_time, name, duration
+    FROM exams WHERE sem = ? ORDER BY code
+`
+
+/**
+ * Each module's title as of its most recent offering, plus `sem` so
+ * PREREQUISITE_GRAPH_EDGES_SQL can join to the same "latest" row.
+ */
+export const PREREQUISITE_GRAPH_TITLES_SQL = `
+  WITH ${latestOfferingRanked("o.code, o.sem, o.title")}
+  SELECT code, title FROM ranked WHERE rn = 1
+`
+
+/**
+ * requires_code edges out of each module's most recent offering. Only items
+ * that resolve to a module code become edges — the rest are free text and
+ * cannot be graph edges.
+ */
+export const PREREQUISITE_GRAPH_EDGES_SQL = `
+  WITH ${latestOfferingRanked("o.code, o.sem, o.title")}
+  SELECT DISTINCT r.code AS code, p.requires_code AS requires
+    FROM ranked r
+    JOIN prerequisites p ON p.code = r.code AND p.sem = r.sem
+   WHERE r.rn = 1 AND p.requires_code IS NOT NULL
+   ORDER BY r.code, p.requires_code
+`
+
 /**
  * One row per module code, taken from its newest semester. Replaces
  * modules.json and module-map.json. `:latest_sem` is bound, not subqueried,
  * so the caller decides what "current" means in one place.
  */
 export const MODULE_SUMMARY_SQL = `
-  WITH ranked AS (
-    SELECT o.code, o.sem, o.title, o.au, o.faculty, o.categories,
-           ROW_NUMBER() OVER (PARTITION BY o.code ORDER BY s.sort_key DESC) AS rn
-      FROM offerings o
-      JOIN semesters s ON s.sem = o.sem
-  )
+  WITH ${latestOfferingRanked("o.code, o.sem, o.title, o.au, o.faculty, o.categories, o.not_available_to_programme")}
   SELECT code,
          substr(code, 1, 2)                  AS prefix,
          CAST(substr(code, 3, 1) AS INTEGER) AS level,
-         title, au, faculty, categories,
+         title, au, faculty, categories, not_available_to_programme,
          sem AS latest_sem,
          CASE WHEN sem = ? THEN 1 ELSE 0 END AS is_current
     FROM ranked

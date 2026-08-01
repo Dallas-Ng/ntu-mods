@@ -18,7 +18,7 @@
  * No longer emitted:
  *   public/data/api/metadata/    was read only by the on-demand snapshot route,
  *                                which now queries D1 directly.
- *   src/data/api/prerequisite-graph.json  get-prerequisite-graph.ts now queries SQL.
+ *   src/data/api/prerequisite-graph.json  db/repo.ts now queries SQL.
  *   public/data/api/semesters.json        nothing fetched it; it is only ever
  *                                         imported into the bundle from src/.
  */
@@ -27,7 +27,10 @@ import fs from "fs/promises"
 import path from "path"
 import { DatabaseSync } from "node:sqlite"
 
-import { LATEST_SEMESTER_SQL } from "../src/lib/server/db/queries.ts"
+import {
+  LATEST_SEMESTER_SQL,
+  MODULE_SUMMARY_SQL
+} from "../src/lib/server/db/queries.ts"
 
 const ROOT = path.join(import.meta.dirname, "..")
 const SRC_DATA = path.join(ROOT, "src/data/api")
@@ -117,29 +120,19 @@ function semesterExams(db, sem) {
  * getModuleMetadata, or queried from D1 by the snapshot route.
  */
 function buildModules(db, latestSem) {
-  const rows = db
-    .prepare(
-      `WITH ranked AS (
-         SELECT o.code, o.sem, o.title, o.au, o.faculty, o.categories,
-                o.not_available_to_programme,
-                ROW_NUMBER() OVER (PARTITION BY o.code ORDER BY s.sort_key DESC) AS rn
-           FROM offerings o JOIN semesters s ON s.sem = o.sem
-       )
-       SELECT * FROM ranked WHERE rn = 1 ORDER BY code`
-    )
-    .all()
+  const rows = db.prepare(MODULE_SUMMARY_SQL).all(latestSem)
 
   const modules = rows.map((r) => {
-    const sep = r.sem.indexOf("_")
+    const sep = r.latest_sem.indexOf("_")
     const module = {
       code: r.code,
       title: r.title,
       au: r.au,
       faculty: r.faculty ?? "",
       categories: JSON.parse(r.categories ?? "[]"),
-      latestYear: r.sem.slice(0, sep),
-      latestSemester: r.sem.slice(sep + 1),
-      isCurrentSemester: r.sem === latestSem
+      latestYear: r.latest_sem.slice(0, sep),
+      latestSemester: r.latest_sem.slice(sep + 1),
+      isCurrentSemester: r.is_current === 1
     }
     if (r.not_available_to_programme !== null) {
       module.notAvailableToProgramme = r.not_available_to_programme

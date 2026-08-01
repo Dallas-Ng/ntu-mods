@@ -1,5 +1,4 @@
-import type { ApiExam } from "@/lib/server/get-module-exam-data"
-import type { ApiModule } from "@/lib/server/get-module-metadata"
+import type { ApiExam, ApiModule } from "@/lib/server/db/types"
 import { cn } from "@/lib/utils"
 
 const MODULE_CODE_RE = /^[A-Z]{2,6}\d{4}[A-Z]?$/

@@ -1,6 +1,5 @@
 import { getAllArticles } from "@/lib/server/articles"
-import { query } from "@/lib/server/db/build-time"
-import { MODULE_TITLES_SQL } from "@/lib/server/db/queries"
+import { getModuleTitles } from "@/lib/server/db/repo"
 import Container from "@/components/container"
 import Header from "@/components/header"
 
@@ -84,14 +83,12 @@ function getModulePrefix(code: string) {
 }
 
 // Server-rendered at build time (this page is prerendered, and this component
-// already reads articles off the filesystem), so it can query directly rather
-// than bundling module-map.json into the client payload.
-function getModuleGroups() {
+// already reads articles off the filesystem), so it can fetch module titles
+// here rather than bundling module-map.json into the client payload.
+async function getModuleGroups() {
   const groups = new Map<string, Array<{ code: string; title: string }>>()
 
-  for (const { code, title } of query<{ code: string; title: string }>(
-    MODULE_TITLES_SQL
-  )) {
+  for (const { code, title } of await getModuleTitles()) {
     const prefix = getModulePrefix(code)
     const modules = groups.get(prefix) ?? []
     modules.push({ code, title: title || code })
@@ -104,9 +101,9 @@ function getModuleGroups() {
   }))
 }
 
-const SitemapContent = () => {
+const SitemapContent = async () => {
   const articles = getAllArticles()
-  const moduleGroups = getModuleGroups()
+  const moduleGroups = await getModuleGroups()
 
   return (
     <Container size="sm" className="space-y-10">

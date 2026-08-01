@@ -14,23 +14,19 @@
 import fs from "fs"
 import path from "path"
 
-import { deriveCategories, deriveFaculty } from "./derive.mjs"
+import { deriveCategories, deriveFaculty } from "./lib/derive.mjs"
 
-import { getLatestSemester } from "../../src/lib/server/get-latest-semester.ts"
-import {
-  getModuleCurrentSemester,
-  getModuleSemesters,
-} from "../../src/lib/server/get-module-current-semester.ts"
-import {
-  getModuleExamData,
-  getSemesterExamsData,
-} from "../../src/lib/server/get-module-exam-data.ts"
-import { getModuleIndexesData } from "../../src/lib/server/get-module-indexes-data.ts"
 import {
   getAllModuleMetadata,
+  getLatestSemester,
+  getModuleCurrentSemester,
+  getModuleExamData,
+  getModuleIndexesData,
   getModuleMetadata,
-} from "../../src/lib/server/get-module-metadata.ts"
-import { getPrerequisiteGraph } from "../../src/lib/server/get-prerequisite-graph.ts"
+  getModuleSemesters,
+  getPrerequisiteGraph,
+  getSemesterExamsData,
+} from "../../src/lib/server/db/repo.ts"
 
 const ROOT = path.join(import.meta.dirname, "../..")
 const SRC = path.join(ROOT, "src/data/api")

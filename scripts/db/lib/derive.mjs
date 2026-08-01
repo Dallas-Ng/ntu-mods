@@ -14,7 +14,7 @@ import path from "path"
 import { fileURLToPath } from "url"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-export const ROOT = path.join(__dirname, "../..")
+export const ROOT = path.join(__dirname, "../../..")
 
 /**
  * Faculty keys, read straight out of src/lib/constants.ts rather than

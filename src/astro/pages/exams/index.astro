@@ -1,8 +1,8 @@
 ---
-import { query } from "@/lib/server/db/build-time"
-import { LATEST_EXAM_SEMESTER_SQL } from "@/lib/server/db/queries"
-import type { SemesterRow } from "@/lib/server/db/shape"
-import { getSemesterExamsData } from "@/lib/server/get-module-exam-data"
+import {
+  getLatestExamSemester,
+  getSemesterExamsData
+} from "@/lib/server/db/repo"
 import ExamsList from "@/components/exams/exams-list"
 import Header from "@/components/header"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -15,15 +15,15 @@ const LAST_UPDATED = "27 July 2026"
 // portal's semester list backwards until one did. That is a single indexed
 // query — the newest semester that actually has exam rows.
 async function getExamData() {
-  const row = query<SemesterRow>(LATEST_EXAM_SEMESTER_SQL)[0]
-  if (!row) return { exams: {}, label: "" }
+  const latest = await getLatestExamSemester()
+  if (!latest) return { exams: {}, label: "" }
 
-  const isSpecial = row.semester === "S" || row.semester === "T"
+  const isSpecial = latest.semester === "S" || latest.semester === "T"
   return {
-    exams: await getSemesterExamsData(row.year, row.semester),
+    exams: await getSemesterExamsData(latest.year, latest.semester),
     label: isSpecial
-      ? `AY${row.year} Special Term`
-      : `AY${row.year} Semester ${row.semester}`
+      ? `AY${latest.year} Special Term`
+      : `AY${latest.year} Semester ${latest.semester}`
   }
 }
 

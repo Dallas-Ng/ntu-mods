@@ -1,9 +1,31 @@
+import { execSync } from "node:child_process"
 import { fileURLToPath } from "node:url"
 
 import cloudflare from "@astrojs/cloudflare"
 import react from "@astrojs/react"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig, fontProviders } from "astro/config"
+
+// Cloudflare Workers Builds checks out the real repo (not a tarball), so this
+// resolves there too — baked in at build time so a deployed worker's bundle
+// always carries the commit it was built from, for prod debugging.
+const GIT_COMMIT_SHA = (() => {
+  try {
+    return execSync("git rev-parse --short=10 HEAD").toString().trim()
+  } catch {
+    return "unknown"
+  }
+})()
+
+const BUILD_TIME = new Date().toISOString()
+
+// Same WORKERS_CI/CF_PAGES signal used in scripts/indexnow.mjs to detect a
+// real Cloudflare deploy vs a local `yarn build` — not the commit's git
+// branch or any account/zone info, just "was this built by CI".
+const BUILD_ENV =
+  process.env.WORKERS_CI === "1" || process.env.CF_PAGES === "1"
+    ? "ci"
+    : "local"
 
 export default defineConfig({
   srcDir: "./src/astro",
@@ -50,6 +72,11 @@ export default defineConfig({
   },
   vite: {
     envPrefix: ["PUBLIC_"],
+    define: {
+      "import.meta.env.PUBLIC_GIT_COMMIT_SHA": JSON.stringify(GIT_COMMIT_SHA),
+      "import.meta.env.PUBLIC_BUILD_TIME": JSON.stringify(BUILD_TIME),
+      "import.meta.env.PUBLIC_BUILD_ENV": JSON.stringify(BUILD_ENV)
+    },
     plugins: [tailwindcss()],
     resolve: {
       alias: {

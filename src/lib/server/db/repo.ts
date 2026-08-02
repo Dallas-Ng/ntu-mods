@@ -46,9 +46,21 @@ export async function getLatestExamSemester(): Promise<{
   return latest ? { year: latest.year, semester: latest.semester } : null
 }
 
-/** Every module code that was ever offered, for getStaticPaths. */
+/** Every module code that was ever offered. Used by the sitemap, not getStaticPaths — see getActiveModuleCodes for the build subset. */
 export async function getAllModuleCodes(): Promise<string[]> {
   return json.latestOfferings().map((o) => o.code)
+}
+
+/**
+ * Codes offered in the active/latest semester — the /mods/[module]
+ * getStaticPaths subset. Building all ~4,300 codes ever offered dominated
+ * build time for pages almost nobody visits; codes not in this set 404 out
+ * of the static build and render on demand via src/astro/pages/404.astro +
+ * edge/get-module-snapshot.ts's getLatestModuleSnapshot, same D1-backed
+ * approach as the versioned snapshot route.
+ */
+export async function getActiveModuleCodes(): Promise<string[]> {
+  return json.activeOfferingCodes()
 }
 
 /** Each module's code and title as of its most recent offering. */

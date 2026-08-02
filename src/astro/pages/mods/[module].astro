@@ -1,11 +1,9 @@
 ---
-import { siteConfig } from "@/config/site"
-import { generateTimetableMatrix } from "@/lib/generate-timetable-matrix"
-import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
+import { buildModuleMeta } from "@/lib/module-meta"
+import { getModuleUrl } from "@/lib/module-url"
 import {
-  getAllModuleCodes,
+  getActiveModuleCodes,
   getAllModuleMetadata,
-  getLatestSemester,
   getModuleCurrentSemester,
   getModuleExamData,
   getModuleIndexesData,
@@ -13,17 +11,7 @@ import {
   getModuleSemesters,
   getPrerequisiteGraph
 } from "@/lib/server/db/repo"
-import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
-import ModsDescription from "@/components/mods/mods-description"
-import ModsExpandableFields from "@/components/mods/mods-expandable-fields"
-import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
-import ModsHeader from "@/components/mods/mods-header"
-import ModsIndexTable from "@/components/mods/mods-index-table"
-import ModsInfoTable from "@/components/mods/mods-info-table"
-import ModsPrerequisiteGraph from "@/components/mods/mods-prerequisite-graph"
-import ModsViewTracker from "@/components/mods/mods-view-tracker"
-import ModsWorkloadTable from "@/components/mods/mods-workload-table"
-import RelatedModules from "@/components/related-modules"
+import ModsModulePage from "@/astro/components/ModsModulePage.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 // Fully static — Cloudflare Workers have no runtime filesystem, so this can't
@@ -33,8 +21,14 @@ import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 // snapshot pages).
 export const prerender = true
 
+// Only the active/latest semester's ~1,100 codes are built statically — the
+// other ~3,200 codes ever offered render on demand instead (404.astro +
+// getLatestModuleSnapshot), since prerendering all of them dominated build
+// time for pages almost nobody visits. Because every code here is by
+// definition offered in the latest semester, isCurrentOffering below is
+// always true for statically built pages.
 export async function getStaticPaths() {
-  return (await getAllModuleCodes()).map((code) => ({
+  return (await getActiveModuleCodes()).map((code) => ({
     params: { module: code }
   }))
 }
@@ -46,235 +40,54 @@ if (!current) return new Response(null, { status: 404 })
 
 const { year, semester } = current
 
-const [allMeta, indexes, exam, prereqGraph, prereqNode] = await Promise.all([
-  getAllModuleMetadata(year, semester),
-  getModuleIndexesData(moduleKey, year, semester),
-  getModuleExamData(moduleKey, year, semester),
-  getPrerequisiteGraph(),
-  getModulePrerequisites(moduleKey)
-])
+const [allMeta, indexes, exam, prereqGraph, prereqNode, allSemesters] =
+  await Promise.all([
+    getAllModuleMetadata(year, semester),
+    getModuleIndexesData(moduleKey, year, semester),
+    getModuleExamData(moduleKey, year, semester),
+    getPrerequisiteGraph(),
+    getModulePrerequisites(moduleKey),
+    getModuleSemesters(moduleKey)
+  ])
 
 const moduleData = allMeta[moduleKey]
 if (!moduleData) return new Response(null, { status: 404 })
 
-const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS } = generateTimetableMatrix(
-  Object.fromEntries(
-    Object.entries(indexes).map(([k, v]) => [k, [...v]])
-  ) as Record<string, Index[]>,
-  9
-)
+// Codes emitted by getStaticPaths are always the current offering of the
+// active semester, so this is always true here — kept as a real comparison
+// (not hardcoded) so the component stays identical to the on-demand path.
+const isCurrentOffering = true
 
-const latest = await getLatestSemester()
-const isCurrentOffering =
-  current.year === latest.year && current.semester === latest.semester
-
-const allSemesters = await getModuleSemesters(moduleKey)
 const otherSemesters = allSemesters.filter(
   (s) => !(s.year === year && s.semester === semester)
 )
 
-const offeringsByYear = otherSemesters.reduce<
-  Record<string, Array<{ year: string; semester: string }>>
->((acc, s) => {
-  ;(acc[s.year] ??= []).push(s)
-  return acc
-}, {})
-const sortedYears = Object.keys(offeringsByYear).sort((a, b) =>
-  b.localeCompare(a)
-)
+const prefix = moduleKey.slice(0, 2)
+const related = Object.values(allMeta)
+  .filter((m) => m.code.slice(0, 2) === prefix && m.code !== moduleKey)
+  .sort((a, b) => parseInt(a.code.slice(2)) - parseInt(b.code.slice(2)))
+  .slice(0, 9)
+  .map((m) => ({ code: m.code, title: m.title }))
 
-const semesterLabel = (s: { year: string; semester: string }) => {
-  const semName = s.semester === "S" ? "Special Term" : `Semester ${s.semester}`
-  return `AY${s.year}/${parseInt(s.year) + 1} ${semName}`
-}
-
-const semesterLabelForCurrent = semesterLabel(current)
-
-const baseDesc = moduleData.description?.trim()
-  ? `${moduleData.description.trim().slice(0, 100)}${moduleData.description.trim().length > 100 ? "…" : ""}`
-  : `${moduleKey} is a ${moduleData.au} AU NTU module. Check index schedules, class times, exam dates, venues, and prerequisites on NTUMods.`
-
-const jsonLd = [
-  {
-    "@context": "https://schema.org",
-    "@type": "Course",
-    name: `${moduleKey} ${moduleData.title}`,
-    courseCode: moduleKey,
-    description: moduleData.description || moduleData.title,
-    numberOfCredits: String(moduleData.au),
-    provider: {
-      "@type": "CollegeOrUniversity",
-      name: "Nanyang Technological University",
-      sameAs: "https://www.ntu.edu.sg"
-    }
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Mods",
-        item: `${siteConfig.url}/mods`
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: `${moduleKey} ${moduleData.title}`,
-        item: `${siteConfig.url}/mods/${moduleKey}`
-      }
-    ]
-  }
-]
+const { title, description } = buildModuleMeta(moduleKey, moduleData)
 ---
 
 <BaseLayout
-  title={`${moduleKey} ${moduleData.title} (${moduleData.au} AU) | NTUMods`}
-  description={baseDesc}
+  title={title}
+  description={description}
   canonical={getModuleUrl(moduleKey)}
   noTitleSuffix>
-  <ModsViewTracker
-    client:idle
-    moduleCode={moduleKey}
+  <ModsModulePage
+    moduleKey={moduleKey}
+    moduleData={moduleData}
+    year={year}
+    semester={semester}
+    indexes={indexes}
+    exam={exam}
     isCurrentOffering={isCurrentOffering}
+    otherSemesters={otherSemesters}
+    prereqGraph={prereqGraph}
+    prereqNode={prereqNode}
+    related={related}
   />
-  {
-    !isCurrentOffering && (
-      <div class="mb-4 rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
-        Not offered in the current semester · Last offered{" "}
-        {semesterLabelForCurrent}
-      </div>
-    )
-  }
-
-  <div class="flex flex-col gap-6 xl:flex-row">
-    <div class="w-full space-y-4 xl:w-3/6">
-      <ModsHeader
-        module={moduleData}
-        currentYear={year}
-        currentSemester={semester}
-        isCurrentOffering={isCurrentOffering}
-      />
-
-      <div class="flex gap-2">
-        {
-          isCurrentOffering && (
-            <ModsAddToTimetableButton
-              client:load
-              moduleKey={moduleKey}
-              year={year}
-              semester={semester}
-              showText={true}
-            />
-          )
-        }
-        <ModsFavouriteButton
-          client:load
-          moduleKey={moduleKey}
-          className="hover:bg-accent size-8 shrink-0 rounded-md border"
-        />
-      </div>
-
-      {
-        moduleData.description && (
-          <ModsDescription description={moduleData.description} />
-        )
-      }
-    </div>
-
-    <div class="h-fit w-full space-y-4 xl:w-3/6">
-      <ModsWorkloadTable indexes={indexes} />
-
-      <hr />
-
-      <ModsInfoTable module={moduleData} exam={exam} />
-
-      <ModsExpandableFields client:idle module={moduleData} />
-    </div>
-  </div>
-
-  <div class="mt-10 space-y-6">
-    {
-      prereqNode && (
-        <>
-          <hr />
-          <ModsPrerequisiteGraph
-            client:visible
-            moduleCode={moduleKey}
-            node={prereqNode}
-            graph={prereqGraph}
-          />
-          <hr />
-        </>
-      )
-    }
-
-    <h2 class="text-lg">Available Indexes</h2>
-
-    <ModsIndexTable
-      indexes={indexes}
-      precomputedMatrix={{ TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS }}
-    />
-
-    {
-      otherSemesters.length > 0 && (
-        <div>
-          <hr class="mb-6" />
-          <h2 class="mb-4 text-lg">Other offerings</h2>
-          <div class="flex gap-1 overflow-x-auto pb-1 xl:flex-wrap xl:overflow-x-visible xl:pb-0">
-            {sortedYears.map((yr) => {
-              const sems = offeringsByYear[yr]
-              const find = (sem: string) => sems.find((s) => s.semester === sem)
-              return (
-                <div
-                  key={yr}
-                  class="bg-muted/40 flex min-w-27.5 flex-col overflow-hidden rounded-lg">
-                  <span class="text-muted-foreground border-border/50 border-b px-3 py-2 text-xs font-medium">
-                    AY{yr.slice(2)}/{String(parseInt(yr) + 1).slice(2)}
-                  </span>
-                  <div class="flex flex-col gap-1 p-2">
-                    {(["1", "2", "S"] as const).map((sem) => {
-                      const s = find(sem)
-                      const label = sem === "S" ? "Sp. Term" : `Semester ${sem}`
-                      return s ? (
-                        <a
-                          href={getModuleVersionUrl(
-                            moduleKey,
-                            s.year,
-                            s.semester
-                          )}
-                          class="hover:bg-background border-border/60 rounded-md border px-2 py-1 text-center text-sm transition-colors">
-                          {label}
-                        </a>
-                      ) : (
-                        <span class="text-muted-foreground/35 px-2 py-1 text-center text-sm line-through">
-                          {label}
-                        </span>
-                      )
-                    })}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )
-    }
-
-    <div>
-      <hr class="mb-6" />
-      <h2 class="mb-2 text-lg">Other Relevant Mods</h2>
-      <RelatedModules
-        limit={9}
-        moduleKey={moduleKey}
-        currentYear={year}
-        currentSemester={semester}
-        emptyHref="/mods"
-        emptyLabel="No Mods Found. Click here to see all Mods"
-      />
-    </div>
-  </div>
-
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 </BaseLayout>

@@ -1,4 +1,8 @@
 ---
+import { buildModuleMeta } from "@/lib/module-meta"
+import { getModuleUrl } from "@/lib/module-url"
+import { getLatestModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
+import ModsModulePage from "@/astro/components/ModsModulePage.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 // On-demand, not prerendered. Astro only runs middleware for requests that
@@ -6,10 +10,61 @@ import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 // straight from the asset bundle and src/astro/middleware.ts never sees it —
 // which is exactly where the /mods/:code case-normalising redirect lives.
 export const prerender = false
+
+// /mods/[module] only statically builds the active semester's codes (see its
+// getStaticPaths); every other module code misses the asset bundle and
+// worker route table entirely, and lands here — the same fall-through the
+// case-normalising redirect above relies on. If the code turns out to be
+// real, render its current-offering page on demand instead of a real 404.
+// This is deliberately narrower than middleware's MODULE_PATH: only a bare
+// /mods/CODE, not the already-SSR'd /mods/CODE/YEAR/SEM.
+const MODULE_ONLY_PATH = /^\/mods\/([A-Z0-9]+)$/
+const match = MODULE_ONLY_PATH.exec(Astro.url.pathname)
+const moduleKey = match?.[1] ?? ""
+const snapshot = match ? await getLatestModuleSnapshot(moduleKey) : null
+
+// Astro serves this file with a 404 status by filename convention alone —
+// real content needs an explicit override, or a valid module page would
+// report itself as missing to search engines and clients checking
+// response.ok.
+const meta = snapshot ? buildModuleMeta(moduleKey, snapshot.moduleData) : null
+if (snapshot) {
+  Astro.response.status = 200
+  Astro.response.headers.set(
+    "Cache-Control",
+    "public, max-age=3600, s-maxage=86400"
+  )
+}
 ---
 
-<BaseLayout title="Page not found" noindex>
-  <h1 class="mb-2 text-xl">This page does not exist</h1>
+{
+  snapshot && meta ? (
+    <BaseLayout
+      title={meta.title}
+      description={meta.description}
+      canonical={getModuleUrl(moduleKey)}
+      noTitleSuffix>
+      <ModsModulePage
+        moduleKey={moduleKey}
+        moduleData={snapshot.moduleData}
+        year={snapshot.year}
+        semester={snapshot.semester}
+        indexes={snapshot.indexes}
+        exam={snapshot.exam}
+        isCurrentOffering={snapshot.isCurrentOffering}
+        otherSemesters={snapshot.otherSemesters}
+        prereqGraph={snapshot.prereqGraph}
+        prereqNode={snapshot.prereqNode}
+        related={snapshot.related}
+      />
+    </BaseLayout>
+  ) : (
+    <BaseLayout title="Page not found" noindex>
+      <h1 class="mb-2 text-xl">This page does not exist</h1>
 
-  <a href="/" class="hover:text-primary-alt">Click here to return home</a>
-</BaseLayout>
+      <a href="/" class="hover:text-primary-alt">
+        Click here to return home
+      </a>
+    </BaseLayout>
+  )
+}

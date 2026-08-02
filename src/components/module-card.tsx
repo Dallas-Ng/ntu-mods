@@ -1,13 +1,12 @@
 import type { AllModule } from "@/types/mods"
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
-import type { DbModule } from "@/lib/server/db/types"
 import { cn } from "@/lib/utils"
 
 import { Skeleton } from "./ui/skeleton"
 
 interface ModuleCardProps {
-  module: DbModule
+  module: { code: string; title: string }
   cardClassName?: string
 }
 

@@ -1,7 +1,13 @@
 import { env } from "cloudflare:workers"
 
 import {
+  buildModuleTitlesSql,
   LATEST_SEMESTER_SQL,
+  MODULE_LATEST_SEM_SQL,
+  MODULE_OTHER_SEMESTERS_SQL,
+  MODULE_RELATED_SQL,
+  MODULE_REQUIRED_BY_SQL,
+  MODULE_REQUIRES_SQL,
   OFFERING_EXAM_SQL,
   OFFERING_INDEX_KEYS_SQL,
   OFFERING_PREREQUISITES_SQL,
@@ -16,7 +22,11 @@ import type {
   DbSemesterRow,
   DbSlotRow
 } from "@/lib/server/db/shape"
-import type { DbExam, DbModule } from "@/lib/server/db/types"
+import type {
+  DbExam,
+  DbModule,
+  DbPrerequisiteNode
+} from "@/lib/server/db/types"
 
 /**
  * Request-time counterpart to src/lib/server/db/repo.ts, for the one route
@@ -106,5 +116,104 @@ export async function getModuleSnapshot(
     // so a newly listed but unscraped semester made every module render the
     // "historical snapshot" banner.
     isCurrentOffering: latestSem === sem
+  }
+}
+
+export interface ModuleFullSnapshot extends ModuleSnapshot {
+  year: string
+  semester: string
+  otherSemesters: Array<{ year: string; semester: string }>
+  prereqNode: DbPrerequisiteNode | null
+  prereqGraph: Record<string, DbPrerequisiteNode>
+  related: Array<{ code: string; title: string }>
+}
+
+/**
+ * Request-time counterpart to /mods/[module]'s build-time data (repo.ts's
+ * getModuleCurrentSemester + friends), for module codes outside the active
+ * semester and therefore not in its getStaticPaths — see
+ * src/astro/pages/404.astro, the route that calls this.
+ *
+ * Unlike getModuleSnapshot, the caller doesn't know which semester a code
+ * was last offered in, so this resolves that first and then fetches
+ * everything the /mods/[module] page needs: the offering itself, its other
+ * semesters, and a two-hop slice of the prerequisite graph (this module's
+ * direct edges plus their titles) rather than the whole graph, which is
+ * only ever built from JSON at build time.
+ */
+export async function getLatestModuleSnapshot(
+  code: string
+): Promise<ModuleFullSnapshot | null> {
+  if (!/^[A-Z0-9]{2,12}$/.test(code)) return null
+
+  const db = env.DB
+  if (!db) return null
+
+  const latest = await db
+    .prepare(MODULE_LATEST_SEM_SQL)
+    .bind(code)
+    .first<DbSemesterRow>()
+  if (!latest) return null
+
+  const snapshot = await getModuleSnapshot(
+    new URL("http://internal/"),
+    code,
+    latest.year,
+    latest.semester
+  )
+  if (!snapshot) return null
+
+  const [otherSemesters, requiresRows, requiredByRows, relatedRows] =
+    await Promise.all([
+      db
+        .prepare(MODULE_OTHER_SEMESTERS_SQL)
+        .bind(code, latest.sem)
+        .all<{ year: string; semester: string }>(),
+      db
+        .prepare(MODULE_REQUIRES_SQL)
+        .bind(code, latest.sem)
+        .all<{ code: string }>(),
+      db.prepare(MODULE_REQUIRED_BY_SQL).bind(code).all<{ code: string }>(),
+      db
+        .prepare(MODULE_RELATED_SQL)
+        .bind(latest.sem, `${code.slice(0, 2)}%`, code)
+        .all<{ code: string; title: string }>()
+    ])
+
+  const requires = (requiresRows.results ?? []).map((r) => r.code).sort()
+  const requiredBy = (requiredByRows.results ?? []).map((r) => r.code).sort()
+
+  let prereqGraph: Record<string, DbPrerequisiteNode> = {}
+  let prereqNode: DbPrerequisiteNode | null = null
+
+  if (requires.length > 0 || requiredBy.length > 0) {
+    const neighbours = Array.from(new Set([...requires, ...requiredBy]))
+    const titles = await db
+      .prepare(buildModuleTitlesSql(neighbours.length))
+      .bind(...neighbours)
+      .all<{ code: string; title: string }>()
+
+    prereqGraph = Object.fromEntries(
+      (titles.results ?? []).map((r) => [
+        r.code,
+        { title: r.title, requires: [], requiredBy: [] }
+      ])
+    )
+    prereqNode = { title: snapshot.moduleData.title, requires, requiredBy }
+    prereqGraph[code] = prereqNode
+  }
+
+  const related = (relatedRows.results ?? [])
+    .sort((a, b) => parseInt(a.code.slice(2)) - parseInt(b.code.slice(2)))
+    .slice(0, 9)
+
+  return {
+    ...snapshot,
+    year: latest.year,
+    semester: latest.semester,
+    otherSemesters: otherSemesters.results ?? [],
+    prereqNode,
+    prereqGraph,
+    related
   }
 }

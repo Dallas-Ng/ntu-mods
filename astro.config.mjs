@@ -17,6 +17,16 @@ const GIT_COMMIT_SHA = (() => {
   }
 })()
 
+const BUILD_TIME = new Date().toISOString()
+
+// Same WORKERS_CI/CF_PAGES signal used in scripts/indexnow.mjs to detect a
+// real Cloudflare deploy vs a local `yarn build` — not the commit's git
+// branch or any account/zone info, just "was this built by CI".
+const BUILD_ENV =
+  process.env.WORKERS_CI === "1" || process.env.CF_PAGES === "1"
+    ? "ci"
+    : "local"
+
 export default defineConfig({
   srcDir: "./src/astro",
   output: "server",
@@ -63,7 +73,9 @@ export default defineConfig({
   vite: {
     envPrefix: ["PUBLIC_"],
     define: {
-      "import.meta.env.PUBLIC_GIT_COMMIT_SHA": JSON.stringify(GIT_COMMIT_SHA)
+      "import.meta.env.PUBLIC_GIT_COMMIT_SHA": JSON.stringify(GIT_COMMIT_SHA),
+      "import.meta.env.PUBLIC_BUILD_TIME": JSON.stringify(BUILD_TIME),
+      "import.meta.env.PUBLIC_BUILD_ENV": JSON.stringify(BUILD_ENV)
     },
     plugins: [tailwindcss()],
     resolve: {

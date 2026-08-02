@@ -10,4 +10,8 @@ export const BASE_URL = IS_DEV ? "http://localhost:4321" : "https://ntumods.com"
 
 export const GIT_COMMIT_SHA = import.meta.env.PUBLIC_GIT_COMMIT_SHA ?? "unknown"
 
+export const BUILD_TIME = import.meta.env.PUBLIC_BUILD_TIME ?? "unknown"
+
+export const BUILD_ENV = import.meta.env.PUBLIC_BUILD_ENV ?? "unknown"
+
 export * from "./module-constants"

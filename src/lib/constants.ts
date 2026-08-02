@@ -8,4 +8,6 @@ export const IS_PROD = import.meta.env.PROD
 
 export const BASE_URL = IS_DEV ? "http://localhost:4321" : "https://ntumods.com"
 
+export const GIT_COMMIT_SHA = import.meta.env.PUBLIC_GIT_COMMIT_SHA ?? "unknown"
+
 export * from "./module-constants"

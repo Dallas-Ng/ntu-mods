@@ -4,7 +4,7 @@ import "@/styles/globals.css"
 import { Font } from "astro:assets"
 
 import { siteConfig } from "@/config/site"
-import { IS_PROD } from "@/lib/constants"
+import { GIT_COMMIT_SHA, IS_PROD } from "@/lib/constants"
 import { Toaster } from "@/components/ui/sonner"
 import AppBanner from "@/components/app-banner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
@@ -121,7 +121,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
       import "@/astro/lib/posthog-client-init"
     </script>
   </head>
-  <body class="antialiased">
+  <body class="antialiased" data-commit={GIT_COMMIT_SHA}>
     <AppearanceStyleProvider client:load />
     <AppBanner client:idle />
     <div

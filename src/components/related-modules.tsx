@@ -1,4 +1,4 @@
-import { getAllModuleMetadata } from "@/lib/server/get-module-metadata"
+import { getAllModuleMetadata } from "@/lib/server/db/repo"
 
 import ModuleCard from "./module-card"
 

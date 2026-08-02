@@ -1,6 +1,5 @@
-import moduleMapJson from "@/data/api/module-map.json"
-
 import { getAllArticles } from "@/lib/server/articles"
+import { getModuleTitles } from "@/lib/server/db/repo"
 import Container from "@/components/container"
 import Header from "@/components/header"
 
@@ -79,28 +78,22 @@ const TOOL_LINKS = [
   }
 ]
 
-const moduleMap = moduleMapJson as Record<string, { title?: string }>
-
 function getModulePrefix(code: string) {
   return code.match(/^[A-Z]+/)?.[0] ?? "#"
 }
 
-function getModuleGroups() {
+// Server-rendered at build time (this page is prerendered, and this component
+// already reads articles off the filesystem), so it can fetch module titles
+// here rather than bundling module-map.json into the client payload.
+async function getModuleGroups() {
   const groups = new Map<string, Array<{ code: string; title: string }>>()
 
-  Object.entries(moduleMap)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .forEach(([code, moduleItem]) => {
-      const prefix = getModulePrefix(code)
-      const modules = groups.get(prefix) ?? []
-
-      modules.push({
-        code,
-        title: moduleItem.title ?? code
-      })
-
-      groups.set(prefix, modules)
-    })
+  for (const { code, title } of await getModuleTitles()) {
+    const prefix = getModulePrefix(code)
+    const modules = groups.get(prefix) ?? []
+    modules.push({ code, title: title || code })
+    groups.set(prefix, modules)
+  }
 
   return Array.from(groups.entries()).map(([prefix, modules]) => ({
     prefix,
@@ -108,10 +101,9 @@ function getModuleGroups() {
   }))
 }
 
-const SitemapContent = () => {
+const SitemapContent = async () => {
   const articles = getAllArticles()
-  const moduleGroups = getModuleGroups()
-  const moduleCount = Object.keys(moduleMap).length
+  const moduleGroups = await getModuleGroups()
 
   return (
     <Container size="sm" className="space-y-10">

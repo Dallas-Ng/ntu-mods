@@ -1,12 +1,8 @@
 ---
-import SEMESTERS_JSON from "@/data/api/semesters.json"
-
 import {
-  LATEST_SEMESTER_LABEL,
-  latestSemester,
-  latestYear
-} from "@/lib/semesters"
-import { getSemesterExamsData } from "@/lib/server/get-module-exam-data"
+  getLatestExamSemester,
+  getSemesterExamsData
+} from "@/lib/server/db/repo"
 import ExamsList from "@/components/exams/exams-list"
 import Header from "@/components/header"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -15,26 +11,20 @@ export const prerender = true
 
 const LAST_UPDATED = "27 July 2026"
 
+// Previously: read the latest semester, and if it had no exams, walk the
+// portal's semester list backwards until one did. That is a single indexed
+// query — the newest semester that actually has exam rows.
 async function getExamData() {
-  let exams = await getSemesterExamsData(latestYear, latestSemester)
-  let label = LATEST_SEMESTER_LABEL
+  const latest = await getLatestExamSemester()
+  if (!latest) return { exams: {}, label: "" }
 
-  if (Object.keys(exams).length === 0) {
-    for (const sem of (
-      SEMESTERS_JSON as { code: string; name: string }[]
-    ).slice(1)) {
-      const [y, s] = sem.code.split(";")
-      const data = await getSemesterExamsData(y, s)
-      if (Object.keys(data).length > 0) {
-        exams = data
-        const isSpecial = s === "S" || s === "T"
-        label = isSpecial ? `AY${y} Special Term` : `AY${y} Semester ${s}`
-        break
-      }
-    }
+  const isSpecial = latest.semester === "S" || latest.semester === "T"
+  return {
+    exams: await getSemesterExamsData(latest.year, latest.semester),
+    label: isSpecial
+      ? `AY${latest.year} Special Term`
+      : `AY${latest.year} Semester ${latest.semester}`
   }
-
-  return { exams, label }
 }
 
 const { exams, label } = await getExamData()

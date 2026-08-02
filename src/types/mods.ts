@@ -12,7 +12,13 @@ export interface AllModule {
   code: string
   title: string
   au: string
-  searchKeys: string[]
+  /**
+   * Precomputed at load from the offering's own programmes, replacing the raw
+   * `searchKeys` array that used to ship to the browser and be re-parsed on
+   * every card render and every filter pass.
+   */
+  faculty?: ModuleFaculty | ""
+  categories?: ModuleType[]
   notAvailableToProgramme?: string
   isCurrentSemester?: boolean
   latestYear?: string

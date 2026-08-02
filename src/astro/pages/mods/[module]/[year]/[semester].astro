@@ -1,7 +1,6 @@
 ---
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { formatTitle } from "@/lib/format"
-import { getModuleCategories } from "@/lib/get-module-category"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import { getModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
 import Breadcrumbs from "@/components/breadcrumbs"
@@ -42,7 +41,9 @@ Astro.response.headers.set(
   "public, max-age=3600, s-maxage=86400"
 )
 
-const categories = getModuleCategories(moduleData.searchKeys)
+// Precomputed at load, so this route no longer parses programme codes per
+// request — it was the last per-request use of getModuleCategories.
+const categories = moduleData.categories ?? []
 
 const semName = semester === "S" ? "Special Term" : `Semester ${semester}`
 const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`

@@ -2,18 +2,37 @@
 stepfinal_upsync.py
 ===================
 
-Copies the processed scraper output into the main project's src/data/api
-directory, then generates derived lookup files used by the app.
+Copies the processed scraper output into src/data/api.
 
 Mapping:
-    scraper/data/03_mdata_YYYY_S.json  ->  src/data/api/metadata/YYYY_S.json
+    scraper/data/03_mdata_YYYY_S.json   ->  src/data/api/metadata/YYYY_S.json
     scraper/data/04_indexes_YYYY_S.json ->  src/data/api/indexes/YYYY_S.json
     scraper/data/05_exams_YYYY_S.json   ->  src/data/api/exams/YYYY_S.json
-    scraper/data/01_semesters.json      ->  src/data/api/semesters.json  (if present)
 
-Generated (from all metadata/indexes files in src/data/api/):
-    src/data/api/module-map.json   -- { code: { title, au, indexKeys } } (latest semester wins)
-    src/data/api/index-map.json    -- { indexKey: Index[] } (flat, all semesters merged)
+The app doesn't read these directly anymore — D1 is what
+``step6_load_d1`` (scripts/db/load-semester.mjs) publishes a semester to, and
+the on-demand snapshot route queries D1 live. But prerendered pages and the
+client's bulk JSON artifacts are built from a local SQLite copy
+(``scripts/db/sync-db.mjs --from json``, the build's default), which is
+rebuilt from *this* directory — not pulled from D1 on every build, since a
+Workers Build fires on every push regardless of whether the data changed, and
+a fresh `wrangler d1 export` of the whole ~100MB database on each one would
+be wasted work.
+
+So this copy is the actual publish step for prerendered/client data: after
+``--load`` writes to D1, run this script, then commit and push the result.
+That push is what should trigger a rebuild with the new data — running
+``--load`` alone does not. ``scripts/db/sync-db.mjs --from d1`` (``yarn
+db:pull``) stays available to pull fresh from D1 by hand if this ever drifts.
+
+Two files this used to generate are gone:
+    module-map.json  -- replaced by ALL_MODULE_CODES_SQL / MODULE_TITLES_SQL
+    index-map.json   -- had no consumers anywhere in the app; it was dead
+
+semesters.json is no longer copied either. It is generated from the database by
+scripts/build-static-data.mts, so that "the current semester" means the newest
+semester that actually has offerings rather than whatever the portal happens to
+be listing.
 
 Usage:
     python stepfinal_upsync.py
@@ -23,7 +42,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import json
 import shutil
 import re
 from pathlib import Path
@@ -37,67 +55,6 @@ PATTERNS = [
     (re.compile(r"^04_indexes_(.+)\.json$"), API_DIR / "indexes"),
     (re.compile(r"^05_exams_(.+)\.json$"), API_DIR / "exams"),
 ]
-
-
-def build_derived_files(dry_run: bool = False) -> None:
-    """Build module-map.json and index-map.json from all synced API files."""
-    metadata_dir = API_DIR / "metadata"
-    indexes_dir = API_DIR / "indexes"
-
-    # Sort ascending so later files (latest semester) override earlier ones
-    metadata_files = sorted(metadata_dir.glob("*.json"))
-    indexes_files = sorted(indexes_dir.glob("*.json"))
-
-    # Build index-map: indexKey -> Index[]
-    # Flatten all index files; later files override earlier ones for same key
-    index_map: dict[str, list] = {}
-    for idx_file in indexes_files:
-        obj = json.loads(idx_file.read_text(encoding="utf-8"))
-        for _module_code, indexes_by_key in obj.items():
-            for index_key, slots in indexes_by_key.items():
-                index_map[index_key] = slots
-
-    # Build module-map: code -> { title, au, indexKeys }
-    # Also load indexes_files to attach indexKeys for each module from its latest semester
-    module_map: dict[str, dict] = {}
-
-    # First pass: build title/au from metadata (latest wins); record which semester is latest per module
-    for meta_file in metadata_files:
-        stem = meta_file.stem  # e.g. "2025_2"
-        parts = stem.split("_", 1)
-        file_year, file_sem = parts[0], parts[1]
-        obj = json.loads(meta_file.read_text(encoding="utf-8"))
-        for code, mod in obj.items():
-            module_map[code] = {
-                "title": mod.get("title", ""),
-                "au": mod.get("au", "0"),
-                "indexKeys": [],
-                "currentYear": file_year,
-                "currentSemester": file_sem,
-            }
-
-    # Second pass: attach indexKeys from the latest index file containing each module
-    for idx_file in reversed(indexes_files):
-        obj = json.loads(idx_file.read_text(encoding="utf-8"))
-        for code, indexes_by_key in obj.items():
-            if code in module_map and not module_map[code]["indexKeys"]:
-                module_map[code]["indexKeys"] = list(indexes_by_key.keys())
-
-    module_map_path = API_DIR / "module-map.json"
-    index_map_path = API_DIR / "index-map.json"
-
-    print(f"  -> src/data/api/module-map.json  ({len(module_map)} modules)")
-    print(f"  -> src/data/api/index-map.json   ({len(index_map)} indexes)")
-
-    if not dry_run:
-        module_map_path.write_text(
-            json.dumps(module_map, ensure_ascii=False),
-            encoding="utf-8",
-        )
-        index_map_path.write_text(
-            json.dumps(index_map, ensure_ascii=False),
-            encoding="utf-8",
-        )
 
 
 def upsync(dry_run: bool = False) -> None:
@@ -117,23 +74,11 @@ def upsync(dry_run: bool = False) -> None:
                 copied += 1
                 break
 
-        # Semesters
-        if name == "01_semesters.json":
-            dest_file = API_DIR / "semesters.json"
-            print(f"  {src_file.relative_to(SCRAPER_DIR)}  ->  {dest_file.relative_to(SCRAPER_DIR.parent)}")
-            if not dry_run:
-                API_DIR.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(src_file, dest_file)
-            copied += 1
-
     if copied == 0:
         print("Nothing to sync — no matching files found in scraper/data/.")
     else:
         suffix = " (dry run)" if dry_run else ""
         print(f"\nSynced {copied} file(s){suffix}.")
-
-    print("\nBuilding derived lookup files...")
-    build_derived_files(dry_run=dry_run)
 
 
 def main() -> None:

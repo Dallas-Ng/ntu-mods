@@ -24,14 +24,31 @@
   // Web ReadableStream — Response can't accept that, and silently
   // stringifies it to the literal text "[object Object]".
   "compatibility_flags": ["nodejs_compat", "disable_nodejs_process_v2"],
-  // Holds per-module slices of the semester indexes/metadata files, keyed
-  // "indexes:{year}_{sem}:{code}" / "metadata:{year}_{sem}:{code}". The
-  // historic snapshot route (src/lib/server/edge/get-module-snapshot.ts)
-  // reads a single module's entry from here instead of fetching and
-  // JSON.parse-ing the whole-semester file (up to ~3MB) per request.
-  "kv_namespaces": [
-    { "binding": "MODULE_DATA", "id": "98c8dfc5fcfb4dd180c30d37b4d000aa" }
+  // Source of truth for all module data. The on-demand snapshot route
+  // (src/lib/server/edge/get-module-snapshot.ts) queries it at request time
+  // through this binding; prerendered routes query the same schema at build
+  // time through node:sqlite against a local copy pulled with `yarn db:pull`.
+  //
+  // "remote": true makes `astro dev` query this binding over the network
+  // rather than an empty local D1 — without it the on-demand route errors in
+  // dev with "no such table: offerings". Safe because that route only ever
+  // reads. (Unrelated: the loader scripts default writes to a separate
+  // ntu-mods-dev database, so experiments never touch what is serving
+  // traffic — that database has no binding here.)
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ntu-mods",
+      "database_id": "c18f73e4-8b03-43d2-acf1-4b03c81f94e8",
+      "migrations_dir": "db/migrations",
+      "remote": true
+    }
   ],
+  // The MODULE_DATA KV namespace (98c8dfc5fcfb4dd180c30d37b4d000aa) held
+  // per-module slices of the semester JSON files, to avoid fetching and
+  // parsing a whole ~3MB file per request. D1 indexes those lookups directly,
+  // so the binding is gone. The namespace itself still exists and can be
+  // re-bound if this ever needs reverting.
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1,

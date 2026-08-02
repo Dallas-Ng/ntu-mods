@@ -16,6 +16,9 @@
   "[mdx]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "typescript.tsdk": "node_modules/typescript/lib",
   "tailwindCSS.classAttributes": [
     "class",

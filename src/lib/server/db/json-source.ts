@@ -220,6 +220,17 @@ export function getModuleSemesters(code: string): SemesterEntry[] {
   return moduleSemestersIndex().get(code) ?? []
 }
 
+/**
+ * Codes offered in the active/latest semester only — the getStaticPaths
+ * subset for the /mods/[module] build. Everything else (~3,200 of the 4,300
+ * codes ever offered) renders on demand instead; see
+ * src/astro/pages/404.astro.
+ */
+export function activeOfferingCodes(): string[] {
+  const [latest] = semestersWithOfferings()
+  return latest ? Object.keys(readMetadata(latest.sem)).sort() : []
+}
+
 export interface LatestOffering {
   code: string
   sem: string

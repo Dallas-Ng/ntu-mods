@@ -19,19 +19,21 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 export const ROOT = path.join(__dirname, "../../..")
 
 /**
- * Faculty keys, read straight out of src/lib/constants.ts rather than
+ * Faculty keys, read straight out of src/lib/module-constants.ts rather than
  * duplicated, so the two can never drift. Order matters: the rule is
  * last-match-wins, and the original iterated the object in insertion order.
  */
 function readFacultyKeys() {
   const src = fs.readFileSync(
-    path.join(ROOT, "src/lib/constants.ts"),
+    path.join(ROOT, "src/lib/module-constants.ts"),
     "utf-8"
   )
   const block = src.match(
     /export const MODULE_FACULTY = \{([\s\S]*?)\n\} as const/
   )
-  if (!block) throw new Error("Could not locate MODULE_FACULTY in constants.ts")
+  if (!block) {
+    throw new Error("Could not locate MODULE_FACULTY in module-constants.ts")
+  }
   const keys = [...block[1].matchAll(/^\s*([A-Z]+):/gm)].map((m) => m[1])
   if (keys.length < 20) throw new Error(`Parsed only ${keys.length} faculty keys`)
   return keys
@@ -40,8 +42,8 @@ function readFacultyKeys() {
 let facultyKeysCache = null
 /**
  * Lazy and memoized, not a top-level `const FACULTY_KEYS = readFacultyKeys()`:
- * that ran the file read + regex parse of src/lib/constants.ts the instant
- * anything imported this module, so a formatting change in constants.ts (or
+ * that ran the file read + regex parse of src/lib/module-constants.ts the
+ * instant anything imported this module, so a formatting change there (or
  * running from a directory where it doesn't exist) broke every script that
  * merely imports derive.mjs, not just the ones that call deriveFaculty.
  */

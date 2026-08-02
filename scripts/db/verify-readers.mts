@@ -1,12 +1,12 @@
 /**
- * Behavioural check for the rewritten src/lib/server/get-*.ts readers.
+ * Behavioural check for src/lib/server/db/repo.ts.
  *
- * verify-parity.mjs proves the database holds the same data as the JSON. This
- * proves the readers built on top of it return the same JavaScript values the
- * fs-based readers did, which is the thing the pages actually consume.
- *
- * Expected values come from the JSON files still in the repo, so this can only
- * run before those are deleted — which is exactly when it is useful.
+ * repo.ts reads src/data/api through json-source.ts. This file reimplements
+ * the same reads independently — its own walk of the JSON, its own copies of
+ * deriveFaculty/deriveCategories/MODULE_CODE_RE imported from scripts/db/lib,
+ * not from json-source.ts — so a bug in json-source.ts's actual logic has a
+ * real chance of showing up as a mismatch rather than passing silently
+ * because both sides share the same code.
  *
  *   npx tsx scripts/db/verify-readers.mts     (or: node --experimental-strip-types)
  */

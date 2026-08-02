@@ -73,9 +73,10 @@ time (in plain Node, via the adapter's `prerenderEnvironment`) except:
 | `/api/feedback`                | Sends mail through Resend at request time                             |
 | `/ingest/*`                    | PostHog reverse proxy                                                 |
 
-On-demand routes must not import the `node:fs`-based readers in
-`src/lib/server/*.ts` — use `src/lib/server/edge/*` instead, which reads the
-same JSON over the `ASSETS` binding.
+On-demand routes must not import `src/lib/server/db/repo.ts` (or
+`json-source.ts` underneath it) — both use `node:fs` to read `src/data/api`,
+unavailable in the Workers runtime. Use `src/lib/server/edge/*` instead,
+which queries the D1 binding.
 
 ## Getting Started
 
@@ -139,9 +140,11 @@ Set as Worker secrets (not `.env`), read via `locals.runtime.env`:
 
 ## Data Pipeline
 
-Module and index data is sourced from NTU STARS and stored in a Cloudflare D1
-database, which is the single source of truth. The scraper writes to it, and
-both the build and the running Worker read from it.
+Module and index data is sourced from NTU STARS. The scraper writes it to two
+independent places: Cloudflare D1, which the on-demand historic-snapshot
+route reads live, and `src/data/api`, which the build reads to prerender
+pages and generate the client's bulk JSON. Publishing a semester means doing
+both — see [Working with the database](#working-with-the-database).
 
 The scraper lives in `scraper/` and runs in order:
 
@@ -153,7 +156,8 @@ scraper/
   step3_convert_mdata.py     # Normalise module metadata
   step4_convert_indexes.py   # Normalise class indexes
   step5_convert_exams.py     # Convert the exam CSV
-                             # then --load runs scripts/db/load-semester.mjs
+                             # then --load publishes to D1 (scripts/db/load-semester.mjs)
+                             # then stepfinal_upsync.py publishes to src/data/api
 ```
 
 ```bash
@@ -189,20 +193,26 @@ yarn db:dump      # Emit SQL for `wrangler d1 execute --file`
 yarn data         # Regenerate the static artifacts the client fetches
 ```
 
-`yarn dev` and `yarn build` both run `yarn data` first, which creates the local
-database if it is missing and regenerates `public/data/api/`. Neither directory
-is committed — `public/data/api/` is build output, and `db/*.sqlite` is a
-derived read replica of D1.
+`yarn dev` and `yarn build` both run `yarn data` first, which reads
+`src/data/api` directly and regenerates `public/data/api/` — neither this nor
+prerendering touches D1 or `db/*.sqlite` at all. That file is only for the
+`db:*` scripts above: staging a load before it's applied to D1, and verifying
+D1 matches the JSON.
 
-Loading a semester into D1 is **not** enough to change the live site: the
-prerendered pages and the client artifacts are published by a rebuild. Only the
-on-demand `/mods/:code/:year/:semester` route reflects D1 immediately.
+Loading a semester into D1 (`--load`) is **not** enough to change the live
+site — it only reaches the on-demand `/mods/:code/:year/:semester` route,
+which queries D1 directly. Everything else (prerendered pages, the client's
+bulk JSON) is built from `src/data/api`, so publishing a semester there too
+needs `python scraper/stepfinal_upsync.py` followed by a commit and push —
+see the scraper README for the full pipeline.
 
 ### The current semester
 
-The current semester is derived, not configured: it is the newest semester in
-the database that actually has offerings, ordered by `semesters.sort_key`. There
-is nothing to edit when a new semester arrives — load it and rebuild.
+The current semester is derived, not configured: it is the newest semester
+that actually has offerings, ordered by sort key — from `src/data/api` for
+prerendered pages and the client, from D1 for the on-demand route. There is
+nothing to edit when a new semester arrives — publish it (see above) and
+rebuild.
 
 Semester codes follow the format `{year};{semester}` where semester is `1`, `2`,
 `S` (Special Term), or `T` (Special Term II). `sort_key` is
@@ -218,7 +228,7 @@ The following tasks must be performed manually at the start of each semester.
 
 #### 1. Run the data pipeline
 
-Re-run the full scraper pipeline (see [Data Pipeline](#data-pipeline)) with the new semester code.
+Re-run the full scraper pipeline (see [Data Pipeline](#data-pipeline)) with the new semester code, `--load` to publish to D1, then `python scraper/stepfinal_upsync.py` and commit — `--load` alone does not update the prerendered site.
 
 #### 2. Add exam timetable
 

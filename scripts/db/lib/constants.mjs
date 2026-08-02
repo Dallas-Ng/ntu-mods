@@ -7,7 +7,7 @@
 /**
  * Shape of an NTU module code: 2-6 letter school/subject prefix, a 4-digit
  * level+serial, optional trailing letter (e.g. CZ2002, SC1005, AB1201A).
- * Mirrors src/lib/constants.ts's MODULE_CODE_RE — plain .mjs scripts can't
+ * Mirrors src/lib/module-constants.ts's MODULE_CODE_RE — plain .mjs scripts can't
  * import a .ts file directly, so this can't just re-export it. Keep the two
  * in sync.
  */

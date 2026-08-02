@@ -1,36 +1,19 @@
 /**
  * Build-time data-access layer. One exported function per query — pages and
- * components call these, never `query()` + a SQL constant directly, so every
- * query used outside this file (and the request-time counterpart,
- * edge/get-module-snapshot.ts) has exactly one place it's written.
+ * components call these, never read src/data/api directly, so every read
+ * used outside this file (and the request-time counterpart,
+ * edge/get-module-snapshot.ts, which queries D1 instead) has exactly one
+ * place it's written.
+ *
+ * Everything here reads through json-source.ts, an in-memory cache over
+ * src/data/api. Every function stays `async` even though the underlying
+ * reads are synchronous — signatures matching the previous SQL-backed
+ * implementation means every caller (astro pages, components) needed zero
+ * changes when this switched from querying a build-time SQLite copy of D1 to
+ * reading the JSON directly.
  */
 
-import { query } from "./build-time"
-import {
-  ALL_MODULE_CODES_SQL,
-  LATEST_EXAM_SEMESTER_SQL,
-  LATEST_SEMESTER_SQL,
-  MODULE_SEMESTERS_SQL,
-  MODULE_TITLES_SQL,
-  OFFERING_EXAM_SQL,
-  OFFERING_INDEX_KEYS_SQL,
-  OFFERING_PREREQUISITES_SQL,
-  OFFERING_SLOTS_SQL,
-  OFFERING_SQL,
-  PREREQUISITE_GRAPH_EDGES_SQL,
-  PREREQUISITE_GRAPH_TITLES_SQL,
-  SEMESTER_EXAMS_SQL,
-  SEMESTER_OFFERINGS_SQL,
-  SEMESTER_PREREQUISITES_SQL
-} from "./queries"
-import { toDbExam, toDbModule, toIndexes } from "./shape"
-import type {
-  DbExamRow,
-  DbOfferingRow,
-  DbPrerequisiteRow,
-  DbSemesterRow,
-  DbSlotRow
-} from "./shape"
+import * as json from "./json-source"
 import type { DbExam, DbModule, DbPrerequisiteNode } from "./types"
 
 let latestSemesterCache: { year: string; semester: string } | null = null
@@ -40,7 +23,7 @@ let latestSemesterCache: { year: string; semester: string } | null = null
  *
  * Deliberately not `semesters.json[0]`, which is the portal's catalogue,
  * scraped independently of whether any courses were loaded for those
- * semesters — see LATEST_SEMESTER_SQL.
+ * semesters — see json.semestersWithOfferings.
  */
 export async function getLatestSemester(): Promise<{
   year: string
@@ -48,10 +31,10 @@ export async function getLatestSemester(): Promise<{
 }> {
   if (latestSemesterCache) return latestSemesterCache
 
-  const row = query<DbSemesterRow>(LATEST_SEMESTER_SQL)[0]
-  if (!row) throw new Error("No semester in the database has any offerings")
+  const [latest] = json.semestersWithOfferings()
+  if (!latest) throw new Error("No semester in src/data/api has any offerings")
 
-  latestSemesterCache = { year: row.year, semester: row.semester }
+  latestSemesterCache = { year: latest.year, semester: latest.semester }
   return latestSemesterCache
 }
 
@@ -59,48 +42,38 @@ export async function getLatestExamSemester(): Promise<{
   year: string
   semester: string
 } | null> {
-  const row = query<DbSemesterRow>(LATEST_EXAM_SEMESTER_SQL)[0]
-  return row ? { year: row.year, semester: row.semester } : null
+  const [latest] = json.semestersWithExams()
+  return latest ? { year: latest.year, semester: latest.semester } : null
 }
 
 /** Every module code that was ever offered, for getStaticPaths. */
 export async function getAllModuleCodes(): Promise<string[]> {
-  return query<{ code: string }>(ALL_MODULE_CODES_SQL).map((r) => r.code)
+  return json.latestOfferings().map((o) => o.code)
 }
 
+/** Each module's code and title as of its most recent offering. */
 export async function getModuleTitles(): Promise<
   Array<{ code: string; title: string }>
 > {
-  return query<{ code: string; title: string }>(MODULE_TITLES_SQL)
+  return json
+    .latestOfferings()
+    .map((o) => ({ code: o.code, title: o.raw.title }))
 }
 
-/**
- * Both of these previously walked all 45 metadata files in reverse, parsing
- * whole 1.2 MB semester files just to test whether one key was present — with
- * a module-level file cache bolted on to stop that happening once per module.
- * Now it is an indexed lookup.
- *
- * Ordering comes from semesters.sort_key rather than filename sort. Filename
- * sort placed "2025_S" after "2025_2" only by luck of ASCII ordering.
- */
 export async function getModuleCurrentSemester(
   code: string
 ): Promise<{ year: string; semester: string } | null> {
-  const row = query<{ sem: string; year: string; semester: string }>(
-    `${MODULE_SEMESTERS_SQL} LIMIT 1`,
-    code
-  )[0]
-  return row ? { year: row.year, semester: row.semester } : null
+  const [latest] = json.getModuleSemesters(code)
+  return latest ? { year: latest.year, semester: latest.semester } : null
 }
 
 /** All semesters that offered the module, most recent first. */
 export async function getModuleSemesters(
   code: string
 ): Promise<Array<{ year: string; semester: string }>> {
-  return query<{ sem: string; year: string; semester: string }>(
-    MODULE_SEMESTERS_SQL,
-    code
-  ).map((r) => ({ year: r.year, semester: r.semester }))
+  return json
+    .getModuleSemesters(code)
+    .map((s) => ({ year: s.year, semester: s.semester }))
 }
 
 export async function getModuleMetadata(
@@ -108,73 +81,32 @@ export async function getModuleMetadata(
   year: string,
   semester: string
 ): Promise<DbModule | null> {
-  const sem = `${year}_${semester}`
-  const row = query<DbOfferingRow>(OFFERING_SQL, code, sem)[0]
-  if (!row) return null
-  const prereqs = query<DbPrerequisiteRow>(
-    OFFERING_PREREQUISITES_SQL,
-    code,
-    sem
-  )
-  return toDbModule(row, prereqs)
+  return json.getModuleMetadata(code, year, semester)
 }
 
 /**
  * Every module offered in one semester, keyed by code.
  *
- * Previously parsed a whole 1.2 MB semester file. Callers that only want one
- * module should use getModuleMetadata — this one exists for the pages that
- * genuinely enumerate a semester.
+ * Callers that only want one module should use getModuleMetadata — this one
+ * exists for the pages that genuinely enumerate a semester.
  */
 export async function getAllModuleMetadata(
   year: string,
   semester: string
 ): Promise<Record<string, DbModule>> {
-  const sem = `${year}_${semester}`
-
-  const rows = query<DbOfferingRow>(SEMESTER_OFFERINGS_SQL, sem)
-  if (rows.length === 0) return {}
-
-  const prereqRows = query<DbPrerequisiteRow & { code: string }>(
-    SEMESTER_PREREQUISITES_SQL,
-    sem
-  )
-  const prereqsByCode = new Map<string, DbPrerequisiteRow[]>()
-  for (const p of prereqRows) {
-    let list = prereqsByCode.get(p.code)
-    if (!list) prereqsByCode.set(p.code, (list = []))
-    list.push(p)
-  }
-
-  return Object.fromEntries(
-    rows.map((row) => [
-      row.code,
-      toDbModule(row, prereqsByCode.get(row.code) ?? [])
-    ])
-  )
+  return json.getAllModuleMetadata(year, semester)
 }
 
 /**
  * Class schedule indexes for a module in one semester.
  * Returns an empty object when the module was not offered that semester.
- *
- * Index keys are read from class_indexes rather than inferred from the slot
- * rows: 24 offerings across the corpus have an index with no slots, and the
- * JSON this replaces represented those as a present-but-empty entry.
  */
 export async function getModuleIndexesData(
   code: string,
   year: string,
   semester: string
 ): Promise<Record<string, Index[]>> {
-  const sem = `${year}_${semester}`
-  const keys = query<{ index_key: string }>(
-    OFFERING_INDEX_KEYS_SQL,
-    code,
-    sem
-  ).map((r) => r.index_key)
-  if (keys.length === 0) return {}
-  return toIndexes(query<DbSlotRow>(OFFERING_SLOTS_SQL, code, sem), keys)
+  return json.getModuleIndexesData(code, year, semester)
 }
 
 export async function getModuleExamData(
@@ -182,71 +114,28 @@ export async function getModuleExamData(
   year: string,
   semester: string
 ): Promise<DbExam | null> {
-  const row = query<DbExamRow>(
-    OFFERING_EXAM_SQL,
-    code,
-    `${year}_${semester}`
-  )[0]
-  return row ? toDbExam(row) : null
+  return json.getModuleExamData(code, year, semester)
 }
 
 export async function getSemesterExamsData(
   year: string,
   semester: string
 ): Promise<Record<string, DbExam>> {
-  const rows = query<DbExamRow>(SEMESTER_EXAMS_SQL, `${year}_${semester}`)
-  return Object.fromEntries(rows.map((r) => [r.code, toDbExam(r)]))
+  return json.getSemesterExamsData(year, semester)
 }
 
-type PrerequisiteGraph = Record<string, DbPrerequisiteNode>
-
-let prerequisiteGraphCache: PrerequisiteGraph | null = null
+let prerequisiteGraphCache: Record<string, DbPrerequisiteNode> | null = null
 
 /**
- * Each module's prerequisites as of its most recent offering, plus the inverse
- * edges. Replaces prerequisite-graph.json.
- *
- * Only prerequisite items that resolve to a module code become edges; the
- * remaining 30% are free text ("NGL students are taking AL1001, cannot read
- * AB1088") and cannot be graph edges. Unlike the JSON build, that text is not
- * discarded — it stays in prerequisites.raw_text and can be surfaced later.
- *
- * Modules with no edges in either direction are omitted, matching the previous
- * artifact.
+ * Each module's prerequisites as of its most recent offering, plus the
+ * inverse edges. Only prerequisite items that resolve to a module code
+ * become edges — the rest are free text and cannot be graph edges. Modules
+ * with no edges in either direction are omitted.
  */
-export async function getPrerequisiteGraph(): Promise<PrerequisiteGraph> {
-  if (prerequisiteGraphCache) return prerequisiteGraphCache
-
-  const titles = query<{ code: string; title: string }>(
-    PREREQUISITE_GRAPH_TITLES_SQL
-  )
-  const edges = query<{ code: string; requires: string }>(
-    PREREQUISITE_GRAPH_EDGES_SQL
-  )
-
-  const graph: PrerequisiteGraph = {}
-  const titleByCode = new Map(titles.map((t) => [t.code, t.title]))
-
-  // A node only exists for a code that was actually offered. A prerequisite may
-  // name a module that never appears in the corpus — that stays as an outgoing
-  // edge but never becomes a node of its own, which is what the previous
-  // artifact did.
-  const node = (code: string): DbPrerequisiteNode | null => {
-    const title = titleByCode.get(code)
-    if (title === undefined) return null
-    return (graph[code] ??= { title, requires: [], requiredBy: [] })
-  }
-
-  for (const e of edges) {
-    node(e.code)?.requires.push(e.requires)
-    node(e.requires)?.requiredBy.push(e.code)
-  }
-
-  // requiredBy accumulates in `code` order from the query, but the previous
-  // artifact sorted it explicitly. Keep that.
-  for (const n of Object.values(graph)) n.requiredBy.sort()
-
-  prerequisiteGraphCache = graph
+export async function getPrerequisiteGraph(): Promise<
+  Record<string, DbPrerequisiteNode>
+> {
+  prerequisiteGraphCache ??= json.getPrerequisiteGraph()
   return prerequisiteGraphCache
 }
 

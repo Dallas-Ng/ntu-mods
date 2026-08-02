@@ -7,18 +7,11 @@
 import fs from "fs/promises"
 import path from "path"
 import { fileURLToPath } from "url"
-import { DatabaseSync } from "node:sqlite"
 
-import {
-  ALL_MODULE_CODES_SQL,
-  SITEMAP_VERSIONED_OFFERINGS_SQL,
-} from "../src/lib/server/db/queries.ts"
+import * as json from "../src/lib/server/db/json-source.ts"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, "..")
-const DB_PATH = process.env.NTU_MODS_DB
-  ? path.resolve(process.env.NTU_MODS_DB)
-  : path.join(ROOT, "db/ntu-mods.sqlite")
 const SITE_URL = process.env.SITE_URL || "https://ntumods.com"
 const SITEMAP_SIZE = 5000
 const OUT_DIR = path.join(ROOT, "dist", "client")
@@ -64,26 +57,17 @@ async function getArticleRoutes() {
 }
 
 // Was a merge of module-map.json with a walk of all 45 metadata files. The two
-// exclusions it applied are now the query's WHERE clause: rn > 1 drops each
-// module's current offering (those URLs redirect to /mods/:code), and the year
-// cutoff drops old thin pages that read as soft 404s.
+// exclusions it applied are now versionedOfferings' own filtering: excluding
+// each module's current offering (those URLs redirect to /mods/:code) and the
+// year cutoff, which drops old thin pages that read as soft 404s.
 function getModuleRoutes() {
-  const db = new DatabaseSync(DB_PATH, { readOnly: true })
-  try {
-    const modulePaths = db
-      .prepare(ALL_MODULE_CODES_SQL)
-      .all()
-      .map((r) => `/mods/${r.code}`)
+  const modulePaths = json.latestOfferings().map((o) => `/mods/${o.code}`)
 
-    const versionedPaths = db
-      .prepare(SITEMAP_VERSIONED_OFFERINGS_SQL)
-      .all(SITEMAP_YEAR_CUTOFF)
-      .map((r) => `/mods/${r.code}/${r.year}/${r.semester}`)
+  const versionedPaths = json
+    .versionedOfferings(SITEMAP_YEAR_CUTOFF)
+    .map((o) => `/mods/${o.code}/${o.year}/${o.semester}`)
 
-    return [...modulePaths, ...versionedPaths]
-  } finally {
-    db.close()
-  }
+  return [...modulePaths, ...versionedPaths]
 }
 
 const CORE_ROUTES = [

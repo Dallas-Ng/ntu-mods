@@ -1,5 +1,9 @@
 /*
   X-Content-Type-Options: nosniff
+  Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800
 
 /data/api/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/debug
+  Cache-Control: no-cache

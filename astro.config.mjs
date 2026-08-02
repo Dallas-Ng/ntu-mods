@@ -62,6 +62,10 @@ export default defineConfig({
       fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"]
     }
   ],
+  // Hover-triggered prefetch of same-origin links — pairs with the long
+  // edge/browser Cache-Control on prerendered pages (public/_headers), so
+  // prefetched navigations are cheap cache hits, not fresh renders.
+  prefetch: { defaultStrategy: "hover" },
   trailingSlash: "never",
   // "file" emits /faq.html, not /faq/index.html. Cloudflare's asset server
   // serves a directory-style build at /faq/ and 307s /faq to it — so with the

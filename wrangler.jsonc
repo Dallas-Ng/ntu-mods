@@ -16,7 +16,17 @@
   //   Build command:  yarn build
   //   Deploy command: npx wrangler deploy --config dist/server/wrangler.json
   "name": "ntu-mods",
+  // Keep the production workers.dev route off — deploy re-generates
+  // dist/server/wrangler.json from this file each time, so leaving this
+  // unset (wrangler defaults to true) silently re-enables the route on
+  // every deploy even after manually disabling it in the dashboard.
+  "workers_dev": false,
   "compatibility_date": "2025-11-01",
+  // Workers Cache is config-as-code only (no dashboard-only toggle) —
+  // unset here means off, so the Cache-Control headers this app already
+  // sets (404.astro, [semester].astro, public/_headers) do nothing without
+  // this. Same deploy-overwrites-dashboard trap as workers_dev above.
+  "cache": { "enabled": true },
   // disable_nodejs_process_v2 works around a known upstream bug (astro
   // issues #14511, #15434): nodejs_compat's newer `process` shim ("process
   // v2") makes Astro's internal isNode check misidentify workerd as Node,

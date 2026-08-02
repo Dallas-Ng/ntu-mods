@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url"
 import cloudflare from "@astrojs/cloudflare"
 import react from "@astrojs/react"
 import tailwindcss from "@tailwindcss/vite"
-import { defineConfig, fontProviders } from "astro/config"
+import { defineConfig, fontProviders, sessionDrivers } from "astro/config"
 
 // Cloudflare Workers Builds checks out the real repo (not a tarball), so this
 // resolves there too — baked in at build time so a deployed worker's bundle
@@ -40,6 +40,12 @@ export default defineConfig({
     imageService: "passthrough",
     prerenderEnvironment: "node"
   }),
+  // Nothing in this app calls Astro.session — without an explicit driver,
+  // the Cloudflare adapter auto-provisions a "SESSION" KV binding with no
+  // id, which Cloudflare deploys reject once that dashboard-linked
+  // namespace is gone (deploy error 10210). memory() satisfies the
+  // adapter's session requirement without needing any KV namespace at all.
+  session: { driver: sessionDrivers.memory() },
   integrations: [react()],
   // Replaces next/font's Inter. Same deal: downloaded and self-hosted at build
   // time, so there's no render-blocking request to fonts.googleapis.com and no

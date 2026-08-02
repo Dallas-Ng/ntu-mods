@@ -4,6 +4,30 @@ Build your timetable easier with NTU Mods. Create, customize, and manage your cl
 
 ![NTU Mods Banner](/public/og-image.png)
 
+## Table of Contents
+
+- [Overview](#overview)
+  - [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+  - [Rendering model](#rendering-model)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Running Locally](#running-locally)
+  - [Checks](#checks)
+  - [Building for Production](#building-for-production)
+- [Deployment](#deployment)
+  - [Secrets](#secrets)
+- [Data Pipeline](#data-pipeline)
+  - [Working with the database](#working-with-the-database)
+  - [The current semester](#the-current-semester)
+- [Maintenance](#maintenance)
+  - [Each Semester](#each-semester)
+  - [Each Academic Year](#each-academic-year)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Overview
 
 NTU Mods is a timetable planner for Nanyang Technological University (NTU) students. It provides a visual interface to browse modules, view class schedules by index, and build a timetable — without needing to log into STARS.
@@ -27,7 +51,7 @@ NTU Mods is a timetable planner for Nanyang Technological University (NTU) stude
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS + [shadcn/ui](https://ui.shadcn.com/)
 - **State:** Zustand
-- **Data:** Static JSON files (scraped from NTU STARS)
+- **Data:** Scraped from NTU STARS into JSON (build-time, most of the site) and Cloudflare D1 (one live route — see [Data Pipeline](#data-pipeline))
 - **Email:** Resend (for the feedback form)
 - **Deployment:** Cloudflare Workers (static assets + on-demand routes)
 
@@ -50,9 +74,12 @@ NTU Mods is a timetable planner for Nanyang Technological University (NTU) stude
 │   ├── data/api/           # Static JSON data (modules, indexes, exams)
 │   ├── hooks/              # React hooks
 │   ├── lib/                # Utility functions and server helpers
-│   │   └── server/edge/    # Runtime data readers (ASSETS binding, no fs)
+│   │   └── server/
+│   │       ├── db/         # json-source.ts (build-time reads) + D1 query layer
+│   │       └── edge/       # On-demand routes — D1 binding, no fs
 │   └── types/              # Global TypeScript types
 ├── content/articles/       # Markdown articles (Astro content collection)
+├── db/migrations/          # D1 schema
 ├── scripts/                # Build steps + data pipeline
 └── scraper/                # Python scrapers for NTU STARS data
 ```
@@ -146,42 +173,50 @@ route reads live, and `src/data/api`, which the build reads to prerender
 pages and generate the client's bulk JSON. Publishing a semester means doing
 both — see [Working with the database](#working-with-the-database).
 
-The scraper lives in `scraper/` and runs in order:
+```
+                     scraper/main.py (steps 1-5)
+                     fetch, scrape, normalise
+                              |
+                              v
+                     scraper/data/*.json
+                              |
+              +---------------------------------+
+              |                                 |
+           --load                   stepfinal_upsync.py
+              |                                 |
+              v                                 v
+      Cloudflare D1                    src/data/api/*.json
+      (live database)                  (committed to git)
+              |                                 |
+              |                                 |  git commit + push
+              |                                 v
+              |                           yarn build
+              |                     (json-source.ts reads it)
+              |                                 |
+              v                                 v
+   edge/get-module-snapshot.ts        prerendered pages +
+                                       public/data/api/*.json
+   ONE route, live per request:       (client bulk fetch)
+   /mods/:code/:year/:sem
+   (historic offerings only)          everything else on the site
+```
 
-```
-scraper/
-  step1_fetch_semesters.py   # Discover available semesters
-  step2_scrape_courses.py    # Scrape course listings per semester
-  step2b_scrape_content.py   # Scrape the content portal (descriptions, restrictions)
-  step3_convert_mdata.py     # Normalise module metadata
-  step4_convert_indexes.py   # Normalise class indexes
-  step5_convert_exams.py     # Convert the exam CSV
-                             # then --load publishes to D1 (scripts/db/load-semester.mjs)
-                             # then stepfinal_upsync.py publishes to src/data/api
-```
+`--load` and `stepfinal_upsync.py` are independent writes of the same
+scraped output — running one does not run the other. Skipping
+`stepfinal_upsync.py` (or skipping the commit+push after it) means D1 has
+the new semester but the rest of the site doesn't, until that's done too.
+
+The scraper lives in `scraper/`. For step-by-step usage, individual-step
+invocation, CSV/CLI flags, publishing semantics (`--load`'s replace-not-merge
+behaviour, the shrink guard, `stepfinal_upsync.py`), data invariants, and the
+semester/exam-timetable maintenance checklist, see
+**[scraper/README.md](scraper/README.md)** — that file is the complete,
+self-contained reference for scraping and publishing data. The short version:
 
 ```bash
-python scraper/main.py --semester "2025;2" --load             # scrape and publish
-python scraper/main.py --semester "2025;2" --load --dry-run   # check, don't apply
-python scraper/main.py --semester "2025;2" --load --scope exams
-python scraper/main.py --semester all --min-year 2025 --load  # rebuild a year
+python scraper/main.py --semester "2025;2" --load   # scrape, publish to D1
+python scraper/stepfinal_upsync.py                  # publish to src/data/api
 ```
-
-Everything after step 1 is scoped to a single semester, so a load replaces
-exactly one `(semester, scope)` — and rebuilding one year, one semester, or the
-whole corpus is the same operation repeated. The two scopes (`courses`, `exams`)
-are independent: re-running `courses` never deletes exam rows, which matters
-because the exam timetable arrives separately as a CSV.
-
-A load is a `DELETE` of that scope's rows followed by `INSERT`s, applied as one
-file through `wrangler d1 execute`, which is atomic — a failed load leaves the
-semester exactly as it was. Replace rather than merge, because merging cannot
-express deletion: a cancelled class index would otherwise linger forever.
-
-Before applying, the loader compares row counts against the previous load
-recorded in the `loads` table and refuses a drop of more than 20% without
-`--force`. An expired session or a portal error page yields zero courses, and a
-blind replace would wipe the semester.
 
 ### Working with the database
 
@@ -198,13 +233,6 @@ yarn data         # Regenerate the static artifacts the client fetches
 prerendering touches D1 or `db/*.sqlite` at all. That file is only for the
 `db:*` scripts above: staging a load before it's applied to D1, and verifying
 D1 matches the JSON.
-
-Loading a semester into D1 (`--load`) is **not** enough to change the live
-site — it only reaches the on-demand `/mods/:code/:year/:semester` route,
-which queries D1 directly. Everything else (prerendered pages, the client's
-bulk JSON) is built from `src/data/api`, so publishing a semester there too
-needs `python scraper/stepfinal_upsync.py` followed by a commit and push —
-see the scraper README for the full pipeline.
 
 ### The current semester
 
@@ -226,21 +254,13 @@ The following tasks must be performed manually at the start of each semester.
 
 ### Each Semester
 
-#### 1. Run the data pipeline
+#### 1. Scrape and publish the new semester's data
 
-Re-run the full scraper pipeline (see [Data Pipeline](#data-pipeline)) with the new semester code, `--load` to publish to D1, then `python scraper/stepfinal_upsync.py` and commit — `--load` alone does not update the prerendered site.
+See [scraper/README.md § Maintenance](scraper/README.md#maintenance) for the
+full checklist (running the pipeline, publishing to D1 and `src/data/api`,
+and adding the exam timetable once released).
 
-#### 2. Add exam timetable
-
-Download the exam timetable from NTU and place the CSV in `scraper/data/exams/` with the naming convention:
-
-```
-exams-YYYY-YYYY-sX.csv   # e.g. exams-2025-2026-s2.csv
-```
-
-Then re-run `scraper/step5_convert_exams.py` to convert it.
-
-#### 3. Update ICS start date
+#### 2. Update ICS start date
 
 Update `MIN_DATE` in [`src/lib/get-ics.ts`](src/lib/get-ics.ts) to the **Monday of Week 1** of the new semester:
 
@@ -252,7 +272,7 @@ This date is used to calculate recurring calendar events in `.ics` exports. The 
 
 ### Each Academic Year
 
-#### 4. Update banner and landing page
+#### 3. Update banner and landing page
 
 - [`src/components/banner.tsx`](src/components/banner.tsx) — update the banner announcement text with the new academic year
 - [`src/components/landing/landing-product.tsx`](src/components/landing/landing-product.tsx) — update `LANDING_YEAR` and `LANDING_SEMESTER` constants

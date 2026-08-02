@@ -318,40 +318,35 @@ Semester codes follow the format `YYYY;S` where `YYYY` is the **academic year** 
 
 ---
 
-## Claude Agent Quick Reference
+## Publishing
 
-This section is written for Claude agents. Read it to self-orient before running any pipeline commands or checking data quality.
+Running the pipeline only writes files under `data/` — nothing is live until it's published. Publishing writes to two independent places, and both are needed:
 
-### Activate virtualenv first
-
-```bash
-cd /path/to/ntu-mods/scraper
-source venv/bin/activate   # Windows: venv\Scripts\activate
-```
-
-### Common one-liners
+| Step                   | Publishes to                                                        | Command                                     |
+| ----------------------- | -------------------------------------------------------------------- | -------------------------------------------- |
+| `--load`                | Cloudflare D1 (the on-demand historic-snapshot route reads this live) | `python main.py --semester "2025;2" --load` |
+| `python stepfinal_upsync.py` | `src/data/api` (prerendered pages and the client's bulk JSON — everything else) | `python stepfinal_upsync.py`                |
 
 ```bash
-# Refresh latest semester data end-to-end (most common task)
-python main.py --semester "2025;2" --refetch --workers 4
-
-# Sync refreshed data to src/data/api + rebuild derived maps
+# Full refresh, then publish to both
+python main.py --semester "2025;2" --refetch --workers 4 --load
 python stepfinal_upsync.py
 
-# Full refresh + sync in one go
-python main.py --semester "2025;2" --refetch --workers 4 && python stepfinal_upsync.py
+# Check what a load would do without touching D1
+python main.py --semester "2025;2" --load --dry-run
 
-# Dry-run sync (see what would be copied without writing)
+# Publish only exams, leaving courses alone
+python main.py --semester "2025;2" --load --scope exams
+
+# Preview what stepfinal_upsync would copy, without writing
 python stepfinal_upsync.py --dry-run
-
-# Re-fetch all semesters from 2025 onwards
-python main.py --semester all --from "2025;2" --refetch --workers 4
-
-# Pretty-print a specific file for inspection
-python -c "import json; print(json.dumps(json.load(open('data/03_mdata_2025_2.json')), indent=2))" | head -80
 ```
 
-### Data file locations
+A load is a `DELETE` of that scope's rows followed by `INSERT`s, applied as one file through `wrangler d1 execute`, which is atomic — a failed load leaves the semester exactly as it was. Replace rather than merge, because merging cannot express deletion: a cancelled class index would otherwise linger forever.
+
+Before applying, the loader compares row counts against the previous load recorded in the `loads` table and refuses a drop of more than 20% without `--force`. An expired session or a portal error page yields zero courses, and a blind replace would wipe the semester.
+
+`stepfinal_upsync.py` copies scraper output straight into `src/data/api/{metadata,indexes,exams}`:
 
 | Scraper output                        | Production destination              |
 | ------------------------------------- | ----------------------------------- |
@@ -359,11 +354,41 @@ python -c "import json; print(json.dumps(json.load(open('data/03_mdata_2025_2.js
 | `scraper/data/04_indexes_YYYY_S.json` | `src/data/api/indexes/YYYY_S.json`  |
 | `scraper/data/05_exams_YYYY_S.json`   | `src/data/api/exams/YYYY_S.json`    |
 
-`src/data/api/semesters.json` is not copied from the scraper — `scripts/build-static-data.mts` generates it from the database, so "the current semester" means the newest semester that actually has offerings loaded rather than whatever the portal happens to list.
+Its changes must be committed and pushed — that push is what triggers the site rebuild that actually shows the new data. `--load` on its own never does. `src/data/api/semesters.json` isn't copied by this script — `scripts/build-static-data.mts` generates it from the metadata files at build time, so "the current semester" means the newest one that actually has offerings loaded, not whatever the portal happens to list.
 
-### Data invariants (quality rules)
+After publishing, validate from the repo root:
 
-These are the correctness rules a quality-check agent should verify against any `03_mdata` / `04_indexes` / `05_exams` triplet:
+```bash
+yarn db:verify   # confirms D1 matches src/data/api exactly, every module, every semester
+```
+
+## Maintenance
+
+Tasks for keeping data current, in the order they need doing.
+
+### Every semester
+
+1. Run the pipeline for the new semester and publish both destinations (see [Publishing](#publishing)):
+   ```bash
+   python main.py --semester "2026;1" --load
+   python stepfinal_upsync.py
+   ```
+2. Add the exam timetable once NTU releases it. Download the CSV and place it at:
+   ```
+   data/exams/exams-YYYY-YYYY-sX.csv   # e.g. exams-2025-2026-s2.csv
+   ```
+   Then re-run step 5 and publish again:
+   ```bash
+   python step5_convert_exams.py "2026;1"
+   python main.py --semester "2026;1" --load --scope exams
+   python stepfinal_upsync.py
+   ```
+
+Commit and push `src/data/api` after each publish — nothing outside the on-demand snapshot route updates until that push lands.
+
+## Data Invariants
+
+Correctness rules to check any `03_mdata` / `04_indexes` / `05_exams` triplet against:
 
 **`03_mdata_YYYY_S.json` (module metadata)**
 
@@ -377,7 +402,7 @@ These are the correctness rules a quality-check agent should verify against any 
 
 - Structure: `{ "COURSE_CODE": { "INDEX_NUM": [ slot, ... ] } }`
 - Every `slot` has: `key` (= index number), `type`, `group`, `day`, `time`, `venue`, `remarks`, `duration`
-- `day` is int 1–7 (Mon=1, Sun=7). `day=0` is invalid — should not appear (server filters it, but flag if present)
+- `day` is int 1–7 (Mon=1, Sun=7). `day=0`/missing means no scheduled day (e.g. distance learning) — valid, but the settings preview's random-sample generator (`scripts/build-static-data.mts`) skips these, so flag an unexpectedly high count
 - `time` matches `HHMM-HHMM`, start < end, both in 0000–2359 range
 - `duration` = `ceil((end_minutes - start_minutes) / 30)` where minutes = HH\*60+MM
 - `type` is one of: `LEC`, `LAB`, `SEM`, `TUT`, `DES`, `PRJ`
@@ -397,11 +422,12 @@ These are the correctness rules a quality-check agent should verify against any 
 - Modules in `05_exams` that are absent from `03_mdata` → flag as orphaned exam entries
 - Modules in `03_mdata` with zero indexes in `04_indexes` → may be valid (distance learning) but worth noting
 
-### Known gotchas
+## Known Gotchas
 
 - **Shell quoting:** Always quote semester codes: `"2025;2"` not `2025;2` (`;` is a shell separator)
 - **Exam CSV required for Step 5:** Place `data/exams/exams-YYYY-YYYY-s{1|2}.csv` before running Step 5 or the exam file will be empty
 - **Special terms (S/T):** Far fewer courses than S1/S2 — a low course count is expected, not an error
 - **Multi-programme modules:** Same course appears under multiple programme codes; `searchKeys` collects them all. `03_mdata` deduplicates — one entry per `course_code`
-- **`day=0` slots:** Some NTU portal entries have no scheduled day. The server-side loader (`src/lib/server/get-module-indexes-data.ts`) silently filters these. Flag them in the scraper data so they can be investigated
+- **`day=0`/missing-day slots:** Real and valid (see Data Invariants above) — don't treat a nonzero count of these as a bug on its own
 - **`02b_content` step:** Adds `description`, `gradeType`, and restriction fields to mdata. If Step 2b was skipped or failed, these fields will be missing from `03_mdata`
+- **`--load` publishes to D1 only:** it does not touch `src/data/api` — always follow with `stepfinal_upsync.py` and a commit, or the rest of the site won't show the new data (see [Publishing](#publishing))

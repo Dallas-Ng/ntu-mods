@@ -2,6 +2,7 @@
 
 import { Fragment, useMemo, useState } from "react"
 
+import { TABLE_SETTINGS } from "@/config/table-settings"
 import { STARS_TIMESLOTS } from "@/lib/constants"
 import {
   generateTimetableMatrix,
@@ -54,7 +55,13 @@ export const TimetableTable = (props: Props) => {
     precomputedMatrix,
     indexPicker
   } = props
-  const { isMobile } = useSettings()
+  const { isMobile, settings } = useSettings()
+  const { fullSizeBlocks, standardisedScale } = settings
+  const rowHeightStyle = standardisedScale
+    ? { height: TABLE_SETTINGS.ROW_HEIGHT_PX }
+    : fullSizeBlocks
+      ? { minHeight: TABLE_SETTINGS.ROW_HEIGHT_PX }
+      : undefined
 
   const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS, TABLE_OVERFLOW_THRESHOLD } =
     useMemo(() => {
@@ -116,7 +123,7 @@ export const TimetableTable = (props: Props) => {
             const tsIndex = parseInt(matrixKey)
 
             return (
-              <tr key={matrixKey}>
+              <tr key={matrixKey} style={rowHeightStyle}>
                 <TimeSlotItem startTime={STARS_TIMESLOTS[tsIndex].start} />
 
                 {rowData.map((dayColumn, dayIndex) => {

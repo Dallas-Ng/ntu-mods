@@ -26,7 +26,7 @@ interface Props {
 
 const TableSettings = ({ toggleBorder = false }: Props) => {
   const { settings, updateSettings } = useSettings()
-  const { tableCell } = settings
+  const { tableCell, fullSizeBlocks, standardisedScale } = settings
   const [samples, setSamples] = useState<RandomModuleData[]>([])
   const [randomData, setRandomData] = useState<RandomModuleData | null>(null)
   const [rerollKey, setRerollKey] = useState(0)
@@ -145,6 +145,51 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
             )
           })}
         </div>
+      </div>
+
+      <div className="mt-4 grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
+        <Toggle
+          className={cn(
+            "h-fit w-full justify-start py-2",
+            toggleBorder && "border"
+          )}
+          pressed={fullSizeBlocks}
+          onPressedChange={(val) => {
+            updateSettings({ fullSizeBlocks: val })
+            posthog.capture("settings_table_changed", {
+              setting: "fullSizeBlocks",
+              value: val
+            })
+          }}>
+          <div className="text-left">
+            <p>Full size blocks</p>
+            <span className="text-muted-foreground text-xs">
+              Colour the entire timeslot, even for short lessons
+            </span>
+          </div>
+        </Toggle>
+
+        <Toggle
+          className={cn(
+            "h-fit w-full justify-start py-2",
+            toggleBorder && "border"
+          )}
+          pressed={standardisedScale}
+          onPressedChange={(val) => {
+            updateSettings({ standardisedScale: val })
+            posthog.capture("settings_table_changed", {
+              setting: "standardisedScale",
+              value: val
+            })
+          }}>
+          <div className="text-left">
+            <p>Standardised scale</p>
+            <span className="text-muted-foreground text-xs">
+              Give every 30 min timeslot the same height, so breaks and lessons
+              are visually comparable
+            </span>
+          </div>
+        </Toggle>
       </div>
     </>
   )

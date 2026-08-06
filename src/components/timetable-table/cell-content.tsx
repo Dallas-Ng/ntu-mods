@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils"
 interface Props {
   index: Index
   moduleKey: string
+  customRemark?: string
   tableCell?: {
     key: boolean
     type: boolean
@@ -28,6 +29,7 @@ export const TimetableTableCellContent = (props: Props) => {
   const {
     moduleKey,
     index,
+    customRemark,
     tableCell = {
       key: true,
       type: true,
@@ -61,6 +63,7 @@ export const TimetableTableCellContent = (props: Props) => {
         </p>
         {tableCell.time && <p className={cn(style.textAlt)}>{index.time}</p>}
         {tableCell.venue && index.venue && <p>{index.venue}</p>}
+        {customRemark && <p className="italic opacity-80">{customRemark}</p>}
       </>
     )
   }
@@ -91,6 +94,8 @@ export const TimetableTableCellContent = (props: Props) => {
       {tableCell.venue && <p>{index.venue}</p>}
 
       {tableCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
+
+      {customRemark && <p className="italic opacity-80">{customRemark}</p>}
 
       {tableCell.key && <p>{index.key}</p>}
     </>

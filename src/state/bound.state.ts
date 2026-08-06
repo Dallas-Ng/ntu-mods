@@ -21,13 +21,19 @@ export const useBoundState = create(
     }),
     {
       name: "ntu-mods",
-      version: 1,
+      version: 2,
       migrate: (persistedState, version) => {
         const state = persistedState as StoreState
 
         // v1: custom blocks gained multiple indexes (variants)
         if (version < 1) {
           state.customCourses = normalizeCustomCourses(state.customCourses)
+        }
+
+        // v2: user-owned per-module/per-index remarks
+        if (version < 2) {
+          state.moduleRemarks = state.moduleRemarks ?? {}
+          state.indexRemarks = state.indexRemarks ?? {}
         }
 
         return state

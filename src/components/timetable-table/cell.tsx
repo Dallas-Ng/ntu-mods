@@ -1,5 +1,7 @@
 "use client"
 
+import { useBoundState } from "@/state/bound.state"
+
 import {
   CUSTOM_BLOCK_STYLE,
   isCustomCourseKey,
@@ -50,6 +52,12 @@ export const TimetableTableCell = (props: Props) => {
   // Settings for cells
   const { settings } = useSettings()
   const { tableCell } = settings
+
+  const moduleRemark = useBoundState((s) => s.moduleRemarks[moduleKey])
+  const indexRemark = useBoundState(
+    (s) => s.indexRemarks[`${moduleKey}:${index.key}`]
+  )
+  const customRemark = indexRemark || moduleRemark || undefined
 
   // Styling and Modifications
   const isCustom = isCustomCourseKey(moduleKey)
@@ -110,6 +118,7 @@ export const TimetableTableCell = (props: Props) => {
               key: hideIndex ? "" : index.key
             }}
             moduleKey={moduleKeyText ? moduleKeyText : moduleKey}
+            customRemark={customRemark}
             tableCell={
               fullCell
                 ? {

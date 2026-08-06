@@ -10,6 +10,11 @@ import {
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from "@/components/ui/tooltip"
 
 import { TimetableTableCellContent } from "./cell-content"
 
@@ -21,6 +26,10 @@ interface Props {
   dimmed?: boolean
   moduleKeyText?: string
   hideIndex?: boolean
+  /** Locks the cell to exactly `duration * clampCellHeightPx`, clipping
+   * overflow — used by the "standardised scale" setting so every 30 min
+   * timeslot stays the same height regardless of text length. */
+  clampCellHeightPx?: number
   //
   onMouseOver?: () => void
   onMouseOut?: () => void
@@ -40,6 +49,7 @@ export const TimetableTableCell = (props: Props) => {
     dimmed = false,
     moduleKeyText = undefined,
     hideIndex = false,
+    clampCellHeightPx,
     //
     onMouseOver,
     onMouseOut,
@@ -89,53 +99,81 @@ export const TimetableTableCell = (props: Props) => {
     ? variations.map((x) => x.venue).join(", ")
     : index.venue
 
+  const cellContent = (
+    <div
+      className={cn(
+        "flex h-full cursor-pointer items-center rounded-lg p-[var(--cell-padding)] break-words",
+        backgroundClass,
+        clampCellHeightPx && "overflow-hidden",
+        previewCandidate &&
+          "ring-primary/80 hover:ring-primary shadow-md ring-1",
+        previewActive && "ring-primary shadow-lg ring-1",
+        dimmed && "opacity-30 dark:opacity-20",
+        pickerDimmed && "pointer-events-none opacity-[0.12] dark:opacity-[0.08]"
+      )}
+      onClick={onClick}>
+      <div className="w-full">
+        {/*  */}
+        <TimetableTableCellContent
+          index={{
+            ...index,
+            remarks: indexRemarks,
+            venue: indexVenues,
+            key: hideIndex ? "" : index.key
+          }}
+          moduleKey={moduleKeyText ? moduleKeyText : moduleKey}
+          customRemark={customRemark}
+          tableCell={
+            fullCell
+              ? {
+                  key: true,
+                  type: true,
+                  group: true,
+                  day: true,
+                  time: true,
+                  venue: true,
+                  remarks: true,
+                  duration: false // always false
+                }
+              : tableCell
+          }
+        />
+      </div>
+    </div>
+  )
+
   return (
     <td
       rowSpan={index.duration}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
-      className="p-1">
-      {/*  */}
-      <div
-        className={cn(
-          "flex h-full cursor-pointer items-center rounded-lg p-[var(--cell-padding)] break-words",
-          backgroundClass,
-          previewCandidate &&
-            "ring-primary/80 hover:ring-primary shadow-md ring-1",
-          previewActive && "ring-primary shadow-lg ring-1",
-          dimmed && "opacity-30 dark:opacity-20",
-          pickerDimmed &&
-            "pointer-events-none opacity-[0.12] dark:opacity-[0.08]"
-        )}
-        onClick={onClick}>
-        <div className="w-full">
-          {/*  */}
-          <TimetableTableCellContent
-            index={{
-              ...index,
-              remarks: indexRemarks,
-              venue: indexVenues,
-              key: hideIndex ? "" : index.key
-            }}
-            moduleKey={moduleKeyText ? moduleKeyText : moduleKey}
-            customRemark={customRemark}
-            tableCell={
-              fullCell
-                ? {
-                    key: true,
-                    type: true,
-                    group: true,
-                    day: true,
-                    time: true,
-                    venue: true,
-                    remarks: true,
-                    duration: false // always false
-                  }
-                : tableCell
-            }
-          />
-        </div>
-      </div>
+      style={
+        clampCellHeightPx
+          ? { height: clampCellHeightPx * index.duration }
+          : undefined
+      }
+      className={cn("p-1", clampCellHeightPx && "overflow-hidden")}>
+      {moduleRemark || indexRemark ? (
+        <Tooltip>
+          <TooltipTrigger asChild>{cellContent}</TooltipTrigger>
+          <TooltipContent side="top" className="max-w-56 space-y-1 text-left">
+            {moduleRemark && (
+              <p>
+                <span className="font-semibold">Module: </span>
+                {moduleRemark}
+              </p>
+            )}
+            {indexRemark && (
+              <p>
+                <span className="font-semibold">Index: </span>
+                {indexRemark}
+              </p>
+            )}
+          </TooltipContent>
+        </Tooltip>
+      ) : (
+        cellContent
+      )}
     </td>
   )
 }

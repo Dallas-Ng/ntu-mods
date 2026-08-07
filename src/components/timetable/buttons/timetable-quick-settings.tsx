@@ -29,7 +29,7 @@ const TimetableQuickSettings = () => {
         <p className="text-sm font-medium">Table display</p>
 
         <Toggle
-          className="h-fit w-full justify-start border py-2"
+          className="h-fit w-full items-start justify-start border py-2 whitespace-normal"
           pressed={fullSizeBlocks}
           onPressedChange={(val) => {
             updateSettings({ fullSizeBlocks: val })
@@ -48,7 +48,7 @@ const TimetableQuickSettings = () => {
         </Toggle>
 
         <Toggle
-          className="h-fit w-full justify-start border py-2"
+          className="h-fit w-full items-start justify-start border py-2 whitespace-normal"
           pressed={standardisedScale}
           onPressedChange={(val) => {
             updateSettings({ standardisedScale: val })
@@ -61,8 +61,8 @@ const TimetableQuickSettings = () => {
           <div className="text-left">
             <p>Standardised scale</p>
             <span className="text-muted-foreground text-xs">
-              Give every 30 min timeslot the same height, so breaks and
-              lessons are visually comparable
+              Give every 30 min timeslot the same height, so breaks and lessons
+              are visually comparable
             </span>
           </div>
         </Toggle>

@@ -150,7 +150,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
       <div className="mt-4 grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
         <Toggle
           className={cn(
-            "h-fit w-full justify-start py-2",
+            "h-fit w-full items-start justify-start py-2 whitespace-normal",
             toggleBorder && "border"
           )}
           pressed={fullSizeBlocks}
@@ -171,7 +171,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
 
         <Toggle
           className={cn(
-            "h-fit w-full justify-start py-2",
+            "h-fit w-full items-start justify-start py-2 whitespace-normal",
             toggleBorder && "border"
           )}
           pressed={standardisedScale}

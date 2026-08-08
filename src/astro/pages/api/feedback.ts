@@ -28,9 +28,11 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ success: false, error: "Invalid JSON body" }, 400)
   }
 
-  const { feedback, author } = (data ?? {}) as {
+  const { feedback, author, distinctId, url } = (data ?? {}) as {
     feedback?: unknown
     author?: unknown
+    distinctId?: unknown
+    url?: unknown
   }
 
   if (typeof feedback !== "string" || feedback.trim() === "") {
@@ -41,6 +43,8 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const authorLine = typeof author === "string" ? author : ""
+  const posthogDistinctId = typeof distinctId === "string" ? distinctId : ""
+  const pageUrl = typeof url === "string" ? url : ""
 
   if (!RESEND_KEY) {
     console.error("Feedback: RESEND_KEY is not bound")
@@ -57,7 +61,7 @@ export const POST: APIRoute = async ({ request }) => {
       from: "feedback@ntumods.com",
       to: "ngdallas1@gmail.com",
       subject: "New Feedback on NTU Mods",
-      text: `From: ${authorLine}\n\n${feedback}`
+      text: `From: ${authorLine}\nPostHog distinct_id: ${posthogDistinctId || "unknown"}\nPage: ${pageUrl || "unknown"}\n\n${feedback}`
     })
   })
 
@@ -70,11 +74,12 @@ export const POST: APIRoute = async ({ request }) => {
   if (PUBLIC_POSTHOG_TOKEN) {
     const posthog = createPostHogClient(PUBLIC_POSTHOG_TOKEN)
     posthog.capture({
-      distinctId: authorLine || "anonymous",
+      distinctId: posthogDistinctId || authorLine || "anonymous",
       event: "feedback_submitted",
       properties: {
         has_email: !!authorLine && authorLine !== "anon",
-        feedback_length: feedback.length
+        feedback_length: feedback.length,
+        $current_url: pageUrl || undefined
       }
     })
     // Flush after the response is sent instead of blocking on it.

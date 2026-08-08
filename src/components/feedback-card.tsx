@@ -49,7 +49,9 @@ const FeedbackCard = ({ divClassName }: Props) => {
     const body = {
       author: data.email ?? "anon",
       feedback: data.feedback,
-      category: "feedback"
+      category: "feedback",
+      distinctId: posthog.get_distinct_id(),
+      url: window.location.href
     }
 
     // fetch only rejects on network failure — a 500 (bad Resend key, say)

@@ -1,5 +1,5 @@
 ---
-import { buildModuleMeta } from "@/lib/module-meta"
+import { buildModuleMeta, buildRelatedArticles } from "@/lib/module-meta"
 import { getModuleUrl } from "@/lib/module-url"
 import {
   getActiveModuleCodes,
@@ -70,6 +70,7 @@ const related = Object.values(allMeta)
   .map((m) => ({ code: m.code, title: m.title }))
 
 const { title, description } = buildModuleMeta(moduleKey, moduleData)
+const relatedArticles = buildRelatedArticles(moduleData)
 ---
 
 <BaseLayout
@@ -89,5 +90,6 @@ const { title, description } = buildModuleMeta(moduleKey, moduleData)
     prereqGraph={prereqGraph}
     prereqNode={prereqNode}
     related={related}
+    relatedArticles={relatedArticles}
   />
 </BaseLayout>

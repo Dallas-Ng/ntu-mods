@@ -57,6 +57,17 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ success: false, error: "Feedback is not configured" }, 500)
   }
 
+  const emailLines = [
+    `From: ${authorLine}`,
+    `PostHog distinct_id: ${posthogDistinctId || "unknown"}`,
+    `Page: ${pageUrl || "unknown"}`,
+    "",
+    feedback
+  ]
+  if (localDataLine) {
+    emailLines.push("", "--- Local data ---", localDataLine)
+  }
+
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -67,7 +78,7 @@ export const POST: APIRoute = async ({ request }) => {
       from: "feedback@ntumods.com",
       to: "ngdallas1@gmail.com",
       subject: "New Feedback on NTU Mods",
-      text: `From: ${authorLine}\nPostHog distinct_id: ${posthogDistinctId || "unknown"}\nPage: ${pageUrl || "unknown"}\n\n${feedback}${localDataLine ? `\n\n--- Local data (opted in) ---\n${localDataLine}` : ""}`
+      text: emailLines.join("\n")
     })
   })
 

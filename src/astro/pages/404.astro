@@ -1,5 +1,5 @@
 ---
-import { buildModuleMeta } from "@/lib/module-meta"
+import { buildModuleMeta, buildRelatedArticles } from "@/lib/module-meta"
 import { getModuleUrl } from "@/lib/module-url"
 import { getLatestModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
 import ModsModulePage from "@/astro/components/ModsModulePage.astro"
@@ -56,6 +56,7 @@ if (snapshot) {
         prereqGraph={snapshot.prereqGraph}
         prereqNode={snapshot.prereqNode}
         related={snapshot.related}
+        relatedArticles={buildRelatedArticles(snapshot.moduleData)}
       />
     </BaseLayout>
   ) : (

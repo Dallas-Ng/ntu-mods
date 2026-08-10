@@ -19,13 +19,15 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 
 const FormSchema = z.object({
   email: z.optional(z.string()),
   feedback: z
     .string()
-    .min(10, { message: "Feedback must be at least 10 characters long." })
+    .min(10, { message: "Feedback must be at least 10 characters long." }),
+  includeLocalData: z.boolean()
 })
 
 interface Props {
@@ -39,17 +41,30 @@ const FeedbackCard = ({ divClassName }: Props) => {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       email: "",
-      feedback: ""
+      feedback: "",
+      includeLocalData: true
     }
   })
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true)
 
+    const localData = data.includeLocalData
+      ? Object.fromEntries(
+          Object.keys(localStorage).map((key) => [
+            key,
+            localStorage.getItem(key)
+          ])
+        )
+      : undefined
+
     const body = {
       author: data.email ?? "anon",
       feedback: data.feedback,
-      category: "feedback"
+      category: "feedback",
+      distinctId: posthog.get_distinct_id(),
+      url: window.location.href,
+      localData: localData ? JSON.stringify(localData) : undefined
     }
 
     // fetch only rejects on network failure — a 500 (bad Resend key, say)
@@ -69,7 +84,8 @@ const FeedbackCard = ({ divClassName }: Props) => {
 
     posthog.capture("feedback_submitted", {
       has_email: !!data.email,
-      feedback_length: data.feedback.length
+      feedback_length: data.feedback.length,
+      included_local_data: data.includeLocalData
     })
 
     try {
@@ -131,6 +147,28 @@ const FeedbackCard = ({ divClassName }: Props) => {
                 </FormControl>
 
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="includeLocalData"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between gap-4">
+                <div className="space-y-0.5">
+                  <FormLabel>Include my timetable data</FormLabel>
+                  <FormDescription>
+                    Attaches your saved timetables and settings to help debug
+                    the issue. On by default — turn off to exclude it.
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
               </FormItem>
             )}
           />

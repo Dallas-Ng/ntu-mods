@@ -6,6 +6,7 @@ import { createPostHogClient } from "@/lib/posthog-server"
 export const prerender = false
 
 const MAX_FEEDBACK_LENGTH = 10_000
+const MAX_LOCAL_DATA_LENGTH = 200_000
 
 function json(body: unknown, status: number) {
   return new Response(JSON.stringify(body), {
@@ -28,9 +29,12 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ success: false, error: "Invalid JSON body" }, 400)
   }
 
-  const { feedback, author } = (data ?? {}) as {
+  const { feedback, author, distinctId, url, localData } = (data ?? {}) as {
     feedback?: unknown
     author?: unknown
+    distinctId?: unknown
+    url?: unknown
+    localData?: unknown
   }
 
   if (typeof feedback !== "string" || feedback.trim() === "") {
@@ -41,10 +45,27 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const authorLine = typeof author === "string" ? author : ""
+  const posthogDistinctId = typeof distinctId === "string" ? distinctId : ""
+  const pageUrl = typeof url === "string" ? url : ""
+  const localDataLine =
+    typeof localData === "string"
+      ? localData.slice(0, MAX_LOCAL_DATA_LENGTH)
+      : ""
 
   if (!RESEND_KEY) {
     console.error("Feedback: RESEND_KEY is not bound")
     return json({ success: false, error: "Feedback is not configured" }, 500)
+  }
+
+  const emailLines = [
+    `From: ${authorLine}`,
+    `PostHog distinct_id: ${posthogDistinctId || "unknown"}`,
+    `Page: ${pageUrl || "unknown"}`,
+    "",
+    feedback
+  ]
+  if (localDataLine) {
+    emailLines.push("", "--- Local data ---", localDataLine)
   }
 
   const res = await fetch("https://api.resend.com/emails", {
@@ -57,7 +78,7 @@ export const POST: APIRoute = async ({ request }) => {
       from: "feedback@ntumods.com",
       to: "ngdallas1@gmail.com",
       subject: "New Feedback on NTU Mods",
-      text: `From: ${authorLine}\n\n${feedback}`
+      text: emailLines.join("\n")
     })
   })
 
@@ -70,11 +91,12 @@ export const POST: APIRoute = async ({ request }) => {
   if (PUBLIC_POSTHOG_TOKEN) {
     const posthog = createPostHogClient(PUBLIC_POSTHOG_TOKEN)
     posthog.capture({
-      distinctId: authorLine || "anonymous",
+      distinctId: posthogDistinctId || authorLine || "anonymous",
       event: "feedback_submitted",
       properties: {
         has_email: !!authorLine && authorLine !== "anon",
-        feedback_length: feedback.length
+        feedback_length: feedback.length,
+        $current_url: pageUrl || undefined
       }
     })
     // Flush after the response is sent instead of blocking on it.

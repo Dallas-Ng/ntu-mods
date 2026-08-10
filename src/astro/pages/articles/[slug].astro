@@ -127,7 +127,25 @@ if (kind === "category") {
   article = articles.find((item) => item.slug === slug)
 
   if (article) {
-    moreArticles = articles.filter((item) => item.slug !== slug).slice(0, 3)
+    // Rank by shared category/tags first so "More articles" surfaces genuinely
+    // related guides instead of whatever happens to be newest.
+    const candidates = articles.filter((item) => item.slug !== slug)
+    const articleTags = new Set(article.tags ?? [])
+    moreArticles = candidates
+      .map((item) => {
+        const sharedTags = (item.tags ?? []).filter((tag) =>
+          articleTags.has(tag)
+        ).length
+        const sameCategory = item.category === article!.category ? 2 : 0
+        return { item, score: sameCategory + sharedTags }
+      })
+      .sort(
+        (a, b) =>
+          b.score - a.score ||
+          new Date(b.item.date).getTime() - new Date(a.item.date).getTime()
+      )
+      .slice(0, 3)
+      .map(({ item }) => item)
 
     const rendered = await render(article.entry)
     ArticleContent = rendered.Content

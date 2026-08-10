@@ -117,6 +117,20 @@ Getting shut out of Round 1 is common for popular BDEs. It is not the end. Here 
 
 **Choosing a BDE index first and then trying to fit labs around it.** Labs have the fewest index options of any module type. Lock in your lab indexes first, then find a BDE index around them. Doing it backwards creates a problem that is hard to fix.
 
+## Frequently asked questions
+
+### When do BDE bidding results come out?
+
+Results for each STARS round are typically released shortly after that round's bidding window closes — check your student email and the STARS system directly, since exact timing is announced by NTU each semester rather than fixed to a set date.
+
+### Can I get a BDE exemption?
+
+BDE exemptions are handled by your school on a case-by-case basis, usually for students with credit transfers, exchange modules, or programme-specific circumstances. There is no general self-service exemption in STARS — contact your school's academic office if you believe you qualify.
+
+### What happens if I don't get any BDE after all rounds and add/drop?
+
+If you exhaust Round 1, Round 2, and add/drop without securing a BDE, talk to your school's academic office about deferring the requirement to a later semester. Most BDEs run every semester, so waiting is usually a real option — see [Add/Drop Period: How It Works](/articles/ntu-add-drop-period-guide) for the last realistic window before you need to escalate.
+
 ## Final thoughts
 
 Registration is a preparation game. Students who go into STARS with a shortlist, verified indexes, and confirmed programme eligibility get their preferred BDE far more often than those who decide during the bidding window.

@@ -19,6 +19,23 @@ const GIT_COMMIT_SHA = (() => {
 
 const BUILD_TIME = new Date().toISOString()
 
+// Claude Code worktrees (.claude/worktrees/*) symlink node_modules back to the
+// main checkout instead of a duplicate install — Vite's dev server otherwise
+// refuses to serve files outside its project root, which the symlink target
+// resolves to. Widening fs.allow to every worktree root (main included) fixes
+// dev in any of them without hardcoding a path.
+const WORKTREE_ROOTS = (() => {
+  try {
+    return execSync("git worktree list")
+      .toString()
+      .trim()
+      .split("\n")
+      .map((line) => line.split(" ")[0])
+  } catch {
+    return []
+  }
+})()
+
 // Same WORKERS_CI/CF_PAGES signal used in scripts/indexnow.mjs to detect a
 // real Cloudflare deploy vs a local `yarn build` — not the commit's git
 // branch or any account/zone info, just "was this built by CI".
@@ -81,6 +98,7 @@ export default defineConfig({
     "/help": { status: 301, destination: "/faq" }
   },
   vite: {
+    server: { fs: { allow: [".", ...WORKTREE_ROOTS] } },
     envPrefix: ["PUBLIC_"],
     define: {
       "import.meta.env.PUBLIC_GIT_COMMIT_SHA": JSON.stringify(GIT_COMMIT_SHA),

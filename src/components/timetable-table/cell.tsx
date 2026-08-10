@@ -26,10 +26,15 @@ interface Props {
   dimmed?: boolean
   moduleKeyText?: string
   hideIndex?: boolean
-  /** Locks the cell to exactly `duration * clampCellHeightPx`, clipping
-   * overflow — used by the "standardised scale" setting so every 30 min
-   * timeslot stays the same height regardless of text length. */
-  clampCellHeightPx?: number
+  /** Per-30-min-unit height baseline. Always applied as a minimum so a
+   * block's coloured area reaches its full duration even when its own
+   * text is short — fixes rowSpan cells otherwise collapsing to the
+   * height of whatever little content sits in the rows they span. */
+  rowHeightPx: number
+  /** Locks the cell to exactly `duration * rowHeightPx`, clipping overflow
+   * — used by the "standardised scale" setting so every 30 min timeslot
+   * stays the same height regardless of text length. */
+  clamp?: boolean
   //
   onMouseOver?: () => void
   onMouseOut?: () => void
@@ -49,7 +54,8 @@ export const TimetableTableCell = (props: Props) => {
     dimmed = false,
     moduleKeyText = undefined,
     hideIndex = false,
-    clampCellHeightPx,
+    rowHeightPx,
+    clamp = false,
     //
     onMouseOver,
     onMouseOut,
@@ -67,7 +73,7 @@ export const TimetableTableCell = (props: Props) => {
   const indexRemark = useBoundState(
     (s) => s.indexRemarks[`${moduleKey}:${index.key}`]
   )
-  const customRemark = indexRemark || moduleRemark || undefined
+  const hasRemark = Boolean(moduleRemark || indexRemark)
 
   // Styling and Modifications
   const isCustom = isCustomCourseKey(moduleKey)
@@ -99,19 +105,32 @@ export const TimetableTableCell = (props: Props) => {
     ? variations.map((x) => x.venue).join(", ")
     : index.venue
 
+  const cellHeightPx = rowHeightPx * index.duration
+
   const cellContent = (
     <div
       className={cn(
-        "flex h-full cursor-pointer items-center rounded-lg p-[var(--cell-padding)] break-words",
+        "relative flex cursor-pointer items-center rounded-lg p-[var(--cell-padding)] break-words",
+        clamp ? "overflow-hidden" : "h-full",
         backgroundClass,
-        clampCellHeightPx && "overflow-hidden",
         previewCandidate &&
           "ring-primary/80 hover:ring-primary shadow-md ring-1",
         previewActive && "ring-primary shadow-lg ring-1",
         dimmed && "opacity-30 dark:opacity-20",
         pickerDimmed && "pointer-events-none opacity-[0.12] dark:opacity-[0.08]"
       )}
+      // h-full (100% of the td) is a no-op here: table cells always grow to
+      // fit their content regardless of the td's own declared height, so
+      // clamping needs the child to have its OWN fixed height + overflow
+      // hidden — only then does the td's content height stay bounded to it,
+      // instead of the overflowing text quietly dragging the whole row
+      // (and every other column sharing it) taller.
+      style={clamp ? { height: cellHeightPx } : undefined}
       onClick={onClick}>
+      {hasRemark && (
+        <span className="bg-foreground/50 absolute top-1 right-1 size-1.5 rounded-full" />
+      )}
+
       <div className="w-full">
         {/*  */}
         <TimetableTableCellContent
@@ -122,7 +141,6 @@ export const TimetableTableCell = (props: Props) => {
             key: hideIndex ? "" : index.key
           }}
           moduleKey={moduleKeyText ? moduleKeyText : moduleKey}
-          customRemark={customRemark}
           tableCell={
             fullCell
               ? {
@@ -147,13 +165,9 @@ export const TimetableTableCell = (props: Props) => {
       rowSpan={index.duration}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
-      style={
-        clampCellHeightPx
-          ? { height: clampCellHeightPx * index.duration }
-          : undefined
-      }
-      className={cn("p-1", clampCellHeightPx && "overflow-hidden")}>
-      {moduleRemark || indexRemark ? (
+      style={{ height: cellHeightPx }}
+      className={cn("p-1", clamp && "overflow-hidden")}>
+      {hasRemark ? (
         <Tooltip>
           <TooltipTrigger asChild>{cellContent}</TooltipTrigger>
           <TooltipContent side="top" className="max-w-56 space-y-1 text-left">

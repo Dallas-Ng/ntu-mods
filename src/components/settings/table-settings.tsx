@@ -11,6 +11,7 @@ import { useSettings } from "@/hooks/use-settings"
 import TimetableCell from "../timetable/timetable-cell"
 import { Button } from "../ui/button"
 import { Skeleton } from "../ui/skeleton"
+import { Switch } from "../ui/switch"
 import { Toggle } from "../ui/toggle"
 
 interface RandomModuleData {
@@ -26,7 +27,7 @@ interface Props {
 
 const TableSettings = ({ toggleBorder = false }: Props) => {
   const { settings, updateSettings } = useSettings()
-  const { tableCell, fullSizeBlocks, standardisedScale } = settings
+  const { tableCell, standardisedScale } = settings
   const [samples, setSamples] = useState<RandomModuleData[]>([])
   const [randomData, setRandomData] = useState<RandomModuleData | null>(null)
   const [rerollKey, setRerollKey] = useState(0)
@@ -147,49 +148,28 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
         </div>
       </div>
 
-      <div className="mt-4 grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
-        <Toggle
-          className={cn(
-            "h-fit w-full items-start justify-start py-2 whitespace-normal",
-            toggleBorder && "border"
-          )}
-          pressed={fullSizeBlocks}
-          onPressedChange={(val) => {
-            updateSettings({ fullSizeBlocks: val })
-            posthog.capture("settings_table_changed", {
-              setting: "fullSizeBlocks",
-              value: val
-            })
-          }}>
-          <div className="text-left">
-            <p>Full size blocks</p>
-            <span className="text-muted-foreground text-xs">
-              Colour the entire timeslot, even for short lessons
-            </span>
-          </div>
-        </Toggle>
-
-        <Toggle
-          className={cn(
-            "h-fit w-full items-start justify-start py-2 whitespace-normal",
-            toggleBorder && "border"
-          )}
-          pressed={standardisedScale}
-          onPressedChange={(val) => {
-            updateSettings({ standardisedScale: val })
-            posthog.capture("settings_table_changed", {
-              setting: "standardisedScale",
-              value: val
-            })
-          }}>
-          <div className="text-left">
-            <p>Standardised scale</p>
+      <div className="mt-4 space-y-2">
+        <label className="flex items-center justify-between gap-4 rounded-lg border px-3 py-2">
+          <span>
+            <p className="text-sm font-medium">Standardised scale</p>
             <span className="text-muted-foreground text-xs">
               Give every 30 min timeslot the same height, so breaks and lessons
               are visually comparable
             </span>
-          </div>
-        </Toggle>
+          </span>
+
+          <Switch
+            checked={standardisedScale}
+            onCheckedChange={(val) => {
+              updateSettings({ standardisedScale: val })
+              posthog.capture("settings_table_changed", {
+                setting: "standardisedScale",
+                value: val
+              })
+            }}
+            aria-label="Standardised scale"
+          />
+        </label>
       </div>
     </>
   )

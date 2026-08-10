@@ -20,7 +20,6 @@ export const INIT_SETTINGS: Settings = {
   appearance: DEFAULT_APPEARANCE_SETTINGS,
   modsViewMode: "cards",
   modsGroupBy: "none",
-  fullSizeBlocks: false,
   standardisedScale: false
 }
 
@@ -39,9 +38,6 @@ export interface Settings {
   appearance: AppearanceSettings
   modsViewMode: "cards" | "list"
   modsGroupBy: "none" | "level" | "au" | "faculty" | "type"
-  /** Force each timeslot row to a uniform minimum height, so a block's
-   * coloured area always fills its full duration even with little text. */
-  fullSizeBlocks: boolean
   /** Force every timeslot row to the same fixed height, so lesson length
    * vs. break length is visually proportional across the grid. */
   standardisedScale: boolean

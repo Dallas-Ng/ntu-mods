@@ -3,17 +3,17 @@
   "configurations": [
     {
       "name": "Astro Dev",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["dev"],
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [".claude/worktree-dev.sh", "dev"],
       "port": 4321,
-      "url": "http://localhost:4321"
+      "autoPort": true
     },
     {
       "name": "Astro Preview (production build)",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["preview"],
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [".claude/worktree-dev.sh", "preview"],
       "port": 4321,
-      "url": "http://localhost:4321"
+      "autoPort": true
     }
   ]
 }

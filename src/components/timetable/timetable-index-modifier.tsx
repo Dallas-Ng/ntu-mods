@@ -1,6 +1,7 @@
 "use client"
 
 import { Fragment, useEffect, useRef, useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 import { Check } from "lucide-react"
 import posthog from "posthog-js"
 
@@ -28,6 +29,7 @@ import {
   DrawerTrigger
 } from "../ui/drawer"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { Textarea } from "../ui/textarea"
 
 type Indexes = Record<string, Index[]>
 
@@ -51,6 +53,96 @@ const IndexCommandItem = ({ index }: { index: Index }) => {
         <span>{isOnline ? "No scheduled timeslot" : index.time}</span>
         <span>{index.venue}</span>
       </div>
+    </div>
+  )
+}
+
+interface TimetableIndexNoteProps {
+  moduleKey: string
+  indexKey: string
+}
+
+/**
+ * A note defaults to being tied to the currently selected index (most
+ * notes are index-specific — "bring laptop" for a particular lab group),
+ * with an escape hatch to widen it to every index of the module.
+ *
+ * Every keystroke writes straight to the store — no local draft, no
+ * save-on-blur. A popover can close in ways that never fire blur (Escape,
+ * for one), and a note is throwaway enough that losing it silently on
+ * dismiss would be worse than a few extra store writes.
+ */
+const TimetableIndexNote = ({
+  moduleKey,
+  indexKey
+}: TimetableIndexNoteProps) => {
+  const moduleRemark = useBoundState((s) => s.moduleRemarks[moduleKey] ?? "")
+  const indexRemark = useBoundState(
+    (s) => s.indexRemarks[`${moduleKey}:${indexKey}`] ?? ""
+  )
+  const setModuleRemark = useBoundState((s) => s.setModuleRemark)
+  const setIndexRemark = useBoundState((s) => s.setIndexRemark)
+
+  const [scope, setScope] = useState<"index" | "module">(
+    moduleRemark && !indexRemark ? "module" : "index"
+  )
+
+  // Only re-derive scope when the row itself changes — not on every
+  // keystroke, or toggling to "module" while the note is still empty
+  // would immediately flip back to "index" (empty moduleRemark looks
+  // indistinguishable from "not module-scoped" otherwise).
+  useEffect(() => {
+    setScope(moduleRemark && !indexRemark ? "module" : "index")
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [moduleKey, indexKey])
+
+  const value = scope === "module" ? moduleRemark : indexRemark
+
+  const handleChange = (val: string) => {
+    if (scope === "module") setModuleRemark(moduleKey, val)
+    else setIndexRemark(moduleKey, indexKey, val)
+  }
+
+  const toggleScope = () => {
+    const nextScope = scope === "index" ? "module" : "index"
+
+    if (nextScope === "module") {
+      setModuleRemark(moduleKey, value)
+      if (indexRemark) setIndexRemark(moduleKey, indexKey, "")
+    } else {
+      setIndexRemark(moduleKey, indexKey, value)
+      if (moduleRemark) setModuleRemark(moduleKey, "")
+    }
+
+    setScope(nextScope)
+    posthog.capture("remark_scope_toggled", {
+      module_code: moduleKey,
+      scope: nextScope
+    })
+  }
+
+  return (
+    <div
+      className="space-y-1 border-t p-2"
+      onClick={(e) => e.stopPropagation()}>
+      <div className="flex items-center justify-between gap-2">
+        <label className="text-muted-foreground text-xs">Note</label>
+
+        <button
+          type="button"
+          onClick={toggleScope}
+          className="text-muted-foreground hover:text-foreground text-[11px] underline underline-offset-2">
+          {scope === "index" ? "Apply to all indexes" : "Only this index"}
+        </button>
+      </div>
+
+      <Textarea
+        value={value}
+        onChange={(e) => handleChange(e.target.value)}
+        maxLength={200}
+        placeholder="e.g. bring laptop, seat near the door"
+        className="min-h-12 text-xs"
+      />
     </div>
   )
 }
@@ -131,86 +223,99 @@ const TimetableIndexModifier = (props: Props) => {
     if (isMobile) onOpenChange("")
   }
 
+  const currentIndexKey = timetable[moduleKey]
+
   const items = (
-    <Command
-      shouldFilter={false}
-      className="h-full min-h-0 border md:rounded-t-none">
-      <div className="h-fit w-full border-b">
-        <CommandInput
-          placeholder="Search for code, timing or tutorial group"
-          onValueChange={handleSearch}
-        />
-      </div>
-
-      {hasCommonLecture && (
-        <div className="w-full space-y-2 border-b px-4 py-2 text-sm md:py-4">
-          <p className="text-muted-foreground text-center text-xs">
-            Common Lecture for Indexes
-          </p>
-
-          {randomLecture.map((index, idx) => (
-            <IndexCommandItem key={idx} index={index} />
-          ))}
+    <div
+      className="flex h-full min-h-0 flex-col overflow-hidden"
+      style={{
+        maxHeight:
+          "min(32rem, var(--radix-popover-content-available-height, 32rem))"
+      }}>
+      <Command
+        shouldFilter={false}
+        className="min-h-0 flex-1 border md:rounded-t-none">
+        <div className="h-fit w-full border-b">
+          <CommandInput
+            placeholder="Search for code, timing or tutorial group"
+            onValueChange={handleSearch}
+          />
         </div>
-      )}
 
-      {Object.keys(filteredIndexes).length > 0 && (
-        <div className="bg-background sticky top-0 z-20 flex w-full items-center gap-2 border-b p-1 text-xs">
-          <div className="flex gap-1">
-            <span className="w-4" />
-            <span className="w-[43px] text-center">Code</span>
+        {hasCommonLecture && (
+          <div className="w-full space-y-2 border-b px-4 py-2 text-sm md:py-4">
+            <p className="text-muted-foreground text-center text-xs">
+              Common Lecture for Indexes
+            </p>
+
+            {randomLecture.map((index, idx) => (
+              <IndexCommandItem key={idx} index={index} />
+            ))}
           </div>
+        )}
 
-          <span className="w-full">Day / Time</span>
-          <span className="text-end whitespace-nowrap">Group / Venue</span>
-        </div>
-      )}
+        {Object.keys(filteredIndexes).length > 0 && (
+          <div className="bg-background sticky top-0 z-20 flex w-full items-center gap-2 border-b p-1 text-xs">
+            <div className="flex gap-1">
+              <span className="w-4" />
+              <span className="w-[43px] text-center">Code</span>
+            </div>
 
-      <CommandEmpty>No indexes code found</CommandEmpty>
+            <span className="w-full">Day / Time</span>
+            <span className="text-end whitespace-nowrap">Group / Venue</span>
+          </div>
+        )}
 
-      <CommandList className="max-h-none min-h-0 flex-1 overflow-y-auto md:max-h-[28rem]">
-        {Object.entries(filteredIndexes).map(([indexKey, slots]) => {
-          const active = timetable[moduleKey] === indexKey
+        <CommandEmpty>No indexes code found</CommandEmpty>
 
-          return (
-            <Fragment key={indexKey}>
-              <CommandItem
-                value={indexKey}
-                onSelect={handleSelect}
-                className="hover:bg-accent cursor-pointer transition-colors">
-                <div className="flex w-full justify-between gap-2 text-sm">
-                  <span className="flex items-center gap-1">
-                    <Check
-                      className={cn(
-                        "inline size-4",
-                        active ? "opacity-100" : "opacity-0"
-                      )}
-                    />
+        <CommandList className="min-h-0 flex-1 overflow-y-auto">
+          {Object.entries(filteredIndexes).map(([indexKey, slots]) => {
+            const active = timetable[moduleKey] === indexKey
 
-                    {indexKey}
-                  </span>
+            return (
+              <Fragment key={indexKey}>
+                <CommandItem
+                  value={indexKey}
+                  onSelect={handleSelect}
+                  className="hover:bg-accent cursor-pointer transition-colors">
+                  <div className="flex w-full justify-between gap-2 text-sm">
+                    <span className="flex items-center gap-1">
+                      <Check
+                        className={cn(
+                          "inline size-4",
+                          active ? "opacity-100" : "opacity-0"
+                        )}
+                      />
 
-                  {/* Dont remove this flex-col, there can be multiple timeslots for 1 index (e.g. lab, tutorial, lecture) */}
-                  <div className="flex w-full flex-col gap-1">
-                    {slots.map((index, i) => {
-                      if (
-                        hasCommonLecture &&
-                        getIndexType(index.type) === "LEC"
-                      )
-                        return null
+                      {indexKey}
+                    </span>
 
-                      return <IndexCommandItem key={i} index={index} />
-                    })}
+                    {/* Dont remove this flex-col, there can be multiple timeslots for 1 index (e.g. lab, tutorial, lecture) */}
+                    <div className="flex w-full flex-col gap-1">
+                      {slots.map((index, i) => {
+                        if (
+                          hasCommonLecture &&
+                          getIndexType(index.type) === "LEC"
+                        )
+                          return null
+
+                        return <IndexCommandItem key={i} index={index} />
+                      })}
+                    </div>
                   </div>
-                </div>
-              </CommandItem>
+                </CommandItem>
 
-              <hr />
-            </Fragment>
-          )
-        })}
-      </CommandList>
-    </Command>
+                <hr />
+              </Fragment>
+            )
+          })}
+        </CommandList>
+      </Command>
+
+      {currentIndexKey && (
+        <TimetableIndexNote moduleKey={moduleKey} indexKey={currentIndexKey} />
+      )}
+    </div>
   )
 
   if (isMobile)

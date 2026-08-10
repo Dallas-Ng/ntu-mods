@@ -10,6 +10,7 @@ import { Migration } from "@/components/migration"
 import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile-timetable-modifier-button"
 import TimetableActionsDropdown from "@/components/timetable/buttons/timetable-actions-dropdown"
 import TimetablePlanSwitcher from "@/components/timetable/buttons/timetable-plan-switcher"
+import TimetableSettingsDialog from "@/components/timetable/buttons/timetable-settings-dialog"
 import TimetableHiddenContentHelper from "@/components/timetable/timetable-hidden-content-helper"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import TimetableModifier from "@/components/timetable/timetable-modifier"
@@ -50,7 +51,10 @@ const TimetablePageContent = () => {
             )}
           </div>
 
-          <TimetableActionsDropdown />
+          <div className="flex gap-2">
+            <TimetableSettingsDialog />
+            <TimetableActionsDropdown />
+          </div>
         </div>
 
         <div className="flex h-full items-start justify-between gap-4">

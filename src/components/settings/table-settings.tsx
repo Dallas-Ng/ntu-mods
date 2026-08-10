@@ -11,6 +11,7 @@ import { useSettings } from "@/hooks/use-settings"
 import TimetableCell from "../timetable/timetable-cell"
 import { Button } from "../ui/button"
 import { Skeleton } from "../ui/skeleton"
+import { Switch } from "../ui/switch"
 import { Toggle } from "../ui/toggle"
 
 interface RandomModuleData {
@@ -26,7 +27,7 @@ interface Props {
 
 const TableSettings = ({ toggleBorder = false }: Props) => {
   const { settings, updateSettings } = useSettings()
-  const { tableCell } = settings
+  const { tableCell, standardisedScale } = settings
   const [samples, setSamples] = useState<RandomModuleData[]>([])
   const [randomData, setRandomData] = useState<RandomModuleData | null>(null)
   const [rerollKey, setRerollKey] = useState(0)
@@ -145,6 +146,30 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
             )
           })}
         </div>
+      </div>
+
+      <div className="mt-4 space-y-2">
+        <label className="flex items-center justify-between gap-4 rounded-lg border px-3 py-2">
+          <span>
+            <p className="text-sm font-medium">Standardised scale</p>
+            <span className="text-muted-foreground text-xs">
+              Give every 30 min timeslot the same height, so breaks and lessons
+              are visually comparable
+            </span>
+          </span>
+
+          <Switch
+            checked={standardisedScale}
+            onCheckedChange={(val) => {
+              updateSettings({ standardisedScale: val })
+              posthog.capture("settings_table_changed", {
+                setting: "standardisedScale",
+                value: val
+              })
+            }}
+            aria-label="Standardised scale"
+          />
+        </label>
       </div>
     </>
   )

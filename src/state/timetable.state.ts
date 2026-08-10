@@ -17,6 +17,10 @@ export interface TimetableSlice {
   lockedModules: string[]
   hasOnboarded: boolean
   customCourses: CustomCourse[][]
+  /** User notes, keyed by moduleKey. Not sourced from STARS — user-owned. */
+  moduleRemarks: Record<string, string>
+  /** User notes for a specific index/group, keyed by `${moduleKey}:${indexKey}`. */
+  indexRemarks: Record<string, string>
   migrateTimetable: (timetable: Timetable) => void
   updateTimetable: (timetable: Timetable, timetableIndex: number) => void
   addItemToTimetable: (moduleKey: string, indexKey: string) => void
@@ -39,6 +43,8 @@ export interface TimetableSlice {
   removeCustomCourse: (id: string) => void
   selectCustomCourseIndex: (courseId: string, courseIndexId: string) => void
   setCustomCourses: (courses: CustomCourse[], timetableIndex: number) => void
+  setModuleRemark: (moduleKey: string, remark: string) => void
+  setIndexRemark: (moduleKey: string, indexKey: string, remark: string) => void
 }
 
 export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
@@ -50,6 +56,8 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   lockedModules: [],
   hasOnboarded: false,
   customCourses: [[], [], [], [], []],
+  moduleRemarks: {},
+  indexRemarks: {},
   migrateTimetable: (timetable: Timetable) =>
     set((state) => ({
       timetables: [{ ...timetable }, {}, {}, {}, {}]
@@ -210,5 +218,30 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
       updated[timetableIndex] = courses
       return { customCourses: updated }
     })
+  },
+  setModuleRemark: (moduleKey, remark) => {
+    set((state) => ({
+      moduleRemarks: setRemark(state.moduleRemarks, moduleKey, remark)
+    }))
+  },
+  setIndexRemark: (moduleKey, indexKey, remark) => {
+    set((state) => ({
+      indexRemarks: setRemark(
+        state.indexRemarks,
+        `${moduleKey}:${indexKey}`,
+        remark
+      )
+    }))
   }
 })
+
+const setRemark = (
+  remarks: Record<string, string>,
+  key: string,
+  remark: string
+) => {
+  const updated = { ...remarks }
+  if (remark.trim() === "") delete updated[key]
+  else updated[key] = remark
+  return updated
+}

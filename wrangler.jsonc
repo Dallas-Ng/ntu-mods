@@ -20,7 +20,15 @@
   // dist/server/wrangler.json from this file each time, so leaving this
   // unset (wrangler defaults to true) silently re-enables the route on
   // every deploy even after manually disabling it in the dashboard.
+  // Production traffic must only ever reach the app via the ntumods.com
+  // custom domain (attached in the dashboard, not here).
   "workers_dev": false,
+  // Preview URLs are a separate toggle from workers_dev, but default to
+  // matching it when unset — so leaving this out silently killed PR/branch
+  // preview deployments too. Force it on so Workers Builds keeps producing
+  // *.workers.dev preview links for non-production branches, without
+  // touching the workers_dev route above.
+  "preview_urls": true,
   "compatibility_date": "2025-11-01",
   // Workers Cache is config-as-code only (no dashboard-only toggle) —
   // unset here means off, so the Cache-Control headers this app already

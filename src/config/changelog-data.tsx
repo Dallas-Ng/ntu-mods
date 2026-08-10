@@ -49,6 +49,47 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Standardised scale and notes",
+    date: "10 Aug 2026",
+    items: [
+      {
+        category: "Bug Fix",
+        content: (
+          <>
+            <ChangelogLink href="/timetable">Timetable</ChangelogLink> blocks
+            now reliably colour their whole 30-minute slot, even when the
+            text is short — some blocks were only colouring the height of
+            their own text, leaving a half-coloured gap next to fully
+            coloured blocks of the same length.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            A new <em>Standardised scale</em> table setting locks every
+            30-minute row to the same height, so lesson length and break length
+            stay visually comparable across the whole grid instead of stretching
+            to fit whichever block has the most text.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Registered modules can now carry a personal note — click a module in
+            the sidebar to add one, scoped to just that index (e.g. &quot;seat
+            near the door&quot; for one tutorial group) or to every index of
+            that module. A coloured dot marks which modules have a note, and
+            hovering shows it — both in the sidebar and on the block itself.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Generate mode shows every distinct timetable",
     date: "30 Jul 2026",
     items: [

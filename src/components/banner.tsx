@@ -63,6 +63,13 @@ export const Banner = {
       </BannerWrapper>
     </a>
   ),
+  timetableNotes: () => (
+    <a href="/changelog">
+      <BannerWrapper>
+        New: standardised scale and notes on your modules →
+      </BannerWrapper>
+    </a>
+  ),
   experienceProblems: () => (
     <BannerWrapper>
       Clicking of courses in the timetable has problems, please use the

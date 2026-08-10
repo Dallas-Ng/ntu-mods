@@ -19,7 +19,8 @@ export const INIT_SETTINGS: Settings = {
   isMobile: false,
   appearance: DEFAULT_APPEARANCE_SETTINGS,
   modsViewMode: "cards",
-  modsGroupBy: "none"
+  modsGroupBy: "none",
+  standardisedScale: false
 }
 
 export interface Settings {
@@ -37,6 +38,9 @@ export interface Settings {
   appearance: AppearanceSettings
   modsViewMode: "cards" | "list"
   modsGroupBy: "none" | "level" | "au" | "faculty" | "type"
+  /** Force every timeslot row to the same fixed height, so lesson length
+   * vs. break length is visually proportional across the grid. */
+  standardisedScale: boolean
 }
 
 export interface SettingsSlice {

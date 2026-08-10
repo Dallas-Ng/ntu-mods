@@ -31,9 +31,10 @@ const PrivacyContent = () => {
       <p>
         Your timetable selections, academic year/semester preferences, and
         display settings are saved in your browser&apos;s{" "}
-        <strong>localStorage</strong>. This data never leaves your device and is
-        not transmitted to our servers. You can clear it at any time by clearing
-        your browser&apos;s site data.
+        <strong>localStorage</strong>. This data is not transmitted to our
+        servers, except when submitting the feedback form (see below), where it
+        is attached by default to help us debug your issue. You can clear it at
+        any time by clearing your browser&apos;s site data.
       </p>
 
       <h3 className="mt-4 text-lg">Analytics</h3>
@@ -98,6 +99,12 @@ const PrivacyContent = () => {
         <li>Your feedback message (required)</li>
         <li>
           Your email address (optional — only if you choose to provide it)
+        </li>
+        <li>
+          The full contents of your browser&apos;s localStorage for this site
+          (your saved timetables, settings, and favourites) — included by
+          default to help us debug your issue; you can turn this off with the
+          &quot;Include my timetable data&quot; toggle before submitting
         </li>
       </ul>
 

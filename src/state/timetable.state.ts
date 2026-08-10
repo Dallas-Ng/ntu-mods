@@ -220,26 +220,28 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
     })
   },
   setModuleRemark: (moduleKey, remark) => {
-    set((state) => {
-      const updated = { ...state.moduleRemarks }
-      if (remark.trim() === "") {
-        delete updated[moduleKey]
-      } else {
-        updated[moduleKey] = remark
-      }
-      return { moduleRemarks: updated }
-    })
+    set((state) => ({
+      moduleRemarks: setRemark(state.moduleRemarks, moduleKey, remark)
+    }))
   },
   setIndexRemark: (moduleKey, indexKey, remark) => {
-    set((state) => {
-      const updated = { ...state.indexRemarks }
-      const compositeKey = `${moduleKey}:${indexKey}`
-      if (remark.trim() === "") {
-        delete updated[compositeKey]
-      } else {
-        updated[compositeKey] = remark
-      }
-      return { indexRemarks: updated }
-    })
+    set((state) => ({
+      indexRemarks: setRemark(
+        state.indexRemarks,
+        `${moduleKey}:${indexKey}`,
+        remark
+      )
+    }))
   }
 })
+
+const setRemark = (
+  remarks: Record<string, string>,
+  key: string,
+  remark: string
+) => {
+  const updated = { ...remarks }
+  if (remark.trim() === "") delete updated[key]
+  else updated[key] = remark
+  return updated
+}

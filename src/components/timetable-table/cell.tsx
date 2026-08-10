@@ -16,6 +16,7 @@ import {
   TooltipContent,
   TooltipTrigger
 } from "@/components/ui/tooltip"
+import { RemarkTooltipContent } from "@/components/timetable/remark-tooltip-content"
 
 import { TimetableTableCellContent } from "./cell-content"
 
@@ -178,30 +179,10 @@ export const TimetableTableCell = (props: Props) => {
         <Tooltip>
           <TooltipTrigger asChild>{cellContent}</TooltipTrigger>
           <TooltipContent side="top" className="max-w-56 space-y-1 text-left">
-            {moduleRemark && (
-              <p>
-                <span
-                  className={cn(
-                    "mr-1 inline-block size-1.5 rounded-full",
-                    REMARK_SCOPE_DOT_CLASS.module
-                  )}
-                />
-                <span className="font-semibold">Module: </span>
-                {moduleRemark}
-              </p>
-            )}
-            {indexRemark && (
-              <p>
-                <span
-                  className={cn(
-                    "mr-1 inline-block size-1.5 rounded-full",
-                    REMARK_SCOPE_DOT_CLASS.index
-                  )}
-                />
-                <span className="font-semibold">Index: </span>
-                {indexRemark}
-              </p>
-            )}
+            <RemarkTooltipContent
+              moduleRemark={moduleRemark}
+              indexRemark={indexRemark}
+            />
           </TooltipContent>
         </Tooltip>
       ) : (

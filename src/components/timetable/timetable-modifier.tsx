@@ -15,6 +15,7 @@ import {
   TooltipTrigger
 } from "@/components/ui/tooltip"
 
+import { RemarkTooltipContent } from "./remark-tooltip-content"
 import CustomCourseEditor from "./custom-course-editor"
 import TimetableIndexModifier from "./timetable-index-modifier"
 import TimetableModeSelector from "./timetable-mode-selector"
@@ -110,30 +111,10 @@ const ModuleRow = ({
         <div>{indexModifier}</div>
       </TooltipTrigger>
       <TooltipContent side="right" className="max-w-56 space-y-1 text-left">
-        {moduleRemark && (
-          <p>
-            <span
-              className={cn(
-                "mr-1 inline-block size-1.5 rounded-full",
-                REMARK_SCOPE_DOT_CLASS.module
-              )}
-            />
-            <span className="font-semibold">Module: </span>
-            {moduleRemark}
-          </p>
-        )}
-        {indexRemark && (
-          <p>
-            <span
-              className={cn(
-                "mr-1 inline-block size-1.5 rounded-full",
-                REMARK_SCOPE_DOT_CLASS.index
-              )}
-            />
-            <span className="font-semibold">Index: </span>
-            {indexRemark}
-          </p>
-        )}
+        <RemarkTooltipContent
+          moduleRemark={moduleRemark}
+          indexRemark={indexRemark}
+        />
       </TooltipContent>
     </Tooltip>
   )

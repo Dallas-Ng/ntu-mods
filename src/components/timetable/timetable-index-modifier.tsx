@@ -30,6 +30,7 @@ import {
 } from "../ui/drawer"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Textarea } from "../ui/textarea"
+import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group"
 
 type Indexes = Record<string, Index[]>
 
@@ -103,8 +104,12 @@ const TimetableIndexNote = ({
     else setIndexRemark(moduleKey, indexKey, val)
   }
 
-  const toggleScope = () => {
-    const nextScope = scope === "index" ? "module" : "index"
+  const changeScope = (raw: string) => {
+    // ToggleGroup (single) deselects on re-click, emitting "" — a
+    // radio-style either/or has no unselected state, so ignore that.
+    if (raw !== "index" && raw !== "module") return
+    const nextScope = raw
+    if (nextScope === scope) return
 
     if (nextScope === "module") {
       setModuleRemark(moduleKey, value)
@@ -123,17 +128,33 @@ const TimetableIndexNote = ({
 
   return (
     <div
-      className="space-y-1 border-t p-2"
+      className="space-y-1.5 border-t p-2"
       onClick={(e) => e.stopPropagation()}>
       <div className="flex items-center justify-between gap-2">
         <label className="text-muted-foreground text-xs">Note</label>
 
-        <button
-          type="button"
-          onClick={toggleScope}
-          className="text-muted-foreground hover:text-foreground text-[11px] underline underline-offset-2">
-          {scope === "index" ? "Apply to all indexes" : "Only this index"}
-        </button>
+        <ToggleGroup
+          type="single"
+          size="sm"
+          variant="outline"
+          value={scope}
+          onValueChange={changeScope}
+          className="text-[11px]">
+          {/* The outline variant's hover:bg-accent is identical to
+             data-[state=on]:bg-accent — hovering the unselected option
+             would make it look selected too. Give hover a distinct,
+             lighter colour so which one is actually active stays clear. */}
+          <ToggleGroupItem
+            value="index"
+            className="hover:bg-muted hover:text-foreground data-[state=on]:hover:bg-accent data-[state=on]:hover:text-accent-foreground h-6 px-2 text-[11px]">
+            This index
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="module"
+            className="hover:bg-muted hover:text-foreground data-[state=on]:hover:bg-accent data-[state=on]:hover:text-accent-foreground h-6 px-2 text-[11px]">
+            All indexes
+          </ToggleGroupItem>
+        </ToggleGroup>
       </div>
 
       <Textarea

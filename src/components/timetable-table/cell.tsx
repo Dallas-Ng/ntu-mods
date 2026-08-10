@@ -8,6 +8,7 @@ import {
   PRESET_INDEX_TYPES
 } from "@/lib/custom-course-colors"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
+import { getRemarkScope, REMARK_SCOPE_DOT_CLASS } from "@/lib/remark-scope"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 import {
@@ -73,7 +74,8 @@ export const TimetableTableCell = (props: Props) => {
   const indexRemark = useBoundState(
     (s) => s.indexRemarks[`${moduleKey}:${index.key}`]
   )
-  const hasRemark = Boolean(moduleRemark || indexRemark)
+  const remarkScope = getRemarkScope(moduleRemark, indexRemark)
+  const hasRemark = remarkScope !== null
 
   // Styling and Modifications
   const isCustom = isCustomCourseKey(moduleKey)
@@ -127,8 +129,13 @@ export const TimetableTableCell = (props: Props) => {
       // (and every other column sharing it) taller.
       style={clamp ? { height: cellHeightPx } : undefined}
       onClick={onClick}>
-      {hasRemark && (
-        <span className="bg-foreground/50 absolute top-1 right-1 size-1.5 rounded-full" />
+      {remarkScope && (
+        <span
+          className={cn(
+            "absolute top-1 right-1 size-1.5 rounded-full",
+            REMARK_SCOPE_DOT_CLASS[remarkScope]
+          )}
+        />
       )}
 
       <div className="w-full">
@@ -173,12 +180,24 @@ export const TimetableTableCell = (props: Props) => {
           <TooltipContent side="top" className="max-w-56 space-y-1 text-left">
             {moduleRemark && (
               <p>
+                <span
+                  className={cn(
+                    "mr-1 inline-block size-1.5 rounded-full",
+                    REMARK_SCOPE_DOT_CLASS.module
+                  )}
+                />
                 <span className="font-semibold">Module: </span>
                 {moduleRemark}
               </p>
             )}
             {indexRemark && (
               <p>
+                <span
+                  className={cn(
+                    "mr-1 inline-block size-1.5 rounded-full",
+                    REMARK_SCOPE_DOT_CLASS.index
+                  )}
+                />
                 <span className="font-semibold">Index: </span>
                 {indexRemark}
               </p>

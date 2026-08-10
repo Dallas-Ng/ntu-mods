@@ -65,7 +65,7 @@ export const Banner = {
   ),
   timetableNotes: () => (
     <a href="/changelog">
-      <BannerWrapper divClass="bg-yellow-300">
+      <BannerWrapper>
         New: full-size blocks, standardised scale, and notes on your modules →
       </BannerWrapper>
     </a>

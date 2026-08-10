@@ -8,9 +8,9 @@
   },
   "scripts": {
     "data": "tsx scripts/build-static-data.mts",
-    "dev": "yarn data && astro dev",
+    "dev": "yarn data && astro dev --port ${PORT:-4321}",
     "build": "yarn data && astro build && tsx scripts/build-sitemap.mts && node scripts/indexnow.mjs ../dist/client",
-    "preview": "astro preview",
+    "preview": "astro preview --port ${PORT:-4321}",
     "db:build": "node scripts/db/sync-db.mjs --from json",
     "db:pull": "node scripts/db/sync-db.mjs --from d1",
     "db:dump": "node scripts/db/reseed-d1.mjs",

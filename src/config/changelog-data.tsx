@@ -57,10 +57,10 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         content: (
           <>
             <ChangelogLink href="/timetable">Timetable</ChangelogLink> blocks
-            now reliably colour their whole 30-minute slot, even when the
-            text is short — some blocks were only colouring the height of
-            their own text, leaving a half-coloured gap next to fully
-            coloured blocks of the same length.
+            now reliably colour their whole 30-minute slot, even when the text
+            is short — some blocks were only colouring the height of their own
+            text, leaving a half-coloured gap next to fully coloured blocks of
+            the same length.
           </>
         )
       },

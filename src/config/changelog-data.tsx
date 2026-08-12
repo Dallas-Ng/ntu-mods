@@ -7,6 +7,7 @@ export type ChangelogCategory =
   | "Content"
   | "Data"
   | "Performance"
+  | "Feedback"
 
 export interface ChangelogItem {
   category: ChangelogCategory
@@ -48,6 +49,66 @@ export const ChangelogLink = ({
 )
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
+  {
+    title: "Custom block days, Lunch type, and mobile fixes",
+    date: "12 Aug 2026",
+    items: [
+      {
+        category: "Feedback",
+        content: (
+          <>
+            Someone asked for a generation option to auto-insert X minutes of
+            free time anywhere within a range, so flexible eaters don&apos;t
+            have to nudge a fixed lunch block by hand. The two changes below are
+            a first step toward that.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Custom blocks now take multiple days at once instead of one row per
+            day, and the sidebar collapses repeated sessions (e.g.{" "}
+            <em>LEC (5d)</em>) instead of overflowing — quicker than adjusting a
+            lunch block on each day one by one.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Custom blocks gain a <em>Lunch</em> session type with its own
+            reserved colour, replacing the old lunch-break editor in Generation
+            Settings. Still a fixed block you place by hand for now — true
+            generation-side free time is on our list.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content:
+          "Custom block descriptions are now optional — only the block name is required."
+      },
+      {
+        category: "Improvement",
+        content:
+          "Cell padding now defaults to compact on mobile regardless of your desktop density setting."
+      },
+      {
+        category: "Bug Fix",
+        content: (
+          <>
+            Rebuilt the mobile modifier drawer — nested drawers no longer fight
+            each other when picking an index, inputs no longer trigger iOS
+            auto-zoom, and long index lists scroll properly instead of getting
+            clipped.
+          </>
+        )
+      }
+    ]
+  },
   {
     title: "Standardised scale and notes",
     date: "10 Aug 2026",

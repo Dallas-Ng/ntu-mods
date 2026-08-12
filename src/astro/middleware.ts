@@ -61,7 +61,10 @@ const MODULE_PATH = /^\/mods\/([A-Za-z0-9]+)((?:\/[A-Za-z0-9]+)*)$/
 
 export const onRequest: MiddlewareHandler = async (context, next) => {
   if (isPreviewDeployment(context.url.hostname)) {
-    if (context.url.pathname === PREVIEW_AUTH_PATH && context.request.method === "POST") {
+    if (
+      context.url.pathname === PREVIEW_AUTH_PATH &&
+      context.request.method === "POST"
+    ) {
       const form = await context.request.formData()
       const redirect = String(form.get("redirect") || "/")
       if (form.get("password") === PREVIEW_PASSWORD) {
@@ -80,7 +83,9 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
       })
     }
 
-    if (context.cookies.get(PREVIEW_AUTH_COOKIE)?.value !== PREVIEW_AUTH_TOKEN) {
+    if (
+      context.cookies.get(PREVIEW_AUTH_COOKIE)?.value !== PREVIEW_AUTH_TOKEN
+    ) {
       const redirect = `${context.url.pathname}${context.url.search}`
       return new Response(renderAuthPage(false, redirect), {
         status: 401,

@@ -70,6 +70,13 @@ export const Banner = {
       </BannerWrapper>
     </a>
   ),
+  customBlockDays: () => (
+    <a href="/changelog">
+      <BannerWrapper divClass="bg-yellow-300">
+        New: multi-day custom blocks, Lunch type, mobile drawer fixes →
+      </BannerWrapper>
+    </a>
+  ),
   experienceProblems: () => (
     <BannerWrapper>
       Clicking of courses in the timetable has problems, please use the

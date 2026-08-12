@@ -35,8 +35,9 @@ const LUNCH_STYLE = {
 export const getCustomBlockStyle = (type: string) =>
   type === CUSTOM_LUNCH_TYPE
     ? LUNCH_STYLE
-    : ((PRESET_INDEX_TYPES.has(type) ? getIndexTypeStyle(type) : undefined) ??
-      CUSTOM_BLOCK_STYLE)
+    : PRESET_INDEX_TYPES.has(type)
+      ? getIndexTypeStyle(type)!
+      : CUSTOM_BLOCK_STYLE
 
 export const CUSTOM_COURSE_KEY_PREFIX = "__CC__"
 

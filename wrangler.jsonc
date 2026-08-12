@@ -42,12 +42,6 @@
   // Web ReadableStream — Response can't accept that, and silently
   // stringifies it to the literal text "[object Object]".
   "compatibility_flags": ["nodejs_compat", "disable_nodejs_process_v2"],
-  // Forces every request (including prerendered static pages, since
-  // build.format:"file" in astro.config.mjs prerenders nearly everything) to
-  // hit the worker before Cloudflare's asset server responds. Without this,
-  // the middleware-based preview password gate below never runs for static
-  // routes — Cloudflare serves them straight from the assets binding.
-  "assets": { "run_worker_first": true },
   // Source of truth for all module data. The on-demand snapshot route
   // (src/lib/server/edge/get-module-snapshot.ts) queries it at request time
   // through this binding; prerendered routes query the same schema at build

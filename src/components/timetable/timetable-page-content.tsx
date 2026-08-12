@@ -1,10 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { MousePointerClick } from "lucide-react"
 import posthog from "posthog-js"
 
-import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import { Migration } from "@/components/migration"
 import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile-timetable-modifier-button"
@@ -20,6 +18,13 @@ import TimetableTable from "@/components/timetable/timetable-table"
 const TimetablePageContent = () => {
   const [indexPickerEnabled, setIndexPickerEnabled] = useState(false)
 
+  const toggleIndexPicker = () => {
+    setIndexPickerEnabled((v) => {
+      posthog.capture("index_picker_toggled", { enabled: !v })
+      return !v
+    })
+  }
+
   return (
     <>
       <Migration />
@@ -28,24 +33,11 @@ const TimetablePageContent = () => {
         <Header title="Timetable" />
 
         <div className="flex justify-between gap-2">
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <TimetablePlanSwitcher />
 
-            <Button
-              variant={indexPickerEnabled ? "default" : "outline"}
-              className="w-35 gap-2"
-              onClick={() => {
-                setIndexPickerEnabled((v) => {
-                  posthog.capture("index_picker_toggled", { enabled: !v })
-                  return !v
-                })
-              }}>
-              <MousePointerClick className="size-4" />
-              {indexPickerEnabled ? "Stop picking" : "Pick indexes"}
-            </Button>
-
             {indexPickerEnabled && (
-              <span className="text-muted-foreground hidden self-center text-xs sm:inline">
+              <span className="text-muted-foreground hidden text-xs sm:inline">
                 Tap a block to see its other indexes
               </span>
             )}
@@ -53,7 +45,10 @@ const TimetablePageContent = () => {
 
           <div className="flex gap-2">
             <TimetableSettingsDialog />
-            <TimetableActionsDropdown />
+            <TimetableActionsDropdown
+              indexPickerEnabled={indexPickerEnabled}
+              onToggleIndexPicker={toggleIndexPicker}
+            />
           </div>
         </div>
 

@@ -278,8 +278,14 @@ const TimetableIndexModifier = (props: Props) => {
           // overflow-hidden means a long lecture list here would just get
           // clipped with no way to reach the rest. Bound it and let it
           // scroll on its own instead.
-          <div className="max-h-40 w-full space-y-2 overflow-y-auto border-b px-4 py-2 text-sm md:py-4">
-            <p className="text-muted-foreground bg-background sticky top-0 text-center text-xs">
+          <div className="max-h-40 w-full space-y-2 overflow-y-auto border-b px-4 pb-2 text-sm md:pb-4">
+            {/* The block's own top padding lives here (pt-2/md:pt-4), not
+                on the parent — sticky pins to the parent's content-box top,
+                so parent padding-top would leave an uncovered sliver above
+                the label where scrolled rows still peek through. z-10 for
+                the same reason on the paint-order axis: entries are later
+                in DOM order and would paint over this label without it. */}
+            <p className="text-muted-foreground bg-background sticky top-0 z-10 pt-2 pb-1 text-center text-xs md:pt-4">
               Common Lecture for Indexes
             </p>
 

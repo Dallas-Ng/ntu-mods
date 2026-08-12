@@ -188,9 +188,12 @@ const SessionRowEditor = ({
       {/* Type selector + remove */}
       <div className="flex items-start gap-2">
         <div className="flex-1 space-y-1.5">
-          <div className="flex gap-2">
+          {/* Stacked full-width on mobile — a custom type input squeezed
+              beside a select is cramped on a narrow dialog. Side-by-side
+              from sm: up where there's room. */}
+          <div className="flex flex-col gap-2 sm:flex-row">
             <Select value={selectValue} onValueChange={handleTypeSelectChange}>
-              <SelectTrigger size="sm" className="w-36 shrink-0">
+              <SelectTrigger size="sm" className="w-full sm:w-36 sm:shrink-0">
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
@@ -210,7 +213,7 @@ const SessionRowEditor = ({
 
             {isCustomType && (
               <Input
-                className="h-8 text-sm placeholder:text-sm"
+                className="h-8 w-full text-sm placeholder:text-sm"
                 placeholder="e.g. CCA, Gym, Work"
                 value={session.type}
                 maxLength={20}
@@ -231,7 +234,7 @@ const SessionRowEditor = ({
       </div>
 
       {/* Day + Venue */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <div className="space-y-1">
           <Label className="text-xs">Day</Label>
           <Select
@@ -262,7 +265,7 @@ const SessionRowEditor = ({
       </div>
 
       {/* Start + End */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <div className="space-y-1">
           <Label className="text-xs">Start</Label>
           <Select

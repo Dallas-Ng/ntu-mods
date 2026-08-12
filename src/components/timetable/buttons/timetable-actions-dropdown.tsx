@@ -7,11 +7,13 @@ import {
   Download,
   ImageDown,
   Link as LinkIcon,
-  MoreHorizontal
+  MoreHorizontal,
+  MousePointerClick
 } from "lucide-react"
 import posthog from "posthog-js"
 import { toast } from "sonner"
 
+import { cn } from "@/lib/utils"
 import { getIcs } from "@/lib/get-ics"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
@@ -33,7 +35,15 @@ import {
 import TimetableImportDialog from "./timetable-import-dialog"
 import TimetableShareDialog from "./timetable-share-dialog"
 
-const TimetableActionsDropdown = () => {
+interface Props {
+  indexPickerEnabled: boolean
+  onToggleIndexPicker: () => void
+}
+
+const TimetableActionsDropdown = ({
+  indexPickerEnabled,
+  onToggleIndexPicker
+}: Props) => {
   const { timetable, timetables, timetableIndex, duplicateTimetable } =
     useTimetable()
   const { customCourses } = useCustomCourses()
@@ -135,6 +145,22 @@ const TimetableActionsDropdown = () => {
             </DropdownMenuSubContent>
           </DropdownMenuSub>
           <DropdownMenuSeparator />
+          {/* Bringing data in, grouped apart from the send-it-out actions
+              below — opposite direction, shouldn't share a group. */}
+          <DropdownMenuItem
+            onClick={() => setImportOpen(true)}
+            className="gap-2">
+            <Download className="size-4" />
+            Import from text
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => setShareOpen(true)}
+            className="gap-2">
+            <LinkIcon className="size-4" />
+            Share
+          </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <a href="/screenshot" className="flex items-center gap-2">
               <ImageDown className="size-4" />
@@ -148,17 +174,19 @@ const TimetableActionsDropdown = () => {
             <Calendar className="size-4" />
             Save to Calendar
           </DropdownMenuItem>
+
+          {/* Separator marks the line between navigation/actions above and
+              a feature toggle below — same menu, different kind of item. */}
+          <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => setShareOpen(true)}
-            className="gap-2">
-            <LinkIcon className="size-4" />
-            Share
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => setImportOpen(true)}
-            className="gap-2">
-            <Download className="size-4" />
-            Import from text
+            onClick={onToggleIndexPicker}
+            className={cn(
+              "gap-2",
+              indexPickerEnabled &&
+                "bg-primary/10 text-primary focus:bg-primary/15 focus:text-primary"
+            )}>
+            <MousePointerClick className="size-4" />
+            {indexPickerEnabled ? "Stop picking indexes" : "Pick indexes"}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

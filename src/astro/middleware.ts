@@ -106,5 +106,17 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
     }
   }
 
-  return next()
+  const response = await next()
+
+  // Pages set "public, s-maxage=..." Cache-Control (see public/_headers) so
+  // Cloudflare's edge cache can serve them cross-visitor on prod. That same
+  // cache sits in front of the worker, so on a preview deployment a single
+  // cached hit — even our own health-check request — serves the gated page
+  // to every later visitor without ever running the password check again.
+  // Force preview responses private so nothing lands in the shared cache.
+  if (isPreviewDeployment(context.url.hostname)) {
+    response.headers.set("Cache-Control", "private, no-store")
+  }
+
+  return response
 }

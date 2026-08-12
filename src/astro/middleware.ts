@@ -114,8 +114,17 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
   // cached hit — even our own health-check request — serves the gated page
   // to every later visitor without ever running the password check again.
   // Force preview responses private so nothing lands in the shared cache.
+  // The response coming out of the assets binding has immutable headers
+  // (guard "immutable"), so an in-place .set() silently no-ops — clone into
+  // a fresh Response instead.
   if (isPreviewDeployment(context.url.hostname)) {
-    response.headers.set("Cache-Control", "private, no-store")
+    const headers = new Headers(response.headers)
+    headers.set("Cache-Control", "private, no-store")
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers
+    })
   }
 
   return response

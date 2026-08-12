@@ -172,6 +172,14 @@
     --index-cus-text-dark: 280 72% 70%;
     --index-cus-text-alt-dark: 280 72% 61%;
     --index-cus-border: 280 72% 44%;
+    --index-lunch-bg: 25 90% 88%;
+    --index-lunch-bg-hover: 25 90% 82%;
+    --index-lunch-bg-dark: 25 90% 65%;
+    --index-lunch-text: 25 90% 30%;
+    --index-lunch-text-alt: 25 90% 44%;
+    --index-lunch-text-dark: 25 90% 65%;
+    --index-lunch-text-alt-dark: 25 90% 58%;
+    --index-lunch-border: 25 90% 44%;
   }
 
   .dark {

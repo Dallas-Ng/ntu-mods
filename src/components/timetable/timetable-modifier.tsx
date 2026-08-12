@@ -15,8 +15,8 @@ import {
   TooltipTrigger
 } from "@/components/ui/tooltip"
 
-import { RemarkTooltipContent } from "./remark-tooltip-content"
 import CustomCourseEditor from "./custom-course-editor"
+import { RemarkTooltipContent } from "./remark-tooltip-content"
 import TimetableIndexModifier from "./timetable-index-modifier"
 import TimetableModeSelector from "./timetable-mode-selector"
 import TimetableModulesSelect from "./timetable-modules-select"

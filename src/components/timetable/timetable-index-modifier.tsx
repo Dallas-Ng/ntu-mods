@@ -22,9 +22,9 @@ import {
   CommandList
 } from "../ui/command"
 import {
-  Drawer,
   DrawerContent,
   DrawerDescription,
+  DrawerNestedRoot,
   DrawerTitle,
   DrawerTrigger
 } from "../ui/drawer"
@@ -128,7 +128,7 @@ const TimetableIndexNote = ({
 
   return (
     <div
-      className="space-y-1.5 border-t p-2"
+      className="space-y-1.5 border-t p-2 pb-6 sm:pb-2"
       onClick={(e) => e.stopPropagation()}>
       <div className="flex items-center justify-between gap-2">
         <label className="text-muted-foreground text-xs">Note</label>
@@ -162,7 +162,9 @@ const TimetableIndexNote = ({
         onChange={(e) => handleChange(e.target.value)}
         maxLength={200}
         placeholder="e.g. bring laptop, seat near the door"
-        className="min-h-12 text-xs"
+        // Stay at the default 16px on mobile — anything smaller triggers
+        // iOS Safari's auto-zoom on focus. Only shrink on desktop.
+        className="min-h-12 sm:text-xs"
       />
     </div>
   )
@@ -249,10 +251,18 @@ const TimetableIndexModifier = (props: Props) => {
   const items = (
     <div
       className="flex h-full min-h-0 flex-col overflow-hidden"
-      style={{
-        maxHeight:
-          "min(32rem, var(--radix-popover-content-available-height, 32rem))"
-      }}>
+      // Desktop caps to the popover's available height so it never
+      // overflows the viewport. Mobile has no such cap — it should fill
+      // the drawer, so the note below the list lands at the actual
+      // bottom instead of floating right under a short list.
+      style={
+        isMobile
+          ? undefined
+          : {
+              maxHeight:
+                "min(32rem, var(--radix-popover-content-available-height, 32rem))"
+            }
+      }>
       <Command
         shouldFilter={false}
         className="min-h-0 flex-1 border md:rounded-t-none">
@@ -264,8 +274,12 @@ const TimetableIndexModifier = (props: Props) => {
         </div>
 
         {hasCommonLecture && (
-          <div className="w-full space-y-2 border-b px-4 py-2 text-sm md:py-4">
-            <p className="text-muted-foreground text-center text-xs">
+          // Sits above CommandList, outside its scroll area — Command's own
+          // overflow-hidden means a long lecture list here would just get
+          // clipped with no way to reach the rest. Bound it and let it
+          // scroll on its own instead.
+          <div className="max-h-40 w-full space-y-2 overflow-y-auto border-b px-4 py-2 text-sm md:py-4">
+            <p className="text-muted-foreground bg-background sticky top-0 text-center text-xs">
               Common Lecture for Indexes
             </p>
 
@@ -289,7 +303,10 @@ const TimetableIndexModifier = (props: Props) => {
 
         <CommandEmpty>No indexes code found</CommandEmpty>
 
-        <CommandList className="min-h-0 flex-1 overflow-y-auto">
+        {/* max-h-none — cmdk's own default caps this at 300px, which left
+            dead space below a short list instead of the list filling the
+            flex-1 height we actually gave it. */}
+        <CommandList className="max-h-none min-h-0 flex-1 overflow-y-auto">
           {Object.entries(filteredIndexes).map(([indexKey, slots]) => {
             const active = timetable[moduleKey] === indexKey
 
@@ -341,14 +358,20 @@ const TimetableIndexModifier = (props: Props) => {
 
   if (isMobile)
     return (
-      <Drawer
+      // Always opened from a row inside the mobile modifier drawer — must
+      // nest under it (DrawerNestedRoot), a plain Drawer here would fight
+      // the parent drawer for the drag gesture and never open correctly.
+      <DrawerNestedRoot
         open={open}
         onOpenChange={(open) =>
           open ? onOpenChange(moduleKey) : onOpenChange("")
         }>
         <DrawerTrigger asChild>{props.children}</DrawerTrigger>
 
-        <DrawerContent className="border-primary h-[calc(100svh-6rem)] overflow-hidden p-2 focus:outline-none data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[calc(100svh-6rem)] data-[vaul-drawer-direction=bottom]:rounded-t-3xl data-[vaul-drawer-direction=bottom]:border-4 data-[vaul-drawer-direction=bottom]:border-b-0">
+        <DrawerContent
+          // vaul's default 500ms slide reads as sluggish for a row tap
+          // that used to open an instant popover — cut it to feel snappier.
+          className="border-primary h-[calc(100svh-6rem)] overflow-hidden p-2 !duration-150 focus:outline-none data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[calc(100svh-6rem)] data-[vaul-drawer-direction=bottom]:rounded-t-3xl data-[vaul-drawer-direction=bottom]:border-4 data-[vaul-drawer-direction=bottom]:border-b-0">
           <DrawerTitle className="sr-only">Select module index</DrawerTitle>
           <DrawerDescription className="sr-only">
             Search and select an index for {moduleKey}.
@@ -358,7 +381,7 @@ const TimetableIndexModifier = (props: Props) => {
             {items}
           </div>
         </DrawerContent>
-      </Drawer>
+      </DrawerNestedRoot>
     )
 
   return (

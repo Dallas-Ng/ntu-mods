@@ -83,9 +83,6 @@ const TimetablePageContent = () => {
       </div>
 
       <MobileTimetableModifierButton hidden={indexPickerEnabled} />
-
-      {/* Buffer for button */}
-      <div className="block h-16 md:hidden" />
     </>
   )
 }

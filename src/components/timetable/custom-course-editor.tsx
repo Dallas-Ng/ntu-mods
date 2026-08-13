@@ -5,7 +5,8 @@ import { useBoundState } from "@/state/bound.state"
 import { Plus, Trash2, X } from "lucide-react"
 import posthog from "posthog-js"
 
-import { STARS_TIMESLOTS } from "@/lib/constants"
+import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
+import { CUSTOM_LUNCH_TYPE } from "@/lib/custom-course-colors"
 import { formatHhmm } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -27,15 +28,7 @@ import {
 
 // ─── constants ───────────────────────────────────────────────────────────────
 
-const DAY_OPTIONS = [
-  { value: "1", label: "Monday" },
-  { value: "2", label: "Tuesday" },
-  { value: "3", label: "Wednesday" },
-  { value: "4", label: "Thursday" },
-  { value: "5", label: "Friday" },
-  { value: "6", label: "Saturday" },
-  { value: "7", label: "Sunday" }
-]
+const DAYS = [1, 2, 3, 4, 5, 6, 7] as const
 
 const TIME_OPTIONS = STARS_TIMESLOTS.filter(
   (t) => t.start >= 800 && t.start <= 2200
@@ -51,7 +44,8 @@ const PRESET_TYPES = [
   { value: "LAB", label: "Lab" },
   { value: "SEM", label: "Seminar" },
   { value: "DES", label: "Design" },
-  { value: "PRJ", label: "Project" }
+  { value: "PRJ", label: "Project" },
+  { value: CUSTOM_LUNCH_TYPE, label: "Lunch" }
 ]
 
 const PRESET_TYPE_VALUES = new Set(PRESET_TYPES.map((p) => p.value))
@@ -63,7 +57,7 @@ const MAX_INDEXES = 10
 interface SessionRow {
   _key: string
   type: string // stored value — preset code or free text
-  day: number
+  days: number[] // one persisted session is created per selected day
   startTime: number
   endTime: number
   venue: string
@@ -86,7 +80,7 @@ const newSession = (
 ): SessionRow => ({
   _key: crypto.randomUUID(),
   type: "LEC",
-  day: 1,
+  days: [1],
   startTime: 900,
   endTime: 1000,
   venue: "",
@@ -104,6 +98,31 @@ const makeDefaultForm = (name = ""): FormState => {
   return { name, indexes: [index], activeIndexKey: index._key }
 }
 
+// Persisted sessions are one-day-each; group siblings that only differ by
+// day back into a single multi-day row for editing.
+const groupSessionsIntoRows = (
+  sessions: CustomCourseSession[]
+): SessionRow[] => {
+  const rows = new Map<string, SessionRow>()
+  sessions.forEach((s) => {
+    const groupKey = `${s.type}|${s.startTime}|${s.endTime}|${s.venue}`
+    const existing = rows.get(groupKey)
+    if (existing) {
+      existing.days.push(s.day)
+    } else {
+      rows.set(groupKey, {
+        _key: crypto.randomUUID(),
+        type: s.type,
+        days: [s.day],
+        startTime: s.startTime,
+        endTime: s.endTime,
+        venue: s.venue
+      })
+    }
+  })
+  return Array.from(rows.values())
+}
+
 const courseToForm = (course: CustomCourse): FormState => {
   const indexes: IndexRow[] =
     course.indexes?.length > 0
@@ -112,7 +131,7 @@ const courseToForm = (course: CustomCourse): FormState => {
           label: i.label,
           sessions:
             i.sessions.length > 0
-              ? i.sessions.map((s) => ({ ...s, _key: crypto.randomUUID() }))
+              ? groupSessionsIntoRows(i.sessions)
               : [newSession()]
         }))
       : [newIndex("Option 1")]
@@ -129,9 +148,9 @@ const formToCourse = (form: FormState): Omit<CustomCourse, "id"> => {
     .map((index, i) => ({
       id: index._key,
       label: index.label.trim() || `Option ${i + 1}`,
-      sessions: index.sessions
-        .map(({ _key: _k, ...s }) => ({ ...s, type: s.type.trim() }))
-        .filter((s) => s.type.length > 0)
+      sessions: index.sessions.flatMap(({ _key: _k, days, ...s }) =>
+        days.map((day) => ({ ...s, type: s.type.trim(), day }))
+      )
     }))
     .filter((index) => index.sessions.length > 0)
 
@@ -165,6 +184,16 @@ const SessionRowEditor = ({
     (t) => Number(t.value) > session.startTime
   )
 
+  const toggleDay = (day: number) => {
+    const has = session.days.includes(day)
+    if (has && session.days.length === 1) return // keep at least one day
+    onChange({
+      days: has
+        ? session.days.filter((d) => d !== day)
+        : [...session.days, day].sort((a, b) => a - b)
+    })
+  }
+
   const handleStartChange = (v: string) => {
     const n = Number(v)
     const updates: Partial<SessionRow> = { startTime: n }
@@ -188,9 +217,12 @@ const SessionRowEditor = ({
       {/* Type selector + remove */}
       <div className="flex items-start gap-2">
         <div className="flex-1 space-y-1.5">
-          <div className="flex gap-2">
+          {/* Stacked full-width on mobile — a custom type input squeezed
+              beside a select is cramped on a narrow dialog. Side-by-side
+              from sm: up where there's room. */}
+          <div className="flex flex-col gap-2 sm:flex-row">
             <Select value={selectValue} onValueChange={handleTypeSelectChange}>
-              <SelectTrigger size="sm" className="w-36 shrink-0">
+              <SelectTrigger size="sm" className="w-full sm:w-36 sm:shrink-0">
                 <SelectValue placeholder="Type" />
               </SelectTrigger>
               <SelectContent>
@@ -210,8 +242,8 @@ const SessionRowEditor = ({
 
             {isCustomType && (
               <Input
-                className="h-8 text-sm placeholder:text-sm"
-                placeholder="e.g. CCA, Gym, Work"
+                className="h-8 w-full text-sm placeholder:text-sm"
+                placeholder="Optional — e.g. Practice, Shift, Meeting"
                 value={session.type}
                 maxLength={20}
                 onChange={(e) => onChange({ type: e.target.value })}
@@ -230,39 +262,44 @@ const SessionRowEditor = ({
         </Button>
       </div>
 
-      {/* Day + Venue */}
-      <div className="grid grid-cols-2 gap-2">
-        <div className="space-y-1">
-          <Label className="text-xs">Day</Label>
-          <Select
-            value={String(session.day)}
-            onValueChange={(v) => onChange({ day: Number(v) })}>
-            <SelectTrigger size="sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {DAY_OPTIONS.map((d) => (
-                <SelectItem key={d.value} value={d.value}>
-                  {d.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-1">
-          <Label className="text-xs">Venue</Label>
-          <Input
-            className="h-8 text-sm placeholder:text-sm"
-            placeholder="Optional"
-            value={session.venue}
-            onChange={(e) => onChange({ venue: e.target.value })}
-          />
+      {/* Days */}
+      <div className="space-y-1">
+        <Label className="text-xs">Days</Label>
+        <div className="flex flex-wrap gap-1">
+          {DAYS.map((day) => {
+            const active = session.days.includes(day)
+            return (
+              <button
+                key={day}
+                type="button"
+                onClick={() => toggleDay(day)}
+                aria-pressed={active}
+                className={cn(
+                  "focus-visible:ring-ring/50 h-6 cursor-pointer rounded border px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px]",
+                  active
+                    ? "bg-foreground text-background border-transparent"
+                    : "text-muted-foreground hover:border-foreground"
+                )}>
+                {TRUN_DAY_MAP[day as keyof typeof TRUN_DAY_MAP]}
+              </button>
+            )
+          })}
         </div>
       </div>
 
+      {/* Venue */}
+      <div className="space-y-1">
+        <Label className="text-xs">Venue</Label>
+        <Input
+          className="h-8 text-sm placeholder:text-sm"
+          placeholder="Optional"
+          value={session.venue}
+          onChange={(e) => onChange({ venue: e.target.value })}
+        />
+      </div>
+
       {/* Start + End */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <div className="space-y-1">
           <Label className="text-xs">Start</Label>
           <Select
@@ -389,7 +426,7 @@ export const CourseModal = ({
     form.indexes.every(
       (index) =>
         index.sessions.length > 0 &&
-        index.sessions.every((s) => s.type.trim().length > 0)
+        index.sessions.every((s) => s.days.length > 0)
     )
 
   const hasMultipleIndexes = form.indexes.length > 1
@@ -406,10 +443,15 @@ export const CourseModal = ({
         <div className="space-y-5 pt-1">
           {/* Name */}
           <div className="space-y-1.5">
-            <Label htmlFor="cc-name">Name</Label>
+            <Label htmlFor="cc-name">
+              Name{" "}
+              <span className="text-muted-foreground font-normal">
+                (shown like a module code)
+              </span>
+            </Label>
             <Input
               id="cc-name"
-              placeholder="e.g. Gym, Badminton CCA, External Course"
+              placeholder="e.g. Gym, Badminton CCA, Part-time Job"
               value={form.name}
               maxLength={40}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
@@ -575,8 +617,18 @@ const CustomCourseEditor = () => {
             const selected =
               course.indexes.find((i) => i.id === course.selectedIndexId) ??
               course.indexes[0]
-            const sessionLabels =
-              selected?.sessions.map((s) => s.type).join(" · ") ?? ""
+            // Collapse repeats from multi-day sessions (e.g. 5x "LEC") into "LEC ×5"
+            const typeCounts = new Map<string, number>()
+            selected?.sessions.forEach((s) =>
+              typeCounts.set(s.type, (typeCounts.get(s.type) ?? 0) + 1)
+            )
+            const sessionLabels = [...typeCounts]
+              .map(([type, count]) => {
+                const label = type.length > 0 ? type : ""
+                if (count === 1) return label
+                return label ? `${label} (${count}d)` : `${count}d`
+              })
+              .join(" · ")
 
             return (
               <div key={course.id} className="py-0.5">

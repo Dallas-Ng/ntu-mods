@@ -49,6 +49,54 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Mobile timetable rebuilt",
+    date: "13 Aug 2026",
+    items: [
+      {
+        category: "Bug Fix",
+        content: (
+          <>
+            The mobile <em>Add mods</em> drawer wasn&apos;t reliably opening,
+            and tapping a module to change its index could conflict with it.
+            Rebuilt so it opens and closes the way every other drawer in the
+            app does, with index picking working correctly inside it.
+          </>
+        )
+      },
+      {
+        category: "Bug Fix",
+        content:
+          "Search and note fields on mobile no longer trigger iOS's automatic zoom when tapped."
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            <em>Pick indexes</em> moved from a permanent button on the
+            toolbar into the ••• menu, so it no longer competes for space
+            with the rest of the toolbar on small screens.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Timetable cells are more compact on mobile by default,
+            regardless of your chosen density in{" "}
+            <ChangelogLink href="/settings">Settings</ChangelogLink> — which
+            still applies from tablet width up.
+          </>
+        )
+      },
+      {
+        category: "Bug Fix",
+        content:
+          "Custom block fields (type, day, venue, timing) no longer squeeze into cramped two-column rows on narrow screens."
+      }
+    ]
+  },
+  {
     title: "Standardised scale and notes",
     date: "10 Aug 2026",
     items: [
@@ -57,10 +105,10 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         content: (
           <>
             <ChangelogLink href="/timetable">Timetable</ChangelogLink> blocks
-            now reliably colour their whole 30-minute slot, even when the
-            text is short — some blocks were only colouring the height of
-            their own text, leaving a half-coloured gap next to fully
-            coloured blocks of the same length.
+            now reliably colour their whole 30-minute slot, even when the text
+            is short — some blocks were only colouring the height of their own
+            text, leaving a half-coloured gap next to fully coloured blocks of
+            the same length.
           </>
         )
       },

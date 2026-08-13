@@ -3,9 +3,8 @@
 import { useBoundState } from "@/state/bound.state"
 
 import {
-  CUSTOM_BLOCK_STYLE,
-  isCustomCourseKey,
-  PRESET_INDEX_TYPES
+  getCustomBlockStyle,
+  isCustomCourseKey
 } from "@/lib/custom-course-colors"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 import { getRemarkScope, REMARK_SCOPE_DOT_CLASS } from "@/lib/remark-scope"
@@ -82,12 +81,9 @@ export const TimetableTableCell = (props: Props) => {
   const isCustom = isCustomCourseKey(moduleKey)
   const indexStyle = getIndexTypeStyle(index.type)
 
-  // Custom blocks: preset types use their color scheme; custom-text gets purple
+  // Custom blocks: preset types (and Lunch) use their own color scheme
   const backgroundClass = isCustom
-    ? (PRESET_INDEX_TYPES.has(index.remarks)
-        ? getIndexTypeStyle(index.remarks)!
-        : CUSTOM_BLOCK_STYLE
-      ).background
+    ? getCustomBlockStyle(index.remarks).background
     : indexStyle.background
 
   // Variations
@@ -113,7 +109,11 @@ export const TimetableTableCell = (props: Props) => {
   const cellContent = (
     <div
       className={cn(
-        "relative flex cursor-pointer items-center rounded-lg p-[var(--cell-padding)] break-words",
+        // Mobile always renders compact (0.25rem, matching the "Compact"
+        // density preset) regardless of the user's chosen density — cells
+        // are too small on a phone screen to afford Comfortable/Spacious
+        // padding. The density setting only takes effect from md: up.
+        "relative flex cursor-pointer items-center rounded-lg p-[0.25rem] break-words md:p-[var(--cell-padding)]",
         clamp ? "overflow-hidden" : "h-full",
         backgroundClass,
         previewCandidate &&

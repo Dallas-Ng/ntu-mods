@@ -1,8 +1,7 @@
 import { TRUN_DAY_MAP } from "@/lib/constants"
 import {
-  CUSTOM_BLOCK_STYLE,
-  isCustomCourseKey,
-  PRESET_INDEX_TYPES
+  getCustomBlockStyle,
+  isCustomCourseKey
 } from "@/lib/custom-course-colors"
 import { formatRemarks } from "@/lib/format"
 import { getIndexType } from "@/lib/get-index-type"
@@ -45,9 +44,7 @@ export const TimetableTableCellContent = (props: Props) => {
 
   if (isCustom) {
     const sessionLabel = index.remarks.length > 0 ? index.remarks : null
-    const style = PRESET_INDEX_TYPES.has(index.remarks)
-      ? getIndexTypeStyle(index.remarks)!
-      : CUSTOM_BLOCK_STYLE
+    const style = getCustomBlockStyle(index.remarks)
     return (
       <>
         <p>

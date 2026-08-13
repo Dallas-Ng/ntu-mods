@@ -62,6 +62,34 @@ export const customCoursesToIndexMap = (
 }
 
 /**
+ * Custom blocks as extra entries for getIcs's timetable/indexLookup/
+ * titleLookup/labelLookup — they don't live in `timetable` or seasonIndexes,
+ * so each block is keyed by its own synthetic moduleKey pointing at itself.
+ */
+export const customCoursesToIcsInputs = (courses: CustomCourse[]) => {
+  const timetable: Record<string, string> = {}
+  const indexLookup: Record<string, Index[]> = {}
+  const titleLookup: Record<string, string> = {}
+  const labelLookup: Record<string, string> = {}
+
+  for (const [moduleKey, slots] of Object.entries(
+    customCoursesToIndexMap(courses)
+  )) {
+    const course = courses.find(
+      (c) => customCourseModuleKey(c.id) === moduleKey
+    )
+    if (!course) continue
+
+    timetable[moduleKey] = moduleKey
+    indexLookup[moduleKey] = slots
+    titleLookup[moduleKey] = course.name
+    labelLookup[moduleKey] = course.name
+  }
+
+  return { timetable, indexLookup, titleLookup, labelLookup }
+}
+
+/**
  * Every variant of every custom block, in the same shape as the season index
  * data, so the generator can treat custom blocks like any other module.
  */

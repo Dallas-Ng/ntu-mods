@@ -14,7 +14,7 @@ import {
 import posthog from "posthog-js"
 import { Dialog as DialogPrimitive } from "radix-ui"
 
-import { COURSE_TYPE, TRUN_DAY_MAP } from "@/lib/constants"
+import { COURSE_TYPE } from "@/lib/constants"
 import { customCourseModuleKey } from "@/lib/custom-course-colors"
 import { formatHhmm } from "@/lib/format"
 import {
@@ -54,7 +54,6 @@ import {
 } from "@/components/ui/tooltip"
 
 import TimetableBlacklistEditor from "./timetable-blacklist-editor"
-import TimetableLunchEditor from "./timetable-lunch-editor"
 import TimetableResultsCycler from "./timetable-results-cycler"
 
 const ElevatedDialogContent = ({
@@ -393,14 +392,6 @@ const SettingsForm = () => {
         </div>
       </div>
 
-      {/* Lunch breaks */}
-      <div className="flex flex-col gap-2">
-        <SectionLabel tip="Block a lunch window per day. Classes will not be scheduled during these times. Toggle each day on to set its window.">
-          Lunch breaks
-        </SectionLabel>
-        <TimetableLunchEditor />
-      </div>
-
       {/* Skippable types */}
       <div className="flex flex-col gap-2">
         <SectionLabel tip="Selected class types will ignore day/time constraints. Useful for classes like lectures that you have no control over scheduling.">
@@ -464,8 +455,7 @@ const SettingsForm = () => {
             resetConfig()
             posthog.capture("timetable_generation_settings_reset", {
               locked_modules: lockedModules.length,
-              blacklisted_slots: config.blacklistedTimeslots.length,
-              lunch_break_days: config.lunchBreaks.length
+              blacklisted_slots: config.blacklistedTimeslots.length
             })
           }}
           className="h-7 shrink-0 gap-1.5 text-xs">
@@ -514,13 +504,6 @@ const ConfigSummary = () => {
       (o) => o.value === config.minGapBetweenClasses
     )?.label
     if (gapLabel) chips.push(`${gapLabel} break`)
-  }
-
-  if (config.lunchBreaks.length > 0) {
-    const dayLabels = config.lunchBreaks
-      .map((lb) => TRUN_DAY_MAP[lb.day as keyof typeof TRUN_DAY_MAP])
-      .join(", ")
-    chips.push(`Lunch: ${dayLabels}`)
   }
 
   chips.push(config.loadPreference === "compact" ? "Compact" : "Spread out")
@@ -672,7 +655,6 @@ const TimetableGenerationConfig = () => {
                 unique_only: uniqueTimeslotsOnly,
                 load_preference: generationConfig.loadPreference,
                 blacklisted_slots: generationConfig.blacklistedTimeslots.length,
-                lunch_break_days: generationConfig.lunchBreaks.length,
                 free_days_count: generationConfig.preferredFreeDays.length,
                 max_consecutive_slots: generationConfig.maxConsecutiveSlots,
                 min_gap: generationConfig.minGapBetweenClasses,

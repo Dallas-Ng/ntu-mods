@@ -1,14 +1,18 @@
 "use client"
 
 import { useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 import { Calendar } from "lucide-react"
 import posthog from "posthog-js"
 import { toast } from "sonner"
 
+import { customCoursesToIcsInputs } from "@/lib/custom-course-to-index"
 import { getIcs } from "@/lib/get-ics"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
+import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
+import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import ButtonCollapsable from "@/components/button-collapsable"
 
@@ -18,10 +22,14 @@ const TimetableDownloadCalendarButton = () => {
   const semester = latestSemester
   const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const { modules } = useAllModules()
+  const { customCourses } = useCustomCourses()
+  const { settings } = useSettings()
+  const moduleRemarks = useBoundState((s) => s.moduleRemarks)
+  const indexRemarks = useBoundState((s) => s.indexRemarks)
   const [loading, setLoading] = useState(false)
 
   const handleClick = async () => {
-    if (Object.keys(timetable).length === 0) {
+    if (Object.keys(timetable).length === 0 && customCourses.length === 0) {
       toast.info("Please fill up your timetable first")
       return
     }
@@ -42,7 +50,20 @@ const TimetableDownloadCalendarButton = () => {
         if (timetable[m.code]) titleLookup[m.code] = m.title
       }
 
-      const icsText = getIcs(timetable, indexLookup, titleLookup)
+      // Merge in custom blocks (gym, CCA, etc.)
+      const customIcs = customCoursesToIcsInputs(customCourses)
+      Object.assign(indexLookup, customIcs.indexLookup)
+      Object.assign(titleLookup, customIcs.titleLookup)
+
+      const icsText = getIcs(
+        { ...timetable, ...customIcs.timetable },
+        indexLookup,
+        titleLookup,
+        settings.tableCell,
+        customIcs.labelLookup,
+        moduleRemarks,
+        indexRemarks
+      )
 
       if (!icsText) throw new Error("Failed to generate calendar")
 

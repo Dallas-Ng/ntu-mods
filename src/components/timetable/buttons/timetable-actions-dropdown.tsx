@@ -13,9 +13,9 @@ import {
 import posthog from "posthog-js"
 import { toast } from "sonner"
 
-import { cn } from "@/lib/utils"
 import { getIcs } from "@/lib/get-ics"
 import { latestSemester, latestYear } from "@/lib/semesters"
+import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"

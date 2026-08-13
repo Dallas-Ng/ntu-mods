@@ -70,6 +70,13 @@ export const Banner = {
       </BannerWrapper>
     </a>
   ),
+  mobileTimetableRebuilt: () => (
+    <a href="/changelog">
+      <BannerWrapper divClass="bg-yellow-300">
+        New: mobile timetable rebuilt — faster, more reliable, easier to use →
+      </BannerWrapper>
+    </a>
+  ),
   experienceProblems: () => (
     <BannerWrapper>
       Clicking of courses in the timetable has problems, please use the

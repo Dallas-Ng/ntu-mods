@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useBoundState } from "@/state/bound.state"
 import {
   Calendar,
   Copy,
@@ -13,12 +14,14 @@ import {
 import posthog from "posthog-js"
 import { toast } from "sonner"
 
+import { customCoursesToIcsInputs } from "@/lib/custom-course-to-index"
 import { getIcs } from "@/lib/get-ics"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
+import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
 import {
@@ -51,12 +54,15 @@ const TimetableActionsDropdown = ({
   const semester = latestSemester
   const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const { modules } = useAllModules()
+  const { settings } = useSettings()
+  const moduleRemarks = useBoundState((s) => s.moduleRemarks)
+  const indexRemarks = useBoundState((s) => s.indexRemarks)
   const [calendarLoading, setCalendarLoading] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [importOpen, setImportOpen] = useState(false)
 
   const handleDownloadCalendar = async () => {
-    if (Object.keys(timetable).length === 0) {
+    if (Object.keys(timetable).length === 0 && customCourses.length === 0) {
       toast.info("Please fill up your timetable first")
       return
     }
@@ -75,7 +81,20 @@ const TimetableActionsDropdown = ({
         if (timetable[m.code]) titleLookup[m.code] = m.title
       }
 
-      const icsText = getIcs(timetable, indexLookup, titleLookup)
+      // Merge in custom blocks (gym, CCA, etc.)
+      const customIcs = customCoursesToIcsInputs(customCourses)
+      Object.assign(indexLookup, customIcs.indexLookup)
+      Object.assign(titleLookup, customIcs.titleLookup)
+
+      const icsText = getIcs(
+        { ...timetable, ...customIcs.timetable },
+        indexLookup,
+        titleLookup,
+        settings.tableCell,
+        customIcs.labelLookup,
+        moduleRemarks,
+        indexRemarks
+      )
 
       if (!icsText) throw new Error("Failed to generate calendar")
 

@@ -10,7 +10,7 @@ const AppBanner = () => {
 
   if (HIDDEN_BANNER_PATHS.has(pathname)) return null
 
-  return <Banner.mobileTimetableRebuilt />
+  return <Banner.dataUpdated />
 }
 
 export default AppBanner

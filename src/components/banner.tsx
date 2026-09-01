@@ -77,6 +77,11 @@ export const Banner = {
       </BannerWrapper>
     </a>
   ),
+  dataUpdated: () => (
+    <BannerWrapper>
+      Exam timetable data last updated 1 September 2026
+    </BannerWrapper>
+  ),
   experienceProblems: () => (
     <BannerWrapper>
       Clicking of courses in the timetable has problems, please use the

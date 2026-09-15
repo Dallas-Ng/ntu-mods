@@ -6,8 +6,8 @@ import {
   customCourseModuleKey,
   getCustomBlockStyle,
   isCustomCourseKey
-} from "./custom-course-colors"
-import { getIndexTypeStyle } from "./get-index-type-style"
+} from "@/lib/custom-course-colors"
+import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 
 describe("custom course module keys", () => {
   it("round-trips a course id through its module key", () => {

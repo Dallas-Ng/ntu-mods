@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest"
 
-import { customCourseModuleKey } from "./custom-course-colors"
+import { customCourseModuleKey } from "@/lib/custom-course-colors"
 import {
   customCoursesToAllIndexes,
   customCoursesToIcsInputs,
   customCoursesToIndexMap,
   getSelectedCustomCourseIndex
-} from "./custom-course-to-index"
+} from "@/lib/custom-course-to-index"
 
 const gymCourse = (): CustomCourse => ({
   id: "c1",

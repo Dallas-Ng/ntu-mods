@@ -5,7 +5,7 @@ import {
   DEFAULT_CUSTOM_INDEX_LABEL,
   normalizeCustomCourse,
   normalizeCustomCourses
-} from "./custom-course-migrate"
+} from "@/lib/custom-course-migrate"
 
 const session = (): CustomCourseSession => ({
   type: "Gym",

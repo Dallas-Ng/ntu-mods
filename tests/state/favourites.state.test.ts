@@ -1,7 +1,9 @@
+import {
+  createFavouritesSlice,
+  FavouritesSlice
+} from "@/state/favourites.state"
 import { describe, expect, it } from "vitest"
 import { createStore } from "zustand/vanilla"
-
-import { createFavouritesSlice, FavouritesSlice } from "./favourites.state"
 
 describe("favourites slice", () => {
   it("starts with no favourites", () => {

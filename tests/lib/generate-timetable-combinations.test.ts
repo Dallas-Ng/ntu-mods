@@ -5,8 +5,8 @@ import {
   diagnoseEmptyResult,
   generateCombinations,
   timeslotsOverlap
-} from "./generate-timetable-combinations"
-import { DEFAULT_GENERATION_CONFIG } from "./generation-config"
+} from "@/lib/generate-timetable-combinations"
+import { DEFAULT_GENERATION_CONFIG } from "@/lib/generation-config"
 
 const idx = (day: number, time: string, type: IndexType = "LEC"): Index => ({
   key: `${day}-${time}`,

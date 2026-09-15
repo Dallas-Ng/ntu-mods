@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { resolveBestIndex } from "./resolve-best-index"
+import { resolveBestIndex } from "@/lib/resolve-best-index"
 
 const idx = (key: string, day: number, time: string): Index => ({
   key,

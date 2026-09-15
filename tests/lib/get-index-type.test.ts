@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { getIndexType } from "./get-index-type"
+import { getIndexType } from "@/lib/get-index-type"
 
 describe("getIndexType", () => {
   it.each([

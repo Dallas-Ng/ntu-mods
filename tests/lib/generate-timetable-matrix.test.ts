@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest"
 import {
   generateTimetableMatrix,
   getFirstTsIndex
-} from "./generate-timetable-matrix"
+} from "@/lib/generate-timetable-matrix"
 
 const idx = (overrides: Partial<Index> = {}): Index => ({
   key: "K1",

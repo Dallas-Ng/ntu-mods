@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { getIcs } from "./get-ics"
+import { getIcs } from "@/lib/get-ics"
 
 const index = (overrides: Partial<Index> = {}): Index => ({
   key: "IDX1",

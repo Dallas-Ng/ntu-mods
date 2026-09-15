@@ -5,7 +5,7 @@ import {
   decodeCustomBlocksParam,
   decodeTextBundle,
   encodeTextBundle
-} from "./timetable-share"
+} from "@/lib/timetable-share"
 
 const customCourse = (): CustomCourse => ({
   id: "c1",

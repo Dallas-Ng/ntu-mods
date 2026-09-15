@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest"
 import {
   DEFAULT_GENERATION_CONFIG,
   isDefaultGenerationConfig
-} from "./generation-config"
+} from "@/lib/generation-config"
 
 describe("isDefaultGenerationConfig", () => {
   it("is true for the default config", () => {

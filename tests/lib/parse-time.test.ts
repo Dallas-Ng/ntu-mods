@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { parseTime, parseTimeNumber } from "./parse-time"
+import { parseTime, parseTimeNumber } from "@/lib/parse-time"
 
 const idx = (time: string): Index => ({
   key: "K",

@@ -1,6 +1,5 @@
+import { migrateBoundState } from "@/state/bound.state"
 import { describe, expect, it } from "vitest"
-
-import { migrateBoundState } from "./bound.state"
 
 describe("migrateBoundState", () => {
   it("normalizes legacy flat-session custom courses when migrating from before v1", () => {

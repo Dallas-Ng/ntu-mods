@@ -1,13 +1,12 @@
 import { describe, expect, it } from "vitest"
 
 import type { AllModule } from "@/types/mods"
-
 import {
   filterModules,
   getGroupKey,
   getGroupLabel,
   groupModules
-} from "./filter-modules"
+} from "@/lib/filter-modules"
 
 const mod = (overrides: Partial<AllModule> = {}): AllModule => ({
   code: "CZ2001",

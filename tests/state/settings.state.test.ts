@@ -1,11 +1,10 @@
-import { describe, expect, it } from "vitest"
-import { createStore } from "zustand/vanilla"
-
 import {
   createSettingsSlice,
   INIT_SETTINGS,
   SettingsSlice
-} from "./settings.state"
+} from "@/state/settings.state"
+import { describe, expect, it } from "vitest"
+import { createStore } from "zustand/vanilla"
 
 describe("settings slice", () => {
   it("starts with INIT_SETTINGS", () => {

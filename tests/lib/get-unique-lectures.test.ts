@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { getUniqueLectures } from "./get-unique-lectures"
+import { getUniqueLectures } from "@/lib/get-unique-lectures"
 
 const idx = (overrides: Partial<Index> = {}): Index => ({
   key: "K1",

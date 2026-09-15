@@ -1,9 +1,8 @@
+import { createTimetableSlice, TimetableSlice } from "@/state/timetable.state"
 import { describe, expect, it } from "vitest"
 import { createStore } from "zustand/vanilla"
 
 import { DEFAULT_GENERATION_CONFIG } from "@/lib/generation-config"
-
-import { createTimetableSlice, TimetableSlice } from "./timetable.state"
 
 const makeStore = () => createStore<TimetableSlice>(createTimetableSlice)
 

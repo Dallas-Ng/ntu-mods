@@ -79,7 +79,7 @@ export const Banner = {
   ),
   dataUpdated: () => (
     <BannerWrapper>
-      Exam timetable data last updated 1 September 2026
+      Exam timetable data last updated 15 September 2026
     </BannerWrapper>
   ),
   experienceProblems: () => (

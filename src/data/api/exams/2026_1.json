@@ -224,33 +224,6 @@
     "name": "BUSINESS OPERATIONS & PROCESS",
     "duration": 4
   },
-  "BF2201": {
-    "date": "3 December 2026",
-    "day": 4,
-    "start_time": "1.00 pm",
-    "end_time": "3.00 pm",
-    "key": "BF2201",
-    "name": "INVESTMENTS",
-    "duration": 4
-  },
-  "BF2209": {
-    "date": "28 November 2026",
-    "day": 6,
-    "start_time": "1.00 pm",
-    "end_time": "3.30 pm",
-    "key": "BF2209",
-    "name": "DERIVATIVE SECURITIES",
-    "duration": 5
-  },
-  "BF2216": {
-    "date": "28 November 2026",
-    "day": 6,
-    "start_time": "9.00 am",
-    "end_time": "11.30 am",
-    "key": "BF2216",
-    "name": "TRADE INCOTERMS & SHIP CHARTERING",
-    "duration": 5
-  },
   "BF2219": {
     "date": "3 December 2026",
     "day": 4,
@@ -296,15 +269,6 @@
     "name": "MACHINE LEARNING IN FINANCE",
     "duration": 6
   },
-  "BF3201": {
-    "date": "2 December 2026",
-    "day": 3,
-    "start_time": "9.00 am",
-    "end_time": "11.30 am",
-    "key": "BF3201",
-    "name": "CORPORATE FINANCE & STRATEGY",
-    "duration": 5
-  },
   "BF3202": {
     "date": "2 December 2026",
     "day": 3,
@@ -313,33 +277,6 @@
     "key": "BF3202",
     "name": "FIXED INCOME SECURITIES",
     "duration": 5
-  },
-  "BF3203": {
-    "date": "25 November 2026",
-    "day": 3,
-    "start_time": "9.00 am",
-    "end_time": "11.30 am",
-    "key": "BF3203",
-    "name": "EQUITY SECURITIES",
-    "duration": 5
-  },
-  "BF3204": {
-    "date": "23 November 2026",
-    "day": 1,
-    "start_time": "9.00 am",
-    "end_time": "11.00 am",
-    "key": "BF3204",
-    "name": "FINANCIAL MODELLING",
-    "duration": 4
-  },
-  "BF3207": {
-    "date": "24 November 2026",
-    "day": 2,
-    "start_time": "1.00 pm",
-    "end_time": "3.00 pm",
-    "key": "BF3207",
-    "name": "ALTERNATIVE INVESTMENTS",
-    "duration": 4
   },
   "BF3215": {
     "date": "2 December 2026",
@@ -375,15 +312,6 @@
     "end_time": "11.00 am",
     "key": "BF3218",
     "name": "FINANCIAL MODELLING",
-    "duration": 4
-  },
-  "BF3219": {
-    "date": "24 November 2026",
-    "day": 2,
-    "start_time": "1.00 pm",
-    "end_time": "3.00 pm",
-    "key": "BF3219",
-    "name": "ALTERNATIVE INVESTMENTS",
     "duration": 4
   },
   "BG1141": {
@@ -502,24 +430,6 @@
     "key": "BR2207",
     "name": "QUANTITATIVE ANALYSIS",
     "duration": 6
-  },
-  "BR3208": {
-    "date": "30 November 2026",
-    "day": 1,
-    "start_time": "9.00 am",
-    "end_time": "11.30 am",
-    "key": "BR3208",
-    "name": "OPERATIONAL RISK MANAGEMENT",
-    "duration": 5
-  },
-  "BR3211": {
-    "date": "30 November 2026",
-    "day": 1,
-    "start_time": "9.00 am",
-    "end_time": "11.30 am",
-    "key": "BR3211",
-    "name": "OPERATIONAL RISK & RESILIENCY",
-    "duration": 5
   },
   "BR3212": {
     "date": "1 December 2026",
@@ -800,6 +710,15 @@
     "name": "MARKETING FOR THE 21ST CENTURY",
     "duration": 3
   },
+  "CB1117": {
+    "date": "25 November 2026",
+    "day": 3,
+    "start_time": "9.00 am",
+    "end_time": "11.00 am",
+    "key": "CB1117",
+    "name": "ENGINEERING MATHEMATICS",
+    "duration": 4
+  },
   "CB1131": {
     "date": "24 November 2026",
     "day": 2,
@@ -834,6 +753,15 @@
     "end_time": "11.00 am",
     "key": "CH2108",
     "name": "THERMODYNAMICS",
+    "duration": 4
+  },
+  "CH2123": {
+    "date": "25 November 2026",
+    "day": 3,
+    "start_time": "1.00 pm",
+    "end_time": "3.00 pm",
+    "key": "CH2123",
+    "name": "CHEMICAL THERMODYNAMICS",
     "duration": 4
   },
   "CH3104": {
@@ -1410,15 +1338,6 @@
     "end_time": "11.00 am",
     "key": "EN3002",
     "name": "WASTEWATER ENGINEERING",
-    "duration": 4
-  },
-  "EN3003": {
-    "date": "24 November 2026",
-    "day": 2,
-    "start_time": "1.00 pm",
-    "end_time": "3.00 pm",
-    "key": "EN3003",
-    "name": "ENVIRONMENTAL TRANSPORT PROCESSES",
     "duration": 4
   },
   "EN3004": {
@@ -2498,7 +2417,7 @@
     "start_time": "9.00 am",
     "end_time": "11.30 am",
     "key": "MA4842",
-    "name": "ENGINEERING METROLOGY & MATERIALS CHARACTERIZATION",
+    "name": "ENGINEERING METROLOGY &  MATERIALS CHARACTERIZATION",
     "duration": 5
   },
   "MA4849": {
@@ -2941,6 +2860,15 @@
     "key": "MS4013",
     "name": "BIOMATERIALS",
     "duration": 2
+  },
+  "MS4014": {
+    "date": "23 November 2026",
+    "day": 1,
+    "start_time": "9.00 am",
+    "end_time": "10.30 am",
+    "key": "MS4014",
+    "name": "NANOMATERIALS: FUNDAMENTALS & APPLICATIONS",
+    "duration": 3
   },
   "MS4610": {
     "date": "25 November 2026",

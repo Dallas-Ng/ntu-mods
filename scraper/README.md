@@ -255,6 +255,26 @@ Each slot's `day` is an integer (Mon=1 … Sun=7) and `duration` is the number o
 
 ---
 
+#### Step 5a — Fetch exam CSV (optional, replaces manual download)
+
+`step5b_fetch_exams.py` hits NTU's public `exam_timetable_und.Get_detail` endpoint
+directly and writes the CSV Step 5 expects — no login/cookie required, no manual
+download from the portal.
+
+```bash
+python3 step5b_fetch_exams.py "2026;1" --plan-no 115
+```
+
+`--plan-no` is an undocumented `p_plan_no` query param that changes each semester —
+find the current value by opening the portal's exam timetable query form
+(https://wis.ntu.edu.sg/webexe/owa/exam_timetable_und.query_page), submitting a
+query, and reading `p_plan_no` off the resulting request (devtools network tab, or
+inspect the "track changes" link in the response HTML which embeds it too).
+
+The exam timetable changes during the semester (add/drop deadlines, room/time
+shuffles) even after NTU first releases it — re-run this before trusting a stale
+checked-in CSV, don't assume it's static once downloaded once.
+
 #### Step 5 — Convert exams
 
 Converts exam CSV files in `data/exams` into per-semester exam JSON.
@@ -373,9 +393,10 @@ Tasks for keeping data current, in the order they need doing.
    python main.py --semester "2026;1" --load
    python stepfinal_upsync.py
    ```
-2. Add the exam timetable once NTU releases it. Download the CSV and place it at:
-   ```
-   data/exams/exams-YYYY-YYYY-sX.csv   # e.g. exams-2025-2026-s2.csv
+2. Fetch/refresh the exam timetable once NTU releases it (see Step 5a above for
+   finding `--plan-no`):
+   ```bash
+   python step5b_fetch_exams.py "2026;1" --plan-no 115
    ```
    Then re-run step 5 and publish again:
    ```bash
@@ -383,6 +404,9 @@ Tasks for keeping data current, in the order they need doing.
    python main.py --semester "2026;1" --load --scope exams
    python stepfinal_upsync.py
    ```
+   The portal keeps revising the timetable through the semester — re-fetch and diff
+   against `src/data/api/exams/YYYY_S.json` before publishing, rather than trusting
+   a CSV downloaded once at the start.
 
 Commit and push `src/data/api` after each publish — nothing outside the on-demand snapshot route updates until that push lands.
 

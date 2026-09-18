@@ -2,8 +2,6 @@ name: Unit Tests
 
 on:
   pull_request:
-  push:
-    branches: [main]
 
 concurrency:
   group: unit-tests-${{ github.workflow }}-${{ github.ref }}

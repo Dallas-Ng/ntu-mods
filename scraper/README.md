@@ -11,12 +11,40 @@ check.py     invariants + diff against src/data/api; exit 1 = do not publish
 main.py      the pipeline: scrape -> convert -> check -> --load / --upsync
 ```
 
-```
-                 portal                       convert                        publish
-01_semesters.json
-02_courses_YYYY_S.json  ─┬─>  03_mdata_YYYY_S.json    ─┬─>  --load    -> Cloudflare D1
-02b_content_YYYY_S.json ─┘    04_indexes_YYYY_S.json  ─┤    --upsync  -> src/data/api  (commit + push)
-exams/exams-YYYY-YYYY-sN.csv  05_exams_YYYY_S.json    ─┘
+```mermaid
+flowchart LR
+    subgraph NTU portals
+        S[aus_schedule<br/>semesters · programmes · class schedules]
+        C[AUS_SUBJ_CONT<br/>descriptions · grade type · restrictions]
+        E[exam_timetable_und<br/>plan_no · exam timetable]
+    end
+
+    subgraph "scrape (portal.py) — cached unless --refetch"
+        S --> F01[01_semesters.json]
+        S --> F02[02_courses_YYYY_S.json]
+        C --> F02b[02b_content_YYYY_S.json]
+        E --> CSV[exams/exams-YYYY-YYYY-sN.csv]
+    end
+
+    subgraph "convert (convert.py) — always reruns"
+        F02 --> M[03_mdata_YYYY_S.json]
+        F02b --> M
+        F02 --> I[04_indexes_YYYY_S.json]
+        CSV --> X[05_exams_YYYY_S.json]
+    end
+
+    M & I & X --> CHK{check.py<br/>invariants + diff vs src/data/api}
+    CHK -- PROBLEM --> STOP[exit 1 — do not publish]
+    CHK -- OK --> LOAD[--load] & UP[--upsync]
+
+    subgraph publish
+        LOAD --> D1[(Cloudflare D1)]
+        UP --> API[src/data/api/*.json]
+        API -- commit + push --> BUILD[Workers Build → site]
+    end
+
+    D1 -.-> V[yarn db:verify]
+    API -.-> V
 ```
 
 Only the exam CSVs are committed (`data/.gitignore` drops the JSON).

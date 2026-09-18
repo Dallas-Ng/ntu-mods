@@ -61,15 +61,10 @@ def _session() -> requests.Session:
     return s
 
 
-def _get(url: str) -> str:
-    r = _session().get(url, timeout=TIMEOUT)
-    r.raise_for_status()
-    return r.text
-
-
-def _post(url: str, data, referer: str | None = None) -> str:
+def _fetch(url: str, data=None, referer: str | None = None) -> str:
+    """GET when ``data`` is None, else POST."""
     headers = {"Referer": referer} if referer else None
-    r = _session().post(url, data=data, headers=headers, timeout=TIMEOUT)
+    r = _session().request("POST" if data is not None else "GET", url, data=data, headers=headers, timeout=TIMEOUT)
     r.raise_for_status()
     return r.text
 
@@ -88,7 +83,7 @@ def _select_values(html: str, name: str) -> list[tuple[str, str]]:
 
 def fetch_semesters() -> list[dict[str, str]]:
     """``[{"code": "2026;1", "name": "Acad Yr 2026 Semester 1"}, ...]``, newest first."""
-    return [{"code": v, "name": n} for v, n in _select_values(_get(SCHEDULE_MAIN_URL), "acadsem")]
+    return [{"code": v, "name": n} for v, n in _select_values(_fetch(SCHEDULE_MAIN_URL), "acadsem")]
 
 
 def fetch_programmes(acadsem: str) -> list[str]:
@@ -97,7 +92,7 @@ def fetch_programmes(acadsem: str) -> list[str]:
     Must POST with the semester: the landing page only lists programmes for
     whichever semester it happens to default to (often a tiny Special Term).
     """
-    html = _post(SCHEDULE_PROGRAMMES_URL, {"acadsem": acadsem, "boption": "x", "staff_access": "false"})
+    html = _fetch(SCHEDULE_PROGRAMMES_URL, {"acadsem": acadsem, "boption": "x", "staff_access": "false"})
     return [v for v, label in _select_values(html, "r_course_yr") if "---" not in v and "---" not in label]
 
 
@@ -108,7 +103,7 @@ def fetch_schedule(acadsem: str, programme: str) -> list[dict]:
         ("r_subj_code", "Enter Keywords or Course Code"), ("r_search_type", "F"),
         ("boption", "CLoad"), ("acadsem", acadsem), ("staff_access", "false"),
     ]
-    return parse_schedule_html(_post(SCHEDULE_DISPLAY_URL, payload))
+    return parse_schedule_html(_fetch(SCHEDULE_DISPLAY_URL, payload))
 
 
 def fetch_content(acadsem: str, programme: str) -> list[dict]:
@@ -119,10 +114,10 @@ def fetch_content(acadsem: str, programme: str) -> list[dict]:
         ("r_subj_code", "Enter Keywords or Course Code"), ("boption", "CLoad"),
         ("acad", year), ("semester", sem), ("acadsem", f"{year}_{sem}"),
     ]
-    return parse_content_html(_post(CONTENT_DISPLAY_URL, payload))
+    return parse_content_html(_fetch(CONTENT_DISPLAY_URL, payload))
 
 
-def scrape_semester(acadsem: str, workers: int = 4, log=print) -> tuple[dict, dict]:
+def scrape_semester(acadsem: str, workers: int = 4) -> tuple[dict, dict]:
     """Scrape schedule + content for every programme, in one thread pool.
 
     Returns ``(courses, content)``, each ``{programme: [course, ...]}``. Any
@@ -132,7 +127,7 @@ def scrape_semester(acadsem: str, workers: int = 4, log=print) -> tuple[dict, di
     if acadsem not in {s["code"] for s in fetch_semesters()}:
         raise ValueError(f"Semester '{acadsem}' is not listed on the schedule portal.")
     programmes = fetch_programmes(acadsem)
-    log(f"  {len(programmes)} programmes in {acadsem}")
+    print(f"  {len(programmes)} programmes in {acadsem}")
 
     jobs = [(fetch_schedule, p) for p in programmes] + [(fetch_content, p) for p in programmes]
     done = 0
@@ -143,7 +138,7 @@ def scrape_semester(acadsem: str, workers: int = 4, log=print) -> tuple[dict, di
             results[fn][p] = fut.result()
             done += 1
             if done % 100 == 0 or done == len(jobs):
-                log(f"  {done}/{len(jobs)} requests done")
+                print(f"  {done}/{len(jobs)} requests done")
     return results[fetch_schedule], results[fetch_content]
 
 
@@ -297,7 +292,7 @@ _PLAN_RADIO = re.compile(r'name="p_plan_no"\s+value="(\d+)"\s*/?>\s*([^<]+)', re
 
 def fetch_exam_plans() -> dict[str, int]:
     """``{"AY2026-27 SEM 1": 115, ...}`` — the timetables the portal has released."""
-    html = _post(EXAM_PLANS_URL, {"p_opt": "1", "p_type": "UE", "bOption": "Next"}, referer=EXAM_MAIN_URL)
+    html = _fetch(EXAM_PLANS_URL, {"p_opt": "1", "p_type": "UE", "bOption": "Next"}, referer=EXAM_MAIN_URL)
     return {label.strip(): int(no) for no, label in _PLAN_RADIO.findall(html)}
 
 
@@ -322,6 +317,6 @@ def fetch_exam_timetable(acadsem: str, plan_no: int | None = None) -> list[list[
         "academic_session": f"Semester {sem} Academic Year {year}-{year + 1}",
         "p_plan_no": plan_no, "p_exam_yr": year, "p_semester": sem, "p_type": "UE", "bOption": "Next",
     }
-    html = _post(EXAM_DETAIL_URL, form)
+    html = _fetch(EXAM_DETAIL_URL, form)
     rows = [[c.strip() for c in cells[:6]] for cells in map(_EXAM_CELL.findall, _EXAM_ROW.findall(html)) if len(cells) >= 6]
     return rows or None

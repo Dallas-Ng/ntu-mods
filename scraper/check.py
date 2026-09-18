@@ -117,20 +117,18 @@ def check(mdata: dict, indexes: dict, exams: dict, live: dict[str, dict] | None)
     return problems, notes
 
 
-def load_live(sem_key: str) -> dict[str, dict] | None:
-    paths = {k: API_DIR / d / f"{sem_key}.json" for k, d in (("mdata", "metadata"), ("indexes", "indexes"), ("exams", "exams"))}
-    if not paths["mdata"].exists():
-        return None
-    return {k: json.loads(p.read_text()) if p.exists() else {} for k, p in paths.items()}
+def _read(path: Path) -> dict:
+    """Missing file = {} — lets --scope exams run without a course scrape."""
+    return json.loads(path.read_text()) if path.exists() else {}
 
 
 def check_semester(acadsem: str) -> bool:
     """Run the check for one semester, print the report, return ok/not."""
     key = acadsem.replace(";", "_")
-    def read(name):  # missing file = {} so --scope exams works without a course scrape
-        p = DATA_DIR / f"{name}_{key}.json"
-        return json.loads(p.read_text()) if p.exists() else {}
-    problems, notes = check(read("03_mdata"), read("04_indexes"), read("05_exams"), load_live(key))
+    live = None
+    if (API_DIR / "metadata" / f"{key}.json").exists():
+        live = {k: _read(API_DIR / d / f"{key}.json") for k, d in (("mdata", "metadata"), ("indexes", "indexes"), ("exams", "exams"))}
+    problems, notes = check(*(_read(DATA_DIR / f"{n}_{key}.json") for n in ("03_mdata", "04_indexes", "05_exams")), live)
     print(f"[Check] {acadsem}")
     for n in notes:
         print(f"  note: {n}")

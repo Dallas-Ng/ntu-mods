@@ -47,12 +47,11 @@ python3 check.py "2026;1"                          # re-run just the publish gat
 | `--refetch`       | Ignore cached `02_courses` / exam CSV and hit the portal again. Conversion always reruns. |
 | `--scope`         | `courses` (02–04 only) or `exams` (05 only). Applies to scraping, checking and loading. |
 | `--plan-no`       | Override the exam portal's `p_plan_no`. Normally auto-detected from the portal.        |
-| `--min-year`, `--from` | With `all`: restrict to semesters from that year / semester onwards.               |
+| `--from`          | With `all`: this semester and newer.                                                    |
 | `--load`          | Publish to D1 via `scripts/db/load-semester.mjs` after the check passes.               |
 | `--upsync`        | Copy `03/04/05` into `src/data/api/{metadata,indexes,exams}` after the check passes.   |
 | `--dry-run`       | With `--load`/`--upsync`: print, change nothing.                                       |
 | `--force`         | Publish even if the check fails or D1 row counts drop sharply. Only when the drop is real. |
-| `--pretty`        | Indented JSON.                                                                          |
 
 ### What the check gates
 

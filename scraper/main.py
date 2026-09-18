@@ -40,7 +40,6 @@ DATA_DIR = SCRAPER_DIR / "data"
 EXAMS_DIR = DATA_DIR / "exams"
 REPO_ROOT = SCRAPER_DIR.parent
 API_DIR = REPO_ROOT / "src" / "data" / "api"
-SEMESTERS_PATH = DATA_DIR / "01_semesters.json"
 
 #: Special Term and Teaching Term run after Semester 2 of the same academic year.
 SEM_ORDER = {"1": 1, "2": 2, "S": 3, "T": 4}
@@ -62,24 +61,20 @@ def exam_csv_path(acadsem: str) -> Path:
     return EXAMS_DIR / f"exams-{year}-{int(year) + 1}-s{sem.lower()}.csv"
 
 
-def write_json(path: Path, data, indent: int | None) -> None:
+def write_json(path: Path, data) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=indent, ensure_ascii=False), encoding="utf-8")
+    path.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 
 
-def read_json(path: Path):
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def scrape_courses(acadsem: str, workers: int, refetch: bool, indent: int | None) -> tuple[dict, dict]:
+def scrape_courses(acadsem: str, workers: int, refetch: bool) -> tuple[dict, dict]:
     courses_p, content_p = data_path("02_courses", acadsem), data_path("02b_content", acadsem)
     if not refetch and courses_p.exists() and content_p.exists():
         print(f"[Scrape] using cached {courses_p.name} + {content_p.name} (--refetch to update)")
-        return read_json(courses_p), read_json(content_p)
+        return json.loads(courses_p.read_text()), json.loads(content_p.read_text())
     print(f"[Scrape] {acadsem} with {workers} workers")
     courses, content = portal.scrape_semester(acadsem, workers)
-    write_json(courses_p, courses, indent)
-    write_json(content_p, content, indent)
+    write_json(courses_p, courses)
+    write_json(content_p, content)
     print(f"[Scrape] {sum(map(len, courses.values()))} course rows across {len(courses)} programmes")
     return courses, content
 
@@ -126,18 +121,17 @@ def run_upsync(acadsem: str, scope: str | None, dry_run: bool) -> None:
 
 
 def process(acadsem: str, a: argparse.Namespace) -> None:
-    indent = 2 if a.pretty else None
     print(f"\n=== {acadsem} ===")
     if a.scope != "exams":
-        courses, content = scrape_courses(acadsem, a.workers, a.refetch, indent)
+        courses, content = scrape_courses(acadsem, a.workers, a.refetch)
         mdata, indexes = convert.to_mdata(courses, content), convert.to_indexes(courses)
-        write_json(data_path("03_mdata", acadsem), mdata, indent)
-        write_json(data_path("04_indexes", acadsem), indexes, indent)
+        write_json(data_path("03_mdata", acadsem), mdata)
+        write_json(data_path("04_indexes", acadsem), indexes)
         print(f"[Convert] {len(mdata)} courses, {sum(map(len, indexes.values()))} indexes")
     if a.scope != "courses":
         csv_text = scrape_exams(acadsem, a.refetch, a.plan_no)
         exams = convert.to_exams(csv_text) if csv_text else {}
-        write_json(data_path("05_exams", acadsem), exams, indent)
+        write_json(data_path("05_exams", acadsem), exams)
         print(f"[Convert] {len(exams)} exams")
 
     ok = check.check_semester(acadsem)
@@ -158,8 +152,6 @@ def main() -> None:
     p.add_argument("--refetch", action="store_true", help="ignore cached scrapes and hit the portal again")
     p.add_argument("--scope", choices=["courses", "exams"], help="only courses (02–04) or only exams (05); default both")
     p.add_argument("--plan-no", type=int, help="override the exam portal's p_plan_no (normally auto-detected)")
-    p.add_argument("--pretty", action="store_true", help="indent JSON output")
-    p.add_argument("--min-year", type=int, metavar="YYYY", help="with 'all': skip semesters before this year")
     p.add_argument("--from", dest="from_sem", metavar="YYYY;S", help="with 'all': this semester and newer")
     p.add_argument("--load", action="store_true", help="publish to D1 after checking")
     p.add_argument("--upsync", action="store_true", help="copy into src/data/api after checking (then commit + push)")
@@ -168,7 +160,7 @@ def main() -> None:
     a = p.parse_args()
 
     semesters = portal.fetch_semesters()
-    write_json(SEMESTERS_PATH, semesters, 2 if a.pretty else None)
+    write_json(DATA_DIR / "01_semesters.json", semesters)
     codes = [s["code"] for s in semesters]
     print(f"[Semesters] {len(codes)} listed, newest {codes[0]}")
 
@@ -178,8 +170,6 @@ def main() -> None:
         targets = sorted(codes, key=sort_key)
         if a.from_sem:
             targets = [c for c in targets if sort_key(c) >= sort_key(a.from_sem)]
-        elif a.min_year:
-            targets = [c for c in targets if int(c.split(";")[0]) >= a.min_year]
     elif a.semester in codes:
         targets = [a.semester]
     else:

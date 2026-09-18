@@ -39,18 +39,56 @@ _FIELD_KEYS = {
     "description": "description",
 }
 
-_ROMAN = frozenset("I II III IV V VI VII VIII IX X XI XII XIII XIV XV XVI XVII XVIII XIX XX".split())
+_ROMAN = re.compile(r"^(?=[IVX])X{0,2}(?:IX|IV|V?I{0,3})[A-C]?$")  # I–XXXIX, plus "IIA" (Physics Lab IIA)
+#: Portal titles are ALL CAPS, so acronyms can only be restored from a list.
+_ACRONYMS = {
+    "AI", "AIGC", "API", "AR", "ASEAN", "CAD", "CFD", "CMOS", "CNYSP", "CPU", "CSR", "DNA", "E2S2", "EEE", "ESG",
+    "EU", "FEM", "FMCG", "GIS", "GPU", "HCI", "HR", "IC", "ICT", "IEEE", "LED", "LLM", "MBA", "MEMS", "ML", "MRI",
+    "NLP", "NTU", "PCB", "PR", "RF", "RNA", "SQL", "STEM", "TV", "UAEB", "UI", "UK", "USA", "UX", "VFX", "VLSI", "VR",
+}
+_SMALL = {"a", "an", "and", "as", "at", "but", "by", "for", "from", "in", "nor", "of", "on", "or", "the", "to", "via", "vs", "with"}
+
+
+def _title_word(word: str, first: bool, last: bool) -> str:
+    pre, core, post = re.match(r"^(\W*)(.*?)(\W*)$", word).groups()
+    up = core.upper()
+    if not core:
+        return word
+    if up in _ACRONYMS or _ROMAN.match(up) or re.fullmatch(r"(?:[A-Z]\.)+[A-Z]?", up):  # AI, III, A.I.
+        out = up
+    elif re.fullmatch(r"\d+(?:ST|ND|RD|TH)", up):  # 21st
+        out = core.lower()
+    elif re.fullmatch(r"\d+[A-Z]+", up):  # 3D, 2A
+        out = up
+    elif core.lower() in _SMALL and not (first or last or pre):  # "Laboratory A", "'The Long Century'" keep caps
+        out = core.lower()
+    else:
+        out = core[:1].upper() + core[1:].lower()  # not str.title(): "it's" -> "It's", not "It'S"
+    return pre + out + post
+
+
+def smart_title(s: str) -> str:
+    """Title-case a portal ALL-CAPS title: small words lowered, known acronyms
+    and Roman numerals upper, ordinals like 21st lowered, apostrophes intact."""
+    s = re.sub(r"([:,])(?=[A-Za-z])", r"\1 ", s)  # "WRITING:POETRY", "GODS,GHOSTS"
+    toks = s.split(" ")
+    out: list[str] = []
+    for i, tok in enumerate(toks):
+        first = i == 0 or out[-1].endswith((":", "-", "?"))
+        parts = re.split(r"([-/])", tok)  # "MICRO/NANO", "ICT-BASED": case each side
+        last = i == len(toks) - 1
+        out.append("".join(p if j % 2 else _title_word(p, first and j == 0, last and j == len(parts) - 1) for j, p in enumerate(parts)))
+    return " ".join(out)
+
+
 _INLINE_LIST_SEP = re.compile(
     r"\s*;\s*(?=\((?:ii{1,3}|iv|vi{0,3}|ix|x{1,3}|[2-9]|\d{2,}|[b-z])\))", re.IGNORECASE
 )
 
 
-def smart_title(s: str) -> str:
-    """Title-case, keeping Roman numerals (``Calculus II``) uppercase."""
-    return re.sub(r"[A-Za-z]+", lambda m: m.group(0).upper() if m.group(0).upper() in _ROMAN else m.group(0).title(), s)
-
-
 def clean_description(text: str) -> str:
+    text = text.replace("\t", " ")
+    text = re.sub(r"(?<=[A-Za-z])\?(?=(?:s|t|re|ve|ll|d)\b)", "'", text)  # portal lost curly apostrophes: "Einstein?s"
     text = re.sub(r"\.([A-Z])", r". \1", text)          # missing space after full stop
     text = _INLINE_LIST_SEP.sub("\n", text)               # "(i) ...; (ii) ..." -> one per line
     if re.search(r"\n\((?:ii|iii|[2-9]|[b-z])\)", text, re.IGNORECASE):

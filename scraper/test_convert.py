@@ -4,7 +4,13 @@ import convert
 
 assert convert.parse_prerequisite("A & B OR C") == [["A", "B"], ["C"]]
 assert convert.parse_prerequisite("A") == [["A"]]
-assert convert.smart_title("CALCULUS III FOR ENGINEERS") == "Calculus III For Engineers"
+assert convert.smart_title("CALCULUS III FOR ENGINEERS") == "Calculus III for Engineers"
+assert convert.smart_title("ASEAN IN THE 21ST CENTURY") == "ASEAN in the 21st Century"
+assert convert.smart_title("WHY IT'S HERE:AI & 3D ART") == "Why It's Here: AI & 3D Art"
+assert convert.smart_title("PHYSICS LAB IIA") == "Physics Lab IIA" and convert.smart_title("LABORATORY A") == "Laboratory A"
+assert convert.smart_title("ICT-BASED DESIGN OF A.I.") == "ICT-Based Design of A.I."
+assert convert.smart_title("MICRO/NANOELECTRONIC DEVICES") == "Micro/Nanoelectronic Devices"
+assert convert.clean_description("Einstein?s\ttheory") == "Einstein's theory"
 assert convert.duration_units("0830-0950") == 3 and convert.duration_units("") == 0
 assert convert.clean_description("Covers (i) foo; (ii) bar.Next") == "Covers\n(i) foo\n(ii) bar. Next"
 

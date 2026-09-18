@@ -1,9 +1,8 @@
 /**
  * Load one (semester, scope) from the scraper's output into D1.
  *
- * This replaces stepfinal_upsync.py — the copy-into-src/data/api step and the
- * hand-written module-map / index-map aggregation that followed it. Those two
- * derived files are gone: the equivalent queries live in
+ * Invoked by `scraper/main.py --load`. The old hand-written module-map /
+ * index-map aggregation is gone: the equivalent queries live in
  * src/lib/server/db/queries.ts.
  *
  *   node scripts/db/load-semester.mjs --sem 2025;2

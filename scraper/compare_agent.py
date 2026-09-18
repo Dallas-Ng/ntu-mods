@@ -71,7 +71,7 @@ _content_cache: Dict[str, List[Dict]] = {}
 
 def tool_list_available_semesters() -> Dict:
     if not SEMESTERS_PATH.exists():
-        return {"error": "01_semesters.json not found. Run step1_fetch_semesters.py first."}
+        return {"error": "01_semesters.json not found. Run main.py first."}
     with SEMESTERS_PATH.open("r") as f:
         data = json.load(f)
     return {"semesters": data}
@@ -208,9 +208,9 @@ def _fetch_schedule_for_programme(acadsem: str, programme: str) -> List[Dict]:
     if cache_key in _schedule_cache:
         return _schedule_cache[cache_key]
 
-    from step2_scrape_courses import scrape_programme_schedule
+    from portal import fetch_schedule
     try:
-        courses = scrape_programme_schedule(acadsem, programme)
+        courses = fetch_schedule(acadsem, programme)
         _schedule_cache[cache_key] = courses
         return courses
     except Exception as exc:
@@ -223,9 +223,9 @@ def _fetch_content_for_programme(acadsem: str, programme: str) -> List[Dict]:
     if cache_key in _content_cache:
         return _content_cache[cache_key]
 
-    from step2b_scrape_content import scrape_programme_content
+    from portal import fetch_content
     try:
-        courses = scrape_programme_content(acadsem, programme)
+        courses = fetch_content(acadsem, programme)
         _content_cache[cache_key] = courses
         return courses
     except Exception as exc:
@@ -472,10 +472,10 @@ The scraper pipeline can break at multiple points:
 
 1. If data not yet loaded, call load_data() first.
 2. Pick 15-20 courses from sample_candidates covering all categories:
-   - with_prerequisites: tests prerequisite AND/OR parsing in step3
+   - with_prerequisites: tests prerequisite AND/OR parsing in convert.to_mdata
    - multi_programme: tests deduplication and searchKeys
    - with_description: tests content portal extraction
-   - compound_type: tests type normalization (LEC/STUDIO → LEC in step4)
+   - compound_type: tests type normalization (LEC/STUDIO → LEC in convert.to_indexes)
    - general: baseline coverage
 3. For each selected course:
    a. Call get_course_stored_data() — see what scraper produced (raw + mdata + indexes)
@@ -504,7 +504,7 @@ The scraper pipeline can break at multiple points:
 
 **Duration:** Verify ceil((end_minutes - start_minutes) / 30). Example: 1330-1620 = 170min → ceil(170/30) = 6.
 
-**Type normalization:** "LEC/STUDIO" in portal → "LEC" in stored indexes is INTENTIONAL (step4 takes prefix before /). Report as ok.
+**Type normalization:** "LEC/STUDIO" in portal → "LEC" in stored indexes is INTENTIONAL (convert.to_indexes takes prefix before /). Report as ok.
 
 **Content fields:** gradeType, description, notAvailableToProgramme — verify they're present and non-empty when portal shows them.
 
@@ -520,8 +520,8 @@ The scraper pipeline can break at multiple points:
 - ok: course validates correctly
 
 ## Known acceptable differences
-- Title: .title() normalization from step3 (21st → 21St, API → Api)
-- Type: "LEC/STUDIO" → "LEC" (step4 takes prefix, intentional)
+- Title: .title() normalization from convert.to_mdata (21st → 21St, API → Api)
+- Type: "LEC/STUDIO" → "LEC" (convert.to_indexes takes prefix, intentional)
 - day=0 slots: portal data issue, filtered by server — flag as warning only
 - Courses with 0 indexes: may be valid (distance learning, non-scheduled)
 - Programme fetch returning 0 courses: CRITICAL — means portal HTML may have changed
@@ -654,12 +654,9 @@ def run_agent(semester: str, workers: int, skip_scrape: bool, sample: int) -> in
 def resolve_semester(arg: Optional[str]) -> str:
     if arg in (None, "latest"):
         if not SEMESTERS_PATH.exists():
+            from portal import fetch_semesters
             print("Fetching semester list from NTU portal...")
-            subprocess.run(
-                [sys.executable, str(SCRAPER_DIR / "step1_fetch_semesters.py")],
-                cwd=str(SCRAPER_DIR),
-                check=True,
-            )
+            SEMESTERS_PATH.write_text(json.dumps(fetch_semesters()))
         with SEMESTERS_PATH.open("r") as f:
             semesters = json.load(f)
         if not semesters:

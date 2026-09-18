@@ -192,15 +192,15 @@ pages and generate the client's bulk JSON. Publishing a semester means doing
 both — see [Working with the database](#working-with-the-database).
 
 ```
-                     scraper/main.py (steps 1-5)
-                     fetch, scrape, normalise
+                     scraper/main.py
+                     scrape, convert, check
                               |
                               v
                      scraper/data/*.json
                               |
               +---------------------------------+
               |                                 |
-           --load                   stepfinal_upsync.py
+           --load                       --upsync
               |                                 |
               v                                 v
       Cloudflare D1                    src/data/api/*.json
@@ -219,21 +219,18 @@ both — see [Working with the database](#working-with-the-database).
    (historic offerings only)          everything else on the site
 ```
 
-`--load` and `stepfinal_upsync.py` are independent writes of the same
-scraped output — running one does not run the other. Skipping
-`stepfinal_upsync.py` (or skipping the commit+push after it) means D1 has
-the new semester but the rest of the site doesn't, until that's done too.
+`--load` and `--upsync` are independent writes of the same scraped output —
+one does not imply the other. Skipping `--upsync` (or the commit+push after
+it) means D1 has the new semester but the rest of the site doesn't.
 
-The scraper lives in `scraper/`. For step-by-step usage, individual-step
-invocation, CSV/CLI flags, publishing semantics (`--load`'s replace-not-merge
-behaviour, the shrink guard, `stepfinal_upsync.py`), data invariants, and the
-semester/exam-timetable maintenance checklist, see
-**[scraper/README.md](scraper/README.md)** — that file is the complete,
-self-contained reference for scraping and publishing data. The short version:
+The scraper lives in `scraper/`. CLI flags, publishing semantics (`--load`'s
+replace-not-merge behaviour, the shrink guard), data invariants and the
+per-semester checklist are in **[scraper/README.md](scraper/README.md)**;
+the step-by-step refresh procedure for agents is [AGENTS.md](AGENTS.md).
+The short version:
 
 ```bash
-python scraper/main.py --semester "2025;2" --load   # scrape, publish to D1
-python scraper/stepfinal_upsync.py                  # publish to src/data/api
+cd scraper && python3 main.py --refetch --load --upsync   # latest semester -> D1 + src/data/api
 ```
 
 ### Working with the database

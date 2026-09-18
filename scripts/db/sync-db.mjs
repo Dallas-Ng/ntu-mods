@@ -9,7 +9,7 @@
  * Workers Build regardless of whether the underlying data changed, and
  * `wrangler d1 export` pulls the whole ~100MB database over the network each
  * time. Publishing new scraper data is a separate, explicit step: after
- * `main.py --load` writes to D1, run `python stepfinal_upsync.py` to refresh
+ * `main.py --load` writes to D1, `main.py --upsync` refreshes
  * src/data/api, then commit and push it — that commit is what a build should
  * actually react to. `--from d1` (`yarn db:pull`) stays available to pull
  * fresh from D1 by hand, e.g. to resync src/data/api if it's drifted.

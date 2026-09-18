@@ -19,7 +19,9 @@
     "lint": "eslint . && astro check && tsc",
     "lint:fix": "eslint . --fix",
     "format:write": "prettier --write \"**/*.{ts,tsx,mdx,astro}\" --cache",
-    "format:check": "prettier --check \"**/*.{ts,tsx,mdx,astro}\" --cache"
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx,astro}\" --cache",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.1.4",
@@ -57,6 +59,7 @@
     "@types/node": "^22",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "@vitest/coverage-v8": "^5.0.0",
     "eslint": "9.39.4",
     "eslint-config-prettier": "^8.8.0",
     "eslint-import-resolver-typescript": "^3.10.1",
@@ -67,6 +70,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-tailwindcss": "^3.18.3",
     "eslint-plugin-unused-imports": "4.4.1",
+    "fast-check": "^4.10.1",
     "globals": "^16.4.0",
     "lighthouse": "^11.5.0",
     "prettier": "^3.8.3",
@@ -75,7 +79,8 @@
     "tailwindcss": "^4.2.4",
     "tsx": "^4.23.1",
     "typescript": "^5",
-    "typescript-eslint": "^8.59.1"
+    "typescript-eslint": "^8.59.1",
+    "vitest": "^5.0.0"
   },
   "browserslist": {
     "production": [

@@ -37,6 +37,9 @@ NTU terminology used throughout this site: STARS (Student Allocation of Register
 ## Articles — NTU Student Portals and Resources
 
 - [NTU Student Portals: Complete List of Websites and Links](https://ntumods.com/articles/ntu-student-portal-links): Every NTU student portal with direct links and explanations — STARS (course registration), NTULearn (LMS), Degree Audit (grades/AU tracking), Self-Help Transcript, Class Schedule, FGO Portal (S/U declarations), Academic Calendar, Library Booking, CareerAxis (jobs/internships), InPlace (credit-bearing internships), GEM Portal (exchange applications), Course Matching, and Financial Aid. Includes FAQ answering common questions about NTU portals.
+- [NTU Degree Audit Guide](https://ntumods.com/articles/ntu-degree-audit-guide): What the degree audit shows, how to log in, and how to read it against core/BDE/UE/PE/AU requirements before STARS registration.
+- [What Is NTULearn?](https://ntumods.com/articles/ntu-ntulearn-guide): NTU's LMS (Blackboard Ultra) explained — login, features, and how it differs from STARS and Degree Audit.
+- [NTU FGO (S/U Option) Guide](https://ntumods.com/articles/ntu-fgo-su-option-guide): The Flexible Grading Option explained — AU quotas, excluded course types, declaration timing, and why it's irreversible.
 
 ## Articles — Module Planning, STARS, Academic Calendar & Common Core
 

@@ -2,7 +2,7 @@
 title: "NTU STARS, NTULearn & Student Portal Links (All-in-One List)"
 description: "Direct links to every NTU student portal — STARS for course registration, NTULearn for course materials, Degree Audit for grades, CareerAxis for jobs, GEM for exchange, and more."
 date: "2026-06-22"
-updated: "2026-07-23"
+updated: "2026-09-22"
 author: "NTUMods"
 category: "General"
 tags: ["NTU portals", "ntu portal", "NTU student links", "NTU websites", "STARS NTU", "NTULearn", "Degree Audit NTU", "NTU student guide", "NTU resources", "NTU online portals", "NTU student portal list"]
@@ -41,7 +41,7 @@ The sections below cover each portal in full.
 
 ### What is NTULearn?
 
-**NTULearn** is NTU's learning management system (LMS), equivalent to Google Classroom. Professors post lecture slides, readings, assignment submissions, quiz links, and course announcements here.
+**NTULearn** is NTU's learning management system (LMS), equivalent to Google Classroom. Professors post lecture slides, readings, assignment submissions, quiz links, and course announcements here. See [What Is NTULearn?](/articles/ntu-ntulearn-guide) for a full walkthrough of logging in and using it.
 
 - **URL**: [ntulearn.ntu.edu.sg](https://ntulearn.ntu.edu.sg/ultra/institution-page)
 - **When to use**: Weekly throughout the semester. Check at the start of each week for new postings or announcements
@@ -65,10 +65,10 @@ The **Class Schedule portal** lets you browse every module's available indexes �
 
 ### What is the NTU FGO Portal?
 
-The **FGO (Free General Option) Portal** is where you declare S/U (satisfactory/unsatisfactory) for eligible modules. Most students get a fixed number of S/U declarations across their degree — check your remaining count here before using one.
+The **FGO (Flexible Grading Option) Portal** is where you declare FGO — NTU's current name for what used to be called the S/U (satisfactory/unsatisfactory) option — for eligible modules. FGO replaced the old S/U policy in AY2024/25, then got a further quota expansion (up to 21–24 AU) and wider course eligibility with effect from June 2026. See [NTU FGO / S-U Option: What It Is and How It Works](/articles/ntu-fgo-su-option-guide) for the full policy, quotas, and declaration window.
 
 - **URL**: [wis.ntu.edu.sg (FGO)](https://sso.wis.ntu.edu.sg/webexe88/owa/sso_login1.asp?t=1&p2=https://wis.ntu.edu.sg/pls/webexe/aus_su_opt.display&extra=&pg=)
-- **When to use**: Near the end of each semester before the S/U declaration deadline
+- **When to use**: During the short declaration window that opens right after exam results are released each semester
 
 ### NTU Academic Calendar
 

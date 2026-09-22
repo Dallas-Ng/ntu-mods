@@ -2,10 +2,10 @@
 title: "NTU Academic Calendar 2026/2027 (AY2026/27): Semester Dates & Term Breaks"
 description: "NTU academic calendar 2026/2027 — semester 1 & 2 start/end dates, recess week, exam period dates, and STARS registration rounds. Updated for AY2026/27."
 date: "2026-06-20"
-updated: "2026-07-23"
+updated: "2026-09-22"
 author: "NTUMods"
 category: "Module Planning"
-tags: ["ntu academic calendar", "ntu academic calendar 2026", "ntu calendar 26/27", "ntu calendar 2026/2027", "ntu term dates", "ntu semester calendar", "ntu semester dates", "ntu exam period 2026", "ntu stars dates", "ntu recess week", "ntu semester 1 2026", "ntu ay2026 dates", "ntu timetable dates", "ntu academic year 2026"]
+tags: ["ntu academic calendar", "ntu academic calendar 2026", "ntu calendar 26/27", "ntu calendar 2026/2027", "ntu term dates", "ntu semester calendar", "ntu semester dates", "ntu exam period 2026", "ntu stars dates", "ntu recess week", "ntu semester 1 2026", "ntu ay2026 dates", "ntu timetable dates", "ntu academic year 2026", "ntu academic calendar 2027", "ntu 2027 academic calendar"]
 ---
 
 # NTU Academic Calendar AY2026/2027: Key Dates for Semester 1 and 2
@@ -131,3 +131,7 @@ NTU follows an academic year divided into Semester 1 (August–December) and Sem
 ### Is there an NTU calendar 2026/27 I can add to my phone?
 
 Yes — build your semester timetable on [NTUMods](/timetable) and use **Save to Calendar** to export an `.ics` file with your class times and semester dates already set, ready to import into Google Calendar, Apple Calendar, or Outlook.
+
+### What about the NTU academic calendar for 2027/2028?
+
+This page covers AY2026/2027 (Semester 1: August–December 2026; Semester 2: January–May 2027). NTU has not published AY2027/2028 dates (the academic year starting August 2027) at the time of writing — they are typically released on the [official NTU academic calendar](https://www.ntu.edu.sg/education/academic-calendar) roughly a year ahead. This article will be updated once those dates are confirmed.

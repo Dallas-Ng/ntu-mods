@@ -2,10 +2,10 @@
 title: "NTU STARS Guide 2026: Registration Rounds, Bidding & Planner Tips"
 description: "NTU STARS planner guide — how bidding rounds work, how to prepare a shortlist before registration opens, and what to do when a module fills up. Includes a free STARS planner tool."
 date: "2026-06-08"
-updated: "2026-07-23"
+updated: "2026-09-22"
 author: "NTUMods"
 category: "STARS"
-tags: ["NTU STARS", "STARS NTU", "ntu stars planner", "stars planner ntu", "ntu module registration", "ntu stars system", "stars bidding ntu", "ntu stars guide", "ntu stars dates", "ntu stars registration", "ntustars"]
+tags: ["NTU STARS", "STARS NTU", "ntu stars planner", "stars planner ntu", "ntu module registration", "ntu stars system", "stars bidding ntu", "ntu stars guide", "ntu stars dates", "ntu stars registration", "ntustars", "ntu stars login", "stars ntu login"]
 ---
 
 # NTU STARS: How the Module Registration System Works
@@ -19,6 +19,10 @@ If you are new to NTU, STARS can feel confusing the first time you use it. This 
 STARS is an open bidding window — a time period where all eligible students can register for available module indexes on a first-come, first-served basis within each round.
 
 Some modules are pre-allocated by your school and will appear in your timetable without you needing to bid. These are usually compulsory core modules specific to your programme. BDEs (Broadening and Deepening Electives), most open electives, and some CC modules require active registration through STARS.
+
+## How to log in to STARS
+
+STARS is at [wish.wis.ntu.edu.sg](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/aus_stars_planner.main). Sign in with your regular NTU network username and password — there is no separate STARS account. The login only accepts submissions once your round is open; outside your bidding window, module data may still be viewable but registration is locked.
 
 ## How STARS rounds work
 

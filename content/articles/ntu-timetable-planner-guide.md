@@ -2,9 +2,10 @@
 title: "NTU Timetable Planner: How to Build Your Semester Schedule on NTUMods"
 description: "Step-by-step: use the NTUMods timetable planner to pick indexes, spot clashes, and lock in your semester before STARS bidding opens."
 date: "2026-06-14"
+updated: "2026-09-22"
 author: "NTUMods"
 category: "Module Planning"
-tags: ["ntu timetable planner", "ntu planner", "ntu timetable", "ntumods timetable", "ntu module planner", "plan ntu timetable", "ntu course planner", "ntu semester planner"]
+tags: ["ntu timetable planner", "ntu planner", "ntu timetable", "ntumods timetable", "ntu module planner", "plan ntu timetable", "ntu course planner", "ntu semester planner", "ntu class schedule", "ntu class timetable", "ntu time table"]
 ---
 
 # NTU Timetable Planner: How to Build Your Semester Schedule on NTUMods
@@ -63,6 +64,12 @@ Before you finalise your plan, check exam dates for your shortlisted modules on 
 
 See [NTU Exam Schedule Guide](/articles/ntu-exam-schedule-ay2026) for how to use the exam schedule in module planning.
 
+## NTU Class Schedule vs the NTUMods timetable planner
+
+NTU also runs its own [Class Schedule portal](https://wish.wis.ntu.edu.sg/webexe/owa/aus_schedule.main), which lists each module's indexes, timeslots, and venues without requiring login. It answers "when does this module run" one module at a time.
+
+The NTUMods planner does the same lookup but across your whole shortlist at once — add every module you are considering and it lays out the full week, flags clashes between indexes automatically, and lets you compare index combinations side by side. For checking a single module's timing, either works; for building an actual semester schedule, the planner saves you from cross-referencing multiple tabs by hand.
+
 ## Timetable planning vs STARS bidding
 
 The timetable planner and STARS do different things:
@@ -113,3 +120,7 @@ Yes. Once your timetable is built, use **Save to Calendar** on the [timetable pa
 ### Does the planner show exam dates?
 
 Not directly on the grid, but you can cross-check your shortlisted modules against the [NTU Exam Schedule](/exams) before finalising your plan, so exam clustering doesn't surprise you later.
+
+### How do I check the NTU class schedule for a module?
+
+Use [NTUMods Module Browser](/mods) or the [Timetable Planner](/timetable) — search the module code and every index (timeslot, venue, class type) for the current semester is shown immediately. This mirrors NTU's own Class Schedule portal, but lets you add multiple modules at once and see clashes across your full timetable instead of checking one module at a time.

@@ -2,9 +2,10 @@
 title: "NTU Degree Audit: How to Check Your Graduation Requirements"
 description: "How the NTU degree audit works, where to find it, and how to read it against your programme's core, BDE, UE, and AU requirements before you register for modules."
 date: "2026-08-06"
+updated: "2026-09-22"
 author: "NTUMods"
 category: "Module Planning"
-tags: ["ntu degree audit", "degree audit ntu", "ntu degree audit login", "ntu graduation requirements", "ntu curriculum structure", "ntu au requirements", "ntu student portal"]
+tags: ["ntu degree audit", "degree audit ntu", "ntu degree audit login", "ntu audit degree", "ntu graduation requirements", "ntu curriculum structure", "ntu au requirements", "ntu student portal"]
 ---
 
 # NTU Degree Audit: How to Check Your Graduation Requirements
@@ -26,11 +27,17 @@ The degree audit maps every module you have taken, or are currently registered f
 
 For each category, the audit shows what is satisfied, what is in progress (registered but not yet graded), and what is still outstanding.
 
-## Where to find your degree audit
+## How to log in to your degree audit
 
-The degree audit is not inside STARS. It is a separate report accessed through NTU's student portal system. See [NTU Student Links](/articles/ntu-student-portal-links) for the full set of portal links students use regularly, including where the degree audit sits alongside STARS, NTULearn, and CareerAxis.
+The degree audit is not inside STARS. It is a separate report, accessed at [wish.wis.ntu.edu.sg (Degree Audit)](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/dars_result_ro.main_display) using your regular NTU network username and password — the same login as STARS.
 
-If you cannot locate it, check with your school's academic office — the exact access path has changed between cohorts as NTU has updated its portal systems.
+1. Open the Degree Audit link above.
+2. Sign in with your NTU credentials.
+3. Your requirements load grouped by category (core, BDE, UE, PE, and more), each marked as fulfilled, in progress, or outstanding.
+
+The Degree Audit portal is also listed alongside every other NTU system in [NTU Student Links](/articles/ntu-student-portal-links), including STARS, NTULearn, and CareerAxis.
+
+If the login fails or the page looks different from what is described here, check with your school's academic office — NTU has changed portal systems between cohorts, and the access path can shift.
 
 ## Why the degree audit matters more than STARS availability
 

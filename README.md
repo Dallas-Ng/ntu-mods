@@ -174,6 +174,27 @@ worker config after a successful build, so deploy with that one:
 npx wrangler deploy --config dist/server/wrangler.json
 ```
 
+### Preview deployments
+
+Every non-production branch / PR gets its own `*.workers.dev` preview URL via
+Cloudflare Workers Builds (`preview_urls: true` in `wrangler.jsonc`; the
+production `workers_dev` route stays off). One-time dashboard setup under
+Workers & Pages → `ntu-mods` → Settings → Builds:
+
+| Setting                          | Value                                                       |
+| -------------------------------- | ----------------------------------------------------------- |
+| Git repository                   | connected to this repo                                      |
+| Production branch                | `main`                                                      |
+| Build command                    | `yarn build`                                                |
+| Deploy command (production)      | `npx wrangler deploy --config dist/server/wrangler.json`    |
+| Non-production branch builds     | enabled                                                     |
+| Version command (non-production) | `npx wrangler versions upload --config dist/server/wrangler.json` |
+
+Preview builds skip the IndexNow submission (`WORKERS_CI_BRANCH` ≠ `main`).
+Previews share the production D1 binding (read-only at request time) and need
+the same Worker secrets/variables as production to exercise the feedback form
+and PostHog.
+
 ### Secrets
 
 Set as Worker secrets (not `.env`), read via `locals.runtime.env`:

@@ -198,6 +198,12 @@ Setup is in the dashboard (Workers & Pages → `ntu-mods` → Settings → Build
    `npx wrangler preview base-config secret put <NAME>` if you want the
    feedback form and PostHog on previews.
 
+5. **Access control**: previews are served on `*.ntumods.com`, which (unlike
+   `workers.dev` previews) gets no automatic `X-Robots-Tag: noindex`. Protect
+   them with Cloudflare Access instead: Workers & Pages → `ntu-mods` →
+   Settings → Domains & Routes → **Enable Cloudflare Access** on Preview URLs
+   (previews only, not production).
+
 Preview builds skip the IndexNow submission (`WORKERS_CI_BRANCH` ≠ `main`).
 
 ### Secrets

@@ -16,7 +16,16 @@ const isProductionBuild =
   process.env.WORKERS_CI === "1" ||
   process.env.CF_PAGES === "1"
 
-if (!isProductionBuild) {
+// Workers Builds also runs this for every non-production branch (PR preview
+// builds), where WORKERS_CI_BRANCH is that branch's name. Don't submit the
+// production sitemap on behalf of a preview.
+const PRODUCTION_BRANCH = "main"
+const isPreviewBranch =
+  process.env.INDEXNOW !== "1" &&
+  !!process.env.WORKERS_CI_BRANCH &&
+  process.env.WORKERS_CI_BRANCH !== PRODUCTION_BRANCH
+
+if (!isProductionBuild || isPreviewBranch) {
   console.log(
     "[IndexNow] Skipping — not a production build (set INDEXNOW=1 to force)"
   )

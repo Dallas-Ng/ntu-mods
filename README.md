@@ -176,24 +176,26 @@ npx wrangler deploy --config dist/server/wrangler.json
 
 ### Preview deployments
 
-Every non-production branch / PR gets its own `*.workers.dev` preview URL via
-Cloudflare Workers Builds (`preview_urls: true` in `wrangler.jsonc`; the
-production `workers_dev` route stays off). One-time dashboard setup under
-Workers & Pages → `ntu-mods` → Settings → Builds:
+Pushes to non-production branches get a preview via Cloudflare
+[Worker Previews](https://developers.cloudflare.com/workers/previews/) and
+Workers Builds ([Build branches](https://developers.cloudflare.com/workers/ci-cd/builds/build-branches/#configure-preview-builds)).
+Setup is in the dashboard (Workers & Pages → `ntu-mods` → Settings → Builds):
 
-| Setting                          | Value                                                       |
-| -------------------------------- | ----------------------------------------------------------- |
-| Git repository                   | connected to this repo                                      |
-| Production branch                | `main`                                                      |
-| Build command                    | `yarn build`                                                |
-| Deploy command (production)      | `npx wrangler deploy --config dist/server/wrangler.json`    |
-| Non-production branch builds     | enabled                                                     |
-| Version command (non-production) | `npx wrangler versions upload --config dist/server/wrangler.json` |
+1. **Branch control**: production branch `main`, and tick **Enable Preview
+   Builds**.
+2. **Preview command**: the default is `npx wrangler preview`. This Worker
+   deploys from the adapter-generated config, so use
+   `npx wrangler preview --config dist/server/wrangler.json` (any custom command
+   must still invoke `npx wrangler preview`).
+3. If the Worker was connected before Worker Previews existed, complete the
+   one-time **Set up Worker Previews** switch in the Builds settings banner
+   (irreversible).
+4. **Configure Preview settings** — previews do _not_ inherit production
+   settings. Add the variables, secrets and bindings a preview needs: the `DB`
+   D1 binding, `RESEND_KEY` and `PUBLIC_POSTHOG_TOKEN` (see
+   [Get started](https://developers.cloudflare.com/workers/previews/get-started/#step-1-configure-preview-settings)).
 
 Preview builds skip the IndexNow submission (`WORKERS_CI_BRANCH` ≠ `main`).
-Previews share the production D1 binding (read-only at request time) and need
-the same Worker secrets/variables as production to exercise the feedback form
-and PostHog.
 
 ### Secrets
 

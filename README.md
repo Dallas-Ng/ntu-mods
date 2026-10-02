@@ -190,10 +190,13 @@ Setup is in the dashboard (Workers & Pages → `ntu-mods` → Settings → Build
 3. If the Worker was connected before Worker Previews existed, complete the
    one-time **Set up Worker Previews** switch in the Builds settings banner
    (irreversible).
-4. **Configure Preview settings** — previews do _not_ inherit production
-   settings. Add the variables, secrets and bindings a preview needs: the `DB`
-   D1 binding, `RESEND_KEY` and `PUBLIC_POSTHOG_TOKEN` (see
-   [Get started](https://developers.cloudflare.com/workers/previews/get-started/#step-1-configure-preview-settings)).
+4. **Bindings and secrets**: previews do _not_ inherit production settings.
+   The `DB` D1 binding (production database — previews only read) is declared
+   in the `previews` block of `wrangler.jsonc`, so nothing to set for it in the
+   dashboard. Secrets are not in config: add `RESEND_KEY` and
+   `PUBLIC_POSTHOG_TOKEN` via the preview settings or
+   `npx wrangler preview base-config secret put <NAME>` if you want the
+   feedback form and PostHog on previews.
 
 Preview builds skip the IndexNow submission (`WORKERS_CI_BRANCH` ≠ `main`).
 

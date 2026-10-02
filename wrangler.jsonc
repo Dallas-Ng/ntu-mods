@@ -62,6 +62,20 @@
       "remote": true
     }
   ],
+  // Worker Previews (`wrangler preview`) don't inherit bindings from the
+  // top level — D1/KV/vars must be redeclared here or previews run with no
+  // DB. Previews deliberately point at the production database: the
+  // on-demand snapshot route only reads, so a preview can't change data.
+  "previews": {
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_name": "ntu-mods",
+        "database_id": "c18f73e4-8b03-43d2-acf1-4b03c81f94e8",
+        "remote": true
+      }
+    ]
+  },
   // The MODULE_DATA KV namespace (98c8dfc5fcfb4dd180c30d37b4d000aa) held
   // per-module slices of the semester JSON files, to avoid fetching and
   // parsing a whole ~3MB file per request. D1 indexes those lookups directly,

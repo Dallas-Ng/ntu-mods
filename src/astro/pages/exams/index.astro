@@ -31,6 +31,22 @@ async function getExamData() {
 const { exams, label } = await getExamData()
 const examList = Object.values(exams)
 const total = examList.length
+
+const examsJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  name: `NTU Exam Schedule ${label}`,
+  description: `${total} NTU exams for ${label}: module code, name, date, start and end time.`,
+  url: `${siteConfig.url}/exams`,
+  isAccessibleForFree: true,
+  keywords: ["NTU", "exam schedule", "exam timetable", label],
+  creator: {
+    "@type": "Organization",
+    name: siteConfig.name,
+    url: siteConfig.url
+  },
+  dateModified: new Date(`${LAST_UPDATED} UTC`).toISOString().slice(0, 10)
+}
 ---
 
 <BaseLayout
@@ -41,6 +57,7 @@ const total = examList.length
   ogImageAlt="NTUMods exam schedule listing NTU exam dates and times for SC modules"
   size="md"
   containerClassName="space-y-6">
+  <script type="application/ld+json" set:html={JSON.stringify(examsJsonLd)} />
   <div class="flex items-end justify-between gap-4">
     <Header
       title="NTU Exam Schedule"

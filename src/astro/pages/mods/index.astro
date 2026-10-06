@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from "@/config/site"
+import { collectionPageJsonLd } from "@/lib/json-ld"
 import ModsPage from "@/components/mods/mods-page"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
@@ -7,6 +8,12 @@ import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 // the URL, read client-side) — mounts as one island rather than trying to
 // partially server-render it.
 export const prerender = true
+
+const modsJsonLd = collectionPageJsonLd({
+  name: siteConfig.metatags.mods.title,
+  description: siteConfig.metatags.mods.desc,
+  path: "/mods"
+})
 ---
 
 <BaseLayout
@@ -15,5 +22,6 @@ export const prerender = true
   canonical="/mods"
   ogImage={`${siteConfig.url}/og/mods.png`}
   ogImageAlt="NTUMods module browser searching NTU modules, listing Digital Logic and other SC modules">
+  <script type="application/ld+json" set:html={JSON.stringify(modsJsonLd)} />
   <ModsPage client:load />
 </BaseLayout>

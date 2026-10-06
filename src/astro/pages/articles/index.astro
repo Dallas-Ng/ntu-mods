@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from "@/config/site"
+import { collectionPageJsonLd } from "@/lib/json-ld"
 import ArticlesList from "@/components/articles/articles-list"
 import Header from "@/components/header"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -32,6 +33,16 @@ const articleList = articles.map(
     readingTime
   })
 )
+
+const articlesJsonLd = collectionPageJsonLd({
+  name: siteConfig.metatags.articles.title,
+  description: siteConfig.metatags.articles.desc,
+  path: "/articles",
+  items: articleList.map(({ slug, title }) => ({
+    name: title,
+    url: `${siteConfig.url}/articles/${slug}`
+  }))
+})
 ---
 
 <BaseLayout
@@ -42,6 +53,10 @@ const articleList = articles.map(
   ogImageAlt="NTUMods guides for NTU students, including NTULearn, FGO and degree audit"
   size="md"
   containerClassName="space-y-3">
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(articlesJsonLd)}
+  />
   <Header
     title="Articles"
     subtitle="Guides, updates, and notes from NTUMods."

@@ -1,10 +1,17 @@
 ---
 import { siteConfig } from "@/config/site"
+import { formatCount } from "@/lib/format"
+import { webApplicationJsonLd } from "@/lib/json-ld"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
+import { getLatestSemester, getSemesterCounts } from "@/lib/server/db/repo"
 import TimetablePageContent from "@/components/timetable/timetable-page-content"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
+
+const { year, semester } = await getLatestSemester()
+const counts = await getSemesterCounts(year, semester)
 
 const GUIDES = [
   {
@@ -37,14 +44,24 @@ const GUIDES = [
 <BaseLayout
   title={siteConfig.metatags.timetable.title}
   description={siteConfig.metatags.timetable.desc}
-  canonical="/timetable">
+  canonical="/timetable"
+  ogImage={`${siteConfig.url}/og/timetable.png`}
+  ogImageAlt="NTUMods timetable planner showing a weekly NTU class schedule with lectures, tutorials and labs">
+  <JsonLd
+    data={webApplicationJsonLd({
+      path: "/timetable",
+      description: siteConfig.metatags.timetable.desc
+    })}
+  />
   <TimetablePageContent client:load />
 
   <section class="mt-10 space-y-4 border-t pt-8">
     <div>
       <h2 class="text-lg font-semibold tracking-tight">Planning guides</h2>
       <p class="text-muted-foreground mt-1 text-sm">
-        {LATEST_SEMESTER_LABEL} · 1,134 modules · 4,846 class indexes
+        {LATEST_SEMESTER_LABEL} · {formatCount(counts.modules)} modules · {
+          formatCount(counts.indexes)
+        } class indexes
       </p>
     </div>
 
@@ -64,5 +81,50 @@ const GUIDES = [
         ))
       }
     </div>
+  </section>
+
+  <section class="mt-10 space-y-3 border-t pt-8" aria-labelledby="how-it-works">
+    <h2 id="how-it-works" class="text-lg font-semibold tracking-tight">
+      How the NTUMods timetable planner works
+    </h2>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      NTUMods is a free timetable planner for Nanyang Technological University
+      students. Add modules to a plan, choose an index for each one, and the
+      weekly grid shows every lecture, tutorial and lab with its venue. Clashes
+      are flagged as soon as they appear, so you can adjust your plan before
+      STARS registration opens.
+    </p>
+    <ul
+      class="text-muted-foreground list-disc space-y-1.5 pl-5 text-sm leading-relaxed">
+      <li>
+        Add modules by code or title, or paste a list of module codes to import
+        them in one step.
+      </li>
+      <li>
+        Compare the indexes of each module ({formatCount(counts.indexes)} across{
+          " "
+        }
+        {formatCount(counts.modules)} modules this semester) and lock the ones you
+        want to keep.
+      </li>
+      <li>
+        Use generate mode to produce clash-free combinations that respect
+        preferences such as free days and lunch breaks.
+      </li>
+      <li>
+        Block out personal commitments such as CCA, gym or work with custom
+        blocks, and see any clash with your modules.
+      </li>
+      <li>
+        Keep up to five plans, share a plan by link, or export it as a calendar
+        file (.ics) or a phone wallpaper.
+      </li>
+    </ul>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      Timetables are stored in your browser, so no account is needed and your
+      plan stays on your device. NTUMods is independent and is not affiliated
+      with NTU. It does not perform registration, so you still register through
+      STARS.
+    </p>
   </section>
 </BaseLayout>

@@ -1,17 +1,105 @@
 ---
 import { siteConfig } from "@/config/site"
+import { formatCount } from "@/lib/format"
+import { collectionPageJsonLd } from "@/lib/json-ld"
+import { getModuleUrl } from "@/lib/module-url"
+import { getAllModuleMetadata, getLatestSemester } from "@/lib/server/db/repo"
 import ModsPage from "@/components/mods/mods-page"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
-// Fully client-rendered already in the Next app (search/filter state lives in
-// the URL, read client-side) — mounts as one island rather than trying to
-// partially server-render it.
+// The interactive browser is client-rendered (search/filter state lives in the
+// URL), so it ships no module links in the HTML. The directory below is
+// server-rendered so crawlers and no-JS visitors can reach every module page.
 export const prerender = true
+
+const { year, semester } = await getLatestSemester()
+const modules = await getAllModuleMetadata(year, semester)
+
+// Group by the letter prefix of the code (SC1005 -> SC).
+const groups = new Map<string, { code: string; title: string }[]>()
+for (const { code, title } of Object.values(modules)) {
+  const prefix = /^[A-Z]+/.exec(code)![0]
+  if (!groups.has(prefix)) groups.set(prefix, [])
+  groups.get(prefix)!.push({ code, title })
+}
+const directory = [...groups.entries()]
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(
+    ([prefix, list]) =>
+      [prefix, list.sort((a, b) => a.code.localeCompare(b.code))] as const
+  )
+const moduleCount = formatCount(Object.keys(modules).length)
+const coverage = `AY${year} Semester ${semester} with ${moduleCount} modules`
+
+const modsJsonLd = collectionPageJsonLd({
+  name: siteConfig.metatags.mods.title,
+  description: siteConfig.metatags.mods.desc,
+  path: "/mods"
+})
 ---
 
 <BaseLayout
   title={siteConfig.metatags.mods.title}
   description={siteConfig.metatags.mods.desc}
-  canonical="/mods">
+  canonical="/mods"
+  ogImage={`${siteConfig.url}/og/mods.png`}
+  ogImageAlt="NTUMods module browser searching NTU modules, listing Digital Logic and other SC modules">
+  <JsonLd data={modsJsonLd} />
   <ModsPage client:load />
+
+  <section class="mt-10 space-y-3 border-t pt-8" aria-labelledby="mods-about">
+    <h2 id="mods-about" class="text-lg font-semibold tracking-tight">
+      About the NTU module browser
+    </h2>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      Search every module offered at NTU by code or title, and narrow the
+      results by module type, school, level, day and time. Each module page
+      lists its academic units, prerequisites, mutually exclusive modules, exam
+      date, and every class index with its timeslots and venues.
+    </p>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      The browser currently covers {coverage}, and earlier semesters are
+      available back to AY2014. Module data comes from NTU's public course and
+      exam timetables and is refreshed each semester. Add any module straight to
+      a timetable plan from the results.
+    </p>
+  </section>
+
+  <section
+    class="mt-8 space-y-3 border-t pt-8"
+    aria-labelledby="mods-directory">
+    <div>
+      <h2 id="mods-directory" class="text-lg font-semibold tracking-tight">
+        Browse modules by code
+      </h2>
+      <p class="text-muted-foreground text-sm">
+        All {moduleCount} modules offered in AY{year} Semester {semester}.
+      </p>
+    </div>
+    <div class="space-y-2">
+      {
+        directory.map(([prefix, list]) => (
+          <details class="rounded-lg border px-4 py-2">
+            <summary class="cursor-pointer text-sm font-medium">
+              {prefix}
+              <span class="text-muted-foreground ml-1 font-normal">
+                ({list.length})
+              </span>
+            </summary>
+            <ul class="mt-2 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
+              {list.map(({ code, title }) => (
+                <li>
+                  <a href={getModuleUrl(code)} class="hover:underline">
+                    <span class="text-muted-foreground font-mono">{code}</span>{" "}
+                    {title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))
+      }
+    </div>
+  </section>
 </BaseLayout>

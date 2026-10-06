@@ -1,10 +1,13 @@
 ---
+import { siteConfig } from "@/config/site"
+import { datasetJsonLd } from "@/lib/json-ld"
 import {
   getLatestExamSemester,
   getSemesterExamsData
 } from "@/lib/server/db/repo"
 import ExamsList from "@/components/exams/exams-list"
 import Header from "@/components/header"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
@@ -36,8 +39,19 @@ const total = examList.length
   title={`NTU Exam Schedule ${label}`}
   description={`Browse ${total} NTU exams for ${label}. Search by module code or name, and check exam dates, times, and durations.`}
   canonical="/exams"
+  ogImage={`${siteConfig.url}/og/exams.png`}
+  ogImageAlt="NTUMods exam schedule listing NTU exam dates and times for SC modules"
   size="md"
   containerClassName="space-y-6">
+  <JsonLd
+    data={datasetJsonLd({
+      name: `NTU Exam Schedule ${label}`,
+      description: `${total} NTU exams for ${label}: module code, name, date, start and end time.`,
+      path: "/exams",
+      keywords: ["NTU", "exam schedule", "exam timetable", label],
+      dateModified: new Date(`${LAST_UPDATED} UTC`).toISOString().slice(0, 10)
+    })}
+  />
   <div class="flex items-end justify-between gap-4">
     <Header
       title="NTU Exam Schedule"

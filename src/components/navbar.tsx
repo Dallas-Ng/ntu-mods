@@ -10,12 +10,6 @@ import { cn } from "@/lib/utils"
 import { useChangelogUnseenCount } from "@/hooks/use-changelog-unseen"
 import { usePathname } from "@/hooks/use-pathname"
 import { useTheme } from "@/hooks/use-theme"
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList
-} from "@/components/ui/navigation-menu"
 
 import ChangelogButton from "./changelog-button"
 import { NewDot } from "./new-dot"
@@ -73,45 +67,18 @@ const Navbar = () => {
             </span>
           </a>
 
-          {/* Desktop nav */}
-          <NavigationMenu
-            className="ml-2 hidden items-center md:flex"
-            viewport={false}>
-            <NavigationMenuList>
-              {siteConfig.navLinks.map((link) => (
-                <NavigationMenuItem key={link.route}>
-                  <NavigationMenuLink asChild>
-                    <a
-                      href={link.route}
-                      className={cn(
-                        "hover:text-foreground relative mr-1 px-1 text-sm font-semibold transition-colors hover:bg-transparent md:px-3",
-                        pathname.includes(link.route)
-                          ? "text-foreground"
-                          : "text-muted-foreground"
-                      )}>
-                      {link.label}
-                      {link.route === "/exams" && (
-                        <NewDot
-                          storageKey="seen-exams"
-                          triggerRoute="/exams"
-                          className="absolute top-0 right-0 hidden h-2 w-2 md:flex"
-                        />
-                      )}
-                    </a>
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
-
-          {/* Mobile inline quick links */}
-          <nav className="ml-2 flex items-center gap-1 md:hidden">
+          {/* One nav for all breakpoints: a single copy of the links in the
+              HTML (crawlers otherwise read desktop + mobile twice). Items
+              past the 2nd collapse at narrow widths; all show from md up. */}
+          <nav
+            aria-label="Main"
+            className="ml-2 flex items-center gap-1 md:gap-0">
             {siteConfig.navLinks.map((link, i) => (
               <a
                 href={link.route}
                 key={link.route}
                 className={cn(
-                  "hover:bg-accent hover:text-foreground rounded-md px-2 py-1.5 text-sm font-semibold transition-colors",
+                  "hover:bg-accent hover:text-foreground relative rounded-md px-2 py-1.5 text-sm font-semibold transition-colors md:mr-1 md:px-3 md:hover:bg-transparent",
                   i === 2 && "hidden min-[420px]:flex",
                   i === 3 && "hidden min-[520px]:flex",
                   i === 4 && "hidden min-[640px]:flex",
@@ -120,6 +87,13 @@ const Navbar = () => {
                     : "text-muted-foreground"
                 )}>
                 {link.label}
+                {link.route === "/exams" && (
+                  <NewDot
+                    storageKey="seen-exams"
+                    triggerRoute="/exams"
+                    className="absolute top-0 right-0 hidden h-2 w-2 md:flex"
+                  />
+                )}
               </a>
             ))}
           </nav>

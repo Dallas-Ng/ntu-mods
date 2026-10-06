@@ -109,6 +109,20 @@ export async function getAllModuleMetadata(
   return json.getAllModuleMetadata(year, semester)
 }
 
+/** Module and class-index totals for one semester, for page copy that quotes them. */
+export async function getSemesterCounts(
+  year: string,
+  semester: string
+): Promise<{ modules: number; indexes: number }> {
+  const codes = Object.keys(json.getAllModuleMetadata(year, semester))
+  const indexes = codes.reduce(
+    (sum, code) =>
+      sum + Object.keys(json.getModuleIndexesData(code, year, semester)).length,
+    0
+  )
+  return { modules: codes.length, indexes }
+}
+
 /**
  * Class schedule indexes for a module in one semester.
  * Returns an empty object when the module was not offered that semester.

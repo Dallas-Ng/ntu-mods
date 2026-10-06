@@ -1,10 +1,12 @@
 ---
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { formatTitle } from "@/lib/format"
+import { breadcrumbListJsonLd } from "@/lib/json-ld"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import { getModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
 import Breadcrumbs from "@/components/breadcrumbs"
 import ModsIndexTable from "@/components/mods/mods-index-table"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 // On-demand — Cloudflare Workers has no filesystem at all, even at build
@@ -47,6 +49,15 @@ const categories = moduleData.categories ?? []
 
 const semName = semester === "S" ? "Special Term" : `Semester ${semester}`
 const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
+const crumbs = [
+  { name: "Mods", label: "Mods", href: "/mods" },
+  { name: code, label: code, href: getModuleUrl(code) },
+  {
+    name: semLabel,
+    label: semLabel,
+    href: getModuleVersionUrl(code, year, semester)
+  }
+]
 ---
 
 <BaseLayout
@@ -54,6 +65,7 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
   description={`View the AY${year}/${parseInt(year) + 1} ${semName} record for ${code} ${moduleData.title}, including module details, index schedules, class times, venues, and exams.`}
   canonical={getModuleVersionUrl(code, year, semester)}
   noTitleSuffix>
+  <JsonLd data={breadcrumbListJsonLd(crumbs)} />
   {
     !isCurrentOffering && (
       <div class="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
@@ -69,17 +81,7 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
 
   <div class="mt-4 flex flex-col gap-6 xl:flex-row">
     <div class="w-full xl:w-3/6">
-      <Breadcrumbs
-        breadcrumbs={[
-          { name: "Mods", label: "Mods", href: "/mods" },
-          { name: code, label: code, href: getModuleUrl(code) },
-          {
-            name: semLabel,
-            label: semLabel,
-            href: getModuleVersionUrl(code, year, semester)
-          }
-        ]}
-      />
+      <Breadcrumbs breadcrumbs={crumbs} />
       <h1 class="mt-2 text-3xl">{formatTitle(moduleData.title)}</h1>
       <p class="text-muted-foreground mt-1 text-sm">{semLabel}</p>
       {

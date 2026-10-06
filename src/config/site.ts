@@ -2,6 +2,8 @@ export const siteConfig = {
   url: "https://ntumods.com",
   name: "NTUMods",
   ogImage: "https://ntumods.com/og-image.png",
+  ogImageAlt:
+    "NTUMods: build your NTU timetable in minutes, shown with a weekly class schedule",
   metatags: {
     default: {
       title: "NTU Timetable Planner and Module Finder | NTUMods",

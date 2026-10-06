@@ -1,10 +1,9 @@
 ---
 import { siteConfig } from "@/config/site"
+import { faqPageJsonLd } from "@/lib/json-ld"
 import ArticleToc from "@/components/articles/article-toc"
-import FaqContent, {
-  faqHeadings,
-  faqJsonLd
-} from "@/components/faq/faq-content"
+import FaqContent, { faqHeadings, faqItems } from "@/components/faq/faq-content"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
@@ -17,5 +16,5 @@ export const prerender = true
   <FaqContent>
     <ArticleToc client:idle headings={faqHeadings} />
   </FaqContent>
-  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+  <JsonLd data={faqPageJsonLd(faqItems)} />
 </BaseLayout>

@@ -9,6 +9,7 @@ interface BannerProps {
 export const BannerWrapper = (props: BannerProps) => {
   return (
     <div
+      data-nosnippet
       className={cn(
         "relative z-10 flex items-center justify-center bg-sky-300 p-1",
         props.divClass

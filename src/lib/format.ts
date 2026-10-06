@@ -21,3 +21,6 @@ export const formatRemarks = (remarks: string) => {
 
   return formattedRemarks
 }
+
+/** 1138 -> "1,138". Fixed locale so builds do not depend on the host. */
+export const formatCount = (n: number) => n.toLocaleString("en-US")

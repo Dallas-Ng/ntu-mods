@@ -26,57 +26,50 @@ const FOOTER_GROUPS = [
       { label: "Feedback", href: "/feedback" },
       { label: "FAQ", href: "/faq" }
     ]
-  },
-  {
-    title: "Project",
-    links: [
-      { label: "Privacy", href: "/privacy" },
-      { label: "Sitemap", href: "/sitemap" }
-    ]
   }
+] as const
+
+const LEGAL_LINKS = [
+  { label: "Privacy", href: "/privacy" },
+  { label: "Sitemap", href: "/sitemap" }
 ] as const
 
 const Footer = () => {
   return (
-    <footer className="border-border/60 mt-10 space-y-10 border-t px-3 py-10 lg:px-5">
-      <div className="container">
-        <p className="text-muted-foreground mb-1 text-xs font-medium tracking-wider uppercase">
-          Current semester
-        </p>
-
-        <a href="/faq#current-semester" className="hover:underline">
-          <span className="bg-primary/10 ring-primary/20 text-primary inline-flex items-center rounded-md px-2.5 py-1 text-sm font-semibold ring-1">
-            {LATEST_SEMESTER_LABEL}
-          </span>
-        </a>
-      </div>
-
-      <div className="container grid gap-8 text-sm sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
-        <div className="space-y-2">
+    <footer className="border-border/60 bg-muted/30 mt-16 border-t px-3 lg:px-5">
+      <div className="container grid gap-10 py-12 text-sm sm:grid-cols-2 lg:grid-cols-[1.6fr_repeat(3,1fr)]">
+        <div className="space-y-4 sm:col-span-2 lg:col-span-1">
           <a
             href="/"
-            className="text-foreground hover:text-primary inline-flex font-semibold transition-colors">
+            className="text-foreground hover:text-primary inline-flex text-lg font-semibold tracking-tight transition-colors">
             {siteConfig.name}
           </a>
 
-          <p className="text-muted-foreground leading-6">
+          <p className="text-muted-foreground max-w-xs leading-6">
             Plan NTU timetables, browse modules, compare indexes, and keep
             course planning links close at hand.
           </p>
+
+          <a
+            href="/faq#current-semester"
+            className="bg-primary/10 ring-primary/20 text-primary hover:bg-primary/15 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium ring-1 transition-colors">
+            <span className="bg-primary size-1.5 rounded-full" />
+            {LATEST_SEMESTER_LABEL}
+          </a>
         </div>
 
         {FOOTER_GROUPS.map((group) => (
           <nav key={group.title} aria-label={`${group.title} links`}>
-            <h2 className="text-foreground text-sm font-semibold">
+            <h2 className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
               {group.title}
             </h2>
 
-            <ul className="mt-3 space-y-2">
+            <ul className="mt-4 space-y-2.5">
               {group.links.map((link) => (
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors">
+                    className="text-foreground/80 hover:text-primary transition-colors">
                     {link.label}
                   </a>
                 </li>
@@ -86,10 +79,22 @@ const Footer = () => {
         ))}
       </div>
 
-      <div className="container">
-        <p className="text-muted-foreground text-center text-sm">
-          NTUmods.com &copy; {new Date().getFullYear()}
+      <div className="border-border/60 container flex flex-col gap-2 border-t pt-6 pb-24 text-xs sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-muted-foreground">
+          &copy; {new Date().getFullYear()} NTUmods.com. Not affiliated with
+          Nanyang Technological University.
         </p>
+        <ul className="text-muted-foreground flex gap-4">
+          {LEGAL_LINKS.map((link) => (
+            <li key={link.href}>
+              <a
+                href={link.href}
+                className="hover:text-primary transition-colors">
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
     </footer>
   )

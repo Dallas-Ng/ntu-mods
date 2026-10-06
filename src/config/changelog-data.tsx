@@ -49,6 +49,57 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Articles, nav, footer and links polish",
+    date: "6 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            <ChangelogLink href="/articles">Articles</ChangelogLink> now show
+            unique view counts and can be sorted by date or by views.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content:
+          "The More articles section at the bottom of each article now uses richer cards with a thumbnail, category, reading time and description, plus a View all articles link."
+      },
+      {
+        category: "Improvement",
+        content:
+          "Tables in articles, this changelog and module info now share one consistent design."
+      },
+      {
+        category: "Improvement",
+        content:
+          "The desktop navigation bar is easier to use, with settings moved into a compact actions area."
+      },
+      {
+        category: "Improvement",
+        content:
+          "The footer has been redesigned to look cleaner and more modern."
+      },
+      {
+        category: "Improvement",
+        content:
+          "Scrollbars now follow the dark theme instead of showing light system styling."
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            The <ChangelogLink href="/links">Links</ChangelogLink> page now
+            includes Course Content, Student Email, NTU Library, Campus
+            Shuttle, Housing, Student Wellbeing, Fee Payment, and the IT
+            Helpdesk. All links point to official NTU pages.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Mobile timetable rebuilt",
     date: "13 Aug 2026",
     items: [

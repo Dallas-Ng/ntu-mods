@@ -34,7 +34,7 @@ const FILTERS = ["All", ...CATEGORIES] as ChangelogFilter[]
 
 const getCategoryBadgeClassName = (category: ChangelogCategory) =>
   cn(
-    "inline-flex h-6 w-fit items-center rounded-full border px-2 text-xs leading-none font-medium",
+    "inline-flex h-6 w-fit items-center whitespace-nowrap rounded-full border px-2 text-xs leading-none font-medium",
     CATEGORY_STYLES[category]
   )
 
@@ -70,25 +70,20 @@ const ChangelogFilters = ({
 )
 
 const ChangelogTable = ({ items }: { items: ChangelogItem[] }) => (
-  <table className="text-muted-foreground w-full border-collapse text-left text-sm">
+  <table className="data-table">
     <thead>
       <tr>
-        <th className="bg-muted/50 text-muted-foreground w-28 border px-3 py-1.5 text-center text-xs font-medium tracking-wide">
-          Type
-        </th>
-        <th className="bg-muted/50 text-muted-foreground border px-2 py-1.5 text-xs font-medium tracking-wide">
-          Description
-        </th>
+        <th className="w-40">Type</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody>
       {items.map((item, i) => (
-        <tr key={i} className="align-top">
-          <td className="w-28 border py-1.5 pr-3 text-center">
+        <tr key={i}>
+          <td>
             <CategoryBadge category={item.category} />
           </td>
-
-          <td className="border py-1.5 leading-6">{item.content}</td>
+          <td className="leading-6">{item.content}</td>
         </tr>
       ))}
     </tbody>

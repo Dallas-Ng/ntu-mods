@@ -8,6 +8,16 @@ import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.name,
+  url: siteConfig.url,
+  logo: `${siteConfig.url}/logo.png`,
+  description:
+    "Free, independent timetable planner and module browser for Nanyang Technological University students. Not affiliated with NTU."
+}
+
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -40,16 +50,16 @@ const websiteJsonLd = {
       <LandingProduct />
     </div>
 
-    {/* CSS backgrounds, not <img>: crawlers/AI previews pick <img> as the page thumbnail */}
+    {
+      /* CSS backgrounds, not <img>: crawlers/AI previews pick <img> as the page thumbnail */
+    }
     <div
       aria-hidden="true"
-      class="absolute bottom-1/2 left-0 z-[1] hidden aspect-[3/2] w-full bg-[url('/landing/product-bg.svg')] bg-cover lg:block"
-    >
+      class="absolute bottom-1/2 left-0 z-[1] hidden aspect-[3/2] w-full bg-[url('/landing/product-bg.svg')] bg-cover lg:block">
     </div>
     <div
       aria-hidden="true"
-      class="absolute top-1/2 z-[1] hidden aspect-[3/2] w-full rotate-180 bg-[url('/landing/product-bg.svg')] bg-cover lg:block"
-    >
+      class="absolute top-1/2 z-[1] hidden aspect-[3/2] w-full rotate-180 bg-[url('/landing/product-bg.svg')] bg-cover lg:block">
     </div>
   </div>
 
@@ -62,4 +72,8 @@ const websiteJsonLd = {
   </div>
 
   <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(organizationJsonLd)}
+  />
 </BaseLayout>

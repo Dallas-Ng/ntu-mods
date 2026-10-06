@@ -19,7 +19,7 @@ import {
 
 import ChangelogButton from "./changelog-button"
 import { NewDot } from "./new-dot"
-import SettingsDropdown from "./settings-dropdown"
+import NavActions from "./nav-actions"
 import { Button } from "./ui/button"
 import {
   Drawer,
@@ -137,7 +137,7 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:block">
-            <SettingsDropdown />
+            <NavActions />
           </div>
 
           {/* Mobile drawer */}

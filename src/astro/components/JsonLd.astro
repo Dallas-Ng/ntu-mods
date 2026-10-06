@@ -1,0 +1,19 @@
+---
+import { serializeJsonLd, type JsonLd } from "@/lib/json-ld"
+
+interface Props {
+  /** One schema object or several; each is emitted as its own script tag. */
+  data: JsonLd | (JsonLd | null | undefined)[] | null | undefined
+}
+
+const { data } = Astro.props
+const items = (Array.isArray(data) ? data : [data]).filter((d): d is JsonLd =>
+  Boolean(d)
+)
+---
+
+{
+  items.map((item) => (
+    <script type="application/ld+json" set:html={serializeJsonLd(item)} />
+  ))
+}

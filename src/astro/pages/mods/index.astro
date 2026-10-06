@@ -27,7 +27,8 @@ const directory = [...groups.entries()]
     ([prefix, list]) =>
       [prefix, list.sort((a, b) => a.code.localeCompare(b.code))] as const
   )
-const moduleCount = Object.keys(modules).length
+const moduleCount = Object.keys(modules).length.toLocaleString("en-US")
+const coverage = `AY${year} Semester ${semester} with ${moduleCount} modules`
 
 const modsJsonLd = collectionPageJsonLd({
   name: siteConfig.metatags.mods.title,
@@ -45,8 +46,26 @@ const modsJsonLd = collectionPageJsonLd({
   <script type="application/ld+json" set:html={JSON.stringify(modsJsonLd)} />
   <ModsPage client:load />
 
+  <section class="mt-10 space-y-3 border-t pt-8" aria-labelledby="mods-about">
+    <h2 id="mods-about" class="text-lg font-semibold tracking-tight">
+      About the NTU module browser
+    </h2>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      Search every module offered at NTU by code or title, and narrow the
+      results by module type, school, level, day and time. Each module page
+      lists its academic units, prerequisites, mutually exclusive modules, exam
+      date, and every class index with its timeslots and venues.
+    </p>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      The browser currently covers {coverage}, and earlier semesters are
+      available back to AY2014. Module data comes from NTU's public course and
+      exam timetables and is refreshed each semester. Add any module straight to
+      a timetable plan from the results.
+    </p>
+  </section>
+
   <section
-    class="mt-10 space-y-3 border-t pt-8"
+    class="mt-8 space-y-3 border-t pt-8"
     aria-labelledby="mods-directory">
     <div>
       <h2 id="mods-directory" class="text-lg font-semibold tracking-tight">

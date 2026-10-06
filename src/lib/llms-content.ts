@@ -1,5 +1,6 @@
 import { siteConfig } from "@/config/site"
-import { formatCount, type SiteFacts } from "@/astro/lib/site-facts"
+import { formatCount } from "@/lib/format"
+import type { SiteFacts } from "@/astro/lib/site-facts"
 
 const articleLines = (facts: SiteFacts) =>
   facts.articlesByCategory

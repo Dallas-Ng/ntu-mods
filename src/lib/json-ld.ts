@@ -11,20 +11,14 @@ const CONTEXT = "https://schema.org"
 
 /** Site-relative path ("/mods") or an already absolute URL -> absolute URL. */
 export const absoluteUrl = (pathOrUrl: string) =>
-  /^https?:\/\//.test(pathOrUrl)
-    ? pathOrUrl
-    : `${siteConfig.url}${pathOrUrl.startsWith("/") ? "" : "/"}${pathOrUrl}`
+  pathOrUrl.startsWith("http") ? pathOrUrl : `${siteConfig.url}${pathOrUrl}`
 
 /**
  * JSON.stringify for use inside a <script> tag. Escapes "<" so text such as
- * "</script>" in a title cannot close the tag, and the two line separators
- * that are valid JSON but not valid in older JS parsers.
+ * "</script>" in a title cannot close the tag.
  */
 export const serializeJsonLd = (data: JsonLd) =>
-  JSON.stringify(data).replace(
-    /[<\u2028\u2029]/g,
-    (c) => `\\u${c.charCodeAt(0).toString(16).padStart(4, "0")}`
-  )
+  JSON.stringify(data).replace(/</g, "\\u003c")
 
 export const organizationJsonLd = (): JsonLd => ({
   "@context": CONTEXT,

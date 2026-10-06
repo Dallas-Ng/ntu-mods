@@ -20,9 +20,6 @@ export interface SiteFacts {
   articlesByCategory: { category: string; articles: Article[] }[]
 }
 
-const fmt = (n: number) => n.toLocaleString("en-US")
-export { fmt as formatCount }
-
 /**
  * Numbers and article lists quoted by llms.txt and /ai-instructions, read from
  * the same data the site is built from so they cannot drift out of date.

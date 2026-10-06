@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from "@/config/site"
+import { formatCount } from "@/lib/format"
 import { collectionPageJsonLd } from "@/lib/json-ld"
 import { getModuleUrl } from "@/lib/module-url"
 import { getAllModuleMetadata, getLatestSemester } from "@/lib/server/db/repo"
@@ -18,7 +19,7 @@ const modules = await getAllModuleMetadata(year, semester)
 // Group by the letter prefix of the code (SC1005 -> SC).
 const groups = new Map<string, { code: string; title: string }[]>()
 for (const { code, title } of Object.values(modules)) {
-  const prefix = /^[A-Za-z]+/.exec(code)?.[0].toUpperCase() ?? "Other"
+  const prefix = /^[A-Z]+/.exec(code)![0]
   if (!groups.has(prefix)) groups.set(prefix, [])
   groups.get(prefix)!.push({ code, title })
 }
@@ -28,7 +29,7 @@ const directory = [...groups.entries()]
     ([prefix, list]) =>
       [prefix, list.sort((a, b) => a.code.localeCompare(b.code))] as const
   )
-const moduleCount = Object.keys(modules).length.toLocaleString("en-US")
+const moduleCount = formatCount(Object.keys(modules).length)
 const coverage = `AY${year} Semester ${semester} with ${moduleCount} modules`
 
 const modsJsonLd = collectionPageJsonLd({

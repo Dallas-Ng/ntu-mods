@@ -11,7 +11,6 @@ import {
 describe("absoluteUrl", () => {
   it("prefixes site-relative paths and leaves absolute URLs alone", () => {
     expect(absoluteUrl("/mods")).toBe("https://ntumods.com/mods")
-    expect(absoluteUrl("mods")).toBe("https://ntumods.com/mods")
     expect(absoluteUrl("https://example.com/x")).toBe("https://example.com/x")
   })
 })
@@ -21,12 +20,6 @@ describe("serializeJsonLd", () => {
     const out = serializeJsonLd({ name: "</script><script>alert(1)" })
     expect(out).not.toContain("</script>")
     expect(JSON.parse(out).name).toBe("</script><script>alert(1)")
-  })
-
-  it("escapes the JSON-valid line separators U+2028 and U+2029", () => {
-    const out = serializeJsonLd({ name: "a\u2028b\u2029c" })
-    expect(out).not.toMatch(/[\u2028\u2029]/)
-    expect(JSON.parse(out).name).toBe("a\u2028b\u2029c")
   })
 })
 

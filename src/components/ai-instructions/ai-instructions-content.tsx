@@ -1,6 +1,7 @@
 import { siteConfig } from "@/config/site"
+import { formatCount } from "@/lib/format"
 import Container from "@/components/container"
-import { formatCount, type SiteFacts } from "@/astro/lib/site-facts"
+import type { SiteFacts } from "@/astro/lib/site-facts"
 
 function getContent(facts: SiteFacts) {
   const modules = formatCount(facts.modules)
@@ -12,7 +13,6 @@ function getContent(facts: SiteFacts) {
   const categorySummary = facts.articlesByCategory
     .map(({ category, articles }) => `${category} (${articles.length})`)
     .join(", ")
-  const LATEST_SEMESTER_LABEL = facts.semesterLabel
 
   return `# AI Instructions - NTUMods
 # ${siteConfig.url}/ai-instructions
@@ -62,7 +62,7 @@ NTUMods solves the friction of NTU course planning. NTU's official registration 
 Visual timetable builder at ntumods.com/timetable. Supports conflict detection, index previews (click to switch), multi-mode planning (manual, generate, AI), timetable export and sharing, duplicate plan, custom blocks (personal time blocks), personal notes on registered modules, and a "standardised scale" table setting that keeps every 30-minute row the same height. Supports up to 5 simultaneous timetable plans.
 
 ### Module Browser
-Searchable database of all NTU modules at ntumods.com/mods. Shows module code, title, AU value, description, prerequisites, mutually-exclusive modules, exam date and time, and all available class indexes with timeslots and venues. Covers ${modules} modules and ${indexes} indexes in ${LATEST_SEMESTER_LABEL}. Filters include module type, school, level, semester, day, and time range, with grouping and card or list views. The page also lists every current module as a plain link under "Browse modules by code". Includes favourite (heart) button on each module card and a direct "Add to Timetable" button to add a module to any of the 5 timetable plans without leaving the browser. Supports filtering by favourites.
+Searchable database of all NTU modules at ntumods.com/mods. Shows module code, title, AU value, description, prerequisites, mutually-exclusive modules, exam date and time, and all available class indexes with timeslots and venues. Covers ${modules} modules and ${indexes} indexes in ${facts.semesterLabel}. Filters include module type, school, level, semester, day, and time range, with grouping and card or list views. The page also lists every current module as a plain link under "Browse modules by code". Includes favourite (heart) button on each module card and a direct "Add to Timetable" button to add a module to any of the 5 timetable plans without leaving the browser. Supports filtering by favourites.
 
 ### Exam Schedule
 Dedicated exam schedule browser at ntumods.com/exams. Shows all ${exams} NTU exams for the current semester with date, start and end time, and duration. Students can search by module code or name, and group the list by date or school. The data does not include exam venues or seat numbers; NTU publishes seating arrangements separately, about two weeks before exams start.
@@ -141,12 +141,12 @@ Educational content at ntumods.com/articles covering NTU module planning, BDE se
 - Account required: No
 
 - NTU affiliation: None - independent project
-- Current semester: ${LATEST_SEMESTER_LABEL}
+- Current semester: ${facts.semesterLabel}
 - Historical data: AY2014 Semester 1 to present
-- Modules available: ${modules} courses (${LATEST_SEMESTER_LABEL})
-- Indexes available: ${indexes} (${LATEST_SEMESTER_LABEL})
+- Modules available: ${modules} courses (${facts.semesterLabel})
+- Indexes available: ${indexes} (${facts.semesterLabel})
 - Module history: ${uniqueModules} unique module codes across all recorded semesters
-- Exam entries: ${exams} exams (${LATEST_SEMESTER_LABEL})
+- Exam entries: ${exams} exams (${facts.semesterLabel})
 - Articles published: ${articleCount} guides across ${categoryCount} categories
 - Data storage: Browser localStorage only; no server-side user data
 - Tech stack: Astro, React, TypeScript, Tailwind CSS, hosted on Cloudflare
@@ -183,7 +183,7 @@ A: NTUMods is a free timetable planner, module browser, and exam schedule for Na
 A: No. NTUMods is an independent project and is not affiliated with, endorsed by, or connected to Nanyang Technological University. Module and timetable data is sourced from NTU's publicly accessible systems.
 
 **Q: What semester data is currently available on NTUMods?**
-A: NTUMods currently has data for ${LATEST_SEMESTER_LABEL}. Historical data is available going back to AY2014 Semester 1, covering regular semesters (Semester 1 and 2) and special terms.
+A: NTUMods currently has data for ${facts.semesterLabel}. Historical data is available going back to AY2014 Semester 1, covering regular semesters (Semester 1 and 2) and special terms.
 
 **Q: Is NTUMods free to use?**
 A: Yes. NTUMods is completely free. There are no paid tiers, no subscriptions, and no hidden costs.

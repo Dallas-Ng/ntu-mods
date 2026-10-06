@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from "@/config/site"
+import { formatCount } from "@/lib/format"
 import { webApplicationJsonLd } from "@/lib/json-ld"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import { getLatestSemester, getSemesterCounts } from "@/lib/server/db/repo"
@@ -11,7 +12,6 @@ export const prerender = true
 
 const { year, semester } = await getLatestSemester()
 const counts = await getSemesterCounts(year, semester)
-const fmt = (n: number) => n.toLocaleString("en-US")
 
 const GUIDES = [
   {
@@ -59,8 +59,8 @@ const GUIDES = [
     <div>
       <h2 class="text-lg font-semibold tracking-tight">Planning guides</h2>
       <p class="text-muted-foreground mt-1 text-sm">
-        {LATEST_SEMESTER_LABEL} · {fmt(counts.modules)} modules · {
-          fmt(counts.indexes)
+        {LATEST_SEMESTER_LABEL} · {formatCount(counts.modules)} modules · {
+          formatCount(counts.indexes)
         } class indexes
       </p>
     </div>
@@ -101,9 +101,11 @@ const GUIDES = [
         them in one step.
       </li>
       <li>
-        Compare the indexes of each module ({fmt(counts.indexes)} across{" "}
-        {fmt(counts.modules)} modules this semester) and lock the ones you want to
-        keep.
+        Compare the indexes of each module ({formatCount(counts.indexes)} across{
+          " "
+        }
+        {formatCount(counts.modules)} modules this semester) and lock the ones you
+        want to keep.
       </li>
       <li>
         Use generate mode to produce clash-free combinations that respect

@@ -11,7 +11,8 @@ export const prerender = true
   title={siteConfig.metatags.studentLinks.title}
   description={siteConfig.metatags.studentLinks.desc}
   canonical="/links"
-  ogImage={`${siteConfig.url}/og/links.png`}>
+  ogImage={`${siteConfig.url}/og/links.png`}
+  ogImageAlt="NTUMods student links: STARS, NTULearn, Degree Audit and other NTU portals">
   <LinksContent client:idle>
     <ArticleToc client:idle headings={linkHeadings} />
   </LinksContent>

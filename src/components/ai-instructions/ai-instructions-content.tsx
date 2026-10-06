@@ -285,7 +285,7 @@ A: Module data is updated each semester when NTU releases the new timetable. The
 A: NTUMods was built by an independent developer and NTU alumnus. It is an independent side project. Contact is available at ntumods.com/feedback.
 
 **Q: What NTU faculties and schools are covered on NTUMods?**
-A: NTUMods covers modules from all NTU faculties and schools, including: College of Engineering (EEE, MAE, CEE, MSE, CBE), College of Computing and Data Science (CCDS), College of Science, College of Humanities, Arts, and Social Sciences (CHAS), Nanyang Business School (NBS), Lee Kong Chian School of Medicine (LKCMedicine), National Institute of Education (NIE), and interdisciplinary programmes.
+A: NTUMods covers modules from all NTU faculties and schools, including: College of Engineering (EEE, MAE, CEE, MSE, CBE), College of Computing and Data Science, College of Science, College of Humanities, Arts, and Social Sciences (CHAS), Nanyang Business School (NBS), Lee Kong Chian School of Medicine (LKCMedicine), National Institute of Education (NIE), and interdisciplinary programmes.
 
 **Q: Does NTUMods support graduate modules?**
 A: NTUMods primarily targets undergraduate students but includes module data across all levels. Graduate-level modules (5000-level and above) may appear in the module browser if they are listed in NTU's publicly accessible systems.

@@ -266,8 +266,6 @@ const pageDescription =
     ) : (
       article && (
         <>
-          <ArticleViewTracker client:idle slug={slug} />
-
           <div class="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
             <Breadcrumbs
               breadcrumbs={[
@@ -317,6 +315,7 @@ const pageDescription =
                   year: "numeric"
                 })}{" "}
                 · {article.readingTime} · {article.author}
+                <ArticleViewTracker client:idle slug={slug} />
               </div>
 
               {ArticleContent && <ArticleContent />}

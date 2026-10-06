@@ -44,36 +44,27 @@ export function renderModuleValue(key: keyof DbModule, value: unknown) {
 
 const ModsInfoTable = ({ module, exam }: Props) => (
   <div className="space-y-3">
-    <table className="bg-background w-full text-sm">
+    <table className="data-table">
       <tbody>
-        <tr className="border-b">
-          <td className="w-[200px] p-2">AUs</td>
-          <td className="p-2">{module.au} AUs</td>
+        <tr>
+          <td className="w-[200px]">AUs</td>
+          <td>{module.au} AUs</td>
         </tr>
 
         {FIELDS.map(({ key, label }) => {
           const value = module[key]
           const has = hasValue(value)
           return (
-            <tr key={key} className="border-b">
-              <td
-                className={cn(
-                  "p-2 font-medium",
-                  !has && "text-muted-foreground"
-                )}>
-                {label}
-              </td>
-              <td className="p-2">{has && renderModuleValue(key, value)}</td>
+            <tr key={key}>
+              <td className={cn(!has && "text-muted-foreground")}>{label}</td>
+              <td>{has && renderModuleValue(key, value)}</td>
             </tr>
           )
         })}
 
         <tr>
-          <td
-            className={cn("p-2 font-medium", !exam && "text-muted-foreground")}>
-            Exam
-          </td>
-          <td className="p-2">
+          <td className={cn(!exam && "text-muted-foreground")}>Exam</td>
+          <td>
             {exam ? `${exam.date}, ${exam.start_time} - ${exam.end_time}` : ""}
           </td>
         </tr>

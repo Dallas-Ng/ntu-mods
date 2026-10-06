@@ -92,23 +92,25 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
     </div>
 
     <div class="h-fit w-full xl:w-3/6">
-      <table class="bg-background text-sm">
+      <table class="data-table">
         <tbody>
           <tr>
-            <td class="p-2">AUs</td>
-            <td class="p-2">{moduleData.au} AUs</td>
+            <td>AUs</td>
+            <td>{moduleData.au} AUs</td>
           </tr>
 
           {
             categories.length > 0 && (
               <tr>
-                <td class="p-2">Categories</td>
-                <td class="flex flex-wrap gap-1 p-2">
-                  {categories.map((cat) => (
-                    <span class="rounded-full border px-2 py-0 text-xs">
-                      {MODULE_CATEGORY[cat]}
-                    </span>
-                  ))}
+                <td>Categories</td>
+                <td>
+                  <div class="flex flex-wrap gap-1">
+                    {categories.map((cat) => (
+                      <span class="rounded-full border px-2 py-0 text-xs">
+                        {MODULE_CATEGORY[cat]}
+                      </span>
+                    ))}
+                  </div>
                 </td>
               </tr>
             )
@@ -117,8 +119,8 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
           {
             moduleData.gradeType && (
               <tr>
-                <td class="p-2">Grade Type</td>
-                <td class="p-2">{moduleData.gradeType}</td>
+                <td>Grade Type</td>
+                <td>{moduleData.gradeType}</td>
               </tr>
             )
           }
@@ -126,8 +128,8 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
           {
             moduleData.notAvailableToProgramme && (
               <tr>
-                <td class="p-2">Not Available To Programme</td>
-                <td class="p-2">{moduleData.notAvailableToProgramme}</td>
+                <td>Not Available To Programme</td>
+                <td>{moduleData.notAvailableToProgramme}</td>
               </tr>
             )
           }
@@ -135,8 +137,8 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
           {
             moduleData.notAvailableToAllProgrammeWith && (
               <tr>
-                <td class="p-2">Not Available To All Programme With</td>
-                <td class="p-2">{moduleData.notAvailableToAllProgrammeWith}</td>
+                <td>Not Available To All Programme With</td>
+                <td>{moduleData.notAvailableToAllProgrammeWith}</td>
               </tr>
             )
           }
@@ -144,8 +146,8 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
           {
             moduleData.notAvailableAsBdeueToProgramme && (
               <tr>
-                <td class="p-2">Not Available As BDE/UE To Programme</td>
-                <td class="p-2">{moduleData.notAvailableAsBdeueToProgramme}</td>
+                <td>Not Available As BDE/UE To Programme</td>
+                <td>{moduleData.notAvailableAsBdeueToProgramme}</td>
               </tr>
             )
           }
@@ -153,8 +155,8 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
           {
             moduleData.notAvailableAsCoreToProgramme && (
               <tr>
-                <td class="p-2">Not Available As Core To Programme</td>
-                <td class="p-2">{moduleData.notAvailableAsCoreToProgramme}</td>
+                <td>Not Available As Core To Programme</td>
+                <td>{moduleData.notAvailableAsCoreToProgramme}</td>
               </tr>
             )
           }
@@ -162,8 +164,8 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
           {
             moduleData.notAvailableAsPeToProgramme && (
               <tr>
-                <td class="p-2">Not Available As PE To Programme</td>
-                <td class="p-2">{moduleData.notAvailableAsPeToProgramme}</td>
+                <td>Not Available As PE To Programme</td>
+                <td>{moduleData.notAvailableAsPeToProgramme}</td>
               </tr>
             )
           }
@@ -171,10 +173,8 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
           {
             moduleData.mutuallyExclusiveWith && (
               <tr>
-                <td class="p-2">Mutually Exclusive With</td>
-                <td class="p-2">
-                  {moduleData.mutuallyExclusiveWith.join(", ")}
-                </td>
+                <td>Mutually Exclusive With</td>
+                <td>{moduleData.mutuallyExclusiveWith.join(", ")}</td>
               </tr>
             )
           }
@@ -183,15 +183,15 @@ const semLabel = `AY${year}/${parseInt(year) + 1} ${semName}`
             moduleData.extras &&
               Object.entries(moduleData.extras).map(([label, value]) => (
                 <tr>
-                  <td class="p-2">{label}</td>
-                  <td class="p-2">{value}</td>
+                  <td>{label}</td>
+                  <td>{value}</td>
                 </tr>
               ))
           }
 
           <tr>
-            <td class="p-2">Exam</td>
-            <td class="p-2">
+            <td>Exam</td>
+            <td>
               {
                 exam
                   ? `${exam.date}, ${exam.start_time} - ${exam.end_time}`

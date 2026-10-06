@@ -280,3 +280,46 @@ table td {
   @apply border border-slate-200 dark:border-slate-900;
   padding: var(--table-padding);
 }
+
+/* Standard content table: tinted header with a primary rule, rounded frame,
+   roomy cells, row dividers only. Used for article prose and `.data-table`
+   (changelog, module info). The timetable grid keeps the dense global style
+   above. */
+.prose table,
+.data-table {
+  @apply overflow-hidden rounded-lg border bg-transparent text-sm;
+  border-color: hsl(var(--border));
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.prose table th,
+.prose table td,
+.data-table th,
+.data-table td {
+  @apply border-0 text-left align-top;
+  padding: 0.7rem 1rem;
+}
+
+.prose table th,
+.data-table th {
+  @apply text-foreground font-semibold;
+  background: hsl(var(--muted));
+  border-bottom: 2px solid hsl(var(--primary));
+}
+
+.prose table td,
+.data-table td {
+  background: hsl(var(--card));
+  border-top: 1px solid hsl(var(--border));
+}
+
+.prose table tbody tr:first-child td,
+.data-table tbody tr:first-child td {
+  border-top: 0;
+}
+
+.prose table td:first-child,
+.data-table td:first-child {
+  @apply font-medium;
+}

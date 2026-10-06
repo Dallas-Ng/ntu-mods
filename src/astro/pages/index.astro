@@ -1,39 +1,14 @@
 ---
 import { siteConfig } from "@/config/site"
+import { organizationJsonLd, websiteJsonLd } from "@/lib/json-ld"
 import LandingArticles from "@/components/landing/landing-articles"
 import LandingCTA from "@/components/landing/landing-cta"
 import LandingFeatures from "@/components/landing/landing-features"
 import LandingProduct from "@/components/landing/landing-product"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
-
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: siteConfig.name,
-  url: siteConfig.url,
-  logo: `${siteConfig.url}/logo.png`,
-  description:
-    "Free, independent timetable planner and module browser for Nanyang Technological University students. Not affiliated with NTU."
-}
-
-const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: siteConfig.name,
-  url: siteConfig.url,
-  description:
-    "NTU timetable planner and module browser for Nanyang Technological University students.",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: `${siteConfig.url}/mods?searchTerm={search_term_string}`
-    },
-    "query-input": "required name=search_term_string"
-  }
-}
 ---
 
 <BaseLayout
@@ -71,9 +46,5 @@ const websiteJsonLd = {
     </div>
   </div>
 
-  <script type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
-  <script
-    type="application/ld+json"
-    set:html={JSON.stringify(organizationJsonLd)}
-  />
+  <JsonLd data={[websiteJsonLd(), organizationJsonLd()]} />
 </BaseLayout>

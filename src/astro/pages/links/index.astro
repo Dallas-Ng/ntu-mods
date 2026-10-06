@@ -3,6 +3,7 @@ import { siteConfig } from "@/config/site"
 import { collectionPageJsonLd } from "@/lib/json-ld"
 import ArticleToc from "@/components/articles/article-toc"
 import LinksContent, { linkHeadings } from "@/components/links/links-content"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
@@ -24,7 +25,7 @@ const linksJsonLd = collectionPageJsonLd({
   canonical="/links"
   ogImage={`${siteConfig.url}/og/links.png`}
   ogImageAlt="NTUMods student links: STARS, NTULearn, Degree Audit and other NTU portals">
-  <script type="application/ld+json" set:html={JSON.stringify(linksJsonLd)} />
+  <JsonLd data={linksJsonLd} />
   <LinksContent client:idle>
     <ArticleToc client:idle headings={linkHeadings} />
   </LinksContent>

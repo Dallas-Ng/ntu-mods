@@ -140,18 +140,11 @@ export const faqHeadings: ArticleHeading[] = FAQ_CONFIG.map(
   })
 )
 
-export const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQ_CONFIG.map(({ question, answer, answerText }) => ({
-    "@type": "Question",
-    name: question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: answerText ?? (answer as string)
-    }
-  }))
-}
+/** Question/answer pairs for the FAQPage JSON-LD built in the faq page. */
+export const faqItems = FAQ_CONFIG.map(({ question, answer, answerText }) => ({
+  question,
+  answer: answerText ?? (answer as string)
+}))
 
 interface Props {
   /** Rendered as the second grid column — the .astro page passes its own

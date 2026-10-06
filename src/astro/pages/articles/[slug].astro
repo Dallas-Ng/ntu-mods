@@ -2,11 +2,18 @@
 import { render } from "astro:content"
 
 import { siteConfig } from "@/config/site"
+import {
+  articleJsonLd,
+  breadcrumbListJsonLd,
+  faqPageJsonLd,
+  type JsonLd as JsonLdData
+} from "@/lib/json-ld"
 import { extractFaqItems } from "@/lib/server/articles"
 import ArticleToc from "@/components/articles/article-toc"
 import ArticleViewTracker from "@/components/articles/article-view-tracker"
 import ArticlesList from "@/components/articles/articles-list"
 import Breadcrumbs from "@/components/breadcrumbs"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 import {
   getAllArticles,
@@ -85,14 +92,16 @@ const { kind, slug } = Astro.props
 let categoryHeading = ""
 let categorySubheading = ""
 let categoryArticleList: Awaited<ReturnType<typeof getArticlesByCategory>> = []
-let categoryJsonLd: Record<string, unknown> | null = null
+let categoryLd: JsonLdData | null = null
 
 // Article branch
 let article: Awaited<ReturnType<typeof getAllArticles>>[number] | undefined
 let moreArticles: Awaited<ReturnType<typeof getAllArticles>> = []
-let articleJsonLd: Record<string, unknown> | null = null
-let faqJsonLd: Record<string, unknown> | null = null
-let breadcrumbJsonLd: Record<string, unknown> | null = null
+let articleLd: JsonLdData | null = null
+let faqLd: JsonLdData | null = null
+let breadcrumbLd: JsonLdData | null = null
+// One list drives both the visible breadcrumbs and their JSON-LD.
+let articleCrumbs: { href: string; label: string; name: string }[] = []
 let ArticleContent: Awaited<ReturnType<typeof render>>["Content"] | null = null
 let articleHeadings: { id: string; depth: number; text: string }[] = []
 
@@ -104,24 +113,10 @@ if (kind === "category") {
   categorySubheading = meta?.subheading ?? `NTUMods guides on ${categoryName}.`
   categoryArticleList = categoryArticles
 
-  categoryJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Articles",
-        item: `${siteConfig.url}/articles`
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: categoryHeading,
-        item: `${siteConfig.url}/articles/${slug}`
-      }
-    ]
-  }
+  categoryLd = breadcrumbListJsonLd([
+    { name: "Articles", href: "/articles" },
+    { name: categoryHeading, href: `/articles/${slug}` }
+  ])
 } else {
   const articles = await getAllArticles()
   article = articles.find((item) => item.slug === slug)
@@ -158,49 +153,28 @@ if (kind === "category") {
     )
 
     const faqItems = extractFaqItems(article.content)
-    faqJsonLd =
-      faqItems.length > 0
-        ? {
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: faqItems.map(({ question, answer }) => ({
-              "@type": "Question",
-              name: question,
-              acceptedAnswer: { "@type": "Answer", text: answer }
-            }))
-          }
-        : null
+    faqLd = faqItems.length > 0 ? faqPageJsonLd(faqItems) : null
 
-    articleJsonLd = {
-      "@context": "https://schema.org",
-      "@type": "Article",
+    articleLd = articleJsonLd({
       headline: article.title,
       description: article.description,
       image: getArticleImageUrl(article.thumbnail),
       datePublished: article.date,
       dateModified: article.updated || article.date,
-      author: { "@type": "Person", name: article.author },
-      mainEntityOfPage: article.url
-    }
+      author: article.author,
+      url: article.url
+    })
 
-    breadcrumbJsonLd = {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Articles",
-          item: `${siteConfig.url}/articles`
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: article.title,
-          item: article.url
-        }
-      ]
-    }
+    articleCrumbs = [
+      { href: "/", label: "Home", name: "Home" },
+      { href: "/articles", label: "Articles", name: "Articles" },
+      {
+        href: `/articles/${article.slug}`,
+        label: article.title,
+        name: article.title
+      }
+    ]
+    breadcrumbLd = breadcrumbListJsonLd(articleCrumbs)
   }
 }
 
@@ -258,10 +232,7 @@ const pageDescription =
           categories={[]}
         />
 
-        <script
-          type="application/ld+json"
-          set:html={JSON.stringify(categoryJsonLd)}
-        />
+        <JsonLd data={categoryLd} />
       </>
     ) : (
       article && (
@@ -269,36 +240,10 @@ const pageDescription =
           <ArticleViewTracker client:idle slug={slug} />
 
           <div class="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
-            <Breadcrumbs
-              breadcrumbs={[
-                { href: "/", label: "Home", name: "Home" },
-                { href: "/articles", label: "Articles", name: "Articles" },
-                {
-                  href: `/articles/${article.slug}`,
-                  label: article.title,
-                  name: article.title
-                }
-              ]}
-            />
+            <Breadcrumbs breadcrumbs={articleCrumbs} />
           </div>
 
-          <script
-            id="article-jsonld"
-            type="application/ld+json"
-            set:html={JSON.stringify(articleJsonLd)}
-          />
-          {faqJsonLd && (
-            <script
-              id="article-faq-jsonld"
-              type="application/ld+json"
-              set:html={JSON.stringify(faqJsonLd)}
-            />
-          )}
-          <script
-            id="article-breadcrumb-jsonld"
-            type="application/ld+json"
-            set:html={JSON.stringify(breadcrumbJsonLd)}
-          />
+          <JsonLd data={[articleLd, faqLd, breadcrumbLd]} />
 
           <div class="mt-5 grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
             <article class="prose dark:prose-invert max-w-full min-w-0">

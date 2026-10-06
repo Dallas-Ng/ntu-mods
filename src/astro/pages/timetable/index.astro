@@ -1,8 +1,10 @@
 ---
 import { siteConfig } from "@/config/site"
+import { webApplicationJsonLd } from "@/lib/json-ld"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import { getLatestSemester, getSemesterCounts } from "@/lib/server/db/repo"
 import TimetablePageContent from "@/components/timetable/timetable-page-content"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
@@ -37,24 +39,6 @@ const GUIDES = [
       "How to use NTUMods to search modules, compare indexes, detect clashes, and export your schedule to calendar."
   }
 ]
-
-const timetableJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  name: `${siteConfig.name} Timetable Planner`,
-  url: `${siteConfig.url}/timetable`,
-  description: siteConfig.metatags.timetable.desc,
-  applicationCategory: "EducationalApplication",
-  operatingSystem: "Any",
-  browserRequirements: "Requires a modern web browser",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "SGD" },
-  isAccessibleForFree: true,
-  publisher: {
-    "@type": "Organization",
-    name: siteConfig.name,
-    url: siteConfig.url
-  }
-}
 ---
 
 <BaseLayout
@@ -63,9 +47,11 @@ const timetableJsonLd = {
   canonical="/timetable"
   ogImage={`${siteConfig.url}/og/timetable.png`}
   ogImageAlt="NTUMods timetable planner showing a weekly NTU class schedule with lectures, tutorials and labs">
-  <script
-    type="application/ld+json"
-    set:html={JSON.stringify(timetableJsonLd)}
+  <JsonLd
+    data={webApplicationJsonLd({
+      path: "/timetable",
+      description: siteConfig.metatags.timetable.desc
+    })}
   />
   <TimetablePageContent client:load />
 

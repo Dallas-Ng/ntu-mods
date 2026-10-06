@@ -3,6 +3,7 @@ import { siteConfig } from "@/config/site"
 import { collectionPageJsonLd } from "@/lib/json-ld"
 import ArticlesList from "@/components/articles/articles-list"
 import Header from "@/components/header"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 import { getAllArticles, getArticleCategories } from "@/astro/lib/articles"
 
@@ -53,10 +54,7 @@ const articlesJsonLd = collectionPageJsonLd({
   ogImageAlt="NTUMods guides for NTU students, including NTULearn, FGO and degree audit"
   size="md"
   containerClassName="space-y-3">
-  <script
-    type="application/ld+json"
-    set:html={JSON.stringify(articlesJsonLd)}
-  />
+  <JsonLd data={articlesJsonLd} />
   <Header
     title="Articles"
     subtitle="Guides, updates, and notes from NTUMods."

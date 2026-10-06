@@ -4,6 +4,7 @@ import { collectionPageJsonLd } from "@/lib/json-ld"
 import { getModuleUrl } from "@/lib/module-url"
 import { getAllModuleMetadata, getLatestSemester } from "@/lib/server/db/repo"
 import ModsPage from "@/components/mods/mods-page"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 // The interactive browser is client-rendered (search/filter state lives in the
@@ -43,7 +44,7 @@ const modsJsonLd = collectionPageJsonLd({
   canonical="/mods"
   ogImage={`${siteConfig.url}/og/mods.png`}
   ogImageAlt="NTUMods module browser searching NTU modules, listing Digital Logic and other SC modules">
-  <script type="application/ld+json" set:html={JSON.stringify(modsJsonLd)} />
+  <JsonLd data={modsJsonLd} />
   <ModsPage client:load />
 
   <section class="mt-10 space-y-3 border-t pt-8" aria-labelledby="mods-about">

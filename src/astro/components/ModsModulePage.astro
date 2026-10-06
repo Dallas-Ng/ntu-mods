@@ -1,6 +1,7 @@
 ---
 import { siteConfig } from "@/config/site"
 import { generateTimetableMatrix } from "@/lib/generate-timetable-matrix"
+import { breadcrumbListJsonLd, courseJsonLd } from "@/lib/json-ld"
 import { getModuleVersionUrl } from "@/lib/module-url"
 import type {
   DbExam,
@@ -18,6 +19,7 @@ import ModsPrerequisiteGraph from "@/components/mods/mods-prerequisite-graph"
 import ModsViewTracker from "@/components/mods/mods-view-tracker"
 import ModsWorkloadTable from "@/components/mods/mods-workload-table"
 import RelatedModules from "@/components/related-modules"
+import JsonLd from "@/astro/components/JsonLd.astro"
 
 // Shared body for the /mods/[module] "current offering" view — used by both
 // the static build (active-semester codes) and the on-demand fallback in
@@ -79,37 +81,16 @@ const sortedYears = Object.keys(offeringsByYear).sort((a, b) =>
 )
 
 const jsonLd = [
-  {
-    "@context": "https://schema.org",
-    "@type": "Course",
-    name: `${moduleKey} ${moduleData.title}`,
-    courseCode: moduleKey,
+  courseJsonLd({
+    code: moduleKey,
+    title: moduleData.title,
     description: moduleData.description || moduleData.title,
-    numberOfCredits: String(moduleData.au),
-    provider: {
-      "@type": "CollegeOrUniversity",
-      name: "Nanyang Technological University",
-      sameAs: "https://www.ntu.edu.sg"
-    }
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Mods",
-        item: `${siteConfig.url}/mods`
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: `${moduleKey} ${moduleData.title}`,
-        item: `${siteConfig.url}/mods/${moduleKey}`
-      }
-    ]
-  }
+    credits: moduleData.au
+  }),
+  breadcrumbListJsonLd([
+    { name: "Mods", href: "/mods" },
+    { name: `${moduleKey} ${moduleData.title}`, href: `/mods/${moduleKey}` }
+  ])
 ]
 ---
 
@@ -271,4 +252,4 @@ const jsonLd = [
   }
 </div>
 
-<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+<JsonLd data={jsonLd} />

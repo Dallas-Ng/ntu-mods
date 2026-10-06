@@ -23,9 +23,8 @@ const ModsHeader = ({
     <div className="space-y-2">
       <Breadcrumbs
         breadcrumbs={[
-          { name: "Mods", label: "Mods", href: "/mods" },
+          { label: "Mods", href: "/mods" },
           {
-            name: module.code,
             label: module.code,
             href: `/mods/${module.code}`
           }

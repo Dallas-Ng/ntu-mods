@@ -1,4 +1,5 @@
 ---
+import { siteConfig } from "@/config/site"
 import {
   getLatestExamSemester,
   getSemesterExamsData
@@ -36,6 +37,7 @@ const total = examList.length
   title={`NTU Exam Schedule ${label}`}
   description={`Browse ${total} NTU exams for ${label}. Search by module code or name, and check exam dates, times, and durations.`}
   canonical="/exams"
+  ogImage={`${siteConfig.url}/og/exams.png`}
   size="md"
   containerClassName="space-y-6">
   <div class="flex items-end justify-between gap-4">

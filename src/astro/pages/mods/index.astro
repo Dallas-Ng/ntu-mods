@@ -12,6 +12,7 @@ export const prerender = true
 <BaseLayout
   title={siteConfig.metatags.mods.title}
   description={siteConfig.metatags.mods.desc}
-  canonical="/mods">
+  canonical="/mods"
+  ogImage={`${siteConfig.url}/og/mods.png`}>
   <ModsPage client:load />
 </BaseLayout>

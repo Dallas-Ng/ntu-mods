@@ -40,22 +40,17 @@ const websiteJsonLd = {
       <LandingProduct />
     </div>
 
-    <img
-      height="600"
-      width="900"
-      loading="eager"
-      alt="some cool waves"
-      src="/landing/product-bg.svg"
-      class="absolute bottom-1/2 left-0 z-[1] hidden w-full lg:block"
-    />
-    <img
-      height="600"
-      width="900"
-      loading="eager"
-      alt="some cool waves"
-      src="/landing/product-bg.svg"
-      class="absolute top-1/2 z-[1] hidden w-full rotate-180 lg:block"
-    />
+    {/* CSS backgrounds, not <img>: crawlers/AI previews pick <img> as the page thumbnail */}
+    <div
+      aria-hidden="true"
+      class="absolute bottom-1/2 left-0 z-[1] hidden aspect-[3/2] w-full bg-[url('/landing/product-bg.svg')] bg-cover lg:block"
+    >
+    </div>
+    <div
+      aria-hidden="true"
+      class="absolute top-1/2 z-[1] hidden aspect-[3/2] w-full rotate-180 bg-[url('/landing/product-bg.svg')] bg-cover lg:block"
+    >
+    </div>
   </div>
 
   <div class="relative z-[3] mt-10 space-y-10 p-3">

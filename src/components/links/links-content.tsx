@@ -1,7 +1,10 @@
+import { useState } from "react"
+import { Search } from "lucide-react"
 import type { ArticleHeading } from "@/lib/server/articles"
 import Container from "@/components/container"
 import Header from "@/components/header"
 import LinkCard from "@/components/links/link-card"
+import { Input } from "@/components/ui/input"
 
 interface InternalLink {
   name: string
@@ -93,6 +96,16 @@ const LINK_CATEGORIES: LinkCategory[] = [
         name: "Academic Calendar",
         href: "https://www.ntu.edu.sg/admissions/matriculation/academic-calendars",
         desc: "Semester dates, reading week, and exam period schedule"
+      },
+      {
+        name: "Course Content",
+        href: "https://wish.wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main",
+        desc: "Official module descriptions, AUs, and prerequisites by programme"
+      },
+      {
+        name: "Student Email",
+        href: "https://outlook.com/e.ntu.edu.sg",
+        desc: "Office 365 EDU mailbox and calendar (username@e.ntu.edu.sg)"
       }
     ]
   },
@@ -110,6 +123,26 @@ const LINK_CATEGORIES: LinkCategory[] = [
         name: "Facilities Booking",
         href: "https://ntu.facilitiesbooking.com/bookings.aspx",
         desc: "Book sports halls and other campus facilities"
+      },
+      {
+        name: "NTU Library",
+        href: "https://www.ntu.edu.sg/library",
+        desc: "OneSearch, e-resources, and library opening hours"
+      },
+      {
+        name: "Campus Shuttle",
+        href: "https://ntu.edu.sg/about-us/visiting-ntu/internal-campus-shuttle",
+        desc: "Campus loop and Pioneer MRT bus routes, timings, and the Omnibus app"
+      },
+      {
+        name: "Housing",
+        href: "https://www.ntu.edu.sg/life-at-ntu/accommodation",
+        desc: "On-campus hall and residence information and applications"
+      },
+      {
+        name: "Student Wellbeing",
+        href: "https://www.ntu.edu.sg/life-at-ntu/student-life/campus-life-and-wellbeing/ntu-wellbeing/student-wellbeing-services",
+        desc: "University Counselling Centre and mental health support"
       }
     ]
   },
@@ -149,6 +182,16 @@ const LINK_CATEGORIES: LinkCategory[] = [
         name: "Financial Aid",
         href: "https://www.ntu.edu.sg/admissions/undergraduate/financial-matters/financial-aid",
         desc: "Bursaries, loans, and financial assistance options"
+      },
+      {
+        name: "Fee Payment",
+        href: "https://ntuadminonestop.service-now.com/ntussp",
+        desc: "Pay tuition and other fees through the One Stop portal"
+      },
+      {
+        name: "IT Helpdesk",
+        href: "https://www.ntu.edu.sg/life-at-ntu/internet-account-and-policy/contact-service-desk",
+        desc: "Network account, wifi, and technical support contacts"
       }
     ]
   }
@@ -169,13 +212,23 @@ interface Props {
 }
 
 const LinksContent = ({ children }: Props) => {
+  const [query, setQuery] = useState("")
+  const q = query.trim().toLowerCase()
+  const visible = LINK_CATEGORIES.map((c) => ({
+    ...c,
+    links: c.links.filter(
+      ({ name, desc }) =>
+        !q || `${name} ${desc} ${c.title}`.toLowerCase().includes(q)
+    )
+  })).filter((c) => c.links.length > 0)
+
   return (
     <Container size="md">
       <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
         <div className="space-y-8">
           <Header
             title="Student Links"
-            subtitle="Quick links to the most-used NTU student portals — from course registration and grades to career, exchange, and campus facilities."
+            subtitle="Quick links to the most-used NTU student portals, from course registration and grades to career, exchange, and campus facilities."
           />
 
           <p className="text-muted-foreground text-sm">
@@ -188,14 +241,31 @@ const LinksContent = ({ children }: Props) => {
             for a breakdown of every portal and when to use it.
           </p>
 
+          <div className="relative">
+            <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+            <Input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search links, e.g. fees, library, email"
+              aria-label="Search links"
+              className="pl-9"
+            />
+          </div>
+
           <div className="space-y-10">
-            {LINK_CATEGORIES.map(({ id, title, type, links }) => (
+            {visible.length === 0 && (
+              <p className="text-muted-foreground text-sm">
+                No links match &ldquo;{query.trim()}&rdquo;.
+              </p>
+            )}
+            {visible.map(({ id, title, type, links }) => (
               <section id={id} key={id} className="scroll-mt-20 space-y-4">
                 <div className="space-y-0.5">
                   <h2 className="text-xl font-semibold">{title}</h2>
                   <p className="text-muted-foreground text-xs">
                     {type === "internal"
-                      ? "NTUMods — unofficial"
+                      ? "NTUMods (unofficial)"
                       : "Official NTU portal"}
                   </p>
                 </div>

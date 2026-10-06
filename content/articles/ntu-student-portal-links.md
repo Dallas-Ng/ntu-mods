@@ -1,8 +1,8 @@
 ---
 title: "NTU STARS, NTULearn & Student Portal Links (All-in-One List)"
-description: "Direct links to every NTU student portal — STARS for course registration, NTULearn for course materials, Degree Audit for grades, CareerAxis for jobs, GEM for exchange, and more."
+description: "Direct links to every NTU student portal: STARS for course registration, NTULearn for course materials, Degree Audit for grades, CareerAxis for jobs, GEM for exchange, student email, fee payment, and more."
 date: "2026-06-22"
-updated: "2026-09-22"
+updated: "2026-10-06"
 author: "NTUMods"
 category: "General"
 tags: ["NTU portals", "ntu portal", "NTU student links", "NTU websites", "STARS NTU", "NTULearn", "Degree Audit NTU", "NTU student guide", "NTU resources", "NTU online portals", "NTU student portal list"]
@@ -77,6 +77,20 @@ The **NTU Academic Calendar** lists semester start and end dates, recess week, r
 - **URL**: [ntu.edu.sg/admissions/matriculation/academic-calendars](https://www.ntu.edu.sg/admissions/matriculation/academic-calendars)
 - **When to use**: At the start of each academic year to plan internships, travel, and commitments around official semester dates
 
+### Where can I check official module descriptions?
+
+**Course Content** is NTU's official module database. Search by academic year, semester, and programme to see each module's description, AUs, prerequisites, and mutual exclusions. Check it before you commit a module to your plan, and compare it with the [NTUMods Module Browser](/mods) for schedules and exam dates.
+
+- **URL**: [wish.wis.ntu.edu.sg (Course Content)](https://wish.wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main)
+- **When to use**: Before each registration round, and whenever you need the official prerequisite or AU information for a module
+
+### How do I access my NTU student email?
+
+Every student has an **Office 365 EDU** mailbox in the form `username@e.ntu.edu.sg`. Professors, schools, and administrative offices send official notices here, so check it regularly. Accounts issued since November 2022 require two-factor authentication.
+
+- **URL**: [outlook.com/e.ntu.edu.sg](https://outlook.com/e.ntu.edu.sg)
+- **When to use**: Daily, especially around registration, results, and exam periods
+
 ## Library and Campus
 
 ### How do NTU students book study rooms?
@@ -88,6 +102,28 @@ The **NTU Academic Calendar** lists semester start and end dates, recess week, r
 **Facilities Booking** covers campus spaces outside the library: sports halls, tennis courts, futsal courts, and outdoor spaces.
 
 - **URL**: [ntu.facilitiesbooking.com](https://ntu.facilitiesbooking.com/bookings.aspx)
+
+**NTU Library** is the main library site. It has OneSearch for books and articles, e-resources and databases, and the opening hours for each library branch.
+
+- **URL**: [ntu.edu.sg/library](https://www.ntu.edu.sg/library)
+
+### How do I get around the NTU campus?
+
+The **Campus Shuttle** page lists the Campus Loop Blue and Red routes, the Campus Rider to Pioneer MRT, operating hours, and the NTU Omnibus app for live bus tracking.
+
+- **URL**: [ntu.edu.sg (Campus Shuttle)](https://ntu.edu.sg/about-us/visiting-ntu/internal-campus-shuttle)
+
+### Where can I find NTU housing information?
+
+The **Housing** page covers on-campus halls and residences, eligibility, and how to apply. New students are guaranteed on-campus housing for their first two years of study.
+
+- **URL**: [ntu.edu.sg/life-at-ntu/accommodation](https://www.ntu.edu.sg/life-at-ntu/accommodation)
+
+### Where can I get counselling or wellbeing support?
+
+**Student Wellbeing Services** lists the University Counselling Centre and other mental health support for NTU students. The 24-hour crisis line is 6514 1911.
+
+- **URL**: [ntu.edu.sg (Student Wellbeing Services)](https://www.ntu.edu.sg/life-at-ntu/student-life/campus-life-and-wellbeing/ntu-wellbeing/student-wellbeing-services)
 
 ## Career and Exchange
 
@@ -121,6 +157,19 @@ The **NTU Financial Aid** page covers bursaries, study loans, Mendaki, and other
 
 - **URL**: [ntu.edu.sg/admissions/undergraduate/financial-matters/financial-aid](https://www.ntu.edu.sg/admissions/undergraduate/financial-matters/financial-aid)
 
+### How do NTU students pay fees?
+
+**Fee Payment** is handled through the One Stop portal, where matriculated students can view their bills and pay online. NTU also encourages eGIRO for automatic deductions, which helps you avoid late charges.
+
+- **URL**: [ntuadminonestop.service-now.com](https://ntuadminonestop.service-now.com/ntussp)
+- **When to use**: When a new e-bill is issued each semester, or to check your payment status
+
+### Where do I get IT help?
+
+The **IT Helpdesk** page lists how to reach NTU IT support for network account, wifi, VPN, and email problems, including the hotline and the One Stop Tech Lounge walk-in counter.
+
+- **URL**: [ntu.edu.sg (IT Service Desk)](https://www.ntu.edu.sg/life-at-ntu/internet-account-and-policy/contact-service-desk)
+
 ## Frequently Asked Questions
 
 **What is the main NTU student portal?**
@@ -130,7 +179,7 @@ NTU does not have a single unified portal. Students use different systems for di
 Your student ID is printed on your NTU student card. It is also visible in Degree Audit and the Self-Help Transcript portal after you log in.
 
 **How do I access NTU portals off-campus?**
-Most NTU portals are publicly accessible. Some library eResources require you to log in with your NTU credentials or connect via VPN. Contact the NTU IT Help Centre for VPN setup instructions.
+Most NTU portals are publicly accessible. Some library eResources require you to log in with your NTU credentials or connect via VPN. Contact the [NTU IT Helpdesk](https://www.ntu.edu.sg/life-at-ntu/internet-account-and-policy/contact-service-desk) for VPN setup instructions.
 
 **What portal does NTU use for course materials?**
 NTU uses NTULearn — accessible at [ntulearn.ntu.edu.sg](https://ntulearn.ntu.edu.sg/ultra/institution-page). It runs on Blackboard Ultra.

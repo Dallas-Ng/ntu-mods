@@ -36,6 +36,25 @@ interface ArticlesListProps {
 
 const ALL_CATEGORIES = "all"
 const GROUP_BY_CATEGORY = "category"
+const SORT_GROUPS: { heading: string; options: [string, string][] }[] = [
+  {
+    heading: "Date",
+    options: [
+      ["", "Newest"],
+      ["oldest", "Oldest"]
+    ]
+  },
+  {
+    heading: "Views",
+    options: [
+      ["views", "Most viewed"],
+      ["views-asc", "Least viewed"]
+    ]
+  }
+]
+const SORT_LABELS = Object.fromEntries(
+  SORT_GROUPS.flatMap((group) => group.options)
+)
 
 const getCategoryParam = (category: string) =>
   category
@@ -58,10 +77,12 @@ const formatArticleDate = (date: string) =>
 
 function ArticleCard({
   article,
-  showCategory
+  showCategory,
+  views
 }: {
   article: ArticleListItem
   showCategory: boolean
+  views?: number
 }) {
   return (
     <a
@@ -79,6 +100,14 @@ function ArticleCard({
           <span>{formatArticleDate(article.date)}</span>
           <span aria-hidden="true">·</span>
           <span>{article.readingTime}</span>
+          {views !== undefined && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>
+                {views.toLocaleString("en-SG")} {views === 1 ? "view" : "views"}
+              </span>
+            </>
+          )}
           {showCategory && (
             <>
               <span aria-hidden="true">·</span>
@@ -110,6 +139,9 @@ export default function ArticlesList({
   const queryParam = searchParams.get("q") ?? ""
   const categoryParam = searchParams.get("category") ?? ALL_CATEGORIES
   const groupParam = searchParams.get("group") ?? ""
+  const rawSort = searchParams.get("sort") ?? ""
+  const sortParam = Object.hasOwn(SORT_LABELS, rawSort) ? rawSort : ""
+  const [views, setViews] = useState<Record<string, number>>()
   const [searchQuery, setSearchQuery] = useState(queryParam)
   const debouncedSearchQuery = useDebounce(searchQuery, 250)
 
@@ -138,6 +170,13 @@ export default function ArticlesList({
     },
     [pathname, searchParams]
   )
+
+  useEffect(() => {
+    fetch("/api/article-views")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => data?.views && setViews(data.views))
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     setSearchQuery(queryParam)
@@ -174,12 +213,14 @@ export default function ArticlesList({
   const hasCategory = activeCategory !== ALL_CATEGORIES
   const hasGrouping = groupParam === GROUP_BY_CATEGORY
   const isGrouped = hasGrouping && !hasCategory
-  const hasActiveFilters = hasSearch || hasCategory || hasGrouping
+  const sortLabel = SORT_LABELS[sortParam]
+  const hasSorting = sortParam !== ""
+  const hasActiveFilters = hasSearch || hasCategory || hasGrouping || hasSorting
 
   const filteredArticles = useMemo(() => {
     const normalisedQuery = queryParam.trim().toLowerCase()
 
-    return articles.filter((article) => {
+    const matches = articles.filter((article) => {
       const matchesCategory =
         activeCategory === ALL_CATEGORIES ||
         getCategoryParam(article.category) === activeCategoryParam
@@ -189,7 +230,24 @@ export default function ArticlesList({
 
       return matchesCategory && matchesSearch
     })
-  }, [activeCategory, activeCategoryParam, articles, queryParam])
+
+    // Input is newest first and Array.sort is stable, so view ties stay newest first.
+    if (sortParam === "oldest") return matches.reverse()
+    if (sortParam.startsWith("views")) {
+      const dir = sortParam === "views" ? -1 : 1
+      return matches.sort(
+        (a, b) => dir * ((views?.[a.slug] ?? 0) - (views?.[b.slug] ?? 0))
+      )
+    }
+    return matches
+  }, [
+    activeCategory,
+    activeCategoryParam,
+    articles,
+    queryParam,
+    sortParam,
+    views
+  ])
 
   const shouldGroup = isGrouped
 
@@ -231,6 +289,43 @@ export default function ArticlesList({
             onChange={(event) => setSearchQuery(event.target.value)}
           />
         </div>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant="outline"
+              className={cn(
+                "justify-between sm:w-44",
+                hasSorting && "ring-ring rounded-md ring-1"
+              )}>
+              <span className="truncate">{sortLabel}</span>
+              <ChevronDown className="size-4 opacity-60" />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-48 p-1">
+            {SORT_GROUPS.map(({ heading, options }) => (
+              <div key={heading}>
+                <p className="text-muted-foreground px-2 pt-1.5 pb-1 text-xs font-medium">
+                  {heading}
+                </p>
+                {options.map(([value, label]) => (
+                  <PopoverClose
+                    key={label}
+                    className="hover:bg-accent flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors"
+                    onClick={() => updateParams({ sort: value || null })}>
+                    <Check
+                      className={cn(
+                        "size-4",
+                        sortParam === value ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    <span className="truncate">{label}</span>
+                  </PopoverClose>
+                ))}
+              </div>
+            ))}
+          </PopoverContent>
+        </Popover>
 
         <Popover>
           <PopoverTrigger asChild>
@@ -320,14 +415,14 @@ export default function ArticlesList({
         </Popover>
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex min-h-6 flex-wrap items-center justify-between gap-2">
         <p className="text-muted-foreground text-sm">
           {filteredArticles.length}{" "}
           {filteredArticles.length === 1 ? "article" : "articles"}
         </p>
 
         {hasActiveFilters && (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap justify-end gap-2">
             {hasSearch && (
               <Button
                 variant="secondary"
@@ -337,6 +432,15 @@ export default function ArticlesList({
                   updateParams({ q: null })
                 }}>
                 <span>&quot;{queryParam}&quot;</span>
+                <X className="size-3" />
+              </Button>
+            )}
+            {hasSorting && (
+              <Button
+                variant="secondary"
+                size="xs"
+                onClick={() => updateParams({ sort: null })}>
+                Sort: {sortLabel}
                 <X className="size-3" />
               </Button>
             )}
@@ -374,6 +478,7 @@ export default function ArticlesList({
                       key={article.slug}
                       article={article}
                       showCategory={false}
+                      views={views?.[article.slug]}
                     />
                   ))}
                 </div>
@@ -387,6 +492,7 @@ export default function ArticlesList({
                 key={article.slug}
                 article={article}
                 showCategory={!hasCategory}
+                views={views?.[article.slug]}
               />
             ))}
           </div>

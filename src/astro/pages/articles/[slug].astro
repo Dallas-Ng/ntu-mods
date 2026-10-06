@@ -327,20 +327,43 @@ const pageDescription =
 
           {moreArticles.length > 0 && (
             <section class="mx-auto mt-10 max-w-3xl border-t pt-6 sm:mt-12 sm:pt-8">
-              <h2 class="text-xl font-semibold tracking-normal">
-                More articles
-              </h2>
+              <div class="flex items-baseline justify-between gap-3">
+                <h2 class="text-xl font-semibold tracking-normal">
+                  More articles
+                </h2>
+                <a
+                  href="/articles"
+                  class="text-primary text-sm underline-offset-4 hover:underline">
+                  View all articles
+                </a>
+              </div>
               <div class="mt-4 grid gap-3 sm:grid-cols-3">
                 {moreArticles.map((item) => (
                   <a
                     href={`/articles/${item.slug}`}
-                    class="bg-card hover:bg-accent rounded-md border p-3 transition-colors">
-                    <p class="line-clamp-2 text-sm font-medium break-words">
-                      {item.title}
-                    </p>
-                    <p class="text-foreground/70 mt-2 text-xs">
-                      {item.readingTime}
-                    </p>
+                    class="group bg-card hover:bg-accent rounded-lg border transition-colors">
+                    {item.thumbnail && (
+                      <img
+                        src={item.thumbnail}
+                        alt={item.thumbnailAlt}
+                        loading="lazy"
+                        class="aspect-video w-full rounded-t-md border-b object-cover"
+                      />
+                    )}
+                    <div class="p-3">
+                      <div class="text-foreground/70 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
+                        <span class="bg-muted text-muted-foreground rounded px-1.5 py-0.5">
+                          {item.category}
+                        </span>
+                        <span>{item.readingTime}</span>
+                      </div>
+                      <p class="group-hover:text-primary mt-2 line-clamp-2 text-sm font-medium break-words transition-colors">
+                        {item.title}
+                      </p>
+                      <p class="text-foreground/80 mt-1.5 line-clamp-2 text-xs leading-5 break-words">
+                        {item.description}
+                      </p>
+                    </div>
                   </a>
                 ))}
               </div>

@@ -49,6 +49,23 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "More student links",
+    date: "6 Oct 2026",
+    items: [
+      {
+        category: "Content",
+        content: (
+          <>
+            The <ChangelogLink href="/links">Links</ChangelogLink> page now
+            includes Course Content, Student Email, NTU Library, Campus
+            Shuttle, Housing, Student Wellbeing, Fee Payment, and the IT
+            Helpdesk. All links point to official NTU pages.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Mobile timetable rebuilt",
     date: "13 Aug 2026",
     items: [

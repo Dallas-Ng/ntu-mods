@@ -49,7 +49,7 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
-    title: "Articles, nav and footer polish",
+    title: "Articles, nav, footer and links polish",
     date: "6 Oct 2026",
     items: [
       {
@@ -85,13 +85,7 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         category: "Improvement",
         content:
           "Scrollbars now follow the dark theme instead of showing light system styling."
-      }
-    ]
-  },
-  {
-    title: "More student links",
-    date: "6 Oct 2026",
-    items: [
+      },
       {
         category: "Content",
         content: (

@@ -51,6 +51,7 @@ NTUMods solves the friction of NTU course planning. NTU's official registration 
 - Export timetable as a phone wallpaper image
 - Browse and search NTU exam dates, times, and durations by module
 - View module prerequisite relationships as an interactive graph
+- Work out the average grade needed for each honours class in the CGPA Planner
 - Work out which modules to Flexible-Grade (FGO) for the highest CGPA from an uploaded transcript, in the FGO Optimiser
 - Access curated quick-links to every major NTU student portal
 - Read guides on BDEs, Common Core, and module planning
@@ -96,7 +97,10 @@ Exports the planned timetable as an .ics file with recurring calendar events, co
 Generates a shareable URL encoding the full timetable. Recipients can view the timetable and copy it into their own NTUMods planner.
 
 ### Tools
-Index of free NTU student tools at ntumods.com/tools. It currently lists the FGO Optimiser (ntumods.com/tools/fgo-optimiser) and the Wallpaper Maker (ntumods.com/screenshot). All tools run in the browser and nothing the user enters is uploaded.
+Index of free NTU student tools at ntumods.com/tools. It currently lists the CGPA Planner (ntumods.com/tools/cgpa-planner), the FGO Optimiser (ntumods.com/tools/fgo-optimiser) and the Wallpaper Maker (ntumods.com/screenshot). All tools run in the browser and nothing the user enters is uploaded.
+
+### CGPA Planner
+Tool at ntumods.com/tools/cgpa-planner that shows NTU undergraduates the average grade they need over their remaining AU to reach each honours class. The user enters their CGPA, letter-graded AU completed and AU still to be letter-graded, or uploads their official transcript PDF, which is parsed entirely in the browser and never sent to a server. For Highest Distinction (4.50), Distinction (4.00), Merit (3.50) and Honours (3.00) it shows whether the class is already secured, within reach (with the average grade points and the nearest letter grade) or out of reach. Pass and No Record modules are excluded, as in NTU's CGPA. Some programmes set their own bands, and the tool is not official. Background reading: ntumods.com/articles/ntu-honours-classification-cgpa-guide.
 
 ### FGO Optimiser
 Tool at ntumods.com/tools/fgo-optimiser that helps NTU undergraduates choose which modules to put under the Flexible Grading Option (FGO). The user uploads their official NTU transcript PDF (or the NIE Academic Progress Report), which is parsed entirely in the browser with pdf.js and never sent to a server. The tool reads each module's AU and grade, calculates CGPA, and finds the set of eligible modules that gives the highest CGPA within the user's remaining FGO quota. It applies the programme quota (21 or 24 AU) and the 12 AU combined cap on Major Core, ICC and MPE courses, treats modules already graded Pass as FGO already used, lets the user add AU used earlier that no longer appear on the transcript (for example No Record modules), locks Final Year Projects and professional attachments, and shows the projected CGPA live. It does not check a programme's minimum letter-graded AU or academic sanctions, and it is not official. Background reading: ntumods.com/articles/ntu-fgo-su-option-guide.

@@ -41,7 +41,7 @@ export const Banner = {
   tools: () => (
     <a href="/tools">
       <BannerWrapper>
-        New: Tools section, starting with the FGO Optimiser for your best CGPA →
+        New: CGPA Planner and FGO Optimiser in the Tools section →
       </BannerWrapper>
     </a>
   ),

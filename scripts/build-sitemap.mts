@@ -85,6 +85,7 @@ const CORE_ROUTES = [
   "/privacy",
   "/timetable",
   "/tools",
+  "/tools/cgpa-planner",
   "/tools/fgo-optimiser"
 ]
 

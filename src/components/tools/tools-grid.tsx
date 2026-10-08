@@ -1,11 +1,12 @@
 "use client"
 
-import { ArrowRight, GraduationCap, Smartphone } from "lucide-react"
+import { ArrowRight, Calculator, GraduationCap, Smartphone } from "lucide-react"
 import posthog from "posthog-js"
 
 import { siteConfig } from "@/config/site"
 
 const ICONS = {
+  calculator: Calculator,
   "graduation-cap": GraduationCap,
   smartphone: Smartphone
 } as const

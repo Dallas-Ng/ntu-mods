@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest"
 
-import { gradedTotals, planBands, requiredAverage } from "@/lib/cgpa"
+import {
+  classFor,
+  gradedTotals,
+  planBands,
+  projectedCgpa,
+  requiredAverage
+} from "@/lib/cgpa"
 import { parseTranscriptLines } from "@/lib/fgo"
 
 describe("requiredAverage", () => {
@@ -44,5 +50,13 @@ describe("gradedTotals", () => {
       "SC2002 OOP 4.0 A"
     ])
     expect(gradedTotals(mods)).toEqual({ points: 3 * 3.5 + 4 * 5, au: 7 })
+  })
+})
+
+describe("projectedCgpa and classFor", () => {
+  it("blends the remaining AU into the CGPA", () => {
+    expect(projectedCgpa(3.5, 60, 60, 4.5)).toBeCloseTo(4)
+    expect(classFor(4)).toBe("Distinction")
+    expect(classFor(2.9)).toBeNull()
   })
 })

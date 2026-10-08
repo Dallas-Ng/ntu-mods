@@ -13,7 +13,7 @@ export const HONOURS_BANDS = [
 ] as const
 
 // Lowest first, so the first grade at or above a target is the lowest that works.
-const GRADES = [
+export const GRADES = [
   ["D", 1],
   ["D+", 1.5],
   ["C", 2],
@@ -62,6 +62,11 @@ export function requiredAverage(
   return (target * (doneAu + remainingAu) - cgpa * doneAu) / remainingAu
 }
 
+/** Lowest letter grade whose points reach `gp`, null above an A. */
+export function gradeFor(gp: number) {
+  return GRADES.find(([, pts]) => pts >= gp - 1e-9)?.[0] ?? null
+}
+
 export function planBands(
   cgpa: number,
   doneAu: number,
@@ -71,10 +76,22 @@ export function planBands(
     const required = requiredAverage(cgpa, doneAu, remainingAu, min)
     const status: BandStatus =
       required <= 0 ? "secured" : required > 5 ? "out of reach" : "possible"
-    const grade =
-      status === "possible"
-        ? (GRADES.find(([, gp]) => gp >= required - 1e-9)?.[0] ?? null)
-        : null
+    const grade = status === "possible" ? gradeFor(required) : null
     return { label, min, required, status, grade }
   })
+}
+
+/** CGPA after the remaining AU all earn `avg` grade points. */
+export function projectedCgpa(
+  cgpa: number,
+  doneAu: number,
+  remainingAu: number,
+  avg: number
+) {
+  return (cgpa * doneAu + avg * remainingAu) / (doneAu + remainingAu)
+}
+
+/** Highest honours class a CGPA reaches, or null below the lowest band. */
+export function classFor(cgpa: number) {
+  return HONOURS_BANDS.find((b) => cgpa >= b.min - 1e-9)?.label ?? null
 }

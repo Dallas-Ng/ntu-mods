@@ -144,7 +144,7 @@ const CgpaPlanner = () => {
         }}
       />
 
-      <section className="bg-card space-y-5 rounded-xl border p-5">
+      <section className="space-y-5 rounded-lg border-2 p-4">
         <h2 className="text-sm font-medium">Your grades so far</h2>
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
           <Field
@@ -174,15 +174,15 @@ const CgpaPlanner = () => {
         </div>
         <div className="flex flex-wrap items-center gap-2 border-t pt-4">
           <Button
-            variant="outline"
             size="sm"
             disabled={busy}
             onClick={() => input.current?.click()}>
             <Upload /> {busy ? "Reading..." : "Fill from transcript PDF"}
           </Button>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
+            disabled={busy}
             onClick={() => {
               setCgpa("3.72")
               setDoneAu("78")
@@ -190,11 +190,11 @@ const CgpaPlanner = () => {
               setError("")
               track("sample_loaded")
             }}>
-            Try sample
+            Try with sample data
           </Button>
           <p className="text-muted-foreground basis-full pt-1 text-xs">
             <Lock className="mr-1.5 inline size-3.5 align-[-2px]" /> Read in
-            your browser, never uploaded.{" "}
+            your browser. Nothing is uploaded.{" "}
             <a
               href={TRANSCRIPT_URL}
               onClick={() => track("transcript_link_clicked")}
@@ -209,7 +209,7 @@ const CgpaPlanner = () => {
       </section>
 
       {!active ? (
-        <p className="text-muted-foreground rounded-xl border border-dashed p-8 text-center text-sm">
+        <p className="text-muted-foreground rounded-lg border-2 border-dashed p-8 text-center text-sm">
           Enter your CGPA and AU to see the grades you need for each honours
           class.
         </p>
@@ -233,7 +233,7 @@ const CgpaPlanner = () => {
                   className={cn(
                     "bg-card space-y-1 rounded-lg border p-3 text-left transition-colors",
                     b === active
-                      ? "border-primary ring-primary ring-1"
+                      ? "border-primary bg-primary/5 ring-primary ring-1"
                       : "hover:bg-accent"
                   )}>
                   <p className="text-sm leading-tight font-medium">{b.label}</p>
@@ -254,7 +254,7 @@ const CgpaPlanner = () => {
             </div>
           </section>
 
-          <section className="bg-card space-y-4 rounded-xl border p-5">
+          <section className="space-y-4 rounded-lg border-2 p-4">
             <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
               {active.label} · CGPA {fmt(active.min)}+
             </p>
@@ -296,7 +296,7 @@ const CgpaPlanner = () => {
             )}
           </section>
 
-          <section className="bg-card space-y-5 rounded-xl border p-5">
+          <section className="space-y-5 rounded-lg border-2 p-4">
             <div className="space-y-1">
               <h2 className="text-sm font-medium">Where would you finish?</h2>
               <p className="text-muted-foreground text-xs">
@@ -307,7 +307,7 @@ const CgpaPlanner = () => {
             <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
               <div>
                 <p className="text-muted-foreground text-xs">If you average</p>
-                <p className="text-2xl font-semibold tabular-nums">
+                <p className="text-4xl font-semibold tabular-nums">
                   {gradeFor(avg)}{" "}
                   <span className="text-muted-foreground text-sm font-normal">
                     ({avg.toFixed(1)} points)
@@ -315,11 +315,18 @@ const CgpaPlanner = () => {
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-muted-foreground text-xs">You finish on</p>
+                <p className="text-muted-foreground text-xs">
+                  Projected final CGPA
+                </p>
                 <p className="flex items-baseline justify-end gap-2">
-                  <span className="text-2xl font-semibold tabular-nums">
+                  <span className="text-4xl font-semibold tabular-nums">
                     {fmt(final)}
                   </span>
+                  {final - c > 0.005 && (
+                    <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                      +{fmt(final - c)}
+                    </span>
+                  )}
                   <span
                     className={cn(
                       "rounded-full px-2 py-0.5 text-xs font-medium",

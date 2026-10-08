@@ -51,7 +51,7 @@ If you have completed D AU at a CGPA of C, and plan to take R more AU, the avera
 
 For example, 3.50 over 60 AU with 60 AU to go. To finish on 4.00, the remaining modules need an average of (4.00 × 120 − 3.50 × 60) ÷ 60 = 4.50, which means about an A- across the board. If the answer is above 5.0, the class is out of reach. If it is zero or less, it is already secured.
 
-The [NTUMods CGPA Planner](/tools/cgpa-planner) does this for every class at once. Enter your CGPA and AU, or upload your transcript from the [Self-Help Transcript System](/articles/ntu-student-portal-links) and it reads them for you in your browser.
+The [NTUMods CGPA Planner](/tools/cgpa-planner) does this for every class at once. Enter your CGPA and AU, or upload your transcript from the [Self-Help Transcript System](/articles/ntu-student-portal-links) and it reads them for you in your browser. The [CGPA Planner guide](/articles/ntu-cgpa-planner-guide) walks through it with a worked example.
 
 ## Tips
 

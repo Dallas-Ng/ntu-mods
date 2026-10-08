@@ -69,6 +69,22 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
             .
           </>
         )
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            Two new step-by-step guides with screenshots:{" "}
+            <ChangelogLink href="/articles/ntu-cgpa-planner-guide">
+              How to use the CGPA Planner
+            </ChangelogLink>{" "}
+            and{" "}
+            <ChangelogLink href="/articles/ntu-fgo-optimiser-guide">
+              How to use the FGO Optimiser
+            </ChangelogLink>
+            .
+          </>
+        )
       }
     ]
   },

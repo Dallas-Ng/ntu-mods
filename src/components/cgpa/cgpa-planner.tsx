@@ -84,39 +84,13 @@ function Field({
   )
 }
 
-/** Grade scale with a marker for the average the remaining AU need. */
-function Scale({ needed }: { needed: number }) {
-  return (
-    <div className="pt-2 pb-6">
-      <div className="bg-muted relative h-2.5 rounded-full">
-        <div
-          className="bg-primary absolute inset-y-0 left-0 rounded-full transition-all"
-          style={{ width: pct(needed) }}
-        />
-        <span
-          className="bg-background border-primary absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 transition-all"
-          style={{ left: pct(needed) }}
-        />
-        {SCALE.map(([g, gp]) => (
-          <span
-            key={g}
-            className="text-muted-foreground absolute top-5 -translate-x-1/2 text-[10px] tabular-nums"
-            style={{ left: pct(gp) }}>
-            {g}
-          </span>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 const CgpaPlanner = () => {
   const input = useRef<HTMLInputElement>(null)
   const [cgpa, setCgpa] = useState("")
   const [doneAu, setDoneAu] = useState("")
   const [leftAu, setLeftAu] = useState("")
   const [goal, setGoal] = useState("")
-  const [whatIf, setWhatIf] = useState(4)
+  const [whatIf, setWhatIf] = useState<number | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState("")
 
@@ -151,7 +125,11 @@ const CgpaPlanner = () => {
     bands.find((b) => b.label === goal) ??
     bands.find((b) => b.status === "possible") ??
     bands[0]
-  const final = valid ? projectedCgpa(c, d, r, whatIf) : 0
+  // Grades sit 0.5 apart, so the slider snaps to them. Until it is touched,
+  // assume the student keeps their current pace.
+  const avg = whatIf ?? Math.min(5, Math.max(1, Math.round(c * 2) / 2))
+  const final = valid ? projectedCgpa(c, d, r, avg) : 0
+  const finalClass = classFor(final)
 
   return (
     <div className="space-y-6">
@@ -167,6 +145,7 @@ const CgpaPlanner = () => {
       />
 
       <section className="bg-card space-y-5 rounded-xl border p-5">
+        <h2 className="text-sm font-medium">Your grades so far</h2>
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
           <Field
             id="cgpa"
@@ -238,6 +217,9 @@ const CgpaPlanner = () => {
         <>
           <section className="space-y-3">
             <h2 className="text-sm font-medium">Pick a goal</h2>
+            <p className="text-muted-foreground -mt-2 text-xs">
+              See the average grade it takes to finish in each class.
+            </p>
             <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
               {bands.map((b) => (
                 <button
@@ -272,69 +254,137 @@ const CgpaPlanner = () => {
             </div>
           </section>
 
-          <section className="bg-card space-y-3 rounded-xl border p-5">
-            <p className="text-muted-foreground text-sm">
-              To finish with {active.label} (CGPA {fmt(active.min)}), your next{" "}
-              {r} AU need
+          <section className="bg-card space-y-4 rounded-xl border p-5">
+            <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+              {active.label} · CGPA {fmt(active.min)}+
             </p>
             {active.status === "possible" && (
               <>
-                <p className="text-3xl font-semibold tracking-tight">
-                  {active.grade} or better{" "}
-                  <span className="text-muted-foreground mt-1 block text-base font-normal tabular-nums">
-                    on average ({fmt(active.required)} points)
-                  </span>
-                </p>
-                <Scale needed={active.required} />
+                <div className="space-y-1">
+                  <p className="text-3xl font-semibold tracking-tight">
+                    Average {active.grade} or better
+                  </p>
+                  <p className="text-muted-foreground text-sm">
+                    That is {fmt(active.required)} grade points or more across
+                    your remaining {r} AU.
+                  </p>
+                </div>
               </>
             )}
             {active.status === "secured" && (
-              <p className="text-xl font-semibold tracking-tight text-emerald-600 dark:text-emerald-400">
-                Nothing. It is already secured.
-              </p>
-            )}
-            {active.status === "out of reach" && (
-              <>
-                <p className="text-xl font-semibold tracking-tight">
-                  More than an A average, so it is out of reach.
+              <div className="space-y-1">
+                <p className="text-3xl font-semibold tracking-tight text-emerald-600 dark:text-emerald-400">
+                  Already secured
                 </p>
                 <p className="text-muted-foreground text-sm">
-                  Straight As over {r} AU would finish you on{" "}
+                  No set of grades over your remaining {r} AU can take you below{" "}
+                  {fmt(active.min)}.
+                </p>
+              </div>
+            )}
+            {active.status === "out of reach" && (
+              <div className="space-y-1">
+                <p className="text-3xl font-semibold tracking-tight">
+                  Out of reach
+                </p>
+                <p className="text-muted-foreground text-sm">
+                  It needs more than an A average. Straight As over your
+                  remaining {r} AU would finish you on{" "}
                   {fmt(projectedCgpa(c, d, r, 5))}.
                 </p>
-              </>
+              </div>
             )}
           </section>
 
-          <section className="bg-card space-y-3 rounded-xl border p-5">
-            <div className="flex items-baseline justify-between gap-3">
-              <label htmlFor="whatif" className="text-sm font-medium">
-                What if you average...
-              </label>
-              <span className="text-sm font-medium tabular-nums">
-                {fmt(whatIf)}
-                <span className="text-muted-foreground font-normal">
-                  {" "}
-                  about {gradeFor(whatIf) ?? "A"}
-                </span>
-              </span>
+          <section className="bg-card space-y-5 rounded-xl border p-5">
+            <div className="space-y-1">
+              <h2 className="text-sm font-medium">Where would you finish?</h2>
+              <p className="text-muted-foreground text-xs">
+                Drag to the average grade you expect over your remaining {r} AU.
+              </p>
             </div>
-            <input
-              id="whatif"
-              type="range"
-              min={1}
-              max={5}
-              step={0.1}
-              value={whatIf}
-              onChange={(e) => setWhatIf(Number(e.target.value))}
-              onPointerUp={() => track("what_if_used")}
-              className="accent-primary w-full"
-            />
-            <p className="text-sm">
-              You would finish on{" "}
-              <span className="font-semibold tabular-nums">{fmt(final)}</span>,{" "}
-              {classFor(final) ?? "below Honours"}.
-            </p>
+
+            <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+              <div>
+                <p className="text-muted-foreground text-xs">If you average</p>
+                <p className="text-2xl font-semibold tabular-nums">
+                  {gradeFor(avg)}{" "}
+                  <span className="text-muted-foreground text-sm font-normal">
+                    ({avg.toFixed(1)} points)
+                  </span>
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-muted-foreground text-xs">You finish on</p>
+                <p className="flex items-baseline justify-end gap-2">
+                  <span className="text-2xl font-semibold tabular-nums">
+                    {fmt(final)}
+                  </span>
+                  <span
+                    className={cn(
+                      "rounded-full px-2 py-0.5 text-xs font-medium",
+                      finalClass
+                        ? "bg-primary/10 text-primary"
+                        : "bg-muted text-muted-foreground"
+                    )}>
+                    {finalClass ?? "Below Honours"}
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              {active.status === "possible" && (
+                <div className="relative mx-2 h-5">
+                  <span
+                    className={cn(
+                      "text-primary absolute bottom-0 flex flex-col text-[11px] font-medium whitespace-nowrap",
+                      active.required > 4
+                        ? "-translate-x-full items-end"
+                        : active.required < 2
+                          ? "items-start"
+                          : "-translate-x-1/2 items-center"
+                    )}
+                    style={{ left: pct(active.required) }}>
+                    {active.label} needs {fmt(active.required)}
+                  </span>
+                </div>
+              )}
+              <div className="relative">
+                {active.status === "possible" && (
+                  <span
+                    aria-hidden
+                    className="bg-primary absolute -top-1 h-2 w-px"
+                    style={{
+                      left: `calc(0.5rem + (100% - 1rem) * ${(active.required - 1) / 4})`
+                    }}
+                  />
+                )}
+                <input
+                  id="whatif"
+                  type="range"
+                  aria-label="Average grade points over your remaining AU"
+                  min={1}
+                  max={5}
+                  step={0.5}
+                  value={avg}
+                  onChange={(e) => setWhatIf(Number(e.target.value))}
+                  onPointerUp={() => track("what_if_used")}
+                  className="accent-primary block w-full cursor-pointer"
+                />
+              </div>
+              {/* Inset by the thumb radius so letters line up with the thumb */}
+              <div className="relative mx-2 h-3">
+                {SCALE.map(([g, gp]) => (
+                  <span
+                    key={g}
+                    className="text-muted-foreground absolute -translate-x-1/2 text-[10px]"
+                    style={{ left: pct(gp) }}>
+                    {g}
+                  </span>
+                ))}
+              </div>
+            </div>
           </section>
 
           <p className="text-muted-foreground text-xs">

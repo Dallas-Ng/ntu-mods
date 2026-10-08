@@ -20,7 +20,7 @@ const GRADE_POINTS: Record<string, number> = {
 
 // FYP and work attachments cannot be FGO'd per NTU policy.
 const LOCKED_NAME_RE =
-  /FINAL YEAR PROJECT|HONOURS PROJECT|PROFESSIONAL (ATTACHMENT|INTERNSHIP)|INDUSTRIAL ATTACHMENT|INTERNSHIP/i
+  /FINAL YEAR PROJECT|HONOURS PROJECT|ATTACHMENT|INTERNSHIP/i
 
 const TERM_RE = /^(\d{4}-\d{4})\s+(SEMESTER\s+\d|SPECIAL TERM(?:\s+\d)?)/i
 // pdf.js merges a long name with the AU next to it ("SECURITY3.0"), so the gap
@@ -73,7 +73,7 @@ export function parseTranscriptLines(lines: string[]): ParsedTranscript {
     const m = ROW_RE.exec(line)
     if (!m || !term) continue
     const [, code, name = "", au, grade] = m
-    const g = grade.toUpperCase() === "PASS" ? "PASS" : grade
+    const g = grade.toUpperCase()
     const gp = GRADE_POINTS[g]
     const status: ModStatus =
       gp !== undefined ? "graded" : g === "PASS" ? "fgo" : "other"
@@ -112,8 +112,6 @@ export interface ExtraUsage {
   bde: number
 }
 
-export const NO_EXTRA: ExtraUsage = { core: 0, bde: 0 }
-
 /**
  * Quota used so far: modules already Pass on the transcript, the picks, and
  * `extra` for earlier FGO / S/U that the transcript hides (a No Record module
@@ -123,7 +121,7 @@ export function quotaUsage(
   mods: Mod[],
   picked: ReadonlySet<string>,
   bde: ReadonlySet<string>,
-  extra: ExtraUsage = NO_EXTRA
+  extra: ExtraUsage = { core: 0, bde: 0 }
 ) {
   let total = extra.core + extra.bde
   let core = extra.core

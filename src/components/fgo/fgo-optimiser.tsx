@@ -71,23 +71,6 @@ const SAMPLE_LINES = [
   "SC4079 FINAL YEAR PROJECT 8.0 A-"
 ]
 
-function Frame({
-  header,
-  children
-}: {
-  header: React.ReactNode
-  children: React.ReactNode
-}) {
-  return (
-    <div className="overflow-hidden rounded-lg border-2">
-      <div className="bg-muted/50 text-muted-foreground flex items-center gap-3 border-b px-3 py-2 text-xs font-medium tracking-wide uppercase">
-        {header}
-      </div>
-      <div className="divide-y">{children}</div>
-    </div>
-  )
-}
-
 export default function FgoOptimiser() {
   const [data, setData] = useState<ParsedTranscript | null>(null)
   const [fileName, setFileName] = useState("")

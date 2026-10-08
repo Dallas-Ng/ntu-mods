@@ -28,10 +28,7 @@ const FOOTER_GROUPS = [
       { label: "FAQ", href: "/faq" }
     ]
   }
-] as const satisfies readonly {
-  title: string
-  links: readonly { label: string; href: string }[]
-}[]
+]
 
 const LEGAL_LINKS = [
   { label: "Privacy", href: "/privacy" },

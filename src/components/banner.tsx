@@ -38,6 +38,13 @@ export const Banner = {
       Optimsed for website, mobile support coming soon!
     </BannerWrapper>
   ),
+  tools: () => (
+    <a href="/tools">
+      <BannerWrapper>
+        New: Tools section, starting with the FGO Optimiser for your best CGPA →
+      </BannerWrapper>
+    </a>
+  ),
   updatedAy: () => (
     <a href="/changelog">
       <BannerWrapper>NTU Mods has new features!</BannerWrapper>

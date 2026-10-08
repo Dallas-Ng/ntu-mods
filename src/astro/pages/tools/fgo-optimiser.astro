@@ -1,0 +1,164 @@
+---
+import { siteConfig } from "@/config/site"
+import {
+  breadcrumbListJsonLd,
+  faqPageJsonLd,
+  webApplicationJsonLd
+} from "@/lib/json-ld"
+import Breadcrumbs from "@/components/breadcrumbs"
+import FgoOptimiser from "@/components/fgo/fgo-optimiser"
+import Header from "@/components/header"
+import JsonLd from "@/astro/components/JsonLd.astro"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
+
+const { title, desc } = siteConfig.metatags.fgo
+
+const GUIDES = [
+  {
+    href: "/articles/ntu-fgo-su-option-guide",
+    title: "NTU FGO: What It Is and How It Works",
+    description:
+      "Quotas, which modules are excluded, when to declare, and why declarations are final."
+  },
+  {
+    href: "/articles/ntu-student-portal-links",
+    title: "NTU Student Portals",
+    description:
+      "Where to find the FGO portal and the Self-Help Transcript System."
+  },
+  {
+    href: "/articles/ntu-degree-audit-guide",
+    title: "NTU Degree Audit",
+    description:
+      "Check your graduation requirements, including letter-graded minimums."
+  },
+  {
+    href: "/articles/ntu-academic-calendar-ay2026",
+    title: "NTU Academic Calendar AY2026/2027",
+    description: "When results are released and FGO declaration windows open."
+  }
+]
+
+const FAQ = [
+  {
+    question: "Is my transcript uploaded anywhere?",
+    answer:
+      "No. The PDF is read inside your browser and the module list never leaves your device. NTUMods has no server that receives your transcript. Anonymous usage counts, such as how many modules were picked, are recorded to improve the tool, never module codes, names or grades."
+  },
+  {
+    question: "What if I have already used FGO before?",
+    answer:
+      "Modules graded Pass on your transcript are detected and counted against your quota. Set each one to Core or BDE, because the 12 AU cap covers only Major Core, ICC and MPE. A module you declared FGO on and failed becomes No Record and disappears from the transcript, so add those AU in the Not on your transcript fields. Your FGO portal shows the exact balance."
+  },
+  {
+    question: "How does the optimiser choose which modules to FGO?",
+    answer:
+      "It tests every combination of eligible modules that fits your remaining quota and the 12 AU cap for Major Core, ICC and MPE, then keeps the set that gives the highest CGPA. Failed modules and low grades in high AU modules help most, since they leave your CGPA while the AU still count for a Pass."
+  },
+  {
+    question: "Which modules cannot be Flexible-Graded?",
+    answer:
+      "Final Year Projects, Professional Internships and Attachments, and modules with an academic sanction. The tool locks Final Year Projects and attachments automatically. It cannot see academic sanctions, so check those yourself."
+  },
+  {
+    question: "Does it check my minimum letter-graded AU?",
+    answer:
+      "No. Programmes require a minimum number of letter-graded Major Core and MPE AU for graduation. Check that figure in your Academic Handbook before you declare."
+  },
+  {
+    question: "Is the FGO Optimiser official?",
+    answer:
+      "No. It is an unofficial NTUMods tool and is not affiliated with NTU. Confirm your final list against the official FGO portal. Declarations cannot be undone."
+  }
+]
+---
+
+<BaseLayout
+  title={title}
+  description={desc}
+  canonical="/tools/fgo-optimiser"
+  ogImage={`${siteConfig.url}/og/links.png`}
+  ogImageAlt="NTUMods FGO Optimiser: pick the modules to Flexible-Grade for the highest CGPA"
+  size="md"
+  containerClassName="space-y-8">
+  <JsonLd
+    data={[
+      webApplicationJsonLd({
+        name: "NTUMods FGO Optimiser",
+        path: "/tools/fgo-optimiser",
+        description: desc
+      }),
+      breadcrumbListJsonLd([
+        { name: "Tools", href: "/tools" },
+        { name: "FGO Optimiser", href: "/tools/fgo-optimiser" }
+      ]),
+      faqPageJsonLd(FAQ)
+    ]}
+  />
+
+  <div class="space-y-3">
+    <Breadcrumbs
+      breadcrumbs={[
+        { href: "/tools", label: "Tools" },
+        { href: "/tools/fgo-optimiser", label: "FGO Optimiser" }
+      ]}
+    />
+    <Header
+      title="NTU FGO Optimiser"
+      subtitle="Upload your transcript and find the modules to Flexible-Grade for the highest CGPA."
+    />
+  </div>
+
+  <div>
+    <FgoOptimiser client:load />
+  </div>
+
+  <section class="space-y-3 border-t pt-10" aria-labelledby="about-fgo">
+    <h2 id="about-fgo" class="text-lg font-semibold tracking-tight">
+      About the Flexible Grading Option
+    </h2>
+    <p class="text-muted-foreground max-w-3xl text-sm leading-relaxed">
+      The Flexible Grading Option (FGO) lets NTU undergraduates convert eligible
+      course grades into Pass (P) or No Record (NR) so they do not affect CGPA.
+      Most programmes allow 21 or 24 AU across the degree, with at most 12 AU of
+      that on Major Core, ICC and MPE courses. This tool reads your transcript,
+      subtracts the FGO you have already used, and finds the set of modules that
+      raises CGPA the most within what is left.
+    </p>
+    <div class="grid gap-3 pt-2 sm:grid-cols-2">
+      {
+        GUIDES.map(({ href, title, description }) => (
+          <a
+            href={href}
+            class="bg-card hover:bg-accent group rounded-lg border p-4 transition-colors">
+            <p class="group-hover:text-primary text-sm leading-snug font-medium">
+              {title}
+            </p>
+            <p class="text-muted-foreground mt-1.5 text-sm leading-relaxed">
+              {description}
+            </p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="space-y-4 border-t pt-10" aria-labelledby="fgo-faq">
+    <h2 id="fgo-faq" class="text-lg font-semibold tracking-tight">
+      Frequently asked questions
+    </h2>
+    {
+      FAQ.map(({ question, answer }) => (
+        <div class="space-y-1">
+          <h3 class="text-sm font-medium">{question}</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+        </div>
+      ))
+    }
+    <a href="/tools" class="inline-block text-sm text-blue-500 hover:underline">
+      Browse all NTUMods tools →
+    </a>
+  </section>
+</BaseLayout>

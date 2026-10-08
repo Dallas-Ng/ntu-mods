@@ -49,14 +49,16 @@ export const websiteJsonLd = (): JsonLd => ({
 
 export const webApplicationJsonLd = ({
   path,
-  description
+  description,
+  name = `${siteConfig.name} Timetable Planner`
 }: {
   path: string
   description: string
+  name?: string
 }): JsonLd => ({
   "@context": CONTEXT,
   "@type": "WebApplication",
-  name: `${siteConfig.name} Timetable Planner`,
+  name,
   url: absoluteUrl(path),
   description,
   applicationCategory: "EducationalApplication",

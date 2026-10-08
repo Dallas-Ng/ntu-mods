@@ -1,3 +1,4 @@
+import { siteConfig } from "@/config/site"
 import { getAllArticles } from "@/lib/server/articles"
 import { getModuleTitles } from "@/lib/server/db/repo"
 import Container from "@/components/container"
@@ -28,6 +29,12 @@ const CORE_LINKS = [
       "Check NTU exam dates and times by module for the current semester"
   },
   {
+    label: "Tools",
+    href: "/tools",
+    description:
+      "Free NTU student tools, starting with the FGO Optimiser for your CGPA"
+  },
+  {
     label: "Articles",
     href: "/articles",
     description: "Guides on choosing modules, BDEs, Common Core, and STARS prep"
@@ -46,11 +53,11 @@ const CORE_LINKS = [
 ]
 
 const TOOL_LINKS = [
-  {
-    label: "Wallpaper Maker",
-    href: "/screenshot",
-    description: "Export your timetable as a phone wallpaper or shareable image"
-  },
+  ...siteConfig.tools.map((t) => ({
+    label: t.name,
+    href: t.href,
+    description: t.desc
+  })),
   {
     label: "Changelog",
     href: "/changelog",

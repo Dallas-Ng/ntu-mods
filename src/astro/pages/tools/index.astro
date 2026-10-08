@@ -1,0 +1,59 @@
+---
+import { siteConfig } from "@/config/site"
+import { collectionPageJsonLd } from "@/lib/json-ld"
+import Header from "@/components/header"
+import ToolsGrid from "@/components/tools/tools-grid"
+import JsonLd from "@/astro/components/JsonLd.astro"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
+
+const { title, desc } = siteConfig.metatags.tools
+---
+
+<BaseLayout
+  title={title}
+  description={desc}
+  canonical="/tools"
+  ogImage={`${siteConfig.url}/og/links.png`}
+  ogImageAlt="NTUMods student tools: FGO Optimiser and timetable wallpaper maker"
+  size="md"
+  containerClassName="space-y-6">
+  <JsonLd
+    data={collectionPageJsonLd({
+      name: title,
+      description: desc,
+      path: "/tools",
+      items: siteConfig.tools.map((tool) => ({
+        name: tool.name,
+        url: `${siteConfig.url}${tool.href}`
+      }))
+    })}
+  />
+  <Header
+    title="NTU Student Tools"
+    subtitle="Free tools that run in your browser. Nothing you enter is uploaded."
+  />
+
+  <div>
+    <ToolsGrid client:idle />
+  </div>
+
+  <div class="space-y-1.5 rounded-lg border p-4">
+    <p class="text-sm font-medium">More for NTU students</p>
+    <div class="flex flex-col gap-1">
+      <a href="/timetable" class="text-sm text-blue-500 hover:underline">
+        Timetable Planner: build a clash-free STARS timetable →
+      </a>
+      <a href="/exams" class="text-sm text-blue-500 hover:underline">
+        Exam Schedule: check your exam dates by module →
+      </a>
+      <a href="/links" class="text-sm text-blue-500 hover:underline">
+        Student Links: STARS, NTULearn, Degree Audit and the FGO portal →
+      </a>
+      <a href="/articles" class="text-sm text-blue-500 hover:underline">
+        Articles: guides on FGO, BDEs, Common Core and more →
+      </a>
+    </div>
+  </div>
+</BaseLayout>

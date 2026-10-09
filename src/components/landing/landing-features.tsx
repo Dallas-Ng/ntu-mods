@@ -76,9 +76,11 @@ const LandingFeatures = () => {
   return (
     <div>
       <div className="mb-6 text-center">
-        <h2 className="text-4xl font-bold">Features</h2>
+        <h2 className="text-4xl font-bold">
+          Everything you need to plan your semester
+        </h2>
         <p className="text-muted-foreground">
-          NTU Mods allows you to build your timetable your own way
+          From generating timetables to checking exams and finding student links
         </p>
       </div>
 

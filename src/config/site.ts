@@ -7,7 +7,7 @@ export const siteConfig = {
   metatags: {
     default: {
       title: "NTU Timetable Planner and Module Finder | NTUMods",
-      desc: "Plan NTU timetables, browse modules, compare indexes, check exams, share schedules, and export calendars or wallpapers in one course planning tool.",
+      desc: "Plan NTU timetables, compare indexes, check exams, and use free tools like the FGO optimiser and CGPA planner. Share and export your schedule.",
       keywords: [
         "NTU",
         "Nanyang Technological University",

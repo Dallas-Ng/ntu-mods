@@ -13,6 +13,8 @@ Your Nanyang Technological University (NTU) degree class depends on one number, 
 
 > **Quick summary:** NTU uses a 5.0 scale where A+ and A are both 5.0. CGPA is the AU-weighted average over letter-graded modules. For most honours degrees, Highest Distinction needs 4.50 or above, Distinction 4.00, Merit 3.50 and Honours 3.00. Modules graded Pass or No Record are not counted.
 
+> **Want the answer for your own grades?** Use the [NTUMods CGPA Planner](/tools/cgpa-planner), then follow the [step-by-step guide to the CGPA Planner](/articles/ntu-cgpa-planner-guide) if you would like a worked example.
+
 ## The NTU grade scale
 
 | Grade | Grade points |

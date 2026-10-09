@@ -47,20 +47,19 @@
   // through this binding; prerendered routes query the same schema at build
   // time through node:sqlite against a local copy pulled with `yarn db:pull`.
   //
-  // No "remote": true here on purpose. `astro dev` reads a local D1 under
-  // .wrangler/state (per worktree), seeded with `yarn db:seed-local`. A
-  // remote binding sends dev queries through a proxy worker on the
-  // preview-URL hostname, which sits behind Cloudflare Access, so every query
-  // loops through the Access login ("Too many redirects") and Access has to
-  // stay on to keep preview URLs private. (Unrelated: the loader scripts
-  // default writes to a separate ntu-mods-dev database, so experiments never
-  // touch what is serving traffic; that database has no binding here.)
+  // "remote": true makes `astro dev` query this binding over the network
+  // rather than an empty local D1 — without it the on-demand route errors in
+  // dev with "no such table: offerings". Safe because that route only ever
+  // reads. (Unrelated: the loader scripts default writes to a separate
+  // ntu-mods-dev database, so experiments never touch what is serving
+  // traffic — that database has no binding here.)
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "ntu-mods",
       "database_id": "c18f73e4-8b03-43d2-acf1-4b03c81f94e8",
-      "migrations_dir": "db/migrations"
+      "migrations_dir": "db/migrations",
+      "remote": true
     }
   ],
   // Worker Previews (`wrangler preview`) don't inherit bindings from the

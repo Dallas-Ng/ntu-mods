@@ -14,6 +14,8 @@ Before STARS opens, you need to know which module indexes actually work with you
 
 The [NTUMods timetable planner](/timetable) lets you add modules, pick indexes, and see your week laid out before you commit to anything. This guide walks through how to use it effectively.
 
+![NTU timetable planner on NTUMods showing a Monday to Friday semester schedule with lectures, tutorials and labs colour-coded by class type](/articles/ntumods-timetable-planner-week-view.webp "The NTUMods timetable planner: every registered module and its chosen index laid out on one weekly grid.")
+
 ## What the NTUMods timetable planner does
 
 The timetable planner is a visual tool for building your semester schedule before STARS opens. It does not register you for anything — it is purely for planning.

@@ -7,7 +7,7 @@ const ModsEmptyCard = () => {
     <div className="w-full space-y-4 rounded-md border p-4 text-center">
       <div className="flex justify-center">
         <img
-          src="/empty.svg"
+          src="/not-found.svg"
           alt="theres no search results, try changing your filters..."
           width={300}
           height={200}

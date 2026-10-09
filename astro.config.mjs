@@ -2,9 +2,12 @@ import { execSync } from "node:child_process"
 import { fileURLToPath } from "node:url"
 
 import cloudflare from "@astrojs/cloudflare"
+import { satteri } from "@astrojs/markdown-satteri"
 import react from "@astrojs/react"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig, fontProviders, sessionDrivers } from "astro/config"
+
+import hastFigure from "./src/lib/hast-figure.mjs"
 
 // Cloudflare Workers Builds checks out the real repo (not a tarball), so this
 // resolves there too — baked in at build time so a deployed worker's bundle
@@ -53,9 +56,16 @@ export default defineConfig({
   // generation running in plain Node (where all the fs-based data readers in
   // src/lib/server/*.ts still work) instead of Cloudflare's workerd runtime,
   // which has no fs at all — even at build time, by default.
+  //
+  // remoteBindings: false keeps `astro dev` off wrangler's remote proxy
+  // session. wrangler.jsonc marks the D1 binding remote:true, but that session
+  // is a preview-hostname worker, which Cloudflare Access (enabled on Preview
+  // URLs) bounces in a redirect loop: "Too many redirects. http://d1/query".
+  // Dev reads a local D1 instead — seed it with `yarn db:seed-local`.
   adapter: cloudflare({
     imageService: "passthrough",
-    prerenderEnvironment: "node"
+    prerenderEnvironment: "node",
+    remoteBindings: false
   }),
   // Nothing in this app calls Astro.session — without an explicit driver,
   // the Cloudflare adapter auto-provisions a "SESSION" KV binding with no
@@ -79,6 +89,10 @@ export default defineConfig({
       fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"]
     }
   ],
+  // Article images get a <figure>/<figcaption> and a dark-mode twin
+  // (src/lib/hast-figure.mjs). Sätteri is Astro's default Markdown processor;
+  // it is named here only to attach the plugin.
+  markdown: { processor: satteri({ hastPlugins: [hastFigure] }) },
   // Hover-triggered prefetch of same-origin links — pairs with the long
   // edge/browser Cache-Control on prerendered pages (public/_headers), so
   // prefetched navigations are cheap cache hits, not fresh renders.
@@ -133,6 +147,7 @@ export default defineConfig({
         "ics",
         "lucide-react",
         "pdfjs-dist",
+        "photoswipe",
         "radix-ui",
         "react-hook-form",
         "react-resizable-panels",

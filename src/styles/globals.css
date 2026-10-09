@@ -322,3 +322,26 @@ table td {
 .data-table td:first-child {
   @apply font-medium;
 }
+
+/* Article images: centred, click-to-zoom (medium-zoom, see articles/[slug].astro),
+   with an always-present caption underneath (src/lib/rehype-figure.mjs). */
+.prose figure {
+  @apply my-6 text-center;
+}
+
+.prose figure img {
+  @apply mx-auto my-0 block h-auto max-w-full cursor-zoom-in rounded-md border;
+}
+
+.prose figcaption {
+  @apply text-muted-foreground mx-auto mt-2 max-w-prose text-sm;
+}
+
+.prose figure img.img-dark,
+.dark .prose figure img.img-light {
+  display: none;
+}
+
+.dark .prose figure img.img-dark {
+  display: block;
+}

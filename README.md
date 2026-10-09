@@ -111,9 +111,6 @@ which queries the D1 binding.
 
 - Node.js 22+
 - Yarn
-- A Cloudflare account with access to the `ntu-mods` D1 database (see
-  [Running Locally](#running-locally) — `wrangler.jsonc`'s D1 binding is
-  `remote: true`, so dev needs auth against the real database)
 
 ### Installation
 
@@ -126,18 +123,17 @@ yarn install
 ### Running Locally
 
 The `/mods/:code/:year/:semester` route reads D1 live (see
-[Rendering model](#rendering-model)). In dev it reads a local D1 under
-`.wrangler/state`, one per worktree. Seed it once before your first `yarn dev`
-(and again whenever `src/data/api` changes):
+[Rendering model](#rendering-model)). `astro dev` uses a **local** D1 (set
+`remoteBindings: false` in `astro.config.mjs`), because `wrangler.jsonc`'s
+`remote: true` makes dev proxy through a preview-hostname worker that Cloudflare
+Access blocks with `Too many redirects. http://d1/query`. Seed it once, and again
+after the data changes (about a minute, no Cloudflare login needed):
 
 ```bash
 yarn db:seed-local
 ```
 
-The binding is deliberately not `remote`. A remote binding routes dev queries
-through a proxy on the preview-URL hostname, which is protected by Cloudflare
-Access, so every query fails with "Too many redirects". Without a seeded local
-D1 the route fails in dev with "no such table: offerings".
+Without it, those pages fail in dev with `no such table: offerings`.
 
 ```bash
 yarn dev

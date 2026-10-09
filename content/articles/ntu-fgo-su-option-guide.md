@@ -13,6 +13,8 @@ The NTU Flexible Grading Option (FGO) is Nanyang Technological University's syst
 
 > **Quick summary:** FGO lets you have a course graded Pass or No Record instead of a letter grade, so it's excluded from CGPA. With effect from June 2026, most programmes get an AU quota of 21 or 24 AU across the whole degree (up from 9 or 12 AU previously), with a combined 12 AU sub-limit for Major Core, ICC, and MPE courses. FYPs, internships/attachments, and modules with academic sanctions are excluded. You declare it in a short window right after exam results are released, and once submitted, it's final.
 
+> **Ready to choose which modules to use FGO on?** Use the [NTUMods FGO Optimiser](/tools/fgo-optimiser), and follow the [step-by-step guide to the FGO Optimiser](/articles/ntu-fgo-optimiser-guide) if you would like it explained with screenshots.
+
 ## Pass (P) vs No Record (NR)
 
 | | Pass (P) | No Record (NR) |

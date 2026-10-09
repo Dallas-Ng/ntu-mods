@@ -1,0 +1,50 @@
+---
+interface Props {
+  href: string
+  title: string
+  description: string
+}
+
+const { href, title, description } = Astro.props
+---
+
+<!-- Sits directly above a tool so the how-to guide is seen before the tool
+     itself, not found in a related-guides list further down the page. -->
+<a
+  href={href}
+  class="bg-card hover:bg-accent group flex items-center gap-4 rounded-lg border-2 p-4 transition-colors">
+  <span
+    class="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-md">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true">
+      <path d="M12 7v14"></path>
+      <path
+        d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+      ></path>
+    </svg>
+  </span>
+  <span class="min-w-0 flex-1 space-y-0.5">
+    <span
+      class="text-muted-foreground block text-xs font-medium tracking-wide uppercase">
+      Step-by-step guide
+    </span>
+    <span class="group-hover:text-primary block text-sm font-semibold">
+      {title}
+    </span>
+    <span class="text-muted-foreground block text-sm leading-relaxed">
+      {description}
+    </span>
+  </span>
+  <span class="text-primary hidden shrink-0 text-sm font-medium sm:inline">
+    Read the guide →
+  </span>
+</a>

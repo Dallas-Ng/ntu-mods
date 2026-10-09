@@ -9,6 +9,7 @@ import Breadcrumbs from "@/components/breadcrumbs"
 import FgoOptimiser from "@/components/fgo/fgo-optimiser"
 import Header from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
+import ToolGuideCallout from "@/astro/components/ToolGuideCallout.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
@@ -113,6 +114,12 @@ const FAQ = [
       subtitle="Upload your transcript and find the modules to Flexible-Grade for the highest CGPA."
     />
   </div>
+
+  <ToolGuideCallout
+    href="/articles/ntu-fgo-optimiser-guide"
+    title="How to use the FGO Optimiser"
+    description="Upload your transcript, set your quota and press Auto-optimise. Three steps with screenshots, about 5 minutes."
+  />
 
   <div>
     <FgoOptimiser client:load />

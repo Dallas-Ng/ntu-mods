@@ -318,3 +318,32 @@ const pageDescription =
     )
   }
 </BaseLayout>
+
+<script>
+  import PhotoSwipe from "photoswipe"
+  import "photoswipe/style.css"
+
+  // Body figures only; the not-prose hero thumbnail is excluded by the selector.
+  // Lightbox with wheel / double-click / pinch zoom and drag-to-pan, so the
+  // screenshots can be read at full resolution, not just enlarged to fit.
+  document
+    .querySelectorAll<HTMLImageElement>("article.prose figure img")
+    .forEach((img) => {
+      img.addEventListener("click", () => {
+        new PhotoSwipe({
+          dataSource: [
+            {
+              src: img.currentSrc || img.src,
+              width: img.naturalWidth,
+              height: img.naturalHeight,
+              alt: img.alt
+            }
+          ],
+          wheelToZoom: true,
+          maxZoomLevel: 3,
+          showHideAnimationType: "fade",
+          bgOpacity: 0.92
+        }).init()
+      })
+    })
+</script>

@@ -17,6 +17,8 @@ AY2026/2027 Semester 1 exam dates are now available, covering 394 modules with a
 
 ## What the NTUMods exam schedule shows
 
+![NTU exam schedule AY2026/2027 Semester 1 on NTUMods, searched for SC20 to list each module's exam date and time](/articles/ntu-exam-schedule-search-ntumods.webp "Search the NTU exam schedule by module code or name to see exam dates and times.")
+
 The exam schedule page lists every module with a scheduled exam for AY2026/2027 Semester 1. For each module you can see:
 
 - The exam date

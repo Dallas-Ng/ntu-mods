@@ -104,6 +104,8 @@ Then build the timetable in that order. After that, check prerequisites, restric
 
 [NTUMods](/timetable) has a built-in timetable planner that lets you add modules, pick indexes, and see clashes before STARS opens. You do not need to commit to anything — it is a planning tool, not a registration system.
 
+![NTU module planner timetable built on NTUMods, with registered modules listed in the sidebar and each class placed on the week view](/articles/ntumods-timetable-planner-week-view.webp "A semester plan in the NTUMods module planner: registered modules on the right, the full week on the left.")
+
 A few things it helps with:
 
 - **Index selection:** See all available session times for a module and pick ones that fit your existing schedule

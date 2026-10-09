@@ -40,7 +40,11 @@ Anything you would pencil into a physical planner can go here.
 5. Add more sessions if the commitment recurs on several days.
 6. Click **Save**.
 
+![Add custom block dialog in the NTUMods NTU timetable planner with name, session days, venue, start time and end time fields](/articles/ntumods-add-custom-block-dialog.webp "The Add custom block dialog: name it, pick the days, then set the venue and times.")
+
 The block appears on the timetable grid immediately.
+
+![NTU timetable with custom Gym blocks on Monday, Wednesday and Friday shown next to registered modules in NTUMods](/articles/ntumods-timetable-custom-gym-blocks.webp "Custom Gym blocks sit on the grid beside registered modules, so clashes are visible straight away.")
 
 ## Options: letting the generator choose the timing
 

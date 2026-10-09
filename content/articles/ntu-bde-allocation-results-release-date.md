@@ -47,7 +47,7 @@ If you placed a BDE on the waitlist, check your results after the allocation is 
 You have three practical options, and they are not mutually exclusive.
 
 1. **Use add/drop.** Seats often reopen in Teaching Weeks 1 and 2 as students drop modules. See the [add/drop guide](/articles/ntu-add-drop-period-guide) for how to monitor seats.
-2. **Pick a backup BDE.** Build a shortlist of alternatives with similar timings before results are out. The [complete BDE list](/articles/complete-ntu-bde-list) and [easy BDE guide](/articles/easy-bde-at-ntu) help you find them.
+2. **Pick a backup BDE.** Build a shortlist of alternatives with similar timings before results are out. Browse BDE modules, indexes and class times in the [NTUMods module browser](/mods), check their exam dates in the [exam schedule](/exams), and see the [complete BDE list](/articles/complete-ntu-bde-list) and [easy BDE guide](/articles/easy-bde-at-ntu).
 3. **Appeal.** NTU states that students who wish to appeal for GERPE, UE or BDE courses must apply through the Online Appeal System in the student intranet. Appeals are decided by the university, so treat them as a last resort rather than a plan.
 
 ## Plan around the timeline

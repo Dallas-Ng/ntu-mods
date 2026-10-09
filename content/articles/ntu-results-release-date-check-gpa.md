@@ -24,6 +24,10 @@ These come from NTU's Schedule of Key Academic Activities for undergraduate prog
 
 The Flexible Grading Option declaration opens soon after results are out, so read your grades first, then decide. See the [NTU FGO and S/U guide](/articles/ntu-fgo-su-option-guide) and the [FGO optimiser guide](/articles/ntu-fgo-optimiser-guide) before you declare.
 
+## Plan your CGPA before and after results
+
+You do not have to wait for results to see where you stand. The [NTUMods CGPA Planner](/tools/cgpa-planner) takes your current CGPA and remaining AU, or your uploaded transcript, and shows the average grade you need to reach Merit, Distinction or Highest Distinction. Once results are out, the [FGO Optimiser](/tools/fgo-optimiser) shows which modules to Flexible-Grade for the highest CGPA before the declaration window closes. Both run in your browser, so nothing is uploaded.
+
 ## Where to check your results, GPA and CGPA
 
 - **Degree audit.** Released grades flow into your [degree audit](/articles/ntu-degree-audit-guide) once processed, along with whether each requirement is fulfilled.
@@ -66,7 +70,7 @@ Use your degree audit or the academic record on the student intranet once result
 
 ### How do I check my CGPA at NTU?
 
-Your CGPA is calculated across all graded modules. You can see released grades in your degree audit or student intranet, and you can use the CGPA Planner to project your result before grades come out.
+Your CGPA is calculated across all graded modules. You can see released grades in your degree audit or student intranet, and you can use the [CGPA Planner](/tools/cgpa-planner) to project your result before grades come out.
 
 ### Can I appeal or review my NTU results?
 

@@ -95,6 +95,10 @@ Use the planner to prepare your shortlist and verify index choices. Then use tho
 
 **Not checking AU count.** The planner shows you what fits in your week, not whether you are meeting your graduation requirements. Check AU totals and degree audit separately.
 
+## Turn your timetable into a wallpaper
+
+Once your timetable is final, the [NTUMods Wallpaper Maker](/screenshot) exports it as a phone wallpaper or shareable image, so your classes are one glance away without opening an app.
+
 ## Next steps
 
 Once your plan is ready:

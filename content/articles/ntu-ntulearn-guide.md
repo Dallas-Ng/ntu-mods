@@ -108,6 +108,10 @@ NTULearn runs on Blackboard Ultra. If you've used Blackboard at another institut
 
 Enrolment sync between STARS and NTULearn isn't instant — it can take a day or two, especially right after a registration round or add/drop. If a module is still missing after that, contact the module coordinator or your school's academic office.
 
+## Keep your portal links in one place
+
+NTULearn, STARS, Degree Audit and the other NTU systems are listed together on the [NTUMods Links page](/links), so you can open the right one without searching each time.
+
 ## Related
 
 - [NTU Student Portals: Complete List of Websites and Links](/articles/ntu-student-portal-links)

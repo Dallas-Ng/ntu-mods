@@ -23,7 +23,7 @@ Exam information at Nanyang Technological University (NTU Singapore) is spread a
 
 The timetable is released long before the semester ends so that you can plan around it. For calculator registration, NTU advises checking the details for your programme at least 4 weeks before examinations begin.
 
-You do not have to wait for the official release to plan. The [NTUMods exam schedule](/exams) shows exam dates for modules with a centrally scheduled exam, so you can check for clashes before you register. See [NTU Exam Schedule AY2026/2027](/articles/ntu-exam-schedule-ay2026) for how to use it.
+You do not have to wait for the official release to plan. The [NTUMods exam schedule](/exams) shows exam dates for modules with a centrally scheduled exam, so you can check for clashes before you register. See [NTU Exam Schedule AY2026/2027](/articles/ntu-exam-schedule-ay2026) for how to use it, and add the modules to the [timetable planner](/timetable) to see classes and exams in one place.
 
 ## Where to find your exam seating arrangement
 

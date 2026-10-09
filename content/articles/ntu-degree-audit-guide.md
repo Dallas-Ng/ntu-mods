@@ -56,6 +56,8 @@ The degree audit is the only place that reflects your actual requirement status.
 3. **Watch for "in progress" modules.** Modules you are currently taking show as in-progress, not yet fulfilled. If you are relying on a current module to satisfy a requirement, it will not show as complete until grades are released.
 4. **Recheck after every semester.** Requirements update after grades post. Re-run your audit at the start of each planning cycle rather than relying on a stale mental model from a previous semester.
 
+Once you know which categories are outstanding, use the [NTUMods module browser](/mods) to find modules that fit them and the [timetable planner](/timetable) to check they work together. If you are also tracking your honours class, the [CGPA Planner](/tools/cgpa-planner) shows the grades you need across your remaining AU.
+
 For the full pre-STARS planning workflow, including AU limits and prerequisite checks, see [How to Plan NTU Modules Before STARS Opens](/articles/how-to-plan-for-modules).
 
 ## Degree audit vs CGPA vs transcript

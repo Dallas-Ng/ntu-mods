@@ -42,7 +42,7 @@ Use the Reset Password option on the same pages, which asks you to verify your i
 
 The student intranet is NTU's hub for personal academic records, forms and requests. It sits behind a Microsoft sign-in, using your network account in the full format above. From there you can reach the [degree audit](/articles/ntu-degree-audit-guide), results, the Online Appeal System for course appeals, and library resources such as the exam question papers site.
 
-The full list of portals is in [NTU Student Links](/articles/ntu-student-portal-links).
+The full list of portals is in [NTU Student Links](/articles/ntu-student-portal-links), and every link is also on the [NTUMods Links page](/links).
 
 ## Frequently asked questions
 

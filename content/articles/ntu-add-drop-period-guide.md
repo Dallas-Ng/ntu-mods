@@ -64,7 +64,7 @@ Add/drop only affects registration availability. It does not change:
 
 ### When does NTU add/drop start?
 
-For full-time undergraduates, NTU runs add/drop during Teaching Weeks 1 and 2 of each semester. For AY2026/2027, Semester 1 add/drop starts in the week of 10 August 2026 and Semester 2 in the week of 11 January 2027. BDE, UE and GERPE allocation results are released shortly before, in early August and early January. See [NTU BDE Allocation Results](/articles/ntu-bde-allocation-results-release-date) for how that fits together.
+For full-time undergraduates, NTU runs add/drop during Teaching Weeks 1 and 2 of each semester. For AY2026/2027, Semester 1 add/drop starts in the week of 10 August 2026 and Semester 2 in the week of 11 January 2027. BDE, UE and GERPE allocation results are released shortly before, in early August and early January. See [NTU BDE Allocation Results](/articles/ntu-bde-allocation-results-release-date) for how that fits together. Before you swap a module, test the new index in the [NTUMods timetable planner](/timetable) so you know it does not clash with what you already have.
 
 ### Can I still get a popular module during add/drop?
 

@@ -14,6 +14,7 @@
     "db:build": "node scripts/db/sync-db.mjs --from json",
     "db:pull": "node scripts/db/sync-db.mjs --from d1",
     "db:dump": "node scripts/db/reseed-d1.mjs",
+    "db:seed-local": "node scripts/db/sync-db.mjs --from json --if-missing && rm -rf .wrangler/state/v3/d1 && node scripts/db/reseed-d1.mjs --max-stmt-bytes 90000 && wrangler d1 migrations apply DB --local && wrangler d1 execute DB --local --yes --file db/out/full.sql",
     "db:load": "node scripts/db/load-semester.mjs",
     "db:verify": "node scripts/db/verify-parity.mjs && npx tsx scripts/db/verify-readers.mts",
     "lint": "eslint . && astro check && tsc",

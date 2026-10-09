@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version-file: .node-version
+          package-manager-cache: false # setup-node auto-caches yarn from packageManager; we cache node_modules instead
 
       # Tests run in ~1s; install dominates. Cache node_modules itself so a
       # lockfile-unchanged PR skips install entirely.

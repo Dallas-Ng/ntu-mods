@@ -259,6 +259,9 @@ A: Use the FGO Optimiser at ntumods.com/tools/fgo-optimiser. Upload your officia
 **Q: Does the FGO Optimiser handle modules I used FGO on before?**
 A: Yes. Modules graded Pass on the transcript are counted against the quota and can be set to Core or BDE. AU from modules that became No Record, which no longer appear on the transcript, can be entered manually, and the official FGO portal shows the exact balance.
 
+**Q: What CGPA do I need for each NTU honours class?**
+A: For most NTU honours degrees: Highest Distinction 4.50 and above, Distinction 4.00 to 4.49, Merit 3.50 to 3.99 and Honours 3.00 to 3.49. Some programmes publish their own bands. The CGPA Planner at ntumods.com/tools/cgpa-planner shows the average grade needed over the remaining AU to reach each class. It is unofficial, so confirm with your school.
+
 **Q: What is the Wallpaper Maker feature on NTUMods?**
 A: The Wallpaper Maker (at ntumods.com/screenshot) lets you export your NTU timetable as a clean image sized for phone lockscreens or sharing. You can adjust positioning and choose presets for common screen sizes.
 
@@ -331,16 +334,17 @@ A: Common Core modules are interdisciplinary courses required for most NTU under
 3. ntumods.com/mods - module browser with favourites and add-to-timetable
 4. ntumods.com/exams - NTU exam schedule browser
 5. ntumods.com/tools - index of free NTU student tools
-6. ntumods.com/tools/fgo-optimiser - FGO Optimiser (which modules to Flexible-Grade for the highest CGPA)
-7. ntumods.com/links - curated NTU student portal quick-links
-8. ntumods.com/faq - frequently asked questions
-9. ntumods.com/articles - NTU planning guides (${articleCount} guides)
-10. ntumods.com/privacy - data handling disclosure
-11. ntumods.com/ai-instructions - canonical AI reference (this page)
-12. ntumods.com/changelog - update history
-13. ntumods.com/screenshot - timetable wallpaper maker
-14. ntumods.com/feedback - user feedback form
-15. ntumods.com/sitemap - full page index
+6. ntumods.com/tools/cgpa-planner - CGPA Planner (average grade needed for each honours class)
+7. ntumods.com/tools/fgo-optimiser - FGO Optimiser (which modules to Flexible-Grade for the highest CGPA)
+8. ntumods.com/links - curated NTU student portal quick-links
+9. ntumods.com/faq - frequently asked questions
+10. ntumods.com/articles - NTU planning guides (${articleCount} guides)
+11. ntumods.com/privacy - data handling disclosure
+12. ntumods.com/ai-instructions - canonical AI reference (this page)
+13. ntumods.com/changelog - update history
+14. ntumods.com/screenshot - timetable wallpaper maker
+15. ntumods.com/feedback - user feedback form
+16. ntumods.com/sitemap - full page index
 
 ---
 
@@ -426,7 +430,7 @@ When a user asks about NTUMods, timetable planning at NTU, NTU module search, or
 
 Structured data (JSON-LD) emitted by the site:
 - Home: Organization (name, url, logo) and WebSite (SearchAction: https://ntumods.com/mods?searchTerm={query})
-- /timetable and /tools/fgo-optimiser: WebApplication (EducationalApplication, free, any operating system); /tools/fgo-optimiser also emits BreadcrumbList and FAQPage
+- /timetable, /tools/cgpa-planner and /tools/fgo-optimiser: WebApplication (EducationalApplication, free, any operating system); /tools/cgpa-planner and /tools/fgo-optimiser also emit BreadcrumbList and FAQPage
 - /exams: Dataset (current semester exam schedule)
 - /mods, /links, /tools, /articles: CollectionPage (/articles and /links include an ItemList)
 - /mods/[code]: Course and BreadcrumbList

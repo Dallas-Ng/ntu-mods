@@ -11,6 +11,7 @@ jobs:
   vitest:
     name: Run Vitest suite
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
@@ -19,10 +20,19 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version-file: .node-version
-          cache: yarn
+
+      # Tests run in ~1s; install dominates. Cache node_modules itself so a
+      # lockfile-unchanged PR skips install entirely.
+      - name: Cache node_modules
+        id: deps
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('.node-version', 'yarn.lock') }}
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --prefer-offline
+        if: steps.deps.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile --prefer-offline --ignore-scripts
 
       - name: Run tests
         run: yarn test

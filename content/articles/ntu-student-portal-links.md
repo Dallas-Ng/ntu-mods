@@ -69,6 +69,7 @@ The **FGO (Flexible Grading Option) Portal** is where you declare FGO — NTU's 
 
 - **URL**: [wis.ntu.edu.sg (FGO)](https://sso.wis.ntu.edu.sg/webexe88/owa/sso_login1.asp?t=1&p2=https://wis.ntu.edu.sg/pls/webexe/aus_su_opt.display&extra=&pg=)
 - **When to use**: During the short declaration window that opens right after exam results are released each semester
+- **Before you declare**: Use the [NTUMods FGO Optimiser](/tools/fgo-optimiser) to work out which modules give the highest CGPA within your remaining quota
 
 ### NTU Academic Calendar
 

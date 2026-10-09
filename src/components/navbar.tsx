@@ -12,8 +12,8 @@ import { usePathname } from "@/hooks/use-pathname"
 import { useTheme } from "@/hooks/use-theme"
 
 import ChangelogButton from "./changelog-button"
-import { NewDot } from "./new-dot"
 import NavActions from "./nav-actions"
+import { NewDot } from "./new-dot"
 import { Button } from "./ui/button"
 import {
   Drawer,
@@ -82,11 +82,19 @@ const Navbar = () => {
                   i === 2 && "hidden min-[420px]:flex",
                   i === 3 && "hidden min-[520px]:flex",
                   i === 4 && "hidden min-[640px]:flex",
+                  i === 5 && "hidden min-[700px]:flex",
                   pathname.includes(link.route)
                     ? "text-foreground"
                     : "text-muted-foreground"
                 )}>
                 {link.label}
+                {link.route === "/tools" && (
+                  <NewDot
+                    storageKey="seen-tools"
+                    triggerRoute="/tools"
+                    className="absolute top-0 right-0 hidden h-2 w-2 md:flex"
+                  />
+                )}
                 {link.route === "/exams" && (
                   <NewDot
                     storageKey="seen-exams"

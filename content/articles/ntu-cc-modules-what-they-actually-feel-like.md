@@ -275,4 +275,4 @@ Some CC categories offer multiple module options; others are fixed by your intak
 
 ### Do CC modules affect my GPA?
 
-Yes. CC modules are graded and count toward your GPA the same way major modules do, unless you specifically apply an S/U (satisfactory/unsatisfactory) declaration through the FGO portal.
+Yes. CC modules are graded and count toward your GPA the same way major modules do, unless you specifically apply an S/U (satisfactory/unsatisfactory) declaration through the FGO portal. If a CC module drags your CGPA down, the [NTUMods FGO Optimiser](/tools/fgo-optimiser) shows whether it is worth using your FGO quota on it, and the [NTU FGO guide](/articles/ntu-fgo-su-option-guide) explains the rules.

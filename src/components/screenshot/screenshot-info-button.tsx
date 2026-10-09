@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { BadgeInfo } from "lucide-react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -16,24 +16,18 @@ import {
 
 type PhoneType = "android" | "ios" | "web"
 
+const detectPhone = (): PhoneType =>
+  typeof navigator === "undefined"
+    ? "ios"
+    : /Android/i.test(navigator.userAgent)
+      ? "android"
+      : /iPhone|iPad|iPod/i.test(navigator.userAgent)
+        ? "ios"
+        : "web"
+
 const ScreenshotInfoButton = () => {
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [phoneType, setPhoneType] = useState<PhoneType>("ios")
-  const [tabValue, setTabValue] = useState("ios")
-
-  useEffect(() => {
-    if (/Android/i.test(navigator.userAgent)) {
-      setPhoneType("android")
-    } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      setPhoneType("ios")
-    } else {
-      setPhoneType("web")
-    }
-  }, [])
-
-  useEffect(() => {
-    setTabValue(phoneType)
-  }, [phoneType])
+  const [tabValue, setTabValue] = useState<PhoneType>(detectPhone)
 
   return (
     <Dialog open={dialogOpen} onOpenChange={(val) => setDialogOpen(val)}>
@@ -47,7 +41,7 @@ const ScreenshotInfoButton = () => {
         <Tabs
           defaultValue="ios"
           value={tabValue}
-          onValueChange={(val) => setTabValue(val)}>
+          onValueChange={(val) => setTabValue(val as PhoneType)}>
           <DialogHeader>
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="ios">IOS</TabsTrigger>

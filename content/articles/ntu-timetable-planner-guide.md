@@ -95,6 +95,10 @@ Use the planner to prepare your shortlist and verify index choices. Then use tho
 
 **Not checking AU count.** The planner shows you what fits in your week, not whether you are meeting your graduation requirements. Check AU totals and degree audit separately.
 
+## Turn your timetable into a wallpaper
+
+Once your timetable is final, the [NTUMods Wallpaper Maker](/screenshot) exports it as a phone wallpaper or shareable image, so your classes are one glance away without opening an app.
+
 ## Next steps
 
 Once your plan is ready:
@@ -106,6 +110,10 @@ Once your plan is ready:
 For the broader module planning process before timetable building, start with [How to Plan NTU Modules Before STARS Opens](/articles/how-to-plan-for-modules).
 
 ## Frequently asked questions
+
+### When is the NTU timetable released?
+
+NTU releases the class schedule at the end of May for Semester 1 and in mid November for Semester 2. The course registration schedule, which tells you when your registration window opens, is released in April and October, and the registration period itself runs from mid to end June (Semester 1) or in December (Semester 2). Check the [academic calendar guide](/articles/ntu-academic-calendar-ay2026) for how these fit together.
 
 ### Does the NTUMods timetable planner register me for modules?
 

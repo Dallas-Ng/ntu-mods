@@ -2,15 +2,15 @@
 title: "NTU STARS Guide 2026: Registration Rounds, Bidding & Planner Tips"
 description: "NTU STARS planner guide — how bidding rounds work, how to prepare a shortlist before registration opens, and what to do when a module fills up. Includes a free STARS planner tool."
 date: "2026-06-08"
-updated: "2026-09-22"
+updated: "2026-10-09"
 author: "NTUMods"
 category: "STARS"
-tags: ["NTU STARS", "STARS NTU", "ntu stars planner", "stars planner ntu", "ntu module registration", "ntu stars system", "stars bidding ntu", "ntu stars guide", "ntu stars dates", "ntu stars registration", "ntustars", "ntu stars login", "stars ntu login"]
+tags: ["NTU STARS", "STARS NTU", "ntu stars planner", "stars planner ntu", "ntu module registration", "ntu stars system", "stars bidding ntu", "ntu stars guide", "ntu stars dates", "ntu stars registration", "ntustars", "ntu stars login", "stars ntu login", "ntu stars full form", "ntu stars waitlist", "ntu stars swap index", "ntu stars freshmen", "ntu stars add drop"]
 ---
 
 # NTU STARS: How the Module Registration System Works
 
-STARS stands for Student Allocation of Registered Subjects. It is the online system NTU uses for module registration — where you go to bid for, add, and drop modules each semester.
+STARS stands for Student Automated Registration System. It is the online system Nanyang Technological University (NTU Singapore) uses for module registration, where you go to register for, add, drop, and swap module indexes each semester. You reach it through StudentLink or the NTU student intranet.
 
 If you are new to NTU, STARS can feel confusing the first time you use it. This guide explains how the system works, what each round means, and how to prepare so you actually get the modules you want.
 
@@ -62,13 +62,22 @@ Understanding what STARS actually controls helps avoid common mistakes.
 
 Check all of these before you bid. Being able to see a module in STARS does not confirm you can take it, count it, or will be allowed to complete registration.
 
+## STARS Planner vs STARS registration
+
+NTU runs two connected tools, and students often mix them up:
+
+- **STARS Planner** is for planning only. NTU's planner guide describes saving up to 3 timetable plans, adding courses in bulk, checking class vacancies, and seeing exam or timetable clashes highlighted before your registration window opens. Nothing you do here registers you for anything.
+- **STARS registration** is where you actually register, drop, or swap index numbers during your personal registration time and the add/drop period.
+
+Freshmen usually have their first-semester core modules pre-registered by their school, so self-registration matters most from Year 2 onward. Where a BDE or elective is full, some modules allow you to join a waitlist, subject to seat availability. Always confirm what your school and the module offer.
+
 ## Use a STARS planner before you bid
 
 Before your STARS window opens, build your shortlist on a proper planner instead of guessing from memory. The [NTUMods Timetable Planner](/timetable) lets you search every module and index, preview class times and venues, and instantly flag clashes — so when Round 1 opens, you already know exactly which index numbers to enter instead of improvising under time pressure.
 
 ![STARS planner for NTU students: NTUMods timetable with module indexes selected and class clashes checked before bidding](/articles/ntumods-timetable-planner-week-view.webp "Check your index choices in the NTUMods planner before your STARS round opens.")
 
-This matters most for labs and other index-scarce slots: check clashes across your full shortlist first, lock in the combination that works, then bid in that order the moment the window opens.
+Pair it with the [NTUMods exam schedule](/exams) to catch exam clashes before you bid, and the [module browser](/mods) to compare indexes and seats. This matters most for labs and other index-scarce slots: check clashes across your full shortlist first, lock in the combination that works, then bid in that order the moment the window opens.
 
 ## Before you open STARS
 
@@ -141,6 +150,18 @@ NTU enforces AU limits per semester. If you exceed the limit, STARS will not all
 ### Can I drop a module after the add/drop period ends?
 
 Dropping after add/drop officially ends typically requires going through your school and may result in a notation on your transcript. Check the official NTU academic policies for your specific situation.
+
+### What does STARS stand for at NTU?
+
+STARS stands for Student Automated Registration System. It is the official module registration system of Nanyang Technological University.
+
+### Can I swap my index with another student in STARS?
+
+STARS lets you drop and add indexes yourself while seats are available. Some students also use peer index-swap tools such as SwapHub to find a classmate who wants the opposite swap. These are not run by NTU, so confirm the swap in STARS yourself before relying on it.
+
+### Do freshmen need to bid in STARS?
+
+Usually not for first-semester core modules, which schools pre-register. Check your school's registration instructions for any modules you still need to add yourself.
 
 ### What is the difference between Round 1 and Round 2?
 

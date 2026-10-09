@@ -73,6 +73,10 @@ For help building your overall module plan before STARS, see [How to Plan NTU Mo
 
 ## Frequently asked questions
 
+### When does NTU release the official exam timetable?
+
+NTU releases the examination timetable in mid May for Semester 1 and mid November for Semester 2, with seating arrangements 2 weeks before exams start. See [NTU Exam Timetable, Seating and Past Papers](/articles/ntu-exam-timetable-seating-past-papers).
+
 ### Where is the NTU exam schedule?
 
 The exam schedule for AY2026/2027 Semester 1 is available at [ntumods.com/exams](/exams). It shows exam dates and times for modules with centrally scheduled exams.

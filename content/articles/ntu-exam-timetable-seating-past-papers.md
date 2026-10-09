@@ -1,7 +1,7 @@
 ---
 title: "NTU Exam Timetable, Seating Arrangement and Past Year Papers: Where to Find Each"
 description: "When NTU releases the exam timetable and seating arrangements, where to get past year exam papers from the NTU Library, and how to find your exam venue on campus."
-date: "2026-10-09"
+date: "2026-09-02"
 author: "NTUMods"
 category: "Module Planning"
 tags: ["ntu exam timetable", "ntu exam seating", "ntu past year papers", "ntu exam papers", "ntu exam hall", "ntu exam venue", "ntu exam dates", "ntu exam schedule", "ntu exam calculator registration"]

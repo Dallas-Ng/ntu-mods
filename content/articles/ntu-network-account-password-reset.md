@@ -1,7 +1,7 @@
 ---
 title: "NTU Network Account: Password Reset, Login Format and Student Intranet"
 description: "How to change or reset your NTU network account and email password, the correct username format for NTULearn and STARS, and where the student intranet fits in."
-date: "2026-10-09"
+date: "2026-09-11"
 author: "NTUMods"
 category: "General"
 tags: ["ntu password reset", "ntulearn change password", "ntu network account", "ntu network account login", "ntu email login", "ntu student intranet", "ntu intranet", "ntu sharepoint", "ntu ldap", "ntu account locked"]

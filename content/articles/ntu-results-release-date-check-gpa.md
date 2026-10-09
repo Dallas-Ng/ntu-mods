@@ -1,7 +1,7 @@
 ---
 title: "NTU Results Release Date: When Grades Come Out and How to Check Your GPA"
 description: "When Nanyang Technological University releases semester results, where to check your grades, GPA and CGPA, and the short window to request a review of your results."
-date: "2026-10-09"
+date: "2026-09-17"
 author: "NTUMods"
 category: "Module Planning"
 tags: ["ntu results release", "ntu results release date", "ntu results release 2026", "ntu how to check cgpa", "where to check gpa ntu", "ntu check results", "ntu gpa release", "ntu cgpa requirements", "ntu review of results"]

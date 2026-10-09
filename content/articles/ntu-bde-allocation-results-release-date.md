@@ -1,7 +1,7 @@
 ---
 title: "NTU BDE Allocation Results: Release Date, How to Check and How to Appeal"
 description: "When Nanyang Technological University releases GERPE, UE and BDE allocation results, what happens during add/drop, and how to appeal if you did not get the BDE you wanted."
-date: "2026-10-09"
+date: "2026-08-19"
 author: "NTUMods"
 category: "BDE"
 tags: ["ntu bde release date", "ntu bde results release", "ntu bde allocation", "ntu bde appeal", "bde allocation results ntu", "ntu bde waitlist", "ntu bde results", "ntu gerpe ue bde allocation", "ntu bde reddit"]

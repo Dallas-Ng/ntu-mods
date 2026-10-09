@@ -15,7 +15,7 @@ Most NTU students eventually ask the same question: what do I need to score from
 
 ## Step 1: Enter your grades so far
 
-![The CGPA Planner input card with a current CGPA of 3.72, 78 AU done and 54 AU left](/articles/ntu-cgpa-planner-guide/inputs.webp)
+![NTUMods CGPA planner input card for an NTU student with a current CGPA of 3.72, 78 AU done and 54 AU left](/articles/ntu-cgpa-planner-guide/inputs.webp "Step 1: enter your current CGPA, the AU already behind it and the AU you still have to take.")
 
 The planner needs three numbers.
 
@@ -31,7 +31,7 @@ Not ready to use your own numbers? **Try with sample data** fills in a CGPA of 3
 
 ## Step 2: Pick a goal
 
-![Four honours class cards, with Distinction selected and the answer: average A- or better, 4.40 grade points across 54 AU](/articles/ntu-cgpa-planner-guide/goal.webp)
+![NTU honours classification cards in the NTUMods CGPA planner, with Distinction selected: an average of A- or better, 4.40 grade points, across the remaining 54 AU](/articles/ntu-cgpa-planner-guide/goal.webp "Step 2: pick an honours class to see the average grade your remaining AU need.")
 
 Each card is one honours class, with the CGPA it requires and a status:
 
@@ -45,7 +45,7 @@ In the sample, Distinction needs an average of **4.40 grade points** over the re
 
 ## Step 3: See where you would finish
 
-![The what-if slider set to A-, showing a final CGPA of 4.04 and Distinction, with a marker where Distinction needs 4.40](/articles/ntu-cgpa-planner-guide/what-if.webp)
+![NTUMods CGPA calculator what-if slider set to an A- average, giving a final NTU CGPA of 4.04 and a Distinction, with a marker where Distinction needs 4.40](/articles/ntu-cgpa-planner-guide/what-if.webp "Step 3: drag the slider to see the final CGPA and honours class a given average would give you.")
 
 The second half of the planner works the other way round. Instead of asking what a class needs, it asks where a given average leaves you.
 

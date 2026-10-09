@@ -17,7 +17,7 @@ If you are new to FGO itself, read [NTU FGO: What It Is and How It Works](/artic
 
 ## Step 1: Upload your transcript
 
-![The FGO Optimiser upload area with Choose PDF and Try with sample data buttons, above three numbered steps](/articles/ntu-fgo-optimiser-guide/upload.webp)
+![NTUMods FGO optimiser upload page for an NTU transcript PDF, with Choose PDF and Try with sample data buttons above three numbered steps](/articles/ntu-fgo-optimiser-guide/upload.webp "Upload your official NTU transcript PDF. It is read in your browser and never uploaded.")
 
 Download your official transcript PDF from the Self-Help Transcript System. The [NTU student portals guide](/articles/ntu-student-portal-links) links to it. NIE students can use the Academic Progress Report instead.
 
@@ -27,7 +27,7 @@ To explore first, choose **Try with sample data**. The screenshots below use tha
 
 ## Step 2: Check your modules and quota
 
-![The module table grouped by semester, with grade, AU, impact and type columns, beside a panel showing projected CGPA, quota meters and the Auto-optimise button](/articles/ntu-fgo-optimiser-guide/transcript.webp)
+![NTU FGO optimiser module table grouped by semester with grade, AU, impact and type columns, beside the projected CGPA, FGO quota meters and the Auto-optimise button](/articles/ntu-fgo-optimiser-guide/transcript.webp "Every graded module with the CGPA change that using FGO on it would make.")
 
 The optimiser lists every module from your transcript, grouped by semester. Before optimising, check three things.
 
@@ -43,7 +43,7 @@ The **Impact** column shows how much your CGPA would change if you Flexible-Grad
 
 ## Step 3: Auto-optimise
 
-![After Auto-optimise, three modules are ticked and the projected CGPA rises from 3.21 to 3.81, with a Declare in the FGO portal list below](/articles/ntu-fgo-optimiser-guide/optimised.webp)
+![NTU FGO optimiser after Auto-optimise, with three modules ticked, projected CGPA rising from 3.21 to 3.81 and a Declare in the FGO portal list](/articles/ntu-fgo-optimiser-guide/optimised.webp "After Auto-optimise: three modules picked, projected CGPA up from 3.21 to 3.81, and a list to declare in the FGO portal.")
 
 Press **Auto-optimise**. The tool tests the combinations of eligible modules that fit your remaining quota and the 12 AU cap, and ticks the set that gives the highest CGPA.
 

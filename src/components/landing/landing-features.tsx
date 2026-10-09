@@ -76,30 +76,35 @@ const FeatureCard = ({
 
 const ToolsCard = () => (
   <div className="flex flex-col gap-5 rounded-xl border p-5 shadow lg:flex-row lg:items-center">
-    <div className="lg:w-[30%] lg:shrink-0">
-      <h3 className="text-2xl font-bold">Student Tools</h3>
+    <a href="/tools" className="group lg:w-[30%] lg:shrink-0">
+      <h3 className="text-2xl font-bold group-hover:underline">
+        Student Tools
+      </h3>
       <p className="text-muted-foreground text-lg">
         Free tools that run in your browser, from FGO planning to CGPA targets
       </p>
-    </div>
+    </a>
 
-    <div className="grid flex-1 gap-3 md:grid-cols-3">
-      {siteConfig.tools.map((tool) => (
-        <a
-          key={tool.href}
-          href={tool.href}
-          className="hover:bg-accent flex flex-col gap-1 rounded-lg border p-4 transition-colors">
-          <span className="flex items-center justify-between gap-2 font-semibold">
-            {tool.name}
-            {tool.isNew && (
-              <span className="rounded-full bg-yellow-400 px-2 py-0.5 text-[10px] font-semibold text-black">
-                New
-              </span>
-            )}
-          </span>
-          <span className="text-muted-foreground text-sm">{tool.desc}</span>
-        </a>
-      ))}
+    <div className="grid flex-1 gap-3 md:grid-cols-2">
+      {siteConfig.tools
+        // Wallpaper Maker is the Save as Photo card above
+        .filter((tool) => tool.href !== "/screenshot")
+        .map((tool) => (
+          <a
+            key={tool.href}
+            href={tool.href}
+            className="hover:bg-accent flex flex-col gap-1 rounded-lg border p-4 transition-colors">
+            <span className="flex items-center justify-between gap-2 font-semibold">
+              {tool.name}
+              {tool.isNew && (
+                <span className="rounded-full bg-yellow-400 px-2 py-0.5 text-[10px] font-semibold text-black">
+                  New
+                </span>
+              )}
+            </span>
+            <span className="text-muted-foreground text-sm">{tool.desc}</span>
+          </a>
+        ))}
     </div>
   </div>
 )
@@ -185,6 +190,7 @@ const LandingFeatures = () => {
 
           <FeatureCard
             wide
+            href="/screenshot"
             title="Save as Photo or Calendar"
             desc="NTU Mods supports exporting your timetable for your lockscreen photo to your calendar"
             src="/landing/save-as-photo.svg"

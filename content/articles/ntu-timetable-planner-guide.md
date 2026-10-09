@@ -107,6 +107,10 @@ For the broader module planning process before timetable building, start with [H
 
 ## Frequently asked questions
 
+### When is the NTU timetable released?
+
+NTU releases the class schedule at the end of May for Semester 1 and in mid November for Semester 2. The course registration schedule, which tells you when your registration window opens, is released in April and October, and the registration period itself runs from mid to end June (Semester 1) or in December (Semester 2). Check the [academic calendar guide](/articles/ntu-academic-calendar-ay2026) for how these fit together.
+
 ### Does the NTUMods timetable planner register me for modules?
 
 No. The planner is for planning only — it does not connect to STARS or submit any registration. You still bid for your indexes in STARS once your plan is ready.

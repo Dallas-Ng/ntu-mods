@@ -2,15 +2,15 @@
 title: "NTU Degree Audit: How to Check Your Graduation Requirements"
 description: "How the NTU degree audit works, where to find it, and how to read it against your programme's core, BDE, UE, and AU requirements before you register for modules."
 date: "2026-08-06"
-updated: "2026-09-22"
+updated: "2026-10-09"
 author: "NTUMods"
 category: "Module Planning"
-tags: ["ntu degree audit", "degree audit ntu", "ntu degree audit login", "ntu audit degree", "ntu graduation requirements", "ntu curriculum structure", "ntu au requirements", "ntu student portal"]
+tags: ["ntu degree audit", "degree audit ntu", "ntu degree audit login", "ntu audit degree", "ntu graduation requirements", "ntu curriculum structure", "ntu au requirements", "ntu student portal", "ntu degree audit results", "ntu degree audit reddit", "download ntu degree audit", "ntu transcript", "ntu intranet"]
 ---
 
 # NTU Degree Audit: How to Check Your Graduation Requirements
 
-The degree audit is NTU's official record of what you have completed and what you still need to graduate. It is not the same as STARS, and it is not the same as your CGPA. This guide explains what it shows, where to find it, and how to actually use it when planning modules.
+The degree audit is Nanyang Technological University's (NTU Singapore) official record of what you have completed and what you still need to graduate. It is not the same as STARS, and it is not the same as your CGPA. This guide explains what it shows, where to find it, and how to actually use it when planning modules.
 
 > **Quick summary:** The degree audit is accessed through the [NTU student portal](/articles/ntu-student-portal-links), not through STARS. It breaks your requirements into categories (core, BDE, UE, PE, and more), shows what is fulfilled versus outstanding, and should be checked before every STARS registration window — not just before graduation.
 
@@ -70,7 +70,18 @@ These three records answer different questions:
 
 A module can appear complete on your transcript with a passing grade and still not satisfy a degree audit requirement, if it was taken outside the category your programme needs. Always check the degree audit specifically for graduation-requirement questions — the transcript and CGPA will not tell you that.
 
+## Where to find results, transcripts and your classification
+
+- **Results:** your released grades show in your degree audit once they are processed, so check it again after each results release. See [NTU Results Release Date](/articles/ntu-results-release-date-check-gpa) for when that happens.
+- **Official transcript:** request it through NTU's Self-help Transcript System, which is separate from the degree audit. Undergraduate and graduate programmes use different entries.
+- **Honours classification:** the degree audit does not tell you your class of honours. See [NTU Honours Classification and CGPA](/articles/ntu-honours-classification-cgpa-guide).
+- **All portals in one place:** the degree audit, STARS and transcript links are all listed in [NTU Student Links](/articles/ntu-student-portal-links).
+
 ## Frequently asked questions
+
+### Where is the NTU degree audit on the student intranet?
+
+Log in to the NTU student intranet, which sits behind your NTU Microsoft sign-in (see [NTU Network Account](/articles/ntu-network-account-password-reset)), then open Degree Audit from the student links. The direct link is given in the login section above.
 
 ### Is the degree audit the same as STARS?
 
@@ -83,6 +94,10 @@ Before every STARS registration window, and again after grades are released each
 ### What if a module I took doesn't show as fulfilling a requirement?
 
 This usually means the module was not approved for that category under your specific programme's curriculum, even if it appeared available in STARS at the time. Contact your school's academic office to clarify — this needs to be resolved through your school, not through STARS.
+
+### How do I download my full NTU degree audit?
+
+Open your degree audit while logged in and use your browser's print function to save the page as a PDF. This keeps a copy you can bring to your school's academic office.
 
 ### Does the degree audit show my CGPA?
 

@@ -64,6 +64,10 @@ The [NTUMods CGPA Planner](/tools/cgpa-planner) does this for every class at onc
 
 ## FAQ
 
+### Where do I check my CGPA, and when are results out?
+
+See [NTU Results Release Date and How to Check Your GPA](/articles/ntu-results-release-date-check-gpa) for release windows and where to see your grades.
+
 **Is A+ worth more than A at NTU?** No. Both are 5.0 grade points.
 
 **Does a Pass grade affect my CGPA?** No. Pass and No Record modules are excluded from CGPA, but Pass still counts towards graduation AU.

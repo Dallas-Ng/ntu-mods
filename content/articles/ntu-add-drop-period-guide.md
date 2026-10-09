@@ -4,7 +4,7 @@ description: "How NTU's add/drop period works after STARS closes — when it hap
 date: "2026-08-06"
 author: "NTUMods"
 category: "STARS"
-tags: ["ntu add drop period", "ntu add/drop period 2026", "add drop period ntu", "add drop ntu 2026", "ntu add drop", "add/drop ntu"]
+tags: ["ntu add drop period 2026 dates", "ntu add drop reddit", "ntu add drop results", "ntu add drop week", "ntu add drop period", "ntu add/drop period 2026", "add drop period ntu", "add drop ntu 2026", "ntu add drop", "add/drop ntu"]
 ---
 
 # NTU Add/Drop Period: How It Works and How to Use It
@@ -64,7 +64,7 @@ Add/drop only affects registration availability. It does not change:
 
 ### When does NTU add/drop start?
 
-Add/drop starts when the semester officially begins, right after STARS Round 2 closes. Exact dates change each academic year — check the [NTU Academic Calendar](/articles/ntu-academic-calendar-ay2026) for your current semester's dates.
+For full-time undergraduates, NTU runs add/drop during Teaching Weeks 1 and 2 of each semester. For AY2026/2027, Semester 1 add/drop starts in the week of 10 August 2026 and Semester 2 in the week of 11 January 2027. BDE, UE and GERPE allocation results are released shortly before, in early August and early January. See [NTU BDE Allocation Results](/articles/ntu-bde-allocation-results-release-date) for how that fits together.
 
 ### Can I still get a popular module during add/drop?
 

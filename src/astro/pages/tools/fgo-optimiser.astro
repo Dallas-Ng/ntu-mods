@@ -15,13 +15,14 @@ export const prerender = true
 
 const { title, desc } = siteConfig.metatags.fgo
 
-const GUIDES = [
-  {
-    href: "/articles/ntu-fgo-su-option-guide",
-    title: "NTU FGO: What It Is and How It Works",
-    description:
-      "Quotas, which modules are excluded, when to declare, and why declarations are final."
-  },
+const MAIN_GUIDE = {
+  href: "/articles/ntu-fgo-su-option-guide",
+  title: "NTU FGO: What It Is and How It Works",
+  description:
+    "The full rules in one place: quotas and the 12 AU Core, ICC and MPE cap, which modules are excluded, how Pass and No Record work, when the declaration window opens and why declarations are final."
+}
+
+const RELATED_GUIDES = [
   {
     href: "/articles/ntu-student-portal-links",
     title: "NTU Student Portals",
@@ -36,7 +37,7 @@ const GUIDES = [
   },
   {
     href: "/articles/ntu-academic-calendar-ay2026",
-    title: "NTU Academic Calendar AY2026/2027",
+    title: "NTU Academic Calendar",
     description: "When results are released and FGO declaration windows open."
   }
 ]
@@ -119,7 +120,7 @@ const FAQ = [
     <h2 id="about-fgo" class="text-lg font-semibold tracking-tight">
       About the Flexible Grading Option
     </h2>
-    <p class="text-muted-foreground max-w-3xl text-sm leading-relaxed">
+    <p class="text-muted-foreground text-sm leading-relaxed">
       The Flexible Grading Option (FGO) lets NTU undergraduates convert eligible
       course grades into Pass (P) or No Record (NR) so they do not affect CGPA.
       Most programmes allow 21 or 24 AU across the degree, with at most 12 AU of
@@ -127,21 +128,40 @@ const FAQ = [
       subtracts the FGO you have already used, and finds the set of modules that
       raises CGPA the most within what is left.
     </p>
-    <div class="grid gap-3 pt-2 sm:grid-cols-2">
-      {
-        GUIDES.map(({ href, title, description }) => (
-          <a
-            href={href}
-            class="bg-card hover:bg-accent group rounded-lg border p-4 transition-colors">
-            <p class="group-hover:text-primary text-sm leading-snug font-medium">
-              {title}
-            </p>
-            <p class="text-muted-foreground mt-1.5 text-sm leading-relaxed">
-              {description}
-            </p>
-          </a>
-        ))
-      }
+    <div class="space-y-3 pt-2">
+      <a
+        href={MAIN_GUIDE.href}
+        class="bg-card hover:bg-accent group block space-y-2 rounded-lg border-2 p-6 transition-colors">
+        <p
+          class="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+          Main guide
+        </p>
+        <p
+          class="group-hover:text-primary text-xl leading-snug font-semibold tracking-tight">
+          {MAIN_GUIDE.title}
+        </p>
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          {MAIN_GUIDE.description}
+        </p>
+        <p class="text-primary pt-1 text-sm font-medium">Read the guide →</p>
+      </a>
+
+      <div class="grid gap-3 sm:grid-cols-3">
+        {
+          RELATED_GUIDES.map(({ href, title, description }) => (
+            <a
+              href={href}
+              class="bg-card hover:bg-accent group rounded-lg border p-3 transition-colors">
+              <p class="group-hover:text-primary text-sm leading-snug font-medium">
+                {title}
+              </p>
+              <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
+                {description}
+              </p>
+            </a>
+          ))
+        }
+      </div>
     </div>
   </section>
 

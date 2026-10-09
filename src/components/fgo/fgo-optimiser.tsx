@@ -112,7 +112,6 @@ export default function FgoOptimiser() {
   const canAdd = (m: Mod) =>
     usage.total + m.au <= quotaAu &&
     (bde.has(m.id) || usage.core + m.au <= FGO_CORE_SUBCAP)
-  const overQuota = usage.total > quotaAu || usage.core > FGO_CORE_SUBCAP
 
   function loadSample() {
     setData(parseTranscriptLines(SAMPLE_LINES))

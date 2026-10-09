@@ -147,6 +147,7 @@ export default defineConfig({
         "ics",
         "lucide-react",
         "pdfjs-dist",
+        "photoswipe",
         "radix-ui",
         "react-hook-form",
         "react-resizable-panels",

@@ -24,7 +24,14 @@ export const applyTheme = (theme: Theme) => {
 }
 
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>(readStoredTheme)
+  // Same value on the server and the first client render ("dark" is the stored
+  // default); reading localStorage here made the SSR'd navbar disagree with
+  // the client for light-theme users and forced a hydration re-render.
+  const [theme, setThemeState] = useState<Theme>("dark")
+
+  useEffect(() => {
+    setThemeState(readStoredTheme())
+  }, [])
 
   useEffect(() => {
     const syncFromStorage = () => setThemeState(readStoredTheme())

@@ -49,6 +49,106 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "CGPA Planner",
+    date: "8 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            <ChangelogLink href="/tools/cgpa-planner">
+              CGPA Planner
+            </ChangelogLink>
+            : enter your CGPA and remaining AU, or upload your transcript, to
+            see the average grade you need for Merit, Distinction or Highest
+            Distinction. Your transcript is read in your browser and never
+            uploaded. Guide:{" "}
+            <ChangelogLink href="/articles/ntu-honours-classification-cgpa-guide">
+              NTU honours and CGPA guide
+            </ChangelogLink>
+            .
+          </>
+        )
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            Two new step-by-step guides with screenshots:{" "}
+            <ChangelogLink href="/articles/ntu-cgpa-planner-guide">
+              How to use the CGPA Planner
+            </ChangelogLink>{" "}
+            and{" "}
+            <ChangelogLink href="/articles/ntu-fgo-optimiser-guide">
+              How to use the FGO Optimiser
+            </ChangelogLink>
+            .
+          </>
+        )
+      }
+    ]
+  },
+  {
+    title: "New Tools section and the FGO Optimiser",
+    date: "8 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            New <ChangelogLink href="/tools">Tools</ChangelogLink> page, with a
+            link in the navbar and footer, showing every NTUMods tool as a card.
+            It starts with the FGO Optimiser and the existing{" "}
+            <ChangelogLink href="/screenshot">Wallpaper Maker</ChangelogLink>.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            <ChangelogLink href="/tools/fgo-optimiser">
+              FGO Optimiser
+            </ChangelogLink>
+            : upload your transcript PDF and see which modules to Flexible-Grade
+            for the highest CGPA within your quota and the 12 AU Core, ICC and
+            MPE cap. Your transcript is read in your browser and never uploaded.
+            Guide:{" "}
+            <ChangelogLink href="/articles/ntu-fgo-su-option-guide">
+              NTU FGO guide
+            </ChangelogLink>
+            .
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content:
+          "The optimiser counts FGO you have already used. Modules graded Pass are detected from the transcript, and AU from No Record modules, which no longer appear on a transcript, can be added by hand."
+      },
+      {
+        category: "Improvement",
+        content:
+          "The optimiser shows how much each module would change your CGPA if you Flexible-Graded it, keeps your CGPA and quota visible while you scroll, and has a Try with sample data button."
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            The{" "}
+            <ChangelogLink href="/articles/ntu-fgo-su-option-guide">
+              NTU FGO guide
+            </ChangelogLink>{" "}
+            now opens with a plain definition, adds a Pass vs No Record table
+            and new FAQ entries, and links to the optimiser. The{" "}
+            <ChangelogLink href="/links">Links</ChangelogLink> page, AI
+            instructions, llms.txt and sitemap list the new section too.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Articles, nav, footer and links polish",
     date: "6 Oct 2026",
     items: [
@@ -91,9 +191,9 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         content: (
           <>
             The <ChangelogLink href="/links">Links</ChangelogLink> page now
-            includes Course Content, Student Email, NTU Library, Campus
-            Shuttle, Housing, Student Wellbeing, Fee Payment, and the IT
-            Helpdesk. All links point to official NTU pages.
+            includes Course Content, Student Email, NTU Library, Campus Shuttle,
+            Housing, Student Wellbeing, Fee Payment, and the IT Helpdesk. All
+            links point to official NTU pages.
           </>
         )
       }
@@ -109,8 +209,8 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
           <>
             The mobile <em>Add mods</em> drawer wasn&apos;t reliably opening,
             and tapping a module to change its index could conflict with it.
-            Rebuilt so it opens and closes the way every other drawer in the
-            app does, with index picking working correctly inside it.
+            Rebuilt so it opens and closes the way every other drawer in the app
+            does, with index picking working correctly inside it.
           </>
         )
       },
@@ -123,9 +223,9 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         category: "Improvement",
         content: (
           <>
-            <em>Pick indexes</em> moved from a permanent button on the
-            toolbar into the ••• menu, so it no longer competes for space
-            with the rest of the toolbar on small screens.
+            <em>Pick indexes</em> moved from a permanent button on the toolbar
+            into the ••• menu, so it no longer competes for space with the rest
+            of the toolbar on small screens.
           </>
         )
       },
@@ -133,8 +233,8 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         category: "Improvement",
         content: (
           <>
-            Timetable cells are more compact on mobile by default,
-            regardless of your chosen density in{" "}
+            Timetable cells are more compact on mobile by default, regardless of
+            your chosen density in{" "}
             <ChangelogLink href="/settings">Settings</ChangelogLink> — which
             still applies from tablet width up.
           </>

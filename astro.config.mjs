@@ -95,7 +95,8 @@ export default defineConfig({
   redirects: {
     "/stars": { status: 301, destination: "/timetable" },
     "/mod": { status: 301, destination: "/mods" },
-    "/help": { status: 301, destination: "/faq" }
+    "/help": { status: 301, destination: "/faq" },
+    "/fgo": { status: 301, destination: "/tools/fgo-optimiser" }
   },
   vite: {
     server: { fs: { allow: [".", ...WORKTREE_ROOTS] } },
@@ -131,6 +132,7 @@ export default defineConfig({
         "date-fns",
         "ics",
         "lucide-react",
+        "pdfjs-dist",
         "radix-ui",
         "react-hook-form",
         "react-resizable-panels",

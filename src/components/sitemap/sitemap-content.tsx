@@ -32,7 +32,7 @@ const CORE_LINKS = [
     label: "Tools",
     href: "/tools",
     description:
-      "Free NTU student tools, starting with the FGO Optimiser for your CGPA"
+      "Free NTU student tools, including the CGPA Planner and FGO Optimiser"
   },
   {
     label: "Articles",

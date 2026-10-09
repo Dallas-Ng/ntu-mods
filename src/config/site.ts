@@ -82,7 +82,11 @@ export const siteConfig = {
     },
     tools: {
       title: "NTU Student Tools",
-      desc: "Free tools for NTU students: the FGO Optimiser for choosing which modules to Flexible-Grade, a timetable wallpaper maker, and more."
+      desc: "Free tools for NTU students: the FGO Optimiser for choosing which modules to Flexible-Grade, a CGPA planner for honours classes, a timetable wallpaper maker, and more."
+    },
+    cgpa: {
+      title: "NTU CGPA Calculator: What Grades Do You Need for Honours?",
+      desc: "Free NTU CGPA planner. Enter your CGPA and remaining AU, or upload your transcript, to see the average grade needed for Merit, Distinction or Highest Distinction. Runs in your browser."
     },
     fgo: {
       title: "NTU FGO Optimiser: Which Modules Should You FGO?",
@@ -117,8 +121,19 @@ export const siteConfig = {
       isNew: true,
       desc: "Upload your transcript and find the modules to Flexible-Grade for the highest CGPA",
       guide: {
-        label: "NTU FGO guide",
-        href: "/articles/ntu-fgo-su-option-guide"
+        label: "How to use it",
+        href: "/articles/ntu-fgo-optimiser-guide"
+      }
+    },
+    {
+      name: "CGPA Planner",
+      href: "/tools/cgpa-planner",
+      icon: "calculator",
+      isNew: true,
+      desc: "See the average grade you need over your remaining AU to reach Merit, Distinction or Highest Distinction",
+      guide: {
+        label: "How to use it",
+        href: "/articles/ntu-cgpa-planner-guide"
       }
     },
     {

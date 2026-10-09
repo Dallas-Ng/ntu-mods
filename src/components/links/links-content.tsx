@@ -57,6 +57,11 @@ const LINK_CATEGORIES: LinkCategory[] = [
         desc: "Browse the AY 2026/2027 Sem 1 exam timetable by date or module"
       },
       {
+        name: "CGPA Planner",
+        href: "/tools/cgpa-planner",
+        desc: "Find the average grade you need over your remaining AU to reach Merit, Distinction or Highest Distinction"
+      },
+      {
         name: "FGO Optimiser",
         href: "/tools/fgo-optimiser",
         desc: "Upload your transcript and find the modules to Flexible-Grade for the highest CGPA"

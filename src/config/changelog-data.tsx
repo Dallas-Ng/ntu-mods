@@ -49,6 +49,46 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "CGPA Planner",
+    date: "8 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            <ChangelogLink href="/tools/cgpa-planner">
+              CGPA Planner
+            </ChangelogLink>
+            : enter your CGPA and remaining AU, or upload your transcript, to
+            see the average grade you need for Merit, Distinction or Highest
+            Distinction. Your transcript is read in your browser and never
+            uploaded. Guide:{" "}
+            <ChangelogLink href="/articles/ntu-honours-classification-cgpa-guide">
+              NTU honours and CGPA guide
+            </ChangelogLink>
+            .
+          </>
+        )
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            Two new step-by-step guides with screenshots:{" "}
+            <ChangelogLink href="/articles/ntu-cgpa-planner-guide">
+              How to use the CGPA Planner
+            </ChangelogLink>{" "}
+            and{" "}
+            <ChangelogLink href="/articles/ntu-fgo-optimiser-guide">
+              How to use the FGO Optimiser
+            </ChangelogLink>
+            .
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "New Tools section and the FGO Optimiser",
     date: "8 Oct 2026",
     items: [

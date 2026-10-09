@@ -22,7 +22,7 @@ The NTU Flexible Grading Option (FGO) is Nanyang Technological University's syst
 | AUs | Count toward your degree requirements | Do not count |
 | Transcript | Shown as P, no letter grade | Removed from your external transcript |
 
-> **Work it out for your own transcript:** the free [NTUMods FGO Optimiser](/tools/fgo-optimiser) reads your transcript PDF in your browser, counts the FGO you have already used, and finds the modules that give the highest CGPA within your remaining quota. Nothing is uploaded.
+> **Work it out for your own transcript:** the free [NTUMods FGO Optimiser](/tools/fgo-optimiser) reads your transcript PDF in your browser, counts the FGO you have already used, and finds the modules that give the highest CGPA within your remaining quota. Nothing is uploaded. The [FGO Optimiser guide](/articles/ntu-fgo-optimiser-guide) walks through it step by step.
 
 ## What FGO actually does
 

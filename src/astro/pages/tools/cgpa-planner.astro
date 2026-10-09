@@ -1,0 +1,178 @@
+---
+import { siteConfig } from "@/config/site"
+import {
+  breadcrumbListJsonLd,
+  faqPageJsonLd,
+  webApplicationJsonLd
+} from "@/lib/json-ld"
+import Breadcrumbs from "@/components/breadcrumbs"
+import CgpaPlanner from "@/components/cgpa/cgpa-planner"
+import Header from "@/components/header"
+import JsonLd from "@/astro/components/JsonLd.astro"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
+
+const { title, desc } = siteConfig.metatags.cgpa
+
+const MAIN_GUIDE = {
+  href: "/articles/ntu-honours-classification-cgpa-guide",
+  title: "NTU Honours Classification and CGPA",
+  description:
+    "Everything behind the numbers: the 5.0 grade scale, how CGPA is weighted by AU, the CGPA each honours class needs, and how to work out the grades you still need by hand."
+}
+
+const RELATED_GUIDES = [
+  {
+    href: "/articles/ntu-cgpa-planner-guide",
+    title: "How to Use the CGPA Planner",
+    description:
+      "A step-by-step walkthrough with screenshots and a worked example."
+  },
+  {
+    href: "/articles/ntu-fgo-su-option-guide",
+    title: "NTU FGO: What It Is and How It Works",
+    description: "Take eligible grades out of your CGPA with Pass or No Record."
+  },
+  {
+    href: "/articles/ntu-degree-audit-guide",
+    title: "NTU Degree Audit",
+    description: "Check your graduation requirements and AU progress."
+  }
+]
+
+const FAQ = [
+  {
+    question: "How does NTU calculate CGPA?",
+    answer:
+      "CGPA is the AU-weighted average of grade points over every letter-graded module. A+ and A are 5.0, A- is 4.5, B+ is 4.0, B is 3.5, B- is 3.0, C+ is 2.5, C is 2.0, D+ is 1.5, D is 1.0 and F is 0. Modules graded Pass or No Record are left out."
+  },
+  {
+    question: "What CGPA do I need for each honours class?",
+    answer:
+      "For most NTU honours degrees: Highest Distinction 4.50 and above, Distinction 4.00 to 4.49, Merit 3.50 to 3.99 and Honours 3.00 to 3.49. Some programmes publish their own bands, so confirm with your school."
+  },
+  {
+    question: "What number do I put under AU left?",
+    answer:
+      "The AU you still expect to take for a grade. Subtract any you plan to Flexible-Grade, because those leave your CGPA. The planner assumes the same average grade across all of them."
+  },
+  {
+    question: "Is my transcript uploaded anywhere?",
+    answer:
+      "No. The PDF is read inside your browser and nothing is sent to a server. Uploading is optional, you can type your CGPA instead."
+  },
+  {
+    question: "Is the CGPA Planner official?",
+    answer:
+      "No. It is an unofficial NTUMods tool and is not affiliated with NTU. Your official CGPA and honours class are set by NTU."
+  }
+]
+---
+
+<BaseLayout
+  title={title}
+  description={desc}
+  canonical="/tools/cgpa-planner"
+  ogImage={`${siteConfig.url}/og/links.png`}
+  ogImageAlt="NTUMods CGPA Planner: the average grade needed for each NTU honours class"
+  size="md"
+  containerClassName="space-y-8">
+  <JsonLd
+    data={[
+      webApplicationJsonLd({
+        name: "NTUMods CGPA Planner",
+        path: "/tools/cgpa-planner",
+        description: desc
+      }),
+      breadcrumbListJsonLd([
+        { name: "Tools", href: "/tools" },
+        { name: "CGPA Planner", href: "/tools/cgpa-planner" }
+      ]),
+      faqPageJsonLd(FAQ)
+    ]}
+  />
+
+  <div class="space-y-3">
+    <Breadcrumbs
+      breadcrumbs={[
+        { href: "/tools", label: "Tools" },
+        { href: "/tools/cgpa-planner", label: "CGPA Planner" }
+      ]}
+    />
+    <Header
+      title="NTU CGPA Planner"
+      subtitle="Find the average grade you need over your remaining AU to reach each honours class."
+    />
+  </div>
+
+  <div>
+    <CgpaPlanner client:load />
+  </div>
+
+  <section class="space-y-3 border-t pt-10" aria-labelledby="about-cgpa">
+    <h2 id="about-cgpa" class="text-lg font-semibold tracking-tight">
+      About NTU honours classification
+    </h2>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      Your NTU honours class depends on your final CGPA, the AU-weighted average
+      of grade points across every letter-graded module. For most honours
+      degrees, Highest Distinction needs 4.50, Distinction 4.00, Merit 3.50 and
+      Honours 3.00. This tool works backwards from those bands to the average
+      grade your remaining AU need, so you can see which class is still within
+      reach.
+    </p>
+    <div class="space-y-3 pt-2">
+      <a
+        href={MAIN_GUIDE.href}
+        class="bg-card hover:bg-accent group block space-y-2 rounded-lg border-2 p-6 transition-colors">
+        <p
+          class="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+          Main guide
+        </p>
+        <p
+          class="group-hover:text-primary text-xl leading-snug font-semibold tracking-tight">
+          {MAIN_GUIDE.title}
+        </p>
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          {MAIN_GUIDE.description}
+        </p>
+        <p class="text-primary pt-1 text-sm font-medium">Read the guide →</p>
+      </a>
+
+      <div class="grid gap-3 sm:grid-cols-3">
+        {
+          RELATED_GUIDES.map(({ href, title, description }) => (
+            <a
+              href={href}
+              class="bg-card hover:bg-accent group rounded-lg border p-3 transition-colors">
+              <p class="group-hover:text-primary text-sm leading-snug font-medium">
+                {title}
+              </p>
+              <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
+                {description}
+              </p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-4 border-t pt-10" aria-labelledby="cgpa-faq">
+    <h2 id="cgpa-faq" class="text-lg font-semibold tracking-tight">
+      Frequently asked questions
+    </h2>
+    {
+      FAQ.map(({ question, answer }) => (
+        <div class="space-y-1">
+          <h3 class="text-sm font-medium">{question}</h3>
+          <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+        </div>
+      ))
+    }
+    <a href="/tools" class="inline-block text-sm text-blue-500 hover:underline">
+      Browse all NTUMods tools →
+    </a>
+  </section>
+</BaseLayout>

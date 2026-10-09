@@ -13,6 +13,8 @@ The Flexible Grading Option (FGO) lets you take eligible grades out of your CGPA
 
 > **Quick summary:** Upload your official NTU transcript PDF. Check the quota and mark your BDEs. Press Auto-optimise to get the set of modules that gives the highest CGPA within your quota and the 12 AU Core, ICC and MPE cap. Copy the list and declare it in the FGO portal. Your transcript never leaves your browser.
 
+> **Ready to try it?** [Open the FGO Optimiser](/tools/fgo-optimiser) in another tab and follow along. The sample data button loads the transcript used in this guide.
+
 If you are new to FGO itself, read [NTU FGO: What It Is and How It Works](/articles/ntu-fgo-su-option-guide) first. It covers the rules this tool applies.
 
 ## Step 1: Upload your transcript

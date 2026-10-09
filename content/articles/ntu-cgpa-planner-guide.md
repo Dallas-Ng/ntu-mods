@@ -13,6 +13,8 @@ Most NTU students eventually ask the same question: what do I need to score from
 
 > **Quick summary:** Enter your current CGPA, the letter-graded AU you have completed and the AU you still have to take. Pick an honours class to see the average grade your remaining AU need, then drag the slider to see where a given average would leave you. Everything runs in your browser.
 
+> **Ready to try it?** [Open the CGPA Planner](/tools/cgpa-planner) in another tab and follow along. The sample data button fills in the example used in this guide.
+
 ## Step 1: Enter your grades so far
 
 ![NTUMods CGPA planner input card for an NTU student with a current CGPA of 3.72, 78 AU done and 54 AU left](/articles/ntu-cgpa-planner-guide/inputs.webp "Step 1: enter your current CGPA, the AU already behind it and the AU you still have to take.")

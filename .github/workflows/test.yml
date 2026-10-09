@@ -2,6 +2,8 @@ name: Unit Tests
 
 on:
   pull_request:
+  push:
+    branches: [main] # seeds the node_modules cache so PRs hit it
 
 concurrency:
   group: unit-tests-${{ github.workflow }}-${{ github.ref }}

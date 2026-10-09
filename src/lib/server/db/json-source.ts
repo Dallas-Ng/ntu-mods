@@ -331,14 +331,26 @@ export function getModuleMetadata(
   return raw ? shapeModule(raw) : null
 }
 
+// Memoised: every prerendered /mods/[module] page asks for the whole
+// semester, and re-deriving faculty/categories for ~4k modules per page was
+// ~a third of build time. Callers treat the result as read-only.
+const allModuleMetadataCache = new Map<string, Record<string, DbModule>>()
 export function getAllModuleMetadata(
   year: string,
   semester: string
 ): Record<string, DbModule> {
-  const data = readMetadata(`${year}_${semester}`)
-  return Object.fromEntries(
-    Object.entries(data).map(([code, raw]) => [code, shapeModule(raw)])
-  )
+  const sem = `${year}_${semester}`
+  let shaped = allModuleMetadataCache.get(sem)
+  if (!shaped) {
+    shaped = Object.fromEntries(
+      Object.entries(readMetadata(sem)).map(([code, raw]) => [
+        code,
+        shapeModule(raw)
+      ])
+    )
+    allModuleMetadataCache.set(sem, shaped)
+  }
+  return shaped
 }
 
 export function getModuleIndexesData(

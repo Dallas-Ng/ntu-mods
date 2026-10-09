@@ -83,7 +83,9 @@ const CORE_ROUTES = [
   "/llms.md",
   "/mods",
   "/privacy",
-  "/timetable"
+  "/timetable",
+  "/tools",
+  "/tools/fgo-optimiser"
 ]
 
 function buildUrlEntry(loc, lastmod) {

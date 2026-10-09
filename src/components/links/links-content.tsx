@@ -1,10 +1,11 @@
 import { useState } from "react"
 import { Search } from "lucide-react"
+
 import type { ArticleHeading } from "@/lib/server/articles"
+import { Input } from "@/components/ui/input"
 import Container from "@/components/container"
 import Header from "@/components/header"
 import LinkCard from "@/components/links/link-card"
-import { Input } from "@/components/ui/input"
 
 interface InternalLink {
   name: string
@@ -54,6 +55,11 @@ const LINK_CATEGORIES: LinkCategory[] = [
         name: "Exam Schedule",
         href: "/exams",
         desc: "Browse the AY 2026/2027 Sem 1 exam timetable by date or module"
+      },
+      {
+        name: "FGO Optimiser",
+        href: "/tools/fgo-optimiser",
+        desc: "Upload your transcript and find the modules to Flexible-Grade for the highest CGPA"
       }
     ]
   },
@@ -90,7 +96,7 @@ const LINK_CATEGORIES: LinkCategory[] = [
       {
         name: "FGO Portal",
         href: "https://sso.wis.ntu.edu.sg/webexe88/owa/sso_login1.asp?t=1&p2=https://wis.ntu.edu.sg/pls/webexe/aus_su_opt.display&extra=&pg=",
-        desc: "Declare eligible courses under the Free General Option"
+        desc: "Declare eligible courses under the Flexible Grading Option. Use the FGO Optimiser first to pick which ones"
       },
       {
         name: "Academic Calendar",

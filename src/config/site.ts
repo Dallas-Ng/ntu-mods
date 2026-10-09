@@ -80,6 +80,14 @@ export const siteConfig = {
       title: "NTU Student Links",
       desc: "Quick links to the most-used NTU student portals — STARS, NTULearn, Degree Audit, CareerAxis, GEM, library booking, and more."
     },
+    tools: {
+      title: "NTU Student Tools",
+      desc: "Free tools for NTU students: the FGO Optimiser for choosing which modules to Flexible-Grade, a timetable wallpaper maker, and more."
+    },
+    fgo: {
+      title: "NTU FGO Optimiser: Which Modules Should You FGO?",
+      desc: "Upload your NTU transcript and find the modules to Flexible-Grade (FGO) for the highest CGPA. Handles earlier FGO and S/U use. Runs in your browser, nothing is uploaded."
+    },
     exams: {
       title: "NTU Exam Schedule",
       desc: "Browse the NTU exam schedule by date, time, and module code. Find exam durations and search by module for the current semester.",
@@ -97,8 +105,30 @@ export const siteConfig = {
     { label: "Timetable", route: "/timetable" },
     { label: "Mods", route: "/mods" },
     { label: "Exams", route: "/exams" },
+    { label: "Tools", route: "/tools" },
     { label: "Articles", route: "/articles" },
     { label: "Links", route: "/links" }
+  ],
+  tools: [
+    {
+      name: "FGO Optimiser",
+      href: "/tools/fgo-optimiser",
+      icon: "graduation-cap",
+      isNew: true,
+      desc: "Upload your transcript and find the modules to Flexible-Grade for the highest CGPA",
+      guide: {
+        label: "NTU FGO guide",
+        href: "/articles/ntu-fgo-su-option-guide"
+      }
+    },
+    {
+      name: "Wallpaper Maker",
+      href: "/screenshot",
+      icon: "smartphone",
+      isNew: false,
+      desc: "Export your timetable as a phone wallpaper or shareable image",
+      guide: null
+    }
   ],
   links: {
     github: "https://github.com/Dallas-Ng",

@@ -14,20 +14,21 @@ const FOOTER_GROUPS = [
   {
     title: "Tools",
     links: [
-      { label: "Wallpaper Maker", href: "/screenshot" },
-      { label: "Settings", href: "/settings" }
+      { label: "All tools", href: "/tools" },
+      ...siteConfig.tools.map((t) => ({ label: t.name, href: t.href }))
     ]
   },
   {
     title: "Resources",
     links: [
       { label: "Links", href: "/links" },
+      { label: "Settings", href: "/settings" },
       { label: "Changelog", href: "/changelog" },
       { label: "Feedback", href: "/feedback" },
       { label: "FAQ", href: "/faq" }
     ]
   }
-] as const
+]
 
 const LEGAL_LINKS = [
   { label: "Privacy", href: "/privacy" },

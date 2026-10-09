@@ -15,6 +15,32 @@ import path from "node:path"
 
 const isBlank = (node) => node.type === "text" && !node.value.trim()
 
+/** Pixel size of a /articles/*.webp, read from its header (no image dependency).
+ *  Written as width/height so the browser reserves the space before the image
+ *  loads, and a theme swap between same-sized light/dark twins never reflows. */
+const webpSize = (src) => {
+  try {
+    const fd = fs.openSync(path.join(process.cwd(), "public", src), "r")
+    const b = Buffer.alloc(32)
+    fs.readSync(fd, b, 0, 32, 0)
+    fs.closeSync(fd)
+    if (b.toString("ascii", 8, 12) !== "WEBP") return null
+    const kind = b.toString("ascii", 12, 16)
+    if (kind === "VP8 ")
+      return {
+        width: b.readUInt16LE(26) & 0x3fff,
+        height: b.readUInt16LE(28) & 0x3fff
+      }
+    if (kind === "VP8L") {
+      const v = b.readUInt32LE(21)
+      return { width: (v & 0x3fff) + 1, height: ((v >> 14) & 0x3fff) + 1 }
+    }
+    if (kind === "VP8X")
+      return { width: b.readUIntLE(24, 3) + 1, height: b.readUIntLE(27, 3) + 1 }
+  } catch {}
+  return null
+}
+
 const darkVariant = (src) => {
   if (typeof src !== "string" || !src.startsWith("/articles/")) return null
   const dark = src.replace(/(\.\w+)$/, "-dark$1")
@@ -35,16 +61,20 @@ export default {
       const { alt = "", title, ...rest } = img.properties
       const caption = String(title || alt).trim()
       const dark = darkVariant(rest.src)
-      const image = (props) => ({
-        ...img,
-        properties: {
-          ...rest,
-          alt,
-          loading: "lazy",
-          decoding: "async",
-          ...props
+      const image = (props) => {
+        const src = props.src ?? rest.src
+        return {
+          ...img,
+          properties: {
+            ...rest,
+            alt,
+            loading: "lazy",
+            decoding: "async",
+            ...(typeof src === "string" ? webpSize(src) : null),
+            ...props
+          }
         }
-      })
+      }
       ctx.replaceNode(node, {
         type: "element",
         tagName: "figure",

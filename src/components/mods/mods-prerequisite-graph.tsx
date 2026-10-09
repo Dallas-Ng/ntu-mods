@@ -8,7 +8,7 @@ import type { DbPrerequisiteNode } from "@/lib/server/db/types"
 interface Props {
   moduleCode: string
   node: DbPrerequisiteNode
-  graph: Record<string, DbPrerequisiteNode>
+  graph: Record<string, { title: string }>
 }
 
 interface CardProps {

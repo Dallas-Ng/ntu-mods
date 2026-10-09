@@ -56,6 +56,21 @@ const {
   relatedArticles
 } = Astro.props
 
+// The graph island only reads titles for this module and the codes it
+// renders (requires + first 15 requiredBy). Passing the whole graph inlined
+// every module's node into each page's island props (~360KB/page).
+const prereqTitles: Record<string, { title: string }> = {}
+if (prereqNode) {
+  for (const code of [
+    moduleKey,
+    ...prereqNode.requires,
+    ...prereqNode.requiredBy.slice(0, 15)
+  ]) {
+    const title = prereqGraph[code]?.title
+    if (title) prereqTitles[code] = { title }
+  }
+}
+
 const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS } = generateTimetableMatrix(
   Object.fromEntries(
     Object.entries(indexes).map(([k, v]) => [k, [...v]])
@@ -163,7 +178,7 @@ const jsonLd = [
           client:visible
           moduleCode={moduleKey}
           node={prereqNode}
-          graph={prereqGraph}
+          graph={prereqTitles}
         />
 
         <hr class="mt-10" />

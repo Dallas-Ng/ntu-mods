@@ -1,5 +1,7 @@
 import type { ReactNode } from "react"
 
+import { siteConfig } from "@/config/site"
+
 const CARD =
   "relative flex h-full min-h-[300px] w-full overflow-hidden rounded-xl border p-5 shadow"
 
@@ -71,6 +73,36 @@ const FeatureCard = ({
     <div className={CARD}>{body}</div>
   )
 }
+
+const ToolsCard = () => (
+  <div className="flex flex-col gap-5 rounded-xl border p-5 shadow lg:flex-row lg:items-center">
+    <div className="lg:w-[30%] lg:shrink-0">
+      <h3 className="text-2xl font-bold">Student Tools</h3>
+      <p className="text-muted-foreground text-lg">
+        Free tools that run in your browser, from FGO planning to CGPA targets
+      </p>
+    </div>
+
+    <div className="grid flex-1 gap-3 md:grid-cols-3">
+      {siteConfig.tools.map((tool) => (
+        <a
+          key={tool.href}
+          href={tool.href}
+          className="hover:bg-accent flex flex-col gap-1 rounded-lg border p-4 transition-colors">
+          <span className="flex items-center justify-between gap-2 font-semibold">
+            {tool.name}
+            {tool.isNew && (
+              <span className="rounded-full bg-yellow-400 px-2 py-0.5 text-[10px] font-semibold text-black">
+                New
+              </span>
+            )}
+          </span>
+          <span className="text-muted-foreground text-sm">{tool.desc}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+)
 
 const LandingFeatures = () => {
   return (
@@ -159,6 +191,8 @@ const LandingFeatures = () => {
             alt="use on any devices"
           />
         </div>
+
+        <ToolsCard />
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
           <FeatureCard

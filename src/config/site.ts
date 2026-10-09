@@ -121,7 +121,7 @@ export const siteConfig = {
       isNew: true,
       desc: "Upload your transcript and find the modules to Flexible-Grade for the highest CGPA",
       guide: {
-        label: "How to use it",
+        label: "Step-by-step guide",
         href: "/articles/ntu-fgo-optimiser-guide"
       }
     },
@@ -132,7 +132,7 @@ export const siteConfig = {
       isNew: true,
       desc: "See the average grade you need over your remaining AU to reach Merit, Distinction or Highest Distinction",
       guide: {
-        label: "How to use it",
+        label: "Step-by-step guide",
         href: "/articles/ntu-cgpa-planner-guide"
       }
     },

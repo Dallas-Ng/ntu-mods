@@ -9,6 +9,7 @@ import Breadcrumbs from "@/components/breadcrumbs"
 import CgpaPlanner from "@/components/cgpa/cgpa-planner"
 import Header from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
+import ToolGuideCallout from "@/astro/components/ToolGuideCallout.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
@@ -105,6 +106,12 @@ const FAQ = [
       subtitle="Find the average grade you need over your remaining AU to reach each honours class."
     />
   </div>
+
+  <ToolGuideCallout
+    href="/articles/ntu-cgpa-planner-guide"
+    title="How to use the CGPA Planner"
+    description="Enter your grades, pick an honours class and drag the slider. Three steps with a worked example, about 5 minutes."
+  />
 
   <div>
     <CgpaPlanner client:load />

@@ -111,9 +111,6 @@ which queries the D1 binding.
 
 - Node.js 22+
 - Yarn
-- A Cloudflare account with access to the `ntu-mods` D1 database (see
-  [Running Locally](#running-locally) — `wrangler.jsonc`'s D1 binding is
-  `remote: true`, so dev needs auth against the real database)
 
 ### Installation
 
@@ -126,19 +123,17 @@ yarn install
 ### Running Locally
 
 The `/mods/:code/:year/:semester` route reads D1 live (see
-[Rendering model](#rendering-model)), and `wrangler.jsonc` sets `remote: true`
-on that binding, so `astro dev` proxies queries to the real Cloudflare D1
-database over the network instead of an empty local one. Authenticate once
-before your first `yarn dev`:
+[Rendering model](#rendering-model)). `astro dev` uses a **local** D1 (set
+`remoteBindings: false` in `astro.config.mjs`), because `wrangler.jsonc`'s
+`remote: true` makes dev proxy through a preview-hostname worker that Cloudflare
+Access blocks with `Too many redirects. http://d1/query`. Seed it once, and again
+after the data changes (about a minute, no Cloudflare login needed):
 
 ```bash
-npx wrangler login
+yarn db:seed-local
 ```
 
-In a non-interactive shell (CI, some sandboxed/agent terminals) `wrangler
-login`'s OAuth flow can't run — set a `CLOUDFLARE_API_TOKEN` env var instead
-([create one here](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/)).
-Without either, dev fails with `Failed to start the remote proxy session`.
+Without it, those pages fail in dev with `no such table: offerings`.
 
 ```bash
 yarn dev

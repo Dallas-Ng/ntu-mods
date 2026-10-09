@@ -66,6 +66,8 @@ Check all of these before you bid. Being able to see a module in STARS does not 
 
 Before your STARS window opens, build your shortlist on a proper planner instead of guessing from memory. The [NTUMods Timetable Planner](/timetable) lets you search every module and index, preview class times and venues, and instantly flag clashes — so when Round 1 opens, you already know exactly which index numbers to enter instead of improvising under time pressure.
 
+![STARS planner for NTU students: NTUMods timetable with module indexes selected and class clashes checked before bidding](/articles/ntumods-timetable-planner-week-view.webp "Check your index choices in the NTUMods planner before your STARS round opens.")
+
 This matters most for labs and other index-scarce slots: check clashes across your full shortlist first, lock in the combination that works, then bid in that order the moment the window opens.
 
 ## Before you open STARS

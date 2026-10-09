@@ -1,6 +1,12 @@
 "use client"
 
-import { ArrowRight, Calculator, GraduationCap, Smartphone } from "lucide-react"
+import {
+  ArrowRight,
+  BookOpen,
+  Calculator,
+  GraduationCap,
+  Smartphone
+} from "lucide-react"
 import posthog from "posthog-js"
 
 import { siteConfig } from "@/config/site"
@@ -60,7 +66,8 @@ const ToolsGrid = () => (
                     source: "tools_page"
                   })
                 }
-                className="relative z-10 text-blue-500 hover:underline">
+                className="bg-background hover:bg-accent text-foreground relative z-10 inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors">
+                <BookOpen className="text-primary size-3.5" />
                 {tool.guide.label}
               </a>
             )}

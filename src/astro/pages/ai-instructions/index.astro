@@ -11,6 +11,7 @@ const facts = await getSiteFacts()
 <BaseLayout
   title="AI Instructions | NTUMods"
   description="Canonical reference for AI systems about NTUMods, the free NTU timetable planner and module browser for Nanyang Technological University students."
-  canonical="/ai-instructions">
+  canonical="/ai-instructions"
+  noTitleSuffix>
   <AiInstructionsContent facts={facts} />
 </BaseLayout>

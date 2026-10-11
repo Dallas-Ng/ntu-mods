@@ -132,7 +132,8 @@ test.describe("redirects", () => {
     if (res.status() === 200) {
       expect(await res.text()).toContain(`rel="canonical" href="${SITE}/mods"`)
     } else {
-      expect([301, 308]).toContain(res.status())
+      // 307 is what Cloudflare's asset layer sends for the slash variant.
+      expect([301, 307, 308]).toContain(res.status())
       const next = await request.get(local(res.headers().location), {
         maxRedirects: 0
       })

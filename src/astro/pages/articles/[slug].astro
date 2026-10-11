@@ -5,6 +5,7 @@ import { siteConfig } from "@/config/site"
 import {
   articleJsonLd,
   breadcrumbListJsonLd,
+  collectionPageJsonLd,
   faqPageJsonLd,
   type JsonLd as JsonLdData
 } from "@/lib/json-ld"
@@ -113,10 +114,21 @@ if (kind === "category") {
   categorySubheading = meta?.subheading ?? `NTUMods guides on ${categoryName}.`
   categoryArticleList = categoryArticles
 
-  categoryLd = breadcrumbListJsonLd([
-    { name: "Articles", href: "/articles" },
-    { name: categoryHeading, href: `/articles/${slug}` }
-  ])
+  categoryLd = [
+    collectionPageJsonLd({
+      name: categoryHeading,
+      description: categorySubheading,
+      path: `/articles/${slug}`,
+      items: categoryArticles.map((a) => ({
+        name: a.title,
+        url: `${siteConfig.url}/articles/${a.slug}`
+      }))
+    }),
+    breadcrumbListJsonLd([
+      { name: "Articles", href: "/articles" },
+      { name: categoryHeading, href: `/articles/${slug}` }
+    ])
+  ]
 } else {
   const articles = await getAllArticles()
   article = articles.find((item) => item.slug === slug)
@@ -183,9 +195,14 @@ if (kind === "article" && !article) {
 }
 
 const pageTitle =
-  kind === "category" ? CATEGORY_META[slug]?.title : article?.title
+  kind === "category"
+    ? (CATEGORY_META[slug]?.title ?? `${categoryHeading} | NTUMods`)
+    : article?.title
 const pageDescription =
-  kind === "category" ? CATEGORY_META[slug]?.desc : article?.description
+  kind === "category"
+    ? (CATEGORY_META[slug]?.desc ??
+      `${categorySubheading} Practical NTU guides, tips and how-tos from NTUMods.`)
+    : article?.description
 ---
 
 <BaseLayout
@@ -193,6 +210,10 @@ const pageDescription =
   description={pageDescription}
   canonical={`/articles/${slug}`}
   size={kind === "category" ? "sm" : "md"}
+  article={article && {
+    publishedTime: article.date,
+    modifiedTime: article.updated || article.date
+  }}
   noTitleSuffix>
   {
     kind === "category" ? (
@@ -321,6 +342,7 @@ const pageDescription =
 
 <script>
   import PhotoSwipe from "photoswipe"
+
   import "photoswipe/style.css"
 
   // Body figures only; the not-prose hero thumbnail is excluded by the selector.

@@ -15,7 +15,9 @@ import type { MiddlewareHandler } from "astro"
 // to middleware and a looser pattern would "normalise" the file extension.
 const MODULE_PATH = /^\/mods\/([A-Za-z0-9]+)((?:\/[A-Za-z0-9]+)*)$/
 
-export const onRequest: MiddlewareHandler = (context, next) => {
+export const SNAPSHOT_HEADER = "x-module-snapshot"
+
+export const onRequest: MiddlewareHandler = async (context, next) => {
   const match = MODULE_PATH.exec(context.url.pathname)
 
   if (match) {
@@ -28,5 +30,16 @@ export const onRequest: MiddlewareHandler = (context, next) => {
     }
   }
 
-  return next()
+  const response = await next()
+
+  // 404.astro renders real module pages on demand, but Astro forces a 404
+  // status on that route no matter what the page sets. It flags those
+  // responses with this header so the status can be corrected here.
+  if (response.status === 404 && response.headers.has(SNAPSHOT_HEADER)) {
+    const headers = new Headers(response.headers)
+    headers.delete(SNAPSHOT_HEADER)
+    return new Response(response.body, { status: 200, headers })
+  }
+
+  return response
 }

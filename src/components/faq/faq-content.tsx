@@ -34,7 +34,7 @@ const FAQ_CONFIG: FaqConfig[] = [
         need data for a newer semester, feel free to request it via the{" "}
         <a
           href="#feedback"
-          className="text-primary hover:text-primary/80 transition-colors">
+          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
           feedback form below
         </a>
         .
@@ -50,7 +50,7 @@ const FAQ_CONFIG: FaqConfig[] = [
         Head to the{" "}
         <a
           href="/timetable"
-          className="text-primary hover:text-primary/80 transition-colors">
+          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
           timetable
         </a>{" "}
         page and search for a module by code or title. Select it, then choose an
@@ -75,7 +75,7 @@ const FAQ_CONFIG: FaqConfig[] = [
         Use the{" "}
         <a
           href="/mods"
-          className="text-primary hover:text-primary/80 transition-colors">
+          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
           mods
         </a>{" "}
         page to search and filter all NTU modules. Click on any module to see
@@ -121,7 +121,7 @@ const FAQ_CONFIG: FaqConfig[] = [
         stored only in your browser and never sent to our servers. See the{" "}
         <a
           href="/privacy"
-          className="text-primary hover:text-primary/80 transition-colors">
+          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
           Privacy Policy
         </a>{" "}
         for full details.

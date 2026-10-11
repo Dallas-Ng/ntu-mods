@@ -83,8 +83,7 @@ export const ModuleCardDetail = ({
       {/* Left: navigable link area with its own hover */}
       <a
         href={getHref(moduleData, code)}
-        className="hover:bg-accent flex min-w-0 flex-1 flex-col p-3 transition-colors"
-        aria-label={`${code} ${moduleData.title}`}>
+        className="hover:bg-accent flex min-w-0 flex-1 flex-col p-3 transition-colors">
         <p className="line-clamp-1 flex-1 text-sm leading-tight">
           {highlightText(moduleData.title, searchTerm)}
         </p>
@@ -155,8 +154,7 @@ export const ModuleListRow = ({
       {/* Left: navigable link area */}
       <a
         href={getHref(moduleData, code)}
-        className="hover:bg-accent flex min-w-0 flex-1 items-center gap-3 px-3 py-2.5 transition-colors"
-        aria-label={`${code} ${moduleData.title}`}>
+        className="hover:bg-accent flex min-w-0 flex-1 items-center gap-3 px-3 py-2.5 transition-colors">
         <span className="text-muted-foreground w-[80px] shrink-0 font-mono text-sm">
           {highlightText(code, searchTerm)}
         </span>

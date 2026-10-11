@@ -58,7 +58,7 @@ const ChangelogFilters = ({
         onClick={() => onFilterChange(filter)}
         className={cn(
           "inline-flex h-6 w-fit cursor-pointer items-center rounded-full border px-2 text-xs leading-none font-medium transition-opacity hover:opacity-80",
-          activeFilter !== filter && "opacity-50",
+          activeFilter === filter && "ring-ring ring-2 ring-offset-1",
           filter === "All"
             ? "border-border bg-muted text-foreground"
             : CATEGORY_STYLES[filter]

@@ -1,4 +1,5 @@
 ---
+import { ON_DEMAND_CACHE_CONTROL } from "@/lib/edge-cache"
 import { buildModuleMeta, buildRelatedArticles } from "@/lib/module-meta"
 import { getModuleUrl } from "@/lib/module-url"
 import { getLatestModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
@@ -30,10 +31,7 @@ const snapshot = match ? await getLatestModuleSnapshot(moduleKey) : null
 const meta = snapshot ? buildModuleMeta(moduleKey, snapshot.moduleData) : null
 if (snapshot) {
   Astro.response.headers.set(SNAPSHOT_HEADER, "1")
-  Astro.response.headers.set(
-    "Cache-Control",
-    "public, max-age=3600, s-maxage=86400"
-  )
+  Astro.response.headers.set("Cache-Control", ON_DEMAND_CACHE_CONTROL)
 }
 ---
 

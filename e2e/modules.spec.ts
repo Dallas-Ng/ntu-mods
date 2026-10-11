@@ -117,6 +117,17 @@ test.describe("module URL strategy", () => {
     expect(bad).toEqual([])
   })
 
+  test("Course JSON-LD only on modules offered this semester", async ({
+    request
+  }) => {
+    const hasCourse = async (code: string) =>
+      /"@type":"Course"/.test(await (await request.get(`/mods/${code}`)).text())
+    for (const o of sample(current, 5, "ld-current"))
+      expect(await hasCourse(o.code), o.code).toBe(true)
+    for (const o of sample(past, 5, "ld-past"))
+      expect(await hasCourse(o.code), o.code).toBe(false)
+  })
+
   test("older semester pages are self-canonical", async ({ request }) => {
     const latest = new Set(
       offerings.map((o) => `/mods/${o.code}/${o.year}/${o.semester}`)

@@ -11,8 +11,10 @@ export default defineConfig({
   testDir: "./e2e",
   timeout: 30_000,
   expect: { timeout: 5_000 },
-  workers: process.env.CI ? 2 : "90%",
-  retries: process.env.CI ? 1 : 0,
+  workers: process.env.CI ? "100%" : "90%",
+  // No retries: the server is local and deterministic, so a retry only reruns
+  // genuine failures.
+  retries: 0,
   reporter: process.env.CI
     ? [["github"], ["list"], ["html", { open: "never" }]]
     : "list",

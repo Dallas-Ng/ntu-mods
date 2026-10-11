@@ -1,14 +1,23 @@
 ---
 import { siteConfig } from "@/config/site"
+import { webPageJsonLd } from "@/lib/json-ld"
 import SitemapContent from "@/components/sitemap/sitemap-content"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
+
+const jsonLd = webPageJsonLd({
+  name: siteConfig.metatags.sitemap.title,
+  description: siteConfig.metatags.sitemap.desc,
+  path: "/sitemap"
+})
 ---
 
 <BaseLayout
   title={siteConfig.metatags.sitemap.title}
   description={siteConfig.metatags.sitemap.desc}
   canonical="/sitemap">
+  <JsonLd data={jsonLd} />
   <SitemapContent />
 </BaseLayout>

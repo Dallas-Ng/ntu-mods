@@ -41,6 +41,8 @@ const FeatureCard = ({
           </div>
           <div className="relative min-h-[110px] min-w-0 flex-1">
             <img
+              loading="lazy"
+              decoding="async"
               src={src}
               alt={alt}
               className="absolute inset-0 h-full w-full object-contain object-right-bottom"
@@ -51,6 +53,8 @@ const FeatureCard = ({
         <>
           <div className="relative min-h-[110px] flex-1">
             <img
+              loading="lazy"
+              decoding="async"
               src={src}
               alt={alt}
               className="absolute inset-0 h-full w-full object-contain"
@@ -169,6 +173,8 @@ const LandingFeatures = () => {
           <a href="/mods" className="cursor-pointer">
             <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
               <img
+                loading="lazy"
+                decoding="async"
                 src="/landing/icc-mods.svg"
                 alt="view all courses and indexes"
                 width={400}

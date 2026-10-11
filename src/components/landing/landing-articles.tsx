@@ -31,6 +31,8 @@ const LandingArticles = () => {
             className="group bg-card hover:bg-accent rounded-lg border transition-colors">
             {article.thumbnail && (
               <img
+                loading="lazy"
+                decoding="async"
                 src={article.thumbnail}
                 alt={article.thumbnailAlt}
                 className="aspect-video w-full rounded-t-lg border-b object-cover"

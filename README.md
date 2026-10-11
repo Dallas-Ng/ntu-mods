@@ -169,6 +169,36 @@ worker config after a successful build, so deploy with that one:
 npx wrangler deploy --config dist/server/wrangler.json
 ```
 
+### Production build settings
+
+Production builds run on Workers Builds with a production-only install, to keep
+the dependency cache small. These settings live in the dashboard (Workers &
+Pages → `ntu-mods` → Settings → Builds, **Production** tab), not in the repo:
+
+| Setting                                  | Value                                                                      |
+| ---------------------------------------- | -------------------------------------------------------------------------- |
+| Build command                            | `yarn install --production --frozen-lockfile --no-progress && yarn build`  |
+| Deploy command                           | `npx wrangler deploy --config dist/server/wrangler.json`                   |
+| Build variable `NODE_ENV`                | `production` (makes Yarn skip `devDependencies`)                           |
+| Build variable `SKIP_DEPENDENCY_INSTALL` | `1` (skips Workers Builds' automatic install; the build command installs)  |
+
+Consequences:
+
+- **Anything the build or deploy needs must be in `dependencies`**, not
+  `devDependencies`. That is why `tailwindcss`, `@tailwindcss/typography`,
+  `tsx` and `wrangler` are there. A build tool left in `devDependencies` fails
+  the production build with `Can't resolve '<package>'`.
+- **Previews do not use these settings.** Preview builds use the Previews Base
+  config (see below), so a preview can pass while production fails for the
+  reason above. Test with `NODE_ENV=production yarn install --frozen-lockfile
+  && yarn build` in a clean checkout when adding build-time packages.
+- If these settings are ever recreated, the plain defaults (`yarn build`, no
+  extra variables) also work. They are slower by roughly 10 to 25 seconds.
+
+Reference timings for a production build: about 2m 31s before the build
+optimisations, and about 1m 20s after (build phase about 20s, deploy about 15s).
+Most of the remaining time is Workers Builds restoring its dependency cache.
+
 ### Preview deployments
 
 Pushes to non-production branches get a preview via Cloudflare

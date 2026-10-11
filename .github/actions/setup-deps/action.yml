@@ -1,0 +1,27 @@
+name: Set up Node and dependencies
+description: >
+  Node from .node-version plus node_modules, restored from cache when the
+  lockfile is unchanged. Shared by every workflow so they hit one cache entry.
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v5
+      with:
+        node-version-file: .node-version
+        package-manager-cache: false # setup-node auto-caches yarn from packageManager; we cache node_modules instead
+
+    # Installs dominate the fast jobs, so cache node_modules itself: a
+    # lockfile-unchanged run skips install entirely.
+    - name: Cache node_modules
+      id: deps
+      uses: actions/cache@v4
+      with:
+        path: node_modules
+        key: node-modules-${{ runner.os }}-${{ hashFiles('.node-version', 'yarn.lock') }}
+
+    - name: Install dependencies
+      if: steps.deps.outputs.cache-hit != 'true'
+      shell: bash
+      run: yarn install --frozen-lockfile --prefer-offline --ignore-scripts

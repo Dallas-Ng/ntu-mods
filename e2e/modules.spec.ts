@@ -99,6 +99,24 @@ test.describe("module URL strategy", () => {
     })
   }
 
+  test("h1 leads with the code and keeps the real title", async ({
+    request
+  }) => {
+    const bad: string[] = []
+    for (const o of sample([...current, ...past], 15, "mods-h1")) {
+      const html = await (await request.get(`/mods/${o.code}`)).text()
+      const h1 = /<h1[^>]*>([\s\S]*?)<\/h1>/
+        .exec(html)?.[1]
+        .replace(/<[^>]+>/g, "")
+        .replace(/&amp;/g, "&")
+        .replace(/\s+/g, " ")
+        .trim()
+      if (!h1?.startsWith(o.code) || !h1.includes(o.raw.title.trim()))
+        bad.push(`${o.code}: h1 "${h1}" vs title "${o.raw.title}"`)
+    }
+    expect(bad).toEqual([])
+  })
+
   test("older semester pages are self-canonical", async ({ request }) => {
     const latest = new Set(
       offerings.map((o) => `/mods/${o.code}/${o.year}/${o.semester}`)

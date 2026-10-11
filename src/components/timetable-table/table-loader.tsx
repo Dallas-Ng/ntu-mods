@@ -4,13 +4,13 @@ import { STARS_TIMESLOTS } from "@/lib/constants"
 import { TimetableTableThead } from "./thead"
 
 export const TimeSlotItem = ({ startTime }: { startTime: number }) => (
-  <td className="relative">
+  <th scope="row" className="text-foreground relative">
     <span className="bg-card absolute top-[-8px] left-0 w-full px-1 text-center">
       {startTime}
     </span>
 
     <div className={TABLE_SETTINGS.TIMESLOT_CLASS} />
-  </td>
+  </th>
 )
 
 export const TimetableTableLoader = () => (

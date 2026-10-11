@@ -32,7 +32,7 @@ const PillCard = ({ code, title, anchorRef }: CardProps) => (
 )
 
 const EmptyPill = ({ label }: { label: string }) => (
-  <div className="border-border/40 text-muted-foreground/50 flex w-full items-center justify-center rounded-full border border-dashed px-3 py-1.5 text-xs italic">
+  <div className="border-border/40 text-muted-foreground flex w-full items-center justify-center rounded-full border border-dashed px-3 py-1.5 text-xs italic">
     {label}
   </div>
 )

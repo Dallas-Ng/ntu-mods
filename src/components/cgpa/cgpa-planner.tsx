@@ -200,7 +200,7 @@ const CgpaPlanner = () => {
               onClick={() => track("transcript_link_clicked")}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-500 hover:underline">
+              className="text-blue-500 underline">
               Get your transcript
             </a>
           </p>

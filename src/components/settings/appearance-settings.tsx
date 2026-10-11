@@ -183,6 +183,7 @@ const AppearanceSettings = () => {
 
           <Input
             type="range"
+            aria-label="Corner radius"
             min={0}
             max={16}
             step={1}

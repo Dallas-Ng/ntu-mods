@@ -6,8 +6,8 @@ import { Font } from "astro:assets"
 import { siteConfig } from "@/config/site"
 import { BUILD_ENV, BUILD_TIME, GIT_COMMIT_SHA, IS_PROD } from "@/lib/constants"
 import { Toaster } from "@/components/ui/sonner"
-import AppBanner from "@/components/app-banner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
+import { Banner } from "@/components/banner"
 import Container from "@/components/container"
 import Footer from "@/components/footer"
 import MobileTracker from "@/components/mobile-tracker"
@@ -131,7 +131,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
     data-build-time={BUILD_TIME}
     data-build-env={BUILD_ENV}>
     <AppearanceStyleProvider client:load />
-    <AppBanner client:idle />
+    <Banner.tools />
     <div
       class={`bg-background flex min-h-screen flex-col ${outerClassName ?? ""}`}>
       <Navbar client:load />

@@ -72,6 +72,7 @@ export const ModsDaySelect = ({ paramsValue, disabled }: Props) => {
             disabled={disabled}
             variant="outline"
             role="combobox"
+            aria-label={label}
             className={cn(
               "w-full justify-between overflow-hidden",
               !isAll && "ring-ring rounded-md ring-1"

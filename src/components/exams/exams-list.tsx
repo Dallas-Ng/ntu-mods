@@ -234,7 +234,7 @@ export default function ExamsList({ exams }: Props) {
             setGroupBy(v as GroupBy)
             posthog.capture("exams_grouped", { group_by: v })
           }}>
-          <SelectTrigger className="w-full sm:w-44">
+          <SelectTrigger aria-label="Group exams" className="w-full sm:w-44">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

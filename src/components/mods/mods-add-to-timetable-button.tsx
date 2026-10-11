@@ -136,6 +136,7 @@ const ModsAddToTimetableButton = ({
       variant={triggerVariant ?? (inAnyPlan ? "secondary" : "outline")}
       size="sm"
       disabled={!hasIndexes}
+      aria-label={inAnyPlan ? "In Timetable" : "Add to Calendar"}
       className={cn("gap-1.5", triggerClassName)}>
       {inAnyPlan ? (
         <CalendarCheck className="text-primary size-3.5 shrink-0" />

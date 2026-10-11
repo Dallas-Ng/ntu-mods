@@ -108,6 +108,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
               onClick={reRollIndex}
               variant="outline"
               size="icon"
+              aria-label="Show another module"
               className="ml-2 w-[40px]">
               <RefreshCcw className="size-4" />
             </Button>

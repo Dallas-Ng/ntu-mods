@@ -27,7 +27,7 @@ export function renderModuleValue(key: keyof DbModule, value: unknown) {
         {MODULE_CODE_RE.test(item) ? (
           <a
             href={`/mods/${item}`}
-            className="text-primary hover:text-primary/80 transition-colors">
+            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
             {item}
           </a>
         ) : (

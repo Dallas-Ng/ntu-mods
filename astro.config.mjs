@@ -180,6 +180,7 @@ export default defineConfig({
                 return "vendor-react"
               if (pkg === "posthog-js") return "vendor-posthog"
               if (pkg === "pdfjs-dist") return "vendor-pdfjs"
+              if (pkg === "photoswipe") return "vendor-photoswipe"
               if (pkg === "date-fns") return "vendor-date-fns"
               if (
                 pkg === "zod" ||

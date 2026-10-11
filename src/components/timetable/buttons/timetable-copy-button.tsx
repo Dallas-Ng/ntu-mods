@@ -122,9 +122,7 @@ const TimetableCopyButton = () => {
   if (isMobile)
     return (
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger asChild>
-          <div>{trigger}</div>
-        </DrawerTrigger>
+        <DrawerTrigger asChild>{trigger}</DrawerTrigger>
 
         <DrawerContent className="h-[80vh] p-2">
           <DrawerHeader className="p-2">Copy to Timetable</DrawerHeader>
@@ -137,9 +135,7 @@ const TimetableCopyButton = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <div>{trigger}</div>
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
 
       <DialogContent className="p-2" aria-describedby={undefined}>
         <DialogHeader className="p-2 pb-0">Copy to Timetable</DialogHeader>

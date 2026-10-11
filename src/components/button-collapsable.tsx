@@ -12,6 +12,9 @@ const ButtonCollapsable = ({ text, icon: Icon, ...rest }: Props) => {
     <Button
       variant="outline"
       className="size-9 min-w-10 p-0 md:w-fit md:px-4 md:py-2"
+      // The text is display:none below md, which leaves icon-only buttons
+      // with no accessible name.
+      aria-label={typeof text === "string" ? text : undefined}
       {...rest}>
       <span className="hidden md:mr-1 md:block">{text}</span>
       <Icon className="size-4" />

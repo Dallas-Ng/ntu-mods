@@ -1,45 +1,31 @@
-name: SEO E2E
+name: E2E SEO Tests
 
 on:
   pull_request:
   push:
-    branches: [main] # seeds the node_modules / browser caches so PRs hit them
+    branches: [main] # seeds the caches so PRs hit them
 
 concurrency:
-  group: e2e-${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  seo:
-    name: Browser SEO checks
+  e2e-seo:
+    name: E2E SEO tests (Playwright)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout repo
         uses: actions/checkout@v5
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version-file: .node-version
-          package-manager-cache: false # we cache node_modules instead
-
-      - name: Cache node_modules
-        id: deps
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: node-modules-${{ runner.os }}-${{ hashFiles('.node-version', 'yarn.lock') }}
-
-      - name: Install dependencies
-        if: steps.deps.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --prefer-offline --ignore-scripts
+      - name: Set up Node and dependencies
+        uses: ./.github/actions/setup-deps
 
       # Browser binaries are keyed on the Playwright version; system libs are
       # not cacheable, so install-deps still runs on a hit. Headless shell only:
       # the tests never run headed, and it is a much smaller download.
       - name: Get Playwright version
-        id: pw
+        id: playwright
         run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
 
       - name: Cache Playwright browsers
@@ -47,7 +33,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
 
       - name: Install Chromium
         run: |
@@ -65,7 +51,7 @@ jobs:
           yarn db:seed-local & seed=$!
           wait $build && wait $seed
 
-      - name: Run SEO tests
+      - name: Run E2E SEO tests
         run: yarn test:e2e
 
       - name: Upload report

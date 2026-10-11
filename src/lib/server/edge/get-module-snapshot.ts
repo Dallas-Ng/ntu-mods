@@ -48,6 +48,8 @@ export interface ModuleSnapshot {
   indexes: Record<string, Index[]>
   exam: DbExam | null
   isCurrentOffering: boolean
+  /** This module's most recent semester; /mods/CODE shows the same data. */
+  isLatestOffering: boolean
 }
 
 /**
@@ -86,21 +88,29 @@ export async function getModuleSnapshot(
 
   const sem = `${year}_${semester}`
 
-  const [offering, prerequisites, indexKeys, slots, exam, latestSem] =
-    await Promise.all([
-      db.prepare(OFFERING_SQL).bind(code, sem).first<DbOfferingRow>(),
-      db
-        .prepare(OFFERING_PREREQUISITES_SQL)
-        .bind(code, sem)
-        .all<DbPrerequisiteRow>(),
-      db
-        .prepare(OFFERING_INDEX_KEYS_SQL)
-        .bind(code, sem)
-        .all<{ index_key: string }>(),
-      db.prepare(OFFERING_SLOTS_SQL).bind(code, sem).all<DbSlotRow>(),
-      db.prepare(OFFERING_EXAM_SQL).bind(code, sem).first<DbExamRow>(),
-      getLatestSem(db)
-    ])
+  const [
+    offering,
+    prerequisites,
+    indexKeys,
+    slots,
+    exam,
+    latestSem,
+    moduleLatest
+  ] = await Promise.all([
+    db.prepare(OFFERING_SQL).bind(code, sem).first<DbOfferingRow>(),
+    db
+      .prepare(OFFERING_PREREQUISITES_SQL)
+      .bind(code, sem)
+      .all<DbPrerequisiteRow>(),
+    db
+      .prepare(OFFERING_INDEX_KEYS_SQL)
+      .bind(code, sem)
+      .all<{ index_key: string }>(),
+    db.prepare(OFFERING_SLOTS_SQL).bind(code, sem).all<DbSlotRow>(),
+    db.prepare(OFFERING_EXAM_SQL).bind(code, sem).first<DbExamRow>(),
+    getLatestSem(db),
+    db.prepare(MODULE_LATEST_SEM_SQL).bind(code).first<DbSemesterRow>()
+  ])
 
   if (!offering) return null
 
@@ -115,7 +125,8 @@ export async function getModuleSnapshot(
     // source was scraped independently of whether any courses had been loaded,
     // so a newly listed but unscraped semester made every module render the
     // "historical snapshot" banner.
-    isCurrentOffering: latestSem === sem
+    isCurrentOffering: latestSem === sem,
+    isLatestOffering: moduleLatest?.sem === sem
   }
 }
 

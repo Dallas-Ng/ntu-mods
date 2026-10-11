@@ -168,13 +168,17 @@ test.describe("404 handling", () => {
     "/mods/EE3011/1999/9",
     "/articles/definitely-not-an-article"
   ]
-  for (const p of MISSING) {
-    test(`${p} is a real 404 and noindex`, async ({ request }) => {
+  test("missing pages are real 404s, noindex, with no canonical", async ({
+    request
+  }) => {
+    for (const p of MISSING) {
       const res = await request.get(p, { maxRedirects: 0 })
-      expect(res.status()).toBe(404)
+      expect(res.status(), p).toBe(404)
       const html = await res.text()
-      expect(html).toMatch(/<meta name="robots" content="noindex/)
-      expect(html).not.toMatch(/rel="canonical"/)
-    })
-  }
+      expect(html, p).toMatch(/<meta name="robots" content="noindex/)
+      expect(html, p).not.toMatch(/rel="canonical"/)
+      // set by 404.astro on real module pages; must never reach a real 404
+      expect(res.headers()["x-module-snapshot"], p).toBeUndefined()
+    }
+  })
 })

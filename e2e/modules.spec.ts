@@ -57,6 +57,8 @@ test.describe("module URL strategy", () => {
         const res = await request.get(p, { maxRedirects: 0 })
         const html = await res.text()
         const c = canonicalOf(html)
+        if (res.headers()["x-module-snapshot"])
+          bad.push(`${p} leaks x-module-snapshot`)
         if (res.status() !== 200) bad.push(`${p} -> ${res.status()}`)
         else if (noindex(html, res.headers()["x-robots-tag"] ?? ""))
           bad.push(`${p} noindex`)
@@ -161,23 +163,5 @@ test.describe("module URL strategy", () => {
       .map((o) => `/mods/${o.code}/${o.year}/${o.semester}`)
       .filter((p) => paths.has(p))
     expect(dupes).toEqual([])
-  })
-
-  test("unknown modules and semesters 404 with noindex", async ({
-    request
-  }) => {
-    for (const p of ["/mods/ZZZ9999", "/mods/EE3011/1999/9"]) {
-      const res = await request.get(p, { maxRedirects: 0 })
-      const html = await res.text()
-      expect(res.status(), p).toBe(404)
-      expect(noindex(html, res.headers()["x-robots-tag"] ?? ""), p).toBe(true)
-      expect(res.headers()["x-module-snapshot"], p).toBeUndefined()
-    }
-  })
-
-  test("internal snapshot header never leaks", async ({ request }) => {
-    const o = past[0]
-    const res = await request.get(`/mods/${o.code}`, { maxRedirects: 0 })
-    expect(res.headers()["x-module-snapshot"]).toBeUndefined()
   })
 })

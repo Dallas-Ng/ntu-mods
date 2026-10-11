@@ -20,7 +20,9 @@ const HEAVY = new Set([
 ])
 
 const origin = new URL(BASE_URL).origin
-const pages = pagesUnderTest()
+// Console/network errors come from the template and its islands, not from
+// per-page data, so a handful of each dynamic kind is enough.
+const pages = pagesUnderTest(5)
 const kinds = [...new Set(pages.map((p) => p.kind))]
 
 // Grouped theme -> kind -> path, so a failure reads

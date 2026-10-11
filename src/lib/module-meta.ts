@@ -2,7 +2,8 @@ import type { DbModule } from "@/lib/server/db/types"
 
 /** Head title/description for a module's "current offering" page — shared by the static build and the on-demand fallback so they read identically. */
 export function buildModuleMeta(code: string, moduleData: DbModule) {
-  const trimmed = moduleData.description?.trim()
+  // Descriptions are multi-line prose; a raw newline in a <meta> attribute is noise.
+  const trimmed = moduleData.description?.replace(/\s+/g, " ").trim()
   const description = trimmed
     ? `${trimmed.slice(0, 100)}${trimmed.length > 100 ? "…" : ""}`
     : `${code} ${moduleData.title} is a ${moduleData.au} AU NTU module. See index schedules, class times, exams, venues and prerequisites.`

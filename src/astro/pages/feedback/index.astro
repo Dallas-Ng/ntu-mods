@@ -1,10 +1,19 @@
 ---
 import { siteConfig } from "@/config/site"
+import { webPageJsonLd } from "@/lib/json-ld"
 import FeedbackCard from "@/components/feedback-card"
 import Header from "@/components/header"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
+
+const jsonLd = webPageJsonLd({
+  name: siteConfig.metatags.feedback.title,
+  description: siteConfig.metatags.feedback.desc,
+  path: "/feedback",
+  type: "ContactPage"
+})
 ---
 
 <BaseLayout
@@ -13,6 +22,7 @@ export const prerender = true
   canonical="/feedback"
   size="sm"
   containerClassName="space-y-8">
+  <JsonLd data={jsonLd} />
   <Header
     title="Feedback"
     subtitle="Share your thoughts, report issues, or suggest improvements."

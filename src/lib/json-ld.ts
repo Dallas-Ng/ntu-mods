@@ -137,6 +137,26 @@ export const collectionPageJsonLd = ({
   })
 })
 
+/** Plain page markup for pages with no richer type (policy, changelog, ...). */
+export const webPageJsonLd = ({
+  name,
+  description,
+  path,
+  type = "WebPage"
+}: {
+  name: string
+  description: string
+  path: string
+  type?: "WebPage" | "AboutPage" | "ContactPage"
+}): JsonLd => ({
+  "@context": CONTEXT,
+  "@type": type,
+  name,
+  description,
+  url: absoluteUrl(path),
+  isPartOf: { "@type": "WebSite", name: siteConfig.name, url: siteConfig.url }
+})
+
 /** BreadcrumbList; href is a site-relative path or absolute URL. */
 export const breadcrumbListJsonLd = (
   crumbs: { name: string; href: string }[]

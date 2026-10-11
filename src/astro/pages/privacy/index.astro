@@ -1,14 +1,23 @@
 ---
 import { siteConfig } from "@/config/site"
+import { webPageJsonLd } from "@/lib/json-ld"
 import PrivacyContent from "@/components/privacy/privacy-content"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
+
+const jsonLd = webPageJsonLd({
+  name: siteConfig.metatags.privacy.title,
+  description: siteConfig.metatags.privacy.desc,
+  path: "/privacy"
+})
 ---
 
 <BaseLayout
   title={siteConfig.metatags.privacy.title}
   description={siteConfig.metatags.privacy.desc}
   canonical="/privacy">
+  <JsonLd data={jsonLd} />
   <PrivacyContent />
 </BaseLayout>

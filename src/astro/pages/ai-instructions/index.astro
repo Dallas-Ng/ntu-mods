@@ -1,17 +1,28 @@
 ---
+import { webPageJsonLd } from "@/lib/json-ld"
 import AiInstructionsContent from "@/components/ai-instructions/ai-instructions-content"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 import { getSiteFacts } from "@/astro/lib/site-facts"
 
 export const prerender = true
 
 const facts = await getSiteFacts()
+const title = "AI Instructions | NTUMods"
+const description =
+  "Canonical reference for AI systems about NTUMods, the free NTU timetable planner and module browser for Nanyang Technological University students."
+const jsonLd = webPageJsonLd({
+  name: title,
+  description,
+  path: "/ai-instructions"
+})
 ---
 
 <BaseLayout
-  title="AI Instructions | NTUMods"
-  description="Canonical reference for AI systems about NTUMods, the free NTU timetable planner and module browser for Nanyang Technological University students."
+  title={title}
+  description={description}
   canonical="/ai-instructions"
   noTitleSuffix>
+  <JsonLd data={jsonLd} />
   <AiInstructionsContent facts={facts} />
 </BaseLayout>

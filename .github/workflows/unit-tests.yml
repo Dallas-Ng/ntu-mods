@@ -1,0 +1,25 @@
+name: Unit Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main] # seeds the caches so PRs hit them
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit:
+    name: Unit tests (Vitest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Set up Node and dependencies
+        uses: ./.github/actions/setup-deps
+
+      - name: Run unit tests
+        run: yarn test

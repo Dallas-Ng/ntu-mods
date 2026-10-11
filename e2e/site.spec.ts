@@ -39,6 +39,25 @@ test.describe("robots and sitemap", () => {
     expect(urls.length).toBe(new Set(urls).size)
   })
 
+  test("sitemap lastmod is real: valid, never in the future, not a blanket stamp", async ({
+    request
+  }) => {
+    const index = await (await request.get("/sitemap.xml")).text()
+    const mods: string[] = []
+    for (const f of [...index.matchAll(/<loc>([^<]+)</g)].map((m) => m[1])) {
+      const body = await (await request.get(local(f))).text()
+      expect(body).not.toMatch(/<changefreq>|<priority>/)
+      mods.push(...[...body.matchAll(/<lastmod>([^<]+)</g)].map((m) => m[1]))
+    }
+    for (const m of mods) {
+      expect(Number.isNaN(Date.parse(m)), m).toBe(false)
+      expect(Date.parse(m), m).toBeLessThanOrEqual(Date.now())
+    }
+    // Articles carry their own dates, so a build-time stamp would show up as
+    // one single value across the whole file.
+    expect(new Set(mods).size).toBeGreaterThan(1)
+  })
+
   test("random sitemap URLs return 200 and are not noindex", async ({
     request
   }) => {

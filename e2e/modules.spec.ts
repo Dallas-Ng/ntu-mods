@@ -3,6 +3,7 @@ import path from "node:path"
 import { expect, test } from "@playwright/test"
 
 import { latestOfferings } from "../src/lib/server/db/json-source"
+import { moduleYearCutoff } from "../src/lib/sitemap-policy"
 import { sample, SITE, sitemapPaths } from "./lib/urls"
 
 // SEO contract for module URLs:
@@ -117,12 +118,16 @@ test.describe("module URL strategy", () => {
     expect(bad).toEqual([])
   })
 
-  test("sitemap lists /mods/CODE for every module and no latest-semester duplicates", () => {
+  test("sitemap lists /mods/CODE for recently offered modules only, and no latest-semester duplicates", () => {
     const paths = new Set(sitemapPaths())
-    const missing = offerings
-      .filter((o) => !paths.has(`/mods/${o.code}`))
-      .map((o) => o.code)
-    expect(missing).toEqual([])
+    const cutoff = moduleYearCutoff()
+    const recent = offerings.filter((o) => Number(o.year) >= cutoff)
+    const stale = offerings.filter((o) => Number(o.year) < cutoff)
+    expect(recent.length).toBeGreaterThan(100)
+    expect(stale.length).toBeGreaterThan(0)
+    expect(recent.filter((o) => !paths.has(`/mods/${o.code}`))).toEqual([])
+    // Stale pages stay live and indexable, just not advertised.
+    expect(stale.filter((o) => paths.has(`/mods/${o.code}`))).toEqual([])
     const dupes = offerings
       .map((o) => `/mods/${o.code}/${o.year}/${o.semester}`)
       .filter((p) => paths.has(p))

@@ -10,6 +10,10 @@ import path from "path"
 import { fileURLToPath } from "url"
 
 import * as json from "../src/lib/server/db/json-source.ts"
+import {
+  moduleYearCutoff,
+  versionedYearCutoff
+} from "../src/lib/sitemap-policy.ts"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, "..")
@@ -43,10 +47,8 @@ function gitDate(file) {
 }
 const semDate = (sem) => gitDate(`src/data/api/metadata/${sem}.json`)
 
-const now = new Date()
-const currentAYStart =
-  now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1
-const SITEMAP_YEAR_CUTOFF = currentAYStart - 1
+const SITEMAP_YEAR_CUTOFF = versionedYearCutoff()
+const MODULE_YEAR_CUTOFF = moduleYearCutoff()
 
 const slugifyCategory = (category) =>
   category
@@ -97,6 +99,7 @@ async function getArticleRoutes() {
 function getModuleRoutes() {
   const modulePaths = json
     .latestOfferings()
+    .filter((o) => Number(o.year) >= MODULE_YEAR_CUTOFF)
     .map((o) => ({ loc: `/mods/${o.code}`, lastmod: semDate(o.sem) }))
 
   const versionedPaths = json

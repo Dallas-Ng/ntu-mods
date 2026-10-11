@@ -15,9 +15,6 @@ import { BASE_URL, pagesUnderTest, type PageRef } from "./lib/urls"
 // JS is off on purpose: what renders here is what crawlers that skip JS see,
 // so meta, JSON-LD, headings and body copy must all be server-rendered.
 //
-// Tests are grouped check -> page kind -> path, so a failure reads as
-// "Meta tags > article > /articles/x" and `-g "Meta tags"` reruns one check.
-// All tests in a file share one worker, so each page loads once (cached).
 interface Loaded {
   seo: SeoSnapshot
   status: number
@@ -53,48 +50,59 @@ const load = (
 const pages = pagesUnderTest()
 const kinds = [...new Set(pages.map((p) => p.kind))]
 
-// Reported as a flat list of problems so the diff names every reason at once.
-function check(
-  name: string,
-  run: (l: Loaded, ref: PageRef) => string[] | Promise<string[]>
-) {
-  test.describe(name, () => {
-    for (const kind of kinds) {
-      test.describe(kind, () => {
-        for (const ref of pages.filter((p) => p.kind === kind)) {
-          test(ref.path, async ({ noJs }) => {
-            expect(await run(await load(noJs, ref), ref)).toEqual([])
-          })
-        }
-      })
+// One test per page runs every check, each as a soft assertion labelled with
+// its name: the page loads once, and a failure still names the page and every
+// check that failed, e.g. "Meta tags" under "article > /articles/x".
+const ogImages = new Map<string, Promise<string[]>>() // shared by many pages
+
+const checks: Array<
+  [string, (l: Loaded, ref: PageRef) => string[] | Promise<string[]>]
+> = [
+  [
+    "Responds 200 and is indexable",
+    ({ status, robotsHeader }) => [
+      ...(status === 200 ? [] : [`status ${status}`]),
+      ...(/noindex/i.test(robotsHeader)
+        ? [`x-robots-tag: ${robotsHeader}`]
+        : [])
+    ]
+  ],
+  [
+    "Meta tags",
+    ({ seo }, ref) => {
+      for (const w of warnings(seo)) {
+        console.warn(`SEO warning ${ref.path}: ${w}`)
+        test.info().annotations.push({ type: "warning", description: w })
+      }
+      return metaProblems(seo, ref)
     }
-  })
-}
+  ],
+  [
+    "JSON-LD is valid and matches the page",
+    ({ seo }, ref) => jsonLdProblems(seo, ref)
+  ],
+  ["Heading outline", ({ seo }) => headingProblems(seo)],
+  ["Images and subresources", ({ seo }) => imageProblems(seo)],
+  [
+    "Renders real content without JS",
+    ({ seo }, ref) => contentProblems(seo, ref)
+  ]
+]
 
-check("Responds 200 and is indexable", ({ status, robotsHeader }) => [
-  ...(status === 200 ? [] : [`status ${status}`]),
-  ...(/noindex/i.test(robotsHeader) ? [`x-robots-tag: ${robotsHeader}`] : [])
-])
+for (const kind of kinds) {
+  test.describe(kind, () => {
+    for (const ref of pages.filter((p) => p.kind === kind)) {
+      test(ref.path, async ({ noJs, request }) => {
+        const loadedPage = await load(noJs, ref)
+        for (const [name, run] of checks) {
+          expect.soft(await run(loadedPage, ref), name).toEqual([])
+        }
 
-check("Meta tags", ({ seo }, ref) => {
-  for (const w of warnings(seo)) {
-    console.warn(`SEO warning ${ref.path}: ${w}`)
-    test.info().annotations.push({ type: "warning", description: w })
-  }
-  return metaProblems(seo, ref)
-})
-
-// The same image is shared by many pages: fetch each URL once per worker.
-const ogImages = new Map<string, Promise<string[]>>()
-test.describe("og:image resolves to an image", () => {
-  for (const kind of kinds) {
-    test.describe(kind, () => {
-      for (const ref of pages.filter((p) => p.kind === kind)) {
-        test(ref.path, async ({ noJs, request }) => {
-          const url = meta((await load(noJs, ref)).seo, "og:image")
-          test.skip(!url, "missing og:image is reported under Meta tags")
+        // og:image must resolve to an image; each URL is fetched once per worker.
+        const url = meta(loadedPage.seo, "og:image")
+        if (url) {
           // Absolute URL points at the prod host; request the same path here.
-          const local = new URL(url!).pathname
+          const local = new URL(url).pathname
           if (!ogImages.has(local)) {
             ogImages.set(
               local,
@@ -109,18 +117,11 @@ test.describe("og:image resolves to an image", () => {
               })
             )
           }
-          expect(await ogImages.get(local)).toEqual([])
-        })
-      }
-    })
-  }
-})
-
-check("JSON-LD is valid and matches the page", ({ seo }, ref) =>
-  jsonLdProblems(seo, ref)
-)
-check("Heading outline", ({ seo }) => headingProblems(seo))
-check("Images and subresources", ({ seo }) => imageProblems(seo))
-check("Renders real content without JS", ({ seo }, ref) =>
-  contentProblems(seo, ref)
-)
+          expect
+            .soft(await ogImages.get(local), "og:image resolves")
+            .toEqual([])
+        }
+      })
+    }
+  })
+}

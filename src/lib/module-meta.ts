@@ -5,7 +5,7 @@ export function buildModuleMeta(code: string, moduleData: DbModule) {
   const trimmed = moduleData.description?.trim()
   const description = trimmed
     ? `${trimmed.slice(0, 100)}${trimmed.length > 100 ? "…" : ""}`
-    : `${code} is a ${moduleData.au} AU NTU module. Check index schedules, class times, exam dates, venues, and prerequisites on NTUMods.`
+    : `${code} ${moduleData.title} is a ${moduleData.au} AU NTU module. See index schedules, class times, exams, venues and prerequisites.`
 
   return {
     title: `${code} ${moduleData.title} (${moduleData.au} AU) | NTUMods`,

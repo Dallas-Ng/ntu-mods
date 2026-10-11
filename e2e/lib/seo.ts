@@ -236,7 +236,15 @@ export function jsonLdProblems(s: SeoSnapshot, ref: PageRef): string[] {
     module: ["Course", "BreadcrumbList"],
     semester: ["BreadcrumbList"]
   }
+  // Course markup only belongs on modules offered this semester.
+  const notOffered =
+    ref.kind === "module" &&
+    s.text.includes("Not offered in the current semester")
   for (const t of expect[ref.kind] ?? []) {
+    if (t === "Course" && notOffered) {
+      if (types.includes(t)) out.push("Course JSON-LD on a not-offered module")
+      continue
+    }
     if (!types.includes(t)) out.push(`missing JSON-LD ${t}`)
   }
   // /articles/[slug] also serves category listings, which are CollectionPages.
@@ -259,7 +267,7 @@ export function jsonLdProblems(s: SeoSnapshot, ref: PageRef): string[] {
 export function contentProblems(s: SeoSnapshot, ref: PageRef): string[] {
   const out: string[] = []
   const h1 = s.headings.find((h) => h.level === 1)?.text ?? ""
-  if (/not found|404/i.test(h1)) out.push(`soft 404, h1 "${h1}"`)
+  if (/not found|\b404\b/i.test(h1)) out.push(`soft 404, h1 "${h1}"`)
   if (!s.text.trim()) out.push("empty body text")
   const leak = s.text.match(PLACEHOLDER)
   if (leak) out.push(`placeholder in body: ${leak[0]}`)

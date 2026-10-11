@@ -146,7 +146,7 @@ For what language BDEs actually feel like week to week, see [Language BDEs at NT
 | [LV5001](/mods/LV5001) | Vietnamese Language Level 1 |
 | [LV5002](/mods/LV5002) | Vietnamese Language Level 2 |
 | [LB5001](/mods/LB5001) | Bahasa Indonesia Level 1 |
-| [LB5002](/mods/LB5002) | Bahasa Indonesia Level 2 |
+| LB5002 | Bahasa Indonesia Level 2 |
 | [LH5001](/mods/LH5001) | Hindi Language Level 1 |
 | [LH5002](/mods/LH5002) | Hindi Language Level 2 |
 | [LL5001](/mods/LL5001) | Singapore Sign Language Level 1 |

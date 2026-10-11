@@ -39,6 +39,25 @@ test.describe("robots and sitemap", () => {
     expect(urls.length).toBe(new Set(urls).size)
   })
 
+  test("sitemap lastmod is real: valid, never in the future, not a blanket stamp", async ({
+    request
+  }) => {
+    const index = await (await request.get("/sitemap.xml")).text()
+    const mods: string[] = []
+    for (const f of [...index.matchAll(/<loc>([^<]+)</g)].map((m) => m[1])) {
+      const body = await (await request.get(local(f))).text()
+      expect(body).not.toMatch(/<changefreq>|<priority>/)
+      mods.push(...[...body.matchAll(/<lastmod>([^<]+)</g)].map((m) => m[1]))
+    }
+    for (const m of mods) {
+      expect(Number.isNaN(Date.parse(m)), m).toBe(false)
+      expect(Date.parse(m), m).toBeLessThanOrEqual(Date.now())
+    }
+    // Articles carry their own dates, so a build-time stamp would show up as
+    // one single value across the whole file.
+    expect(new Set(mods).size).toBeGreaterThan(1)
+  })
+
   test("random sitemap URLs return 200 and are not noindex", async ({
     request
   }) => {
@@ -132,7 +151,8 @@ test.describe("redirects", () => {
     if (res.status() === 200) {
       expect(await res.text()).toContain(`rel="canonical" href="${SITE}/mods"`)
     } else {
-      expect([301, 308]).toContain(res.status())
+      // 307 is what Cloudflare's asset layer sends for the slash variant.
+      expect([301, 307, 308]).toContain(res.status())
       const next = await request.get(local(res.headers().location), {
         maxRedirects: 0
       })
@@ -148,13 +168,17 @@ test.describe("404 handling", () => {
     "/mods/EE3011/1999/9",
     "/articles/definitely-not-an-article"
   ]
-  for (const p of MISSING) {
-    test(`${p} is a real 404 and noindex`, async ({ request }) => {
+  test("missing pages are real 404s, noindex, with no canonical", async ({
+    request
+  }) => {
+    for (const p of MISSING) {
       const res = await request.get(p, { maxRedirects: 0 })
-      expect(res.status()).toBe(404)
+      expect(res.status(), p).toBe(404)
       const html = await res.text()
-      expect(html).toMatch(/<meta name="robots" content="noindex/)
-      expect(html).not.toMatch(/rel="canonical"/)
-    })
-  }
+      expect(html, p).toMatch(/<meta name="robots" content="noindex/)
+      expect(html, p).not.toMatch(/rel="canonical"/)
+      // set by 404.astro on real module pages; must never reach a real 404
+      expect(res.headers()["x-module-snapshot"], p).toBeUndefined()
+    }
+  })
 })

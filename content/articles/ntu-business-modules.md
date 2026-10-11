@@ -44,10 +44,10 @@ These modules cover the fundamentals of business — finance, marketing, managem
 | [AB3602](/mods/AB3602) | Strategic Management | 3 |
 | [AB5101](/mods/AB5101) | Business Valuation: From Theory To Practice | 3 |
 | [AB5102](/mods/AB5102) | Forensic Accounting & Fraud Investigation | 3 |
-| [AB5201](/mods/AB5201) | Finance Workshop I | 2 |
+| AB5201 | Finance Workshop I | 2 |
 | [AB5601](/mods/AB5601) | Negotiate To Get What You Want: Strategy & Practice | 4 |
 | [AB5602](/mods/AB5602) | Leadership In Organisations | 4 |
-| [AB5611](/mods/AB5611) | Management Consulting Workshop I | 2 |
+| AB5611 | Management Consulting Workshop I | 2 |
 
 ---
 

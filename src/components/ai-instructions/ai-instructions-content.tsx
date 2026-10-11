@@ -445,6 +445,7 @@ ntumods.com/ai-instructions`
 const AiInstructionsContent = ({ facts }: { facts: SiteFacts }) => {
   return (
     <Container>
+      <h1 className="sr-only">AI Instructions for NTUMods</h1>
       <pre className="text-muted-foreground font-mono text-xs leading-relaxed break-words whitespace-pre-wrap">
         {getContent(facts)}
       </pre>

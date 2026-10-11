@@ -36,7 +36,8 @@ const snapshot = await getModuleSnapshot(Astro.url, code, year, semester)
 // exactly this reason.
 if (!snapshot) return Astro.rewrite("/404")
 
-const { moduleData, indexes, exam, isCurrentOffering } = snapshot
+const { moduleData, indexes, exam, isCurrentOffering, isLatestOffering } =
+  snapshot
 
 Astro.response.headers.set(
   "Cache-Control",
@@ -63,7 +64,9 @@ const crumbs = [
 <BaseLayout
   title={`${code} ${moduleData.title} | AY${year} ${semName}`}
   description={`View the AY${year}/${parseInt(year) + 1} ${semName} record for ${code} ${moduleData.title}, including module details, index schedules, class times, venues, and exams.`}
-  canonical={getModuleVersionUrl(code, year, semester)}
+  canonical={isLatestOffering
+    ? getModuleUrl(code)
+    : getModuleVersionUrl(code, year, semester)}
   noTitleSuffix>
   <JsonLd data={breadcrumbListJsonLd(crumbs)} />
   {

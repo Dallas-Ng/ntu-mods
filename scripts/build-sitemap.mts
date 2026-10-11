@@ -4,11 +4,16 @@
 // next-sitemap.config.js to keep the same SEO signal — thin/old versioned
 // module pages stay out of the sitemap even though the routes still resolve (a
 // crawl-budget decision, not a routing one).
+import { execFileSync } from "child_process"
 import fs from "fs/promises"
 import path from "path"
 import { fileURLToPath } from "url"
 
 import * as json from "../src/lib/server/db/json-source.ts"
+import {
+  moduleYearCutoff,
+  versionedYearCutoff
+} from "../src/lib/sitemap-policy.ts"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.join(__dirname, "..")
@@ -16,13 +21,34 @@ const SITE_URL = process.env.SITE_URL || "https://ntumods.com"
 const SITEMAP_SIZE = 5000
 const OUT_DIR = path.join(ROOT, "dist", "client")
 
-const CHANGEFREQ = "daily"
-const PRIORITY = "0.7"
+// changefreq and priority are ignored by Google, and a lastmod that is always
+// "now" teaches it to ignore lastmod too. So lastmod is only written when a
+// real date is known: an article's frontmatter, or the git history of the
+// module data file. Everything else omits it.
+// A shallow clone (CI default) stamps every file with the checkout commit, so
+// git dates are skipped there rather than reported as fake.
+const IS_SHALLOW =
+  execFileSync("git", ["rev-parse", "--is-shallow-repository"], {
+    cwd: ROOT,
+    encoding: "utf8"
+  }).trim() !== "false"
 
-const now = new Date()
-const currentAYStart =
-  now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1
-const SITEMAP_YEAR_CUTOFF = currentAYStart - 1
+const gitDates = new Map()
+function gitDate(file) {
+  if (IS_SHALLOW) return undefined
+  if (!gitDates.has(file)) {
+    const out = execFileSync("git", ["log", "-1", "--format=%cI", "--", file], {
+      cwd: ROOT,
+      encoding: "utf8"
+    }).trim()
+    gitDates.set(file, out || undefined)
+  }
+  return gitDates.get(file)
+}
+const semDate = (sem) => gitDate(`src/data/api/metadata/${sem}.json`)
+
+const SITEMAP_YEAR_CUTOFF = versionedYearCutoff()
+const MODULE_YEAR_CUTOFF = moduleYearCutoff()
 
 const slugifyCategory = (category) =>
   category
@@ -38,21 +64,31 @@ async function getArticleRoutes() {
   )
 
   const slugs = []
+  const dates = new Map()
   const categories = new Set()
 
   for (const file of files) {
     const slug = file.replace(/\.md$/, "")
     slugs.push(slug)
     const raw = await fs.readFile(path.join(articlesDir, file), "utf-8")
+    const field = (name) =>
+      new RegExp(`^${name}:\\s*["']?([^"'\\n]+)`, "m").exec(raw)?.[1].trim()
+    const modified = field("updated") || field("date")
+    if (modified) dates.set(slug, new Date(modified).toISOString())
     const match = /^category:\s*(.+)$/m.exec(raw)
-    const category = match ? match[1].trim().replace(/^["']|["']$/g, "") : "General"
+    const category = match
+      ? match[1].trim().replace(/^["']|["']$/g, "")
+      : "General"
     categories.add(category)
   }
 
   const categorySlugs = Array.from(categories).map(slugifyCategory)
   return [
-    ...slugs.map((slug) => `/articles/${slug}`),
-    ...categorySlugs.map((slug) => `/articles/${slug}`)
+    ...slugs.map((slug) => ({
+      loc: `/articles/${slug}`,
+      lastmod: dates.get(slug)
+    })),
+    ...categorySlugs.map((slug) => ({ loc: `/articles/${slug}` }))
   ]
 }
 
@@ -61,11 +97,17 @@ async function getArticleRoutes() {
 // each module's current offering (those URLs redirect to /mods/:code) and the
 // year cutoff, which drops old thin pages that read as soft 404s.
 function getModuleRoutes() {
-  const modulePaths = json.latestOfferings().map((o) => `/mods/${o.code}`)
+  const modulePaths = json
+    .latestOfferings()
+    .filter((o) => Number(o.year) >= MODULE_YEAR_CUTOFF)
+    .map((o) => ({ loc: `/mods/${o.code}`, lastmod: semDate(o.sem) }))
 
   const versionedPaths = json
     .versionedOfferings(SITEMAP_YEAR_CUTOFF)
-    .map((o) => `/mods/${o.code}/${o.year}/${o.semester}`)
+    .map((o) => ({
+      loc: `/mods/${o.code}/${o.year}/${o.semester}`,
+      lastmod: semDate(`${o.year}_${o.semester}`)
+    }))
 
   return [...modulePaths, ...versionedPaths]
 }
@@ -89,9 +131,10 @@ const CORE_ROUTES = [
   "/tools/fgo-optimiser"
 ]
 
-function buildUrlEntry(loc, lastmod) {
+function buildUrlEntry({ loc, lastmod }) {
   const url = loc === "/" ? SITE_URL : `${SITE_URL}${loc}`
-  return `<url><loc>${url}</loc><lastmod>${lastmod}</lastmod><changefreq>${CHANGEFREQ}</changefreq><priority>${PRIORITY}</priority></url>`
+  const mod = lastmod ? `<lastmod>${lastmod}</lastmod>` : ""
+  return `<url><loc>${url}</loc>${mod}</url>`
 }
 
 function chunk(array, size) {
@@ -103,13 +146,16 @@ function chunk(array, size) {
 }
 
 async function main() {
-  const lastmod = new Date().toISOString()
   const [articleRoutes, moduleRoutes] = await Promise.all([
     getArticleRoutes(),
     getModuleRoutes()
   ])
 
-  const allRoutes = [...CORE_ROUTES, ...articleRoutes, ...moduleRoutes]
+  const allRoutes = [
+    ...CORE_ROUTES.map((loc) => ({ loc })),
+    ...articleRoutes,
+    ...moduleRoutes
+  ]
   const chunks = chunk(allRoutes, SITEMAP_SIZE)
 
   await fs.mkdir(OUT_DIR, { recursive: true })
@@ -126,7 +172,7 @@ async function main() {
 
   await Promise.all(
     chunks.map((routes, i) => {
-      const body = routes.map((loc) => buildUrlEntry(loc, lastmod)).join("\n")
+      const body = routes.map(buildUrlEntry).join("\n")
       const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">\n${body}\n</urlset>`
       return fs.writeFile(path.join(OUT_DIR, `sitemap-${i}.xml`), xml)
     })

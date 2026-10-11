@@ -32,6 +32,7 @@ const FOOTER_GROUPS = [
 
 const LEGAL_LINKS = [
   { label: "Privacy", href: "/privacy" },
+  { label: "AI instructions", href: "/ai-instructions" },
   { label: "Sitemap", href: "/sitemap" }
 ] as const
 

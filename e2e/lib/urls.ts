@@ -60,8 +60,8 @@ export function sample<T>(items: T[], n: number, seed = SEED): T[] {
   return out.slice(0, n)
 }
 
-/** All static pages, plus SAMPLE random pages of each dynamic route. */
-export function pagesUnderTest(): PageRef[] {
+/** All static pages, plus `perKind` random pages of each dynamic route. */
+export function pagesUnderTest(perKind = SAMPLE): PageRef[] {
   const byKind: Record<Kind, string[]> = {
     static: [],
     article: [],
@@ -73,7 +73,7 @@ export function pagesUnderTest(): PageRef[] {
     if (kind) byKind[kind].push(p)
   }
   return (Object.keys(byKind) as Kind[]).flatMap((kind) =>
-    (kind === "static" ? byKind.static : sample(byKind[kind], SAMPLE)).map(
+    (kind === "static" ? byKind.static : sample(byKind[kind], perKind)).map(
       (p) => ({ path: p, kind })
     )
   )

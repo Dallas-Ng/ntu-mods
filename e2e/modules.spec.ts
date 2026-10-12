@@ -130,7 +130,9 @@ test.describe("module URL strategy", () => {
       expect(await hasCourse(o.code), o.code).toBe(false)
   })
 
-  test("older semester pages are self-canonical", async ({ request }) => {
+  test("older semester pages are self-canonical or fold into /mods/CODE", async ({
+    request
+  }) => {
     const latest = new Set(
       offerings.map((o) => `/mods/${o.code}/${o.year}/${o.semester}`)
     )
@@ -143,7 +145,13 @@ test.describe("module URL strategy", () => {
       const res = await request.get(p, { maxRedirects: 0 })
       const c = canonicalOf(await res.text())
       if (res.status() !== 200) bad.push(`${p} -> ${res.status()}`)
-      else if (c.length !== 1 || c[0] !== `${SITE}${p}`)
+      else if (
+        c.length !== 1 ||
+        ![
+          `${SITE}${p}`,
+          `${SITE}${p.split("/").slice(0, 3).join("/")}`
+        ].includes(c[0] ?? "")
+      )
         bad.push(`${p} canonical ${c.join(",")}`)
     }
     expect(bad).toEqual([])

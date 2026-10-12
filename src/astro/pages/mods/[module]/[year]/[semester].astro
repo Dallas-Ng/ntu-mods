@@ -4,7 +4,10 @@ import { ON_DEMAND_CACHE_CONTROL } from "@/lib/edge-cache"
 import { formatTitle } from "@/lib/format"
 import { breadcrumbListJsonLd } from "@/lib/json-ld"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
-import { getModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
+import {
+  getModuleSnapshot,
+  isSameAsLatest
+} from "@/lib/server/edge/get-module-snapshot"
 import Breadcrumbs from "@/components/breadcrumbs"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import JsonLd from "@/astro/components/JsonLd.astro"
@@ -42,6 +45,10 @@ const { moduleData, indexes, exam, isCurrentOffering, isLatestOffering } =
 
 Astro.response.headers.set("Cache-Control", ON_DEMAND_CACHE_CONTROL)
 
+// An unchanged older snapshot duplicates /mods/CODE, so it canonicalises there.
+const canonicalToLatest =
+  snapshot.isLatestOffering || (await isSameAsLatest(code, snapshot))
+
 // Precomputed at load, so this route no longer parses programme codes per
 // request — it was the last per-request use of getModuleCategories.
 const categories = moduleData.categories ?? []
@@ -62,7 +69,7 @@ const crumbs = [
 <BaseLayout
   title={`${code} ${moduleData.title} | AY${year} ${semName}`}
   description={`View the AY${year}/${parseInt(year) + 1} ${semName} record for ${code} ${moduleData.title}, including module details, index schedules, class times, venues, and exams.`}
-  canonical={isLatestOffering
+  canonical={canonicalToLatest
     ? getModuleUrl(code)
     : getModuleVersionUrl(code, year, semester)}
   noTitleSuffix>

@@ -36,15 +36,7 @@ export const websiteJsonLd = (): JsonLd => ({
   name: siteConfig.name,
   url: siteConfig.url,
   description:
-    "NTU timetable planner and module browser for Nanyang Technological University students.",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: absoluteUrl("/mods?searchTerm={search_term_string}")
-    },
-    "query-input": "required name=search_term_string"
-  }
+    "NTU timetable planner and module browser for Nanyang Technological University students."
 })
 
 export const webApplicationJsonLd = ({

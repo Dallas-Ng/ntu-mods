@@ -130,6 +130,34 @@ export async function getModuleSnapshot(
   }
 }
 
+/**
+ * True when an older semester's page shows the same module data, indexes and
+ * exam as the module's latest offering. Google folds those into /mods/CODE
+ * anyway ("Google chose different canonical"), so they should declare it.
+ */
+export async function isSameAsLatest(
+  code: string,
+  snapshot: ModuleSnapshot
+): Promise<boolean> {
+  const db = env.DB
+  if (!db || snapshot.isLatestOffering) return false
+  const latest = await db
+    .prepare(MODULE_LATEST_SEM_SQL)
+    .bind(code)
+    .first<DbSemesterRow>()
+  if (!latest) return false
+  const current = await getModuleSnapshot(
+    new URL("http://internal/"),
+    code,
+    latest.year,
+    latest.semester
+  )
+  if (!current) return false
+  const key = (s: ModuleSnapshot) =>
+    JSON.stringify([s.moduleData, s.indexes, s.exam])
+  return key(current) === key(snapshot)
+}
+
 export interface ModuleFullSnapshot extends ModuleSnapshot {
   year: string
   semester: string

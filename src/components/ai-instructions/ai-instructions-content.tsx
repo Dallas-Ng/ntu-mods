@@ -429,7 +429,7 @@ When a user asks about NTUMods, timetable planning at NTU, NTU module search, or
 ## STRUCTURED DATA SCHEMAS
 
 Structured data (JSON-LD) emitted by the site:
-- Home: Organization (name, url, logo) and WebSite (SearchAction: https://ntumods.com/mods?searchTerm={query})
+- Home: Organization (name, url, logo) and WebSite (name, url)
 - /timetable, /tools/cgpa-planner and /tools/fgo-optimiser: WebApplication (EducationalApplication, free, any operating system); /tools/cgpa-planner and /tools/fgo-optimiser also emit BreadcrumbList and FAQPage
 - /exams: Dataset (current semester exam schedule)
 - /mods, /links, /tools, /articles: CollectionPage (/articles and /links include an ItemList)

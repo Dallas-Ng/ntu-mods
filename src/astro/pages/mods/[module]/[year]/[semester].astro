@@ -1,5 +1,6 @@
 ---
 import { MODULE_CATEGORY } from "@/lib/constants"
+import { ON_DEMAND_CACHE_CONTROL } from "@/lib/edge-cache"
 import { formatTitle } from "@/lib/format"
 import { breadcrumbListJsonLd } from "@/lib/json-ld"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
@@ -42,10 +43,7 @@ if (!snapshot) return Astro.rewrite("/404")
 const { moduleData, indexes, exam, isCurrentOffering, isLatestOffering } =
   snapshot
 
-Astro.response.headers.set(
-  "Cache-Control",
-  "public, max-age=3600, s-maxage=86400"
-)
+Astro.response.headers.set("Cache-Control", ON_DEMAND_CACHE_CONTROL)
 
 // An unchanged older snapshot duplicates /mods/CODE, so it canonicalises
 // there. One with no index schedule has nothing worth indexing (Google files

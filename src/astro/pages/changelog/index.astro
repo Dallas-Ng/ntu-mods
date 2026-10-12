@@ -1,14 +1,23 @@
 ---
 import { siteConfig } from "@/config/site"
+import { webPageJsonLd } from "@/lib/json-ld"
 import ChangelogContent from "@/components/changelog/changelog-content"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
+
+const jsonLd = webPageJsonLd({
+  name: siteConfig.metatags.changelog.title,
+  description: siteConfig.metatags.changelog.desc,
+  path: "/changelog"
+})
 ---
 
 <BaseLayout
   title={siteConfig.metatags.changelog.title}
   description={siteConfig.metatags.changelog.desc}
   canonical="/changelog">
+  <JsonLd data={jsonLd} />
   <ChangelogContent client:load />
 </BaseLayout>

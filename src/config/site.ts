@@ -29,7 +29,7 @@ export const siteConfig = {
       ]
     },
     timetable: {
-      title: "NTU Timetable Planner — Build Your STARS Schedule",
+      title: "NTU Timetable Planner: Build Your STARS Schedule",
       desc: "Plan your NTU timetable for STARS registration. Search modules and indexes, check clashes, compare class times, and export to calendar or share link. No login required."
     },
     share: {
@@ -41,7 +41,7 @@ export const siteConfig = {
       desc: "Browse all NTU courses and modules. Search by code or title, compare indexes, check exam dates, view class times, venues, and prerequisites. Updated each semester."
     },
     faq: {
-      title: "FAQ — Frequently Asked Questions",
+      title: "FAQ: Frequently Asked Questions",
       desc: "Find quick answers for planning NTU timetables, browsing modules, choosing indexes, exporting schedules, sharing links, and understanding how your data is stored."
     },
     privacy: {

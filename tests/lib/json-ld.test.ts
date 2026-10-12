@@ -5,7 +5,8 @@ import {
   breadcrumbListJsonLd,
   collectionPageJsonLd,
   faqPageJsonLd,
-  serializeJsonLd
+  serializeJsonLd,
+  webPageJsonLd
 } from "@/lib/json-ld"
 
 describe("absoluteUrl", () => {
@@ -24,6 +25,12 @@ describe("serializeJsonLd", () => {
 })
 
 describe("builders", () => {
+  it("webPageJsonLd defaults to WebPage with an absolute url", () => {
+    const ld = webPageJsonLd({ name: "N", description: "D", path: "/privacy" })
+    expect(ld["@type"]).toBe("WebPage")
+    expect(ld.url).toBe("https://ntumods.com/privacy")
+  })
+
   it("numbers breadcrumb items from 1 with absolute urls", () => {
     const ld = breadcrumbListJsonLd([
       { name: "Home", href: "/" },

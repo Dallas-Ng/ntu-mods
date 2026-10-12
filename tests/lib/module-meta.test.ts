@@ -35,3 +35,13 @@ describe("buildModuleMeta", () => {
     expect(a.length).toBeLessThanOrEqual(170)
   })
 })
+
+describe("buildModuleMeta whitespace", () => {
+  it("collapses newlines in the description", () => {
+    const { description } = buildModuleMeta(
+      "AAA08A",
+      mod({ description: "line one\nline two\n\n  line three" })
+    )
+    expect(description).toBe("line one line two line three")
+  })
+})

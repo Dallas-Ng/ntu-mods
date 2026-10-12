@@ -76,7 +76,7 @@ const SAMPLE_LINES = [
 export default function FgoOptimiser() {
   const [data, setData] = useState<ParsedTranscript | null>(null)
   const [fileName, setFileName] = useState("")
-  const [share, setShare] = useState(false)
+  const [share, setShare] = useState(true)
   const [quota, setQuota] = useState("24")
   const [bde, setBde] = useState<Set<string>>(new Set())
   const [picked, setPicked] = useState<Set<string>>(new Set())
@@ -253,8 +253,8 @@ export default function FgoOptimiser() {
             </Button>
           </div>
           <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
-            <Lock className="size-3.5" /> Read in your browser. Nothing is
-            uploaded unless you tick the box below.
+            <Lock className="size-3.5" /> Your PDF is read in your browser and
+            never uploaded.
           </p>
           <ShareCheckbox checked={share} onChange={setShare} />
           {error && <p className="text-destructive text-sm">{error}</p>}

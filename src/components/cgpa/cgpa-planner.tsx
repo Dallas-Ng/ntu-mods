@@ -95,7 +95,7 @@ const CgpaPlanner = () => {
   const [whatIf, setWhatIf] = useState<number | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState("")
-  const [share, setShare] = useState(false)
+  const [share, setShare] = useState(true)
 
   async function load(file: File | undefined) {
     if (!file) return
@@ -197,8 +197,8 @@ const CgpaPlanner = () => {
             Try with sample data
           </Button>
           <p className="text-muted-foreground basis-full pt-1 text-xs">
-            <Lock className="mr-1.5 inline size-3.5 align-[-2px]" /> Read in
-            your browser. Nothing is uploaded unless you tick the box below.{" "}
+            <Lock className="mr-1.5 inline size-3.5 align-[-2px]" /> Your PDF is
+            read in your browser and never uploaded.{" "}
             <a
               href={TRANSCRIPT_URL}
               onClick={() => track("transcript_link_clicked")}

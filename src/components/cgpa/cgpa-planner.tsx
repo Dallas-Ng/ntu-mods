@@ -13,9 +13,11 @@ import {
   type BandResult
 } from "@/lib/cgpa"
 import { readTranscriptPdf } from "@/lib/fgo"
+import { shareTranscript } from "@/lib/transcript-share"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { ShareCheckbox } from "@/components/tools/share-checkbox"
 
 const TRANSCRIPT_URL =
   "https://wis.ntu.edu.sg/webexe/owa/request_transcript_und.LoginN?pType=SH"
@@ -93,6 +95,7 @@ const CgpaPlanner = () => {
   const [whatIf, setWhatIf] = useState<number | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState("")
+  const [share, setShare] = useState(false)
 
   async function load(file: File | undefined) {
     if (!file) return
@@ -105,6 +108,7 @@ const CgpaPlanner = () => {
       setCgpa(fmt(points / au))
       setDoneAu(String(au))
       track("transcript_loaded")
+      if (share) shareTranscript("cgpa", mods)
     } catch {
       track("upload_failed")
       setError(
@@ -194,7 +198,7 @@ const CgpaPlanner = () => {
           </Button>
           <p className="text-muted-foreground basis-full pt-1 text-xs">
             <Lock className="mr-1.5 inline size-3.5 align-[-2px]" /> Read in
-            your browser. Nothing is uploaded.{" "}
+            your browser. Nothing is uploaded unless you tick the box below.{" "}
             <a
               href={TRANSCRIPT_URL}
               onClick={() => track("transcript_link_clicked")}
@@ -205,6 +209,7 @@ const CgpaPlanner = () => {
             </a>
           </p>
         </div>
+        <ShareCheckbox checked={share} onChange={setShare} />
         {error && <p className="text-destructive text-sm">{error}</p>}
       </section>
 

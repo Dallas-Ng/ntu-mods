@@ -124,11 +124,14 @@ const FAQ_CONFIG: FaqConfig[] = [
           className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
           Privacy Policy
         </a>{" "}
-        for full details.
+        for full details. The CGPA and FGO tools read your transcript PDF in
+        your browser and never upload the file; if you tick the optional share
+        box, the module codes, terms and grades (never your name or matric
+        number) are also sent for analytics.
       </>
     ),
     answerText:
-      "We use analytics tools — Google Analytics, Microsoft Clarity, and PostHog — to collect page views, usage patterns, and session replays. No personal data is collected. Everything you add to your timetable is stored only in your browser and never sent to our servers."
+      "We use analytics tools — Google Analytics, Microsoft Clarity, and PostHog — to collect page views, usage patterns, and session replays. No personal data is collected. Everything you add to your timetable is stored only in your browser and never sent to our servers. The CGPA and FGO tools read your transcript PDF in your browser and never upload the file. If you tick the optional share box, module codes, terms and grades (never your name or matric number) are also sent for analytics."
   }
 ]
 

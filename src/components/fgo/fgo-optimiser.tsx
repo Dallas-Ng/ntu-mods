@@ -23,6 +23,7 @@ import {
   type Mod,
   type ParsedTranscript
 } from "@/lib/fgo"
+import { shareTranscript } from "@/lib/transcript-share"
 import { cn } from "@/lib/utils"
 import {
   Accordion,
@@ -41,6 +42,7 @@ import {
   SelectValue
 } from "@/components/ui/select"
 import { Toggle } from "@/components/ui/toggle"
+import { ShareCheckbox } from "@/components/tools/share-checkbox"
 
 const TRANSCRIPT_URL =
   "https://wis.ntu.edu.sg/webexe/owa/request_transcript_und.LoginN?pType=SH"
@@ -74,6 +76,7 @@ const SAMPLE_LINES = [
 export default function FgoOptimiser() {
   const [data, setData] = useState<ParsedTranscript | null>(null)
   const [fileName, setFileName] = useState("")
+  const [share, setShare] = useState(false)
   const [quota, setQuota] = useState("24")
   const [bde, setBde] = useState<Set<string>>(new Set())
   const [picked, setPicked] = useState<Set<string>>(new Set())
@@ -139,6 +142,7 @@ export default function FgoOptimiser() {
       setPicked(new Set())
       setExtraCore("0")
       setExtraBde("0")
+      if (share) shareTranscript("fgo", parsed.mods)
       track("transcript_loaded", {
         modules: parsed.mods.length,
         graded: parsed.mods.filter((m) => m.status === "graded").length,
@@ -250,8 +254,9 @@ export default function FgoOptimiser() {
           </div>
           <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
             <Lock className="size-3.5" /> Read in your browser. Nothing is
-            uploaded.
+            uploaded unless you tick the box below.
           </p>
+          <ShareCheckbox checked={share} onChange={setShare} />
           {error && <p className="text-destructive text-sm">{error}</p>}
         </div>
 

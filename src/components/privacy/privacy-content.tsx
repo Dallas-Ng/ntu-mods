@@ -88,6 +88,24 @@ const PrivacyContent = () => {
         during local development.
       </p>
 
+      <h3 className="mt-4 text-lg">
+        Transcript Tools (CGPA Planner, FGO Optimiser)
+      </h3>
+
+      <p>
+        Transcript PDFs are read entirely in your browser and the file itself is
+        never uploaded. Only if you tick the &quot;Share anonymised module
+        codes, terms and grades&quot; box before uploading, we also record, via
+        PostHog, the module code, term, AU and grade of each module on your
+        transcript. We never read or collect your name, matriculation number,
+        programme or the PDF file name. A list of modules and grades is not tied
+        to your identity by us, but it could in principle identify you to
+        someone who already knows your results. Without the box ticked, we only
+        record counts and flags such as how many modules were found. Because
+        page interactions may be captured in session replays, avoid uploading a
+        real transcript if you want no part of it recorded.
+      </p>
+
       <h3 className="mt-4 text-lg">Feedback Submissions</h3>
 
       <p>

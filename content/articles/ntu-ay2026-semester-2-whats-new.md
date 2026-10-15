@@ -1,6 +1,6 @@
 ---
 title: "NTU AY2026/2027 Semester 2 Modules: What Is New and What Changed"
-description: "NTU Semester 2 AY2026/2027 module data is now on NTUMods. See how many modules and indexes are offered, which schools grew or shrank, the new modules, how the timetable shape changed from Semester 1, and how to plan."
+description: "NTU Semester 2 AY2026/2027 modules are live on NTUMods: 1,092 modules, 4,306 indexes, 61 new modules and what changed since Semester 1."
 date: "2026-10-15"
 updated: "2026-10-15"
 author: "NTUMods"

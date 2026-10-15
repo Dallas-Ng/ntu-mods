@@ -5,7 +5,20 @@ date: "2026-06-14"
 updated: "2026-09-22"
 author: "NTUMods"
 category: "Module Planning"
-tags: ["ntu timetable planner", "ntu planner", "ntu timetable", "ntumods timetable", "ntu module planner", "plan ntu timetable", "ntu course planner", "ntu semester planner", "ntu class schedule", "ntu class timetable", "ntu time table"]
+tags:
+  [
+    "ntu timetable planner",
+    "ntu planner",
+    "ntu timetable",
+    "ntumods timetable",
+    "ntu module planner",
+    "plan ntu timetable",
+    "ntu course planner",
+    "ntu semester planner",
+    "ntu class schedule",
+    "ntu class timetable",
+    "ntu time table"
+  ]
 ---
 
 # NTU Timetable Planner: How to Build Your Semester Schedule on NTUMods
@@ -13,6 +26,8 @@ tags: ["ntu timetable planner", "ntu planner", "ntu timetable", "ntumods timetab
 Before STARS opens, you need to know which module indexes actually work with your schedule. A timetable that looks fine in your head often looks different once you map out five modules across a real week. Catching clashes at the planning stage means you can fix them — not scramble during the bidding window.
 
 The [NTUMods timetable planner](/timetable) lets you add modules, pick indexes, and see your week laid out before you commit to anything. This guide walks through how to use it effectively.
+
+The planner currently uses AY2026/2027 Semester 2 data. See [what is new in Semester 2](/articles/ntu-ay2026-semester-2-whats-new) for the module and index changes.
 
 ![NTU timetable planner on NTUMods showing a Monday to Friday semester schedule with lectures, tutorials and labs colour-coded by class type](/articles/ntumods-timetable-planner-week-view.webp "The NTUMods timetable planner: every registered module and its chosen index laid out on one weekly grid.")
 
@@ -76,12 +91,12 @@ The NTUMods planner does the same lookup but across your whole shortlist at once
 
 The timetable planner and STARS do different things:
 
-| | NTUMods Timetable Planner | STARS |
-| --- | --- | --- |
-| Purpose | Planning and exploration | Official module registration |
+|              | NTUMods Timetable Planner                 | STARS                                 |
+| ------------ | ----------------------------------------- | ------------------------------------- |
+| Purpose      | Planning and exploration                  | Official module registration          |
 | What it does | Lets you try combinations and see clashes | Registers you for modules and indexes |
-| When to use | Before STARS opens | During STARS bidding windows |
-| Commitment | None — planning only | Binding once confirmed |
+| When to use  | Before STARS opens                        | During STARS bidding windows          |
+| Commitment   | None — planning only                      | Binding once confirmed                |
 
 Use the planner to prepare your shortlist and verify index choices. Then use those verified choices when you bid in STARS.
 

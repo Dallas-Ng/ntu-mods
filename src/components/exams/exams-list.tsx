@@ -20,10 +20,6 @@ type GroupBy = "date" | "prefix" | "none"
 
 interface Props {
   exams: DbExam[]
-  /** "YEAR/SEM" when these exams are not the latest semester, so rows link to that semester's page. */
-  versionPath?: string
-  /** Exam keys that have a page for versionPath; the rest link to /mods/CODE. */
-  versionedKeys?: string[]
 }
 
 const EXAM_PREFIX_LABELS: Record<string, string> = {
@@ -118,14 +114,10 @@ function toTitleCase(str: string) {
 
 function ExamTable({
   items,
-  showDate = true,
-  versionPath,
-  versioned
+  showDate = true
 }: {
   items: DbExam[]
   showDate?: boolean
-  versionPath?: string
-  versioned?: ReadonlySet<string>
 }) {
   return (
     <div className="overflow-hidden rounded-lg border-2">
@@ -145,7 +137,7 @@ function ExamTable({
         {items.map((exam) => (
           <a
             key={exam.key}
-            href={`/mods/${exam.key}${versionPath && versioned?.has(exam.key) ? `/${versionPath}` : ""}`}
+            href={`/mods/${exam.key}`}
             className="hover:bg-accent flex items-center gap-3 px-3 py-2.5 transition-colors">
             {/* Mobile: stacked */}
             <div className="min-w-0 flex-1 md:hidden">
@@ -182,12 +174,7 @@ function ExamTable({
 const DISCLAIMER =
   "The Exam information shown may be subject to changes. Students are to check the finalised exam timetable with exam seat information, which will be available at the 'Examination Seating Arrangement' webpage, 2 weeks before start of examination."
 
-export default function ExamsList({
-  exams,
-  versionPath,
-  versionedKeys
-}: Props) {
-  const versioned = useMemo(() => new Set(versionedKeys), [versionedKeys])
+export default function ExamsList({ exams }: Props) {
   const [search, setSearch] = useState("")
   const [groupBy, setGroupBy] = useState<GroupBy>("none")
   const debouncedSearch = useDebounce(search, 500)
@@ -272,22 +259,12 @@ export default function ExamsList({
           {groups.map(({ key, items }) => (
             <section key={key} className="space-y-3">
               <h2 className="text-base font-semibold">{key}</h2>
-              <ExamTable
-                items={items}
-                showDate={groupBy !== "date"}
-                versionPath={versionPath}
-                versioned={versioned}
-              />
+              <ExamTable items={items} showDate={groupBy !== "date"} />
             </section>
           ))}
         </div>
       ) : (
-        <ExamTable
-          items={filtered}
-          showDate
-          versionPath={versionPath}
-          versioned={versioned}
-        />
+        <ExamTable items={filtered} showDate />
       )}
     </div>
   )

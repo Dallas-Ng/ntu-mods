@@ -5,20 +5,7 @@ date: "2026-06-14"
 updated: "2026-09-22"
 author: "NTUMods"
 category: "Module Planning"
-tags:
-  [
-    "ntu timetable planner",
-    "ntu planner",
-    "ntu timetable",
-    "ntumods timetable",
-    "ntu module planner",
-    "plan ntu timetable",
-    "ntu course planner",
-    "ntu semester planner",
-    "ntu class schedule",
-    "ntu class timetable",
-    "ntu time table"
-  ]
+tags: ["ntu timetable planner", "ntu planner", "ntu timetable", "ntumods timetable", "ntu module planner", "plan ntu timetable", "ntu course planner", "ntu semester planner", "ntu class schedule", "ntu class timetable", "ntu time table"]
 ---
 
 # NTU Timetable Planner: How to Build Your Semester Schedule on NTUMods
@@ -91,12 +78,12 @@ The NTUMods planner does the same lookup but across your whole shortlist at once
 
 The timetable planner and STARS do different things:
 
-|              | NTUMods Timetable Planner                 | STARS                                 |
-| ------------ | ----------------------------------------- | ------------------------------------- |
-| Purpose      | Planning and exploration                  | Official module registration          |
+| | NTUMods Timetable Planner | STARS |
+| --- | --- | --- |
+| Purpose | Planning and exploration | Official module registration |
 | What it does | Lets you try combinations and see clashes | Registers you for modules and indexes |
-| When to use  | Before STARS opens                        | During STARS bidding windows          |
-| Commitment   | None — planning only                      | Binding once confirmed                |
+| When to use | Before STARS opens | During STARS bidding windows |
+| Commitment | None — planning only | Binding once confirmed |
 
 Use the planner to prepare your shortlist and verify index choices. Then use those verified choices when you bid in STARS.
 

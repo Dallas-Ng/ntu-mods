@@ -5,32 +5,7 @@ date: "2026-06-20"
 updated: "2026-10-09"
 author: "NTUMods"
 category: "Module Planning"
-tags:
-  [
-    "ntu academic calendar",
-    "ntu academic calendar 2026",
-    "ntu calendar 26/27",
-    "ntu calendar 2026/2027",
-    "ntu term dates",
-    "ntu semester calendar",
-    "ntu semester dates",
-    "ntu exam period 2026",
-    "ntu stars dates",
-    "ntu recess week",
-    "ntu semester 1 2026",
-    "ntu ay2026 dates",
-    "ntu timetable dates",
-    "ntu academic year 2026",
-    "ntu academic calendar 2027",
-    "ntu 2027 academic calendar",
-    "ntu academic calendar pdf",
-    "ntu school holidays 2026",
-    "ntu school holidays 2027",
-    "ntu calendar 25/26",
-    "ntu academic calendar 2027/28",
-    "ntu public holidays 2026",
-    "ntu recess week 2026"
-  ]
+tags: ["ntu academic calendar", "ntu academic calendar 2026", "ntu calendar 26/27", "ntu calendar 2026/2027", "ntu term dates", "ntu semester calendar", "ntu semester dates", "ntu exam period 2026", "ntu stars dates", "ntu recess week", "ntu semester 1 2026", "ntu ay2026 dates", "ntu timetable dates", "ntu academic year 2026", "ntu academic calendar 2027", "ntu 2027 academic calendar", "ntu academic calendar pdf", "ntu school holidays 2026", "ntu school holidays 2027", "ntu calendar 25/26", "ntu academic calendar 2027/28", "ntu public holidays 2026", "ntu recess week 2026"]
 ---
 
 # NTU Academic Calendar AY2026/2027: Key Dates for Semester 1 and 2
@@ -41,15 +16,15 @@ Nanyang Technological University (NTU Singapore) divides its academic year 2026/
 
 ## NTU term dates 2026/2027 at a glance
 
-|                                   | Semester 1                          | Semester 2                  |
-| --------------------------------- | ----------------------------------- | --------------------------- |
-| University orientation activities | 20 Jul to 6 Aug 2026                | Not applicable              |
-| Course registration period        | Mid to end June 2026                | December 2026               |
-| Teaching Week 1 begins            | Monday 10 Aug 2026                  | Monday 11 Jan 2027          |
-| Add/drop period                   | Teaching Weeks 1 and 2              | Teaching Weeks 1 and 2      |
-| Recess Week                       | 28 Sep to 2 Oct 2026                | 1 to 5 Mar 2027             |
-| Teaching Week 13 ends             | 13 Nov 2026                         | 16 Apr 2027                 |
-| Revision and examination weeks    | Mid November to early December 2026 | Mid April to early May 2027 |
+| | Semester 1 | Semester 2 |
+|---|---|---|
+| University orientation activities | 20 Jul to 6 Aug 2026 | Not applicable |
+| Course registration period | Mid to end June 2026 | December 2026 |
+| Teaching Week 1 begins | Monday 10 Aug 2026 | Monday 11 Jan 2027 |
+| Add/drop period | Teaching Weeks 1 and 2 | Teaching Weeks 1 and 2 |
+| Recess Week | 28 Sep to 2 Oct 2026 | 1 to 5 Mar 2027 |
+| Teaching Week 13 ends | 13 Nov 2026 | 16 Apr 2027 |
+| Revision and examination weeks | Mid November to early December 2026 | Mid April to early May 2027 |
 
 These dates come from the official NTU academic calendar for AY2026-27 (published 19 May 2026). NTU states that all dates are subject to change, so confirm against the [official calendar PDF](https://ntu.edu.sg/academic-calendar) before you commit to travel or leave plans.
 
@@ -57,15 +32,15 @@ These dates come from the official NTU academic calendar for AY2026-27 (publishe
 
 **Semester 1** runs from August to early December 2026.
 
-| Phase                           | Approximate timing                  |
-| ------------------------------- | ----------------------------------- |
-| Course registration period      | Mid to end June 2026                |
-| BDE/UE/GERPE allocation results | Early August 2026                   |
-| Teaching Week 1 begins          | Monday 10 Aug 2026                  |
-| Add/Drop period                 | Teaching Weeks 1 and 2              |
-| Recess Week                     | 28 Sep to 2 Oct 2026                |
-| Teaching Week 13 ends           | 13 Nov 2026                         |
-| Revision and exams              | Mid November to early December 2026 |
+| Phase | Approximate timing |
+|---|---|
+| Course registration period | Mid to end June 2026 |
+| BDE/UE/GERPE allocation results | Early August 2026 |
+| Teaching Week 1 begins | Monday 10 Aug 2026 |
+| Add/Drop period | Teaching Weeks 1 and 2 |
+| Recess Week | 28 Sep to 2 Oct 2026 |
+| Teaching Week 13 ends | 13 Nov 2026 |
+| Revision and exams | Mid November to early December 2026 |
 
 **Exam data for AY2026/2027 Semester 1** is available at [NTUMods Exam Schedule](/exams) — 389 modules with scheduled exams, searchable by module code.
 
@@ -75,32 +50,32 @@ These dates come from the official NTU academic calendar for AY2026-27 (publishe
 
 Module and class index data for this semester is live: see [what is new in Semester 2](/articles/ntu-ay2026-semester-2-whats-new).
 
-| Phase                           | Approximate timing          |
-| ------------------------------- | --------------------------- |
-| Course registration period      | December 2026               |
-| BDE/UE/GERPE allocation results | Early January 2027          |
-| Teaching Week 1 begins          | Monday 11 Jan 2027          |
-| Add/Drop period                 | Teaching Weeks 1 and 2      |
-| Recess Week                     | 1 to 5 Mar 2027             |
-| Teaching Week 13 ends           | 16 Apr 2027                 |
-| Revision and exams              | Mid April to early May 2027 |
+| Phase | Approximate timing |
+|---|---|
+| Course registration period | December 2026 |
+| BDE/UE/GERPE allocation results | Early January 2027 |
+| Teaching Week 1 begins | Monday 11 Jan 2027 |
+| Add/Drop period | Teaching Weeks 1 and 2 |
+| Recess Week | 1 to 5 Mar 2027 |
+| Teaching Week 13 ends | 16 Apr 2027 |
+| Revision and exams | Mid April to early May 2027 |
 
 ## Singapore public holidays in AY2026/27
 
 NTU marks these public holidays on its calendar. A holiday on a Saturday means classes proceed normally on the following Monday, and a holiday on a Sunday makes the next Monday a replacement holiday. Classes end at 14:30 on the eve of New Year's Day, Chinese New Year, Hari Raya Puasa and Deepavali.
 
-| Holiday          | Date                         |
-| ---------------- | ---------------------------- |
-| National Day     | 9 Aug 2026 (Sun)             |
-| Deepavali        | 8 Nov 2026 (Sun)             |
-| Christmas Day    | 25 Dec 2026 (Fri)            |
-| New Year's Day   | 1 Jan 2027 (Fri)             |
+| Holiday | Date |
+|---|---|
+| National Day | 9 Aug 2026 (Sun) |
+| Deepavali | 8 Nov 2026 (Sun) |
+| Christmas Day | 25 Dec 2026 (Fri) |
+| New Year's Day | 1 Jan 2027 (Fri) |
 | Chinese New Year | 6 to 7 Feb 2027 (Sat to Sun) |
-| Hari Raya Puasa  | 10 Mar 2027 (Wed)            |
-| Good Friday      | 26 Mar 2027 (Fri)            |
-| Labour Day       | 1 May 2027 (Sat)             |
-| Hari Raya Haji   | 17 May 2027 (Mon)            |
-| Vesak Day        | 20 May 2027 (Thu)            |
+| Hari Raya Puasa | 10 Mar 2027 (Wed) |
+| Good Friday | 26 Mar 2027 (Fri) |
+| Labour Day | 1 May 2027 (Sat) |
+| Hari Raya Haji | 17 May 2027 (Mon) |
+| Vesak Day | 20 May 2027 (Thu) |
 
 ## Special Term
 

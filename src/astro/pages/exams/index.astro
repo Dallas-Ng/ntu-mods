@@ -2,6 +2,7 @@
 import { siteConfig } from "@/config/site"
 import { datasetJsonLd } from "@/lib/json-ld"
 import {
+  getAllModuleMetadata,
   getLatestExamSemester,
   getLatestSemester,
   getSemesterExamsData
@@ -20,15 +21,21 @@ const LAST_UPDATED = "27 July 2026"
 // query — the newest semester that actually has exam rows.
 async function getExamData() {
   const latest = await getLatestExamSemester()
-  if (!latest) return { exams: {}, label: "", versionPath: undefined }
+  if (!latest)
+    return { exams: {}, label: "", versionPath: undefined, versionedKeys: [] }
 
   const isSpecial = latest.semester === "S" || latest.semester === "T"
   const current = await getLatestSemester()
+  const isLatest =
+    current.year === latest.year && current.semester === latest.semester
+  // Only modules actually offered that semester have a page for it; the rest
+  // (exams for modules NTU did not list) keep linking to /mods/CODE.
+  const versionedKeys = isLatest
+    ? []
+    : Object.keys(await getAllModuleMetadata(latest.year, latest.semester))
   return {
-    versionPath:
-      current.year === latest.year && current.semester === latest.semester
-        ? undefined
-        : `${latest.year}/${latest.semester}`,
+    versionPath: isLatest ? undefined : `${latest.year}/${latest.semester}`,
+    versionedKeys,
     exams: await getSemesterExamsData(latest.year, latest.semester),
     label: isSpecial
       ? `AY${latest.year} Special Term`
@@ -36,7 +43,7 @@ async function getExamData() {
   }
 }
 
-const { exams, label, versionPath } = await getExamData()
+const { exams, label, versionPath, versionedKeys } = await getExamData()
 const examList = Object.values(exams)
 const total = examList.length
 ---
@@ -93,5 +100,10 @@ const total = examList.length
     </div>
   </div>
 
-  <ExamsList client:load exams={examList} versionPath={versionPath} />
+  <ExamsList
+    client:load
+    exams={examList}
+    versionPath={versionPath}
+    versionedKeys={versionedKeys}
+  />
 </BaseLayout>

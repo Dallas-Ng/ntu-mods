@@ -107,16 +107,73 @@ Business is still the largest school with 114 modules, followed by Art, Design &
 
 ## What is new this semester
 
-61 modules appear in the data for the first time. The biggest groups are:
+61 modules appear in the data for the first time. The biggest groups are 12 first-year Art, Design & Media studios and 15 EEE laboratory modules. The EEE laboratory modules carry 0 AU in the data, so check your programme requirements for how they count. Language modules are also worth a look if you want a BDE: see [Language BDEs at NTU](/articles/language-bde-at-ntu).
 
-- **Art, Design & Media first-year studios.** A new set of foundation modules, 12 in total, including Drawing: Line & Form ([DA1100](/mods/DA1100)), Drawing: Figures, Space & Composition ([DA1101](/mods/DA1101)), Typographic Form ([DC1100](/mods/DC1100)), Photography for Designers ([DC1102](/mods/DC1102)), Sight & Sound ([DF1100](/mods/DF1100)), Story & Script ([DF1101](/mods/DF1101)), Transversal Studio: Form & Space ([DS1100](/mods/DS1100)), Dynamic Drawing & Motion ([DT1100](/mods/DT1100)), Sequential Art ([DT1101](/mods/DT1101)) and Gameplay ([DT1102](/mods/DT1102)). This accounts for most of ADM's growth.
-- **EEE laboratory modules.** Fifteen new lab modules with an `L` suffix, such as Circuit Analysis ([E2101L](/mods/E2101L)), Digital Electronics ([E2104L](/mods/E2104L)), Signals & Systems ([E2110L](/mods/E2110L)), Digital Signal Processing ([E3014L](/mods/E3014L)) and Microprocessors ([E3102L](/mods/E3102L)). They carry 0 AU in the data.
-- **Biological Sciences.** Plant-Microbe Interactions ([BS3040](/mods/BS3040)), three UAEB workshop modules ([BS3355](/mods/BS3355), [BS3356](/mods/BS3356), [BS3357](/mods/BS3357)), and several Chinese medicine modules such as Internal Medicine of Chinese Medicine II ([BS3115](/mods/BS3115)).
-- **Business.** Analytics II: Advanced Predictive Techniques ([BC2417](/mods/BC2417)) and Sustainability Assurance ([AC3106](/mods/AC3106)).
-- **Communication and computing.** Communication in the Age of Generative AI ([CS2060](/mods/CS2060)) and a Capstone Project ([SC3099](/mods/SC3099)).
-- **Languages.** Portuguese Language Level 1 ([LP5001](/mods/LP5001)), Bahasa Indonesia Level 2 ([LB5002](/mods/LB5002)), German Language Level 6 ([LG5006](/mods/LG5006)), Korean Language Level 8 ([LK5008](/mods/LK5008)) and "French Touch" - French Culture & Arts ([LF5902](/mods/LF5902)). See [Language BDEs at NTU](/articles/language-bde-at-ntu) for how language modules fit into your BDE options.
-- **History and Chinese.** Environmental History of Modern Japan ([HH2003](/mods/HH2003)), Other Natures: Disease & Ecologies in Oceanic Worlds ([HH3077](/mods/HH3077)), World War III: A History? ([HH4032](/mods/HH4032)) and Cultural History of Late Imperial China ([HC4045](/mods/HC4045)).
-- **Other.** Introduction to Chemical & Biological Safety ([CB2002](/mods/CB2002)), Leading & Managing Growing Enterprises ([ET5003](/mods/ET5003)), Classical Control Theory for Robotic Applications ([MA2604](/mods/MA2604)) and Methods in Research Synthesis ([HP3102](/mods/HP3102)).
+All 61 new modules:
+
+| Module                 | Title                                                        | AU  | School                              |
+| ---------------------- | ------------------------------------------------------------ | --- | ----------------------------------- |
+| [AAM18G](/mods/AAM18G) | History of Mathematics I                                     | 3   | NIE                                 |
+| [AC3106](/mods/AC3106) | Sustainability Assurance                                     | 3   | Accountancy                         |
+| [BC2417](/mods/BC2417) | Analytics II: Advanced Predictive Techniques                 | 3   | Business                            |
+| [BS3040](/mods/BS3040) | Plant-Microbe Interactions                                   | 3   | Biological Sciences                 |
+| [BS3115](/mods/BS3115) | Internal Medicine of Chinese Medicine II                     | 4   | Biological Sciences                 |
+| [BS3116](/mods/BS3116) | Cm Classic: Synopsis of the Golden Chamber                   | 2   | Biological Sciences                 |
+| [BS3119](/mods/BS3119) | Western Medicine for Safe Chinese Medicine Practice 1        | 3   | Biological Sciences                 |
+| [BS3355](/mods/BS3355) | UAEB Workshop (Series I) - How to Make a Peptide?            | 3   | Biological Sciences                 |
+| [BS3356](/mods/BS3356) | Uaeb(series I)-Atomic Scale Imaging of Biomolecules Using Em | 3   | Biological Sciences                 |
+| [BS3357](/mods/BS3357) | UAEB Series I: Real-Time Analysis on Protein-Ligand Binding  | 3   | Biological Sciences                 |
+| [CB2002](/mods/CB2002) | Introduction to Chemical & Biological Safety                 | 1   | Chemical & Biomolecular Engineering |
+| [CS2060](/mods/CS2060) | Communication in the Age of Generative AI                    | 3   | Communication Studies               |
+| [DA1100](/mods/DA1100) | Drawing: Line & Form                                         | 3   | Art, Design & Media                 |
+| [DA1101](/mods/DA1101) | Drawing: Figures, Space & Composition                        | 3   | Art, Design & Media                 |
+| [DC1100](/mods/DC1100) | Typographic Form                                             | 3   | Art, Design & Media                 |
+| [DC1101](/mods/DC1101) | Visual Form, Colour & Composition                            | 3   | Art, Design & Media                 |
+| [DC1102](/mods/DC1102) | Photography for Designers                                    | 3   | Art, Design & Media                 |
+| [DF1100](/mods/DF1100) | Sight & Sound                                                | 3   | Art, Design & Media                 |
+| [DF1101](/mods/DF1101) | Story & Script                                               | 3   | Art, Design & Media                 |
+| [DS1100](/mods/DS1100) | Transversal Studio: Form & Space                             | 3   | Art, Design & Media                 |
+| [DS1101](/mods/DS1101) | Transversal Studio: Sense & Interaction                      | 3   | Art, Design & Media                 |
+| [DT1100](/mods/DT1100) | Dynamic Drawing & Motion                                     | 3   | Art, Design & Media                 |
+| [DT1101](/mods/DT1101) | Sequential Art                                               | 3   | Art, Design & Media                 |
+| [DT1102](/mods/DT1102) | Gameplay                                                     | 3   | Art, Design & Media                 |
+| [E1102L](/mods/E1102L) | Physics Foundation for Electrical & Electronic Engineering   | 0   | Electrical & Electronic Engineering |
+| [E2005L](/mods/E2005L) | Electrical Devices & Machines                                | 0   | Electrical & Electronic Engineering |
+| [E2101L](/mods/E2101L) | Circuit Analysis                                             | 0   | Electrical & Electronic Engineering |
+| [E2103L](/mods/E2103L) | Semiconductor Fundamentals                                   | 0   | Electrical & Electronic Engineering |
+| [E2104L](/mods/E2104L) | Digital Electronics                                          | 0   | Electrical & Electronic Engineering |
+| [E2110L](/mods/E2110L) | Signals & Systems                                            | 0   | Electrical & Electronic Engineering |
+| [E3011L](/mods/E3011L) | Modelling & Control                                          | 0   | Electrical & Electronic Engineering |
+| [E3012L](/mods/E3012L) | Communication Principles                                     | 0   | Electrical & Electronic Engineering |
+| [E3013L](/mods/E3013L) | Semiconductor Devices & Processing                           | 0   | Electrical & Electronic Engineering |
+| [E3014L](/mods/E3014L) | Digital Signal Processing                                    | 0   | Electrical & Electronic Engineering |
+| [E3015L](/mods/E3015L) | Power Systems & Conversion                                   | 0   | Electrical & Electronic Engineering |
+| [E3017L](/mods/E3017L) | Computer Communications                                      | 0   | Electrical & Electronic Engineering |
+| [E3019L](/mods/E3019L) | Integrated Electronics                                       | 0   | Electrical & Electronic Engineering |
+| [E3101L](/mods/E3101L) | Engineering Electromagnetics                                 | 0   | Electrical & Electronic Engineering |
+| [E3102L](/mods/E3102L) | Microprocessors                                              | 0   | Electrical & Electronic Engineering |
+| [ET5003](/mods/ET5003) | Leading & Managing Growing Enterprises                       | 3   | Nanyang Technopreneurship Centre    |
+| [HC4045](/mods/HC4045) | Cultural History of Late Imperial China                      | 4   | Chinese                             |
+| [HC5100](/mods/HC5100) | Chinese Worlds: Culture, Society, & Methods                  | 3   | Chinese                             |
+| [HC7006](/mods/HC7006) | Special Topics in Modern/Contemporary Chinese Literature     | 3   | Chinese                             |
+| [HH2003](/mods/HH2003) | Environmental History of Modern Japan                        | 3   | History                             |
+| [HH3077](/mods/HH3077) | Other Natures: Disease & Ecologies in Oceanic Worlds         | 3   | History                             |
+| [HH4032](/mods/HH4032) | World War III: A History?                                    | 4   | History                             |
+| [HP3102](/mods/HP3102) | Methods in Research Synthesis                                | 3   | Psychology                          |
+| [HP4210](/mods/HP4210) | Data Analytics for Neuroimaging                              | 4   | Psychology                          |
+| [HR1004](/mods/HR1004) | Introduction to the Histories of Art II                      | 3   | Humanities                          |
+| [HW0211](/mods/HW0211) | Academic Communication in the Arts, Design & Media Studies   | 2   | Philosophy                          |
+| [IM1010](/mods/IM1010) | Digital Media Production & Strategies                        | 3   | Other                               |
+| [LB5002](/mods/LB5002) | Bahasa Indonesia Level 2                                     | 3   | Humanities                          |
+| [LF5902](/mods/LF5902) | "French Touch" - French Culture & Arts                       | 3   | Humanities                          |
+| [LG5006](/mods/LG5006) | German Language Level 6                                      | 3   | Humanities                          |
+| [LK5008](/mods/LK5008) | Korean Language Level 8                                      | 3   | Humanities                          |
+| [LP5001](/mods/LP5001) | Portuguese Language Level 1                                  | 3   | Humanities                          |
+| [MA2604](/mods/MA2604) | Classical Control Theory for Robotic Applications            | 3   | Mechanical & Aerospace Engineering  |
+| [MA5008](/mods/MA5008) | Campus Ceo - Innovation to Business                          | 3   | Mechanical & Aerospace Engineering  |
+| [MS5001](/mods/MS5001) | Innovating with Materials: Thinking Deep                     | 3   | Materials Engineering               |
+| [SC3099](/mods/SC3099) | Capstone Project                                             | 4   | Computer Science                    |
+| [SP0057](/mods/SP0057) | Dress to Express? Style-Fashion-Dress in Global Contexts     | 3   | Sport Science and Management        |
 
 ## How the weekly timetable looks
 

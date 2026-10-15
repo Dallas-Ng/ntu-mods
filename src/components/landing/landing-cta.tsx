@@ -12,7 +12,7 @@ const LandingCTA = ({ semesterLabel, modules, indexes }: Props) => {
       <div className="max-w-[720px] text-center">
         <a
           href="/articles/ntu-ay2026-semester-2-whats-new"
-          className="mb-5 inline-flex flex-wrap items-center justify-center gap-x-2 rounded-full border-2 border-yellow-400 bg-yellow-100 px-4 py-1.5 text-sm font-semibold text-black transition-colors hover:bg-yellow-200">
+          className="border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 mb-5 inline-flex flex-wrap items-center justify-center gap-x-2 rounded-full border-2 px-4 py-1.5 text-sm font-semibold transition-colors">
           <span
             className="size-2 rounded-full bg-green-600"
             aria-hidden="true"

@@ -3,7 +3,9 @@ import type { ReactNode } from "react"
 import { siteConfig } from "@/config/site"
 
 const CARD =
-  "relative flex h-full min-h-[300px] w-full overflow-hidden rounded-xl border p-5 shadow"
+  "bg-card relative flex h-full min-h-[300px] w-full overflow-hidden rounded-xl border p-5 shadow-sm transition-all duration-200 group-hover:-translate-y-0.5 group-hover:border-primary/40 group-hover:shadow-md motion-reduce:transition-none motion-reduce:group-hover:translate-y-0"
+const LINK =
+  "group focus-visible:ring-ring block rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
 
 type FeatureCardProps = {
   href?: string
@@ -36,8 +38,10 @@ const FeatureCard = ({
       {wide ? (
         <>
           <div className="lg:w-[55%] lg:shrink-0">
-            <h3 className="text-2xl font-bold">{title}</h3>
-            <p className="text-muted-foreground text-lg">{desc}</p>
+            <h3 className="text-2xl font-bold text-balance">{title}</h3>
+            <p className="text-muted-foreground mt-1 text-lg leading-snug">
+              {desc}
+            </p>
           </div>
           <div className="relative min-h-[110px] min-w-0 flex-1">
             <img
@@ -62,7 +66,7 @@ const FeatureCard = ({
           </div>
           <div>
             <h3 className="mb-1 text-xl font-semibold">{title}</h3>
-            <p className="text-muted-foreground">{desc}</p>
+            <p className="text-muted-foreground leading-snug">{desc}</p>
           </div>
         </>
       )}
@@ -70,7 +74,7 @@ const FeatureCard = ({
   )
 
   return href ? (
-    <a href={href} className="cursor-pointer">
+    <a href={href} className={LINK}>
       <div className={CARD}>{body}</div>
     </a>
   ) : (
@@ -79,7 +83,7 @@ const FeatureCard = ({
 }
 
 const ToolsCard = () => (
-  <div className="flex flex-col gap-5 rounded-xl border p-5 shadow lg:flex-row lg:items-center">
+  <div className="bg-card flex flex-col gap-5 rounded-xl border p-5 shadow-sm lg:flex-row lg:items-center">
     <a href="/tools" className="group lg:w-[30%] lg:shrink-0">
       <h3 className="text-2xl font-bold group-hover:underline">
         Student Tools
@@ -97,7 +101,7 @@ const ToolsCard = () => (
           <a
             key={tool.href}
             href={tool.href}
-            className="hover:bg-accent flex flex-col gap-1 rounded-lg border p-4 transition-colors">
+            className="hover:bg-accent hover:border-primary/40 focus-visible:ring-ring flex flex-col gap-1 rounded-lg border p-4 outline-none transition-colors focus-visible:ring-2">
             <span className="flex items-center justify-between gap-2 font-semibold">
               {tool.name}
               {tool.isNew && (
@@ -117,10 +121,10 @@ const LandingFeatures = () => {
   return (
     <div>
       <div className="mb-6 text-center">
-        <h2 className="text-4xl font-bold">
+        <h2 className="text-3xl font-bold text-balance md:text-4xl">
           Everything you need to plan your semester
         </h2>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground mt-2 text-lg">
           From generating timetables to checking exams and finding student links
         </p>
       </div>
@@ -170,8 +174,8 @@ const LandingFeatures = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <a href="/mods" className="cursor-pointer">
-            <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
+          <a href="/mods" className={LINK}>
+            <div className="bg-card relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow-sm transition-all duration-200 group-hover:-translate-y-0.5 group-hover:border-primary/40 group-hover:shadow-md motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
               <img
                 loading="lazy"
                 decoding="async"

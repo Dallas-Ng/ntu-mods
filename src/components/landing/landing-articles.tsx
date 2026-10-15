@@ -9,7 +9,7 @@ const LandingArticles = () => {
     <section>
       <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <h2 className="text-4xl font-bold">Articles</h2>
+          <h2 className="text-3xl font-bold md:text-4xl">Articles</h2>
           <p className="text-foreground/75">
             Guides for planning modules, choosing BDEs, and building a better
             NTU timetable.
@@ -28,14 +28,14 @@ const LandingArticles = () => {
           <a
             key={article.slug}
             href={`/articles/${article.slug}`}
-            className="group bg-card hover:bg-accent rounded-lg border transition-colors">
+            className="group bg-card hover:bg-accent hover:border-primary/40 focus-visible:ring-ring overflow-hidden rounded-xl border outline-none transition-colors focus-visible:ring-2">
             {article.thumbnail && (
               <img
                 loading="lazy"
                 decoding="async"
                 src={article.thumbnail}
                 alt={article.thumbnailAlt}
-                className="aspect-video w-full rounded-t-lg border-b object-cover"
+                className="aspect-video w-full border-b object-cover"
               />
             )}
 

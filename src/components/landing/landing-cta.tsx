@@ -18,20 +18,20 @@ const LandingCTA = ({ semesterLabel, modules, indexes }: Props) => {
             aria-hidden="true"
           />
           <span>Now live: {semesterLabel} data</span>
-          <span className="font-medium">
+          <span className="font-medium tabular-nums">
             {modules} modules · {indexes} indexes →
           </span>
         </a>
-        <h1 className="bg-gradient-to-l from-blue-600 to-blue-700 bg-clip-text text-4xl leading-tight font-bold text-transparent md:text-6xl">
+        <h1 className="bg-gradient-to-l from-blue-600 to-blue-700 bg-clip-text pb-1 text-4xl leading-[1.1] font-bold tracking-tight text-balance text-transparent md:text-6xl">
           Build your NTU timetable in minutes
         </h1>
 
-        <p className="text-muted-foreground mx-auto mt-4 max-w-lg text-lg">
+        <p className="text-muted-foreground mx-auto mt-5 max-w-lg text-lg text-balance md:text-xl">
           Pick your modules and get every clash-free option. Compare indexes,
           check exams and share your plan with friends.
         </p>
 
-        <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Button size="lg" className="w-full sm:w-fit" asChild>
             <a href="/timetable">Build my timetable</a>
           </Button>
@@ -43,6 +43,10 @@ const LandingCTA = ({ semesterLabel, modules, indexes }: Props) => {
             <a href="/mods">Browse modules</a>
           </Button>
         </div>
+
+        <p className="text-muted-foreground mt-4 text-sm">
+          Free to use. No sign-up needed.
+        </p>
       </div>
     </div>
   )

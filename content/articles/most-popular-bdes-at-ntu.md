@@ -2,7 +2,7 @@
 title: "Most Popular BDEs at NTU"
 description: "Explore popular NTU BDEs, compare why students choose them, what to watch out for, and how to pick an elective that fits your workload and timetable."
 date: "2026-04-29"
-updated: "2026-06-08"
+updated: "2026-10-15"
 author: "NTUMods"
 category: "BDE"
 tags: ["NTU BDE", "popular BDE NTU", "NTU electives", "NTUMods", "NTU electives guide", "ntu bde list", "bde list ntu", "bde courses ntu", "bde ntu"]

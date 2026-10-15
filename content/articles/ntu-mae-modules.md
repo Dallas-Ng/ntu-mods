@@ -2,6 +2,7 @@
 title: "NTU MAE Modules: Courses Offered by the School of Mechanical & Aerospace Engineering (AY2026/2027 Semester 2)"
 description: "A complete list of NTU MAE (Mechanical & Aerospace Engineering) modules for AY2026/2027 Semester 2: mechanics, thermodynamics, aerospace, and design tracks, with AU and how to browse them on NTUMods."
 date: "2026-08-06"
+updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
 tags: ["ntu mae modules", "ntu mechanical engineering modules", "mechanical and aerospace engineering ntu", "ntu mae curriculum", "ntu me modules", "mae ntu courses"]

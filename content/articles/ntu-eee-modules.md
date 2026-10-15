@@ -2,6 +2,7 @@
 title: "NTU EEE Modules: Courses Offered by the School of Electrical & Electronic Engineering (AY2026/2027 Semester 2)"
 description: "A complete list of NTU EEE modules for AY2026/2027 Semester 2: circuits, signals, power systems, and the IE-prefix data science & AI electives EEE offers, with prerequisites and how to browse them on NTUMods."
 date: "2026-08-06"
+updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
 tags: ["ntu eee modules", "ntu eee curriculum", "ntu electrical and electronic engineering modules", "ntu ee modules", "ntu ie modules", "eee ntu courses", "ntu eee electives"]

@@ -2,7 +2,7 @@
 title: "Complete NTU BDE List: Every BDE Category and Module (AY2026/2027 Semester 2)"
 description: "A complete NTU BDE list by category: languages, business, computing, humanities, arts, science, engineering, and more. Updated for AY2026/2027 Semester 2. Browse all 780+ BDE modules on NTUMods."
 date: "2026-05-21"
-updated: "2026-06-14"
+updated: "2026-10-15"
 author: "NTUMods"
 category: "BDE"
 tags: ["ntu bde list", "bde list ntu", "ntu bde 2026", "all bde ntu", "bde courses ntu", "NTU BDE", "NTU electives", "NTUMods", "bde ntu", "ntu bde ay2026", "ntu bde semester 2 2026", "ntu bde ay2026 s2", "ntu bde ay2026/2027", "ntu bde list 2026"]

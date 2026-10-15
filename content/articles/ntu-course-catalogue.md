@@ -2,6 +2,7 @@
 title: "NTU Course Catalogue: Browse All Modules by School (AY2026/2027 Semester 2)"
 description: "The full NTU course catalogue for AY2026/2027 Semester 2 — every school, module prefix, and how many modules each offers, with links to browse or search on NTUMods."
 date: "2026-08-06"
+updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
 tags: ["ntu course catalogue", "ntu courses", "ntu course list", "ntu course index", "ntu course search", "ntu all courses", "ntu modules list", "ntu course codes"]

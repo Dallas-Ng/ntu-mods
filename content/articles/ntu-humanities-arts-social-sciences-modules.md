@@ -2,6 +2,7 @@
 title: "NTU Humanities, Arts & Social Sciences Modules: English, History, Philosophy, Linguistics, Art (AY2026/2027)"
 description: "Complete list of NTU humanities modules for AY2026/2027 Semester 2: English literature (HL), linguistics (HG), history (HH), philosophy (HY), and visual arts (AAA). Browse all CoHASS modules offered this semester."
 date: "2026-06-20"
+updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
 tags: ["ntu english modules", "ntu history modules", "ntu humanities modules", "ntu arts modules", "ntu cohass modules", "ntu literature modules", "ntu philosophy modules", "ntu linguistics modules", "art history ntu", "history course offerings ntu", "ntu english literature", "ntu cohass", "ntu hss modules", "ntu ay2026 humanities"]

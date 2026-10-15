@@ -2,6 +2,7 @@
 title: "NTU Business Modules: Courses Offered by Nanyang Business School (AY2026/2027 Semester 2)"
 description: "A complete list of NTU business modules offered by Nanyang Business School (NBS) for AY2026/2027 Semester 2. Covers accountancy & business (AB), banking & finance (BF), and how to browse all business modules on NTUMods."
 date: "2026-06-20"
+updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
 tags: ["ntu business modules", "ntu nanyang business school modules", "ntu nbs modules", "ntu business courses", "ntu finance modules", "ntu accounting modules", "ntu business school courses", "ntumods business", "ntu ab modules", "ntu bf modules", "ntu business ay2026"]

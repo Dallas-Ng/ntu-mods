@@ -2,7 +2,7 @@
 title: "Language BDEs at NTU: What to Expect Before You Register"
 description: "A practical guide to NTU language BDEs: how the level system works, which language to choose, attendance requirements, weekly workload, and whether prior knowledge helps."
 date: "2026-05-19"
-updated: "2026-06-14"
+updated: "2026-10-15"
 author: "NTUMods"
 category: "BDE"
 tags: ["language BDE NTU", "NTU language elective", "NTU BDE", "Japanese BDE NTU", "Korean BDE NTU", "NTUMods", "NTU electives", "bde ntu", "ntu bde language", "japanese ntu", "korean ntu", "tamil bde ntu", "spanish bde ntu", "chinese language bde ntu", "chinese creative writing ntu", "hf5101 ntu", "lc5001 ntu"]

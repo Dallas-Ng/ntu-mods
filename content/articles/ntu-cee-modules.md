@@ -2,6 +2,7 @@
 title: "NTU CEE Modules: Courses Offered by the School of Civil & Environmental Engineering (AY2026/2027 Semester 2)"
 description: "A complete list of NTU CEE (Civil & Environmental Engineering) modules for AY2026/2027 Semester 2: structures, geotechnics, transportation, and sustainability, with AU and how to browse them on NTUMods."
 date: "2026-08-06"
+updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
 tags: ["ntu cee modules", "ntu cee course content", "civil and environmental engineering ntu", "ntu cv modules", "cee ntu courses", "ntu civil engineering modules"]

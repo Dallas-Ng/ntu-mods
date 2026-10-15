@@ -64,6 +64,13 @@ export const Banner = {
       </BannerWrapper>
     </a>
   ),
+  ay2026s2: () => (
+    <a href="/articles/ntu-ay2026-semester-2-whats-new">
+      <BannerWrapper>
+        AY2026/27 Semester 2 modules are now live: see what&apos;s new →
+      </BannerWrapper>
+    </a>
+  ),
   performanceUpdate: () => (
     <a href="/changelog">
       <BannerWrapper divClass="bg-yellow-300">

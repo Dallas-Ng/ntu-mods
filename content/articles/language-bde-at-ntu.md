@@ -162,7 +162,7 @@ These modules are offered by the School of Humanities and are different in chara
 | --- | --- |
 | [HF5101](/mods/HF5101) | Introduction to Chinese Creative Writing |
 | [HC2010](/mods/HC2010) | Classical Chinese Fiction |
-| [HC2031](/mods/HC2031) | Confucian Thought |
+| [HC3016](/mods/HC3016) | Readings of Classical Chinese Prose |
 
 **[HF5101 Introduction to Chinese Creative Writing](/mods/HF5101)** (华文写作入门) is the module that most commonly appears in search as "Chinese creative writing NTU." It is a humanities BDE taught in Mandarin, focused on developing writing craft rather than foundational language skills. Students who take this should already be comfortable reading and writing in Mandarin — it is not a language learning module.
 

@@ -219,7 +219,7 @@ NTU lists the Semester 2 course registration period as December, and your own re
 
 ## What is not out yet
 
-- **Exam timetable.** NTU has not released the Semester 2 exam timetable, so [the exam schedule](/exams) still shows Semester 1. NTU normally releases it in mid November. See [NTU Exam Timetable and Seating](/articles/ntu-exam-timetable-seating-past-papers).
+- **Exam timetable.** NTU has not released the Semester 2 exam timetable, so [the exam schedule](/exams) keeps showing the Semester 1 exams, which have not finished yet. It will switch to Semester 2 once NTU publishes that timetable. See [NTU Exam Timetable and Seating](/articles/ntu-exam-timetable-seating-past-papers).
 
 ## How to plan your Semester 2 timetable
 
@@ -250,7 +250,7 @@ Many modules are offered in only one semester each year. Open the module page on
 
 ### Are the Semester 2 exam dates available?
 
-Not yet. NTU has not released the Semester 2 exam timetable. The exam schedule on NTUMods will update when it is published.
+Not yet. NTU has not released the Semester 2 exam timetable. The [exam schedule](/exams) shows Semester 1 exams for now and will update when the Semester 2 timetable is published.
 
 ### Why do some modules show 0 AU?
 

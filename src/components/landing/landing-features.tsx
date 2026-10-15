@@ -3,7 +3,7 @@ import type { ReactNode } from "react"
 import { siteConfig } from "@/config/site"
 
 const CARD =
-  "relative flex h-full min-h-[300px] w-full overflow-hidden rounded-xl border p-5 shadow"
+  "bg-card relative flex h-full min-h-[300px] w-full overflow-hidden rounded-2xl border p-6 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0"
 
 type FeatureCardProps = {
   href?: string
@@ -36,8 +36,8 @@ const FeatureCard = ({
       {wide ? (
         <>
           <div className="lg:w-[55%] lg:shrink-0">
-            <h3 className="text-2xl font-bold">{title}</h3>
-            <p className="text-muted-foreground text-lg">{desc}</p>
+            <h3 className="text-2xl font-semibold tracking-tight">{title}</h3>
+            <p className="text-muted-foreground mt-1 text-base text-pretty">{desc}</p>
           </div>
           <div className="relative min-h-[110px] min-w-0 flex-1">
             <img
@@ -61,8 +61,8 @@ const FeatureCard = ({
             />
           </div>
           <div>
-            <h3 className="mb-1 text-xl font-semibold">{title}</h3>
-            <p className="text-muted-foreground">{desc}</p>
+            <h3 className="mb-1 text-xl font-semibold tracking-tight">{title}</h3>
+            <p className="text-muted-foreground text-pretty">{desc}</p>
           </div>
         </>
       )}
@@ -70,7 +70,9 @@ const FeatureCard = ({
   )
 
   return href ? (
-    <a href={href} className="cursor-pointer">
+    <a
+      href={href}
+      className="focus-visible:ring-ring rounded-2xl focus-visible:ring-2 focus-visible:outline-none">
       <div className={CARD}>{body}</div>
     </a>
   ) : (
@@ -79,12 +81,12 @@ const FeatureCard = ({
 }
 
 const ToolsCard = () => (
-  <div className="flex flex-col gap-5 rounded-xl border p-5 shadow lg:flex-row lg:items-center">
+  <div className="bg-card flex flex-col gap-5 rounded-2xl border p-6 shadow-sm lg:flex-row lg:items-center">
     <a href="/tools" className="group lg:w-[30%] lg:shrink-0">
-      <h3 className="text-2xl font-bold group-hover:underline">
+      <h3 className="text-2xl font-semibold tracking-tight group-hover:underline">
         Student Tools
       </h3>
-      <p className="text-muted-foreground text-lg">
+      <p className="text-muted-foreground mt-1 text-base">
         Free tools that run in your browser, from FGO planning to CGPA targets
       </p>
     </a>
@@ -116,11 +118,14 @@ const ToolsCard = () => (
 const LandingFeatures = () => {
   return (
     <div>
-      <div className="mb-6 text-center">
-        <h2 className="text-4xl font-bold">
+      <div className="mx-auto mb-10 max-w-2xl text-center">
+        <p className="text-primary mb-2 text-sm font-semibold tracking-wide uppercase">
+          Features
+        </p>
+        <h2 className="text-3xl font-bold tracking-tight text-balance md:text-4xl">
           Everything you need to plan your semester
         </h2>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground mt-3 text-pretty">
           From generating timetables to checking exams and finding student links
         </p>
       </div>
@@ -170,8 +175,10 @@ const LandingFeatures = () => {
         </div>
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <a href="/mods" className="cursor-pointer">
-            <div className="relative h-[300px] w-full overflow-hidden rounded-xl border p-3 shadow">
+          <a
+            href="/mods"
+            className="focus-visible:ring-ring rounded-2xl focus-visible:ring-2 focus-visible:outline-none">
+            <div className="bg-card relative h-[300px] w-full overflow-hidden rounded-2xl border p-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md motion-reduce:transition-none motion-reduce:hover:translate-y-0">
               <img
                 loading="lazy"
                 decoding="async"
@@ -183,7 +190,7 @@ const LandingFeatures = () => {
               />
 
               <div className="absolute bottom-8 left-8 w-10/12 md:bottom-3 md:left-3 lg:bottom-3 lg:left-8">
-                <h3 className="mb-1 text-xl font-semibold">
+                <h3 className="mb-1 text-xl font-semibold tracking-tight">
                   View all Courses and Indexes
                 </h3>
                 <p className="text-muted-foreground">

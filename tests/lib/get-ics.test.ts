@@ -1,6 +1,12 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 
 import { getIcs } from "@/lib/get-ics"
+
+// Pin the semester so the expected dates do not move when new data ships.
+vi.mock("@/lib/semesters", () => ({
+  latestYear: "2026",
+  latestSemester: "2"
+}))
 
 const index = (overrides: Partial<Index> = {}): Index => ({
   key: "IDX1",
@@ -61,9 +67,9 @@ describe("getIcs", () => {
       { IDX1: [index({ remarks: "Teaching Wk8" })] },
       { CZ2001: "Algorithms" }
     )
-    // Week 1 Monday is 2026-08-10 (Mon), week 8 lands on
-    // WEEK_1_MONDAY + 8*7 days = 2026-10-05, not +7 weeks (2026-09-28).
-    expect(ics).toContain("DTSTART:20261005T083000")
+    // Sem 2 week 1 Monday is 2027-01-11, week 8 lands on
+    // WEEK_1_MONDAY + 8*7 days = 2027-03-08, not +7 weeks (2027-03-01).
+    expect(ics).toContain("DTSTART:20270308T083000")
   })
 
   it("labels a custom block's type from remarks, not the type field", () => {

@@ -5,7 +5,19 @@ date: "2026-10-15"
 updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
-tags: ["ntu semester 2 modules", "ntu ay2026 semester 2", "ntu modules 2027", "ntu new modules", "ntu course list sem 2", "ntu timetable semester 2", "ntumods semester 2", "ntu semester 2 2026/2027", "ntu module changes", "ntu class schedule semester 2"]
+tags:
+  [
+    "ntu semester 2 modules",
+    "ntu ay2026 semester 2",
+    "ntu modules 2027",
+    "ntu new modules",
+    "ntu course list sem 2",
+    "ntu timetable semester 2",
+    "ntumods semester 2",
+    "ntu semester 2 2026/2027",
+    "ntu module changes",
+    "ntu class schedule semester 2"
+  ]
 ---
 
 # NTU AY2026/2027 Semester 2 Modules: What Is New and What Changed
@@ -18,48 +30,48 @@ AY2026/2027 Semester 2 module and class index data is now live on NTUMods. Semes
 
 ## Semester 2 at a glance
 
-| | AY2026/27 Sem 2 | AY2026/27 Sem 1 | AY2025/26 Sem 2 |
-|---|---|---|---|
-| Modules offered | 1,092 | 1,138 | 1,085 |
-| Class indexes | 4,306 | 4,591 | 4,230 |
-| Class slots (lectures, tutorials, labs) | 9,687 | n/a | n/a |
+|                                         | AY2026/27 Sem 2 | AY2026/27 Sem 1 | AY2025/26 Sem 2 |
+| --------------------------------------- | --------------- | --------------- | --------------- |
+| Modules offered                         | 1,092           | 1,138           | 1,085           |
+| Class indexes                           | 4,306           | 4,591           | 4,230           |
+| Class slots (lectures, tutorials, labs) | 9,687           | n/a             | n/a             |
 
 Compared with the same semester last year, Semester 2 has 7 more modules and 76 more indexes. Compared with Semester 1, it has 46 fewer modules.
 
 How much of the list carries over:
 
-| | Modules |
-|---|---|
-| Also offered in AY2026/27 Semester 1 | 392 |
-| Offered in Semester 2 only (not in Semester 1) | 700 |
-| Also offered in AY2025/26 Semester 2 | 878 |
-| New to NTUMods (never offered in any earlier semester in the data) | 61 |
+|                                                                    | Modules |
+| ------------------------------------------------------------------ | ------- |
+| Also offered in AY2026/27 Semester 1                               | 392     |
+| Offered in Semester 2 only (not in Semester 1)                     | 700     |
+| Also offered in AY2025/26 Semester 2                               | 878     |
+| New to NTUMods (never offered in any earlier semester in the data) | 61      |
 
 Most modules run in only one semester each year, which is why only about 390 modules appear in both. If a module you wanted is missing, open its module page and check which semesters it has been offered in. Modules that ran in Semester 2 last year are the best guide: 878 of this semester's modules did.
 
 ## Modules by level
 
-| Level | Sem 2 | Sem 1 |
-|---|---|---|
-| Level 0 (common core and career modules, such as CC and ML) | 43 | 48 |
-| Level 1000 | 110 | 108 |
-| Level 2000 | 267 | 259 |
-| Level 3000 | 224 | 239 |
-| Level 4000 | 225 | 243 |
-| Level 5000 | 151 | 157 |
+| Level                                                       | Sem 2 | Sem 1 |
+| ----------------------------------------------------------- | ----- | ----- |
+| Level 0 (common core and career modules, such as CC and ML) | 43    | 48    |
+| Level 1000                                                  | 110   | 108   |
+| Level 2000                                                  | 267   | 259   |
+| Level 3000                                                  | 224   | 239   |
+| Level 4000                                                  | 225   | 243   |
+| Level 5000                                                  | 151   | 157   |
 
 Year 1 and Year 2 modules are slightly more plentiful than in Semester 1, while Year 3 and Year 4 modules are slightly fewer. The count of 5000-level modules is similar.
 
 ## Modules by AU
 
-| AU | Sem 2 | Sem 1 |
-|---|---|---|
-| 0 AU | 15 | 1 |
-| 1 AU | 25 | 32 |
-| 2 AU | 44 | 49 |
-| 3 AU | 810 | 838 |
-| 4 AU | 192 | 211 |
-| 5 AU and above | 6 | 7 |
+| AU             | Sem 2 | Sem 1 |
+| -------------- | ----- | ----- |
+| 0 AU           | 15    | 1     |
+| 1 AU           | 25    | 32    |
+| 2 AU           | 44    | 49    |
+| 3 AU           | 810   | 838   |
+| 4 AU           | 192   | 211   |
+| 5 AU and above | 6     | 7     |
 
 Three-AU modules remain the large majority. The jump in 0 AU modules comes from the new EEE laboratory modules described below. Check your programme requirements for how those count before you plan around them.
 
@@ -69,27 +81,27 @@ These are the biggest changes in module count from Semester 1 to Semester 2, usi
 
 **Grew the most**
 
-| School | Sem 2 | Sem 1 | Change |
-|---|---|---|---|
-| Art, Design & Media (ADM) | 82 | 61 | +21 |
-| Humanities (SOH) | 78 | 70 | +8 |
-| Psychology (PSY) | 35 | 27 | +8 |
-| Electrical & Electronic Engineering (EEE) | 64 | 56 | +8 |
-| Business (BUS) | 114 | 106 | +8 |
-| Chemistry and Biological Chemistry (CHEM) | 19 | 14 | +5 |
-| Biological Sciences (BS) | 34 | 29 | +5 |
+| School                                    | Sem 2 | Sem 1 | Change |
+| ----------------------------------------- | ----- | ----- | ------ |
+| Art, Design & Media (ADM)                 | 82    | 61    | +21    |
+| Humanities (SOH)                          | 78    | 70    | +8     |
+| Psychology (PSY)                          | 35    | 27    | +8     |
+| Electrical & Electronic Engineering (EEE) | 64    | 56    | +8     |
+| Business (BUS)                            | 114   | 106   | +8     |
+| Chemistry and Biological Chemistry (CHEM) | 19    | 14    | +5     |
+| Biological Sciences (BS)                  | 34    | 29    | +5     |
 
 **Shrank the most**
 
-| School | Sem 2 | Sem 1 | Change |
-|---|---|---|---|
-| Communication Studies (CS) | 47 | 69 | -22 |
-| Sport Science and Management (SSM) | 6 | 25 | -19 |
-| National Institute of Education (NIE) | 56 | 72 | -16 |
-| Computer Science (CSC) | 56 | 62 | -6 |
-| English (ELH) | 28 | 33 | -5 |
-| Civil & Environmental Engineering (CEE) | 14 | 18 | -4 |
-| Public Policy And Global Affairs (PPGA) | 18 | 22 | -4 |
+| School                                  | Sem 2 | Sem 1 | Change |
+| --------------------------------------- | ----- | ----- | ------ |
+| Communication Studies (CS)              | 47    | 69    | -22    |
+| Sport Science and Management (SSM)      | 6     | 25    | -19    |
+| National Institute of Education (NIE)   | 56    | 72    | -16    |
+| Computer Science (CSC)                  | 56    | 62    | -6     |
+| English (ELH)                           | 28    | 33    | -5     |
+| Civil & Environmental Engineering (CEE) | 14    | 18    | -4     |
+| Public Policy And Global Affairs (PPGA) | 18    | 22    | -4     |
 
 Business is still the largest school with 114 modules, followed by Art, Design & Media with 82 and Humanities with 78. See the [NTU Course Catalogue](/articles/ntu-course-catalogue) for every school's count.
 
@@ -110,13 +122,13 @@ Business is still the largest school with 114 modules, followed by Art, Design &
 
 The shape of the week is different from Semester 1, which matters when you compare indexes.
 
-| Day | Class slots, Sem 2 | Class slots, Sem 1 |
-|---|---|---|
-| Monday | 1,967 | 1,738 |
-| Tuesday | 2,120 | 1,690 |
-| Wednesday | 2,155 | 1,650 |
-| Thursday | 2,004 | 1,794 |
-| Friday | 1,410 | 2,028 |
+| Day       | Class slots, Sem 2 | Class slots, Sem 1 |
+| --------- | ------------------ | ------------------ |
+| Monday    | 1,967              | 1,738              |
+| Tuesday   | 2,120              | 1,690              |
+| Wednesday | 2,155              | 1,650              |
+| Thursday  | 2,004              | 1,794              |
+| Friday    | 1,410              | 2,028              |
 
 Semester 2 slots are spread more evenly from Monday to Thursday, with a lighter Friday. Slots that start at 6pm or later also fall from 1,050 in Semester 1 to 392. If you want a free Friday, you will have an easier time this semester. Use the day and time filters in the [Module Browser](/mods) to narrow your search.
 
@@ -126,25 +138,25 @@ By type, the 9,687 slots are made up of 3,707 tutorials, 3,562 lectures, 1,512 s
 
 Large common modules have the most index choices, which makes them the easiest to fit around other classes:
 
-| Module | Indexes |
-|---|---|
-| [CC0001](/mods/CC0001) Inquiry & Communication in an Interdisciplinary World | 153 |
-| [CC0007](/mods/CC0007) Science & Technology for Humanity | 117 |
-| [ML0004](/mods/ML0004) Career Design & Workplace Readiness in a Dynamic World | 90 |
-| [CC0006](/mods/CC0006) Sustainability: Society, Economy & Environment | 83 |
-| [CC0015](/mods/CC0015) Health & Wellbeing | 58 |
+| Module                                                                        | Indexes |
+| ----------------------------------------------------------------------------- | ------- |
+| [CC0001](/mods/CC0001) Inquiry & Communication in an Interdisciplinary World  | 153     |
+| [CC0007](/mods/CC0007) Science & Technology for Humanity                      | 117     |
+| [ML0004](/mods/ML0004) Career Design & Workplace Readiness in a Dynamic World | 90      |
+| [CC0006](/mods/CC0006) Sustainability: Society, Economy & Environment         | 83      |
+| [CC0015](/mods/CC0015) Health & Wellbeing                                     | 58      |
 
 See [Best CC Modules at NTU](/articles/best-cc-modules-ntu) if you are choosing between common core options.
 
 ## Key dates for Semester 2
 
-| | Date |
-|---|---|
-| Teaching Week 1 begins | Monday 11 January 2027 |
-| Recess Week | 1 to 5 March 2027 |
-| Add/drop | Teaching Weeks 1 and 2 |
-| Revision and examinations | Mid April to early May 2027 |
-| BDE, UE and GERPE allocation results | Early January 2027 |
+|                                      | Date                        |
+| ------------------------------------ | --------------------------- |
+| Teaching Week 1 begins               | Monday 11 January 2027      |
+| Recess Week                          | 1 to 5 March 2027           |
+| Add/drop                             | Teaching Weeks 1 and 2      |
+| Revision and examinations            | Mid April to early May 2027 |
+| BDE, UE and GERPE allocation results | Early January 2027          |
 
 NTU lists the Semester 2 course registration period as December, and your own registration time appears in your personal course registration schedule. Dates can change, so confirm against the [official academic calendar](https://ntu.edu.sg/academic-calendar). Our [NTU Academic Calendar AY2026/2027](/articles/ntu-academic-calendar-ay2026) guide has the full list, and the [add/drop guide](/articles/ntu-add-drop-period-guide) explains the first two weeks.
 

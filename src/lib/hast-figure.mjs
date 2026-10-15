@@ -49,11 +49,64 @@ const darkVariant = (src) => {
     : null
 }
 
+const isEl = (n, tag) => n.type === "element" && n.tagName === tag
+
+/** Plain text of a node, for the card title. */
+const textOf = (n) =>
+  n.type === "text" ? n.value : (n.children ?? []).map(textOf).join("")
+
+/**
+ * CTA card: a blockquote whose last paragraph is a link titled "cta" becomes a
+ * card with a button.
+ *
+ *   > **Start planning**
+ *   >
+ *   > One sentence of context.
+ *   >
+ *   > [Browse modules](/mods "cta")
+ */
+const ctaCard = {
+  filter: ["blockquote"],
+  visit(node, ctx) {
+    const paras = node.children.filter((c) => isEl(c, "p"))
+    const last = paras[paras.length - 1]
+    const link = last?.children.find(
+      (c) => isEl(c, "a") && c.properties.title === "cta"
+    )
+    if (!link) return
+    const { title: _title, ...props } = link.properties
+    const [head, ...body] = paras.slice(0, -1)
+    ctx.replaceNode(node, {
+      type: "element",
+      tagName: "div",
+      properties: { className: ["article-cta", "not-prose"] },
+      children: [
+        ...(head
+          ? [
+              {
+                type: "element",
+                tagName: "p",
+                properties: { className: ["article-cta-title"] },
+                children: [{ type: "text", value: textOf(head) }]
+              }
+            ]
+          : []),
+        ...body,
+        {
+          ...link,
+          properties: { ...props, className: ["article-cta-button"] }
+        }
+      ]
+    })
+  }
+}
+
 export default {
   name: "figure-captions",
   element: {
-    filter: ["p"],
+    filter: ["p", "blockquote"],
     visit(node, ctx) {
+      if (node.tagName === "blockquote") return ctaCard.visit(node, ctx)
       const kids = node.children.filter((c) => !isBlank(c))
       const img = kids[0]
       if (kids.length !== 1 || img.type !== "element" || img.tagName !== "img")

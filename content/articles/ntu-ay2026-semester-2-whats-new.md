@@ -24,7 +24,11 @@ tags:
 
 AY2026/2027 Semester 2 module and class index data is now live on NTUMods. Semester 2 teaching begins on Monday 11 January 2027, so this is the right time to shortlist modules, compare indexes and test timetables before registration opens. This page goes through what is in the data, which schools changed the most, the modules that appear for the first time, and how the weekly timetable differs from Semester 1.
 
-> **Start planning:** Browse the [Module Browser](/mods) or open the [timetable planner](/timetable). NTUMods now defaults to AY2026/2027 Semester 2.
+> **Start planning for Semester 2**
+>
+> Browse 1,092 modules, compare class indexes and build a clash-free timetable. NTUMods now defaults to AY2026/2027 Semester 2.
+>
+> [Browse Semester 2 modules](/mods "cta")
 
 > **Quick summary:** 1,092 modules and 4,306 class indexes are offered. That is slightly fewer than Semester 1 (1,138 modules and 4,591 indexes). 61 modules are new to the data. Art, Design & Media grew the most, while Communication Studies and Sport Science and Management shrank the most. The Semester 2 exam timetable is not released yet.
 

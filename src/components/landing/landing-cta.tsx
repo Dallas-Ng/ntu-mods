@@ -1,9 +1,27 @@
 import { Button } from "../ui/button"
 
-const LandingCTA = () => {
+interface Props {
+  semesterLabel: string
+  modules: string
+  indexes: string
+}
+
+const LandingCTA = ({ semesterLabel, modules, indexes }: Props) => {
   return (
     <div className="z-10 flex items-center justify-center align-middle">
       <div className="max-w-[720px] text-center">
+        <a
+          href="/articles/ntu-ay2026-semester-2-whats-new"
+          className="border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 mb-5 inline-flex flex-wrap items-center justify-center gap-x-2 rounded-full border-2 px-4 py-1.5 text-sm font-semibold transition-colors">
+          <span
+            className="size-2 rounded-full bg-green-600"
+            aria-hidden="true"
+          />
+          <span>Now live: {semesterLabel} data</span>
+          <span className="font-medium">
+            {modules} modules · {indexes} indexes →
+          </span>
+        </a>
         <h1 className="bg-gradient-to-l from-blue-600 to-blue-700 bg-clip-text text-4xl leading-tight font-bold text-transparent md:text-6xl">
           Build your NTU timetable in minutes
         </h1>

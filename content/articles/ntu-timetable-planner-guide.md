@@ -14,6 +14,8 @@ Before STARS opens, you need to know which module indexes actually work with you
 
 The [NTUMods timetable planner](/timetable) lets you add modules, pick indexes, and see your week laid out before you commit to anything. This guide walks through how to use it effectively.
 
+The planner currently uses AY2026/2027 Semester 2 data. See [what is new in Semester 2](/articles/ntu-ay2026-semester-2-whats-new) for the module and index changes.
+
 ![NTU timetable planner on NTUMods showing a Monday to Friday semester schedule with lectures, tutorials and labs colour-coded by class type](/articles/ntumods-timetable-planner-week-view.webp "The NTUMods timetable planner: every registered module and its chosen index laid out on one weekly grid.")
 
 ## What the NTUMods timetable planner does

@@ -48,6 +48,8 @@ These dates come from the official NTU academic calendar for AY2026-27 (publishe
 
 **Semester 2** runs from January to early May 2027.
 
+Module and class index data for this semester is live: see [what is new in Semester 2](/articles/ntu-ay2026-semester-2-whats-new).
+
 | Phase | Approximate timing |
 |---|---|
 | Course registration period | December 2026 |

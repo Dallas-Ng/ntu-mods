@@ -3,6 +3,7 @@ import { buildModuleMeta, buildRelatedArticles } from "@/lib/module-meta"
 import { getModuleUrl } from "@/lib/module-url"
 import {
   getActiveModuleCodes,
+  getAllModuleCodes,
   getAllModuleMetadata,
   getModuleCurrentSemester,
   getModuleExamData,
@@ -71,6 +72,7 @@ const related = Object.values(allMeta)
 
 const { title, description } = buildModuleMeta(moduleKey, moduleData)
 const relatedArticles = buildRelatedArticles(moduleData)
+const knownCodes = await getAllModuleCodes()
 ---
 
 <BaseLayout
@@ -91,5 +93,6 @@ const relatedArticles = buildRelatedArticles(moduleData)
     prereqNode={prereqNode}
     related={related}
     relatedArticles={relatedArticles}
+    knownCodes={knownCodes}
   />
 </BaseLayout>

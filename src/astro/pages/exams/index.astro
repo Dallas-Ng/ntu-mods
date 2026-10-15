@@ -3,6 +3,7 @@ import { siteConfig } from "@/config/site"
 import { datasetJsonLd } from "@/lib/json-ld"
 import {
   getLatestExamSemester,
+  getLatestSemester,
   getSemesterExamsData
 } from "@/lib/server/db/repo"
 import ExamsList from "@/components/exams/exams-list"
@@ -19,10 +20,15 @@ const LAST_UPDATED = "27 July 2026"
 // query — the newest semester that actually has exam rows.
 async function getExamData() {
   const latest = await getLatestExamSemester()
-  if (!latest) return { exams: {}, label: "" }
+  if (!latest) return { exams: {}, label: "", versionPath: undefined }
 
   const isSpecial = latest.semester === "S" || latest.semester === "T"
+  const current = await getLatestSemester()
   return {
+    versionPath:
+      current.year === latest.year && current.semester === latest.semester
+        ? undefined
+        : `${latest.year}/${latest.semester}`,
     exams: await getSemesterExamsData(latest.year, latest.semester),
     label: isSpecial
       ? `AY${latest.year} Special Term`
@@ -30,7 +36,7 @@ async function getExamData() {
   }
 }
 
-const { exams, label } = await getExamData()
+const { exams, label, versionPath } = await getExamData()
 const examList = Object.values(exams)
 const total = examList.length
 ---
@@ -87,5 +93,5 @@ const total = examList.length
     </div>
   </div>
 
-  <ExamsList client:load exams={examList} />
+  <ExamsList client:load exams={examList} versionPath={versionPath} />
 </BaseLayout>

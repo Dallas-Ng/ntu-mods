@@ -38,6 +38,7 @@ interface Props {
   prereqNode: DbPrerequisiteNode | null
   related: Array<{ code: string; title: string }>
   relatedArticles: Array<{ href: string; label: string }>
+  knownCodes?: string[]
 }
 
 const {
@@ -52,7 +53,8 @@ const {
   prereqGraph,
   prereqNode,
   related,
-  relatedArticles
+  relatedArticles,
+  knownCodes
 } = Astro.props
 
 // The graph island only reads titles for this module and the codes it
@@ -166,7 +168,7 @@ const jsonLd = [
 
     <hr />
 
-    <ModsInfoTable module={moduleData} exam={exam} />
+    <ModsInfoTable module={moduleData} exam={exam} knownCodes={knownCodes} />
 
     <ModsExpandableFields client:idle module={moduleData} />
   </div>

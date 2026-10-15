@@ -20,6 +20,8 @@ type GroupBy = "date" | "prefix" | "none"
 
 interface Props {
   exams: DbExam[]
+  /** "YEAR/SEM" when these exams are not the latest semester, so rows link to that semester's page. */
+  versionPath?: string
 }
 
 const EXAM_PREFIX_LABELS: Record<string, string> = {
@@ -114,10 +116,12 @@ function toTitleCase(str: string) {
 
 function ExamTable({
   items,
-  showDate = true
+  showDate = true,
+  versionPath
 }: {
   items: DbExam[]
   showDate?: boolean
+  versionPath?: string
 }) {
   return (
     <div className="overflow-hidden rounded-lg border-2">
@@ -137,7 +141,7 @@ function ExamTable({
         {items.map((exam) => (
           <a
             key={exam.key}
-            href={`/mods/${exam.key}`}
+            href={`/mods/${exam.key}${versionPath ? `/${versionPath}` : ""}`}
             className="hover:bg-accent flex items-center gap-3 px-3 py-2.5 transition-colors">
             {/* Mobile: stacked */}
             <div className="min-w-0 flex-1 md:hidden">
@@ -174,7 +178,7 @@ function ExamTable({
 const DISCLAIMER =
   "The Exam information shown may be subject to changes. Students are to check the finalised exam timetable with exam seat information, which will be available at the 'Examination Seating Arrangement' webpage, 2 weeks before start of examination."
 
-export default function ExamsList({ exams }: Props) {
+export default function ExamsList({ exams, versionPath }: Props) {
   const [search, setSearch] = useState("")
   const [groupBy, setGroupBy] = useState<GroupBy>("none")
   const debouncedSearch = useDebounce(search, 500)
@@ -259,12 +263,16 @@ export default function ExamsList({ exams }: Props) {
           {groups.map(({ key, items }) => (
             <section key={key} className="space-y-3">
               <h2 className="text-base font-semibold">{key}</h2>
-              <ExamTable items={items} showDate={groupBy !== "date"} />
+              <ExamTable
+                items={items}
+                showDate={groupBy !== "date"}
+                versionPath={versionPath}
+              />
             </section>
           ))}
         </div>
       ) : (
-        <ExamTable items={filtered} showDate />
+        <ExamTable items={filtered} showDate versionPath={versionPath} />
       )}
     </div>
   )

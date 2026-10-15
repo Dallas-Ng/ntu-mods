@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils"
 interface Props {
   module: DbModule
   exam?: DbExam | null
+  /** Codes that have a module page; prerequisites outside it stay plain text. */
+  knownCodes?: string[]
 }
 
 const FIELDS: Array<{ key: keyof DbModule; label: string }> = [
@@ -18,13 +20,17 @@ export function hasValue(value: unknown): boolean {
   return true
 }
 
-export function renderModuleValue(key: keyof DbModule, value: unknown) {
+export function renderModuleValue(
+  key: keyof DbModule,
+  value: unknown,
+  knownCodes?: ReadonlySet<string>
+) {
   if (key === "prerequisite" && Array.isArray(value)) {
     const allCodes = (value as string[][]).flat()
     const unique = Array.from(new Set(allCodes))
     return unique.map((item, idx) => (
       <span key={item}>
-        {MODULE_CODE_RE.test(item) ? (
+        {MODULE_CODE_RE.test(item) && (!knownCodes || knownCodes.has(item)) ? (
           <a
             href={`/mods/${item}`}
             className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
@@ -42,7 +48,7 @@ export function renderModuleValue(key: keyof DbModule, value: unknown) {
   return String(value)
 }
 
-const ModsInfoTable = ({ module, exam }: Props) => (
+const ModsInfoTable = ({ module, exam, knownCodes }: Props) => (
   <div className="space-y-3">
     <table className="data-table">
       <tbody>
@@ -57,7 +63,14 @@ const ModsInfoTable = ({ module, exam }: Props) => (
           return (
             <tr key={key}>
               <td className={cn(!has && "text-muted-foreground")}>{label}</td>
-              <td>{has && renderModuleValue(key, value)}</td>
+              <td>
+                {has &&
+                  renderModuleValue(
+                    key,
+                    value,
+                    knownCodes && new Set(knownCodes)
+                  )}
+              </td>
             </tr>
           )
         })}

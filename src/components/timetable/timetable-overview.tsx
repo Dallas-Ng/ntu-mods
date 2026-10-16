@@ -14,9 +14,11 @@ const TimetableOverview = () => {
   const [examMap, setExamMap] = useState<
     Record<string, { date: string; start_time: string; end_time: string }>
   >({})
+  const [examsLoaded, setExamsLoaded] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
+    setExamsLoaded(false)
 
     fetch(`/data/api/exams/${year}_${semester}.json`, {
       signal: controller.signal
@@ -24,6 +26,9 @@ const TimetableOverview = () => {
       .then((res) => (res.ok ? res.json() : {}))
       .then((data) => setExamMap(data ?? {}))
       .catch(() => setExamMap({}))
+      .finally(() => {
+        if (!controller.signal.aborted) setExamsLoaded(true)
+      })
 
     return () => controller.abort()
   }, [year, semester])
@@ -103,6 +108,14 @@ const TimetableOverview = () => {
           </tr>
         </tbody>
       </table>
+      {examsLoaded &&
+        Object.keys(examMap).length === 0 &&
+        Object.keys(timetable).length > 0 && (
+          <p className="text-muted-foreground mt-3 text-xs">
+            The exam timetable for AY{year} semester {semester} hasn&apos;t been
+            released yet. Exam dates will show here once it is.
+          </p>
+        )}
       <p className="text-muted-foreground mt-3 text-xs">
         The Exam information shown may be subject to changes. Students are to
         check the finalised exam timetable with exam seat information, which

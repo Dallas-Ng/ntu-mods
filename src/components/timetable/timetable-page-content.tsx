@@ -9,10 +9,13 @@ import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile
 import TimetableActionsDropdown from "@/components/timetable/buttons/timetable-actions-dropdown"
 import TimetablePlanSwitcher from "@/components/timetable/buttons/timetable-plan-switcher"
 import TimetableSettingsDialog from "@/components/timetable/buttons/timetable-settings-dialog"
+import SemesterAssignmentDialog from "@/components/timetable/semester-assignment-dialog"
 import TimetableHiddenContentHelper from "@/components/timetable/timetable-hidden-content-helper"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import TimetableModifier from "@/components/timetable/timetable-modifier"
 import TimetableOverview from "@/components/timetable/timetable-overview"
+import TimetableSemesterNotices from "@/components/timetable/timetable-semester-notices"
+import TimetableSemesterSwitcher from "@/components/timetable/timetable-semester-switcher"
 import TimetableTable from "@/components/timetable/timetable-table"
 
 const TimetablePageContent = () => {
@@ -28,12 +31,14 @@ const TimetablePageContent = () => {
   return (
     <>
       <Migration />
+      <SemesterAssignmentDialog />
 
       <div className="space-y-4">
         <Header title="Timetable" />
 
         <div className="flex justify-between gap-2">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <TimetableSemesterSwitcher />
             <TimetablePlanSwitcher />
 
             {indexPickerEnabled && (
@@ -51,6 +56,8 @@ const TimetablePageContent = () => {
             />
           </div>
         </div>
+
+        <TimetableSemesterNotices />
 
         <div className="flex h-full items-start justify-between gap-4">
           <div className="size-full space-y-4 md:w-[60%] lg:w-[70%]">

@@ -3,16 +3,19 @@
 import { useEffect } from "react"
 import posthog from "posthog-js"
 
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import TimetableCopyButton from "@/components/timetable/buttons/timetable-copy-button"
 import TimetableDownloadCalendarButton from "@/components/timetable/buttons/timetable-download-calendar-button"
 import TimetableScreenshotButton from "@/components/timetable/buttons/timetable-screenshot-button"
+import LegacyShareSemesterNotice from "@/components/timetable/legacy-share-semester-notice"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import TimetableOverview from "@/components/timetable/timetable-overview"
 import TimetableTable from "@/components/timetable/timetable-table"
 
 const SharePageContent = () => {
+  const { label } = useSelectedSemester()
   useEffect(() => {
     posthog.capture("shared_timetable_viewed")
   }, [])
@@ -45,8 +48,10 @@ const SharePageContent = () => {
         </div>
       </div>
 
+      <LegacyShareSemesterNotice />
+
       <p className="text-muted-foreground text-center text-sm">
-        This timetable is being shared by someone.{" "}
+        This timetable is being shared by someone for {label}.{" "}
         <br className="block md:hidden" />
         Copy the timetable to edit!
       </p>

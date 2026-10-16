@@ -95,8 +95,8 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         category: "Data",
         content: (
           <>
-            AY 2026 Semester 2 course data is now live — 1,092 courses and
-            4,306 indexes available in the{" "}
+            AY 2026 Semester 2 course data is now live — 1,092 courses and 4,306
+            indexes available in the{" "}
             <ChangelogLink href="/timetable">timetable</ChangelogLink> and{" "}
             <ChangelogLink href="/mods">module browser</ChangelogLink>. See{" "}
             <ChangelogLink href="/articles/ntu-ay2026-semester-2-whats-new">

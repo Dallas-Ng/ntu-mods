@@ -149,7 +149,6 @@ export default defineConfig({
         "photoswipe",
         "radix-ui",
         "react-hook-form",
-        "react-resizable-panels",
         "sonner",
         "tailwind-merge",
         "vaul",

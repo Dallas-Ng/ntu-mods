@@ -32,6 +32,7 @@ const TimetableSemesterNotices = () => {
   const { customCourses } = useCustomCourses()
   const { indexes: seasonIndexes, isLoading } = useSeasonIndexes(year, semester)
 
+  const pendingAssignment = useBoundState((s) => s.pendingSemesterAssignment)
   const chosenAgainst = useBoundState((s) => s.semesterChosenAgainst)
   const workspaces = useBoundState((s) => s.semesterWorkspaces)
   const switchSemester = useBoundState((s) => s.switchSemester)
@@ -100,6 +101,10 @@ const TimetableSemesterNotices = () => {
     chosenAgainst !== DEFAULT_SEMESTER &&
     key !== DEFAULT_SEMESTER
   const showProvisional = !hasStarted(key)
+
+  // Until the keep-or-clear dialog is answered the saved plan has no semester,
+  // so warning that its modules are "not offered" would be noise.
+  if (pendingAssignment) return null
 
   if (!showNewer && !showProvisional && notOffered.length === 0 && !canCopy) {
     return null

@@ -5,13 +5,13 @@ import posthog from "posthog-js"
 
 import {
   DEFAULT_SEMESTER,
-  resolveSemester,
   SELECTABLE_SEMESTERS,
   semesterLabelShort
 } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { usePathname } from "@/hooks/use-pathname"
 import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import CustomSelect from "@/components/select"
 
 const ALL = "all"
@@ -38,10 +38,10 @@ export const ModsSemesterSelect = ({
 }) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const stored = useBoundState((s) => s.semester)
+  const { key: selectedSemester } = useSelectedSemester()
   const switchSemester = useBoundState((s) => s.switchSemester)
 
-  const value = allSemesters ? ALL : resolveSemester(stored)
+  const value = allSemesters ? ALL : selectedSemester
 
   const handleChange = (next: string | null) => {
     if (next === null || next === value) return

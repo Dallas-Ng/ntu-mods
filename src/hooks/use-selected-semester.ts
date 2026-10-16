@@ -10,6 +10,7 @@ import {
   splitSemester
 } from "@/lib/semesters"
 import { SEMESTER_PARAM, semesterFromParam } from "@/lib/timetable-share"
+import { useHydrated } from "@/hooks/use-hydrated"
 import { useSearchParams } from "@/hooks/use-search-params"
 
 /**
@@ -19,7 +20,11 @@ import { useSearchParams } from "@/hooks/use-search-params"
  */
 export const useSelectedSemester = () => {
   const searchParams = useSearchParams()
-  const stored = useBoundState((s) => s.semester)
+  const storedSemester = useBoundState((s) => s.semester)
+  // The page is server-rendered, where nothing is saved yet: show the default
+  // until hydrated so the first client render matches the HTML.
+  const hydrated = useHydrated()
+  const stored = hydrated ? storedSemester : null
 
   const fromUrl = semesterFromParam(searchParams.get(SEMESTER_PARAM))
   const urlSemester =

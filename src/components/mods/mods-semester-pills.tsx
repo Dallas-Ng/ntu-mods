@@ -3,35 +3,20 @@
 import { useBoundState } from "@/state/bound.state"
 import posthog from "posthog-js"
 
-import {
-  DEFAULT_SEMESTER,
-  SELECTABLE_SEMESTERS,
-  semesterLabelShort
-} from "@/lib/semesters"
-import { cn } from "@/lib/utils"
+import { SELECTABLE_SEMESTERS, semesterLabelShort } from "@/lib/semesters"
 import { usePathname } from "@/hooks/use-pathname"
 import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { useSelectedSemester } from "@/hooks/use-selected-semester"
-import CustomSelect from "@/components/select"
+import SemesterPills from "@/components/semester-pills"
 
 const ALL = "all"
 
-const SELECT_ITEMS = [
-  ...SELECTABLE_SEMESTERS.map((semester) => ({
-    value: semester,
-    label:
-      semesterLabelShort(semester) +
-      (semester === DEFAULT_SEMESTER ? " (latest)" : "")
-  })),
-  { value: ALL, label: "All Semesters" }
-]
-
 /**
- * Picking a semester here switches the planner's semester too, so "Add to
- * calendar" on this page always adds to the plan you are looking at. "All
- * Semesters" is the only state kept in the URL.
+ * Same pills as the planner. Picking a semester switches the planner's
+ * semester too, so "Add to calendar" on this page always adds to the plan you
+ * are looking at; "All" is the only state kept in the URL.
  */
-export const ModsSemesterSelect = ({
+export const ModsSemesterPills = ({
   allSemesters
 }: {
   allSemesters: boolean
@@ -41,11 +26,7 @@ export const ModsSemesterSelect = ({
   const { key: selectedSemester } = useSelectedSemester()
   const switchSemester = useBoundState((s) => s.switchSemester)
 
-  const value = allSemesters ? ALL : selectedSemester
-
-  const handleChange = (next: string | null) => {
-    if (next === null || next === value) return
-
+  const handleChange = (next: string) => {
     const params = new URLSearchParams(searchParams.toString())
     // Drop the legacy flag along with the new one
     params.delete("currentOnly")
@@ -63,12 +44,16 @@ export const ModsSemesterSelect = ({
   }
 
   return (
-    <CustomSelect
-      closeOnSelect
-      value={value}
-      selectItems={SELECT_ITEMS}
+    <SemesterPills
+      options={[
+        ...[...SELECTABLE_SEMESTERS].reverse().map((semester) => ({
+          value: semester,
+          label: semesterLabelShort(semester)
+        })),
+        { value: ALL, label: "All" }
+      ]}
+      value={allSemesters ? ALL : selectedSemester}
       onChange={handleChange}
-      divClassName={cn("w-full", allSemesters && "ring-ring rounded-md ring-1")}
     />
   )
 }

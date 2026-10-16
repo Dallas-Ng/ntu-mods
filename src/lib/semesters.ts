@@ -55,3 +55,11 @@ export const resolveSemester = (key: string | null | undefined) =>
 
 /** Every semester with data, newest first; old share links may point at any of them. */
 export const PUBLISHED_SEMESTERS: string[] = SEMESTERS_JSON.map((s) => s.code)
+
+/** "2026;2" -> "AY26 S2": short enough for a chip, still unambiguous across years. */
+export const semesterLabelCompact = (key: string) => {
+  const [year, semester] = splitSemester(key)
+  return isSpecialTermCode(semester)
+    ? `AY${year.slice(2)} ST`
+    : `AY${year.slice(2)} S${semester}`
+}

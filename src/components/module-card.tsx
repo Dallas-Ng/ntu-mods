@@ -1,6 +1,7 @@
 import type { AllModule } from "@/types/mods"
 import { MODULE_CATEGORY } from "@/lib/constants"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
+import { semesterLabelCompact } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 
 import { Skeleton } from "./ui/skeleton"
@@ -47,7 +48,22 @@ interface ModuleCardDetailProps {
   searchTerm?: string
   timetableButton?: React.ReactNode
   favouriteButton?: React.ReactNode
+  /** Chips for the selectable semesters that offer this module. */
+  showSemesters?: boolean
 }
+
+/** Which of the plannable semesters offer a module; nothing if only an older one does. */
+const SemesterChips = ({ semesters }: { semesters?: string[] }) => (
+  <>
+    {[...(semesters ?? [])].reverse().map((semester) => (
+      <span
+        key={semester}
+        className="text-foreground/80 shrink-0 rounded-full border px-1.5 py-0 text-[11px]">
+        {semesterLabelCompact(semester)}
+      </span>
+    ))}
+  </>
+)
 
 function getHref(moduleData: AllModule, code: string) {
   const isCurrentSemester = moduleData.isCurrentSemester !== false
@@ -67,7 +83,8 @@ export const ModuleCardDetail = ({
   moduleData,
   searchTerm = "",
   timetableButton,
-  favouriteButton
+  favouriteButton,
+  showSemesters = false
 }: ModuleCardDetailProps) => {
   const isCurrentSemester = moduleData.isCurrentSemester !== false
   const categories = moduleData.categories ?? []
@@ -102,6 +119,9 @@ export const ModuleCardDetail = ({
             ))}
           </div>
           <div className="flex shrink-0 items-center gap-1.5">
+            {showSemesters && (
+              <SemesterChips semesters={moduleData.semesters} />
+            )}
             {moduleData.au && <span>{moduleData.au} AU</span>}
             <span>{faculty}</span>
           </div>
@@ -139,7 +159,8 @@ export const ModuleListRow = ({
   moduleData,
   searchTerm = "",
   timetableButton,
-  favouriteButton
+  favouriteButton,
+  showSemesters = false
 }: ModuleCardDetailProps) => {
   const isCurrentSemester = moduleData.isCurrentSemester !== false
   const categories = moduleData.categories ?? []
@@ -170,6 +191,12 @@ export const ModuleListRow = ({
             </span>
           ))}
         </div>
+
+        {showSemesters && (
+          <span className="hidden shrink-0 sm:block">
+            <SemesterChips semesters={moduleData.semesters} />
+          </span>
+        )}
 
         <span className="text-muted-foreground hidden shrink-0 text-xs sm:block">
           {moduleData.au && `${moduleData.au} AU`}

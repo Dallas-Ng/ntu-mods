@@ -5,10 +5,10 @@ import { Megaphone, Menu, Moon, Settings, Sun, X } from "lucide-react"
 import posthog from "posthog-js"
 
 import { siteConfig } from "@/config/site"
-import { LATEST_SEMESTER_LABEL_SHORT } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useChangelogUnseenCount } from "@/hooks/use-changelog-unseen"
 import { usePathname } from "@/hooks/use-pathname"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useTheme } from "@/hooks/use-theme"
 
 import ChangelogButton from "./changelog-button"
@@ -24,6 +24,7 @@ import {
 } from "./ui/drawer"
 
 const Navbar = () => {
+  const { labelShort: semesterLabel } = useSelectedSemester()
   const pathname = usePathname()
   const { theme, setTheme } = useTheme()
   const changelogUnseen = useChangelogUnseenCount()
@@ -109,9 +110,7 @@ const Navbar = () => {
 
         <div className="flex flex-1 items-center justify-end gap-1 sm:gap-2">
           <a href="/faq#current-semester" className="hover:underline">
-            <span className="text-sm whitespace-nowrap">
-              {LATEST_SEMESTER_LABEL_SHORT}
-            </span>
+            <span className="text-sm whitespace-nowrap">{semesterLabel}</span>
           </a>
 
           <div className="hidden md:block">

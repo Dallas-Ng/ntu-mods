@@ -33,7 +33,7 @@ import { ModsGroupBySelect } from "@/components/mods/mods-group-by-select"
 import { ModsLevelSelect } from "@/components/mods/mods-module-level-select"
 import { ModsModuleTypeSelect } from "@/components/mods/mods-module-type-select"
 import ModsSearchInput from "@/components/mods/mods-search-input"
-import { ModsSemesterSelect } from "@/components/mods/mods-semester-select"
+import { ModsSemesterPills } from "@/components/mods/mods-semester-pills"
 import { ModsTimeRangeSelect } from "@/components/mods/mods-time-range-select"
 import {
   ModuleCardDetail,
@@ -93,7 +93,6 @@ const ModsPage = () => {
     moduleType !== "all",
     moduleFaculty !== "all",
     moduleLevel !== "all",
-    allSemesters,
     moduleDay !== "all",
     moduleTimeStart !== "all",
     moduleTimeEnd !== "all"
@@ -197,8 +196,14 @@ const ModsPage = () => {
     <div className="relative space-y-3">
       <Header
         title="NTU Modules"
-        subtitle={`AY${year}/${nextYear} Semester ${semester}`}
+        subtitle={
+          allSemesters
+            ? "All semesters"
+            : `AY${year}/${nextYear} Semester ${semester}`
+        }
       />
+
+      <ModsSemesterPills allSemesters={allSemesters} />
 
       <div className="flex w-full flex-col gap-2">
         <div className="flex gap-2">
@@ -242,14 +247,13 @@ const ModsPage = () => {
 
         {filtersOpen && (
           <div className="flex flex-col gap-2">
-            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3">
               <ModsModuleTypeSelect paramsValue={moduleType} />
               <ModsFacultySelect paramsValue={moduleFaculty} />
               <ModsLevelSelect
                 searchTerm={searchTerm}
                 paramValue={moduleLevel}
               />
-              <ModsSemesterSelect allSemesters={allSemesters} />
             </div>
             <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
               <ModsDaySelect paramsValue={moduleDay} />
@@ -267,7 +271,6 @@ const ModsPage = () => {
         moduleType={moduleType}
         moduleLevel={moduleLevel}
         moduleFaculty={moduleFaculty}
-        allSemesters={allSemesters}
         moduleDay={moduleDay}
         moduleTimeStart={moduleTimeStart}
         moduleTimeEnd={moduleTimeEnd}
@@ -324,6 +327,7 @@ const ModsPage = () => {
         searchTerm={searchTerm}
         year={year}
         semester={semester}
+        showSemesters={allSemesters}
       />
 
       {!isLoading && hasMore && modsGroupBy === "none" && (
@@ -354,6 +358,8 @@ interface ModuleResultsProps {
   searchTerm: string
   year: string
   semester: string
+  /** Show which semesters offer each module (only useful when not filtered to one). */
+  showSemesters: boolean
 }
 
 function ModuleResults({
@@ -365,7 +371,8 @@ function ModuleResults({
   onExpandGroup,
   searchTerm,
   year,
-  semester
+  semester,
+  showSemesters
 }: ModuleResultsProps) {
   function timetableBtn(m: AllModule) {
     if (m.isCurrentSemester === false) return undefined
@@ -398,6 +405,7 @@ function ModuleResults({
                 searchTerm={searchTerm}
                 timetableButton={timetableBtn(m)}
                 favouriteButton={favouriteBtn(m)}
+                showSemesters={showSemesters}
               />
             ))}
           </div>
@@ -413,6 +421,7 @@ function ModuleResults({
               searchTerm={searchTerm}
               timetableButton={timetableBtn(m)}
               favouriteButton={favouriteBtn(m)}
+              showSemesters={showSemesters}
             />
           ))}
         </div>
@@ -427,6 +436,7 @@ function ModuleResults({
               searchTerm={searchTerm}
               timetableButton={timetableBtn(m)}
               favouriteButton={favouriteBtn(m)}
+              showSemesters={showSemesters}
             />
           </div>
         ))}

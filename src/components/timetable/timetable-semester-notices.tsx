@@ -16,6 +16,7 @@ import {
   semesterLabelShort
 } from "@/lib/semesters"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
+import { useHydrated } from "@/hooks/use-hydrated"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -27,6 +28,7 @@ const hasStarted = (semester: string) =>
 
 /** Banners that keep the semester choice honest. Rendered above the planner. */
 const TimetableSemesterNotices = () => {
+  const hydrated = useHydrated()
   const { key, year, semester, label } = useSelectedSemester()
   const { stateTimetable: timetable, timetableIndex } = useTimetable()
   const { customCourses } = useCustomCourses()
@@ -104,7 +106,9 @@ const TimetableSemesterNotices = () => {
 
   // Until the keep-or-clear dialog is answered the saved plan has no semester,
   // so warning that its modules are "not offered" would be noise.
-  if (pendingAssignment) return null
+  // Notices depend on saved state the server never sees, so leave them out of
+  // the first render to keep it identical to the server HTML.
+  if (!hydrated || pendingAssignment) return null
 
   if (!showNewer && !showProvisional && notOffered.length === 0 && !canCopy) {
     return null

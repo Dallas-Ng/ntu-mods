@@ -7,8 +7,8 @@ import {
   customCourseIdFromKey,
   isCustomCourseKey
 } from "@/lib/custom-course-colors"
-import { latestSemester, latestYear } from "@/lib/semesters"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableIndexes } from "@/hooks/use-timetable-indexes"
 
@@ -25,8 +25,7 @@ const TimetablePageTable = ({
   indexPickerEnabled = false
 }: Props) => {
   const { timetable, updateItemIndex } = useTimetable(timetableProp)
-  const year = latestYear
-  const semester = latestSemester
+  const { year, semester } = useSelectedSemester()
   const [activeModuleKey, setActiveModuleKey] = useState<string | null>(null)
   const { moduleIndexMap, allModuleIndexes, isLoading } = useTimetableIndexes(
     timetable,

@@ -52,3 +52,6 @@ export const isSelectableSemester = (key: string | null | undefined) =>
 /** A saved/URL semester if it is still selectable, otherwise the default. */
 export const resolveSemester = (key: string | null | undefined) =>
   key != null && isSelectableSemester(key) ? key : DEFAULT_SEMESTER
+
+/** Every semester with data, newest first; old share links may point at any of them. */
+export const PUBLISHED_SEMESTERS: string[] = SEMESTERS_JSON.map((s) => s.code)

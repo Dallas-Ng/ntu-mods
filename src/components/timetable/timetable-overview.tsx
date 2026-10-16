@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from "react"
 
-import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useTimetable } from "@/hooks/use-timetable"
 
 const TimetableOverview = () => {
   const { timetable } = useTimetable()
-  const year = latestYear
-  const semester = latestSemester
+  const { year, semester } = useSelectedSemester()
   const { modules } = useAllModules()
   const [examMap, setExamMap] = useState<
     Record<string, { date: string; start_time: string; end_time: string }>

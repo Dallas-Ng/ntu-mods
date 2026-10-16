@@ -24,10 +24,10 @@ import {
   isDefaultGenerationConfig,
   TIME_OPTIONS
 } from "@/lib/generation-config"
-import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableGeneration } from "@/hooks/use-timetable-generation"
 import { Button } from "@/components/ui/button"
@@ -104,10 +104,8 @@ const SectionLabel = ({
 
 const CollisionIgnoreSection = () => {
   const { timetable } = useTimetable()
-  const { indexes: seasonIndexes } = useSeasonIndexes(
-    latestYear,
-    latestSemester
-  )
+  const { year, semester } = useSelectedSemester()
+  const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const config = useBoundState((s) => s.generationConfig)
   const updateConfig = useBoundState((s) => s.updateGenerationConfig)
 

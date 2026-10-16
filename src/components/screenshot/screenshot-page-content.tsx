@@ -12,8 +12,8 @@ import {
 } from "lucide-react"
 import posthog from "posthog-js"
 
-import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableIndexes } from "@/hooks/use-timetable-indexes"
@@ -238,10 +238,11 @@ const ScreenshotPageInner = () => {
 
 const ScreenshotTimetable = () => {
   const { timetable } = useTimetable()
+  const { year, semester } = useSelectedSemester()
   const { moduleIndexMap, isLoading } = useTimetableIndexes(
     timetable,
-    latestYear,
-    latestSemester
+    year,
+    semester
   )
 
   if (isLoading && !Object.keys(moduleIndexMap).length) {

@@ -2,12 +2,15 @@
 
 import { useState } from "react"
 import { useBoundState } from "@/state/bound.state"
+import { emptyWorkspace } from "@/state/timetable.state"
 import { Copy } from "lucide-react"
 import posthog from "posthog-js"
 import { toast } from "sonner"
 
+import { isSelectableSemester, resolveSemester } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
@@ -28,16 +31,40 @@ import {
 import ButtonCollapsable from "@/components/button-collapsable"
 
 const TimetableCopyButton = () => {
-  const { timetables, updateTimetable, qsTimetable, updateTimetableIndex } =
-    useTimetable()
+  const {
+    timetables: activeTimetables,
+    updateTimetable,
+    qsTimetable,
+    updateTimetableIndex
+  } = useTimetable()
   const { qsCustomCourses } = useCustomCourses()
   const setCustomCourses = useBoundState((s) => s.setCustomCourses)
+  const switchSemester = useBoundState((s) => s.switchSemester)
+  const storedSemester = useBoundState((s) => s.semester)
+  const semesterWorkspaces = useBoundState((s) => s.semesterWorkspaces)
+  const { key: linkSemester, label: linkSemesterLabel } = useSelectedSemester()
+
+  // The shared plan lands in the link's semester, so show that semester's
+  // plans (not the viewer's current ones) as the things to be overridden.
+  const activeSemester = resolveSemester(storedSemester)
+  const canCopy = isSelectableSemester(linkSemester)
+  const timetables =
+    linkSemester === activeSemester || !canCopy
+      ? activeTimetables
+      : (semesterWorkspaces[linkSemester]?.timetables ??
+        emptyWorkspace().timetables)
   const { isMobile } = useSettings()
   const [open, setOpen] = useState(false)
   const [overrideIndex, setOverrideIndex] = useState<number | null>(null)
 
   const handleOverride = (overrideIndex: number) => {
     if (qsTimetable) {
+      if (!canCopy) {
+        toast.error(`${linkSemesterLabel} can no longer be planned in`)
+        setOpen(false)
+        return
+      }
+      if (linkSemester !== activeSemester) switchSemester(linkSemester)
       updateTimetable(qsTimetable, overrideIndex)
       // The plan is being overridden wholesale, so custom blocks follow the
       // shared link — including when it carries none.
@@ -65,7 +92,7 @@ const TimetableCopyButton = () => {
   const Content = (
     <>
       <p className="text-destructive p-2 text-center text-sm">
-        You will override your existing data
+        You will override your existing {linkSemesterLabel} data
       </p>
       <div className="overflow-y-auto">
         <div className="space-y-1">

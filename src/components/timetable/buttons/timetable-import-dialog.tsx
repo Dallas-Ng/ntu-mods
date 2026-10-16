@@ -5,8 +5,16 @@ import { useBoundState } from "@/state/bound.state"
 import posthog from "posthog-js"
 import { toast } from "sonner"
 
+import { bestMatchSemester } from "@/lib/semester-match"
+import {
+  isSelectableSemester,
+  resolveSemester,
+  SELECTABLE_SEMESTERS,
+  semesterLabel
+} from "@/lib/semesters"
 import { decodeTextBundle } from "@/lib/timetable-share"
 import { cn } from "@/lib/utils"
+import { fetchSeasonIndexes } from "@/hooks/use-season-indexes"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -22,7 +30,10 @@ interface Props {
 }
 
 const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
-  const timetables = useBoundState((s) => s.timetables)
+  const activeTimetables = useBoundState((s) => s.timetables)
+  const semesterWorkspaces = useBoundState((s) => s.semesterWorkspaces)
+  const storedSemester = useBoundState((s) => s.semester)
+  const switchSemester = useBoundState((s) => s.switchSemester)
   const timetableIndex = useBoundState((s) => s.timetableIndex)
   const updateTimetable = useBoundState((s) => s.updateTimetable)
   const setCustomCourses = useBoundState((s) => s.setCustomCourses)
@@ -38,8 +49,38 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
 
   const isInvalid = value.trim().length > 0 && !decoded
 
-  const handleImport = () => {
-    if (!decoded) return
+  const activeSemester = resolveSemester(storedSemester)
+  const unavailableSemester =
+    decoded?.semester && !isSelectableSemester(decoded.semester)
+      ? decoded.semester
+      : undefined
+  // Plans that would be overwritten: the ones in the semester being imported to.
+  const importSemester = decoded?.semester ?? activeSemester
+  const timetables =
+    importSemester === activeSemester || unavailableSemester
+      ? activeTimetables
+      : (semesterWorkspaces[importSemester]?.timetables ??
+        activeTimetables.map(() => ({})))
+
+  const handleImport = async () => {
+    if (!decoded || unavailableSemester) return
+
+    // Old codes carry no semester; place them by which semester's indexes fit.
+    let semester = decoded.semester
+    if (!semester) {
+      const entries = await Promise.all(
+        SELECTABLE_SEMESTERS.map(async (sem) => {
+          const [year, term] = sem.split(";")
+          return [sem, await fetchSeasonIndexes(year, term)] as const
+        })
+      )
+      semester = bestMatchSemester(
+        [decoded.timetable],
+        Object.fromEntries(entries),
+        SELECTABLE_SEMESTERS
+      )
+    }
+    if (semester !== activeSemester) switchSemester(semester)
 
     updateTimetable(decoded.timetable, targetPlan)
     setCustomCourses(decoded.customCourses, targetPlan)
@@ -51,7 +92,9 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
       custom_block_count: decoded.customCourses.length
     })
 
-    toast.success(`Imported into Plan ${targetPlan + 1}`)
+    toast.success(
+      `Imported into Plan ${targetPlan + 1} (${semesterLabel(semester)})`
+    )
     setValue("")
     onOpenChange(false)
   }
@@ -78,6 +121,13 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
             )}
           />
 
+          {unavailableSemester && (
+            <p className="text-destructive text-xs">
+              This timetable is for {semesterLabel(unavailableSemester)}, which
+              can no longer be planned in.
+            </p>
+          )}
+
           {isInvalid && (
             <p className="text-destructive text-xs">
               That doesn&apos;t look like a timetable code or share link.
@@ -89,7 +139,11 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
               Found {Object.keys(decoded.timetable).length} module
               {Object.keys(decoded.timetable).length !== 1 ? "s" : ""} and{" "}
               {decoded.customCourses.length} custom block
-              {decoded.customCourses.length !== 1 ? "s" : ""}.
+              {decoded.customCourses.length !== 1 ? "s" : ""}
+              {decoded.semester
+                ? ` for ${semesterLabel(decoded.semester)}`
+                : ""}
+              .
             </p>
           )}
 
@@ -123,7 +177,10 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
               onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button size="sm" disabled={!decoded} onClick={handleImport}>
+            <Button
+              size="sm"
+              disabled={!decoded || Boolean(unavailableSemester)}
+              onClick={handleImport}>
               Import
             </Button>
           </div>

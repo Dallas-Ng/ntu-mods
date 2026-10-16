@@ -7,6 +7,7 @@ import { toast } from "sonner"
 
 import { BASE_URL } from "@/lib/constants"
 import { buildShareLink, encodeTextBundle } from "@/lib/timetable-share"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -33,6 +34,7 @@ const TimetableShareDialog = ({
   customCourses
 }: Props) => {
   const [includeCustomBlocks, setIncludeCustomBlocks] = useState(true)
+  const { key: semesterKey } = useSelectedSemester()
 
   const withCustom = useMemo(
     () => (includeCustomBlocks ? customCourses : []),
@@ -40,13 +42,13 @@ const TimetableShareDialog = ({
   )
 
   const link = useMemo(
-    () => buildShareLink(BASE_URL, timetable, withCustom),
-    [timetable, withCustom]
+    () => buildShareLink(BASE_URL, timetable, withCustom, semesterKey),
+    [timetable, withCustom, semesterKey]
   )
 
   const textBundle = useMemo(
-    () => encodeTextBundle(timetable, withCustom),
-    [timetable, withCustom]
+    () => encodeTextBundle(timetable, withCustom, semesterKey),
+    [timetable, withCustom, semesterKey]
   )
 
   const moduleCount = Object.keys(timetable).length

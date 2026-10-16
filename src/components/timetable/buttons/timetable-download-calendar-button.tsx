@@ -8,18 +8,17 @@ import { toast } from "sonner"
 
 import { customCoursesToIcsInputs } from "@/lib/custom-course-to-index"
 import { getIcs } from "@/lib/get-ics"
-import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import ButtonCollapsable from "@/components/button-collapsable"
 
 const TimetableDownloadCalendarButton = () => {
   const { timetable } = useTimetable()
-  const year = latestYear
-  const semester = latestSemester
+  const { year, semester } = useSelectedSemester()
   const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const { modules } = useAllModules()
   const { customCourses } = useCustomCourses()
@@ -62,7 +61,8 @@ const TimetableDownloadCalendarButton = () => {
         settings.tableCell,
         customIcs.labelLookup,
         moduleRemarks,
-        indexRemarks
+        indexRemarks,
+        `${year};${semester}`
       )
 
       if (!icsText) throw new Error("Failed to generate calendar")

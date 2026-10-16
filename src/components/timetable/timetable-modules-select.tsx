@@ -7,12 +7,12 @@ import posthog from "posthog-js"
 
 import { customCoursesToIndexMap } from "@/lib/custom-course-to-index"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
-import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useModuleSearchApi } from "@/hooks/use-module-search-api"
 import { useOutsideClick } from "@/hooks/use-outside-click"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import {
@@ -33,10 +33,8 @@ const TimetableModulesSelect = () => {
   const { customCourses } = useCustomCourses()
   const { results: searchResults } = useModuleSearchApi(inputValue, 300)
   const { isMobile } = useSettings()
-  const { indexes: seasonIndexes } = useSeasonIndexes(
-    latestYear,
-    latestSemester
-  )
+  const { year, semester } = useSelectedSemester()
+  const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const ref = useRef<HTMLDivElement>(null)
   const [disabled, setDisabled] = useState(false)
 

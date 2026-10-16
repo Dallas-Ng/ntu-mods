@@ -5,10 +5,10 @@ import { useBoundState } from "@/state/bound.state"
 import { RefreshCwIcon, SendIcon, WandIcon } from "lucide-react"
 import posthog from "posthog-js"
 
-import { latestSemester, latestYear } from "@/lib/semesters"
 import { TIMETABLE_AI_SYSTEM_PROMPT } from "@/lib/timetable-ai-system-prompt"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useSeasonExams } from "@/hooks/use-season-exams"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableGeneration } from "@/hooks/use-timetable-generation"
 import { useWebLLM } from "@/hooks/use-web-llm"
@@ -86,7 +86,8 @@ const TimetableAiChat = () => {
   const updateGenerationConfig = useBoundState((s) => s.updateGenerationConfig)
   const { timetable } = useTimetable()
   const { modules: allModules } = useAllModules()
-  const { exams } = useSeasonExams(latestYear, latestSemester)
+  const { year, semester } = useSelectedSemester()
+  const { exams } = useSeasonExams(year, semester)
   const { initModel, chat, isLoading, loadingProgress, isReady, error } =
     useWebLLM()
   const {

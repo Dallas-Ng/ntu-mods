@@ -14,8 +14,8 @@ import {
   generateCombinations,
   type ConstraintSuggestion
 } from "@/lib/generate-timetable-combinations"
-import { latestSemester, latestYear } from "@/lib/semesters"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useTimetable } from "@/hooks/use-timetable"
 
 const RESULT_LIMIT = 60
@@ -28,10 +28,8 @@ const UNIQUE_TIME_BUDGET_MS = 700
 
 export function useTimetableGeneration() {
   const { timetable, timetableIndex, updateTimetable } = useTimetable()
-  const { indexes: seasonIndexes } = useSeasonIndexes(
-    latestYear,
-    latestSemester
-  )
+  const { year, semester } = useSelectedSemester()
+  const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const generationConfig = useBoundState((s) => s.generationConfig)
   const uniqueTimeslotsOnly = useBoundState((s) => s.uniqueTimeslotsOnly)
   const lockedModules = useBoundState((s) => s.lockedModules)

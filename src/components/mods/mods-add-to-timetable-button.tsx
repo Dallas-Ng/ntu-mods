@@ -5,8 +5,10 @@ import { CalendarCheck, CalendarPlus, Check } from "lucide-react"
 import posthog from "posthog-js"
 
 import { resolveBestIndex } from "@/lib/resolve-best-index"
+import { semesterLabelShort } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
@@ -39,7 +41,7 @@ interface Props {
   /** Override the trigger Button variant. Defaults to outline/secondary based on plan state. */
   triggerVariant?: "outline" | "ghost" | "secondary"
   /**
-   * This module's own indexes, when already available (e.g. server-fetched on the
+   * This module's own indexes for `year`/`semester`, when already available (e.g. server-fetched on the
    * mod detail page). Lets the button render its enabled/disabled state without
    * waiting on the full season indexes fetch.
    */
@@ -82,16 +84,24 @@ const ModsAddToTimetableButton = ({
   showText,
   triggerClassName,
   triggerVariant,
-  moduleIndexes: moduleIndexesProp
+  moduleIndexes: moduleIndexesFromPage
 }: Props) => {
+  // A plan belongs to one semester and index numbers mean different slots in
+  // each, so always add from the planner's semester. `year`/`semester` only say
+  // which semester the server-supplied indexes are for.
+  const planner = useSelectedSemester()
+  const moduleIndexesProp =
+    planner.year === year && planner.semester === semester
+      ? moduleIndexesFromPage
+      : undefined
   const { timetables, updateTimetable } = useTimetable()
   const { isMobile } = useSettings()
   const [open, setOpen] = useState(false)
   // Other modules' indexes are only needed to resolve clashes once the user
   // opens the plan picker, so defer the (large) season-wide fetch until then.
   const { indexes: seasonIndexes, isLoading: seasonLoading } = useSeasonIndexes(
-    year,
-    semester,
+    planner.year,
+    planner.semester,
     moduleIndexesProp == null || open
   )
 
@@ -155,7 +165,9 @@ const ModsAddToTimetableButton = ({
             {triggerBtn}
           </span>
         </TooltipTrigger>
-        <TooltipContent side="top">No schedule available</TooltipContent>
+        <TooltipContent side="top">
+          No schedule in {semesterLabelShort(planner.key)}
+        </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   ) : (

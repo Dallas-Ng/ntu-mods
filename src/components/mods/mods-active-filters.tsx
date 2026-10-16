@@ -19,7 +19,7 @@ interface Props {
   moduleType: string
   moduleLevel: string
   moduleFaculty: string
-  currentOnly: string
+  allSemesters: boolean
   moduleDay?: string
   moduleTimeStart?: string
   moduleTimeEnd?: string
@@ -30,7 +30,7 @@ export const ModsActiveFilters = ({
   moduleType,
   moduleLevel,
   moduleFaculty,
-  currentOnly,
+  allSemesters,
   moduleDay,
   moduleTimeStart,
   moduleTimeEnd
@@ -62,8 +62,8 @@ export const ModsActiveFilters = ({
       label: `${(MODULE_FACULTY as Record<string, string>)[moduleFaculty] ?? moduleFaculty} (${moduleFaculty})`
     })
   }
-  if (currentOnly === "false") {
-    activeFilters.push({ key: "currentOnly", label: "All Semesters" })
+  if (allSemesters) {
+    activeFilters.push({ key: "sem", label: "All Semesters" })
   }
 
   if (moduleDay && moduleDay !== "all") {
@@ -92,6 +92,8 @@ export const ModsActiveFilters = ({
   const clearFilter = (key: string) => {
     const params = new URLSearchParams(searchParams.toString())
     params.delete(key)
+    // "All Semesters" can be spelled either way in the URL
+    if (key === "sem") params.delete("currentOnly")
     pushSearchParams(pathname, params.toString())
     posthog.capture("mods_filter_cleared", { filter_type: key })
   }

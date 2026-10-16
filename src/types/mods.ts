@@ -21,6 +21,8 @@ export interface AllModule {
   categories?: ModuleType[]
   notAvailableToProgramme?: string
   isCurrentSemester?: boolean
+  /** Selectable semesters ("YYYY;S", newest first) that offer this module. */
+  semesters?: string[]
   latestYear?: string
   latestSemester?: string
 }

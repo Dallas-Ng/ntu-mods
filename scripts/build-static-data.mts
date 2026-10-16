@@ -52,7 +52,16 @@ const write = (p: string, value: unknown) => fs.writeFile(p, JSON.stringify(valu
  * by getModuleMetadata, or queried from D1 by the snapshot route.
  */
 function buildModules(latestSem: string) {
+  // The two newest regular semesters with data: the ones the planner and
+  // /mods can switch between (mirrors SELECTABLE_SEMESTERS in src/lib/semesters.ts).
+  const selectable = json
+    .semestersWithOfferings()
+    .filter((s) => s.semester !== "S" && s.semester !== "T")
+    .slice(0, 2)
+    .map((s) => s.sem)
+
   const modules = json.latestOfferings().map((o) => {
+    const offeredSems = new Set(json.getModuleSemesters(o.code).map((s) => s.sem))
     const searchKeys = o.raw.searchKeys ?? []
     const module: Record<string, unknown> = {
       code: o.code,
@@ -62,7 +71,10 @@ function buildModules(latestSem: string) {
       categories: json.deriveCategories(searchKeys),
       latestYear: o.year,
       latestSemester: o.semester,
-      isCurrentSemester: o.sem === latestSem
+      isCurrentSemester: o.sem === latestSem,
+      semesters: selectable
+        .filter((sem) => offeredSems.has(sem))
+        .map((sem) => sem.replace("_", ";"))
     }
     if (o.raw.notAvailableToProgramme !== undefined) {
       module.notAvailableToProgramme = o.raw.notAvailableToProgramme

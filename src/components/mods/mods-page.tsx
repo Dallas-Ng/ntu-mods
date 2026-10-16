@@ -12,19 +12,19 @@ import posthog from "posthog-js"
 
 import type { AllModule } from "@/types/mods"
 import { filterModules, groupModules } from "@/lib/filter-modules"
-import { latestSemester, latestYear } from "@/lib/semesters"
+import { offeredIn } from "@/lib/module-semester"
 import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useFavourites } from "@/hooks/use-favourites"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import { useSearchParams } from "@/hooks/use-search-params"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
+import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import { ModsActiveFilters } from "@/components/mods/mods-active-filters"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
-import { ModsCurrentOnlyToggle } from "@/components/mods/mods-current-only-toggle"
 import { ModsDaySelect } from "@/components/mods/mods-day-select"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import { ModsFacultySelect } from "@/components/mods/mods-faculty-select"
@@ -33,6 +33,7 @@ import { ModsGroupBySelect } from "@/components/mods/mods-group-by-select"
 import { ModsLevelSelect } from "@/components/mods/mods-module-level-select"
 import { ModsModuleTypeSelect } from "@/components/mods/mods-module-type-select"
 import ModsSearchInput from "@/components/mods/mods-search-input"
+import { ModsSemesterSelect } from "@/components/mods/mods-semester-select"
 import { ModsTimeRangeSelect } from "@/components/mods/mods-time-range-select"
 import {
   ModuleCardDetail,
@@ -52,14 +53,17 @@ const ModsPage = () => {
   const moduleType = searchParams.get("moduleType") ?? "all"
   const moduleFaculty = searchParams.get("moduleFaculty") ?? "all"
   const moduleLevel = searchParams.get("moduleLevel") ?? "all"
-  const currentOnly = searchParams.get("currentOnly") ?? "true"
+  // "All Semesters" is the one semester state kept in the URL (`currentOnly=false`
+  // is the older spelling of it); otherwise the planner's semester applies.
+  const allSemesters =
+    searchParams.get("sem") === "all" ||
+    searchParams.get("currentOnly") === "false"
   const favouritesOnly = searchParams.get("favouritesOnly") ?? "false"
   const moduleDay = searchParams.get("moduleDay") ?? "all"
   const moduleTimeStart = searchParams.get("moduleTimeStart") ?? "all"
   const moduleTimeEnd = searchParams.get("moduleTimeEnd") ?? "all"
 
-  const year = latestYear
-  const semester = latestSemester
+  const { key: semesterKey, year, semester } = useSelectedSemester()
   const nextYear = parseInt(year) + 1
   const { modules: allModules, isLoading } = useAllModules()
   const { indexes } = useSeasonIndexes(year, semester)
@@ -89,7 +93,7 @@ const ModsPage = () => {
     moduleType !== "all",
     moduleFaculty !== "all",
     moduleLevel !== "all",
-    currentOnly === "false",
+    allSemesters,
     moduleDay !== "all",
     moduleTimeStart !== "all",
     moduleTimeEnd !== "all"
@@ -103,14 +107,24 @@ const ModsPage = () => {
     [updateSettings]
   )
 
+  // "Current" means offered in the semester being planned, not just the latest
+  const semesterModules = useMemo(
+    () =>
+      allModules.map((m) => ({
+        ...m,
+        isCurrentSemester: offeredIn(m, semesterKey)
+      })),
+    [allModules, semesterKey]
+  )
+
   const filteredModules = useMemo(
     () =>
-      filterModules(allModules, {
+      filterModules(semesterModules, {
         searchTerm,
         moduleType,
         moduleFaculty,
         moduleLevel,
-        currentOnly: currentOnly === "true",
+        currentOnly: !allSemesters,
         favouritesOnly: favouritesOnly === "true",
         favouriteModules,
         allowedDays,
@@ -119,12 +133,12 @@ const ModsPage = () => {
         indexes
       }),
     [
-      allModules,
+      semesterModules,
       searchTerm,
       moduleType,
       moduleFaculty,
       moduleLevel,
-      currentOnly,
+      allSemesters,
       favouritesOnly,
       favouriteModules,
       allowedDays,
@@ -160,7 +174,8 @@ const ModsPage = () => {
     moduleType,
     moduleFaculty,
     moduleLevel,
-    currentOnly,
+    allSemesters,
+    semesterKey,
     modsGroupBy,
     moduleDay,
     moduleTimeStart,
@@ -234,7 +249,7 @@ const ModsPage = () => {
                 searchTerm={searchTerm}
                 paramValue={moduleLevel}
               />
-              <ModsCurrentOnlyToggle paramsValue={currentOnly} />
+              <ModsSemesterSelect allSemesters={allSemesters} />
             </div>
             <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
               <ModsDaySelect paramsValue={moduleDay} />
@@ -252,7 +267,7 @@ const ModsPage = () => {
         moduleType={moduleType}
         moduleLevel={moduleLevel}
         moduleFaculty={moduleFaculty}
-        currentOnly={currentOnly}
+        allSemesters={allSemesters}
         moduleDay={moduleDay}
         moduleTimeStart={moduleTimeStart}
         moduleTimeEnd={moduleTimeEnd}

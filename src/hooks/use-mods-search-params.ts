@@ -9,7 +9,6 @@ type Key =
   | "moduleType"
   | "moduleFaculty"
   | "moduleLevel"
-  | "currentOnly"
   | "favouritesOnly"
   | "moduleDay"
   | "moduleTimeStart"
@@ -21,11 +20,9 @@ export const useModsSearchParams = (paramValue: string, key: Key) => {
       ? ""
       : key === "semester"
         ? "s2"
-        : key === "currentOnly"
-          ? "true"
-          : key === "favouritesOnly"
-            ? "false"
-            : "all"
+        : key === "favouritesOnly"
+          ? "false"
+          : "all"
   const [value, setValue] = useState(paramValue)
 
   const searchParams = useSearchParams()

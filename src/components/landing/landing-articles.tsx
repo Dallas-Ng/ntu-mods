@@ -1,7 +1,7 @@
-import { getAllArticles } from "@/lib/server/articles"
+import { getAllArticles } from "@/astro/lib/articles"
 
-const LandingArticles = () => {
-  const articles = getAllArticles().slice(0, 3)
+const LandingArticles = async () => {
+  const articles = (await getAllArticles()).slice(0, 3)
 
   if (!articles.length) return null
 

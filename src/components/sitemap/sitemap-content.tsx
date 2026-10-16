@@ -1,8 +1,8 @@
 import { siteConfig } from "@/config/site"
-import { getAllArticles } from "@/lib/server/articles"
 import { getModuleTitles } from "@/lib/server/db/repo"
 import Container from "@/components/container"
 import Header from "@/components/header"
+import { getAllArticles } from "@/astro/lib/articles"
 
 const CORE_LINKS = [
   {
@@ -109,7 +109,7 @@ async function getModuleGroups() {
 }
 
 const SitemapContent = async () => {
-  const articles = getAllArticles()
+  const articles = await getAllArticles()
   const moduleGroups = await getModuleGroups()
 
   return (

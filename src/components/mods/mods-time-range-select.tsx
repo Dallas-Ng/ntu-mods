@@ -8,18 +8,18 @@ import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import CustomSelect from "@/components/select"
 
 const START_ITEMS = [
-  { value: "all", label: "From any time" },
+  { value: "all", label: "Any time" },
   ...TIME_OPTIONS.map((t) => ({
     value: String(t.value),
-    label: `From ${t.label}`
+    label: t.label
   }))
 ]
 
 const END_ITEMS = [
-  { value: "all", label: "Until any time" },
+  { value: "all", label: "Any time" },
   ...TIME_OPTIONS.map((t) => ({
     value: String(t.value),
-    label: `Until ${t.label}`
+    label: t.label
   }))
 ]
 
@@ -67,7 +67,8 @@ export const ModsTimeRangeSelect = ({
   const endActive = endValue !== "all"
 
   return (
-    <div className="flex gap-2">
+    <div className="flex items-center gap-2">
+      <span className="text-muted-foreground text-sm">From</span>
       <CustomSelect
         closeOnSelect
         value={startValue}
@@ -79,6 +80,7 @@ export const ModsTimeRangeSelect = ({
           startActive && "ring-ring rounded-md ring-1"
         )}
       />
+      <span className="text-muted-foreground text-sm">to</span>
       <CustomSelect
         closeOnSelect
         value={endValue}

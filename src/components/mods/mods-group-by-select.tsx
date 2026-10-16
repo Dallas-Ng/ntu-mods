@@ -7,11 +7,11 @@ import { useSettings } from "@/hooks/use-settings"
 import CustomSelect from "@/components/select"
 
 const GROUP_BY_OPTIONS: { value: ModsGroupBy; label: string }[] = [
-  { value: "none", label: "No Grouping" },
-  { value: "level", label: "By Level" },
-  { value: "au", label: "By AU" },
-  { value: "faculty", label: "By Faculty" },
-  { value: "type", label: "By Type" }
+  { value: "none", label: "None" },
+  { value: "level", label: "Level" },
+  { value: "au", label: "AUs" },
+  { value: "faculty", label: "School" },
+  { value: "type", label: "Type" }
 ]
 
 export const ModsGroupBySelect = () => {
@@ -27,7 +27,7 @@ export const ModsGroupBySelect = () => {
         updateSettings({ modsGroupBy: groupBy })
         posthog.capture("mods_grouped", { group_by: groupBy })
       }}
-      divClassName="w-full lg:w-[170px]"
+      divClassName="w-full sm:w-[130px]"
     />
   )
 }

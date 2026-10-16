@@ -8,7 +8,7 @@ import { useModsSearchParams } from "@/hooks/use-mods-search-params"
 import CustomSelect from "@/components/select"
 
 const SELECT_ITEMS = [
-  { value: "all", label: "All Module Types" },
+  { value: "all", label: "All types" },
   ...Object.entries(MODULE_CATEGORY)
     .filter(([k]) => k !== "USP")
     .map(([categoryKey, categoryName]) => ({

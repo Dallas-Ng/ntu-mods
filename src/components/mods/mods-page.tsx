@@ -29,6 +29,7 @@ import { ModsDaySelect } from "@/components/mods/mods-day-select"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import { ModsFacultySelect } from "@/components/mods/mods-faculty-select"
 import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
+import { ModsFilterField } from "@/components/mods/mods-filter-field"
 import { ModsGroupBySelect } from "@/components/mods/mods-group-by-select"
 import { ModsLevelSelect } from "@/components/mods/mods-module-level-select"
 import { ModsModuleTypeSelect } from "@/components/mods/mods-module-type-select"
@@ -71,7 +72,7 @@ const ModsPage = () => {
   )
   const [displayCount, setDisplayCount] = useState(PAGE_SIZE)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
-  const [filtersOpen, setFiltersOpen] = useState(true)
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const loaderRef = useRef<HTMLDivElement>(null)
 
   const allowedDays =
@@ -207,7 +208,8 @@ const ModsPage = () => {
           <Button
             variant="outline"
             size="sm"
-            className="h-9 shrink-0 gap-1.5"
+            className="h-9 shrink-0 gap-1.5 md:hidden"
+            aria-expanded={filtersOpen}
             onClick={() => setFiltersOpen((o) => !o)}>
             <SlidersHorizontal className="size-3.5" />
             Filters
@@ -225,26 +227,37 @@ const ModsPage = () => {
           </Button>
         </div>
 
-        {filtersOpen && (
-          <div className="flex flex-col gap-2">
-            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4">
-              <ModsModuleTypeSelect paramsValue={moduleType} />
-              <ModsFacultySelect paramsValue={moduleFaculty} />
-              <ModsLevelSelect
-                searchTerm={searchTerm}
-                paramValue={moduleLevel}
-              />
-              <ModsCurrentOnlyToggle paramsValue={currentOnly} />
-            </div>
-            <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-              <ModsDaySelect paramsValue={moduleDay} />
-              <ModsTimeRangeSelect
-                startParamsValue={moduleTimeStart}
-                endParamsValue={moduleTimeEnd}
-              />
-            </div>
-          </div>
-        )}
+        <div
+          className={cn(
+            "gap-x-6 gap-y-4 rounded-lg border p-4 md:grid md:grid-cols-2",
+            filtersOpen ? "grid grid-cols-1" : "hidden"
+          )}>
+          <ModsFilterField label="Semester">
+            <ModsCurrentOnlyToggle paramsValue={currentOnly} />
+          </ModsFilterField>
+          <ModsFilterField label="Level">
+            <ModsLevelSelect paramValue={moduleLevel} />
+          </ModsFilterField>
+          <ModsFilterField label="Module type">
+            <ModsModuleTypeSelect paramsValue={moduleType} />
+          </ModsFilterField>
+          <ModsFilterField label="School">
+            <ModsFacultySelect paramsValue={moduleFaculty} />
+          </ModsFilterField>
+          <ModsFilterField
+            label="Class days"
+            hint="Only show modules with an index held on these days">
+            <ModsDaySelect paramsValue={moduleDay} />
+          </ModsFilterField>
+          <ModsFilterField
+            label="Class times"
+            hint="Only show modules with an index inside this window">
+            <ModsTimeRangeSelect
+              startParamsValue={moduleTimeStart}
+              endParamsValue={moduleTimeEnd}
+            />
+          </ModsFilterField>
+        </div>
       </div>
 
       <ModsActiveFilters
@@ -258,13 +271,16 @@ const ModsPage = () => {
         moduleTimeEnd={moduleTimeEnd}
       />
 
-      <hr className="py-2" />
-
       {!isLoading && filteredModules.length === 0 && <ModsEmptyCard />}
 
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1 pb-2 sm:flex sm:justify-between">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1 pt-1 pb-1 sm:flex sm:justify-between">
         <div className="min-w-0 sm:flex sm:items-center sm:gap-3">
-          <ModsGroupBySelect />
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground text-sm whitespace-nowrap">
+              Group by
+            </span>
+            <ModsGroupBySelect />
+          </div>
 
           {!isLoading && filteredModules.length > 0 && (
             <p className="text-muted-foreground hidden text-sm whitespace-nowrap sm:block">
@@ -294,8 +310,6 @@ const ModsPage = () => {
           </p>
         )}
       </div>
-
-      <hr className="mt-4" />
 
       <ModuleResults
         isLoading={isLoading}

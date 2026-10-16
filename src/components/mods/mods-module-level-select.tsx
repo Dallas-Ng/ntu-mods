@@ -3,54 +3,36 @@
 import posthog from "posthog-js"
 
 import type { SearchModuleLevel } from "@/types/mods"
-import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
-import CustomSelect from "@/components/select"
+import { ModsChip } from "@/components/mods/mods-filter-field"
 
 const LEVELS = ["1", "2", "3", "4", "5", "6", "7"]
 
 interface Props {
   paramValue: string
-  searchTerm: string
 }
 
-export const ModsLevelSelect = ({ paramValue, searchTerm }: Props) => {
+export const ModsLevelSelect = ({ paramValue }: Props) => {
   const { value, setValue } = useModsSearchParams(paramValue, "moduleLevel")
 
-  const selectItems = [
-    { value: "all", label: "All Levels" },
-    ...LEVELS.map((val) => ({
-      value: val,
-      label: (
-        <div>
-          {searchTerm.length === 2 && (
-            <span className="text-muted-foreground text-xs">
-              {searchTerm.toUpperCase()}
-            </span>
-          )}
-          {val}
-          <span className="text-muted-foreground text-xs">XXX</span>
-        </div>
-      )
-    }))
-  ]
+  const choose = (next: string) => {
+    setValue(next as SearchModuleLevel)
+    posthog.capture("mods_filter_applied", {
+      filter_type: "module_level",
+      value: next
+    })
+  }
 
   return (
-    <CustomSelect
-      closeOnSelect
-      value={value}
-      selectItems={selectItems}
-      onChange={(value) => {
-        setValue(value as SearchModuleLevel)
-        posthog.capture("mods_filter_applied", {
-          filter_type: "module_level",
-          value
-        })
-      }}
-      divClassName={cn(
-        "w-full",
-        value !== "all" && "ring-ring rounded-md ring-1"
-      )}
-    />
+    <div className="flex flex-wrap gap-1.5">
+      <ModsChip active={value === "all"} onClick={() => choose("all")}>
+        Any
+      </ModsChip>
+      {LEVELS.map((l) => (
+        <ModsChip key={l} active={value === l} onClick={() => choose(l)}>
+          {l}000
+        </ModsChip>
+      ))}
+    </div>
   )
 }

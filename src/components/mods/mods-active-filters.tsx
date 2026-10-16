@@ -9,6 +9,17 @@ import { usePathname } from "@/hooks/use-pathname"
 import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { Button } from "@/components/ui/button"
 
+const FILTER_KEYS = [
+  "searchTerm",
+  "moduleType",
+  "moduleFaculty",
+  "moduleLevel",
+  "currentOnly",
+  "moduleDay",
+  "moduleTimeStart",
+  "moduleTimeEnd"
+]
+
 interface ActiveFilter {
   key: string
   label: string
@@ -53,7 +64,7 @@ export const ModsActiveFilters = ({
   }
 
   if (moduleLevel !== "all") {
-    activeFilters.push({ key: "moduleLevel", label: `Level ${moduleLevel}` })
+    activeFilters.push({ key: "moduleLevel", label: `Level ${moduleLevel}000` })
   }
 
   if (moduleFaculty !== "all") {
@@ -63,7 +74,7 @@ export const ModsActiveFilters = ({
     })
   }
   if (currentOnly === "false") {
-    activeFilters.push({ key: "currentOnly", label: "All Semesters" })
+    activeFilters.push({ key: "currentOnly", label: "Incl. past semesters" })
   }
 
   if (moduleDay && moduleDay !== "all") {
@@ -96,6 +107,13 @@ export const ModsActiveFilters = ({
     posthog.capture("mods_filter_cleared", { filter_type: key })
   }
 
+  const clearAll = () => {
+    const params = new URLSearchParams(searchParams.toString())
+    FILTER_KEYS.forEach((k) => params.delete(k))
+    pushSearchParams(pathname, params.toString())
+    posthog.capture("mods_filter_cleared", { filter_type: "all" })
+  }
+
   return (
     <div className="flex flex-wrap gap-2">
       {activeFilters.map(({ key, label }) => (
@@ -108,6 +126,9 @@ export const ModsActiveFilters = ({
           <X />
         </Button>
       ))}
+      <Button variant="ghost" size="xs" onClick={clearAll}>
+        Clear all
+      </Button>
     </div>
   )
 }

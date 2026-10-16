@@ -2,13 +2,12 @@
 
 import posthog from "posthog-js"
 
-import { cn } from "@/lib/utils"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
-import CustomSelect from "@/components/select"
+import { ModsChip } from "@/components/mods/mods-filter-field"
 
-const SELECT_ITEMS = [
-  { value: "true", label: "Current Semester" },
-  { value: "false", label: "All Semesters" }
+const OPTIONS = [
+  { value: "true", label: "This semester" },
+  { value: "false", label: "All past semesters too" }
 ]
 
 export const ModsCurrentOnlyToggle = ({
@@ -18,26 +17,22 @@ export const ModsCurrentOnlyToggle = ({
 }) => {
   const { value, setValue } = useModsSearchParams(paramsValue, "currentOnly")
 
-  const handleChange = (nextValue: string | null) => {
-    if (nextValue !== null) {
-      setValue(nextValue)
-      posthog.capture("mods_filter_applied", {
-        filter_type: "current_only",
-        value: nextValue
-      })
-    }
-  }
-
   return (
-    <CustomSelect
-      closeOnSelect
-      value={value}
-      selectItems={SELECT_ITEMS}
-      onChange={handleChange}
-      divClassName={cn(
-        "w-full",
-        value === "false" && "ring-ring rounded-md ring-1"
-      )}
-    />
+    <div className="flex flex-wrap gap-1.5">
+      {OPTIONS.map((o) => (
+        <ModsChip
+          key={o.value}
+          active={value === o.value}
+          onClick={() => {
+            setValue(o.value)
+            posthog.capture("mods_filter_applied", {
+              filter_type: "current_only",
+              value: o.value
+            })
+          }}>
+          {o.label}
+        </ModsChip>
+      ))}
+    </div>
   )
 }

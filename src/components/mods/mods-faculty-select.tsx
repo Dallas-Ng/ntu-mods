@@ -12,10 +12,10 @@ export const ModsFacultySelect = ({ paramsValue }: { paramsValue: string }) => {
   const { value, setValue } = useModsSearchParams(paramsValue, "moduleFaculty")
 
   const selectItems = [
-    { value: "all", label: "All Faculty" },
-    ...Object.entries(MODULE_FACULTY).map(([categoryKey]) => ({
+    { value: "all", label: "All schools" },
+    ...Object.entries(MODULE_FACULTY).map(([categoryKey, name]) => ({
       value: categoryKey,
-      label: categoryKey
+      label: `${categoryKey} · ${name}`
     }))
   ]
 

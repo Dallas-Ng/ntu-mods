@@ -4,7 +4,8 @@ import {
   buildShareLink,
   decodeCustomBlocksParam,
   decodeTextBundle,
-  encodeTextBundle
+  encodeTextBundle,
+  semesterFromParam
 } from "@/lib/timetable-share"
 
 const customCourse = (): CustomCourse => ({
@@ -89,5 +90,46 @@ describe("share link + text bundle roundtrip", () => {
     expect(decodeCustomBlocksParam(null)).toEqual([])
     expect(decodeCustomBlocksParam(undefined)).toEqual([])
     expect(decodeCustomBlocksParam("%%%not-base64%%%")).toEqual([])
+  })
+})
+
+describe("semester in share payloads", () => {
+  it("puts the semester in a link as sem=YYYY-S and reads it back", () => {
+    const link = buildShareLink(
+      "https://x.test",
+      { CZ2001: "A1" },
+      [],
+      "2026;2"
+    )
+    expect(link).toContain("sem=2026-2")
+    expect(decodeTextBundle(link)).toMatchObject({
+      timetable: { CZ2001: "A1" },
+      semester: "2026;2"
+    })
+  })
+
+  it("keeps sem out of the module map", () => {
+    const decoded = decodeTextBundle("/share?CZ2001=A1&sem=2026-1")
+    expect(decoded?.timetable).toEqual({ CZ2001: "A1" })
+  })
+
+  it("round-trips the semester through a text bundle", () => {
+    const bundle = encodeTextBundle({ CZ2001: "A1" }, [], "2026;1")
+    expect(decodeTextBundle(bundle)?.semester).toBe("2026;1")
+  })
+
+  it("reads legacy links and v1 bundles as semester-less", () => {
+    expect(decodeTextBundle("/share?CZ2001=A1")?.semester).toBeUndefined()
+    const v1 = `NTUMODS1-${btoa(JSON.stringify({ v: 1, t: { CZ2001: "A1" }, c: [] }))}`
+    expect(decodeTextBundle(v1)).toMatchObject({
+      timetable: { CZ2001: "A1" },
+      semester: undefined
+    })
+  })
+
+  it("ignores a malformed semester param", () => {
+    expect(semesterFromParam("2026;2")).toBeUndefined()
+    expect(semesterFromParam("26-2")).toBeUndefined()
+    expect(semesterFromParam("2026-2")).toBe("2026;2")
   })
 })

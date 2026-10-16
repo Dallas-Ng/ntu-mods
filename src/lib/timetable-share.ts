@@ -3,16 +3,37 @@
  *
  * Two carriers, one payload shape:
  *  - a link, where custom blocks ride along in the reserved `cb` query param
+ *    and the semester in `sem` ("2026-2")
  *  - a text bundle (`NTUMODS1-…`), for when the link would get unwieldy
+ *
+ * Index numbers differ between semesters, so a payload without a semester
+ * (every link/bundle made before semesters existed) is ambiguous; readers
+ * treat `semester` as optional and fall back to matching it against the data.
  *
  * Everything is packed as positional tuples before base64url-ing so the string
  * stays short enough to survive being pasted around.
  */
 
 export const CUSTOM_BLOCKS_PARAM = "cb"
+/** Lowercase so it can never collide with an upper-case module code key. */
+export const SEMESTER_PARAM = "sem"
 
 /** Query params on /share that are not module codes. */
-export const RESERVED_SHARE_PARAMS = new Set([CUSTOM_BLOCKS_PARAM])
+export const RESERVED_SHARE_PARAMS = new Set([
+  CUSTOM_BLOCKS_PARAM,
+  SEMESTER_PARAM
+])
+
+/** "2026;2" -> "2026-2": `;` would need escaping in a URL. */
+export const semesterToParam = (semester: string) => semester.replace(";", "-")
+
+/** "2026-2" -> "2026;2", or undefined if it isn't a well-formed semester. */
+export const semesterFromParam = (
+  value: string | null | undefined
+): string | undefined => {
+  const match = value?.match(/^(\d{4})-([12ST])$/)
+  return match ? `${match[1]};${match[2]}` : undefined
+}
 
 export const TEXT_BUNDLE_PREFIX = "NTUMODS1-"
 
@@ -41,9 +62,11 @@ type EncodedCourse = [
 ]
 
 interface TextBundle {
-  v: 1
+  v: 1 | 2
   t: Timetable
   c: EncodedCourse[]
+  /** Semester key ("2026;2"); v2 onwards. */
+  s?: string
 }
 
 // ─── base64url ───────────────────────────────────────────────────────────────
@@ -187,9 +210,11 @@ export const decodeCustomBlocksParam = (
 export const buildShareLink = (
   baseUrl: string,
   timetable: Timetable,
-  customCourses: CustomCourse[]
+  customCourses: CustomCourse[],
+  semester?: string
 ): string => {
   const params = new URLSearchParams(timetable)
+  if (semester) params.set(SEMESTER_PARAM, semesterToParam(semester))
   if (customCourses.length > 0) {
     params.set(CUSTOM_BLOCKS_PARAM, encodeCustomBlocksParam(customCourses))
   }
@@ -212,12 +237,14 @@ const decodeTimetable = (raw: unknown): Timetable => {
 
 export const encodeTextBundle = (
   timetable: Timetable,
-  customCourses: CustomCourse[]
+  customCourses: CustomCourse[],
+  semester?: string
 ): string => {
   const bundle: TextBundle = {
-    v: 1,
+    v: 2,
     t: timetable,
-    c: encodeCourses(customCourses)
+    c: encodeCourses(customCourses),
+    ...(semester ? { s: semester } : {})
   }
   return `${TEXT_BUNDLE_PREFIX}${toBase64Url(JSON.stringify(bundle))}`
 }
@@ -225,6 +252,8 @@ export const encodeTextBundle = (
 export interface DecodedBundle {
   timetable: Timetable
   customCourses: CustomCourse[]
+  /** Absent for links and bundles made before plans were per semester. */
+  semester?: string
 }
 
 /**
@@ -251,7 +280,11 @@ export const decodeTextBundle = (input: string): DecodedBundle | undefined => {
       if (Object.keys(timetable).length === 0 && customCourses.length === 0) {
         return undefined
       }
-      return { timetable, customCourses }
+      return {
+        timetable,
+        customCourses,
+        semester: semesterFromParam(params.get(SEMESTER_PARAM))
+      }
     } catch {
       return undefined
     }
@@ -264,10 +297,14 @@ export const decodeTextBundle = (input: string): DecodedBundle | undefined => {
 
   try {
     const parsed = JSON.parse(fromBase64Url(payload)) as TextBundle
-    if (!parsed || parsed.v !== 1) return undefined
+    if (!parsed || (parsed.v !== 1 && parsed.v !== 2)) return undefined
     return {
       timetable: decodeTimetable(parsed.t),
-      customCourses: decodeCourses(parsed.c)
+      customCourses: decodeCourses(parsed.c),
+      semester:
+        parsed.v === 2 && typeof parsed.s === "string"
+          ? semesterFromParam(parsed.s.replace(";", "-"))
+          : undefined
     }
   } catch {
     return undefined

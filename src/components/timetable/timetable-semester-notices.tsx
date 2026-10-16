@@ -1,8 +1,8 @@
 "use client"
 
-import { useMemo } from "react"
+import { useMemo, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
-import { Info, TriangleAlert } from "lucide-react"
+import { Info, TriangleAlert, X } from "lucide-react"
 import posthog from "posthog-js"
 
 import { hasWeek1Start, week1Start } from "@/config/semester-calendar"
@@ -23,12 +23,27 @@ import { useTimetable } from "@/hooks/use-timetable"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 
+const DISMISSED_KEY = "ntu-mods-provisional-dismissed"
+
+const readDismissed = (): string[] => {
+  try {
+    return JSON.parse(localStorage.getItem(DISMISSED_KEY) ?? "[]")
+  } catch {
+    return []
+  }
+}
+
+/** localStorage does not exist while rendering on the server. */
+const readDismissedSafe = () =>
+  typeof localStorage === "undefined" ? [] : readDismissed()
+
 const hasStarted = (semester: string) =>
   !hasWeek1Start(semester) || new Date(week1Start(semester)) <= new Date()
 
 /** Banners that keep the semester choice honest. Rendered above the planner. */
 const TimetableSemesterNotices = () => {
   const hydrated = useHydrated()
+  const [dismissed, setDismissed] = useState<string[]>(readDismissedSafe)
   const { key, year, semester, label } = useSelectedSemester()
   const { stateTimetable: timetable, timetableIndex } = useTimetable()
   const { customCourses } = useCustomCourses()
@@ -102,7 +117,17 @@ const TimetableSemesterNotices = () => {
     chosenAgainst !== null &&
     chosenAgainst !== DEFAULT_SEMESTER &&
     key !== DEFAULT_SEMESTER
-  const showProvisional = !hasStarted(key)
+  const showProvisional = !hasStarted(key) && !dismissed.includes(key)
+
+  const dismissProvisional = () => {
+    const next = [...readDismissed(), key]
+    setDismissed(next)
+    try {
+      localStorage.setItem(DISMISSED_KEY, JSON.stringify(next))
+    } catch {
+      // storage unavailable: it just comes back next visit
+    }
+  }
 
   // Until the keep-or-clear dialog is answered the saved plan has no semester,
   // so warning that its modules are "not offered" would be noise.
@@ -131,9 +156,18 @@ const TimetableSemesterNotices = () => {
       {showProvisional && (
         <Alert>
           <Info />
-          <AlertDescription>
-            {label} hasn&apos;t started yet. Class slots and venues can still
-            change, and exam dates may not be released.
+          <AlertDescription className="flex items-center justify-between gap-2">
+            <span>
+              {semesterLabelShort(key)} slots are provisional and can still
+              change.
+            </span>
+            <Button
+              size="icon-xs"
+              variant="ghost"
+              aria-label="Dismiss"
+              onClick={dismissProvisional}>
+              <X />
+            </Button>
           </AlertDescription>
         </Alert>
       )}

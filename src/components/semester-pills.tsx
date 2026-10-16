@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils"
 interface Option {
   value: string
   label: string
+  /** Longer text for hover / assistive tech when the label is abbreviated. */
+  title?: string
 }
 
 /** One-tap segmented control, shared by the planner and /mods so a semester always looks the same. */
@@ -29,6 +31,7 @@ const SemesterPills = ({
       <button
         key={option.value}
         type="button"
+        title={option.title}
         aria-pressed={option.value === value}
         onClick={() => option.value !== value && onChange(option.value)}
         className={cn(

@@ -3,7 +3,11 @@
 import { useBoundState } from "@/state/bound.state"
 import posthog from "posthog-js"
 
-import { SELECTABLE_SEMESTERS, semesterLabelShort } from "@/lib/semesters"
+import {
+  SELECTABLE_SEMESTERS,
+  semesterLabel,
+  semesterLabelCompact
+} from "@/lib/semesters"
 import { usePathname } from "@/hooks/use-pathname"
 import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { useSelectedSemester } from "@/hooks/use-selected-semester"
@@ -48,9 +52,10 @@ export const ModsSemesterPills = ({
       options={[
         ...[...SELECTABLE_SEMESTERS].reverse().map((semester) => ({
           value: semester,
-          label: semesterLabelShort(semester)
+          label: semesterLabelCompact(semester),
+          title: semesterLabel(semester)
         })),
-        { value: ALL, label: "All" }
+        { value: ALL, label: "All", title: "All semesters" }
       ]}
       value={allSemesters ? ALL : selectedSemester}
       onChange={handleChange}

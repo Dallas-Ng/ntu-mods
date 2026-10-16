@@ -3,7 +3,11 @@
 import { useBoundState } from "@/state/bound.state"
 import posthog from "posthog-js"
 
-import { SELECTABLE_SEMESTERS, semesterLabelShort } from "@/lib/semesters"
+import {
+  SELECTABLE_SEMESTERS,
+  semesterLabel,
+  semesterLabelCompact
+} from "@/lib/semesters"
 import { useSelectedSemester } from "@/hooks/use-selected-semester"
 import SemesterPills from "@/components/semester-pills"
 
@@ -22,7 +26,8 @@ const TimetableSemesterSwitcher = () => {
       // Older semester on the left, so time reads left to right
       options={[...SELECTABLE_SEMESTERS].reverse().map((semester) => ({
         value: semester,
-        label: semesterLabelShort(semester)
+        label: semesterLabelCompact(semester),
+        title: semesterLabel(semester)
       }))}
       value={selected}
       onChange={(semester) => {

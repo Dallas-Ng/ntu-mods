@@ -21,6 +21,7 @@
     "lint:fix": "eslint . --fix",
     "format:write": "prettier --write \"**/*.{ts,tsx,mdx,astro}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx,astro}\" --cache",
+    "check:articles": "tsx scripts/check-articles.mts",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test"

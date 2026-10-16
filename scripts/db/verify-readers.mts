@@ -69,7 +69,15 @@ const semesters = fs
   .sort()
 
 /** A spread of semesters plus every module in a couple of them. */
-const SAMPLE_SEMS = ["2014_1", "2017_2", "2021_1", "2025_2", "2026_1"]
+// Old semesters for breadth, plus the two newest regular ones that have data,
+// so this does not need editing each time a semester is published.
+const NEWEST_SEMS = semesters
+  .filter((s) => /_[12]$/.test(s))
+  .filter(
+    (s) => Object.keys(readJson(path.join(SRC, "metadata", `${s}.json`))).length
+  )
+  .slice(-2)
+const SAMPLE_SEMS = ["2014_1", "2017_2", "2021_1", ...NEWEST_SEMS]
 
 async function main() {
   console.log("getLatestSemester")

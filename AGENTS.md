@@ -53,3 +53,35 @@ git commit -m "chore(data): refresh AY2026 S1 course data"
 ```
 
 Details: [scraper/README.md](scraper/README.md).
+
+## Publishing a new semester (it goes live for everyone)
+
+The site treats the newest semester with data as the default, and the planner
+and `/mods` let students switch between the **two newest regular semesters**
+(the older one drops out when a third is published). So publishing a new
+semester's courses is the go-live moment; do not upsync it before you want it
+to be the default.
+
+Before step 2 (`--load --upsync`) for a semester that has never been published:
+
+1. Add its Teaching Week 1 Monday to `src/config/semester-calendar.ts`. The
+   prebuild fails without it, and ICS export refuses to guess.
+2. Pin the semester with `-s "YYYY;S"` in step 1; the portal's first listed
+   semester is not reliably the newest.
+
+After step 3 (push), once the Workers build is live:
+
+3. Purge the Cloudflare cache and run `node scripts/warm-cache.mjs`. Module
+   snapshots are cached for 7 days (+30 days stale-while-revalidate), so some
+   visitors keep seeing the old default until you do.
+4. Run `yarn check:articles` and refresh what it lists: counts, module tables
+   and "AY… Semester …" wording in `content/articles`, plus the banner in
+   `src/components/banner.tsx` and the dated strings on `/exams` and
+   `/timetable`. Keep article slugs; renaming loses their search ranking.
+
+Re-running a refresh for a semester that is already live (NTU keeps changing
+slots and exam dates until about week 5-6) needs only steps 1-3 of the main
+runbook, then the cache purge above.
+
+Students with plans saved before plans were per-semester are asked once to keep
+or clear them; nothing here needs doing for that.

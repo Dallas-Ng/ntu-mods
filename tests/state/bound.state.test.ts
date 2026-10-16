@@ -76,3 +76,52 @@ describe("migrateBoundState", () => {
     expect(migrated.indexRemarks).toEqual({})
   })
 })
+
+describe("migrateBoundState: v3 per-semester plans", () => {
+  it("flags existing timetable data for the keep-or-clear dialog", () => {
+    const state = {
+      timetables: [{ CZ2001: "A1" }, {}, {}, {}, {}],
+      customCourses: [[], [], [], [], []],
+      moduleRemarks: {},
+      indexRemarks: {}
+    }
+    const migrated = migrateBoundState(state, 2)
+    expect(migrated.pendingSemesterAssignment).toBe(true)
+    expect(migrated.semester).toBeNull()
+    expect(migrated.semesterWorkspaces).toEqual({})
+    expect(migrated.timetables[0]).toEqual({ CZ2001: "A1" })
+  })
+
+  it("does not prompt a user who has nothing saved", () => {
+    const state = {
+      timetables: [{}, {}, {}, {}, {}],
+      customCourses: [[], [], [], [], []],
+      moduleRemarks: {},
+      indexRemarks: {}
+    }
+    expect(migrateBoundState(state, 2).pendingSemesterAssignment).toBe(false)
+  })
+
+  it("counts notes and locks alone as data worth asking about", () => {
+    const state = {
+      timetables: [{}, {}, {}, {}, {}],
+      customCourses: [[], [], [], [], []],
+      lockedModules: ["CZ2001"],
+      moduleRemarks: {},
+      indexRemarks: {}
+    }
+    expect(migrateBoundState(state, 2).pendingSemesterAssignment).toBe(true)
+  })
+
+  it("leaves a v3 state alone", () => {
+    const state = {
+      timetables: [{ CZ2001: "A1" }, {}, {}, {}, {}],
+      semester: "2026;1",
+      semesterWorkspaces: {},
+      pendingSemesterAssignment: false
+    }
+    const migrated = migrateBoundState(state, 3)
+    expect(migrated.semester).toBe("2026;1")
+    expect(migrated.pendingSemesterAssignment).toBe(false)
+  })
+})

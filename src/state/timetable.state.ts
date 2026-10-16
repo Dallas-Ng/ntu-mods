@@ -2,6 +2,40 @@ import { StateCreator } from "zustand"
 
 import { cloneCustomCourse } from "@/lib/custom-course-migrate"
 import { DEFAULT_GENERATION_CONFIG } from "@/lib/generation-config"
+import { DEFAULT_SEMESTER, isSelectableSemester } from "@/lib/semesters"
+
+/**
+ * Everything personal to one semester's plan. The slice's flat fields
+ * (timetables, customCourses, ...) always hold the workspace of `semester`,
+ * so existing readers are unaffected; the other semesters' workspaces are
+ * parked in `semesterWorkspaces` and swapped in by switchSemester.
+ */
+export interface SemesterWorkspace {
+  timetables: Timetable[]
+  timetableIndex: number
+  customCourses: CustomCourse[][]
+  lockedModules: string[]
+  moduleRemarks: Record<string, string>
+  indexRemarks: Record<string, string>
+}
+
+export const emptyWorkspace = (): SemesterWorkspace => ({
+  timetables: [{}, {}, {}, {}, {}],
+  timetableIndex: 0,
+  customCourses: [[], [], [], [], []],
+  lockedModules: [],
+  moduleRemarks: {},
+  indexRemarks: {}
+})
+
+export const hasWorkspaceData = (w: Partial<SemesterWorkspace>) =>
+  Boolean(
+    w.timetables?.some((t) => Object.keys(t).length > 0) ||
+    w.customCourses?.some((c) => c.length > 0) ||
+    w.lockedModules?.length ||
+    Object.keys(w.moduleRemarks ?? {}).length ||
+    Object.keys(w.indexRemarks ?? {}).length
+  )
 
 export interface TimetableSlice {
   timetables: Timetable[]
@@ -21,6 +55,24 @@ export interface TimetableSlice {
   moduleRemarks: Record<string, string>
   /** User notes for a specific index/group, keyed by `${moduleKey}:${indexKey}`. */
   indexRemarks: Record<string, string>
+  /**
+   * Semester that the flat fields above belong to. null until the user picks
+   * one (or is assigned one); readers resolve null to DEFAULT_SEMESTER.
+   */
+  semester: string | null
+  /** Parked workspaces of the other semesters, keyed "YYYY;S". */
+  semesterWorkspaces: Record<string, SemesterWorkspace>
+  /** DEFAULT_SEMESTER when `semester` was last chosen; drives the "newer semester" nudge. */
+  semesterChosenAgainst: string | null
+  /** Pre-semester data awaiting the keep-or-clear dialog. */
+  pendingSemesterAssignment: boolean
+  switchSemester: (target: string) => void
+  /** Move off a semester that is no longer selectable, parking its data. */
+  reconcileSemester: () => void
+  /** Keep path of the first-load dialog: existing data belongs to `semester`. */
+  assignSemester: (semester: string) => void
+  /** Clear path of the first-load dialog: drop everything personal. */
+  clearAllWorkspaces: () => void
   migrateTimetable: (timetable: Timetable) => void
   updateTimetable: (timetable: Timetable, timetableIndex: number) => void
   addItemToTimetable: (moduleKey: string, indexKey: string) => void
@@ -58,6 +110,61 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   customCourses: [[], [], [], [], []],
   moduleRemarks: {},
   indexRemarks: {},
+  semester: null,
+  semesterWorkspaces: {},
+  semesterChosenAgainst: null,
+  pendingSemesterAssignment: false,
+  switchSemester: (target) =>
+    set((state) => {
+      const from = state.semester ?? DEFAULT_SEMESTER
+      if (from === target) {
+        return { semester: target, semesterChosenAgainst: DEFAULT_SEMESTER }
+      }
+      const parked = {
+        ...state.semesterWorkspaces,
+        [from]: snapshotWorkspace(state)
+      }
+      const next = parked[target] ?? emptyWorkspace()
+      delete parked[target]
+      return {
+        ...next,
+        semester: target,
+        semesterWorkspaces: parked,
+        semesterChosenAgainst: DEFAULT_SEMESTER
+      }
+    }),
+  reconcileSemester: () =>
+    set((state) => {
+      if (state.semester == null || isSelectableSemester(state.semester)) {
+        return state
+      }
+      const parked = {
+        ...state.semesterWorkspaces,
+        [state.semester]: snapshotWorkspace(state)
+      }
+      const next = parked[DEFAULT_SEMESTER] ?? emptyWorkspace()
+      delete parked[DEFAULT_SEMESTER]
+      return {
+        ...next,
+        semester: DEFAULT_SEMESTER,
+        semesterWorkspaces: parked,
+        semesterChosenAgainst: DEFAULT_SEMESTER
+      }
+    }),
+  assignSemester: (semester) =>
+    set(() => ({
+      semester,
+      semesterChosenAgainst: DEFAULT_SEMESTER,
+      pendingSemesterAssignment: false
+    })),
+  clearAllWorkspaces: () =>
+    set(() => ({
+      ...emptyWorkspace(),
+      semester: null,
+      semesterWorkspaces: {},
+      semesterChosenAgainst: null,
+      pendingSemesterAssignment: false
+    })),
   migrateTimetable: (timetable: Timetable) =>
     set((state) => ({
       timetables: [{ ...timetable }, {}, {}, {}, {}]
@@ -233,6 +340,15 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
       )
     }))
   }
+})
+
+const snapshotWorkspace = (state: SemesterWorkspace): SemesterWorkspace => ({
+  timetables: state.timetables,
+  timetableIndex: state.timetableIndex,
+  customCourses: state.customCourses,
+  lockedModules: state.lockedModules,
+  moduleRemarks: state.moduleRemarks,
+  indexRemarks: state.indexRemarks
 })
 
 const setRemark = (

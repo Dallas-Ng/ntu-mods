@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 import { createStore } from "zustand/vanilla"
 
 import { DEFAULT_GENERATION_CONFIG } from "@/lib/generation-config"
+import { SELECTABLE_SEMESTERS } from "@/lib/semesters"
 
 const makeStore = () => createStore<TimetableSlice>(createTimetableSlice)
 
@@ -191,5 +192,75 @@ describe("timetable slice: remarks", () => {
     store.getState().setIndexRemark("CZ2001", "A1", "check venue")
     expect(store.getState().indexRemarks["CZ2001:A1"]).toBe("check venue")
     expect(store.getState().moduleRemarks.CZ2001).toBeUndefined()
+  })
+})
+
+const [NEWER, OLDER] = SELECTABLE_SEMESTERS
+
+describe("timetable slice: per-semester workspaces", () => {
+  it("keeps timetables, locks and notes separate per semester", () => {
+    const store = makeStore()
+    store.getState().addItemToTimetable("CZ2001", "A1")
+    store.getState().toggleModuleLock("CZ2001")
+    store.getState().setModuleRemark("CZ2001", "good prof")
+
+    store.getState().switchSemester(OLDER)
+    expect(store.getState().semester).toBe(OLDER)
+    expect(store.getState().timetables[0]).toEqual({})
+    expect(store.getState().lockedModules).toEqual([])
+    expect(store.getState().moduleRemarks).toEqual({})
+
+    store.getState().addItemToTimetable("CZ1005", "B2")
+    store.getState().switchSemester(NEWER)
+    expect(store.getState().timetables[0]).toEqual({ CZ2001: "A1" })
+    expect(store.getState().lockedModules).toEqual(["CZ2001"])
+    expect(store.getState().moduleRemarks).toEqual({ CZ2001: "good prof" })
+
+    store.getState().switchSemester(OLDER)
+    expect(store.getState().timetables[0]).toEqual({ CZ1005: "B2" })
+  })
+
+  it("switching to the current semester changes nothing", () => {
+    const store = makeStore()
+    store.getState().addItemToTimetable("CZ2001", "A1")
+    store.getState().switchSemester(NEWER)
+    expect(store.getState().timetables[0]).toEqual({ CZ2001: "A1" })
+  })
+
+  it("parks and drops a semester that is no longer selectable", () => {
+    const store = makeStore()
+    store.getState().switchSemester(OLDER)
+    store.setState({ semester: "2001;1" })
+    store.getState().addItemToTimetable("CZ2001", "A1")
+    store.getState().reconcileSemester()
+    expect(store.getState().semester).toBe(NEWER)
+    expect(store.getState().timetables[0]).toEqual({})
+    expect(store.getState().semesterWorkspaces["2001;1"].timetables[0]).toEqual(
+      {
+        CZ2001: "A1"
+      }
+    )
+  })
+
+  it("assignSemester keeps the data and clears the pending flag", () => {
+    const store = makeStore()
+    store.setState({ pendingSemesterAssignment: true })
+    store.getState().addItemToTimetable("CZ2001", "A1")
+    store.getState().assignSemester(OLDER)
+    expect(store.getState().semester).toBe(OLDER)
+    expect(store.getState().pendingSemesterAssignment).toBe(false)
+    expect(store.getState().timetables[0]).toEqual({ CZ2001: "A1" })
+  })
+
+  it("clearAllWorkspaces drops every semester's data", () => {
+    const store = makeStore()
+    store.getState().addItemToTimetable("CZ2001", "A1")
+    store.getState().switchSemester(OLDER)
+    store.getState().addItemToTimetable("CZ1005", "B2")
+    store.setState({ pendingSemesterAssignment: true })
+    store.getState().clearAllWorkspaces()
+    expect(store.getState().timetables[0]).toEqual({})
+    expect(store.getState().semesterWorkspaces).toEqual({})
+    expect(store.getState().pendingSemesterAssignment).toBe(false)
   })
 })

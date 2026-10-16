@@ -1,19 +1,10 @@
 import { addDays, format, startOfWeek } from "date-fns"
 import { createEvents, EventAttributes } from "ics"
 
+import { week1Start } from "@/config/semester-calendar"
+
 import { parseTime } from "./parse-time"
 import { latestSemester, latestYear } from "./semesters"
-
-// Teaching Week 1 start per semester, from the official NTU academic calendar.
-// Add a line when a new semester's data ships.
-const WEEK_1_START: Record<string, string> = {
-  "2026;1": "2026-08-10",
-  "2026;2": "2027-01-11"
-}
-const MIN_DATE = new Date(
-  WEEK_1_START[`${latestYear};${latestSemester}`] ?? "2026-08-10"
-)
-const WEEK_1_MONDAY = startOfWeek(MIN_DATE, { weekStartsOn: 1 })
 
 const TOTAL_TEACHING_WEEKS = 13
 // Recess Week always falls between Teaching Week 7 and Teaching Week 8,
@@ -42,10 +33,10 @@ const parseTeachingWeeks = (remarks: string): number[] => {
   return [...weeks].sort((a, b) => a - b)
 }
 
-const teachingWeekMonday = (weekNumber: number) => {
+const teachingWeekMonday = (week1Monday: Date, weekNumber: number) => {
   const calendarWeekOffset =
     weekNumber <= RECESS_AFTER_WEEK ? weekNumber - 1 : weekNumber
-  return addDays(WEEK_1_MONDAY, calendarWeekOffset * 7)
+  return addDays(week1Monday, calendarWeekOffset * 7)
 }
 
 /** Which block fields the user has chosen to show, mirrors Settings.tableCell. */
@@ -78,6 +69,9 @@ const DEFAULT_TABLE_CELL: IcsTableCellSettings = {
  *   index of that module unless overridden by indexRemarks
  * @param indexRemarks - map of "moduleKey:indexKey" -> user's personal note for that
  *   specific index, takes priority over moduleRemarks
+ * @param semester - "YYYY;S" key whose Teaching Week 1 anchors the dates;
+ *   defaults to the latest semester. Throws if that semester has no known
+ *   Week 1 date, so a calendar is never exported a semester off.
  */
 export const getIcs = (
   timetable: { [moduleKey: string]: string },
@@ -86,9 +80,13 @@ export const getIcs = (
   tableCell: IcsTableCellSettings = DEFAULT_TABLE_CELL,
   labelLookup: Record<string, string> = {},
   moduleRemarks: Record<string, string> = {},
-  indexRemarks: Record<string, string> = {}
+  indexRemarks: Record<string, string> = {},
+  semester: string = `${latestYear};${latestSemester}`
 ) => {
   const events: EventAttributes[] = []
+  const week1Monday = startOfWeek(new Date(week1Start(semester)), {
+    weekStartsOn: 1
+  })
 
   for (const [moduleKey, indexKey] of Object.entries(timetable)) {
     const indexes = indexLookup[indexKey] ?? []
@@ -111,7 +109,7 @@ export const getIcs = (
       const typeLabel = index.isCustom ? index.remarks : index.type
 
       for (const weekNumber of teachingWeeks) {
-        const weekMonday = teachingWeekMonday(weekNumber)
+        const weekMonday = teachingWeekMonday(week1Monday, weekNumber)
 
         const start = addDays(weekMonday, index.day - 1)
         start.setHours(startTime.getHours(), startTime.getMinutes())

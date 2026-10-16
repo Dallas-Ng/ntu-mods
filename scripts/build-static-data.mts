@@ -27,6 +27,7 @@ import fs from "fs/promises"
 import fsSync from "fs"
 import path from "path"
 
+import { hasWeek1Start } from "../src/config/semester-calendar.ts"
 import * as json from "../src/lib/server/db/json-source.ts"
 
 const ROOT = path.join(import.meta.dirname, "..")
@@ -142,6 +143,11 @@ async function main() {
   const [latest] = json.semestersWithOfferings()
   if (!latest) throw new Error("No semester in src/data/api has any offerings")
   console.log(`  latest semester with data: ${latest.sem}`)
+  if (!hasWeek1Start(`${latest.year};${latest.semester}`)) {
+    throw new Error(
+      `Latest semester ${latest.sem} has no Teaching Week 1 date: add it to src/config/semester-calendar.ts`
+    )
+  }
 
   const allSems = fsSync
     .readdirSync(path.join(SRC_DATA, "metadata"))

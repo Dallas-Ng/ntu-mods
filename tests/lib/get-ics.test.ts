@@ -72,6 +72,27 @@ describe("getIcs", () => {
     expect(ics).toContain("DTSTART:20270308T083000")
   })
 
+  it("anchors dates to the semester passed in, not the latest", () => {
+    const sem1 = getIcs(
+      { CZ2001: "IDX1" },
+      { IDX1: [index({ remarks: "Teaching Wk8" })] },
+      { CZ2001: "Algorithms" },
+      undefined,
+      {},
+      {},
+      {},
+      "2026;1"
+    )
+    // Sem 1 week 1 Monday is 2026-08-10, so week 8 is 2026-08-10 + 8*7 days.
+    expect(sem1).toContain("DTSTART:20261005T083000")
+  })
+
+  it("throws for a semester with no known Week 1 date instead of guessing", () => {
+    expect(() => getIcs({}, {}, {}, undefined, {}, {}, {}, "2099;1")).toThrow(
+      /2099;1/
+    )
+  })
+
   it("labels a custom block's type from remarks, not the type field", () => {
     const ics = getIcs(
       { gym: "IDX1" },

@@ -24,9 +24,8 @@ const LandingActivity = async () => {
         Built in 2023. Still improving.
       </h2>
       <p className="mt-4 max-w-2xl text-base md:text-lg">
-        Many student websites stop working or go out of date. NTUMods has been
-        online since {SITE_LIVE_SINCE} and keeps getting new features and fresh
-        semester data.
+        NTUMods has been online since {SITE_LIVE_SINCE} and is still looked
+        after, with new features and fresh course data added over time.
       </p>
 
       <div className="mt-10 grid gap-3 xl:grid-cols-[5fr_7fr]">

@@ -84,11 +84,11 @@ const ChangelogReleaseSection = ({
       </p>
     )}
 
-    <ul className="mt-4 space-y-3">
+    <ul className="divide-border mt-4 divide-y">
       {release.items.map((item, i) => (
         <li
           key={i}
-          className="flex flex-col items-start gap-2 md:flex-row md:gap-4">
+          className="flex flex-col items-start gap-2 py-3 first:pt-0 last:pb-0 md:flex-row md:gap-4">
           <span className="md:w-32 md:shrink-0 md:pt-0.5">
             <CategoryBadge category={item.category} />
           </span>
@@ -113,10 +113,10 @@ const ChangelogContent = () => {
   })).filter((release) => release.items.length > 0)
 
   return (
-    <div className="mx-auto max-w-7xl px-4 pt-8 pb-12 md:pt-10 md:pb-20">
-      <div className="mb-8 max-w-3xl space-y-5 md:mb-10">
+    <div className="mx-auto max-w-3xl px-4 pb-12 md:pb-20">
+      <div className="mb-8 space-y-5 md:mb-10">
         <div>
-          <h1 className="text-3xl leading-[1.05] font-bold tracking-tighter md:text-5xl">
+          <h1 className="text-2xl leading-[1.05] font-bold tracking-tighter md:text-4xl">
             Changelog
           </h1>
           <p className="mt-4 max-w-xl text-base md:text-lg">
@@ -130,7 +130,7 @@ const ChangelogContent = () => {
         />
       </div>
 
-      <div className="max-w-4xl space-y-3">
+      <div className="space-y-3">
         {filteredChangelog.map((release) => (
           <ChangelogReleaseSection key={release.title} release={release} />
         ))}

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 export type Command = {
   name: string
@@ -13,10 +13,14 @@ const artClass = (c: Command) =>
   `object-contain ${c.invert ? "invert dark:invert-0" : ""}`
 
 // Giant command menu: typing filters, hover or arrow keys move the selection.
+// Until the visitor takes over, the row at the middle of the screen is the
+// selected one, so scrolling past the list cycles through the features.
 // Rows are plain links, so it works without script and on touch.
 const LandingCommands = ({ commands }: { commands: Command[] }) => {
   const [query, setQuery] = useState("")
   const [active, setActive] = useState(0)
+  const [manual, setManual] = useState(false)
+  const listRef = useRef<HTMLUListElement>(null)
 
   const q = query.trim().toLowerCase()
   const rows = q
@@ -25,7 +29,25 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
   const selected = Math.min(active, Math.max(rows.length - 1, 0))
   const current = rows[selected]
 
+  useEffect(() => {
+    const list = listRef.current
+    if (manual || q || !list || !("IntersectionObserver" in window)) return
+    // A thin band across the middle of the viewport: the row inside it leads
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting)
+            setActive(Number((e.target as HTMLElement).dataset.row))
+        }
+      },
+      { rootMargin: "-50% 0px -50% 0px" }
+    )
+    list.querySelectorAll("li[data-row]").forEach((li) => observer.observe(li))
+    return () => observer.disconnect()
+  }, [manual, q])
+
   const onKeyDown = (e: React.KeyboardEvent) => {
+    setManual(true)
     if (e.key === "ArrowDown") {
       e.preventDefault()
       setActive(Math.min(selected + 1, rows.length - 1))
@@ -45,26 +67,39 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
       <input
         type="search"
         value={query}
+        onFocus={() => setManual(true)}
         onChange={(e) => {
+          setManual(true)
           setQuery(e.target.value)
           setActive(0)
         }}
         onKeyDown={onKeyDown}
         placeholder="Find a feature or tool"
         aria-label="Find a feature or tool"
-        className="bg-muted placeholder:text-foreground/60 focus-visible:ring-primary h-14 w-full rounded-xl px-5 text-xl font-semibold tracking-tight outline-none focus-visible:ring-2 md:h-20 md:px-8 md:text-4xl"
+        className="bg-muted placeholder:text-foreground/60 focus-visible:ring-primary h-14 w-full rounded-xl px-5 text-xl font-semibold tracking-tight outline-none focus-visible:ring-2 md:h-16 md:px-8 md:text-3xl"
       />
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[7fr_5fr]">
-        <ul className="space-y-1">
+        <ul ref={listRef} className="space-y-1">
           {rows.map((c, i) => {
             const on = i === selected
             return (
-              <li key={c.href + c.name} className="landing-reveal">
+              <li key={c.href + c.name} data-row={i} className="landing-reveal">
                 <a
                   href={c.href}
-                  onMouseEnter={() => setActive(i)}
-                  onFocus={() => setActive(i)}
+                  // Real pointer movement only: scrolling under a resting
+                  // mouse must not count as the visitor choosing a row
+                  onMouseMove={(e) => {
+                    if (e.movementX || e.movementY) {
+                      setManual(true)
+                      setActive(i)
+                    }
+                  }}
+                  onPointerDown={() => setManual(true)}
+                  onFocus={() => {
+                    setManual(true)
+                    setActive(i)
+                  }}
                   className={`flex flex-col gap-4 rounded-xl p-4 transition-colors duration-150 md:px-6 md:py-5 lg:flex-row lg:items-center ${
                     on ? "bg-primary text-primary-foreground" : "hover:bg-muted"
                   }`}>
@@ -83,7 +118,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                     </span>
                   )}
                   <span className="min-w-0 flex-1">
-                    <span className="block text-3xl leading-[1.1] font-bold tracking-tight md:text-5xl">
+                    <span className="block text-3xl leading-[1.1] font-bold tracking-tight md:text-4xl">
                       {c.name}
                       {c.isNew && (
                         <span className="ml-3 inline-block rounded-full bg-yellow-400 px-3 py-1 align-middle text-sm font-semibold tracking-normal text-black">
@@ -130,7 +165,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                   {c.name}
                 </p>
               )}
-              <p className="text-lg">{c.desc}</p>
+              <p className="text-base md:text-lg">{c.desc}</p>
             </div>
           ))}
         </div>

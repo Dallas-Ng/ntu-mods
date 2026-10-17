@@ -11,7 +11,7 @@ const LandingTools = () => {
   return (
     <section className="mx-auto max-w-7xl px-4">
       <div className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <h2 className="landing-reveal max-w-2xl text-4xl leading-none font-bold tracking-tighter md:text-6xl">
+        <h2 className="landing-reveal max-w-2xl text-4xl leading-none font-bold tracking-tighter md:text-5xl">
           Tools for your grades
         </h2>
         <a
@@ -27,7 +27,7 @@ const LandingTools = () => {
             key={tool.href}
             className="bg-muted landing-reveal flex min-h-[320px] flex-col justify-between gap-10 rounded-2xl p-6 md:p-8">
             <div>
-              <h3 className="text-4xl leading-tight font-bold tracking-tight md:text-5xl">
+              <h3 className="text-3xl leading-tight font-bold tracking-tight md:text-4xl">
                 {tool.name}
                 {tool.isNew && (
                   <span className="ml-3 inline-block rounded-full bg-yellow-400 px-3 py-1 align-middle text-sm font-semibold tracking-normal text-black">
@@ -35,7 +35,7 @@ const LandingTools = () => {
                   </span>
                 )}
               </h3>
-              <p className="mt-4 max-w-md text-lg">{tool.desc}</p>
+              <p className="mt-4 max-w-md text-base md:text-lg">{tool.desc}</p>
             </div>
             <div className="flex flex-wrap gap-3">
               <a

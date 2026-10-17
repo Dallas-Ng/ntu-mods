@@ -308,7 +308,7 @@ const LandingShowcase = () => {
                             top: `calc(${pct(start)} + 2px)`,
                             height: `calc(${(len / HOURS) * 100}% - 4px)`
                           }}
-                          className={`animate-in fade-in absolute inset-x-0.5 overflow-hidden rounded-md px-2 py-1 text-[13px] leading-tight font-semibold duration-500 ${style.background} ${style.text}`}>
+                          className={`animate-in fade-in absolute inset-x-0.5 overflow-hidden rounded-md px-2 py-1 text-sm leading-tight font-semibold duration-500 ${style.background} ${style.text}`}>
                           <p>{name ?? type}</p>
                         </div>
                       )

@@ -1,52 +1,45 @@
 import { CHANGELOG } from "@/config/changelog-data"
-import { SITE_LIVE_SINCE } from "@/config/site-activity"
-import { getSemesterCoverage } from "@/lib/server/db/repo"
 
 const CHANGES = CHANGELOG.reduce((sum, r) => sum + r.items.length, 0)
 
-// Proof the site is looked after, in plain words: how long it has been up,
-// how much has been added, and what changed most recently.
-const LandingActivity = async () => {
-  const coverage = await getSemesterCoverage()
+// One entry per date and title, in case the changelog repeats a release
+const seen = new Set<string>()
+const RECENT = CHANGELOG.filter((r) => {
+  const key = `${r.date}|${r.title}`
+  if (seen.has(key)) return false
+  seen.add(key)
+  return true
+}).slice(0, 3)
 
-  const stats = [
-    { value: SITE_LIVE_SINCE, label: "Online since" },
-    { value: String(CHANGES), label: "New features and fixes" },
-    {
-      value: String(coverage.count),
-      label: `Semesters of course data, back to ${coverage.earliestYear}`
-    }
-  ]
+// Proof the site is looked after, in plain words: how much has been added and
+// what changed most recently. The heading already says when it started.
+const LandingActivity = () => (
+  <section className="mx-auto max-w-7xl px-4">
+    <h2 className="landing-reveal max-w-3xl text-4xl leading-none font-bold tracking-tighter md:text-5xl">
+      Built in 2023. Still improving.
+    </h2>
+    <p className="mt-4 max-w-2xl text-base md:text-lg">
+      NTUMods is still looked after, with new features and fresh course data
+      added over time.
+    </p>
 
-  return (
-    <section className="mx-auto max-w-7xl px-4">
-      <h2 className="landing-reveal max-w-3xl text-4xl leading-none font-bold tracking-tighter md:text-5xl">
-        Built in 2023. Still improving.
-      </h2>
-      <p className="mt-4 max-w-2xl text-base md:text-lg">
-        NTUMods has been online since {SITE_LIVE_SINCE} and is still looked
-        after, with new features and fresh course data added over time.
-      </p>
+    <div className="mt-10 grid gap-3 xl:grid-cols-[5fr_7fr]">
+      <div className="bg-muted landing-reveal flex flex-col justify-between gap-6 rounded-2xl p-6 md:p-7">
+        <p className="text-6xl leading-none font-bold tracking-tighter md:text-7xl">
+          {CHANGES}
+        </p>
+        <p className="text-xl font-semibold">New features and fixes so far</p>
+      </div>
 
-      <div className="mt-10 grid gap-3 xl:grid-cols-[5fr_7fr]">
-        <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
-          {stats.map((s) => (
-            <div
-              key={s.label}
-              className="bg-muted landing-reveal flex flex-col justify-between gap-4 rounded-2xl p-6 xl:flex-1">
-              <p className="text-4xl leading-none font-bold tracking-tight md:text-5xl">
-                {s.value}
-              </p>
-              <p className="text-base md:text-lg">{s.label}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="bg-muted rounded-2xl p-5 md:p-7">
-          <p className="text-xl font-semibold">What we added most recently</p>
-          <ol className="mt-5">
-            {CHANGELOG.slice(0, 4).map((release) => (
-              <li key={release.id} className="landing-reveal flex gap-4">
+      <div className="bg-muted rounded-2xl p-5 md:p-7">
+        <p className="text-xl font-semibold">What we added most recently</p>
+        <ol className="mt-5">
+          {RECENT.map((release) => {
+            const kinds = [...new Set(release.items.map((i) => i.category))]
+            return (
+              <li
+                key={`${release.date}|${release.title}`}
+                className="landing-reveal flex gap-4">
                 <div className="flex flex-col items-center">
                   <span className="bg-primary mt-2 size-3 shrink-0 rounded-full" />
                   <span className="bg-foreground/15 w-0.5 flex-1" />
@@ -58,19 +51,28 @@ const LandingActivity = async () => {
                   <span className="block text-lg font-semibold">
                     {release.title}
                   </span>
+                  <span className="mt-1 flex flex-wrap gap-1.5">
+                    {kinds.map((kind) => (
+                      <span
+                        key={kind}
+                        className="bg-background rounded-full px-2.5 py-0.5 text-sm">
+                        {kind}
+                      </span>
+                    ))}
+                  </span>
                 </a>
               </li>
-            ))}
-          </ol>
-          <a
-            href="/changelog"
-            className="text-primary text-lg font-semibold underline-offset-4 hover:underline">
-            See everything we have added
-          </a>
-        </div>
+            )
+          })}
+        </ol>
+        <a
+          href="/changelog"
+          className="text-primary text-lg font-semibold underline-offset-4 hover:underline">
+          See everything we have added
+        </a>
       </div>
-    </section>
-  )
-}
+    </div>
+  </section>
+)
 
 export default LandingActivity

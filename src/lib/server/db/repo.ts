@@ -47,15 +47,6 @@ export async function getLatestExamSemester(): Promise<{
 }
 
 /** Every module code that was ever offered. Used by the sitemap, not getStaticPaths — see getActiveModuleCodes for the build subset. */
-/** How many semesters have course data, and the earliest academic year. */
-export async function getSemesterCoverage(): Promise<{
-  count: number
-  earliestYear: string
-}> {
-  const all = json.semestersWithOfferings()
-  return { count: all.length, earliestYear: all[all.length - 1]?.year ?? "" }
-}
-
 export async function getAllModuleCodes(): Promise<string[]> {
   return json.latestOfferings().map((o) => o.code)
 }

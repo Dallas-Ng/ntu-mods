@@ -1,4 +1,8 @@
 import { useEffect, useRef, useState } from "react"
+import { ChevronDown } from "lucide-react"
+
+// Phones show this many rows until "Show all" is pressed; desktop shows every row
+const PHONE_ROWS = 4
 
 export type Command = {
   name: string
@@ -16,12 +20,15 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
   const [query, setQuery] = useState("")
   const [active, setActive] = useState(0)
   const [manual, setManual] = useState(false)
+  const [showAll, setShowAll] = useState(false)
   const listRef = useRef<HTMLUListElement>(null)
 
   const q = query.trim().toLowerCase()
   const rows = q
     ? commands.filter((c) => `${c.name} ${c.desc}`.toLowerCase().includes(q))
     : commands
+  // Searching always shows every match, so nothing is hidden from a search
+  const collapsed = !showAll && !q && rows.length > PHONE_ROWS
   const selected = Math.min(active, Math.max(rows.length - 1, 0))
   const current = rows[selected]
 
@@ -80,7 +87,12 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
           {rows.map((c, i) => {
             const on = i === selected
             return (
-              <li key={c.href + c.name} data-row={i} className="landing-reveal">
+              <li
+                key={c.href + c.name}
+                data-row={i}
+                className={`landing-reveal ${
+                  collapsed && i >= PHONE_ROWS ? "hidden lg:block" : ""
+                }`}>
                 <a
                   href={c.href}
                   // Real pointer movement only: scrolling under a resting
@@ -136,6 +148,22 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
             </li>
           )}
         </ul>
+
+        {rows.length > PHONE_ROWS && !q && (
+          <button
+            type="button"
+            aria-expanded={showAll}
+            onClick={() => setShowAll((v) => !v)}
+            className="bg-muted hover:bg-accent flex h-12 w-full items-center justify-center gap-2 rounded-xl text-base font-semibold transition-colors duration-150 lg:hidden">
+            {showAll ? "Show fewer" : `Show all ${rows.length} features`}
+            <ChevronDown
+              aria-hidden="true"
+              className={`size-5 transition-transform duration-200 motion-reduce:transition-none ${
+                showAll ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+        )}
 
         <div
           aria-hidden="true"

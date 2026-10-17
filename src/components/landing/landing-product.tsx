@@ -35,7 +35,9 @@ const LandingProduct = async () => {
   )
 
   return (
-    <div className="bg-background relative h-[48.5vh] w-full justify-center overflow-hidden rounded-lg border-4 shadow-xl dark:bg-slate-950">
+    <div
+      data-ui
+      className="bg-background relative h-[56vh] min-h-[360px] w-full overflow-hidden rounded-xl">
       <TimetableTable moduleIndexMap={moduleIndexMap} fullCell />
     </div>
   )

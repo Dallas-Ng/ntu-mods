@@ -2,6 +2,7 @@
 import { siteConfig } from "@/config/site"
 import { organizationJsonLd, websiteJsonLd } from "@/lib/json-ld"
 import LandingArticles from "@/components/landing/landing-articles"
+import LandingCloser from "@/components/landing/landing-closer"
 import LandingCTA from "@/components/landing/landing-cta"
 import LandingFeatures from "@/components/landing/landing-features"
 import LandingProduct from "@/components/landing/landing-product"
@@ -16,35 +17,44 @@ export const prerender = true
   description={siteConfig.metatags.default.desc}
   canonical="/"
   containerClassName="max-w-full p-0 lg:px-0">
-  <div class="relative z-[3] space-y-10 p-3">
-    <LandingCTA />
-  </div>
+  <LandingCTA />
 
-  <div class="relative overflow-hidden">
-    <div class="relative z-[2] container p-3">
+  <div class="mx-auto max-w-7xl px-4">
+    <div class="bg-muted/60 rounded-3xl p-3 md:p-6">
       <LandingProduct />
     </div>
-
-    {
-      /* CSS backgrounds, not <img>: crawlers/AI previews pick <img> as the page thumbnail */
-    }
-    <div
-      aria-hidden="true"
-      class="absolute bottom-1/2 left-0 z-[1] hidden aspect-[3/2] w-full bg-[url('/landing/product-bg.svg')] bg-cover lg:block">
-    </div>
-    <div
-      aria-hidden="true"
-      class="absolute top-1/2 z-[1] hidden aspect-[3/2] w-full rotate-180 bg-[url('/landing/product-bg.svg')] bg-cover lg:block">
-    </div>
   </div>
 
-  <div class="relative z-[3] mt-10 space-y-10 p-3">
-    <LandingFeatures />
-
-    <div class="xl:container xl:py-20">
+  <div class="py-20 md:py-32">
+    <LandingFeatures client:load />
+    <div class="mt-24 md:mt-36">
       <LandingArticles />
     </div>
   </div>
 
+  <LandingCloser />
+
   <JsonLd data={[websiteJsonLd(), organizationJsonLd()]} />
 </BaseLayout>
+
+<style is:global>
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .landing-reveal {
+        animation: landing-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 35%;
+      }
+      @keyframes landing-rise {
+        from {
+          opacity: 0;
+          transform: translateY(32px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    }
+  }
+</style>

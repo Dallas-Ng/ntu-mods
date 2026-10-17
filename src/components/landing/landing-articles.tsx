@@ -6,41 +6,36 @@ const LandingArticles = () => {
   if (!articles.length) return null
 
   return (
-    <section>
-      <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-        <div>
-          <h2 className="text-4xl font-bold">Articles</h2>
-          <p className="text-foreground/75">
-            Guides for planning modules, choosing BDEs, and building a better
-            NTU timetable.
-          </p>
-        </div>
-
+    <section className="mx-auto max-w-7xl px-4">
+      <div className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <h2 className="landing-reveal max-w-2xl text-4xl leading-none font-bold tracking-tighter md:text-6xl">
+          Guides for planning your semester
+        </h2>
         <a
           href="/articles"
-          className="text-primary text-sm font-medium underline-offset-4 hover:underline">
+          className="text-primary text-lg font-semibold underline-offset-4 hover:underline">
           View all articles
         </a>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-3">
         {articles.map((article) => (
           <a
             key={article.slug}
             href={`/articles/${article.slug}`}
-            className="group bg-card hover:bg-accent rounded-lg border transition-colors">
+            className="landing-reveal group bg-muted hover:bg-accent overflow-hidden rounded-xl transition-colors">
             {article.thumbnail && (
               <img
                 loading="lazy"
                 decoding="async"
                 src={article.thumbnail}
                 alt={article.thumbnailAlt}
-                className="aspect-video w-full rounded-t-lg border-b object-cover"
+                className="aspect-video w-full object-cover"
               />
             )}
 
-            <div className="p-4">
-              <p className="text-foreground/65 text-xs">
+            <div className="p-5">
+              <p className="text-foreground/75 text-sm">
                 {new Date(article.date).toLocaleDateString("en-SG", {
                   day: "numeric",
                   month: "short",
@@ -49,11 +44,11 @@ const LandingArticles = () => {
                 · {article.readingTime}
               </p>
 
-              <h3 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold transition-colors">
+              <h3 className="mt-2 line-clamp-2 text-xl font-semibold">
                 {article.title}
               </h3>
 
-              <p className="text-foreground/75 mt-2 line-clamp-3 text-sm leading-6">
+              <p className="text-foreground/75 mt-2 line-clamp-3">
                 {article.description}
               </p>
             </div>

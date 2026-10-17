@@ -9,8 +9,6 @@ import {
   type ChangelogRelease
 } from "@/config/changelog-data"
 import { cn } from "@/lib/utils"
-import Container from "@/components/container"
-import Header from "@/components/header"
 
 type ChangelogFilter = ChangelogCategory | "All"
 
@@ -69,45 +67,37 @@ const ChangelogFilters = ({
   </div>
 )
 
-const ChangelogTable = ({ items }: { items: ChangelogItem[] }) => (
-  <table className="data-table">
-    <thead>
-      <tr>
-        <th className="w-40">Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      {items.map((item, i) => (
-        <tr key={i}>
-          <td>
-            <CategoryBadge category={item.category} />
-          </td>
-          <td className="leading-6">{item.content}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-)
-
 const ChangelogReleaseSection = ({
   release
 }: {
   release: ChangelogRelease
 }) => (
-  <section className="border-border space-y-4 border-t pt-6 first:border-t-0 first:pt-0">
-    <div className="space-y-0.5">
-      <h2 className="text-xl font-semibold">{release.title}</h2>
-      <p className="text-muted-foreground text-sm">{release.date}</p>
-    </div>
+  <section className="bg-muted rounded-2xl p-5 md:p-6">
+    <p className="text-foreground/75 text-sm">{release.date}</p>
+    <h2 className="mt-1 text-2xl leading-tight font-bold tracking-tight">
+      {release.title}
+    </h2>
 
     {release.note && (
-      <p className="text-muted-foreground bg-primary/10 border-primary/20 rounded-lg border px-3 py-2 text-sm">
+      <p className="bg-background mt-4 rounded-lg px-3 py-2 text-sm">
         {release.note}
       </p>
     )}
 
-    <ChangelogTable items={release.items} />
+    <ul className="mt-4 space-y-3">
+      {release.items.map((item, i) => (
+        <li
+          key={i}
+          className="flex flex-col items-start gap-2 md:flex-row md:gap-4">
+          <span className="md:w-32 md:shrink-0 md:pt-0.5">
+            <CategoryBadge category={item.category} />
+          </span>
+          <span className="text-foreground/80 text-base leading-6 md:text-lg md:leading-7">
+            {item.content}
+          </span>
+        </li>
+      ))}
+    </ul>
   </section>
 )
 
@@ -123,12 +113,16 @@ const ChangelogContent = () => {
   })).filter((release) => release.items.length > 0)
 
   return (
-    <Container size="sm" className="space-y-8">
-      <div className="space-y-5">
-        <Header
-          title="Changelog"
-          subtitle="A simple record of recent NTU Mods updates, fixes, and new features."
-        />
+    <div className="mx-auto max-w-7xl px-4 pt-8 pb-12 md:pt-10 md:pb-20">
+      <div className="mb-8 max-w-3xl space-y-5 md:mb-10">
+        <div>
+          <h1 className="text-3xl leading-[1.05] font-bold tracking-tighter md:text-5xl">
+            Changelog
+          </h1>
+          <p className="mt-4 max-w-xl text-base md:text-lg">
+            A simple record of recent NTU Mods updates, fixes, and new features.
+          </p>
+        </div>
 
         <ChangelogFilters
           activeFilter={activeFilter}
@@ -136,12 +130,12 @@ const ChangelogContent = () => {
         />
       </div>
 
-      <div className="space-y-6">
+      <div className="max-w-4xl space-y-3">
         {filteredChangelog.map((release) => (
           <ChangelogReleaseSection key={release.title} release={release} />
         ))}
       </div>
-    </Container>
+    </div>
   )
 }
 

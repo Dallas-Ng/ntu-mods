@@ -62,6 +62,16 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
             and find features and guides faster.
           </>
         )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            The <ChangelogLink href="/faq">FAQ</ChangelogLink>,{" "}
+            <ChangelogLink href="/feedback">feedback</ChangelogLink> and
+            changelog pages now match the new home page design.
+          </>
+        )
       }
     ]
   },

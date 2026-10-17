@@ -109,13 +109,12 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                     setActive(i)
                   }}
                   className={`flex flex-col gap-4 rounded-xl p-4 transition-colors duration-150 md:px-6 md:py-5 lg:flex-row lg:items-center ${
-                    on ? "bg-primary text-primary-foreground" : "hover:bg-muted"
-                  }`}>
+                    on
+                      ? "lg:bg-primary lg:text-primary-foreground"
+                      : "lg:hover:bg-muted"
+                  } max-lg:active:bg-muted`}>
                   {c.art && (
-                    <span
-                      className={`flex h-40 items-center justify-center rounded-lg p-4 sm:h-48 lg:hidden ${
-                        on ? "bg-primary-foreground/10" : "bg-muted"
-                      }`}>
+                    <span className="bg-muted flex h-40 items-center justify-center rounded-lg p-4 sm:h-48 lg:hidden">
                       <img
                         src={c.art}
                         alt=""

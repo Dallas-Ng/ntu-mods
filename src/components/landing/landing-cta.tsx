@@ -11,15 +11,16 @@ const LandingCTA = ({ semesterLabel }: Props) => {
     <div className="relative w-full text-center xl:text-left">
       <a
         href="/articles/ntu-ay2026-semester-2-whats-new"
-        className="bg-primary/15 text-foreground hover:bg-primary/25 mb-6 inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-base font-semibold whitespace-nowrap transition-colors">
+        className="bg-primary/15 text-foreground hover:bg-primary/25 mb-6 inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors sm:text-base">
         <span
           className="size-2.5 rounded-full bg-green-500"
           aria-hidden="true"
         />
-        Now live: {semesterLabel} data
+        Now live: {semesterLabel}
+        <span className="hidden sm:inline"> data</span>
         <ChevronRight aria-hidden="true" className="-ml-1 size-4" />
       </a>
-      <h1 className="max-w-5xl text-5xl leading-[0.98] font-bold tracking-tighter md:text-6xl xl:text-7xl">
+      <h1 className="max-w-5xl text-4xl leading-[0.98] font-bold tracking-tighter min-[380px]:text-5xl md:text-6xl xl:text-7xl">
         Build your NTU timetable
       </h1>
 

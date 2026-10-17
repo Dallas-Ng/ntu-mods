@@ -59,7 +59,7 @@ const VARIATIONS: {
   {
     off: [{ days: [3, 5], hours: [8, 18], label: "Free" }],
     title: "Mon to Wed only",
-    body: "Keep Thursday and Friday clear.",
+    body: "Thu and Fri stay clear.",
     blocks: [
       [0, 9, 3, "LEC"],
       [0, 12, 2, "TUT"],
@@ -92,7 +92,7 @@ const VARIATIONS: {
   {
     off: [{ days: [0, 5], hours: [12, 14], label: "Lunch" }],
     title: "A proper lunch break",
-    body: "Keep 12 to 2 clear every day.",
+    body: "Keep 12 to 2 clear.",
     blocks: [
       [0, 9, 3, "LEC"],
       [0, 14, 2, "TUT"],
@@ -108,7 +108,7 @@ const VARIATIONS: {
   },
   {
     title: "Gym time",
-    body: "Block out your workouts first.",
+    body: "Workouts go in first.",
     blocks: [
       [0, 9, 2, "CUSTOM", "Arms"],
       [0, 11, 3, "LEC"],
@@ -128,8 +128,8 @@ const VARIATIONS: {
     ]
   },
   {
-    title: "A break between classes",
-    body: "Keep an hour free between classes.",
+    title: "Gaps between classes",
+    body: "At least an hour apart.",
     blocks: [
       [0, 9, 2, "LEC"],
       [0, 12, 2, "TUT"],
@@ -146,7 +146,7 @@ const VARIATIONS: {
   },
   {
     title: "Max 4 hours a day",
-    body: "Cap each day at 4 hours of class.",
+    body: "Cap each day at 4 hours.",
     blocks: [
       [0, 9, 2, "LEC"],
       [0, 11, 2, "TUT"],
@@ -161,7 +161,7 @@ const VARIATIONS: {
   {
     off: [{ days: [2, 3], hours: [15, 18], label: "CCA" }],
     title: "Protect CCA time",
-    body: "Block out slots and plan around them.",
+    body: "Plan around blocked slots.",
     blocks: [
       [0, 9, 3, "LEC"],
       [0, 13, 2, "TUT"],
@@ -178,7 +178,7 @@ const VARIATIONS: {
   {
     off: [{ days: [0, 5], hours: [16, 18], label: "Home by 4PM" }],
     title: "Home by 4PM",
-    body: "Set the latest time you finish.",
+    body: "Set your latest finish time.",
     blocks: [
       [0, 9, 3, "LEC"],
       [0, 13, 2, "TUT"],
@@ -263,17 +263,22 @@ const LandingShowcase = () => {
         </div>
       </div>
 
-      <div aria-hidden="true" className="bg-background rounded-2xl p-4 md:p-5">
-        <div className="mb-3 grid grid-cols-5 pl-12">
+      <div
+        aria-hidden="true"
+        className="bg-background rounded-2xl p-3 sm:p-4 md:p-5">
+        <div className="mb-3 grid grid-cols-5 sm:pl-12">
           {DAYS.map((d) => (
-            <p key={d} className="px-2 text-sm font-semibold">
-              {d}
+            <p
+              key={d}
+              className="text-center text-sm font-semibold sm:px-2 sm:text-left">
+              <span className="min-[360px]:hidden sm:hidden">{d[0]}</span>
+              <span className="hidden min-[360px]:inline">{d}</span>
             </p>
           ))}
         </div>
 
-        <div className="relative h-64 pl-12 md:h-72">
-          <div className="absolute inset-y-1 left-0 w-12">
+        <div className="relative h-64 sm:pl-12 md:h-72">
+          <div className="absolute inset-y-1 left-0 hidden w-12 sm:block">
             {HOUR_LABELS.map((h) => (
               <span
                 key={h}
@@ -301,8 +306,8 @@ const LandingShowcase = () => {
                             top: `calc(${pct(start)} + 2px)`,
                             height: `calc(${(len / HOURS) * 100}% - 4px)`
                           }}
-                          className={`animate-in fade-in absolute inset-x-0.5 overflow-hidden rounded-md px-2 py-1 text-sm leading-tight font-semibold duration-500 ${style.background} ${style.text}`}>
-                          <p>{name ?? type}</p>
+                          className={`animate-in fade-in absolute inset-x-0.5 overflow-hidden rounded-md px-0 py-1 text-center text-xs leading-tight font-semibold tracking-tight duration-500 min-[360px]:px-1 min-[360px]:text-sm min-[360px]:tracking-normal sm:px-2 sm:text-left ${style.background} ${style.text}`}>
+                          <p className="truncate">{name ?? type}</p>
                         </div>
                       )
                     })}
@@ -319,7 +324,7 @@ const LandingShowcase = () => {
                     top: pct(o.hours[0]),
                     height: `${span(o.hours)}%`
                   }}>
-                  <div className="bg-muted flex h-full items-center justify-center rounded-md px-3 text-center text-lg font-bold">
+                  <div className="bg-muted flex h-full items-center justify-center rounded-md px-3 text-center text-sm font-semibold md:text-base">
                     {o.label}
                   </div>
                 </div>

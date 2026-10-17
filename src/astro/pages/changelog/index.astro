@@ -17,8 +17,7 @@ const jsonLd = webPageJsonLd({
 <BaseLayout
   title={siteConfig.metatags.changelog.title}
   description={siteConfig.metatags.changelog.desc}
-  canonical="/changelog"
-  containerClassName="max-w-full p-0 lg:px-0">
+  canonical="/changelog">
   <JsonLd data={jsonLd} />
   <ChangelogContent client:load />
 </BaseLayout>

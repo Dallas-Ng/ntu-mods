@@ -1,7 +1,9 @@
 ---
 import { siteConfig } from "@/config/site"
 import { faqPageJsonLd } from "@/lib/json-ld"
-import ArticleToc from "@/components/articles/article-toc"
+import ArticleToc, {
+  MobileSectionDropdown
+} from "@/components/articles/article-toc"
 import FaqContent, { faqHeadings, faqItems } from "@/components/faq/faq-content"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -14,6 +16,11 @@ export const prerender = true
   description={siteConfig.metatags.faq.desc}
   canonical="/faq">
   <FaqContent>
+    <MobileSectionDropdown
+      client:idle
+      slot="mobileNav"
+      headings={faqHeadings}
+    />
     <ArticleToc client:idle headings={faqHeadings} />
   </FaqContent>
   <JsonLd data={faqPageJsonLd(faqItems)} />

@@ -87,12 +87,12 @@ function ArticleCard({
   return (
     <a
       href={`/articles/${article.slug}`}
-      className="group bg-card hover:bg-accent rounded-lg border transition-colors">
+      className="group bg-muted hover:bg-accent overflow-hidden rounded-2xl transition-colors">
       {article.thumbnail && (
         <img
           src={article.thumbnail}
           alt={article.thumbnailAlt}
-          className="aspect-video w-full rounded-t-md border-b object-cover"
+          className="aspect-video w-full object-cover"
         />
       )}
       <div className="p-4">
@@ -111,7 +111,7 @@ function ArticleCard({
           {showCategory && (
             <>
               <span aria-hidden="true">·</span>
-              <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5">
+              <span className="bg-background text-muted-foreground rounded px-1.5 py-0.5">
                 {article.category}
               </span>
             </>
@@ -266,7 +266,7 @@ export default function ArticlesList({
 
   if (articles.length === 0) {
     return (
-      <div className="bg-card text-foreground/80 rounded-md border p-4 text-sm wrap-break-word sm:p-6">
+      <div className="bg-muted text-foreground/80 rounded-2xl p-4 text-sm wrap-break-word sm:p-6">
         No articles published yet. Copy{" "}
         <code className="bg-muted rounded px-1 py-0.5">
           content/articles/_template.md
@@ -471,8 +471,8 @@ export default function ArticlesList({
           <div className="space-y-8">
             {groupedArticles.map(({ category, articles: groupArticles }) => (
               <section key={category}>
-                <h2 className="mb-4 text-lg font-semibold">{category}</h2>
-                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                <h2 className="mb-3 text-xl font-semibold">{category}</h2>
+                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                   {groupArticles.map((article) => (
                     <ArticleCard
                       key={article.slug}
@@ -486,7 +486,7 @@ export default function ArticlesList({
             ))}
           </div>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {filteredArticles.map((article) => (
               <ArticleCard
                 key={article.slug}
@@ -498,7 +498,7 @@ export default function ArticlesList({
           </div>
         )
       ) : (
-        <div className="bg-card text-foreground/80 rounded-md border p-4 text-sm wrap-break-word sm:p-6">
+        <div className="bg-muted text-foreground/80 rounded-2xl p-4 text-sm wrap-break-word sm:p-6">
           No articles match those filters.
         </div>
       )}

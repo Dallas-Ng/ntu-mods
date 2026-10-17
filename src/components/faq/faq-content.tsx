@@ -154,13 +154,18 @@ interface Props {
    * ArticleToc island here so this component can stay a zero-JS static
    * render (it has no interactivity of its own). */
   children?: React.ReactNode
+  /** Sticky section picker for screens without the side nav; passed as the
+   * `mobileNav` named slot for the same reason as `children`. */
+  mobileNav?: React.ReactNode
 }
 
-const FaqContent = ({ children }: Props) => {
+const FaqContent = ({ children, mobileNav }: Props) => {
   return (
     <Container size="md">
       <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
         <div className="space-y-8">
+          {mobileNav}
+
           <Header
             title="Frequently Asked Questions"
             subtitle="Answers for planning timetables, browsing modules, exporting schedules, and understanding how your data is stored."

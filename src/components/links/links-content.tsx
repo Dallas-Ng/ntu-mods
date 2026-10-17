@@ -3,6 +3,7 @@ import { Search } from "lucide-react"
 
 import type { ArticleHeading } from "@/lib/server/articles"
 import { Input } from "@/components/ui/input"
+import { MobileSectionDropdown } from "@/components/articles/article-toc"
 import Container from "@/components/container"
 import Header from "@/components/header"
 import LinkCard from "@/components/links/link-card"
@@ -237,6 +238,8 @@ const LinksContent = ({ children }: Props) => {
     <Container size="md">
       <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
         <div className="space-y-8">
+          <MobileSectionDropdown headings={linkHeadings} />
+
           <Header
             title="Student Links"
             subtitle="Quick links to the most-used NTU student portals, from course registration and grades to career, exchange, and campus facilities."

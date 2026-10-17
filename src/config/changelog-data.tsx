@@ -49,6 +49,23 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Privacy policy updated",
+    date: "17 Oct 2026",
+    items: [
+      {
+        category: "Content",
+        content: (
+          <>
+            The <ChangelogLink href="/privacy">privacy policy</ChangelogLink>{" "}
+            now matches how the site works today: feedback is emailed to us
+            rather than stored in a database, and the site is hosted on
+            Cloudflare.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Landing page redesign",
     date: "17 Oct 2026",
     items: [
@@ -67,9 +84,14 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         category: "Improvement",
         content: (
           <>
-            The <ChangelogLink href="/faq">FAQ</ChangelogLink>,{" "}
-            <ChangelogLink href="/feedback">feedback</ChangelogLink> and
-            changelog pages now match the new home page design.
+            Several other pages have been updated with the new design:{" "}
+            <ChangelogLink href="/faq">FAQ</ChangelogLink>,{" "}
+            <ChangelogLink href="/feedback">feedback</ChangelogLink>,{" "}
+            <ChangelogLink href="/changelog">changelog</ChangelogLink>,{" "}
+            <ChangelogLink href="/links">links</ChangelogLink>,{" "}
+            <ChangelogLink href="/sitemap">sitemap</ChangelogLink>,{" "}
+            <ChangelogLink href="/privacy">privacy</ChangelogLink> and{" "}
+            <ChangelogLink href="/articles">articles</ChangelogLink>.
           </>
         )
       }

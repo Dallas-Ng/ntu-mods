@@ -249,10 +249,10 @@ const LandingShowcase = () => {
               className={`col-start-1 row-start-1 transition-opacity duration-300 motion-reduce:transition-none ${
                 i === selected ? "opacity-100" : "pointer-events-none opacity-0"
               }`}>
-              <h2 className="text-2xl leading-tight font-bold tracking-tight md:text-3xl">
+              <h2 className="text-xl leading-tight font-bold tracking-tight md:text-2xl">
                 {x.title}
               </h2>
-              <p className="mt-2 max-w-md text-base md:text-lg">{x.body}</p>
+              <p className="mt-2 max-w-md text-sm md:text-base">{x.body}</p>
             </div>
           ))}
         </div>
@@ -319,7 +319,7 @@ const LandingShowcase = () => {
                     top: pct(o.hours[0]),
                     height: `${span(o.hours)}%`
                   }}>
-                  <div className="bg-primary/30 flex h-full items-center justify-center rounded-md px-3 text-center text-sm font-bold text-blue-800 md:text-base dark:text-blue-200">
+                  <div className="bg-primary/30 flex h-full items-center justify-center rounded-md px-3 text-center text-sm font-bold text-blue-800 md:text-sm dark:text-blue-200">
                     {o.label}
                   </div>
                 </div>

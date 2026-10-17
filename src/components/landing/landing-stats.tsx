@@ -49,7 +49,7 @@ const LandingStats = ({ semesterLabel, stats }: Props) => {
     <section
       aria-label={`${semesterLabel} data`}
       className="mx-auto max-w-7xl px-4">
-      <p className="mb-4 text-xl font-semibold">
+      <p className="mb-4 text-lg font-semibold">
         What is in{" "}
         {semesterLabel.replace(
           /^AY(\d{4})/,
@@ -62,13 +62,13 @@ const LandingStats = ({ semesterLabel, stats }: Props) => {
             key={t.label}
             href={t.href}
             className={`${TILE} ${t.tone} landing-reveal`}>
-            <p className="text-5xl leading-none font-bold tracking-tighter md:text-6xl">
+            <p className="text-4xl leading-none font-bold tracking-tighter md:text-5xl">
               {formatCount(t.value)}
             </p>
             <div className="flex items-end justify-between gap-3">
               <div>
-                <p className="text-xl font-semibold">{t.label}</p>
-                <p className="text-base">{t.note}</p>
+                <p className="text-lg font-semibold">{t.label}</p>
+                <p className="text-sm">{t.note}</p>
               </div>
               <ChevronRight
                 aria-hidden="true"

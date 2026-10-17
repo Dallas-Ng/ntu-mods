@@ -68,6 +68,15 @@ export function groupModules(modules: AllModule[], groupBy: ModsGroupBy) {
   return entries
 }
 
+/**
+ * Parses a multi-value filter param ("2,3", or "all"/empty for no filter).
+ * A single value like "2" still parses, so older links keep working.
+ */
+export function parseFilterList(value: string | undefined): string[] {
+  if (!value || value === "all") return []
+  return value.split(",").filter(Boolean)
+}
+
 export function filterModules(
   modules: AllModule[],
   opts: {
@@ -94,18 +103,21 @@ export function filterModules(
     filtered = filtered.filter((m) => opts.favouriteModules!.includes(m.code))
   }
 
-  if (opts.moduleType !== "all") {
+  const types = parseFilterList(opts.moduleType)
+  if (types.length > 0) {
     filtered = filtered.filter((m) =>
-      (m.categories ?? []).includes(opts.moduleType as ModuleType)
+      (m.categories ?? []).some((c) => types.includes(c))
     )
   }
 
-  if (opts.moduleFaculty !== "all") {
-    filtered = filtered.filter((m) => m.faculty === opts.moduleFaculty)
+  const faculties = parseFilterList(opts.moduleFaculty)
+  if (faculties.length > 0) {
+    filtered = filtered.filter((m) => faculties.includes(m.faculty ?? ""))
   }
 
-  if (opts.moduleLevel !== "all") {
-    filtered = filtered.filter((m) => m.code.slice(2, 3) === opts.moduleLevel)
+  const levels = parseFilterList(opts.moduleLevel)
+  if (levels.length > 0) {
+    filtered = filtered.filter((m) => levels.includes(m.code.slice(2, 3)))
   }
 
   if (opts.allowedDays && opts.allowedDays.length > 0 && opts.indexes) {

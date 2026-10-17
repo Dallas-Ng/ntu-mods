@@ -1,13 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import {
-  ChevronDown,
-  Heart,
-  LayoutGrid,
-  List,
-  SlidersHorizontal
-} from "lucide-react"
+import { ChevronDown, Heart, LayoutGrid, List } from "lucide-react"
 import posthog from "posthog-js"
 
 import type { AllModule } from "@/types/mods"
@@ -17,24 +11,22 @@ import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useFavourites } from "@/hooks/use-favourites"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
-import { useSearchParams } from "@/hooks/use-search-params"
+import { usePathname } from "@/hooks/use-pathname"
+import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
-import { ModsActiveFilters } from "@/components/mods/mods-active-filters"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
-import { ModsCurrentOnlyToggle } from "@/components/mods/mods-current-only-toggle"
-import { ModsDaySelect } from "@/components/mods/mods-day-select"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
-import { ModsFacultySelect } from "@/components/mods/mods-faculty-select"
 import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
-import { ModsFilterField } from "@/components/mods/mods-filter-field"
+import {
+  FILTER_KEYS,
+  ModsFilterChips,
+  type FacetKey
+} from "@/components/mods/mods-filter-chips"
 import { ModsGroupBySelect } from "@/components/mods/mods-group-by-select"
-import { ModsLevelSelect } from "@/components/mods/mods-module-level-select"
-import { ModsModuleTypeSelect } from "@/components/mods/mods-module-type-select"
 import ModsSearchInput from "@/components/mods/mods-search-input"
-import { ModsTimeRangeSelect } from "@/components/mods/mods-time-range-select"
 import {
   ModuleCardDetail,
   ModuleCardDetailLoading,
@@ -49,6 +41,7 @@ const LOADING_LIST_COUNT = 12
 
 const ModsPage = () => {
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const searchTerm = searchParams.get("searchTerm") ?? ""
   const moduleType = searchParams.get("moduleType") ?? "all"
   const moduleFaculty = searchParams.get("moduleFaculty") ?? "all"
@@ -72,7 +65,6 @@ const ModsPage = () => {
   )
   const [displayCount, setDisplayCount] = useState(PAGE_SIZE)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
-  const [filtersOpen, setFiltersOpen] = useState(false)
   const loaderRef = useRef<HTMLDivElement>(null)
 
   const allowedDays =
@@ -86,15 +78,22 @@ const ModsPage = () => {
     moduleTimeStart !== "all" ? parseInt(moduleTimeStart) : undefined
   const timeEnd = moduleTimeEnd !== "all" ? parseInt(moduleTimeEnd) : undefined
 
-  const activeFilterCount = [
-    moduleType !== "all",
-    moduleFaculty !== "all",
-    moduleLevel !== "all",
-    currentOnly === "false",
-    moduleDay !== "all",
-    moduleTimeStart !== "all",
+  const hasActiveFilters =
+    searchTerm !== "" ||
+    moduleType !== "all" ||
+    moduleFaculty !== "all" ||
+    moduleLevel !== "all" ||
+    currentOnly === "false" ||
+    moduleDay !== "all" ||
+    moduleTimeStart !== "all" ||
     moduleTimeEnd !== "all"
-  ].filter(Boolean).length
+
+  const clearAllFilters = () => {
+    const params = new URLSearchParams(searchParams.toString())
+    FILTER_KEYS.forEach((k) => params.delete(k))
+    pushSearchParams(pathname, params.toString())
+    posthog.capture("mods_filter_cleared", { filter_type: "all" })
+  }
 
   const setViewMode = useCallback(
     (mode: "cards" | "list") => {
@@ -104,23 +103,21 @@ const ModsPage = () => {
     [updateSettings]
   )
 
-  const filteredModules = useMemo(
-    () =>
-      filterModules(allModules, {
-        searchTerm,
-        moduleType,
-        moduleFaculty,
-        moduleLevel,
-        currentOnly: currentOnly === "true",
-        favouritesOnly: favouritesOnly === "true",
-        favouriteModules,
-        allowedDays,
-        timeStart,
-        timeEnd,
-        indexes
-      }),
+  const filterOpts = useMemo(
+    () => ({
+      searchTerm,
+      moduleType,
+      moduleFaculty,
+      moduleLevel,
+      currentOnly: currentOnly === "true",
+      favouritesOnly: favouritesOnly === "true",
+      favouriteModules,
+      allowedDays,
+      timeStart,
+      timeEnd,
+      indexes
+    }),
     [
-      allModules,
       searchTerm,
       moduleType,
       moduleFaculty,
@@ -134,6 +131,14 @@ const ModsPage = () => {
       indexes
     ]
   )
+
+  const filteredModules = useMemo(
+    () => filterModules(allModules, filterOpts),
+    [allModules, filterOpts]
+  )
+
+  const countOption = (key: FacetKey, value: string) =>
+    filterModules(allModules, { ...filterOpts, [key]: value }).length
 
   const displayedModules = useMemo(
     () => filteredModules.slice(0, displayCount),
@@ -205,71 +210,20 @@ const ModsPage = () => {
             />
             <span className="hidden sm:inline">Favourites</span>
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-9 shrink-0 gap-1.5 md:hidden"
-            aria-expanded={filtersOpen}
-            onClick={() => setFiltersOpen((o) => !o)}>
-            <SlidersHorizontal className="size-3.5" />
-            Filters
-            {activeFilterCount > 0 && (
-              <span className="bg-primary text-primary-foreground flex size-4 items-center justify-center rounded-full text-[10px] font-medium">
-                {activeFilterCount}
-              </span>
-            )}
-            <ChevronDown
-              className={cn(
-                "size-3.5 transition-transform",
-                filtersOpen && "rotate-180"
-              )}
-            />
-          </Button>
         </div>
 
-        <div
-          className={cn(
-            "gap-x-6 gap-y-4 rounded-lg border p-4 md:grid md:grid-cols-2",
-            filtersOpen ? "grid grid-cols-1" : "hidden"
-          )}>
-          <ModsFilterField label="Semester">
-            <ModsCurrentOnlyToggle paramsValue={currentOnly} />
-          </ModsFilterField>
-          <ModsFilterField label="Level">
-            <ModsLevelSelect paramValue={moduleLevel} />
-          </ModsFilterField>
-          <ModsFilterField label="Module type">
-            <ModsModuleTypeSelect paramsValue={moduleType} />
-          </ModsFilterField>
-          <ModsFilterField label="School">
-            <ModsFacultySelect paramsValue={moduleFaculty} />
-          </ModsFilterField>
-          <ModsFilterField
-            label="Class days"
-            hint="Only show modules with an index held on these days">
-            <ModsDaySelect paramsValue={moduleDay} />
-          </ModsFilterField>
-          <ModsFilterField
-            label="Class times"
-            hint="Only show modules with an index inside this window">
-            <ModsTimeRangeSelect
-              startParamsValue={moduleTimeStart}
-              endParamsValue={moduleTimeEnd}
-            />
-          </ModsFilterField>
-        </div>
+        <ModsFilterChips
+          moduleType={moduleType}
+          moduleFaculty={moduleFaculty}
+          moduleLevel={moduleLevel}
+          moduleDay={moduleDay}
+          moduleTimeStart={moduleTimeStart}
+          moduleTimeEnd={moduleTimeEnd}
+          currentOnly={currentOnly}
+          countOption={countOption}
+          onClearAll={hasActiveFilters ? clearAllFilters : undefined}
+        />
       </div>
-
-      <ModsActiveFilters
-        searchTerm={searchTerm}
-        moduleType={moduleType}
-        moduleLevel={moduleLevel}
-        moduleFaculty={moduleFaculty}
-        currentOnly={currentOnly}
-        moduleDay={moduleDay}
-        moduleTimeStart={moduleTimeStart}
-        moduleTimeEnd={moduleTimeEnd}
-      />
 
       {!isLoading && filteredModules.length === 0 && <ModsEmptyCard />}
 

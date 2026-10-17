@@ -174,7 +174,7 @@ const FaqContent = ({ children }: Props) => {
                 className="bg-muted scroll-mt-20 space-y-3 rounded-2xl p-5">
                 <h2 className="text-xl font-semibold">{question}</h2>
 
-                <p className="text-muted-foreground">{answer}</p>
+                <p className="text-muted-foreground text-sm">{answer}</p>
               </section>
             ))}
           </div>

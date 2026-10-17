@@ -90,7 +90,7 @@ const ChangelogReleaseSection = ({
           <span className="md:w-32 md:shrink-0 md:pt-0.5">
             <CategoryBadge category={item.category} />
           </span>
-          <span className="text-foreground/80 text-sm leading-6 md:text-base">
+          <span className="text-muted-foreground text-sm leading-6">
             {item.content}
           </span>
         </li>

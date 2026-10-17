@@ -8,7 +8,7 @@ const CORE_LINKS = [
   {
     label: "Home",
     href: "/",
-    description: "Overview of NTUMods — timetable, modules, exams, and guides"
+    description: "Overview of NTUMods, timetable, modules, exams, and guides"
   },
   {
     label: "Timetable",
@@ -43,7 +43,7 @@ const CORE_LINKS = [
     label: "Links",
     href: "/links",
     description:
-      "Quick access to top NTU student portals — STARS, NTULearn, CareerAxis, and more"
+      "Quick access to top NTU student portals, STARS, NTULearn, CareerAxis, and more"
   },
   {
     label: "FAQ",
@@ -126,8 +126,8 @@ const SitemapContent = async () => {
             <a
               key={link.href}
               href={link.href}
-              className="group hover:bg-muted rounded-lg border p-4 transition-colors">
-              <p className="text-foreground group-hover:text-primary text-sm font-medium transition-colors">
+              className="group bg-muted hover:bg-accent rounded-2xl p-4 transition-colors">
+              <p className="text-foreground group-hover:text-primary font-semibold transition-colors">
                 {link.label}
               </p>
               <p className="text-muted-foreground mt-0.5 text-sm">
@@ -145,8 +145,8 @@ const SitemapContent = async () => {
             <a
               key={link.href}
               href={link.href}
-              className="group hover:bg-muted rounded-lg border p-4 transition-colors">
-              <p className="text-foreground group-hover:text-primary text-sm font-medium transition-colors">
+              className="group bg-muted hover:bg-accent rounded-2xl p-4 transition-colors">
+              <p className="text-foreground group-hover:text-primary font-semibold transition-colors">
                 {link.label}
               </p>
               <p className="text-muted-foreground mt-0.5 text-sm">
@@ -165,11 +165,11 @@ const SitemapContent = async () => {
               <a
                 key={article.slug}
                 href={`/articles/${article.slug}`}
-                className="group hover:bg-muted rounded-lg border p-4 transition-colors">
+                className="group bg-muted hover:bg-accent rounded-2xl p-4 transition-colors">
                 <p className="text-muted-foreground mb-1 text-xs">
                   {article.category}
                 </p>
-                <p className="text-foreground group-hover:text-primary text-sm font-medium transition-colors">
+                <p className="text-foreground group-hover:text-primary font-semibold transition-colors">
                   {article.title}
                 </p>
                 <p className="text-muted-foreground mt-0.5 line-clamp-2 text-sm">
@@ -194,7 +194,7 @@ const SitemapContent = async () => {
             <a
               key={group.prefix}
               href={`#modules-${group.prefix.toLowerCase()}`}
-              className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-md border px-2 py-1 text-sm transition-colors">
+              className="bg-muted text-muted-foreground hover:bg-accent hover:text-foreground rounded-md px-2 py-1 text-sm transition-colors">
               {group.prefix}
             </a>
           ))}

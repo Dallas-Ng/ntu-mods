@@ -45,7 +45,7 @@ const LandingActivity = async () => {
         <div className="bg-muted rounded-2xl p-5 md:p-7">
           <p className="text-xl font-semibold">What we added most recently</p>
           <ol className="mt-5">
-            {CHANGELOG.slice(0, 6).map((release) => (
+            {CHANGELOG.slice(0, 4).map((release) => (
               <li key={release.id} className="landing-reveal flex gap-4">
                 <div className="flex flex-col items-center">
                   <span className="bg-primary mt-2 size-3 shrink-0 rounded-full" />

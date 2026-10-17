@@ -20,7 +20,7 @@ const jsonLd = webPageJsonLd({
   title={siteConfig.metatags.feedback.title}
   description={siteConfig.metatags.feedback.desc}
   canonical="/feedback"
-  size="md"
+  size="sm"
   containerClassName="space-y-8">
   <JsonLd data={jsonLd} />
   <Header
@@ -28,27 +28,24 @@ const jsonLd = webPageJsonLd({
     subtitle="Share your thoughts, report issues, or suggest improvements."
   />
 
-  <div class="grid gap-8 lg:grid-cols-2 lg:items-start">
-    <div class="text-muted-foreground space-y-2 text-sm leading-relaxed">
-      <p>
-        NTUMods is built and maintained by a single person. There is no team,
-        just one developer juggling updates, data refreshes, and new features
-        alongside everything else.
-      </p>
-      <p>
-        If something is broken, confusing, or could be better, I genuinely want
-        to hear about it. Feedback and improvement ideas go a long way in
-        keeping this project alive and useful.
-      </p>
-      <p>
-        <a
-          href="/faq"
-          class="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-          Read the FAQ first
-        </a>
-      </p>
-    </div>
-
-    <FeedbackCard client:idle />
+  <div class="text-muted-foreground space-y-2 text-sm leading-relaxed">
+    <p>
+      NTUMods is built and maintained by a single person. There is no team,
+      just one developer juggling updates, data refreshes, and new features
+      alongside everything else.
+    </p>
+    <p>
+      If something is broken, confusing, or could be better, I genuinely want to
+      hear about it. Feedback and improvement ideas go a long way in keeping
+      this project alive and useful. Check the{" "}
+      <a
+        href="/faq"
+        class="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+        FAQ
+      </a>{" "}
+      first in case your question is already answered.
+    </p>
   </div>
+
+  <FeedbackCard client:idle />
 </BaseLayout>

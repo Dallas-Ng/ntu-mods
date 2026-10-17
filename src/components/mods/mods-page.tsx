@@ -20,11 +20,17 @@ import Header from "@/components/header"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
+import { ModsFilterChips } from "@/components/mods/mods-filter-chips"
+import {
+  ModsFilterButton,
+  ModsFilterDrawer,
+  ModsFilterPills,
+  useFilterDrawer
+} from "@/components/mods/mods-filter-mobile"
 import {
   FILTER_KEYS,
-  ModsFilterChips,
   type FacetKey
-} from "@/components/mods/mods-filter-chips"
+} from "@/components/mods/mods-filter-shared"
 import { ModsGroupBySelect } from "@/components/mods/mods-group-by-select"
 import ModsSearchInput from "@/components/mods/mods-search-input"
 import {
@@ -140,6 +146,20 @@ const ModsPage = () => {
   const countOption = (key: FacetKey, value: string) =>
     filterModules(allModules, { ...filterOpts, [key]: value }).length
 
+  const filterDrawer = useFilterDrawer()
+  const filterProps = {
+    moduleType,
+    moduleFaculty,
+    moduleLevel,
+    moduleDay,
+    moduleTimeStart,
+    moduleTimeEnd,
+    currentOnly,
+    countOption,
+    resultCount: filteredModules.length,
+    onClearAll: hasActiveFilters ? clearAllFilters : undefined
+  }
+
   const displayedModules = useMemo(
     () => filteredModules.slice(0, displayCount),
     [filteredModules, displayCount]
@@ -210,20 +230,12 @@ const ModsPage = () => {
             />
             <span className="hidden sm:inline">Favourites</span>
           </Button>
+          <ModsFilterButton drawer={filterDrawer} {...filterProps} />
         </div>
 
-        <ModsFilterChips
-          moduleType={moduleType}
-          moduleFaculty={moduleFaculty}
-          moduleLevel={moduleLevel}
-          moduleDay={moduleDay}
-          moduleTimeStart={moduleTimeStart}
-          moduleTimeEnd={moduleTimeEnd}
-          currentOnly={currentOnly}
-          countOption={countOption}
-          resultCount={filteredModules.length}
-          onClearAll={hasActiveFilters ? clearAllFilters : undefined}
-        />
+        <ModsFilterChips {...filterProps} />
+        <ModsFilterPills drawer={filterDrawer} {...filterProps} />
+        <ModsFilterDrawer drawer={filterDrawer} {...filterProps} />
       </div>
 
       {!isLoading && filteredModules.length === 0 && <ModsEmptyCard />}

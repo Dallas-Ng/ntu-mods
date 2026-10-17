@@ -2,14 +2,7 @@ import { CHANGELOG } from "@/config/changelog-data"
 
 const CHANGES = CHANGELOG.reduce((sum, r) => sum + r.items.length, 0)
 
-// One entry per date and title, in case the changelog repeats a release
-const seen = new Set<string>()
-const RELEASES = CHANGELOG.filter((r) => {
-  const key = `${r.date}|${r.title}`
-  if (seen.has(key)) return false
-  seen.add(key)
-  return true
-})
+const RELEASES = CHANGELOG
 
 const YEAR_MS = 365 * 24 * 60 * 60 * 1000
 const LAST_12_MONTHS = RELEASES.filter(

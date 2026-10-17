@@ -14,8 +14,6 @@ const LandingDemo = () => {
   // Stops for good once the visitor uses the arrows
   const [stopped, setStopped] = useState(false)
   const [paused, setPaused] = useState(false)
-  // No autoplay for people who asked for less motion
-  const [reduced, setReduced] = useState(true)
   // Full cell detail needs room; phones get the compact cells
   const [roomy, setRoomy] = useState(true)
   const count = personas.length
@@ -32,10 +30,6 @@ const LandingDemo = () => {
     return () => {
       cancelled = true
     }
-  }, [])
-
-  useEffect(() => {
-    setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
   }, [])
 
   useEffect(() => {
@@ -62,7 +56,7 @@ const LandingDemo = () => {
     setStopped(true)
     step(by)
   }
-  const auto = !stopped && !reduced && count > 1
+  const auto = !stopped && count > 1
 
   return (
     <div

@@ -79,6 +79,11 @@ const stats = await getSemesterStats(year, semester)
     }
   }
   @media (prefers-reduced-motion: no-preference) {
+    .landing-ring {
+      animation: landing-ring var(--ring-ms) linear forwards;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       .landing-reveal {
         animation: landing-rise linear both;

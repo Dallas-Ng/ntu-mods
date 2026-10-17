@@ -1,12 +1,10 @@
 import { siteConfig } from "@/config/site"
 
 // The two tools students ask about most, as large tiles with their guide.
-const FEATURED = ["/tools/fgo-optimiser", "/tools/cgpa-planner"]
+const FEATURED: string[] = ["/tools/fgo-optimiser", "/tools/cgpa-planner"]
 
 const LandingTools = () => {
-  const tools = FEATURED.map((href) =>
-    siteConfig.tools.find((t) => t.href === href)
-  ).filter((t): t is (typeof siteConfig.tools)[number] => Boolean(t))
+  const tools = siteConfig.tools.filter((t) => FEATURED.includes(t.href))
 
   return (
     <section className="mx-auto max-w-7xl px-4">

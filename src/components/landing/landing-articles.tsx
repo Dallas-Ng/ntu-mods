@@ -1,5 +1,19 @@
-import { POPULAR_ARTICLE_SLUGS } from "@/config/popular-articles"
 import { getAllArticles, type Article } from "@/astro/lib/articles"
+
+// Article slugs ranked by human views, most read first. Source: PostHog
+// `article_viewed` events (bots excluded), last 90 days, queried 2026-10-17.
+// The landing page leads with the first one it finds; refresh the order by
+// re-running that query when the ranking drifts.
+const POPULAR_ARTICLE_SLUGS: string[] = [
+  "complete-ntu-bde-list",
+  "ntu-academic-calendar-ay2026",
+  "most-popular-bdes-at-ntu",
+  "ntu-student-portal-links",
+  "what-is-a-bde-at-ntu",
+  "easy-bde-at-ntu",
+  "how-to-bid-for-bde-at-ntu",
+  "ntu-stars-guide"
+]
 
 const fmt = (date: string) =>
   new Date(date).toLocaleDateString("en-SG", {
@@ -19,7 +33,7 @@ const LandingArticles = async () => {
   const all = await getAllArticles()
   // Most read first (PostHog ranking), anything unranked after, newest first
   const rank = (slug: string) => {
-    const i = (POPULAR_ARTICLE_SLUGS as readonly string[]).indexOf(slug)
+    const i = POPULAR_ARTICLE_SLUGS.indexOf(slug)
     return i === -1 ? POPULAR_ARTICLE_SLUGS.length : i
   }
   const [lead, ...rest] = [...all]

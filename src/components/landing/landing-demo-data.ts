@@ -97,7 +97,6 @@ export type DemoPersona = {
   label: string
   note: string
   timetable: TimetableWithIndex
-  types: string[]
   bdes: string[]
 }
 
@@ -180,12 +179,7 @@ export const getLandingDemoData = async (
           year,
           semester
         )
-        const types = [
-          ...new Set(
-            Object.values(timetable).flatMap((s) => s.map((i) => i.type))
-          )
-        ]
-        return { ...p, timetable, types, bdes }
+        return { ...p, timetable, bdes }
       })
     )
   )

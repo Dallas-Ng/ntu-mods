@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import { CUSTOM_BLOCK_STYLE } from "@/lib/custom-course-colors"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
@@ -206,12 +206,7 @@ const LandingShowcase = () => {
   // Once the visitor steers it themselves, stop cycling on their behalf
   const [stopped, setStopped] = useState(false)
 
-  // No autoplay for people who asked for less motion
-  const [reduced, setReduced] = useState(true)
-  useEffect(() => {
-    setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
-  }, [])
-  const auto = !stopped && !reduced
+  const auto = !stopped
 
   const go = (i: number) =>
     setSelected((i + VARIATIONS.length) % VARIATIONS.length)

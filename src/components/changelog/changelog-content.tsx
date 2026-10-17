@@ -74,7 +74,7 @@ const ChangelogReleaseSection = ({
 }) => (
   <section className="bg-muted rounded-2xl p-5 md:p-6">
     <p className="text-foreground/75 text-sm">{release.date}</p>
-    <h2 className="mt-1 text-2xl leading-tight font-bold tracking-tight">
+    <h2 className="mt-1 text-xl font-semibold">
       {release.title}
     </h2>
 
@@ -92,7 +92,7 @@ const ChangelogReleaseSection = ({
           <span className="md:w-32 md:shrink-0 md:pt-0.5">
             <CategoryBadge category={item.category} />
           </span>
-          <span className="text-foreground/80 text-base leading-6 md:text-lg md:leading-7">
+          <span className="text-foreground/80 text-sm leading-6 md:text-base">
             {item.content}
           </span>
         </li>
@@ -116,10 +116,10 @@ const ChangelogContent = () => {
     <div className="mx-auto max-w-3xl px-4 pb-12 md:pb-20">
       <div className="mb-8 space-y-5 md:mb-10">
         <div>
-          <h1 className="text-2xl leading-[1.05] font-bold tracking-tighter md:text-4xl">
+          <h1 className="text-3xl leading-[1] font-semibold">
             Changelog
           </h1>
-          <p className="mt-4 max-w-xl text-base md:text-lg">
+          <p className="text-muted-foreground mt-3">
             A simple record of recent NTU Mods updates, fixes, and new features.
           </p>
         </div>

@@ -48,6 +48,7 @@ export const ModsFilterChips = (props: ModsFilterProps) => {
       })}
 
       <FilterChip
+        wide
         label={f.days.length > 0 ? `Days: ${f.daySummary}` : "Days"}
         active={f.days.length > 0}>
         <DaysPicker
@@ -57,6 +58,7 @@ export const ModsFilterChips = (props: ModsFilterProps) => {
       </FilterChip>
 
       <FilterChip
+        wide
         label={f.timeSummary ? `Time: ${f.timeSummary}` : "Time"}
         active={Boolean(f.timeSummary)}>
         <TimePicker
@@ -97,10 +99,13 @@ export const ModsFilterChips = (props: ModsFilterProps) => {
 function FilterChip({
   label,
   active,
+  wide,
   children
 }: {
   label: string
   active: boolean
+  /** Days and time need room for seven buttons and two pickers. */
+  wide?: boolean
   children: React.ReactNode
 }) {
   return (
@@ -117,7 +122,15 @@ function FilterChip({
           <ChevronDown className="size-3 opacity-60" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" className="w-72 max-w-[90vw] p-2">
+      {/* Focus the popover itself rather than its first control, which would
+          show a focus ring as soon as it opens. Tab still moves inside. */}
+      <PopoverContent
+        align="start"
+        onOpenAutoFocus={(e) => {
+          e.preventDefault()
+          if (e.target instanceof HTMLElement) e.target.focus()
+        }}
+        className={cn("max-w-[90vw] p-2", wide ? "w-80" : "w-72")}>
         {children}
       </PopoverContent>
     </Popover>

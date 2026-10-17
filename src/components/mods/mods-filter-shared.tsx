@@ -296,6 +296,34 @@ export function ChipGroup({
   )
 }
 
+/** Title, one-line hint and an optional Clear link, shared by the popovers. */
+function PickerHeader({
+  title,
+  hint,
+  onClear
+}: {
+  title: string
+  hint: string
+  onClear?: () => void
+}) {
+  return (
+    <div className="space-y-0.5">
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="text-sm font-medium">{title}</span>
+        {onClear && (
+          <button
+            type="button"
+            className="text-muted-foreground hover:text-foreground cursor-pointer text-xs transition-colors"
+            onClick={onClear}>
+            Clear
+          </button>
+        )}
+      </div>
+      <p className="text-muted-foreground text-xs">{hint}</p>
+    </div>
+  )
+}
+
 export function DaysPicker({
   days,
   onChange
@@ -304,10 +332,12 @@ export function DaysPicker({
   onChange: (next: number[]) => void
 }) {
   return (
-    <>
-      <p className="text-muted-foreground px-1 pb-2 text-xs">
-        Only show modules with an index held on these days.
-      </p>
+    <div className="flex flex-col gap-3 p-1">
+      <PickerHeader
+        title="Class days"
+        hint="Only modules with classes on these days"
+        onClear={days.length > 0 ? () => onChange([]) : undefined}
+      />
       <ChipGroup
         layout="grid"
         value={days.map(String)}
@@ -316,22 +346,19 @@ export function DaysPicker({
           value: String(d),
           label: TRUN_DAY_MAP[d as keyof typeof TRUN_DAY_MAP]
         }))}
-        className="px-1"
+        className="[&_[data-slot=toggle-group-item]]:h-9 [&_[data-slot=toggle-group-item]]:text-[13px]"
       />
-      {days.length > 0 && <ClearLink onClick={() => onChange([])} />}
-    </>
+    </div>
   )
 }
 
 export function TimeSelect({
-  label,
   ariaLabel,
   value,
   onChange,
   className,
   triggerClassName
 }: {
-  label?: string
   ariaLabel: string
   value: string
   onChange: (v: string) => void
@@ -344,7 +371,6 @@ export function TimeSelect({
         "text-muted-foreground flex items-center gap-2",
         className
       )}>
-      {label && <span>{label}</span>}
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger
           size="sm"
@@ -365,6 +391,30 @@ export function TimeSelect({
   )
 }
 
+function TimeField({
+  label,
+  ariaLabel,
+  value,
+  onChange
+}: {
+  label: string
+  ariaLabel: string
+  value: string
+  onChange: (v: string) => void
+}) {
+  return (
+    <div className="flex min-w-0 flex-col gap-1.5">
+      <span className="text-muted-foreground text-xs">{label}</span>
+      <TimeSelect
+        ariaLabel={ariaLabel}
+        value={value}
+        onChange={onChange}
+        triggerClassName="data-[size=sm]:h-9"
+      />
+    </div>
+  )
+}
+
 export function TimePicker({
   from,
   to,
@@ -377,25 +427,26 @@ export function TimePicker({
   onClear?: () => void
 }) {
   return (
-    <>
-      <p className="text-muted-foreground px-1 pb-2 text-xs">
-        Only show modules whose classes all fit inside this window.
-      </p>
-      <div className="flex items-center gap-2 px-1 text-sm">
-        <TimeSelect
+    <div className="flex flex-col gap-3 p-1">
+      <PickerHeader
+        title="Class times"
+        hint="Only modules with classes inside this window"
+        onClear={onClear}
+      />
+      <div className="grid grid-cols-2 gap-3">
+        <TimeField
           label="From"
           ariaLabel="Earliest start time"
           value={from}
           onChange={(v) => onChange("moduleTimeStart", v)}
         />
-        <TimeSelect
-          label="to"
+        <TimeField
+          label="To"
           ariaLabel="Latest end time"
           value={to}
           onChange={(v) => onChange("moduleTimeEnd", v)}
         />
       </div>
-      {onClear && <ClearLink onClick={onClear} />}
-    </>
+    </div>
   )
 }

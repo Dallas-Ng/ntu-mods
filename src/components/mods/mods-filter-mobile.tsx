@@ -64,6 +64,9 @@ type FilterDrawer = ReturnType<typeof useFilterDrawer>
 
 const DRAWER_CLASS =
   "max-h-[90svh] data-[vaul-drawer-direction=bottom]:max-h-[90svh]"
+/** The School list is long, so cap it well below full height. */
+const SCHOOL_DRAWER_CLASS =
+  "max-h-[65svh] data-[vaul-drawer-direction=bottom]:max-h-[65svh]"
 
 /** Sits next to the search box. The only place active filters are counted. */
 export const ModsFilterButton = ({
@@ -216,7 +219,7 @@ function SchoolContent({
   const schools = parseFilterList(props.moduleFaculty)
 
   return (
-    <DrawerContent className={DRAWER_CLASS}>
+    <DrawerContent className={SCHOOL_DRAWER_CLASS}>
       <DrawerTitle className="sr-only">School</DrawerTitle>
       <DrawerDescription className="sr-only">
         Choose one or more schools.

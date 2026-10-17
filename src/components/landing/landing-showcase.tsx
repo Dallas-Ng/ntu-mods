@@ -4,6 +4,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { CUSTOM_BLOCK_STYLE } from "@/lib/custom-course-colors"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 
+import LandingCircleButton from "./landing-circle-button"
+
 // [day 0-4, start hour, hours long, index type, optional custom block name]
 type Block = [number, number, number, string, string?]
 
@@ -252,46 +254,26 @@ const LandingShowcase = () => {
             {selected + 1} / {VARIATIONS.length}
           </p>
           <div className="flex gap-2">
-            {[
-              { label: "Previous", step: -1, Icon: ChevronLeft },
-              { label: "Next", step: 1, Icon: ChevronRight }
-            ].map(({ label, step, Icon }) => (
-              <button
-                key={label}
-                type="button"
-                aria-label={`${label} constraint`}
-                onClick={() => choose(selected + step)}
-                className="bg-background hover:bg-accent relative flex size-9 items-center justify-center rounded-full transition-[background-color,transform] duration-150 active:scale-[0.94] motion-reduce:transition-none md:size-10">
-                <Icon aria-hidden="true" className="size-5" />
-                {/* A clock hand around the button: one full turn, then the
-                    next constraint. Restarts on every change, pauses on hover. */}
-                {step === 1 && auto && (
-                  <svg
-                    key={selected}
-                    aria-hidden="true"
-                    viewBox="0 0 40 40"
-                    className="text-primary pointer-events-none absolute inset-0 size-full -rotate-90">
-                    <circle
-                      cx="20"
-                      cy="20"
-                      r="19"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      pathLength={1}
-                      strokeDasharray={1}
-                      strokeDashoffset={1}
-                      style={{
-                        animation: `landing-ring ${CYCLE_MS}ms linear forwards`,
-                        animationPlayState: paused ? "paused" : "running"
-                      }}
-                      onAnimationEnd={() => go(selected + 1)}
-                    />
-                  </svg>
-                )}
-              </button>
-            ))}
+            <LandingCircleButton
+              label="Previous constraint"
+              Icon={ChevronLeft}
+              onClick={() => choose(selected - 1)}
+            />
+            <LandingCircleButton
+              label="Next constraint"
+              Icon={ChevronRight}
+              onClick={() => choose(selected + 1)}
+              ring={
+                auto
+                  ? {
+                      turnKey: selected,
+                      durationMs: CYCLE_MS,
+                      paused,
+                      onDone: () => go(selected + 1)
+                    }
+                  : undefined
+              }
+            />
           </div>
         </div>
       </div>

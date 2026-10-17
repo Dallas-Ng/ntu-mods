@@ -3,6 +3,7 @@ import { siteConfig } from "@/config/site"
 import { organizationJsonLd, websiteJsonLd } from "@/lib/json-ld"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import { getLatestSemester } from "@/lib/server/db/repo"
+import LandingActivity from "@/components/landing/landing-activity"
 import LandingArticles from "@/components/landing/landing-articles"
 import LandingCTA from "@/components/landing/landing-cta"
 import LandingDemo from "@/components/landing/landing-demo"
@@ -42,6 +43,9 @@ const stats = await getSemesterStats(year, semester)
     </div>
     <div class="mt-24 md:mt-36">
       <LandingArticles />
+    </div>
+    <div class="mt-24 md:mt-36">
+      <LandingActivity />
     </div>
   </div>
 

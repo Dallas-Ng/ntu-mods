@@ -67,7 +67,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
       localData: localData ? JSON.stringify(localData) : undefined
     }
 
-    // fetch only rejects on network failure — a 500 (bad Resend key, say)
+    // fetch only rejects on network failure, a 500 (bad Resend key, say)
     // still resolves, so the status has to be checked explicitly or
     // toast.promise reports success for a submission that never sent.
     const submitFeedback = async () => {
@@ -160,7 +160,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
                   <FormLabel>Include my timetable data</FormLabel>
                   <FormDescription>
                     Attaches your saved timetables and settings to help debug
-                    the issue. On by default — turn off to exclude it.
+                    the issue. On by default, turn off to exclude it.
                   </FormDescription>
                 </div>
                 <FormControl>

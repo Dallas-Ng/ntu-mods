@@ -14,7 +14,7 @@ const FAQ_CONFIG: FaqConfig[] = [
     id: "what-is-ntu-mods",
     question: "What is NTU Mods?",
     answer:
-      "NTU Mods is a timetable planner and module browser for Nanyang Technological University (NTU) students. It lets you browse modules, compare indexes, and plan your schedule — without needing to log into STARS."
+      "NTU Mods is a timetable planner and module browser for Nanyang Technological University (NTU) students. It lets you browse modules, compare indexes, and plan your schedule, without needing to log into STARS."
   },
   {
     id: "ntu-affiliation",
@@ -63,7 +63,7 @@ const FAQ_CONFIG: FaqConfig[] = [
     id: "what-is-an-index",
     question: "What is an index?",
     answer:
-      "An index is a specific class group for a module — it has a fixed set of timeslots and venues for lectures, tutorials, and labs. Different indexes cover the same course content but meet at different times. You pick one index per module when registering in STARS."
+      "An index is a specific class group for a module, it has a fixed set of timeslots and venues for lectures, tutorials, and labs. Different indexes cover the same course content but meet at different times. You pick one index per module when registering in STARS."
   },
   {
     id: "browse-modules",
@@ -77,18 +77,18 @@ const FAQ_CONFIG: FaqConfig[] = [
           mods
         </a>{" "}
         page to search and filter all NTU modules. Click on any module to see
-        its full details — description, academic units, prerequisites, exam
+        its full details, description, academic units, prerequisites, exam
         schedule, and all available indexes with their timeslots and venues.
       </>
     ),
     answerText:
-      "Use the mods page at /mods to search and filter all NTU modules. Click on any module to see its full details — description, academic units, prerequisites, exam schedule, and all available indexes with their timeslots and venues."
+      "Use the mods page at /mods to search and filter all NTU modules. Click on any module to see its full details, description, academic units, prerequisites, exam schedule, and all available indexes with their timeslots and venues."
   },
   {
     id: "export-timetable",
     question: "How do I export my timetable?",
     answer:
-      "There are two export options on the timetable page. You can download an .ics calendar file to import directly into Google Calendar, Apple Calendar, or Outlook. You can also save your timetable as an image — useful for sharing or setting as a wallpaper."
+      "There are two export options on the timetable page. You can download an .ics calendar file to import directly into Google Calendar, Apple Calendar, or Outlook. You can also save your timetable as an image, useful for sharing or setting as a wallpaper."
   },
   {
     id: "share-timetable",
@@ -100,21 +100,21 @@ const FAQ_CONFIG: FaqConfig[] = [
     id: "timetable-disappeared",
     question: "Why did my timetable disappear?",
     answer:
-      "Your timetable is saved in your browser's localStorage — it stays between visits on the same device and browser, but clears if you wipe your browser data, close an incognito window, or switch to a different device or browser. There is no account system, so nothing is synced to the cloud."
+      "Your timetable is saved in your browser's localStorage, it stays between visits on the same device and browser, but clears if you wipe your browser data, close an incognito window, or switch to a different device or browser. There is no account system, so nothing is synced to the cloud."
   },
   {
     id: "live-vacancies",
     question: "Can you show live vacancies for indexes?",
     answer:
-      "No — vacancy data is not publicly available from NTU's systems. Use NTU Mods to figure out which indexes fit your schedule, then check STARS for real-time availability when registration opens."
+      "No. Vacancy data is not publicly available from NTU's systems. Use NTU Mods to figure out which indexes fit your schedule, then check STARS for real-time availability when registration opens."
   },
   {
     id: "data-tracking",
     question: "Do you track my data?",
     answer: (
       <>
-        We use analytics tools — Google Analytics, Microsoft Clarity, and
-        PostHog — to collect page views, usage patterns, and session replays. No
+        We use analytics tools (Google Analytics, Microsoft Clarity, and
+        PostHog) to collect page views, usage patterns, and session replays. No
         personal data is collected. Everything you add to your timetable is
         stored only in your browser and never sent to our servers. See the{" "}
         <a
@@ -129,7 +129,7 @@ const FAQ_CONFIG: FaqConfig[] = [
       </>
     ),
     answerText:
-      "We use analytics tools — Google Analytics, Microsoft Clarity, and PostHog — to collect page views, usage patterns, and session replays. No personal data is collected. Everything you add to your timetable is stored only in your browser and never sent to our servers. The CGPA and FGO tools read your transcript PDF in your browser and never upload the file. By default, module codes, terms and grades (never your name or matric number) are also sent for analytics. Untick the share box before uploading to opt out."
+      "We use analytics tools (Google Analytics, Microsoft Clarity, and PostHog) to collect page views, usage patterns, and session replays. No personal data is collected. Everything you add to your timetable is stored only in your browser and never sent to our servers. The CGPA and FGO tools read your transcript PDF in your browser and never upload the file. By default, module codes, terms and grades (never your name or matric number) are also sent for analytics. Untick the share box before uploading to opt out."
   }
 ]
 
@@ -148,7 +148,7 @@ export const faqItems = FAQ_CONFIG.map(({ question, answer, answerText }) => ({
 }))
 
 interface Props {
-  /** Rendered as the second grid column — the .astro page passes its own
+  /** Rendered as the second grid column ; the .astro page passes its own
    * ArticleToc island here so this component can stay a zero-JS static
    * render (it has no interactivity of its own). */
   children?: React.ReactNode
@@ -158,10 +158,10 @@ const FaqContent = ({ children }: Props) => {
   return (
     <div className="mx-auto max-w-7xl px-4 pt-8 pb-12 md:pt-10 md:pb-20">
       <div className="mb-10 max-w-3xl md:mb-14">
-        <h1 className="text-4xl leading-[0.98] font-bold tracking-tighter min-[380px]:text-5xl md:text-6xl">
+        <h1 className="text-3xl leading-[1.05] font-bold tracking-tighter md:text-5xl">
           Frequently asked questions
         </h1>
-        <p className="mt-6 max-w-xl text-lg md:text-xl">
+        <p className="mt-4 max-w-xl text-base md:text-lg">
           Answers for planning timetables, browsing modules, exporting
           schedules, and understanding how your data is stored.
         </p>

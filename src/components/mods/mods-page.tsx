@@ -1,13 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import {
-  ChevronDown,
-  Heart,
-  LayoutGrid,
-  List,
-  SlidersHorizontal
-} from "lucide-react"
+import { ChevronDown, Heart, LayoutGrid, List } from "lucide-react"
 import posthog from "posthog-js"
 
 import type { AllModule } from "@/types/mods"
@@ -17,23 +11,28 @@ import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useFavourites } from "@/hooks/use-favourites"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
-import { useSearchParams } from "@/hooks/use-search-params"
+import { usePathname } from "@/hooks/use-pathname"
+import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
-import { ModsActiveFilters } from "@/components/mods/mods-active-filters"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
-import { ModsCurrentOnlyToggle } from "@/components/mods/mods-current-only-toggle"
-import { ModsDaySelect } from "@/components/mods/mods-day-select"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
-import { ModsFacultySelect } from "@/components/mods/mods-faculty-select"
 import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
+import { ModsFilterChips } from "@/components/mods/mods-filter-chips"
+import {
+  ModsFilterButton,
+  ModsFilterDrawer,
+  ModsFilterPills,
+  useFilterDrawer
+} from "@/components/mods/mods-filter-mobile"
+import {
+  FILTER_KEYS,
+  type FacetKey
+} from "@/components/mods/mods-filter-shared"
 import { ModsGroupBySelect } from "@/components/mods/mods-group-by-select"
-import { ModsLevelSelect } from "@/components/mods/mods-module-level-select"
-import { ModsModuleTypeSelect } from "@/components/mods/mods-module-type-select"
 import ModsSearchInput from "@/components/mods/mods-search-input"
-import { ModsTimeRangeSelect } from "@/components/mods/mods-time-range-select"
 import {
   ModuleCardDetail,
   ModuleCardDetailLoading,
@@ -48,6 +47,7 @@ const LOADING_LIST_COUNT = 12
 
 const ModsPage = () => {
   const searchParams = useSearchParams()
+  const pathname = usePathname()
   const searchTerm = searchParams.get("searchTerm") ?? ""
   const moduleType = searchParams.get("moduleType") ?? "all"
   const moduleFaculty = searchParams.get("moduleFaculty") ?? "all"
@@ -71,7 +71,6 @@ const ModsPage = () => {
   )
   const [displayCount, setDisplayCount] = useState(PAGE_SIZE)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
-  const [filtersOpen, setFiltersOpen] = useState(true)
   const loaderRef = useRef<HTMLDivElement>(null)
 
   const allowedDays =
@@ -85,15 +84,22 @@ const ModsPage = () => {
     moduleTimeStart !== "all" ? parseInt(moduleTimeStart) : undefined
   const timeEnd = moduleTimeEnd !== "all" ? parseInt(moduleTimeEnd) : undefined
 
-  const activeFilterCount = [
-    moduleType !== "all",
-    moduleFaculty !== "all",
-    moduleLevel !== "all",
-    currentOnly === "false",
-    moduleDay !== "all",
-    moduleTimeStart !== "all",
+  const hasActiveFilters =
+    searchTerm !== "" ||
+    moduleType !== "all" ||
+    moduleFaculty !== "all" ||
+    moduleLevel !== "all" ||
+    currentOnly === "false" ||
+    moduleDay !== "all" ||
+    moduleTimeStart !== "all" ||
     moduleTimeEnd !== "all"
-  ].filter(Boolean).length
+
+  const clearAllFilters = () => {
+    const params = new URLSearchParams(searchParams.toString())
+    FILTER_KEYS.forEach((k) => params.delete(k))
+    pushSearchParams(pathname, params.toString())
+    posthog.capture("mods_filter_cleared", { filter_type: "all" })
+  }
 
   const setViewMode = useCallback(
     (mode: "cards" | "list") => {
@@ -103,23 +109,21 @@ const ModsPage = () => {
     [updateSettings]
   )
 
-  const filteredModules = useMemo(
-    () =>
-      filterModules(allModules, {
-        searchTerm,
-        moduleType,
-        moduleFaculty,
-        moduleLevel,
-        currentOnly: currentOnly === "true",
-        favouritesOnly: favouritesOnly === "true",
-        favouriteModules,
-        allowedDays,
-        timeStart,
-        timeEnd,
-        indexes
-      }),
+  const filterOpts = useMemo(
+    () => ({
+      searchTerm,
+      moduleType,
+      moduleFaculty,
+      moduleLevel,
+      currentOnly: currentOnly === "true",
+      favouritesOnly: favouritesOnly === "true",
+      favouriteModules,
+      allowedDays,
+      timeStart,
+      timeEnd,
+      indexes
+    }),
     [
-      allModules,
       searchTerm,
       moduleType,
       moduleFaculty,
@@ -133,6 +137,28 @@ const ModsPage = () => {
       indexes
     ]
   )
+
+  const filteredModules = useMemo(
+    () => filterModules(allModules, filterOpts),
+    [allModules, filterOpts]
+  )
+
+  const countOption = (key: FacetKey, value: string) =>
+    filterModules(allModules, { ...filterOpts, [key]: value }).length
+
+  const filterDrawer = useFilterDrawer()
+  const filterProps = {
+    moduleType,
+    moduleFaculty,
+    moduleLevel,
+    moduleDay,
+    moduleTimeStart,
+    moduleTimeEnd,
+    currentOnly,
+    countOption,
+    resultCount: filteredModules.length,
+    onClearAll: hasActiveFilters ? clearAllFilters : undefined
+  }
 
   const displayedModules = useMemo(
     () => filteredModules.slice(0, displayCount),
@@ -204,67 +230,24 @@ const ModsPage = () => {
             />
             <span className="hidden sm:inline">Favourites</span>
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-9 shrink-0 gap-1.5"
-            onClick={() => setFiltersOpen((o) => !o)}>
-            <SlidersHorizontal className="size-3.5" />
-            Filters
-            {activeFilterCount > 0 && (
-              <span className="bg-primary text-primary-foreground flex size-4 items-center justify-center rounded-full text-[10px] font-medium">
-                {activeFilterCount}
-              </span>
-            )}
-            <ChevronDown
-              className={cn(
-                "size-3.5 transition-transform",
-                filtersOpen && "rotate-180"
-              )}
-            />
-          </Button>
+          <ModsFilterButton drawer={filterDrawer} {...filterProps} />
         </div>
 
-        {filtersOpen && (
-          <div className="flex flex-col gap-2">
-            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-4">
-              <ModsModuleTypeSelect paramsValue={moduleType} />
-              <ModsFacultySelect paramsValue={moduleFaculty} />
-              <ModsLevelSelect
-                searchTerm={searchTerm}
-                paramValue={moduleLevel}
-              />
-              <ModsCurrentOnlyToggle paramsValue={currentOnly} />
-            </div>
-            <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-              <ModsDaySelect paramsValue={moduleDay} />
-              <ModsTimeRangeSelect
-                startParamsValue={moduleTimeStart}
-                endParamsValue={moduleTimeEnd}
-              />
-            </div>
-          </div>
-        )}
+        <ModsFilterChips {...filterProps} />
+        <ModsFilterPills drawer={filterDrawer} {...filterProps} />
+        <ModsFilterDrawer drawer={filterDrawer} {...filterProps} />
       </div>
-
-      <ModsActiveFilters
-        searchTerm={searchTerm}
-        moduleType={moduleType}
-        moduleLevel={moduleLevel}
-        moduleFaculty={moduleFaculty}
-        currentOnly={currentOnly}
-        moduleDay={moduleDay}
-        moduleTimeStart={moduleTimeStart}
-        moduleTimeEnd={moduleTimeEnd}
-      />
-
-      <hr className="py-2" />
 
       {!isLoading && filteredModules.length === 0 && <ModsEmptyCard />}
 
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1 pb-2 sm:flex sm:justify-between">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1 pt-1 pb-1 sm:flex sm:justify-between">
         <div className="min-w-0 sm:flex sm:items-center sm:gap-3">
-          <ModsGroupBySelect />
+          <div className="flex items-center gap-2">
+            <span className="text-muted-foreground text-sm whitespace-nowrap">
+              Group by
+            </span>
+            <ModsGroupBySelect />
+          </div>
 
           {!isLoading && filteredModules.length > 0 && (
             <p className="text-muted-foreground hidden text-sm whitespace-nowrap sm:block">
@@ -294,8 +277,6 @@ const ModsPage = () => {
           </p>
         )}
       </div>
-
-      <hr className="mt-4" />
 
       <ModuleResults
         isLoading={isLoading}

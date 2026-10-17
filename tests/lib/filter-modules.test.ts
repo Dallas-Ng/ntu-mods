@@ -5,7 +5,8 @@ import {
   filterModules,
   getGroupKey,
   getGroupLabel,
-  groupModules
+  groupModules,
+  parseFilterList
 } from "@/lib/filter-modules"
 
 const mod = (overrides: Partial<AllModule> = {}): AllModule => ({
@@ -65,6 +66,16 @@ describe("groupModules", () => {
   })
 })
 
+describe("parseFilterList", () => {
+  it("treats all/empty as no filter and splits lists", () => {
+    expect(parseFilterList("all")).toEqual([])
+    expect(parseFilterList("")).toEqual([])
+    expect(parseFilterList(undefined)).toEqual([])
+    expect(parseFilterList("2")).toEqual(["2"])
+    expect(parseFilterList("2,3")).toEqual(["2", "3"])
+  })
+})
+
 describe("filterModules", () => {
   it("filters to current-semester modules only", () => {
     const modules = [
@@ -106,6 +117,19 @@ describe("filterModules", () => {
         moduleLevel: "2"
       }).map((m) => m.code)
     ).toEqual(["CZ2001", "EE2001"])
+  })
+
+  it("accepts several comma-separated values per filter", () => {
+    const modules = [
+      mod({ code: "CZ2001", categories: ["CORE"], faculty: "CSC" }),
+      mod({ code: "EE3001", categories: ["GERP"], faculty: "EEE" }),
+      mod({ code: "ME4001", categories: ["GLOAD"], faculty: "ME" })
+    ]
+    const codes = (o: Partial<typeof baseOpts>) =>
+      filterModules(modules, { ...baseOpts, ...o }).map((m) => m.code)
+    expect(codes({ moduleLevel: "2,3" })).toEqual(["CZ2001", "EE3001"])
+    expect(codes({ moduleType: "CORE,GLOAD" })).toEqual(["CZ2001", "ME4001"])
+    expect(codes({ moduleFaculty: "EEE,ME" })).toEqual(["EE3001", "ME4001"])
   })
 
   it("ranks code matches before title matches for a course-code-shaped query", () => {

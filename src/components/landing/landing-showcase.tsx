@@ -202,7 +202,6 @@ const CYCLE_MS = 5000
 // colours the timetable uses. The ruled-out time is marked and named.
 const LandingShowcase = () => {
   const [selected, setSelected] = useState(0)
-  const [paused, setPaused] = useState(false)
   // Once the visitor steers it themselves, stop cycling on their behalf
   const [stopped, setStopped] = useState(false)
 
@@ -219,10 +218,7 @@ const LandingShowcase = () => {
   const span = (h: [number, number]) => ((h[1] - h[0]) / HOURS) * 100
 
   return (
-    <section
-      className="bg-muted rounded-3xl p-5 md:p-6"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}>
+    <section className="bg-muted rounded-3xl p-5 md:p-6">
       <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div className="md:order-last md:pt-1">
           <LandingCarouselControls
@@ -237,7 +233,6 @@ const LandingShowcase = () => {
                 ? {
                     turnKey: selected,
                     durationMs: CYCLE_MS,
-                    paused,
                     onDone: () => go(selected + 1)
                   }
                 : undefined

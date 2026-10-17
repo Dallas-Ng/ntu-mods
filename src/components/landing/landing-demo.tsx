@@ -7,13 +7,12 @@ import type { DemoPersona } from "./landing-demo-data"
 const CYCLE_MS = 7000
 
 // Real timetables for kinds of student. A ring around the next button counts
-// down to the next one, pausing on hover, until the visitor takes over.
+// down to the next one until the visitor clicks an arrow.
 const LandingDemo = () => {
   const [personas, setPersonas] = useState<DemoPersona[]>([])
   const [selected, setSelected] = useState(0)
   // Stops for good once the visitor uses the arrows
   const [stopped, setStopped] = useState(false)
-  const [paused, setPaused] = useState(false)
   // Full cell detail needs room; phones get the compact cells
   const [roomy, setRoomy] = useState(true)
   const count = personas.length
@@ -59,10 +58,7 @@ const LandingDemo = () => {
   const auto = !stopped && count > 1
 
   return (
-    <div
-      className="bg-muted rounded-3xl p-5 md:p-6"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}>
+    <div className="bg-muted rounded-3xl p-5 md:p-6">
       <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div className="md:order-last md:pt-1">
           <LandingCarouselControls
@@ -77,7 +73,6 @@ const LandingDemo = () => {
                 ? {
                     turnKey: current.id,
                     durationMs: CYCLE_MS,
-                    paused,
                     onDone: () => step(1)
                   }
                 : undefined

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 import { TimetableTable } from "../timetable-table/table"
 import type { DemoPersona } from "./landing-demo-data"
@@ -61,13 +62,17 @@ const LandingDemo = ({ personas }: { personas: DemoPersona[] }) => {
         <div className="flex shrink-0 gap-2">
           <button
             type="button"
-            className={button}
+            className={`${button} inline-flex items-center justify-center`}
             onClick={() => go(-1)}
             aria-label="Previous student">
-            ←
+            <ChevronLeft aria-hidden="true" className="size-5" />
           </button>
-          <button type="button" className={button} onClick={() => go(1)}>
-            Next student →
+          <button
+            type="button"
+            className={`${button} inline-flex items-center gap-1`}
+            onClick={() => go(1)}>
+            Next student
+            <ChevronRight aria-hidden="true" className="size-5" />
           </button>
         </div>
       </div>

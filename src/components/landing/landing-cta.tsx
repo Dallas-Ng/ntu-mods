@@ -1,3 +1,5 @@
+import { ChevronRight } from "lucide-react"
+
 import { Button } from "../ui/button"
 
 interface Props {
@@ -14,7 +16,8 @@ const LandingCTA = ({ semesterLabel }: Props) => {
           className="size-2.5 rounded-full bg-green-500"
           aria-hidden="true"
         />
-        Now live: {semesterLabel} data →
+        Now live: {semesterLabel} data
+        <ChevronRight aria-hidden="true" className="-ml-1 size-4" />
       </a>
       <h1 className="max-w-5xl text-5xl leading-[0.98] font-bold tracking-tighter md:text-6xl xl:text-7xl">
         Build your NTU timetable

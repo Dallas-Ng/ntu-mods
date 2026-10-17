@@ -1,3 +1,5 @@
+import { ChevronRight } from "lucide-react"
+
 import { formatCount } from "@/lib/format"
 
 import type { SemesterStats } from "./landing-stats-data"
@@ -68,11 +70,10 @@ const LandingStats = ({ semesterLabel, stats }: Props) => {
                 <p className="text-xl font-semibold">{t.label}</p>
                 <p className="text-base">{t.note}</p>
               </div>
-              <span
+              <ChevronRight
                 aria-hidden="true"
-                className="pb-0.5 text-xl transition-transform duration-150 group-hover:translate-x-1 motion-reduce:transition-none">
-                →
-              </span>
+                className="size-6 shrink-0 transition-transform duration-150 group-hover:translate-x-1 motion-reduce:transition-none"
+              />
             </div>
           </a>
         ))}

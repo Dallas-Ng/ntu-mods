@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 
@@ -113,16 +114,23 @@ const CYCLE_MS = 5000
 const LandingShowcase = () => {
   const [selected, setSelected] = useState(0)
   const [paused, setPaused] = useState(false)
+  // Once the visitor steers it themselves, stop cycling on their behalf
+  const [stopped, setStopped] = useState(false)
 
   useEffect(() => {
-    if (paused) return
+    if (paused || stopped) return
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
     const id = window.setInterval(
       () => setSelected((i) => (i + 1) % VARIATIONS.length),
       CYCLE_MS
     )
     return () => window.clearInterval(id)
-  }, [paused])
+  }, [paused, stopped])
+
+  const choose = (i: number) => {
+    setStopped(true)
+    setSelected((i + VARIATIONS.length) % VARIATIONS.length)
+  }
 
   const v = VARIATIONS[selected]
   const span = (h: [number, number]) => ((h[1] - h[0]) / HOURS) * 100
@@ -150,22 +158,39 @@ const LandingShowcase = () => {
             </div>
           ))}
         </div>
-        <div className="flex shrink-0 gap-1 pt-3">
-          {VARIATIONS.map((x, i) => (
-            <button
-              key={x.title}
-              type="button"
-              aria-label={x.title}
-              aria-pressed={i === selected}
-              onClick={() => setSelected(i)}
-              className="flex h-6 items-center px-0.5">
-              <span
-                className={`block h-2.5 rounded-full transition-[width,background-color] duration-300 ${
-                  i === selected ? "bg-primary w-6" : "bg-foreground/25 w-2.5"
-                }`}
-              />
-            </button>
-          ))}
+        <div className="flex shrink-0 items-center gap-3 pt-1">
+          <div className="hidden gap-1 sm:flex">
+            {VARIATIONS.map((x, i) => (
+              <button
+                key={x.title}
+                type="button"
+                aria-label={x.title}
+                aria-pressed={i === selected}
+                onClick={() => choose(i)}
+                className="flex h-6 items-center px-0.5">
+                <span
+                  className={`block h-2.5 rounded-full transition-[width,background-color] duration-300 ${
+                    i === selected ? "bg-primary w-6" : "bg-foreground/25 w-2.5"
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            {[
+              { label: "Previous", step: -1, Icon: ChevronLeft },
+              { label: "Next", step: 1, Icon: ChevronRight }
+            ].map(({ label, step, Icon }) => (
+              <button
+                key={label}
+                type="button"
+                aria-label={`${label} constraint`}
+                onClick={() => choose(selected + step)}
+                className="bg-background hover:bg-accent flex size-10 items-center justify-center rounded-full transition-[background-color,transform] duration-150 active:scale-[0.94] motion-reduce:transition-none">
+                <Icon aria-hidden="true" className="size-5" />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

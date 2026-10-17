@@ -4,7 +4,6 @@ type Ring = {
   // Changing this restarts the turn (use the item currently shown)
   turnKey: string | number
   durationMs: number
-  paused: boolean
   onDone: () => void
 }
 
@@ -58,8 +57,7 @@ const CircleButton = ({
           strokeDashoffset={1}
           style={
             {
-              "--ring-ms": `${ring.durationMs}ms`,
-              animationPlayState: ring.paused ? "paused" : "running"
+              "--ring-ms": `${ring.durationMs}ms`
             } as React.CSSProperties
           }
           onAnimationEnd={ring.onDone}

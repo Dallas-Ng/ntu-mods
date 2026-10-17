@@ -49,6 +49,23 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Landing page redesign",
+    date: "17 Oct 2026",
+    items: [
+      {
+        category: "Improvement",
+        content: (
+          <>
+            A new design for the{" "}
+            <ChangelogLink href="/">home page</ChangelogLink>! See example
+            timetables for different courses, check this semester at a glance
+            and find features and guides faster.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "AY 2026 Semester 2 now available",
     date: "15 Oct 2026",
     items: [

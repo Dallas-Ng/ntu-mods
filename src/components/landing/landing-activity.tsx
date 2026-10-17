@@ -4,15 +4,21 @@ const CHANGES = CHANGELOG.reduce((sum, r) => sum + r.items.length, 0)
 
 // One entry per date and title, in case the changelog repeats a release
 const seen = new Set<string>()
-const RECENT = CHANGELOG.filter((r) => {
+const RELEASES = CHANGELOG.filter((r) => {
   const key = `${r.date}|${r.title}`
   if (seen.has(key)) return false
   seen.add(key)
   return true
-}).slice(0, 3)
+})
 
-// Proof the site is looked after, in plain words: how much has been added and
-// what changed most recently. The heading already says when it started.
+const YEAR_MS = 365 * 24 * 60 * 60 * 1000
+const LAST_12_MONTHS = RELEASES.filter(
+  (r) => Date.now() - new Date(r.date).getTime() < YEAR_MS
+).length
+
+const RECENT = RELEASES.slice(0, 4)
+
+// Proof the site is looked after: how often it changes, and the latest changes.
 const LandingActivity = () => (
   <section className="mx-auto max-w-7xl px-4">
     <h2 className="landing-reveal max-w-3xl text-4xl leading-none font-bold tracking-tighter md:text-5xl">
@@ -23,42 +29,50 @@ const LandingActivity = () => (
       added over time.
     </p>
 
-    <div className="mt-10 grid gap-3 xl:grid-cols-[5fr_7fr]">
-      <div className="bg-muted landing-reveal flex flex-col justify-between gap-6 rounded-2xl p-6 md:p-7">
-        <p className="text-6xl leading-none font-bold tracking-tighter md:text-7xl">
-          {CHANGES}
-        </p>
-        <p className="text-xl font-semibold">New features and fixes so far</p>
+    <div className="mt-8 grid gap-3 xl:grid-cols-[4fr_8fr]">
+      <div className="grid grid-cols-2 gap-3 xl:grid-cols-1">
+        {[
+          { value: LAST_12_MONTHS, label: "Updates in the last 12 months" },
+          { value: CHANGES, label: "New features and fixes since launch" }
+        ].map((s) => (
+          <div
+            key={s.label}
+            className="bg-muted landing-reveal flex flex-col justify-between gap-4 rounded-2xl p-5 xl:flex-1">
+            <p className="text-4xl leading-none font-bold tracking-tighter md:text-5xl">
+              {s.value}
+            </p>
+            <p className="text-base font-semibold md:text-lg">{s.label}</p>
+          </div>
+        ))}
       </div>
 
-      <div className="bg-muted rounded-2xl p-5 md:p-7">
-        <p className="text-xl font-semibold">What we added most recently</p>
-        <ol className="mt-5">
-          {RECENT.map((release) => {
-            const kinds = [...new Set(release.items.map((i) => i.category))]
+      <div className="bg-muted rounded-2xl p-3 md:p-4">
+        <ol>
+          {RECENT.map((release, i) => {
+            const kinds = [...new Set(release.items.map((it) => it.category))]
             return (
+              // Phones show three updates, wider screens four
               <li
                 key={`${release.date}|${release.title}`}
-                className="landing-reveal flex gap-4">
+                className={`flex gap-3 ${i >= 3 ? "hidden md:flex" : ""}`}>
                 <div className="flex flex-col items-center">
-                  <span className="bg-primary mt-2 size-3 shrink-0 rounded-full" />
-                  <span className="bg-foreground/15 w-0.5 flex-1" />
+                  <span className="bg-primary mt-[1.15rem] size-3 shrink-0 rounded-full" />
+                  {i < RECENT.length - 1 && (
+                    <span className="bg-foreground/15 mt-1 w-0.5 flex-1" />
+                  )}
                 </div>
                 <a
                   href="/changelog"
-                  className="hover:bg-accent -mt-1 mb-2 flex-1 rounded-xl px-3 py-2 transition-colors duration-150">
-                  <span className="block text-sm">{release.date}</span>
-                  <span className="block text-lg font-semibold">
+                  className="hover:bg-accent mb-1 flex flex-1 flex-col gap-0.5 rounded-xl px-3 py-3 transition-colors duration-150 md:flex-row md:items-center md:gap-4">
+                  <span className="text-sm md:w-28 md:shrink-0">
+                    {release.date}
+                    <span className="md:hidden"> · {kinds.join(", ")}</span>
+                  </span>
+                  <span className="flex-1 text-lg font-semibold">
                     {release.title}
                   </span>
-                  <span className="mt-1 flex flex-wrap gap-1.5">
-                    {kinds.map((kind) => (
-                      <span
-                        key={kind}
-                        className="bg-background rounded-full px-2.5 py-0.5 text-sm">
-                        {kind}
-                      </span>
-                    ))}
+                  <span className="hidden text-sm md:block md:text-right">
+                    {kinds.join(", ")}
                   </span>
                 </a>
               </li>
@@ -67,7 +81,7 @@ const LandingActivity = () => (
         </ol>
         <a
           href="/changelog"
-          className="text-primary text-lg font-semibold underline-offset-4 hover:underline">
+          className="text-primary mt-1 mb-1 ml-6 inline-block text-lg font-semibold underline-offset-4 hover:underline">
           See everything we have added
         </a>
       </div>

@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
 
 import { TimetableTable } from "../timetable-table/table"
-import LandingCircleButton from "./landing-circle-button"
+import LandingCarouselControls from "./landing-carousel-controls"
 import type { DemoPersona } from "./landing-demo-data"
 
 const CYCLE_MS = 7000
@@ -51,9 +50,9 @@ const LandingDemo = () => {
   // Same footprint as the loaded card, so nothing shifts when it arrives
   if (!current) {
     return (
-      <div className="bg-muted/60 rounded-3xl p-3 md:p-6">
+      <div className="bg-muted rounded-3xl p-5 md:p-6">
         <div className="mb-4 h-[4.25rem]" />
-        <div className="bg-background h-[56vh] min-h-[360px] w-full rounded-xl" />
+        <div className="bg-background h-[56vh] min-h-[360px] w-full rounded-2xl" />
       </div>
     )
   }
@@ -67,56 +66,47 @@ const LandingDemo = () => {
 
   return (
     <div
-      className="bg-muted/60 rounded-3xl p-3 md:p-6"
+      className="bg-muted rounded-3xl p-5 md:p-6"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}>
-      <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div className="md:order-last md:pt-1">
+          <LandingCarouselControls
+            index={selected}
+            total={count}
+            prevLabel="Previous student"
+            nextLabel="Next student"
+            onPrev={() => go(-1)}
+            onNext={() => go(1)}
+            ring={
+              auto
+                ? {
+                    turnKey: current.id,
+                    durationMs: CYCLE_MS,
+                    paused,
+                    onDone: () => step(1)
+                  }
+                : undefined
+            }
+          />
+        </div>
         <div aria-live="polite" className="min-w-0">
           <p
             key={current.id}
             className="animate-in fade-in slide-in-from-bottom-2 text-2xl leading-tight font-bold tracking-tight duration-300 md:text-3xl">
             {current.label}
           </p>
-          <p className="mt-1 text-base">
+          <p className="mt-2 text-base md:text-lg">
             {Object.keys(current.timetable).length} modules · {current.note}
             {current.bdes.length > 0 &&
               `, incl. ${current.bdes.length} BDE${current.bdes.length > 1 ? "s" : ""}`}
           </p>
         </div>
-        <div className="flex shrink-0 items-center gap-3">
-          <p
-            aria-hidden="true"
-            className="text-muted-foreground hidden text-sm font-semibold tabular-nums sm:block">
-            {selected + 1} / {count}
-          </p>
-          <div className="flex gap-2">
-            <LandingCircleButton
-              label="Previous student"
-              Icon={ChevronLeft}
-              onClick={() => go(-1)}
-            />
-            <LandingCircleButton
-              label="Next student"
-              Icon={ChevronRight}
-              onClick={() => go(1)}
-              ring={
-                auto
-                  ? {
-                      turnKey: current.id,
-                      durationMs: CYCLE_MS,
-                      paused,
-                      onDone: () => step(1)
-                    }
-                  : undefined
-              }
-            />
-          </div>
-        </div>
       </div>
 
       <div
         key={current.id}
-        className="bg-background animate-in fade-in h-[56vh] min-h-[360px] w-full overflow-hidden rounded-xl duration-500">
+        className="bg-background animate-in fade-in h-[56vh] min-h-[360px] w-full overflow-hidden rounded-2xl duration-500">
         <TimetableTable moduleIndexMap={current.timetable} fullCell={roomy} />
       </div>
     </div>

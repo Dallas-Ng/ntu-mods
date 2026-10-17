@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
 
 import { CUSTOM_BLOCK_STYLE } from "@/lib/custom-course-colors"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 
-import LandingCircleButton from "./landing-circle-button"
+import LandingCarouselControls from "./landing-carousel-controls"
 
 // [day 0-4, start hour, hours long, index type, optional custom block name]
 type Block = [number, number, number, string, string?]
@@ -229,7 +228,27 @@ const LandingShowcase = () => {
       className="bg-muted rounded-3xl p-5 md:p-6"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}>
-      <div className="mb-4 flex items-start justify-between gap-4">
+      <div className="mb-4 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div className="md:order-last md:pt-1">
+          <LandingCarouselControls
+            index={selected}
+            total={VARIATIONS.length}
+            prevLabel="Previous constraint"
+            nextLabel="Next constraint"
+            onPrev={() => choose(selected - 1)}
+            onNext={() => choose(selected + 1)}
+            ring={
+              auto
+                ? {
+                    turnKey: selected,
+                    durationMs: CYCLE_MS,
+                    paused,
+                    onDone: () => go(selected + 1)
+                  }
+                : undefined
+            }
+          />
+        </div>
         {/* Every variation's text sits in one grid cell, so the card is always
             as tall as the longest one and nothing resizes when it changes */}
         <div className="grid">
@@ -246,35 +265,6 @@ const LandingShowcase = () => {
               <p className="mt-2 max-w-md text-base md:text-lg">{x.body}</p>
             </div>
           ))}
-        </div>
-        <div className="flex shrink-0 items-center gap-2 pt-1 md:gap-3">
-          <p
-            aria-hidden="true"
-            className="text-muted-foreground hidden text-sm font-semibold tabular-nums sm:block">
-            {selected + 1} / {VARIATIONS.length}
-          </p>
-          <div className="flex gap-2">
-            <LandingCircleButton
-              label="Previous constraint"
-              Icon={ChevronLeft}
-              onClick={() => choose(selected - 1)}
-            />
-            <LandingCircleButton
-              label="Next constraint"
-              Icon={ChevronRight}
-              onClick={() => choose(selected + 1)}
-              ring={
-                auto
-                  ? {
-                      turnKey: selected,
-                      durationMs: CYCLE_MS,
-                      paused,
-                      onDone: () => go(selected + 1)
-                    }
-                  : undefined
-              }
-            />
-          </div>
         </div>
       </div>
 

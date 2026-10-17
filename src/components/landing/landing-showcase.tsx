@@ -109,20 +109,21 @@ const VARIATIONS: {
     title: "Gym time",
     body: "Block out your workouts first.",
     blocks: [
-      [0, 9, 3, "LEC"],
-      [0, 13, 2, "TUT"],
-      [0, 16, 2, "CUSTOM", "Arms"],
+      [0, 9, 2, "CUSTOM", "Arms"],
+      [0, 11, 3, "LEC"],
+      [0, 14, 2, "TUT"],
       [1, 9, 3, "LAB"],
-      [1, 13, 3, "LEC"],
+      [1, 12, 2, "TUT"],
       [1, 16, 2, "CUSTOM", "Chest"],
-      [2, 9, 2, "SEM"],
-      [2, 12, 2, "TUT"],
-      [2, 16, 2, "CUSTOM", "Arms"],
-      [3, 10, 3, "LEC"],
+      [2, 9, 2, "CUSTOM", "Arms"],
+      [2, 11, 2, "SEM"],
+      [2, 14, 3, "LEC"],
+      [3, 9, 3, "LEC"],
       [3, 13, 2, "LAB"],
       [3, 16, 2, "CUSTOM", "Chest"],
       [4, 9, 3, "LEC"],
-      [4, 16, 2, "CUSTOM", "Arms"]
+      [4, 12, 2, "CUSTOM", "Arms"],
+      [4, 14, 2, "TUT"]
     ]
   },
   {

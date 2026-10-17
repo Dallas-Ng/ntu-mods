@@ -324,7 +324,7 @@ const LandingShowcase = () => {
                     top: pct(o.hours[0]),
                     height: `${span(o.hours)}%`
                   }}>
-                  <div className="bg-primary/15 dark:text-primary flex h-full items-center justify-center rounded-md px-3 text-center text-sm font-semibold text-blue-700 md:text-base">
+                  <div className="bg-primary/30 flex h-full items-center justify-center rounded-md px-3 text-center text-sm font-bold text-blue-800 md:text-base dark:text-blue-200">
                     {o.label}
                   </div>
                 </div>

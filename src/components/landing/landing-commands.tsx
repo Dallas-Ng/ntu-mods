@@ -65,9 +65,23 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                   href={c.href}
                   onMouseEnter={() => setActive(i)}
                   onFocus={() => setActive(i)}
-                  className={`flex items-center gap-4 rounded-xl px-5 py-4 transition-colors duration-150 md:px-6 md:py-5 ${
+                  className={`flex flex-col gap-4 rounded-xl p-4 transition-colors duration-150 md:px-6 md:py-5 lg:flex-row lg:items-center ${
                     on ? "bg-primary text-primary-foreground" : "hover:bg-muted"
                   }`}>
+                  {c.art && (
+                    <span
+                      className={`flex h-40 items-center justify-center rounded-lg p-4 sm:h-48 lg:hidden ${
+                        on ? "bg-primary-foreground/10" : "bg-muted"
+                      }`}>
+                      <img
+                        src={c.art}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className={`h-full w-full ${artClass(c)}`}
+                      />
+                    </span>
+                  )}
                   <span className="min-w-0 flex-1">
                     <span className="block text-3xl leading-[1.1] font-bold tracking-tight md:text-5xl">
                       {c.name}
@@ -81,15 +95,6 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                       {c.desc}
                     </span>
                   </span>
-                  {c.art && (
-                    <img
-                      src={c.art}
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      className={`size-16 shrink-0 lg:hidden ${artClass(c)}`}
-                    />
-                  )}
                 </a>
               </li>
             )

@@ -1,8 +1,6 @@
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import type { ArticleHeading } from "@/lib/server/articles"
 import { Button } from "@/components/ui/button"
-import Container from "@/components/container"
-import Header from "@/components/header"
 
 interface FaqConfig {
   id: string
@@ -34,7 +32,7 @@ const FAQ_CONFIG: FaqConfig[] = [
         need data for a newer semester, feel free to request it via the{" "}
         <a
           href="#feedback"
-          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+          className="text-primary font-semibold underline underline-offset-4 hover:no-underline">
           feedback form below
         </a>
         .
@@ -50,7 +48,7 @@ const FAQ_CONFIG: FaqConfig[] = [
         Head to the{" "}
         <a
           href="/timetable"
-          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+          className="text-primary font-semibold underline underline-offset-4 hover:no-underline">
           timetable
         </a>{" "}
         page and search for a module by code or title. Select it, then choose an
@@ -75,7 +73,7 @@ const FAQ_CONFIG: FaqConfig[] = [
         Use the{" "}
         <a
           href="/mods"
-          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+          className="text-primary font-semibold underline underline-offset-4 hover:no-underline">
           mods
         </a>{" "}
         page to search and filter all NTU modules. Click on any module to see
@@ -121,7 +119,7 @@ const FAQ_CONFIG: FaqConfig[] = [
         stored only in your browser and never sent to our servers. See the{" "}
         <a
           href="/privacy"
-          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+          className="text-primary font-semibold underline underline-offset-4 hover:no-underline">
           Privacy Policy
         </a>{" "}
         for full details. The CGPA and FGO tools read your transcript PDF in
@@ -158,47 +156,58 @@ interface Props {
 
 const FaqContent = ({ children }: Props) => {
   return (
-    <Container size="md">
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
-        <div className="space-y-8">
-          <Header
-            title="Frequently Asked Questions"
-            subtitle="Answers for planning timetables, browsing modules, exporting schedules, and understanding how your data is stored."
-          />
+    <div className="mx-auto max-w-7xl px-4 pt-8 pb-12 md:pt-10 md:pb-20">
+      <div className="mb-10 max-w-3xl md:mb-14">
+        <h1 className="text-4xl leading-[0.98] font-bold tracking-tighter min-[380px]:text-5xl md:text-6xl">
+          Frequently asked questions
+        </h1>
+        <p className="mt-6 max-w-xl text-lg md:text-xl">
+          Answers for planning timetables, browsing modules, exporting
+          schedules, and understanding how your data is stored.
+        </p>
+      </div>
 
-          <div className="space-y-6">
-            {FAQ_CONFIG.map(({ id, question, answer }) => (
-              <section
-                id={id}
-                key={id}
-                className="border-border scroll-mt-20 space-y-3 border-t pt-6 first:border-t-0 first:pt-0">
-                <h2 className="text-xl font-semibold">{question}</h2>
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-12 [&>*]:min-w-0">
+        <div className="space-y-3">
+          {FAQ_CONFIG.map(({ id, question, answer }) => (
+            <section
+              id={id}
+              key={id}
+              className="bg-muted scroll-mt-20 rounded-2xl p-5 md:p-6">
+              <h2 className="text-2xl leading-tight font-bold tracking-tight">
+                {question}
+              </h2>
 
-                <p className="text-muted-foreground">{answer}</p>
-              </section>
-            ))}
-          </div>
+              <p className="text-foreground/80 mt-3 max-w-3xl text-base md:text-lg">
+                {answer}
+              </p>
+            </section>
+          ))}
 
-          <hr />
-
-          <div id="feedback" className="space-y-3">
+          <div
+            id="feedback"
+            className="bg-muted flex scroll-mt-20 flex-col justify-between gap-6 rounded-2xl p-5 md:flex-row md:items-center md:p-6">
             <div>
-              <h2 className="text-xl font-semibold">Feedback</h2>
-
-              <p className="text-muted-foreground text-sm">
+              <h2 className="text-2xl leading-tight font-bold tracking-tight">
+                Still have a question?
+              </h2>
+              <p className="text-foreground/80 mt-3 text-base md:text-lg">
                 Have a problem or suggestion? Let us know.
               </p>
             </div>
 
-            <a href="/feedback">
-              <Button variant="outline">Share Feedback</Button>
-            </a>
+            <Button
+              size="lg"
+              className="h-12 px-6 text-base active:scale-[0.98] md:px-8"
+              asChild>
+              <a href="/feedback">Share feedback</a>
+            </Button>
           </div>
         </div>
 
         {children}
       </div>
-    </Container>
+    </div>
   )
 }
 

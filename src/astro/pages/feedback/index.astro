@@ -2,7 +2,6 @@
 import { siteConfig } from "@/config/site"
 import { webPageJsonLd } from "@/lib/json-ld"
 import FeedbackCard from "@/components/feedback-card"
-import Header from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
@@ -20,26 +19,37 @@ const jsonLd = webPageJsonLd({
   title={siteConfig.metatags.feedback.title}
   description={siteConfig.metatags.feedback.desc}
   canonical="/feedback"
-  size="sm"
-  containerClassName="space-y-8">
+  containerClassName="max-w-full p-0 lg:px-0">
   <JsonLd data={jsonLd} />
-  <Header
-    title="Feedback"
-    subtitle="Share your thoughts, report issues, or suggest improvements."
-  />
+  <div
+    class="mx-auto grid max-w-7xl gap-10 px-4 pt-8 pb-12 md:pt-10 md:pb-20 lg:grid-cols-[5fr_6fr] lg:items-start lg:gap-12 [&>*]:min-w-0">
+    <div>
+      <h1
+        class="text-4xl leading-[0.98] font-bold tracking-tighter min-[380px]:text-5xl md:text-6xl">
+        Tell us what to fix
+      </h1>
+      <p class="mt-6 max-w-xl text-lg md:text-xl">
+        Share your thoughts, report issues, or suggest improvements.
+      </p>
+      <div class="text-foreground/80 mt-6 max-w-xl space-y-4 text-base md:text-lg">
+        <p>
+          NTUMods is built and maintained by a single person. There is no team —
+          just one developer juggling updates, data refreshes, and new features
+          alongside everything else.
+        </p>
+        <p>
+          If something is broken, confusing, or could be better, I genuinely
+          want to hear about it. Feedback and improvement ideas go a long way in
+          keeping this project alive and useful.
+        </p>
+      </div>
+      <a
+        href="/faq"
+        class="text-primary mt-6 inline-block text-lg font-semibold underline-offset-4 hover:underline">
+        Read the FAQ first
+      </a>
+    </div>
 
-  <div class="text-muted-foreground space-y-2 text-sm leading-relaxed">
-    <p>
-      NTUMods is built and maintained by a single person. There is no team —
-      just one developer juggling updates, data refreshes, and new features
-      alongside everything else.
-    </p>
-    <p>
-      If something is broken, confusing, or could be better, I genuinely want to
-      hear about it. Feedback and improvement ideas go a long way in keeping
-      this project alive and useful.
-    </p>
+    <FeedbackCard client:idle />
   </div>
-
-  <FeedbackCard client:idle />
 </BaseLayout>

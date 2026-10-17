@@ -106,7 +106,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
   }
 
   return (
-    <div className={cn("rounded-md border p-3 shadow", divClassName)}>
+    <div className={cn("bg-muted rounded-2xl p-5 md:p-6", divClassName)}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -119,7 +119,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
                   <Input
                     autoComplete="off"
                     placeholder="your@email.com"
-                    className="placeholder:text-sm"
+                    className="bg-background h-11 placeholder:text-sm"
                     {...field}
                   />
                 </FormControl>
@@ -142,7 +142,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
                   <Textarea
                     placeholder="Share your thoughts, report an issue, or suggest an improvement..."
                     {...field}
-                    className="h-[200px] placeholder:text-sm lg:h-[100px]"
+                    className="bg-background min-h-[160px] placeholder:text-sm"
                   />
                 </FormControl>
 
@@ -176,7 +176,8 @@ const FeedbackCard = ({ divClassName }: Props) => {
           <div className="flex justify-end">
             <Button
               type="submit"
-              className="self w-full lg:w-[200px]"
+              size="lg"
+              className="h-12 w-full px-8 text-base active:scale-[0.98] lg:w-auto"
               disabled={loading}>
               Submit
             </Button>

@@ -1,9 +1,8 @@
 ---
 import { siteConfig } from "@/config/site"
-import { formatCount } from "@/lib/format"
 import { organizationJsonLd, websiteJsonLd } from "@/lib/json-ld"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
-import { getLatestSemester, getSemesterCounts } from "@/lib/server/db/repo"
+import { getLatestSemester } from "@/lib/server/db/repo"
 import LandingArticles from "@/components/landing/landing-articles"
 import LandingCTA from "@/components/landing/landing-cta"
 import LandingDemo from "@/components/landing/landing-demo"
@@ -11,6 +10,7 @@ import { getLandingDemoData } from "@/components/landing/landing-demo-data"
 import LandingFeatures from "@/components/landing/landing-features"
 import LandingShowcase from "@/components/landing/landing-showcase"
 import LandingStats from "@/components/landing/landing-stats"
+import { getSemesterStats } from "@/components/landing/landing-stats-data"
 import LandingTools from "@/components/landing/landing-tools"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -18,8 +18,8 @@ import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 export const prerender = true
 
 const { year, semester } = await getLatestSemester()
-const counts = await getSemesterCounts(year, semester)
 const personas = await getLandingDemoData(year, semester)
+const stats = await getSemesterStats(year, semester)
 ---
 
 <BaseLayout
@@ -34,11 +34,7 @@ const personas = await getLandingDemoData(year, semester)
   </div>
 
   <div class="mt-6 md:mt-10">
-    <LandingStats
-      semesterLabel={LATEST_SEMESTER_LABEL}
-      modules={formatCount(counts.modules)}
-      indexes={formatCount(counts.indexes)}
-    />
+    <LandingStats semesterLabel={LATEST_SEMESTER_LABEL} stats={stats} />
   </div>
 
   <div class="space-y-0 py-20 md:py-32">

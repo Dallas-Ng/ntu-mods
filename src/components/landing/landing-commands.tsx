@@ -6,11 +6,7 @@ export type Command = {
   desc: string
   art?: string
   isNew?: boolean
-  invert?: boolean
 }
-
-const artClass = (c: Command) =>
-  `object-contain ${c.invert ? "invert dark:invert-0" : ""}`
 
 // Giant command menu: typing filters, hover or arrow keys move the selection.
 // Until the visitor takes over, the row at the middle of the screen is the
@@ -113,7 +109,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                         alt=""
                         loading="lazy"
                         decoding="async"
-                        className={`h-full w-full ${artClass(c)}`}
+                        className="h-full w-full object-contain"
                       />
                     </span>
                   )}
@@ -158,7 +154,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                   alt=""
                   loading="lazy"
                   decoding="async"
-                  className={`min-h-0 flex-1 ${artClass(c)}`}
+                  className="min-h-0 flex-1 object-contain"
                 />
               ) : (
                 <p className="text-4xl leading-tight font-bold tracking-tight">

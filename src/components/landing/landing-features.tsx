@@ -33,8 +33,7 @@ const FEATURES: Command[] = [
   },
   {
     name: "All courses and indexes",
-    art: "/landing/icc-mods.svg",
-    invert: true,
+    art: "/landing/all-courses.svg",
     href: "/mods",
     desc: "Including ICC modules and other special indexes not shown on STARS."
   },

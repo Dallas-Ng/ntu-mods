@@ -1,0 +1,102 @@
+import { ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react"
+
+type Ring = {
+  // Changing this restarts the turn (use the item currently shown)
+  turnKey: string | number
+  durationMs: number
+  paused: boolean
+  onDone: () => void
+}
+
+type Props = {
+  index: number
+  total: number
+  prevLabel: string
+  nextLabel: string
+  onPrev: () => void
+  onNext: () => void
+  // Draws a clock hand around the next button; one full turn calls onDone.
+  // The animation only exists without reduced motion, so with it there is no
+  // hand and nothing advances by itself.
+  ring?: Ring
+}
+
+const CircleButton = ({
+  label,
+  Icon,
+  onClick,
+  ring
+}: {
+  label: string
+  Icon: LucideIcon
+  onClick: () => void
+  ring?: Ring
+}) => (
+  <button
+    type="button"
+    aria-label={label}
+    onClick={onClick}
+    className="bg-background hover:bg-accent relative flex size-9 items-center justify-center rounded-full transition-[background-color,transform] duration-150 active:scale-[0.94] motion-reduce:transition-none md:size-10">
+    <Icon aria-hidden="true" className="size-5" />
+    {ring && (
+      <svg
+        key={ring.turnKey}
+        aria-hidden="true"
+        viewBox="0 0 40 40"
+        className="text-primary pointer-events-none absolute inset-0 size-full -rotate-90">
+        <circle
+          className="landing-ring"
+          cx="20"
+          cy="20"
+          r="19"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          pathLength={1}
+          strokeDasharray={1}
+          strokeDashoffset={1}
+          style={
+            {
+              "--ring-ms": `${ring.durationMs}ms`,
+              animationPlayState: ring.paused ? "paused" : "running"
+            } as React.CSSProperties
+          }
+          onAnimationEnd={ring.onDone}
+        />
+      </svg>
+    )}
+  </button>
+)
+
+// The "n / N" counter and previous / next buttons shared by both timetable
+// cards. On phones the row spans the card and sits above the text; from md up
+// it sits to the right of it.
+const LandingCarouselControls = ({
+  index,
+  total,
+  prevLabel,
+  nextLabel,
+  onPrev,
+  onNext,
+  ring
+}: Props) => (
+  <div className="flex w-full shrink-0 items-center justify-between gap-3 md:w-auto md:justify-end">
+    <p
+      aria-hidden="true"
+      className="text-muted-foreground text-sm font-semibold tabular-nums">
+      {index + 1} / {total}
+    </p>
+    <div className="flex gap-2">
+      <CircleButton label={prevLabel} Icon={ChevronLeft} onClick={onPrev} />
+      <CircleButton
+        label={nextLabel}
+        Icon={ChevronRight}
+        onClick={onNext}
+        ring={ring}
+      />
+    </div>
+  </div>
+)
+
+export default LandingCarouselControls

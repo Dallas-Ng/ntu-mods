@@ -12,6 +12,34 @@ export const getFirstTsIndex = (index: Index) => {
   )
 }
 
+/**
+ * One index can list the same class twice for the same day and time, differing
+ * only in venue and remarks (e.g. a seminar in a room for most weeks and online
+ * for one). Drawing each as its own cell puts two identical-looking blocks side
+ * by side, so fold them into one entry that carries both venues and remarks.
+ */
+const mergeSameSlotVariations = (slots: Index[]): Index[] => {
+  const merged = new Map<string, Index>()
+  for (const slot of slots) {
+    const id = [slot.key, slot.type, slot.group, slot.day, slot.time].join("|")
+    const existing = merged.get(id)
+    if (!existing) {
+      merged.set(id, slot)
+      continue
+    }
+    const join = (a: string, b: string) =>
+      [...new Set([...a.split(", "), ...b.split(", ")].filter(Boolean))].join(
+        ", "
+      )
+    merged.set(id, {
+      ...existing,
+      venue: join(existing.venue, slot.venue),
+      remarks: join(existing.remarks, slot.remarks)
+    })
+  }
+  return [...merged.values()]
+}
+
 export const generateTimetableMatrix = (
   moduleIndexes: TimetableWithIndex,
   maxColumnsThreshold = 9,
@@ -26,10 +54,12 @@ export const generateTimetableMatrix = (
   // Flatten module indexes: use uniqueLectures directly so their venues are
   // already collapsed (e.g. "Multiple Venues"). Non-lecture slots from all indexes.
   const moduleIndexesFlat = [
-    ...uniqueLectures,
-    ...Object.values(moduleIndexes)
-      .flat()
-      .filter((index) => getIndexType(index.type) !== "LEC")
+    ...mergeSameSlotVariations(uniqueLectures),
+    ...mergeSameSlotVariations(
+      Object.values(moduleIndexes)
+        .flat()
+        .filter((index) => getIndexType(index.type) !== "LEC")
+    )
   ]
 
   /**

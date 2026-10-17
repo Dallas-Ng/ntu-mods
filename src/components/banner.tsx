@@ -6,20 +6,25 @@ interface BannerProps {
   pClass?: string
 }
 
+// Keep a trailing arrow on the same line as the word before it, so a narrow
+// screen never leaves "→" alone on a second line.
+const glueArrow = (node: React.ReactNode) =>
+  typeof node === "string" ? node.replace(/\s+→$/, "\u00A0→") : node
+
 export const BannerWrapper = (props: BannerProps) => {
   return (
     <div
       data-nosnippet
       className={cn(
-        "relative z-10 flex items-center justify-center bg-sky-300 p-1",
+        "relative z-10 flex items-center justify-center bg-sky-300 px-2 py-1.5 md:p-1",
         props.divClass
       )}>
       <p
         className={cn(
-          "text-center text-sm leading-6 font-medium text-black",
+          "text-center text-sm leading-[1.2] font-medium text-balance text-black md:leading-5",
           props.pClass
         )}>
-        {props.children}
+        {glueArrow(props.children)}
       </p>
     </div>
   )

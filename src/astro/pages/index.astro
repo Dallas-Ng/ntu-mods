@@ -1,20 +1,24 @@
 ---
 import { siteConfig } from "@/config/site"
-import { formatCount } from "@/lib/format"
 import { organizationJsonLd, websiteJsonLd } from "@/lib/json-ld"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
-import { getLatestSemester, getSemesterCounts } from "@/lib/server/db/repo"
+import { getLatestSemester } from "@/lib/server/db/repo"
+import LandingActivity from "@/components/landing/landing-activity"
 import LandingArticles from "@/components/landing/landing-articles"
 import LandingCTA from "@/components/landing/landing-cta"
+import LandingDemo from "@/components/landing/landing-demo"
 import LandingFeatures from "@/components/landing/landing-features"
-import LandingProduct from "@/components/landing/landing-product"
+import LandingShowcase from "@/components/landing/landing-showcase"
+import LandingStats from "@/components/landing/landing-stats"
+import { getSemesterStats } from "@/components/landing/landing-stats-data"
+import LandingTools from "@/components/landing/landing-tools"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
 
 const { year, semester } = await getLatestSemester()
-const counts = await getSemesterCounts(year, semester)
+const stats = await getSemesterStats(year, semester)
 ---
 
 <BaseLayout
@@ -22,39 +26,80 @@ const counts = await getSemesterCounts(year, semester)
   description={siteConfig.metatags.default.desc}
   canonical="/"
   containerClassName="max-w-full p-0 lg:px-0">
-  <div class="relative z-[3] space-y-10 p-3">
-    <LandingCTA
-      semesterLabel={LATEST_SEMESTER_LABEL}
-      modules={formatCount(counts.modules)}
-      indexes={formatCount(counts.indexes)}
-    />
+  <div
+    class="mx-auto grid max-w-7xl gap-10 px-4 pt-8 pb-8 md:pt-10 xl:grid-cols-[5fr_6fr] xl:items-center xl:gap-12 [&>*]:min-w-0">
+    <LandingCTA semesterLabel={LATEST_SEMESTER_LABEL} />
+    <LandingShowcase client:idle />
   </div>
 
-  <div class="relative overflow-hidden">
-    <div class="relative z-[2] container p-3">
-      <LandingProduct />
-    </div>
-
-    {
-      /* CSS backgrounds, not <img>: crawlers/AI previews pick <img> as the page thumbnail */
-    }
-    <div
-      aria-hidden="true"
-      class="absolute bottom-1/2 left-0 z-[1] hidden aspect-[3/2] w-full bg-[url('/landing/product-bg.svg')] bg-cover lg:block">
-    </div>
-    <div
-      aria-hidden="true"
-      class="absolute top-1/2 z-[1] hidden aspect-[3/2] w-full rotate-180 bg-[url('/landing/product-bg.svg')] bg-cover lg:block">
-    </div>
+  <div class="mt-6 md:mt-10">
+    <LandingStats semesterLabel={LATEST_SEMESTER_LABEL} stats={stats} />
   </div>
 
-  <div class="relative z-[3] mt-10 space-y-10 p-3">
-    <LandingFeatures />
-
-    <div class="xl:container xl:py-20">
+  <div class="mt-24 md:mt-36">
+    <LandingFeatures client:visible />
+    <div class="mt-24 md:mt-36">
+      <LandingTools />
+    </div>
+    <div class="mt-24 md:mt-36">
       <LandingArticles />
     </div>
+    <div class="mt-24 md:mt-36">
+      <LandingActivity />
+    </div>
   </div>
+
+  <section class="mx-auto mt-24 mb-12 max-w-7xl px-4 md:mt-36 md:mb-20">
+    <h2
+      class="landing-reveal mb-10 max-w-3xl text-4xl leading-none font-bold tracking-tighter md:text-5xl">
+      See a week for every course
+    </h2>
+    <LandingDemo client:visible />
+    <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+      <a
+        href="/timetable"
+        class="bg-primary text-primary-foreground inline-flex h-12 items-center justify-center rounded-md px-6 text-base font-semibold transition-transform active:scale-[0.98] md:px-8">
+        Build my timetable
+      </a>
+      <a
+        href="/mods"
+        class="bg-secondary hover:bg-secondary/80 inline-flex h-12 items-center justify-center rounded-md px-6 text-base font-semibold transition-colors md:px-8">
+        Browse modules
+      </a>
+    </div>
+  </section>
 
   <JsonLd data={[websiteJsonLd(), organizationJsonLd()]} />
 </BaseLayout>
+
+<style is:global>
+  @keyframes landing-ring {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .landing-ring {
+      animation: landing-ring var(--ring-ms) linear forwards;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .landing-reveal {
+        animation: landing-rise linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 35%;
+      }
+      @keyframes landing-rise {
+        from {
+          opacity: 0;
+          transform: translateY(32px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    }
+  }
+</style>

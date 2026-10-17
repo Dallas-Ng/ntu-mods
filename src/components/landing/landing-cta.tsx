@@ -1,48 +1,48 @@
+import { ChevronRight } from "lucide-react"
+
 import { Button } from "../ui/button"
 
 interface Props {
   semesterLabel: string
-  modules: string
-  indexes: string
 }
 
-const LandingCTA = ({ semesterLabel, modules, indexes }: Props) => {
+const LandingCTA = ({ semesterLabel }: Props) => {
   return (
-    <div className="z-10 flex items-center justify-center align-middle">
-      <div className="max-w-[720px] text-center">
-        <a
-          href="/articles/ntu-ay2026-semester-2-whats-new"
-          className="border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 mb-5 inline-flex flex-wrap items-center justify-center gap-x-2 rounded-full border-2 px-4 py-1.5 text-sm font-semibold transition-colors">
-          <span
-            className="size-2 rounded-full bg-green-600"
-            aria-hidden="true"
-          />
-          <span>Now live: {semesterLabel} data</span>
-          <span className="font-medium">
-            {modules} modules · {indexes} indexes →
-          </span>
-        </a>
-        <h1 className="bg-gradient-to-l from-blue-600 to-blue-700 bg-clip-text text-4xl leading-tight font-bold text-transparent md:text-6xl">
-          Build your NTU timetable in minutes
-        </h1>
+    <div className="relative w-full text-center xl:text-left">
+      <a
+        href="/articles/ntu-ay2026-semester-2-whats-new"
+        className="bg-primary/15 text-foreground hover:bg-primary/25 mb-6 inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors sm:text-base">
+        <span
+          className="size-2.5 rounded-full bg-green-500"
+          aria-hidden="true"
+        />
+        Now live: {semesterLabel}
+        <span className="hidden sm:inline"> data</span>
+        <ChevronRight aria-hidden="true" className="-ml-1 size-4" />
+      </a>
+      <h1 className="max-w-5xl text-4xl leading-[0.98] font-bold tracking-tighter min-[380px]:text-5xl md:text-6xl xl:text-7xl">
+        Build your NTU timetable
+      </h1>
 
-        <p className="text-muted-foreground mx-auto mt-4 max-w-lg text-lg">
-          Pick your modules and get every clash-free option. Compare indexes,
-          check exams and share your plan with friends.
-        </p>
+      <p className="mx-auto mt-6 max-w-xl text-lg md:text-xl xl:mx-0">
+        Pick your modules and get every clash-free option in minutes. Compare
+        indexes, check exams and share your plan with friends.
+      </p>
 
-        <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button size="lg" className="w-full sm:w-fit" asChild>
-            <a href="/timetable">Build my timetable</a>
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="w-full sm:w-fit"
-            asChild>
-            <a href="/mods">Browse modules</a>
-          </Button>
-        </div>
+      <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row xl:justify-start">
+        <Button
+          size="lg"
+          className="h-12 px-6 text-base active:scale-[0.98] md:px-8"
+          asChild>
+          <a href="/timetable">Build my timetable</a>
+        </Button>
+        <Button
+          size="lg"
+          variant="secondary"
+          className="h-12 px-6 text-base active:scale-[0.98] md:px-8"
+          asChild>
+          <a href="/mods">Browse modules</a>
+        </Button>
       </div>
     </div>
   )

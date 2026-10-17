@@ -16,24 +16,28 @@ const LandingStats = ({ semesterLabel, stats }: Props) => {
     {
       value: stats.modules,
       label: "Modules",
+      note: "Offered this semester",
       href: "/mods",
       tone: "bg-muted hover:bg-accent"
     },
     {
       value: stats.newModules,
-      label: "New this semester",
+      label: "New modules",
+      note: "Offered for the first time",
       href: "/articles/ntu-ay2026-semester-2-whats-new",
       tone: "bg-primary text-primary-foreground hover:bg-primary/90"
     },
     {
       value: stats.bdeModules,
-      label: "Modules open as BDEs",
+      label: "BDE modules",
+      note: "Broadening and Deepening Electives",
       href: "/articles/complete-ntu-bde-list",
       tone: "bg-muted hover:bg-accent"
     },
     {
       value: stats.indexes,
-      label: "Class indexes to plan with",
+      label: "Class indexes",
+      note: "Tutorial and lab groups to pick from",
       href: "/timetable",
       tone: "bg-muted hover:bg-accent"
     }
@@ -59,14 +63,17 @@ const LandingStats = ({ semesterLabel, stats }: Props) => {
             <p className="text-6xl leading-none font-bold tracking-tighter xl:text-7xl">
               {formatCount(t.value)}
             </p>
-            <p className="flex items-center justify-between gap-3 text-lg font-semibold">
-              {t.label}
+            <div className="flex items-end justify-between gap-3">
+              <div>
+                <p className="text-xl font-semibold">{t.label}</p>
+                <p className="text-base">{t.note}</p>
+              </div>
               <span
                 aria-hidden="true"
-                className="transition-transform duration-150 group-hover:translate-x-1 motion-reduce:transition-none">
+                className="pb-0.5 text-xl transition-transform duration-150 group-hover:translate-x-1 motion-reduce:transition-none">
                 →
               </span>
-            </p>
+            </div>
           </a>
         ))}
       </div>

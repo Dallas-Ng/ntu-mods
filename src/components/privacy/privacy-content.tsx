@@ -5,7 +5,7 @@ const PrivacyContent = () => {
   return (
     <Container size="sm" className="text-muted-foreground space-y-6">
       <div className="text-foreground">
-        <Header title="Privacy Policy" subtitle="Last Updated: May 2026" />
+        <Header title="Privacy Policy" subtitle="Last Updated: October 2026" />
       </div>
 
       <p className="text-sm">
@@ -81,7 +81,8 @@ const PrivacyContent = () => {
             <strong>PostHog</strong>: collects page views, custom events (e.g.
             timetable interactions), and error reports to help us identify
             issues and improve the Service. Data is processed by PostHog, Inc.
-            See{" "}
+            Requests are routed through our own domain (ntumods.com) rather than
+            sent straight from your browser. See{" "}
             <a
               href="https://posthog.com/privacy"
               className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
@@ -122,7 +123,7 @@ const PrivacyContent = () => {
         </h3>
 
         <p>
-          The Settings page includes an optional feedback form. If you submit
+          The Feedback page includes an optional feedback form. If you submit
           feedback, we collect:
         </p>
 
@@ -140,9 +141,13 @@ const PrivacyContent = () => {
         </ul>
 
         <p>
-          This data is stored in a Vercel Postgres database hosted in the United
-          States. It is used solely to read and act on your feedback. We do not
-          use it for marketing or share it with third parties.
+          We do not keep feedback in a database. It is sent as an email to the
+          NTU Mods maintainer through Resend, an email delivery service, and
+          stays in that inbox. It is used solely to read and act on your
+          feedback. We do not use it for marketing or share it with third
+          parties. We also record, via PostHog, that a submission happened,
+          along with its length, the page it was sent from and whether an email
+          address was included, but not the message itself.
         </p>
 
         <h3 className="text-foreground mt-4 text-base font-semibold">
@@ -150,7 +155,7 @@ const PrivacyContent = () => {
         </h3>
 
         <p>
-          Like most web services, our hosting provider (Vercel) may
+          Like most web services, our hosting provider (Cloudflare) may
           automatically collect standard server logs, including IP addresses and
           request metadata, for operational and security purposes.
         </p>
@@ -209,6 +214,7 @@ const PrivacyContent = () => {
           <li>
             <strong>Feedback submissions</strong>: retained until we have
             processed and acted on them, or upon your request to delete them.
+            They are kept as emails in the maintainer's inbox.
           </li>
           <li>
             <strong>Analytics data</strong>: retained according to the

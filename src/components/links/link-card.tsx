@@ -13,12 +13,12 @@ interface LinkCardProps {
 
 const LinkCard = ({ name, href, desc, external, category }: LinkCardProps) => {
   const className =
-    "bg-muted hover:bg-accent flex items-start justify-between gap-2 rounded-2xl p-4 transition-colors"
+    "bg-muted hover:bg-accent flex h-28 items-start justify-between gap-2 rounded-2xl p-4 transition-colors"
   const inner = (
     <>
       <div className="min-w-0 space-y-1">
         <p className="leading-none font-semibold">{name}</p>
-        <p className="text-muted-foreground text-sm">{desc}</p>
+        <p className="text-muted-foreground line-clamp-3 text-sm">{desc}</p>
       </div>
       {external && (
         <ExternalLink className="text-muted-foreground mt-0.5 size-4 shrink-0" />

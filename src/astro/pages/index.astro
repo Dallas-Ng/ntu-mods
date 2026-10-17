@@ -7,8 +7,11 @@ import { getLatestSemester, getSemesterCounts } from "@/lib/server/db/repo"
 import LandingArticles from "@/components/landing/landing-articles"
 import LandingCloser from "@/components/landing/landing-closer"
 import LandingCTA from "@/components/landing/landing-cta"
+import LandingDemo from "@/components/landing/landing-demo"
+import { getLandingDemoData } from "@/components/landing/landing-demo-data"
 import LandingFeatures from "@/components/landing/landing-features"
-import LandingProduct from "@/components/landing/landing-product"
+import LandingStats from "@/components/landing/landing-stats"
+import LandingTools from "@/components/landing/landing-tools"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
@@ -16,6 +19,7 @@ export const prerender = true
 
 const { year, semester } = await getLatestSemester()
 const counts = await getSemesterCounts(year, semester)
+const personas = await getLandingDemoData(year, semester)
 ---
 
 <BaseLayout
@@ -30,19 +34,28 @@ const counts = await getSemesterCounts(year, semester)
   />
 
   <div class="mx-auto max-w-7xl px-4">
-    <div class="bg-muted/60 rounded-3xl p-3 md:p-6">
-      <LandingProduct />
-    </div>
+    <LandingDemo client:load personas={personas} />
   </div>
 
-  <div class="py-20 md:py-32">
+  <div class="mt-6 md:mt-10">
+    <LandingStats
+      semesterLabel={LATEST_SEMESTER_LABEL}
+      modules={formatCount(counts.modules)}
+      indexes={formatCount(counts.indexes)}
+    />
+  </div>
+
+  <div class="space-y-0 py-20 md:py-32">
     <LandingFeatures client:load />
+    <div class="mt-24 md:mt-36">
+      <LandingTools />
+    </div>
     <div class="mt-24 md:mt-36">
       <LandingArticles />
     </div>
   </div>
 
-  <LandingCloser />
+  <LandingCloser client:visible />
 
   <JsonLd data={[websiteJsonLd(), organizationJsonLd()]} />
 </BaseLayout>

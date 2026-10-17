@@ -5,6 +5,7 @@ export type Command = {
   href: string
   desc: string
   art?: string
+  isNew?: boolean
   invert?: boolean
 }
 
@@ -37,7 +38,10 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
   }
 
   return (
-    <section aria-label="Features and tools">
+    <section aria-labelledby="landing-features-heading">
+      <h2 id="landing-features-heading" className="sr-only">
+        Everything you need to plan your semester
+      </h2>
       <input
         type="search"
         value={query}
@@ -67,6 +71,11 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                   <span className="min-w-0 flex-1">
                     <span className="block text-3xl leading-[1.1] font-bold tracking-tight md:text-5xl">
                       {c.name}
+                      {c.isNew && (
+                        <span className="ml-3 inline-block rounded-full bg-yellow-400 px-3 py-1 align-middle text-sm font-semibold tracking-normal text-black">
+                          New
+                        </span>
+                      )}
                     </span>
                     <span className="mt-1 block max-w-xl text-base md:text-lg lg:hidden">
                       {c.desc}

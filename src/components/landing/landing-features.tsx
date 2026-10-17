@@ -1,5 +1,3 @@
-import { siteConfig } from "@/config/site"
-
 import LandingCommands, { type Command } from "./landing-commands"
 
 const FEATURES: Command[] = [
@@ -64,14 +62,11 @@ const FEATURES: Command[] = [
     href: "/articles",
     desc: "Step by step guides on STARS, module planning and picking indexes."
   },
-  // Wallpaper Maker is the "Save as photo" row above
-  ...siteConfig.tools
-    .filter((tool) => tool.href !== "/screenshot")
-    .map((tool) => ({
-      name: tool.name,
-      href: tool.href,
-      desc: tool.desc
-    }))
+  {
+    name: "Student tools",
+    href: "/tools",
+    desc: "Free tools that run in your browser, from FGO planning to CGPA targets."
+  }
 ]
 
 const LandingFeatures = () => (

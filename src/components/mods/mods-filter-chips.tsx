@@ -1,6 +1,6 @@
 "use client"
 
-import { Check, ChevronDown, SlidersHorizontal } from "lucide-react"
+import { Check, ChevronDown } from "lucide-react"
 import posthog from "posthog-js"
 
 import { MODULE_CATEGORY, MODULE_FACULTY, TRUN_DAY_MAP } from "@/lib/constants"
@@ -82,6 +82,8 @@ export interface ModsFilterProps {
   currentOnly: string
   /** Modules shown if only `value` were chosen for this facet. */
   countOption: (key: FacetKey, value: string) => number
+  /** Shown on the mobile drawers' close button. */
+  resultCount: number
   onClearAll?: () => void
 }
 
@@ -148,20 +150,25 @@ function useFilters(props: ModsFilterProps) {
 
 type Filters = ReturnType<typeof useFilters>
 
-/** Desktop: one row of chips, each opening a small menu. */
+/**
+ * One row of chips. Each opens its own menu: a popover on desktop and a bottom
+ * drawer on mobile, where the row scrolls sideways instead of wrapping.
+ */
 export const ModsFilterChips = (props: ModsFilterProps) => {
   const f = useFilters(props)
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] md:flex-wrap md:overflow-visible md:pb-0 [&::-webkit-scrollbar]:hidden">
       {FACETS.map(({ key, label, options }) => {
         const selected = parseFilterList(f.values[key])
         const summary = summarise(key, selected, options)
         return (
           <FilterChip
             key={key}
+            title={label}
             label={summary ? `${label}: ${summary}` : label}
-            active={selected.length > 0}>
+            active={selected.length > 0}
+            resultCount={props.resultCount}>
             <FacetOptions
               facet={key}
               options={options}
@@ -174,8 +181,10 @@ export const ModsFilterChips = (props: ModsFilterProps) => {
       })}
 
       <FilterChip
+        title="Class days"
         label={f.days.length > 0 ? `Days: ${f.daySummary}` : "Days"}
-        active={f.days.length > 0}>
+        active={f.days.length > 0}
+        resultCount={props.resultCount}>
         <DaysPicker
           days={f.days}
           onChange={(next) => f.setParam("moduleDay", next.join(","))}
@@ -183,8 +192,10 @@ export const ModsFilterChips = (props: ModsFilterProps) => {
       </FilterChip>
 
       <FilterChip
+        title="Class times"
         label={f.timeSummary ? `Time: ${f.timeSummary}` : "Time"}
-        active={Boolean(f.timeSummary)}>
+        active={Boolean(f.timeSummary)}
+        resultCount={props.resultCount}>
         <TimePicker
           from={props.moduleTimeStart}
           to={props.moduleTimeEnd}
@@ -220,120 +231,6 @@ export const ModsFilterChips = (props: ModsFilterProps) => {
   )
 }
 
-/** Mobile: a single Filters button that opens every filter in a bottom drawer. */
-export const ModsFilterDrawer = ({
-  resultCount,
-  ...props
-}: ModsFilterProps & { resultCount: number }) => {
-  const f = useFilters(props)
-
-  const activeCount = [
-    ...FACETS.map(({ key }) => parseFilterList(f.values[key]).length > 0),
-    f.days.length > 0,
-    Boolean(f.timeSummary),
-    !f.semesterOnly
-  ].filter(Boolean).length
-
-  return (
-    <Drawer>
-      <DrawerTrigger asChild>
-        <Button variant="outline" size="sm" className="h-9 shrink-0 gap-1.5">
-          <SlidersHorizontal className="size-3.5" />
-          Filters
-          {activeCount > 0 && (
-            <span className="bg-primary text-primary-foreground flex size-4 items-center justify-center rounded-full text-[10px] font-medium">
-              {activeCount}
-            </span>
-          )}
-        </Button>
-      </DrawerTrigger>
-
-      <DrawerContent className="max-h-[85svh] data-[vaul-drawer-direction=bottom]:max-h-[85svh]">
-        <DrawerTitle className="sr-only">Filters</DrawerTitle>
-        <DrawerDescription className="sr-only">
-          Narrow the module list by level, type, school, days and time.
-        </DrawerDescription>
-
-        <div className="flex items-center justify-between px-4 pt-3 pb-1">
-          <h2 className="text-base font-semibold">Filters</h2>
-          {props.onClearAll && (
-            <button
-              type="button"
-              className="text-muted-foreground hover:text-foreground cursor-pointer text-sm"
-              onClick={props.onClearAll}>
-              Clear all
-            </button>
-          )}
-        </div>
-
-        <div className="min-h-0 flex-1 overflow-y-auto px-4">
-          <label className="flex cursor-pointer items-center gap-3 border-b py-3 text-sm font-medium">
-            <Checkbox
-              checked={f.semesterOnly}
-              onChange={() =>
-                f.setParam(
-                  "currentOnly",
-                  f.semesterOnly ? "false" : "true",
-                  "true"
-                )
-              }
-            />
-            This semester only
-          </label>
-
-          {FACETS.map(({ key, label, options }) => {
-            const selected = parseFilterList(f.values[key])
-            return (
-              <DrawerSection
-                key={key}
-                title={label}
-                summary={summarise(key, selected, options)}
-                defaultOpen={key !== "moduleFaculty"}>
-                <FacetOptions
-                  facet={key}
-                  options={options}
-                  selected={selected}
-                  countOption={props.countOption}
-                  onChange={(next) => f.setParam(key, next.join(","))}
-                  className={
-                    key === "moduleFaculty" ? "max-h-60" : "max-h-none"
-                  }
-                />
-              </DrawerSection>
-            )
-          })}
-
-          <DrawerSection title="Class days" summary={f.daySummary}>
-            <DaysPicker
-              days={f.days}
-              onChange={(next) => f.setParam("moduleDay", next.join(","))}
-            />
-          </DrawerSection>
-
-          <DrawerSection title="Class times" summary={f.timeSummary}>
-            <TimePicker
-              from={props.moduleTimeStart}
-              to={props.moduleTimeEnd}
-              onChange={f.setParam}
-              onClear={f.timeSummary ? f.clearTime : undefined}
-            />
-          </DrawerSection>
-        </div>
-
-        <div className="border-t p-4">
-          <DrawerClose asChild>
-            <Button className="w-full">
-              {resultCount === 0
-                ? "No modules match"
-                : `Show ${resultCount} module${resultCount === 1 ? "" : "s"}`}
-            </Button>
-          </DrawerClose>
-        </div>
-      </DrawerContent>
-    </Drawer>
-  )
-}
-
 const ACTIVE =
   "bg-foreground text-background hover:bg-foreground/90 hover:text-background dark:bg-foreground dark:hover:bg-foreground/90 border-transparent dark:border-transparent"
 
@@ -347,33 +244,6 @@ function summarise(key: FacetKey, selected: string[], options: Option[]) {
       return options.find((o) => o.value === v)?.label ?? v
     })
     .join(", ")
-}
-
-function Checkbox({
-  checked,
-  onChange
-}: {
-  checked: boolean
-  onChange: () => void
-}) {
-  return (
-    <>
-      <input
-        type="checkbox"
-        className="sr-only"
-        checked={checked}
-        onChange={onChange}
-      />
-      <span
-        aria-hidden="true"
-        className={cn(
-          "flex size-4 shrink-0 items-center justify-center rounded border",
-          checked && "bg-foreground text-background border-transparent"
-        )}>
-        {checked && <Check className="size-3" />}
-      </span>
-    </>
-  )
 }
 
 function FacetOptions({
@@ -392,7 +262,7 @@ function FacetOptions({
   className?: string
 }) {
   return (
-    <div className={cn("max-h-72 overflow-y-auto", className)}>
+    <div className={cn("max-h-none overflow-y-auto md:max-h-72", className)}>
       {options.map((o) => {
         const on = selected.includes(o.value)
         const n = countOption(facet, o.value)
@@ -402,7 +272,7 @@ function FacetOptions({
             type="button"
             role="checkbox"
             aria-checked={on}
-            className="hover:bg-accent flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors"
+            className="hover:bg-accent flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-2.5 text-left text-sm transition-colors md:py-1.5"
             onClick={() =>
               onChange(
                 on
@@ -455,7 +325,7 @@ function DaysPicker({
               type="button"
               aria-pressed={on}
               className={cn(
-                "h-8 min-w-11 cursor-pointer rounded-md border px-2 text-sm font-medium transition-colors",
+                "h-10 min-w-11 cursor-pointer rounded-md border px-2 text-sm font-medium transition-colors md:h-8",
                 on
                   ? "bg-foreground text-background border-transparent"
                   : "text-muted-foreground hover:border-foreground hover:text-foreground"
@@ -507,57 +377,78 @@ function TimePicker({
 }
 
 function FilterChip({
+  title,
   label,
   active,
-  children
-}: {
-  label: string
-  active: boolean
-  children: React.ReactNode
-}) {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className={cn(
-            "h-8 max-w-full shrink-0 gap-1.5 rounded-full px-3",
-            active && ACTIVE
-          )}>
-          <span className="truncate">{label}</span>
-          <ChevronDown className="size-3 opacity-60" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-72 max-w-[90vw] p-2">
-        {children}
-      </PopoverContent>
-    </Popover>
-  )
-}
-
-function DrawerSection({
-  title,
-  summary,
-  defaultOpen,
+  resultCount,
   children
 }: {
   title: string
-  summary?: string
-  defaultOpen?: boolean
+  label: string
+  active: boolean
+  resultCount: number
   children: React.ReactNode
 }) {
+  const chipClass = cn(
+    "h-8 max-w-full shrink-0 gap-1.5 rounded-full px-3",
+    active && ACTIVE
+  )
+  const face = (
+    <>
+      <span className="truncate">{label}</span>
+      <ChevronDown className="size-3 opacity-60" />
+    </>
+  )
+
+  // Both variants are rendered and CSS picks one, so there is no hydration
+  // flash. Menu content only mounts while its popover or drawer is open.
   return (
-    <details open={defaultOpen} className="group border-b py-3">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-medium [&::-webkit-details-marker]:hidden">
-        <span>{title}</span>
-        <span className="text-muted-foreground flex min-w-0 items-center gap-2 text-xs font-normal">
-          <span className="truncate">{summary}</span>
-          <ChevronDown className="size-4 shrink-0 transition-transform group-open:rotate-180" />
-        </span>
-      </summary>
-      <div className="pt-2">{children}</div>
-    </details>
+    <>
+      <Drawer>
+        <DrawerTrigger asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn(chipClass, "md:hidden")}>
+            {face}
+          </Button>
+        </DrawerTrigger>
+        <DrawerContent className="max-h-[75svh] data-[vaul-drawer-direction=bottom]:max-h-[75svh]">
+          <DrawerTitle className="px-4 pt-3 text-base font-semibold">
+            {title}
+          </DrawerTitle>
+          <DrawerDescription className="sr-only">
+            Choose {title.toLowerCase()} to filter modules.
+          </DrawerDescription>
+          <div className="min-h-0 flex-1 overflow-y-auto px-3 py-2">
+            {children}
+          </div>
+          <div className="border-t p-4">
+            <DrawerClose asChild>
+              <Button className="w-full">
+                {resultCount === 0
+                  ? "No modules match"
+                  : `Show ${resultCount} module${resultCount === 1 ? "" : "s"}`}
+              </Button>
+            </DrawerClose>
+          </div>
+        </DrawerContent>
+      </Drawer>
+
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn(chipClass, "hidden md:inline-flex")}>
+            {face}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent align="start" className="w-72 max-w-[90vw] p-2">
+          {children}
+        </PopoverContent>
+      </Popover>
+    </>
   )
 }
 
@@ -585,7 +476,7 @@ function TimeSelect({
     <label className="text-muted-foreground flex items-center gap-2">
       {label}
       <select
-        className="border-input bg-background text-foreground h-8 rounded-md border px-2 text-sm"
+        className="border-input bg-background text-foreground h-10 rounded-md border px-2 text-sm md:h-8"
         value={value}
         onChange={(e) => onChange(e.target.value)}>
         <option value="all">Any time</option>

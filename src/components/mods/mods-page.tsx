@@ -23,7 +23,6 @@ import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
 import {
   FILTER_KEYS,
   ModsFilterChips,
-  ModsFilterDrawer,
   type FacetKey
 } from "@/components/mods/mods-filter-chips"
 import { ModsGroupBySelect } from "@/components/mods/mods-group-by-select"
@@ -211,35 +210,20 @@ const ModsPage = () => {
             />
             <span className="hidden sm:inline">Favourites</span>
           </Button>
-          <div className="md:hidden">
-            <ModsFilterDrawer
-              resultCount={filteredModules.length}
-              moduleType={moduleType}
-              moduleFaculty={moduleFaculty}
-              moduleLevel={moduleLevel}
-              moduleDay={moduleDay}
-              moduleTimeStart={moduleTimeStart}
-              moduleTimeEnd={moduleTimeEnd}
-              currentOnly={currentOnly}
-              countOption={countOption}
-              onClearAll={hasActiveFilters ? clearAllFilters : undefined}
-            />
-          </div>
         </div>
 
-        <div className="hidden md:block">
-          <ModsFilterChips
-            moduleType={moduleType}
-            moduleFaculty={moduleFaculty}
-            moduleLevel={moduleLevel}
-            moduleDay={moduleDay}
-            moduleTimeStart={moduleTimeStart}
-            moduleTimeEnd={moduleTimeEnd}
-            currentOnly={currentOnly}
-            countOption={countOption}
-            onClearAll={hasActiveFilters ? clearAllFilters : undefined}
-          />
-        </div>
+        <ModsFilterChips
+          moduleType={moduleType}
+          moduleFaculty={moduleFaculty}
+          moduleLevel={moduleLevel}
+          moduleDay={moduleDay}
+          moduleTimeStart={moduleTimeStart}
+          moduleTimeEnd={moduleTimeEnd}
+          currentOnly={currentOnly}
+          countOption={countOption}
+          resultCount={filteredModules.length}
+          onClearAll={hasActiveFilters ? clearAllFilters : undefined}
+        />
       </div>
 
       {!isLoading && filteredModules.length === 0 && <ModsEmptyCard />}

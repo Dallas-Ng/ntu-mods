@@ -129,10 +129,10 @@ const LandingShowcase = () => {
 
   return (
     <section
-      className="bg-muted rounded-3xl p-5 md:p-8"
+      className="bg-muted rounded-3xl p-5 md:p-6"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}>
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-4 flex items-start justify-between gap-4">
         {/* Every variation's text sits in one grid cell, so the card is always
             as tall as the longest one and nothing resizes when it changes */}
         <div className="grid">
@@ -169,7 +169,7 @@ const LandingShowcase = () => {
         </div>
       </div>
 
-      <div aria-hidden="true" className="bg-background rounded-2xl p-4 md:p-6">
+      <div aria-hidden="true" className="bg-background rounded-2xl p-4 md:p-5">
         <div className="mb-3 grid grid-cols-5 pl-12">
           {DAYS.map((d) => (
             <p key={d} className="px-2 text-sm font-semibold">
@@ -178,7 +178,7 @@ const LandingShowcase = () => {
           ))}
         </div>
 
-        <div className="relative h-72 pl-12 md:h-80">
+        <div className="relative h-64 pl-12 md:h-72">
           <div className="absolute inset-y-1 left-0 w-12">
             {HOUR_LABELS.map((h) => (
               <span

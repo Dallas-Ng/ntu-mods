@@ -4,7 +4,6 @@ import { useState } from "react"
 import {
   Check,
   ChevronDown,
-  ChevronLeft,
   ChevronRight,
   SlidersHorizontal
 } from "lucide-react"
@@ -18,12 +17,14 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
+  DrawerNestedRoot,
   DrawerTitle
 } from "@/components/ui/drawer"
 import { Switch } from "@/components/ui/switch"
 
 import {
   ACTIVE,
+  ChipGroup,
   DAYS,
   FacetOptions,
   FACULTY_OPTIONS,
@@ -36,25 +37,33 @@ import {
   type Option
 } from "./mods-filter-shared"
 
-type DrawerView = "all" | "types" | "schools"
+type DrawerView = "all" | "types"
 
-/** Shared by the filter button, the pills and the drawer. */
+/** Shared by the filter button, the pills and the drawers. */
 export function useFilterDrawer() {
   const [open, setOpen] = useState(false)
   const [view, setView] = useState<DrawerView>("all")
+  const [schoolOpen, setSchoolOpen] = useState(false)
   return {
     open,
     view,
+    schoolOpen,
     setOpen,
-    setView,
+    setSchoolOpen,
     openView: (next: DrawerView) => {
       setView(next)
       setOpen(true)
-    }
+    },
+    /** From the pill the filters drawer is closed, so School opens on its
+     * own. From inside the filters drawer it nests on top of it. */
+    openSchool: () => setSchoolOpen(true)
   }
 }
 
 type FilterDrawer = ReturnType<typeof useFilterDrawer>
+
+const DRAWER_CLASS =
+  "max-h-[90svh] data-[vaul-drawer-direction=bottom]:max-h-[90svh]"
 
 /** Sits next to the search box. The only place active filters are counted. */
 export const ModsFilterButton = ({
@@ -80,7 +89,7 @@ export const ModsFilterButton = ({
   )
 }
 
-/** Mobile: the three filters people use most, each opening the drawer. */
+/** Mobile: the three filters people use most. */
 export const ModsFilterPills = ({
   drawer,
   ...props
@@ -98,10 +107,7 @@ export const ModsFilterPills = ({
 
   return (
     <div className="flex flex-wrap gap-2 md:hidden">
-      <Pill
-        active={schools.length > 0}
-        caret
-        onClick={() => drawer.openView("schools")}>
+      <Pill active={schools.length > 0} caret onClick={drawer.openSchool}>
         {label("School", schools, FACULTY_OPTIONS)}
       </Pill>
       <Pill
@@ -162,39 +168,99 @@ function Pill({
   )
 }
 
-/** One drawer for everything. School is a page inside it, not a second sheet. */
+function DrawerHead({
+  title,
+  onReset,
+  resetLabel = "Reset"
+}: {
+  title: string
+  onReset?: () => void
+  resetLabel?: string
+}) {
+  return (
+    <div className="flex min-h-12 items-center justify-between px-4 pt-1">
+      <h2 className="text-lg font-semibold">{title}</h2>
+      {onReset && (
+        <button
+          type="button"
+          className="text-primary-alt cursor-pointer py-1.5 text-sm"
+          onClick={onReset}>
+          {resetLabel}
+        </button>
+      )}
+    </div>
+  )
+}
+
+function ShowResults({ count, label }: { count: number; label?: string }) {
+  return (
+    <div className="px-4 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))]">
+      <DrawerClose asChild>
+        <Button className="h-11 w-full text-base">
+          {label ??
+            (count === 0
+              ? "No modules match"
+              : `Show ${count} module${count === 1 ? "" : "s"}`)}
+        </Button>
+      </DrawerClose>
+    </div>
+  )
+}
+
+/** The School list. Shared by the standalone and the nested drawer. */
+function SchoolContent({
+  nested,
+  ...props
+}: ModsFilterProps & { nested: boolean }) {
+  const f = useFilters(props)
+  const schools = parseFilterList(props.moduleFaculty)
+
+  return (
+    <DrawerContent className={DRAWER_CLASS}>
+      <DrawerTitle className="sr-only">School</DrawerTitle>
+      <DrawerDescription className="sr-only">
+        Choose one or more schools.
+      </DrawerDescription>
+      <DrawerHead
+        title="School"
+        resetLabel="Clear"
+        onReset={
+          schools.length > 0
+            ? () => f.setParam("moduleFaculty", "all")
+            : undefined
+        }
+      />
+      <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
+        <FacetOptions
+          facet="moduleFaculty"
+          options={FACULTY_OPTIONS}
+          selected={schools}
+          countOption={props.countOption}
+          onChange={(next) => f.setParam("moduleFaculty", next.join(","))}
+          className="max-h-none [&_label]:py-3 [&_label]:text-base"
+        />
+      </div>
+      <ShowResults
+        count={props.resultCount}
+        label={nested ? "Done" : undefined}
+      />
+    </DrawerContent>
+  )
+}
+
+/**
+ * The filters drawer, with School as a second drawer nested on top of it.
+ * Opened from the School pill, School is a standalone drawer instead.
+ */
 export const ModsFilterDrawer = ({
   drawer,
   ...props
 }: ModsFilterProps & { drawer: FilterDrawer }) => {
   const f = useFilters(props)
-  const { view } = drawer
 
   const schools = parseFilterList(props.moduleFaculty)
   const types = parseFilterList(props.moduleType)
   const levels = parseFilterList(props.moduleLevel)
-
-  const toggle = (key: FacetKey, selected: string[], value: string) =>
-    f.setParam(
-      key,
-      (selected.includes(value)
-        ? selected.filter((v) => v !== value)
-        : [...selected, value]
-      ).join(",")
-    )
-
-  const title =
-    view === "all" ? "Filters" : view === "types" ? "Type" : "School"
-  const canReset =
-    view === "all"
-      ? f.activeCount > 0
-      : view === "types"
-        ? types.length > 0
-        : schools.length > 0
-  const reset = () =>
-    view === "all"
-      ? f.resetFilters()
-      : f.setParam(view === "types" ? "moduleType" : "moduleFaculty", "all")
 
   const schoolSummary =
     schools.length === 0
@@ -203,173 +269,160 @@ export const ModsFilterDrawer = ({
         ? schools.join(", ")
         : `${schools.length} selected`
 
+  const typeChips = TYPE_OPTIONS.map((o) => ({
+    value: o.value,
+    label: o.label,
+    faded: props.countOption("moduleType", o.value) === 0
+  }))
+
   return (
-    <Drawer open={drawer.open} onOpenChange={drawer.setOpen}>
-      <DrawerContent className="max-h-[90svh] data-[vaul-drawer-direction=bottom]:max-h-[90svh]">
-        <DrawerTitle className="sr-only">{title}</DrawerTitle>
-        <DrawerDescription className="sr-only">
-          Narrow the module list.
-        </DrawerDescription>
+    <>
+      <Drawer open={drawer.open} onOpenChange={drawer.setOpen}>
+        <DrawerContent className={DRAWER_CLASS}>
+          <DrawerTitle className="sr-only">
+            {drawer.view === "all" ? "Filters" : "Type"}
+          </DrawerTitle>
+          <DrawerDescription className="sr-only">
+            Narrow the module list.
+          </DrawerDescription>
 
-        <div className="flex min-h-12 items-center justify-between px-4 pt-1">
-          {view === "schools" ? (
-            <button
-              type="button"
-              className="-ml-1 flex cursor-pointer items-center gap-1 text-lg font-semibold"
-              onClick={() => drawer.setView("all")}>
-              <ChevronLeft className="size-5" />
-              School
-            </button>
-          ) : (
-            <h2 className="text-lg font-semibold">{title}</h2>
-          )}
-          {canReset && (
-            <button
-              type="button"
-              className="text-primary-alt cursor-pointer py-1.5 text-sm"
-              onClick={reset}>
-              {view === "all" ? "Reset" : "Clear"}
-            </button>
-          )}
-        </div>
-
-        <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-4 pt-1 pb-3">
-          {view === "types" && (
-            <ChipRow>
-              {TYPE_OPTIONS.map((o) => (
-                <Chip
-                  key={o.value}
-                  on={types.includes(o.value)}
-                  faded={props.countOption("moduleType", o.value) === 0}
-                  onClick={() => toggle("moduleType", types, o.value)}>
-                  {o.label}
-                </Chip>
-              ))}
-            </ChipRow>
-          )}
-
-          {view === "schools" && (
-            <FacetOptions
-              facet="moduleFaculty"
-              options={FACULTY_OPTIONS}
-              selected={schools}
-              countOption={props.countOption}
-              onChange={(next) => f.setParam("moduleFaculty", next.join(","))}
-              className="max-h-none [&_button]:py-3 [&_button]:text-base"
-            />
-          )}
-
-          {view === "all" && (
+          {drawer.view === "types" ? (
             <>
-              <label className="flex cursor-pointer items-center justify-between gap-4">
-                <span>
-                  <span className="block text-base">This semester only</span>
-                  <span className="text-muted-foreground block text-xs">
-                    Hide modules not offered this semester
-                  </span>
-                </span>
-                <Switch
-                  checked={f.semesterOnly}
-                  onCheckedChange={(on) =>
-                    f.setParam("currentOnly", on ? "true" : "false", "true")
+              <DrawerHead
+                title="Type"
+                resetLabel="Clear"
+                onReset={
+                  types.length > 0
+                    ? () => f.setParam("moduleType", "all")
+                    : undefined
+                }
+              />
+              <div className="min-h-0 flex-1 overflow-y-auto px-4 pt-1 pb-3">
+                <ChipGroup
+                  value={types}
+                  options={typeChips}
+                  onValueChange={(next) =>
+                    f.setParam("moduleType", next.join(","))
                   }
                 />
-              </label>
-
-              <Group title="Level" hint="×1000">
-                <div className="grid grid-cols-7 gap-1.5">
-                  {LEVEL_OPTIONS.map((o) => (
-                    <Chip
-                      key={o.value}
-                      square
-                      on={levels.includes(o.value)}
-                      faded={props.countOption("moduleLevel", o.value) === 0}
-                      onClick={() => toggle("moduleLevel", levels, o.value)}>
-                      {o.value}
-                    </Chip>
-                  ))}
-                </div>
-              </Group>
-
-              <Group title="Type">
-                <ChipRow>
-                  {TYPE_OPTIONS.map((o) => (
-                    <Chip
-                      key={o.value}
-                      on={types.includes(o.value)}
-                      faded={props.countOption("moduleType", o.value) === 0}
-                      onClick={() => toggle("moduleType", types, o.value)}>
-                      {o.label}
-                    </Chip>
-                  ))}
-                </ChipRow>
-              </Group>
-
-              <Group title="Class days">
-                <div className="grid grid-cols-7 gap-1.5">
-                  {DAYS.map((d) => (
-                    <Chip
-                      key={d}
-                      square
-                      on={f.days.includes(d)}
-                      onClick={() =>
-                        f.setParam(
-                          "moduleDay",
-                          (f.days.includes(d)
-                            ? f.days.filter((x) => x !== d)
-                            : [...f.days, d].sort()
-                          ).join(",")
-                        )
-                      }>
-                      {TRUN_DAY_MAP[d as keyof typeof TRUN_DAY_MAP]}
-                    </Chip>
-                  ))}
-                </div>
-              </Group>
-
-              <Group title="Class times">
-                <div className="flex items-center gap-2 text-sm">
-                  <TimeSelect
-                    label=""
-                    className="min-w-0 flex-1"
-                    value={props.moduleTimeStart}
-                    onChange={(v) => f.setParam("moduleTimeStart", v)}
+              </div>
+            </>
+          ) : (
+            <>
+              <DrawerHead
+                title="Filters"
+                onReset={f.activeCount > 0 ? f.resetFilters : undefined}
+              />
+              <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-4 pt-1 pb-3">
+                <label className="flex cursor-pointer items-center justify-between gap-4">
+                  <span>
+                    <span className="block text-base">This semester only</span>
+                    <span className="text-muted-foreground block text-xs">
+                      Hide modules not offered this semester
+                    </span>
+                  </span>
+                  <Switch
+                    checked={f.semesterOnly}
+                    onCheckedChange={(on) =>
+                      f.setParam("currentOnly", on ? "true" : "false", "true")
+                    }
                   />
-                  <span className="text-muted-foreground">to</span>
-                  <TimeSelect
-                    label=""
-                    className="min-w-0 flex-1"
-                    value={props.moduleTimeEnd}
-                    onChange={(v) => f.setParam("moduleTimeEnd", v)}
-                  />
-                </div>
-              </Group>
+                </label>
 
-              <button
-                type="button"
-                className="flex w-full cursor-pointer items-center justify-between border-t pt-4 text-left text-base"
-                onClick={() => drawer.setView("schools")}>
-                School
-                <span className="text-muted-foreground flex min-w-0 items-center gap-1.5 text-sm">
-                  <span className="max-w-40 truncate">{schoolSummary}</span>
-                  <ChevronRight className="size-4 shrink-0" />
-                </span>
-              </button>
+                <Group title="Level" hint="×1000">
+                  <ChipGroup
+                    layout="grid"
+                    value={levels}
+                    options={LEVEL_OPTIONS.map((o) => ({
+                      value: o.value,
+                      label: o.value,
+                      faded:
+                        props.countOption(
+                          "moduleLevel" as FacetKey,
+                          o.value
+                        ) === 0
+                    }))}
+                    onValueChange={(next) =>
+                      f.setParam("moduleLevel", next.join(","))
+                    }
+                  />
+                </Group>
+
+                <Group title="Type">
+                  <ChipGroup
+                    value={types}
+                    options={typeChips}
+                    onValueChange={(next) =>
+                      f.setParam("moduleType", next.join(","))
+                    }
+                  />
+                </Group>
+
+                <Group title="Class days">
+                  <ChipGroup
+                    layout="grid"
+                    value={f.days.map(String)}
+                    options={DAYS.map((d) => ({
+                      value: String(d),
+                      label: TRUN_DAY_MAP[d as keyof typeof TRUN_DAY_MAP]
+                    }))}
+                    onValueChange={(next) =>
+                      f.setParam("moduleDay", next.map(Number).sort().join(","))
+                    }
+                  />
+                </Group>
+
+                <Group title="Class times">
+                  <div className="flex items-center gap-2 text-sm">
+                    <TimeSelect
+                      ariaLabel="Earliest start time"
+                      className="min-w-0 flex-1"
+                      triggerClassName="data-[size=sm]:h-10"
+                      value={props.moduleTimeStart}
+                      onChange={(v) => f.setParam("moduleTimeStart", v)}
+                    />
+                    <span className="text-muted-foreground">to</span>
+                    <TimeSelect
+                      ariaLabel="Latest end time"
+                      className="min-w-0 flex-1"
+                      triggerClassName="data-[size=sm]:h-10"
+                      value={props.moduleTimeEnd}
+                      onChange={(v) => f.setParam("moduleTimeEnd", v)}
+                    />
+                  </div>
+                </Group>
+
+                <button
+                  type="button"
+                  className="flex w-full cursor-pointer items-center justify-between border-t pt-4 text-left text-base"
+                  onClick={() => drawer.setSchoolOpen(true)}>
+                  School
+                  <span className="text-muted-foreground flex min-w-0 items-center gap-1.5 text-sm">
+                    <span className="max-w-40 truncate">{schoolSummary}</span>
+                    <ChevronRight className="size-4 shrink-0" />
+                  </span>
+                </button>
+              </div>
             </>
           )}
-        </div>
 
-        <div className="px-4 pt-2 pb-[max(1rem,env(safe-area-inset-bottom))]">
-          <DrawerClose asChild>
-            <Button className="h-11 w-full text-base">
-              {props.resultCount === 0
-                ? "No modules match"
-                : `Show ${props.resultCount} module${props.resultCount === 1 ? "" : "s"}`}
-            </Button>
-          </DrawerClose>
-        </div>
-      </DrawerContent>
-    </Drawer>
+          <ShowResults count={props.resultCount} />
+
+          {/* Nested so vaul stacks it on this drawer and scales this one back. */}
+          <DrawerNestedRoot
+            open={drawer.schoolOpen && drawer.open}
+            onOpenChange={drawer.setSchoolOpen}>
+            <SchoolContent nested {...props} />
+          </DrawerNestedRoot>
+        </DrawerContent>
+      </Drawer>
+
+      <Drawer
+        open={drawer.schoolOpen && !drawer.open}
+        onOpenChange={drawer.setSchoolOpen}>
+        <SchoolContent nested={false} {...props} />
+      </Drawer>
+    </>
   )
 }
 
@@ -390,42 +443,5 @@ function Group({
       </div>
       {children}
     </div>
-  )
-}
-
-function ChipRow({ children }: { children: React.ReactNode }) {
-  return <div className="flex flex-wrap gap-2">{children}</div>
-}
-
-function Chip({
-  on,
-  faded,
-  square,
-  onClick,
-  children
-}: {
-  on: boolean
-  faded?: boolean
-  square?: boolean
-  onClick: () => void
-  children: React.ReactNode
-}) {
-  return (
-    <button
-      type="button"
-      aria-pressed={on}
-      className={cn(
-        "cursor-pointer border text-sm transition-colors",
-        square
-          ? "h-10 min-w-0 rounded-lg px-0"
-          : "h-9 min-w-12 rounded-full px-3.5",
-        on
-          ? "bg-foreground text-background border-transparent font-semibold"
-          : "text-foreground hover:border-foreground",
-        faded && !on && "opacity-40"
-      )}
-      onClick={onClick}>
-      {children}
-    </button>
   )
 }

@@ -1,6 +1,5 @@
 "use client"
 
-import { Check } from "lucide-react"
 import posthog from "posthog-js"
 
 import { MODULE_CATEGORY, MODULE_FACULTY, TRUN_DAY_MAP } from "@/lib/constants"
@@ -9,6 +8,15 @@ import { TIME_OPTIONS } from "@/lib/generation-config"
 import { cn } from "@/lib/utils"
 import { usePathname } from "@/hooks/use-pathname"
 import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 export type FacetKey = "moduleLevel" | "moduleType" | "moduleFaculty"
 
@@ -204,27 +212,19 @@ export function FacetOptions({
         const on = selected.includes(o.value)
         const n = countOption(facet, o.value)
         return (
-          <button
+          <label
             key={o.value}
-            type="button"
-            role="checkbox"
-            aria-checked={on}
-            className="hover:bg-accent flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm transition-colors"
-            onClick={() =>
-              onChange(
-                on
-                  ? selected.filter((v) => v !== o.value)
-                  : [...selected, o.value]
-              )
-            }>
-            <span
-              aria-hidden="true"
-              className={cn(
-                "flex size-4 shrink-0 items-center justify-center rounded border",
-                on && "bg-foreground text-background border-transparent"
-              )}>
-              {on && <Check className="size-3" />}
-            </span>
+            className="hover:bg-accent flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors">
+            <Checkbox
+              checked={on}
+              onCheckedChange={() =>
+                onChange(
+                  on
+                    ? selected.filter((v) => v !== o.value)
+                    : [...selected, o.value]
+                )
+              }
+            />
             <span className="min-w-0 flex-1 truncate">{o.label}</span>
             <span
               className={cn(
@@ -233,11 +233,66 @@ export function FacetOptions({
               )}>
               {n}
             </span>
-          </button>
+          </label>
         )
       })}
       {selected.length > 0 && <ClearLink onClick={() => onChange([])} />}
     </div>
+  )
+}
+
+interface ChipOption {
+  value: string
+  label: React.ReactNode
+  /** Dimmed when it would give no results, but still selectable. */
+  faded?: boolean
+}
+
+/** Multi-select chips built on the shadcn toggle group. */
+export function ChipGroup({
+  value,
+  onValueChange,
+  options,
+  layout = "wrap",
+  className
+}: {
+  value: string[]
+  onValueChange: (next: string[]) => void
+  options: ChipOption[]
+  /** `grid` is seven equal columns for levels and days. */
+  layout?: "wrap" | "grid"
+  className?: string
+}) {
+  return (
+    <ToggleGroup
+      type="multiple"
+      variant="outline"
+      spacing={2}
+      value={value}
+      onValueChange={onValueChange}
+      className={cn(
+        "w-full",
+        layout === "grid"
+          ? "grid grid-cols-7 gap-1.5"
+          : "flex flex-wrap justify-start gap-2",
+        className
+      )}>
+      {options.map((o) => (
+        <ToggleGroupItem
+          key={o.value}
+          value={o.value}
+          className={cn(
+            "cursor-pointer shadow-none",
+            "data-[state=on]:bg-foreground data-[state=on]:text-background data-[state=on]:hover:bg-foreground/90 data-[state=on]:hover:text-background data-[state=on]:border-transparent data-[state=on]:font-semibold",
+            layout === "grid"
+              ? "h-10 rounded-lg px-0"
+              : "h-9 min-w-12 rounded-full px-3.5",
+            o.faded && !value.includes(o.value) && "opacity-40"
+          )}>
+          {o.label}
+        </ToggleGroupItem>
+      ))}
+    </ToggleGroup>
   )
 }
 
@@ -253,28 +308,16 @@ export function DaysPicker({
       <p className="text-muted-foreground px-1 pb-2 text-xs">
         Only show modules with an index held on these days.
       </p>
-      <div className="flex flex-wrap gap-1.5 px-1">
-        {DAYS.map((d) => {
-          const on = days.includes(d)
-          return (
-            <button
-              key={d}
-              type="button"
-              aria-pressed={on}
-              className={cn(
-                "h-8 min-w-11 cursor-pointer rounded-md border px-2 text-sm font-medium transition-colors",
-                on
-                  ? "bg-foreground text-background border-transparent"
-                  : "text-muted-foreground hover:border-foreground hover:text-foreground"
-              )}
-              onClick={() =>
-                onChange(on ? days.filter((x) => x !== d) : [...days, d].sort())
-              }>
-              {TRUN_DAY_MAP[d as keyof typeof TRUN_DAY_MAP]}
-            </button>
-          )
-        })}
-      </div>
+      <ChipGroup
+        layout="grid"
+        value={days.map(String)}
+        onValueChange={(next) => onChange(next.map(Number).sort())}
+        options={DAYS.map((d) => ({
+          value: String(d),
+          label: TRUN_DAY_MAP[d as keyof typeof TRUN_DAY_MAP]
+        }))}
+        className="px-1"
+      />
       {days.length > 0 && <ClearLink onClick={() => onChange([])} />}
     </>
   )
@@ -282,34 +325,43 @@ export function DaysPicker({
 
 export function TimeSelect({
   label,
+  ariaLabel,
   value,
   onChange,
-  className
+  className,
+  triggerClassName
 }: {
-  label: string
+  label?: string
+  ariaLabel: string
   value: string
   onChange: (v: string) => void
   className?: string
+  triggerClassName?: string
 }) {
   return (
-    <label
+    <div
       className={cn(
         "text-muted-foreground flex items-center gap-2",
         className
       )}>
-      {label}
-      <select
-        className="border-input bg-background text-foreground h-8 min-w-0 flex-1 rounded-md border px-2 text-sm"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}>
-        <option value="all">Any time</option>
-        {TIME_OPTIONS.map((t) => (
-          <option key={t.value} value={String(t.value)}>
-            {t.label}
-          </option>
-        ))}
-      </select>
-    </label>
+      {label && <span>{label}</span>}
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger
+          size="sm"
+          aria-label={ariaLabel}
+          className={cn("min-w-0 flex-1", triggerClassName)}>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="all">Any time</SelectItem>
+          {TIME_OPTIONS.map((t) => (
+            <SelectItem key={t.value} value={String(t.value)}>
+              {t.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   )
 }
 
@@ -332,11 +384,13 @@ export function TimePicker({
       <div className="flex items-center gap-2 px-1 text-sm">
         <TimeSelect
           label="From"
+          ariaLabel="Earliest start time"
           value={from}
           onChange={(v) => onChange("moduleTimeStart", v)}
         />
         <TimeSelect
           label="to"
+          ariaLabel="Latest end time"
           value={to}
           onChange={(v) => onChange("moduleTimeEnd", v)}
         />

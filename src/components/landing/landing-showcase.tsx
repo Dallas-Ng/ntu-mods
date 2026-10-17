@@ -18,13 +18,13 @@ const VARIATIONS: {
   title: string
   body: string
   blocks: Block[]
-  // The time the constraint rules out: days [from, to), hours [from, to)
-  off: { days: [number, number]; hours: [number, number]; label: string }
+  // Time the constraint rules out: days [from, to), hours [from, to)
+  off?: { days: [number, number]; hours: [number, number]; label: string }[]
 }[] = [
   {
-    off: { days: [4, 5], hours: [8, 18], label: "Free" },
+    off: [{ days: [4, 5], hours: [8, 18], label: "Free" }],
     title: "Make Friday free",
-    body: "Tell the planner which days you want off and pick from every timetable that works.",
+    body: "Pick the days you want off.",
     blocks: [
       [0, 9, 3, "LEC"],
       [0, 12, 2, "TUT"],
@@ -40,9 +40,9 @@ const VARIATIONS: {
     ]
   },
   {
-    off: { days: [0, 5], hours: [13, 18], label: "No afternoon classes" },
+    off: [{ days: [0, 5], hours: [13, 18], label: "No afternoon classes" }],
     title: "No afternoon classes",
-    body: "Keep everything before lunch and have the rest of the day to yourself.",
+    body: "Finish by lunch, every day.",
     blocks: [
       [0, 9, 2, "LEC"],
       [0, 11, 2, "TUT"],
@@ -55,9 +55,9 @@ const VARIATIONS: {
     ]
   },
   {
-    off: { days: [3, 5], hours: [8, 18], label: "Free" },
+    off: [{ days: [3, 5], hours: [8, 18], label: "Free" }],
     title: "Mon to Wed only",
-    body: "Squeeze the week into three days and keep Thursday and Friday clear.",
+    body: "Keep Thursday and Friday clear.",
     blocks: [
       [0, 9, 3, "LEC"],
       [0, 12, 2, "TUT"],
@@ -71,9 +71,9 @@ const VARIATIONS: {
     ]
   },
   {
-    off: { days: [0, 5], hours: [8, 10], label: "Sleep in" },
+    off: [{ days: [0, 5], hours: [8, 10], label: "Sleep in" }],
     title: "No 8:30 mornings",
-    body: "Start at 10 or later, every day of the week.",
+    body: "Start at 10 or later.",
     blocks: [
       [0, 10, 3, "LEC"],
       [0, 13, 2, "TUT"],
@@ -88,9 +88,9 @@ const VARIATIONS: {
     ]
   },
   {
-    off: { days: [0, 5], hours: [12, 14], label: "Lunch" },
+    off: [{ days: [0, 5], hours: [12, 14], label: "Lunch" }],
     title: "A proper lunch break",
-    body: "Keep 12 to 2 clear so you can actually sit down and eat.",
+    body: "Keep 12 to 2 clear every day.",
     blocks: [
       [0, 9, 3, "LEC"],
       [0, 14, 2, "TUT"],
@@ -102,6 +102,89 @@ const VARIATIONS: {
       [3, 14, 2, "LAB"],
       [4, 9, 3, "LEC"],
       [4, 14, 2, "TUT"]
+    ]
+  },
+  {
+    off: [
+      { days: [0, 1], hours: [8, 18], label: "Free" },
+      { days: [2, 3], hours: [8, 18], label: "Free" },
+      { days: [4, 5], hours: [8, 18], label: "Free" }
+    ],
+    title: "Tue and Thu only",
+    body: "Compact: fewer, fuller days.",
+    blocks: [
+      [1, 9, 3, "LEC"],
+      [1, 12, 2, "TUT"],
+      [1, 14, 3, "LAB"],
+      [3, 9, 2, "SEM"],
+      [3, 11, 3, "LEC"],
+      [3, 14, 2, "TUT"]
+    ]
+  },
+  {
+    title: "A break between classes",
+    body: "Keep an hour free between classes.",
+    blocks: [
+      [0, 9, 2, "LEC"],
+      [0, 12, 2, "TUT"],
+      [0, 15, 2, "LAB"],
+      [1, 10, 2, "SEM"],
+      [1, 13, 2, "LEC"],
+      [2, 9, 2, "LEC"],
+      [2, 12, 2, "TUT"],
+      [3, 10, 3, "LAB"],
+      [3, 14, 2, "LEC"],
+      [4, 9, 2, "LEC"],
+      [4, 12, 2, "TUT"]
+    ]
+  },
+  {
+    title: "Max 4 hours a day",
+    body: "Cap each day at 4 hours of class.",
+    blocks: [
+      [0, 9, 2, "LEC"],
+      [0, 11, 2, "TUT"],
+      [1, 10, 3, "LAB"],
+      [2, 9, 2, "SEM"],
+      [2, 14, 2, "LEC"],
+      [3, 10, 2, "LEC"],
+      [3, 13, 2, "TUT"],
+      [4, 9, 3, "LEC"]
+    ]
+  },
+  {
+    off: [{ days: [2, 3], hours: [15, 18], label: "CCA" }],
+    title: "Protect CCA time",
+    body: "Block out slots and plan around them.",
+    blocks: [
+      [0, 9, 3, "LEC"],
+      [0, 13, 2, "TUT"],
+      [1, 9, 3, "LAB"],
+      [1, 14, 3, "LEC"],
+      [2, 9, 2, "SEM"],
+      [2, 12, 2, "TUT"],
+      [3, 10, 3, "LEC"],
+      [3, 14, 2, "LAB"],
+      [4, 9, 3, "LEC"],
+      [4, 13, 2, "TUT"]
+    ]
+  },
+  {
+    off: [{ days: [0, 5], hours: [16, 18], label: "Home by 4PM" }],
+    title: "Home by 4PM",
+    body: "Set the latest time you finish.",
+    blocks: [
+      [0, 9, 3, "LEC"],
+      [0, 13, 2, "TUT"],
+      [1, 9, 3, "LAB"],
+      [1, 13, 3, "LEC"],
+      [2, 9, 2, "SEM"],
+      [2, 11, 2, "TUT"],
+      [2, 14, 2, "LEC"],
+      [3, 10, 3, "LEC"],
+      [3, 14, 2, "LAB"],
+      [4, 9, 3, "LEC"],
+      [4, 13, 2, "TUT"]
     ]
   }
 ]
@@ -151,31 +234,19 @@ const LandingShowcase = () => {
               className={`col-start-1 row-start-1 transition-opacity duration-300 motion-reduce:transition-none ${
                 i === selected ? "opacity-100" : "pointer-events-none opacity-0"
               }`}>
-              <h2 className="text-3xl leading-tight font-bold tracking-tight md:text-4xl">
+              <h2 className="text-2xl leading-tight font-bold tracking-tight sm:text-3xl md:text-4xl">
                 {x.title}
               </h2>
               <p className="mt-2 max-w-md text-base md:text-lg">{x.body}</p>
             </div>
           ))}
         </div>
-        <div className="flex shrink-0 items-center gap-3 pt-1">
-          <div className="hidden gap-1 sm:flex">
-            {VARIATIONS.map((x, i) => (
-              <button
-                key={x.title}
-                type="button"
-                aria-label={x.title}
-                aria-pressed={i === selected}
-                onClick={() => choose(i)}
-                className="flex h-6 items-center px-0.5">
-                <span
-                  className={`block h-2.5 rounded-full transition-[width,background-color] duration-300 ${
-                    i === selected ? "bg-primary w-6" : "bg-foreground/25 w-2.5"
-                  }`}
-                />
-              </button>
-            ))}
-          </div>
+        <div className="flex shrink-0 items-center gap-2 pt-1 md:gap-3">
+          <p
+            aria-hidden="true"
+            className="text-muted-foreground hidden text-sm font-semibold tabular-nums sm:block">
+            {selected + 1} / {VARIATIONS.length}
+          </p>
           <div className="flex gap-2">
             {[
               { label: "Previous", step: -1, Icon: ChevronLeft },
@@ -186,7 +257,7 @@ const LandingShowcase = () => {
                 type="button"
                 aria-label={`${label} constraint`}
                 onClick={() => choose(selected + step)}
-                className="bg-background hover:bg-accent flex size-10 items-center justify-center rounded-full transition-[background-color,transform] duration-150 active:scale-[0.94] motion-reduce:transition-none">
+                className="bg-background hover:bg-accent flex size-9 items-center justify-center rounded-full transition-[background-color,transform] duration-150 active:scale-[0.94] motion-reduce:transition-none md:size-10">
                 <Icon aria-hidden="true" className="size-5" />
               </button>
             ))}
@@ -238,19 +309,21 @@ const LandingShowcase = () => {
                 </div>
               ))}
 
-              <div
-                key={`off-${selected}`}
-                className="animate-in fade-in absolute p-0.5 duration-500"
-                style={{
-                  left: `${v.off.days[0] * 20}%`,
-                  width: `${(v.off.days[1] - v.off.days[0]) * 20}%`,
-                  top: pct(v.off.hours[0]),
-                  height: `${span(v.off.hours)}%`
-                }}>
-                <div className="bg-muted flex h-full items-center justify-center rounded-md px-3 text-center text-lg font-bold">
-                  {v.off.label}
+              {v.off?.map((o) => (
+                <div
+                  key={`off-${selected}-${o.days[0]}`}
+                  className="animate-in fade-in absolute p-0.5 duration-500"
+                  style={{
+                    left: `${o.days[0] * 20}%`,
+                    width: `${(o.days[1] - o.days[0]) * 20}%`,
+                    top: pct(o.hours[0]),
+                    height: `${span(o.hours)}%`
+                  }}>
+                  <div className="bg-muted flex h-full items-center justify-center rounded-md px-3 text-center text-lg font-bold">
+                    {o.label}
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

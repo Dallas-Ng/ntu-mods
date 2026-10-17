@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
+import { CUSTOM_BLOCK_STYLE } from "@/lib/custom-course-colors"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 
-// [day 0-4, start hour, hours long, index type]
-type Block = [number, number, number, string]
+// [day 0-4, start hour, hours long, index type, optional custom block name]
+type Block = [number, number, number, string, string?]
 
 const FIRST_HOUR = 8
 const HOURS = 10
@@ -105,20 +106,23 @@ const VARIATIONS: {
     ]
   },
   {
-    off: [
-      { days: [0, 1], hours: [8, 18], label: "Free" },
-      { days: [2, 3], hours: [8, 18], label: "Free" },
-      { days: [4, 5], hours: [8, 18], label: "Free" }
-    ],
-    title: "Tue and Thu only",
-    body: "Compact: fewer, fuller days.",
+    title: "Gym time",
+    body: "Block out your workouts first.",
     blocks: [
-      [1, 9, 3, "LEC"],
-      [1, 12, 2, "TUT"],
-      [1, 14, 3, "LAB"],
-      [3, 9, 2, "SEM"],
-      [3, 11, 3, "LEC"],
-      [3, 14, 2, "TUT"]
+      [0, 9, 3, "LEC"],
+      [0, 13, 2, "TUT"],
+      [0, 16, 2, "CUSTOM", "Arms"],
+      [1, 9, 3, "LAB"],
+      [1, 13, 3, "LEC"],
+      [1, 16, 2, "CUSTOM", "Chest"],
+      [2, 9, 2, "SEM"],
+      [2, 12, 2, "TUT"],
+      [2, 16, 2, "CUSTOM", "Arms"],
+      [3, 10, 3, "LEC"],
+      [3, 13, 2, "LAB"],
+      [3, 16, 2, "CUSTOM", "Chest"],
+      [4, 9, 3, "LEC"],
+      [4, 16, 2, "CUSTOM", "Arms"]
     ]
   },
   {
@@ -292,8 +296,10 @@ const LandingShowcase = () => {
                 <div key={d} className="relative">
                   {v.blocks
                     .filter((b) => b[0] === day)
-                    .map(([, start, len, type]) => {
-                      const style = getIndexTypeStyle(type)
+                    .map(([, start, len, type, name]) => {
+                      const style = name
+                        ? CUSTOM_BLOCK_STYLE
+                        : getIndexTypeStyle(type)
                       return (
                         <div
                           key={`${selected}-${start}-${type}`}
@@ -302,7 +308,7 @@ const LandingShowcase = () => {
                             height: `calc(${(len / HOURS) * 100}% - 4px)`
                           }}
                           className={`animate-in fade-in absolute inset-x-0.5 overflow-hidden rounded-md px-2 py-1 text-[13px] leading-tight font-semibold duration-500 ${style.background} ${style.text}`}>
-                          <p>{type}</p>
+                          <p>{name ?? type}</p>
                         </div>
                       )
                     })}

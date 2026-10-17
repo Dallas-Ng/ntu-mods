@@ -1,6 +1,9 @@
 ---
 import { siteConfig } from "@/config/site"
+import { formatCount } from "@/lib/format"
 import { organizationJsonLd, websiteJsonLd } from "@/lib/json-ld"
+import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
+import { getLatestSemester, getSemesterCounts } from "@/lib/server/db/repo"
 import LandingArticles from "@/components/landing/landing-articles"
 import LandingCloser from "@/components/landing/landing-closer"
 import LandingCTA from "@/components/landing/landing-cta"
@@ -10,6 +13,9 @@ import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
+
+const { year, semester } = await getLatestSemester()
+const counts = await getSemesterCounts(year, semester)
 ---
 
 <BaseLayout
@@ -17,7 +23,11 @@ export const prerender = true
   description={siteConfig.metatags.default.desc}
   canonical="/"
   containerClassName="max-w-full p-0 lg:px-0">
-  <LandingCTA />
+  <LandingCTA
+    semesterLabel={LATEST_SEMESTER_LABEL}
+    modules={formatCount(counts.modules)}
+    indexes={formatCount(counts.indexes)}
+  />
 
   <div class="mx-auto max-w-7xl px-4">
     <div class="bg-muted/60 rounded-3xl p-3 md:p-6">

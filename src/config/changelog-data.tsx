@@ -49,6 +49,84 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "AY 2026 Semester 2 now available",
+    date: "15 Oct 2026",
+    items: [
+      {
+        category: "Data",
+        content: (
+          <>
+            AY 2026 Semester 2 course data is now live: 1,092 courses and 4,306
+            indexes available in the{" "}
+            <ChangelogLink href="/timetable">timetable</ChangelogLink> and{" "}
+            <ChangelogLink href="/mods">module browser</ChangelogLink>. See{" "}
+            <ChangelogLink href="/articles/ntu-ay2026-semester-2-whats-new">
+              what is new in Semester 2
+            </ChangelogLink>
+            .
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content:
+          "Calendar export now uses the Semester 2 start date (11 January 2027) and recess week."
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            Updated the{" "}
+            <ChangelogLink href="/articles/ntu-course-catalogue">
+              NTU course catalogue
+            </ChangelogLink>{" "}
+            with Semester 2 module counts. The exam schedule still shows
+            Semester 1 until NTU releases the Semester 2 timetable.
+          </>
+        )
+      }
+    ]
+  },
+  {
+    title: "AY 2026 Semester 2 now available",
+    date: "15 Oct 2026",
+    items: [
+      {
+        category: "Data",
+        content: (
+          <>
+            AY 2026 Semester 2 course data is now live — 1,092 courses and 4,306
+            indexes available in the{" "}
+            <ChangelogLink href="/timetable">timetable</ChangelogLink> and{" "}
+            <ChangelogLink href="/mods">module browser</ChangelogLink>. See{" "}
+            <ChangelogLink href="/articles/ntu-ay2026-semester-2-whats-new">
+              what is new in Semester 2
+            </ChangelogLink>
+            .
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content:
+          "Calendar export now uses the Semester 2 start date (11 January 2027) and recess week."
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            Updated the{" "}
+            <ChangelogLink href="/articles/ntu-course-catalogue">
+              NTU course catalogue
+            </ChangelogLink>{" "}
+            with Semester 2 module counts. The exam schedule still shows
+            Semester 1 until NTU releases the Semester 2 timetable.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "CGPA Planner",
     date: "8 Oct 2026",
     items: [

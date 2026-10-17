@@ -2,8 +2,17 @@ import { addDays, format, startOfWeek } from "date-fns"
 import { createEvents, EventAttributes } from "ics"
 
 import { parseTime } from "./parse-time"
+import { latestSemester, latestYear } from "./semesters"
 
-const MIN_DATE = new Date("2026-08-10") // Start of AY26/27 Semester 1
+// Teaching Week 1 start per semester, from the official NTU academic calendar.
+// Add a line when a new semester's data ships.
+const WEEK_1_START: Record<string, string> = {
+  "2026;1": "2026-08-10",
+  "2026;2": "2027-01-11"
+}
+const MIN_DATE = new Date(
+  WEEK_1_START[`${latestYear};${latestSemester}`] ?? "2026-08-10"
+)
 const WEEK_1_MONDAY = startOfWeek(MIN_DATE, { weekStartsOn: 1 })
 
 const TOTAL_TEACHING_WEEKS = 13

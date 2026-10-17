@@ -43,6 +43,8 @@ import type {
  * do. The MODULE_DATA namespace itself is untouched and can be re-bound if this
  * needs reverting.
  */
+const TITLE_CHUNK = 90
+
 export interface ModuleSnapshot {
   moduleData: DbModule
   indexes: Record<string, Index[]>
@@ -165,6 +167,8 @@ export interface ModuleFullSnapshot extends ModuleSnapshot {
   prereqNode: DbPrerequisiteNode | null
   prereqGraph: Record<string, DbPrerequisiteNode>
   related: Array<{ code: string; title: string }>
+  /** Prerequisite codes that have a module page, so unknown ones stay plain text. */
+  knownCodes: string[]
 }
 
 /**
@@ -224,16 +228,30 @@ export async function getLatestModuleSnapshot(
 
   let prereqGraph: Record<string, DbPrerequisiteNode> = {}
   let prereqNode: DbPrerequisiteNode | null = null
+  let knownCodes: string[] = []
 
   if (requires.length > 0 || requiredBy.length > 0) {
     const neighbours = Array.from(new Set([...requires, ...requiredBy]))
-    const titles = await db
-      .prepare(buildModuleTitlesSql(neighbours.length))
-      .bind(...neighbours)
-      .all<{ code: string; title: string }>()
+    // D1 caps bound parameters per query (100), and a module like HL1001 is
+    // required by far more than that, so look titles up in chunks.
+    const chunks: string[][] = []
+    for (let i = 0; i < neighbours.length; i += TITLE_CHUNK) {
+      chunks.push(neighbours.slice(i, i + TITLE_CHUNK))
+    }
+    const titleRows = (
+      await Promise.all(
+        chunks.map((chunk) =>
+          db
+            .prepare(buildModuleTitlesSql(chunk.length))
+            .bind(...chunk)
+            .all<{ code: string; title: string }>()
+        )
+      )
+    ).flatMap((r) => r.results ?? [])
+    knownCodes = titleRows.map((r) => r.code)
 
     prereqGraph = Object.fromEntries(
-      (titles.results ?? []).map((r) => [
+      titleRows.map((r) => [
         r.code,
         { title: r.title, requires: [], requiredBy: [] }
       ])
@@ -253,6 +271,7 @@ export async function getLatestModuleSnapshot(
     otherSemesters: otherSemesters.results ?? [],
     prereqNode,
     prereqGraph,
-    related
+    related,
+    knownCodes
   }
 }

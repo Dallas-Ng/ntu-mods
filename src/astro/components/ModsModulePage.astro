@@ -38,6 +38,7 @@ interface Props {
   prereqNode: DbPrerequisiteNode | null
   related: Array<{ code: string; title: string }>
   relatedArticles: Array<{ href: string; label: string }>
+  knownCodes?: string[]
 }
 
 const {
@@ -52,18 +53,29 @@ const {
   prereqGraph,
   prereqNode,
   related,
-  relatedArticles
+  relatedArticles,
+  knownCodes
 } = Astro.props
 
 // The graph island only reads titles for this module and the codes it
 // renders (requires + first 15 requiredBy). Passing the whole graph inlined
 // every module's node into each page's island props (~360KB/page).
 const prereqTitles: Record<string, { title: string }> = {}
-if (prereqNode) {
+// Old prerequisite codes that no longer exist as modules (e.g. CV2102) have no
+// page to link to, so they are left out of the graph.
+const graphNode =
+  prereqNode &&
+  (() => {
+    const requires = prereqNode.requires.filter((c) => prereqGraph[c])
+    return requires.length || prereqNode.requiredBy.length
+      ? { ...prereqNode, requires }
+      : null
+  })()
+if (graphNode) {
   for (const code of [
     moduleKey,
-    ...prereqNode.requires,
-    ...prereqNode.requiredBy.slice(0, 15)
+    ...graphNode.requires,
+    ...graphNode.requiredBy.slice(0, 15)
   ]) {
     const title = prereqGraph[code]?.title
     if (title) prereqTitles[code] = { title }
@@ -166,7 +178,7 @@ const jsonLd = [
 
     <hr />
 
-    <ModsInfoTable module={moduleData} exam={exam} />
+    <ModsInfoTable module={moduleData} exam={exam} knownCodes={knownCodes} />
 
     <ModsExpandableFields client:idle module={moduleData} />
   </div>
@@ -174,13 +186,13 @@ const jsonLd = [
 
 <div class="mt-10 space-y-10">
   {
-    prereqNode && (
+    graphNode && (
       <>
         <hr />
         <ModsPrerequisiteGraph
           client:visible
           moduleCode={moduleKey}
-          node={prereqNode}
+          node={graphNode}
           graph={prereqTitles}
         />
 

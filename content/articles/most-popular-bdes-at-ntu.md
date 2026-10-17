@@ -2,7 +2,7 @@
 title: "Most Popular BDEs at NTU"
 description: "Explore popular NTU BDEs, compare why students choose them, what to watch out for, and how to pick an elective that fits your workload and timetable."
 date: "2026-04-29"
-updated: "2026-06-08"
+updated: "2026-10-15"
 author: "NTUMods"
 category: "BDE"
 tags: ["NTU BDE", "popular BDE NTU", "NTU electives", "NTUMods", "NTU electives guide", "ntu bde list", "bde list ntu", "bde courses ntu", "bde ntu"]
@@ -136,7 +136,6 @@ Real modules to browse:
 - [AED28R Developmental Issues in Childhood & Adolescence](/mods/AED28R)
 - [AED38A Motivating Pupils to Learn](/mods/AED38A)
 - [AED38E Psychopathology in Youths](/mods/AED38E)
-- [CS2056 Psychology & Communication](/mods/CS2056)
 
 ### What to watch out for
 
@@ -204,7 +203,6 @@ Most students eventually realise communication is one of the most transferable s
 Real modules to browse:
 
 - [CS2021 News Reporting & Writing](/mods/CS2021)
-- [CS2026 Media Presentation & Performance](/mods/CS2026)
 - [CS2033 Corporate Communications Management](/mods/CS2033)
 - [CS2101 Public Relations Writing](/mods/CS2101)
 - [CS2408 Misinformation & Media Literacy](/mods/CS2408)
@@ -240,10 +238,8 @@ These modules often feel more intellectually refreshing than technically demandi
 Real modules to browse:
 
 - [BU5341 Practical Ethics: Thinking About Right & Wrong](/mods/BU5341)
-- [HR1001 Ways of Seeing: Exploring Visual Culture](/mods/HR1001)
-- [AAE28B Introduction to Children's Literature](/mods/AAE28B)
+- [HR1004 Introduction to the Histories of Art II](/mods/HR1004)
 - [AAF08B Appreciating Multiculturalism Through Story](/mods/AAF08B)
-- [AAE18B Language in Context](/mods/AAE18B)
 
 ### What to watch out for
 
@@ -311,7 +307,6 @@ Real modules to browse:
 
 - [AAA18E Drawing](/mods/AAA18E)
 - [AAA18H Painting with Oil & Acrylic](/mods/AAA18H)
-- [AAA28C Digital Media & Visual Arts: Still Imaging](/mods/AAA28C)
 - [ADP16A Introduction to Theatre & Performance](/mods/ADP16A)
 - [AAU28C Twenty-First Century Learning Through Theatre & Drama](/mods/AAU28C)
 

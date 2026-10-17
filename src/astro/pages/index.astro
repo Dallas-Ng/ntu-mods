@@ -6,7 +6,6 @@ import { getLatestSemester } from "@/lib/server/db/repo"
 import LandingArticles from "@/components/landing/landing-articles"
 import LandingCTA from "@/components/landing/landing-cta"
 import LandingDemo from "@/components/landing/landing-demo"
-import { getLandingDemoData } from "@/components/landing/landing-demo-data"
 import LandingFeatures from "@/components/landing/landing-features"
 import LandingShowcase from "@/components/landing/landing-showcase"
 import LandingStats from "@/components/landing/landing-stats"
@@ -18,7 +17,6 @@ import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 export const prerender = true
 
 const { year, semester } = await getLatestSemester()
-const personas = await getLandingDemoData(year, semester)
 const stats = await getSemesterStats(year, semester)
 ---
 
@@ -30,7 +28,7 @@ const stats = await getSemesterStats(year, semester)
   <div
     class="mx-auto grid max-w-7xl gap-10 px-4 pt-8 pb-8 md:pt-10 xl:grid-cols-[5fr_6fr] xl:items-center xl:gap-12">
     <LandingCTA semesterLabel={LATEST_SEMESTER_LABEL} />
-    <LandingShowcase client:load />
+    <LandingShowcase client:idle />
   </div>
 
   <div class="mt-6 md:mt-10">
@@ -38,7 +36,7 @@ const stats = await getSemesterStats(year, semester)
   </div>
 
   <div class="space-y-0 py-20 md:py-32">
-    <LandingFeatures client:load />
+    <LandingFeatures client:visible />
     <div class="mt-24 md:mt-36">
       <LandingTools />
     </div>
@@ -52,7 +50,7 @@ const stats = await getSemesterStats(year, semester)
       class="landing-reveal mb-10 max-w-3xl text-4xl leading-none font-bold tracking-tighter md:text-5xl">
       See a week for every course
     </h2>
-    <LandingDemo client:visible personas={personas} />
+    <LandingDemo client:visible />
     <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
       <a
         href="/timetable"
@@ -71,6 +69,11 @@ const stats = await getSemesterStats(year, semester)
 </BaseLayout>
 
 <style is:global>
+  @keyframes landing-ring {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
       .landing-reveal {

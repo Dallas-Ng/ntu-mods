@@ -8,7 +8,7 @@ interface Props {
 
 const LandingCTA = ({ semesterLabel }: Props) => {
   return (
-    <div className="relative w-full">
+    <div className="relative w-full text-center xl:text-left">
       <a
         href="/articles/ntu-ay2026-semester-2-whats-new"
         className="bg-primary/15 text-foreground hover:bg-primary/25 mb-6 inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-base font-semibold whitespace-nowrap transition-colors">
@@ -23,12 +23,12 @@ const LandingCTA = ({ semesterLabel }: Props) => {
         Build your NTU timetable
       </h1>
 
-      <p className="mt-6 max-w-xl text-lg md:text-xl">
+      <p className="mx-auto mt-6 max-w-xl text-lg md:text-xl xl:mx-0">
         Pick your modules and get every clash-free option in minutes. Compare
         indexes, check exams and share your plan with friends.
       </p>
 
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+      <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row xl:justify-start">
         <Button
           size="lg"
           className="h-12 px-8 text-base active:scale-[0.98]"

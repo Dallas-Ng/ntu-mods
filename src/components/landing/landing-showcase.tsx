@@ -205,19 +205,18 @@ const LandingShowcase = () => {
   // Once the visitor steers it themselves, stop cycling on their behalf
   const [stopped, setStopped] = useState(false)
 
+  // No autoplay for people who asked for less motion
+  const [reduced, setReduced] = useState(true)
   useEffect(() => {
-    if (paused || stopped) return
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
-    const id = window.setInterval(
-      () => setSelected((i) => (i + 1) % VARIATIONS.length),
-      CYCLE_MS
-    )
-    return () => window.clearInterval(id)
-  }, [paused, stopped])
+    setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+  }, [])
+  const auto = !stopped && !reduced
 
+  const go = (i: number) =>
+    setSelected((i + VARIATIONS.length) % VARIATIONS.length)
   const choose = (i: number) => {
     setStopped(true)
-    setSelected((i + VARIATIONS.length) % VARIATIONS.length)
+    go(i)
   }
 
   const v = VARIATIONS[selected]
@@ -262,8 +261,35 @@ const LandingShowcase = () => {
                 type="button"
                 aria-label={`${label} constraint`}
                 onClick={() => choose(selected + step)}
-                className="bg-background hover:bg-accent flex size-9 items-center justify-center rounded-full transition-[background-color,transform] duration-150 active:scale-[0.94] motion-reduce:transition-none md:size-10">
+                className="bg-background hover:bg-accent relative flex size-9 items-center justify-center rounded-full transition-[background-color,transform] duration-150 active:scale-[0.94] motion-reduce:transition-none md:size-10">
                 <Icon aria-hidden="true" className="size-5" />
+                {/* A clock hand around the button: one full turn, then the
+                    next constraint. Restarts on every change, pauses on hover. */}
+                {step === 1 && auto && (
+                  <svg
+                    key={selected}
+                    aria-hidden="true"
+                    viewBox="0 0 40 40"
+                    className="text-primary pointer-events-none absolute inset-0 size-full -rotate-90">
+                    <circle
+                      cx="20"
+                      cy="20"
+                      r="19"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      pathLength={1}
+                      strokeDasharray={1}
+                      strokeDashoffset={1}
+                      style={{
+                        animation: `landing-ring ${CYCLE_MS}ms linear forwards`,
+                        animationPlayState: paused ? "paused" : "running"
+                      }}
+                      onAnimationEnd={() => go(selected + 1)}
+                    />
+                  </svg>
+                )}
               </button>
             ))}
           </div>

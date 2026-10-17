@@ -8,12 +8,27 @@ const CYCLE_MS = 7000
 
 // Real timetables for kinds of student. Cycles on its own until the visitor
 // takes over with the arrows.
-const LandingDemo = ({ personas }: { personas: DemoPersona[] }) => {
+const LandingDemo = () => {
+  const [personas, setPersonas] = useState<DemoPersona[]>([])
   const [selected, setSelected] = useState(0)
   const [auto, setAuto] = useState(true)
   // Full cell detail needs room; phones get the compact cells
   const [roomy, setRoomy] = useState(true)
   const count = personas.length
+
+  // The timetables are a static file, fetched once this section is on screen
+  useEffect(() => {
+    let cancelled = false
+    fetch("/landing-personas.json")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data: DemoPersona[]) => {
+        if (!cancelled) setPersonas(data)
+      })
+      .catch(() => {})
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   useEffect(() => {
     if (!auto || count < 2) return
@@ -34,7 +49,15 @@ const LandingDemo = ({ personas }: { personas: DemoPersona[] }) => {
   }, [])
 
   const current = personas[selected]
-  if (!current) return null
+  // Same footprint as the loaded card, so nothing shifts when it arrives
+  if (!current) {
+    return (
+      <div className="bg-muted/60 rounded-3xl p-3 md:p-6">
+        <div className="mb-4 h-[4.25rem]" />
+        <div className="bg-background h-[56vh] min-h-[360px] w-full rounded-xl" />
+      </div>
+    )
+  }
 
   const go = (step: number) => {
     setAuto(false)

@@ -167,11 +167,11 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
 
         <div
           aria-hidden="true"
-          className="bg-muted sticky top-24 hidden h-[480px] self-start overflow-hidden rounded-2xl p-8 lg:block">
+          className="bg-muted sticky top-24 hidden h-[480px] self-start overflow-hidden rounded-2xl p-6 lg:block">
           {commands.map((c) => (
             <div
               key={c.href + c.name}
-              className={`absolute inset-8 flex flex-col justify-center gap-6 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
+              className={`absolute inset-6 flex flex-col justify-center gap-6 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none ${
                 current === c
                   ? "translate-y-0 opacity-100"
                   : "pointer-events-none translate-y-2 opacity-0"

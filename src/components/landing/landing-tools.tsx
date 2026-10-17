@@ -25,7 +25,7 @@ const LandingTools = () => {
         {tools.map((tool) => (
           <div
             key={tool.href}
-            className="bg-muted landing-reveal flex min-h-[320px] flex-col justify-between gap-10 rounded-2xl p-6 md:p-8">
+            className="bg-muted landing-reveal flex min-h-[320px] flex-col justify-between gap-10 rounded-2xl p-5 md:p-6">
             <div>
               <h3 className="text-3xl leading-tight font-bold tracking-tight md:text-4xl">
                 {tool.name}
@@ -40,13 +40,13 @@ const LandingTools = () => {
             <div className="flex flex-wrap gap-3">
               <a
                 href={tool.href}
-                className="bg-primary text-primary-foreground inline-flex h-12 items-center rounded-md px-6 text-base font-semibold transition-transform active:scale-[0.98]">
+                className="bg-primary text-primary-foreground inline-flex h-12 items-center rounded-md px-6 text-base font-semibold transition-transform active:scale-[0.98] md:px-8">
                 Open the tool
               </a>
               {tool.guide && (
                 <a
                   href={tool.guide.href}
-                  className="bg-background hover:bg-accent inline-flex h-12 items-center rounded-md px-6 text-base font-semibold transition-colors">
+                  className="bg-background hover:bg-accent inline-flex h-12 items-center rounded-md px-6 text-base font-semibold transition-colors md:px-8">
                   {tool.guide.label}
                 </a>
               )}

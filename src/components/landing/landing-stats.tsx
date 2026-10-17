@@ -10,7 +10,7 @@ interface Props {
 }
 
 const TILE =
-  "group flex min-h-44 flex-col justify-between gap-6 rounded-2xl p-6 transition-colors duration-150 md:p-7"
+  "group flex min-h-44 flex-col justify-between gap-6 rounded-2xl p-5 transition-colors duration-150 md:p-6"
 
 // What this semester's data holds, each number linking to where to use it.
 const LandingStats = ({ semesterLabel, stats }: Props) => {
@@ -62,7 +62,7 @@ const LandingStats = ({ semesterLabel, stats }: Props) => {
             key={t.label}
             href={t.href}
             className={`${TILE} ${t.tone} landing-reveal`}>
-            <p className="text-6xl leading-none font-bold tracking-tighter">
+            <p className="text-5xl leading-none font-bold tracking-tighter md:text-6xl">
               {formatCount(t.value)}
             </p>
             <div className="flex items-end justify-between gap-3">

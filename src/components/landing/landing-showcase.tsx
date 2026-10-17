@@ -259,7 +259,7 @@ const LandingShowcase = () => {
               className={`col-start-1 row-start-1 transition-opacity duration-300 motion-reduce:transition-none ${
                 i === selected ? "opacity-100" : "pointer-events-none opacity-0"
               }`}>
-              <h2 className="text-2xl leading-tight font-bold tracking-tight sm:text-3xl md:text-4xl">
+              <h2 className="text-2xl leading-tight font-bold tracking-tight md:text-3xl">
                 {x.title}
               </h2>
               <p className="mt-2 max-w-md text-base md:text-lg">{x.body}</p>

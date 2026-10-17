@@ -21,7 +21,7 @@ const RECENT = RELEASES.slice(0, 4)
 // Proof the site is looked after: how often it changes, and the latest changes.
 const LandingActivity = () => (
   <section className="mx-auto max-w-7xl px-4">
-    <h2 className="landing-reveal max-w-3xl text-4xl leading-none font-bold tracking-tighter md:text-5xl">
+    <h2 className="landing-reveal max-w-3xl text-5xl leading-none font-bold tracking-tighter md:text-6xl">
       Built in 2023. Still improving.
     </h2>
     <p className="mt-4 max-w-2xl text-base md:text-lg">
@@ -29,7 +29,7 @@ const LandingActivity = () => (
       added over time.
     </p>
 
-    <div className="mt-8 grid gap-3 xl:grid-cols-[4fr_8fr]">
+    <div className="mt-10 grid gap-3 xl:grid-cols-[4fr_8fr]">
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-1">
         {[
           { value: LAST_12_MONTHS, label: "Updates in the last 12 months" },
@@ -37,11 +37,11 @@ const LandingActivity = () => (
         ].map((s) => (
           <div
             key={s.label}
-            className="bg-muted landing-reveal flex flex-col justify-between gap-4 rounded-2xl p-5 xl:flex-1">
-            <p className="text-4xl leading-none font-bold tracking-tighter md:text-5xl">
+            className="bg-muted landing-reveal flex flex-col justify-between gap-4 rounded-2xl p-5 md:p-6 xl:flex-1">
+            <p className="text-5xl leading-none font-bold tracking-tighter md:text-6xl">
               {s.value}
             </p>
-            <p className="text-base font-semibold md:text-lg">{s.label}</p>
+            <p className="text-xl font-semibold">{s.label}</p>
           </div>
         ))}
       </div>

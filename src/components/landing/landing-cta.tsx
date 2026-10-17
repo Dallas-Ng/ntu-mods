@@ -31,14 +31,14 @@ const LandingCTA = ({ semesterLabel }: Props) => {
       <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row xl:justify-start">
         <Button
           size="lg"
-          className="h-12 px-8 text-base active:scale-[0.98]"
+          className="h-12 px-6 text-base active:scale-[0.98] md:px-8"
           asChild>
           <a href="/timetable">Build my timetable</a>
         </Button>
         <Button
           size="lg"
           variant="secondary"
-          className="h-12 px-8 text-base active:scale-[0.98]"
+          className="h-12 px-6 text-base active:scale-[0.98] md:px-8"
           asChild>
           <a href="/mods">Browse modules</a>
         </Button>

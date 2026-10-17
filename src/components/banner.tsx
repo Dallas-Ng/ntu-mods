@@ -16,12 +16,12 @@ export const BannerWrapper = (props: BannerProps) => {
     <div
       data-nosnippet
       className={cn(
-        "relative z-10 flex items-center justify-center bg-sky-300 p-1",
+        "relative z-10 flex items-center justify-center bg-sky-300 px-2 py-1.5 md:p-1",
         props.divClass
       )}>
       <p
         className={cn(
-          "text-center text-sm leading-6 font-medium text-balance text-black",
+          "text-center text-sm leading-[1.2] font-medium text-balance text-black md:leading-5",
           props.pClass
         )}>
         {glueArrow(props.children)}

@@ -41,11 +41,11 @@ const LandingArticles = async () => {
         </a>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[7fr_5fr]">
+      <div className="grid gap-3 lg:grid-cols-[7fr_5fr]">
         <a
           href={`/articles/${lead.slug}`}
           className="landing-reveal group bg-muted flex flex-col overflow-hidden rounded-2xl">
-          <div className="relative flex flex-1 flex-col justify-center gap-3 p-6 md:p-10 lg:min-h-[300px]">
+          <div className="relative flex flex-1 flex-col justify-center gap-3 p-5 md:p-6 lg:min-h-[300px]">
             <Meta a={lead} />
             <h3 className="line-clamp-2 text-2xl leading-tight font-bold tracking-tight md:text-3xl">
               {lead.title}

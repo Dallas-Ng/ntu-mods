@@ -10,6 +10,8 @@ const CYCLE_MS = 7000
 const LandingDemo = ({ personas }: { personas: DemoPersona[] }) => {
   const [selected, setSelected] = useState(0)
   const [auto, setAuto] = useState(true)
+  // Full cell detail needs room; phones get the compact cells
+  const [roomy, setRoomy] = useState(true)
   const count = personas.length
 
   useEffect(() => {
@@ -21,6 +23,14 @@ const LandingDemo = ({ personas }: { personas: DemoPersona[] }) => {
     )
     return () => window.clearInterval(id)
   }, [auto, count])
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)")
+    const sync = () => setRoomy(mq.matches)
+    sync()
+    mq.addEventListener("change", sync)
+    return () => mq.removeEventListener("change", sync)
+  }, [])
 
   const current = personas[selected]
   if (!current) return null
@@ -44,6 +54,8 @@ const LandingDemo = ({ personas }: { personas: DemoPersona[] }) => {
           </p>
           <p className="mt-1 text-base">
             {Object.keys(current.timetable).length} modules · {current.note}
+            {current.bdes.length > 0 &&
+              `, incl. ${current.bdes.length} BDE${current.bdes.length > 1 ? "s" : ""}`}
           </p>
         </div>
         <div className="flex shrink-0 gap-2">
@@ -63,7 +75,7 @@ const LandingDemo = ({ personas }: { personas: DemoPersona[] }) => {
       <div
         key={current.id}
         className="bg-background animate-in fade-in h-[56vh] min-h-[360px] w-full overflow-hidden rounded-xl duration-500">
-        <TimetableTable moduleIndexMap={current.timetable} fullCell />
+        <TimetableTable moduleIndexMap={current.timetable} fullCell={roomy} />
       </div>
     </div>
   )

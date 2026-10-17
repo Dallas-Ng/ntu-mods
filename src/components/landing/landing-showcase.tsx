@@ -2,8 +2,6 @@ import { useEffect, useState } from "react"
 
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 
-import { Button } from "../ui/button"
-
 // [day 0-4, start hour, hours long, index type]
 type Block = [number, number, number, string]
 
@@ -112,7 +110,7 @@ const CYCLE_MS = 5000
 
 // The planner's constraints, cycled through as weeks drawn with the same
 // colours the timetable uses. The ruled-out time is marked and named.
-const LandingCloser = () => {
+const LandingShowcase = () => {
   const [selected, setSelected] = useState(0)
   const [paused, setPaused] = useState(false)
 
@@ -131,64 +129,57 @@ const LandingCloser = () => {
 
   return (
     <section
-      className="mx-auto mb-12 max-w-7xl px-4 md:mb-20"
+      className="bg-muted rounded-3xl p-5 md:p-8"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}>
-      <div className="bg-muted grid gap-10 rounded-3xl p-6 md:p-12 lg:grid-cols-[5fr_6fr] lg:items-center">
-        <div>
-          <h2
-            key={v.title}
-            aria-live="polite"
-            className="animate-in fade-in slide-in-from-bottom-2 min-h-[1.9em] text-5xl leading-[0.95] font-bold tracking-tighter duration-300 md:text-6xl">
-            {v.title}
-          </h2>
-          <p className="mt-6 min-h-14 max-w-md text-lg">{v.body}</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button
-              size="lg"
-              className="h-12 px-8 text-base active:scale-[0.98]"
-              asChild>
-              <a href="/timetable">Build my timetable</a>
-            </Button>
-            <Button
-              size="lg"
-              variant="secondary"
-              className="bg-background hover:bg-accent h-12 px-8 text-base active:scale-[0.98]"
-              asChild>
-              <a href="/mods">Browse modules</a>
-            </Button>
-          </div>
-          <div className="mt-8 flex gap-1">
-            {VARIATIONS.map((x, i) => (
-              <button
-                key={x.title}
-                type="button"
-                aria-label={x.title}
-                aria-pressed={i === selected}
-                onClick={() => setSelected(i)}
-                className="flex h-6 items-center px-1">
-                <span
-                  className={`block h-2.5 rounded-full transition-[width,background-color] duration-300 ${
-                    i === selected ? "bg-primary w-8" : "bg-foreground/25 w-2.5"
-                  }`}
-                />
-              </button>
-            ))}
-          </div>
+      <div className="mb-6 flex items-start justify-between gap-4">
+        {/* Every variation's text sits in one grid cell, so the card is always
+            as tall as the longest one and nothing resizes when it changes */}
+        <div className="grid">
+          {VARIATIONS.map((x, i) => (
+            <div
+              key={x.title}
+              aria-hidden={i !== selected}
+              className={`col-start-1 row-start-1 transition-opacity duration-300 motion-reduce:transition-none ${
+                i === selected ? "opacity-100" : "pointer-events-none opacity-0"
+              }`}>
+              <h2 className="text-3xl leading-tight font-bold tracking-tight md:text-4xl">
+                {x.title}
+              </h2>
+              <p className="mt-2 max-w-md text-base md:text-lg">{x.body}</p>
+            </div>
+          ))}
+        </div>
+        <div className="flex shrink-0 gap-1 pt-3">
+          {VARIATIONS.map((x, i) => (
+            <button
+              key={x.title}
+              type="button"
+              aria-label={x.title}
+              aria-pressed={i === selected}
+              onClick={() => setSelected(i)}
+              className="flex h-6 items-center px-0.5">
+              <span
+                className={`block h-2.5 rounded-full transition-[width,background-color] duration-300 ${
+                  i === selected ? "bg-primary w-6" : "bg-foreground/25 w-2.5"
+                }`}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div aria-hidden="true" className="bg-background rounded-2xl p-4 md:p-6">
+        <div className="mb-3 grid grid-cols-5 pl-12">
+          {DAYS.map((d) => (
+            <p key={d} className="px-2 text-sm font-semibold">
+              {d}
+            </p>
+          ))}
         </div>
 
-        <div
-          aria-hidden="true"
-          className="bg-background rounded-2xl p-4 md:p-6">
-          <div className="mb-3 grid grid-cols-5 pl-12">
-            {DAYS.map((d) => (
-              <p key={d} className="px-2 text-sm font-semibold">
-                {d}
-              </p>
-            ))}
-          </div>
-
-          <div className="relative h-72 pl-12 md:h-80">
+        <div className="relative h-72 pl-12 md:h-80">
+          <div className="absolute inset-y-1 left-0 w-12">
             {HOUR_LABELS.map((h) => (
               <span
                 key={h}
@@ -197,8 +188,10 @@ const LandingCloser = () => {
                 {hourLabel(h)}
               </span>
             ))}
+          </div>
 
-            <div className="bg-muted/50 relative grid h-full grid-cols-5 overflow-hidden rounded-lg">
+          <div className="bg-muted/50 h-full rounded-md p-1">
+            <div className="relative grid h-full grid-cols-5">
               {DAYS.map((d, day) => (
                 <div key={d} className="relative">
                   {v.blocks
@@ -212,7 +205,7 @@ const LandingCloser = () => {
                             top: `calc(${pct(start)} + 2px)`,
                             height: `calc(${(len / HOURS) * 100}% - 4px)`
                           }}
-                          className={`animate-in fade-in absolute inset-x-0.5 overflow-hidden rounded-md border-l-[3px] px-2 py-1 text-[13px] leading-tight font-semibold duration-500 ${style.background} ${style.text} ${style.borderLeft}`}>
+                          className={`animate-in fade-in absolute inset-x-0.5 overflow-hidden rounded-md px-2 py-1 text-[13px] leading-tight font-semibold duration-500 ${style.background} ${style.text}`}>
                           <p>{type}</p>
                         </div>
                       )
@@ -222,14 +215,14 @@ const LandingCloser = () => {
 
               <div
                 key={`off-${selected}`}
-                className="animate-in fade-in absolute duration-500"
+                className="animate-in fade-in absolute p-0.5 duration-500"
                 style={{
                   left: `${v.off.days[0] * 20}%`,
                   width: `${(v.off.days[1] - v.off.days[0]) * 20}%`,
                   top: pct(v.off.hours[0]),
                   height: `${span(v.off.hours)}%`
                 }}>
-                <div className="bg-muted flex h-full items-center justify-center px-3 text-center text-lg font-bold">
+                <div className="bg-muted flex h-full items-center justify-center rounded-md px-3 text-center text-lg font-bold">
                   {v.off.label}
                 </div>
               </div>
@@ -241,4 +234,4 @@ const LandingCloser = () => {
   )
 }
 
-export default LandingCloser
+export default LandingShowcase

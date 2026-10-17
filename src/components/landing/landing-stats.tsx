@@ -14,7 +14,7 @@ const LandingStats = ({ semesterLabel, modules, indexes }: Props) => {
   return (
     <section
       aria-label={`${semesterLabel} data`}
-      className="mx-auto grid max-w-7xl gap-3 px-4 md:grid-cols-4">
+      className="mx-auto grid max-w-7xl gap-3 px-4 sm:grid-cols-2 xl:grid-cols-4">
       <div className={`${TILE} landing-reveal`}>
         <p className="text-4xl leading-none font-bold tracking-tighter">
           Semester {sem}
@@ -26,13 +26,13 @@ const LandingStats = ({ semesterLabel, modules, indexes }: Props) => {
         </p>
       </div>
       <div className={`${TILE} landing-reveal`}>
-        <p className="text-6xl leading-none font-bold tracking-tighter md:text-7xl">
+        <p className="text-6xl leading-none font-bold tracking-tighter xl:text-7xl">
           {modules}
         </p>
         <p className="text-lg font-semibold">Modules</p>
       </div>
       <div className={`${TILE} landing-reveal`}>
-        <p className="text-6xl leading-none font-bold tracking-tighter md:text-7xl">
+        <p className="text-6xl leading-none font-bold tracking-tighter xl:text-7xl">
           {indexes}
         </p>
         <p className="text-lg font-semibold">Indexes</p>

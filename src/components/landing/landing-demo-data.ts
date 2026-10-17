@@ -70,8 +70,19 @@ const PERSONAS: Persona[] = [
   {
     id: "adm",
     label: "Art, Design and Media Student",
-    note: "Studios and critiques",
-    modules: ["DC1100", "DC1101", "DC1102", "DF1100", "DF1101"]
+    note: "Studios plus a few BDEs",
+    modules: [
+      "DC1100",
+      "DC1101",
+      "DC1102",
+      "DF1100",
+      "DF1101",
+      "HP1000",
+      "MA0218",
+      "AB1501",
+      "BS2025",
+      "HP2300"
+    ]
   },
   {
     id: "bde",
@@ -87,28 +98,37 @@ export type DemoPersona = {
   note: string
   timetable: TimetableWithIndex
   types: string[]
+  bdes: string[]
 }
+
+// Broad-appeal BDEs from several schools, used to fill out a thin week
+const BDE_POOL = [
+  "HP1000",
+  "HS1003",
+  "HH1003",
+  "MA0218",
+  "BS2025",
+  "AB1501",
+  "HP2300",
+  "DC1101"
+]
+// A typical semester load; thinner weeks get BDEs added up to this
+const TARGET_MODULES = 6
+// A degree week with more BDEs than that stops looking like the named course
+const MAX_ADDED_BDES = 2
 
 // For each module take the index that clashes with nothing already chosen and
 // sits on the emptiest days, so the week comes out spread out.
 const pickTimetable = async (
-  modules: string[],
+  core: string[],
+  bdePool: string[],
   year: string,
   semester: string
-): Promise<TimetableWithIndex> => {
+): Promise<{ timetable: TimetableWithIndex; bdes: string[] }> => {
   const timetable: TimetableWithIndex = {}
   const chosen: Index[] = []
-  // Modules with the fewest indexes go first, they have the least room to move
-  const options = (
-    await Promise.all(
-      modules.map(async (code) => ({
-        code,
-        indexes: Object.values(await getModuleIndexesData(code, year, semester))
-      }))
-    )
-  ).sort((a, b) => a.indexes.length - b.indexes.length)
 
-  for (const { code, indexes } of options) {
+  const place = async (code: string, indexes: Index[][]) => {
     let best: { slots: Index[]; load: number } | null = null
     for (const slots of indexes) {
       if (slots.some((s) => chosen.some((c) => timeslotsOverlap(s, c))))
@@ -119,12 +139,30 @@ const pickTimetable = async (
       )
       if (!best || load < best.load) best = { slots, load }
     }
-    if (best) {
-      timetable[code] = best.slots
-      chosen.push(...best.slots)
-    }
+    if (!best) return false
+    timetable[code] = best.slots
+    chosen.push(...best.slots)
+    return true
   }
-  return timetable
+  const load = async (code: string) =>
+    Object.values(await getModuleIndexesData(code, year, semester))
+
+  // Modules with the fewest indexes go first, they have the least room to move
+  const options = (
+    await Promise.all(
+      core.map(async (code) => ({ code, indexes: await load(code) }))
+    )
+  ).sort((a, b) => a.indexes.length - b.indexes.length)
+  for (const { code, indexes } of options) await place(code, indexes)
+
+  const bdes: string[] = []
+  for (const code of bdePool) {
+    if (Object.keys(timetable).length >= TARGET_MODULES) break
+    if (bdes.length >= MAX_ADDED_BDES) break
+    if (code in timetable) continue
+    if (await place(code, await load(code))) bdes.push(code)
+  }
+  return { timetable, bdes }
 }
 
 export const getLandingDemoData = async (
@@ -133,14 +171,21 @@ export const getLandingDemoData = async (
 ): Promise<DemoPersona[]> =>
   (
     await Promise.all(
-      PERSONAS.map(async ({ modules, ...p }) => {
-        const timetable = await pickTimetable(modules, year, semester)
+      PERSONAS.map(async ({ modules, ...p }, i) => {
+        // Start each persona at a different BDE so the weeks do not all match
+        const pool = [...BDE_POOL.slice(i % BDE_POOL.length), ...BDE_POOL]
+        const { timetable, bdes } = await pickTimetable(
+          modules,
+          pool,
+          year,
+          semester
+        )
         const types = [
           ...new Set(
             Object.values(timetable).flatMap((s) => s.map((i) => i.type))
           )
         ]
-        return { ...p, timetable, types }
+        return { ...p, timetable, types, bdes }
       })
     )
   )

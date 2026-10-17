@@ -56,6 +56,58 @@ describe("generateTimetableMatrix", () => {
     expect(TABLE_MATRIX[row][0]).toHaveLength(2)
   })
 
+  it("folds same-slot variations of one index into a single entry", () => {
+    const moduleIndexes: TimetableWithIndex = {
+      A: [
+        idx({
+          key: "A1",
+          type: "SEM",
+          venue: "S4-SR21",
+          remarks: "Teaching Wk1-9,11-13"
+        }),
+        idx({
+          key: "A1",
+          type: "SEM",
+          venue: "ONLINE",
+          remarks: "Teaching Wk10"
+        })
+      ]
+    }
+    const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS } =
+      generateTimetableMatrix(moduleIndexes)
+    const row = getFirstTsIndex(idx())
+    expect(TABLE_MATRIX[row][0]).toHaveLength(1)
+    expect(TABLE_MATRIX[row][0][0].venue).toBe("S4-SR21, ONLINE")
+    expect(TABLE_MATRIX[row][0][0].remarks).toBe(
+      "Teaching Wk1-9,11-13, Teaching Wk10"
+    )
+    expect(TABLE_MAX_DAY_COLUMNS[1]).toBe(1)
+  })
+
+  it("folds same-slot lecture variations that differ in venue and remarks", () => {
+    const moduleIndexes: TimetableWithIndex = {
+      A: [
+        idx({ key: "A1", venue: "LT2A", remarks: "Teaching Wk1-6" }),
+        idx({ key: "A1", venue: "ONLINE", remarks: "Teaching Wk10" }),
+        idx({ key: "A1", venue: "LKC-LT", remarks: "Teaching Wk7,13" })
+      ]
+    }
+    const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS } =
+      generateTimetableMatrix(moduleIndexes)
+    const cell = TABLE_MATRIX[getFirstTsIndex(idx())][0]
+    expect(cell).toHaveLength(1)
+    expect(cell[0].venue).toBe("LT2A, ONLINE, LKC-LT")
+    expect(TABLE_MAX_DAY_COLUMNS[1]).toBe(1)
+  })
+
+  it("does not fold the same slot across different indexes", () => {
+    const moduleIndexes: TimetableWithIndex = {
+      A: [idx({ key: "A1", type: "TUT" }), idx({ key: "A2", type: "TUT" })]
+    }
+    const { TABLE_MATRIX } = generateTimetableMatrix(moduleIndexes)
+    expect(TABLE_MATRIX[getFirstTsIndex(idx())][0]).toHaveLength(2)
+  })
+
   it("skips slots with no fixed day", () => {
     const { TABLE_MATRIX } = generateTimetableMatrix({
       A: [idx({ day: 0 })]

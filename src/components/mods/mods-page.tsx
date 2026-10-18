@@ -45,7 +45,7 @@ const GROUP_DEFAULT_VISIBLE = 10
 const LOADING_CARD_COUNT = 9
 const LOADING_LIST_COUNT = 12
 
-const ModsPage = () => {
+const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const searchTerm = searchParams.get("searchTerm") ?? ""
@@ -289,6 +289,16 @@ const ModsPage = () => {
 
       <ModuleResults
         isLoading={isLoading}
+        // Prerendered first cards of the default view, shown instead of
+        // skeletons until the full list arrives. Only valid for the default
+        // view: any URL filter makes them the wrong results.
+        initialModules={
+          hasActiveFilters ||
+          favouritesOnly === "true" ||
+          modsGroupBy !== "none"
+            ? undefined
+            : initialModules
+        }
         viewMode={modsViewMode}
         groupedModules={groupedModules}
         displayedModules={displayedModules}
@@ -321,6 +331,7 @@ const ModsPage = () => {
 
 interface ModuleResultsProps {
   isLoading: boolean
+  initialModules?: AllModule[]
   viewMode: "cards" | "list"
   groupedModules: ReturnType<typeof groupModules> | null
   displayedModules: AllModule[]
@@ -333,6 +344,7 @@ interface ModuleResultsProps {
 
 function ModuleResults({
   isLoading,
+  initialModules,
   viewMode,
   groupedModules,
   displayedModules,
@@ -399,6 +411,8 @@ function ModuleResults({
       </div>
     )
   }
+
+  if (isLoading && initialModules) return renderModules(initialModules)
 
   if (isLoading) {
     return viewMode === "cards" ? (

@@ -61,7 +61,8 @@ function Field({
   hint,
   value,
   step,
-  onChange
+  onChange,
+  prompt
 }: {
   id: string
   label: string
@@ -69,6 +70,8 @@ function Field({
   value: string
   step: string
   onChange: (v: string) => void
+  /** Replaces the hint, in the accent colour, while this field still needs input. */
+  prompt?: string
 }) {
   return (
     <div className="space-y-1.5">
@@ -83,9 +86,15 @@ function Field({
         step={step}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="bg-background"
+        className={cn("bg-background", prompt && "ring-primary ring-2")}
       />
-      <p className="text-muted-foreground text-xs">{hint}</p>
+      <p
+        className={cn(
+          "text-xs",
+          prompt ? "text-primary font-medium" : "text-muted-foreground"
+        )}>
+        {prompt ?? hint}
+      </p>
     </div>
   )
 }
@@ -113,6 +122,8 @@ const CgpaPlanner = () => {
       setCgpa(fmt(points / au))
       setDoneAu(String(au))
       setSource({ sample: false, name: file.name })
+      // A transcript cannot say how many AU are left, so send them there.
+      setTimeout(() => document.getElementById("left")?.focus(), 0)
       track("transcript_loaded")
       if (share) shareTranscript("cgpa", mods)
     } catch {
@@ -125,6 +136,7 @@ const CgpaPlanner = () => {
     }
   }
 
+  const leftMissing = cgpa !== "" && doneAu !== "" && leftAu === ""
   const c = Number(cgpa)
   const d = Number(doneAu)
   const r = Number(leftAu)
@@ -211,6 +223,9 @@ const CgpaPlanner = () => {
             id="left"
             label="AU left"
             hint="After any FGO"
+            prompt={
+              leftMissing ? "Enter the AU you still have to take" : undefined
+            }
             value={leftAu}
             step="0.5"
             onChange={setLeftAu}
@@ -218,7 +233,12 @@ const CgpaPlanner = () => {
         </div>
       </section>
 
-      {!active ? (
+      {leftMissing ? (
+        <p className="bg-muted text-muted-foreground rounded-2xl p-5 text-sm">
+          Almost there. Enter the AU you still have to take above and your goals
+          appear here.
+        </p>
+      ) : !active ? (
         <ToolSteps
           steps={[
             {

@@ -1761,6 +1761,13 @@
     "@posthog/core" "^1.59.1"
     "@posthog/types" "^1.416.0"
 
+"@posthog/cli@^0.18.10":
+  version "0.18.10"
+  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.18.10.tgz#b89db935f9ee21340a704c04d39ef170ea0b1911"
+  integrity sha512-WFucXcIqUL35NkH4hVlch3TBSGRRAhjqvmh2/2z8sj+HsR7e+NUiG3QT5dy9Qs1C3hVe7uWkdNU6DKyKvONAXw==
+  dependencies:
+    detect-libc "^2.1.2"
+
 "@posthog/core@^1.59.1":
   version "1.59.1"
   resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.59.1.tgz#34a08cd2de6410aec6c2ab3643b77e3d5a24cb9a"

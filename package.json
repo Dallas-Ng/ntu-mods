@@ -9,7 +9,7 @@
   "scripts": {
     "data": "tsx scripts/build-static-data.mts",
     "dev": "yarn data && astro dev --port ${PORT:-4321}",
-    "build": "yarn data && astro build && tsx scripts/build-sitemap.mts && node scripts/indexnow.mjs ../dist/client",
+    "build": "yarn data && astro build && node scripts/upload-sourcemaps.mjs && tsx scripts/build-sitemap.mts && node scripts/indexnow.mjs ../dist/client",
     "preview": "astro preview --port ${PORT:-4321}",
     "db:build": "node scripts/db/sync-db.mjs --from json",
     "db:pull": "node scripts/db/sync-db.mjs --from d1",
@@ -62,6 +62,7 @@
     "@astrojs/check": "^0.9",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@playwright/test": "^1.64.0",
+    "@posthog/cli": "^0.18.10",
     "@types/node": "^22",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",

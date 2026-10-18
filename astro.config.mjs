@@ -158,6 +158,13 @@ export default defineConfig({
         "zustand/middleware"
       ]
     },
+    // Source maps for the browser bundles only, so PostHog can show real stack
+    // traces. "hidden" leaves out the sourceMappingURL comment, and
+    // scripts/upload-sourcemaps.mjs deletes the .map files after uploading
+    // them, so they are never served from ntumods.com.
+    environments: {
+      client: { build: { sourcemap: "hidden" } }
+    },
     build: {
       rollupOptions: {
         output: {

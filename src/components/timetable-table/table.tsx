@@ -1,6 +1,7 @@
 "use client"
 
 import { Fragment, useMemo, useState } from "react"
+import { useIndexHover } from "@/state/index-hover.state"
 
 import { TABLE_SETTINGS } from "@/config/table-settings"
 import { STARS_TIMESLOTS } from "@/lib/constants"
@@ -89,6 +90,7 @@ export const TimetableTable = (props: Props) => {
       )
     }, [moduleIndexMap, isMobile, precomputedMatrix])
 
+  const hoveredPicker = useIndexHover((s) => s.hovered)
   const [currentHoverKey, setCurrentHoverKey] = useState("")
 
   const handleIndexClick = (
@@ -211,7 +213,19 @@ export const TimetableTable = (props: Props) => {
                                 }
                                 previewActive={previewActive}
                                 previewCandidate={previewCandidate}
-                                pickerDimmed={pickerDimmed}
+                                pickerDimmed={
+                                  pickerDimmed ||
+                                  (!!hoveredPicker &&
+                                    hoveredPicker.moduleKey !== moduleKey)
+                                }
+                                hoverState={
+                                  hoveredPicker?.moduleKey !== moduleKey
+                                    ? undefined
+                                    : index.key === hoveredPicker.indexKey &&
+                                        index.key !== hoveredPicker.currentKey
+                                      ? "preview"
+                                      : "current"
+                                }
                                 onClick={() =>
                                   handleIndexClick(
                                     moduleKey,

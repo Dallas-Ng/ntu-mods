@@ -43,6 +43,8 @@ interface Props {
   previewCandidate?: boolean
   previewActive?: boolean
   pickerDimmed?: boolean
+  /** Shown only because an index is hovered in the picker, not selected. */
+  hoverState?: "preview" | "current"
 }
 
 export const TimetableTableCell = (props: Props) => {
@@ -63,7 +65,8 @@ export const TimetableTableCell = (props: Props) => {
     onClick,
     previewCandidate = false,
     previewActive = false,
-    pickerDimmed = false
+    pickerDimmed = false,
+    hoverState
   } = props
 
   // Settings for cells
@@ -119,6 +122,10 @@ export const TimetableTableCell = (props: Props) => {
         previewCandidate &&
           "ring-primary/80 hover:ring-primary shadow-md ring-1",
         previewActive && "ring-primary shadow-lg ring-1",
+        hoverState === "preview" &&
+          "outline-primary outline-2 -outline-offset-2 outline-dashed",
+        hoverState === "current" &&
+          "outline-foreground/50 outline-2 -outline-offset-2",
         dimmed && "opacity-30 dark:opacity-20",
         pickerDimmed && "pointer-events-none opacity-[0.12] dark:opacity-[0.08]"
       )}

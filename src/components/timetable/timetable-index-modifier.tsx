@@ -2,6 +2,7 @@
 
 import { Fragment, useEffect, useRef, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
+import { useIndexHover } from "@/state/index-hover.state"
 import { Check } from "lucide-react"
 import posthog from "posthog-js"
 
@@ -188,6 +189,13 @@ const TimetableIndexModifier = (props: Props) => {
   const { isMobile } = useSettings()
   const { timetable, updateItemIndex } = useTimetable()
   const containerRef = useRef<HTMLDivElement>(null)
+  const setHovered = useIndexHover((s) => s.setHovered)
+
+  // Drop the preview when the picker closes or this row unmounts.
+  useEffect(() => {
+    if (!open) setHovered(null)
+    return () => setHovered(null)
+  }, [open, setHovered])
 
   useEffect(() => {
     const raw: Indexes = (seasonIndexes[moduleKey] as Indexes) ?? {}
@@ -265,7 +273,7 @@ const TimetableIndexModifier = (props: Props) => {
       }>
       <Command
         shouldFilter={false}
-        className="min-h-0 flex-1 border md:rounded-t-none">
+        className="bg-muted/60 min-h-0 flex-1 border md:rounded-t-none">
         <div className="h-fit w-full border-b">
           <CommandInput
             placeholder="Search for code, timing or tutorial group"
@@ -274,18 +282,8 @@ const TimetableIndexModifier = (props: Props) => {
         </div>
 
         {hasCommonLecture && (
-          // Sits above CommandList, outside its scroll area — Command's own
-          // overflow-hidden means a long lecture list here would just get
-          // clipped with no way to reach the rest. Bound it and let it
-          // scroll on its own instead.
-          <div className="max-h-40 w-full space-y-2 overflow-y-auto border-b px-4 pb-2 text-sm md:pb-4">
-            {/* The block's own top padding lives here (pt-2/md:pt-4), not
-                on the parent — sticky pins to the parent's content-box top,
-                so parent padding-top would leave an uncovered sliver above
-                the label where scrolled rows still peek through. z-10 for
-                the same reason on the paint-order axis: entries are later
-                in DOM order and would paint over this label without it. */}
-            <p className="text-muted-foreground bg-background sticky top-0 z-10 pt-2 pb-1 text-center text-xs md:pt-4">
+          <div className="w-full shrink-0 space-y-2 border-b px-4 pt-2 pb-2 text-sm md:pt-4 md:pb-4">
+            <p className="text-muted-foreground pb-1 text-center text-xs">
               Common Lecture for Indexes
             </p>
 
@@ -321,6 +319,15 @@ const TimetableIndexModifier = (props: Props) => {
                 <CommandItem
                   value={indexKey}
                   onSelect={handleSelect}
+                  onMouseEnter={() =>
+                    !isMobile &&
+                    setHovered({
+                      moduleKey,
+                      indexKey,
+                      currentKey: currentIndexKey
+                    })
+                  }
+                  onMouseLeave={() => setHovered(null)}
                   className="hover:bg-accent cursor-pointer transition-colors">
                   <div className="flex w-full justify-between gap-2 text-sm">
                     <span className="flex items-center gap-1">
@@ -402,7 +409,7 @@ const TimetableIndexModifier = (props: Props) => {
 
         <PopoverContent
           container={containerRef.current}
-          className="rounded-t-none border p-0"
+          className="border-primary/50 bg-muted rounded-t-none border p-0 shadow-xl"
           sideOffset={0}
           style={{
             width: containerRef.current?.clientWidth

@@ -341,36 +341,25 @@ function ModuleResults({
         year={year}
         semester={semester}
         showText={false}
-        triggerClassName="h-full w-full rounded-none"
+        triggerClassName="bg-background hover:bg-background/60 size-8 rounded-full p-0 active:scale-95"
         triggerVariant="ghost"
       />
     )
   }
 
   function favouriteBtn(m: AllModule) {
-    return <ModsFavouriteButton moduleKey={m.code} />
+    return (
+      <ModsFavouriteButton
+        moduleKey={m.code}
+        className="bg-background hover:bg-background/60 size-8 rounded-full active:scale-95"
+      />
+    )
   }
 
   function renderModules(modules: AllModule[], footer?: React.ReactNode) {
     return viewMode === "cards" ? (
-      footer ? (
-        <div className="overflow-hidden rounded-lg border-2">
-          <div className="grid grid-cols-1 gap-4 p-3 md:grid-cols-2 lg:grid-cols-3">
-            {modules.map((m, i) => (
-              <ModuleCardDetail
-                key={i}
-                code={m.code}
-                moduleData={m}
-                searchTerm={searchTerm}
-                timetableButton={timetableBtn(m)}
-                favouriteButton={favouriteBtn(m)}
-              />
-            ))}
-          </div>
-          <div className="border-t">{footer}</div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="space-y-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           {modules.map((m, i) => (
             <ModuleCardDetail
               key={i}
@@ -382,11 +371,12 @@ function ModuleResults({
             />
           ))}
         </div>
-      )
+        {footer}
+      </div>
     ) : (
-      <div className="overflow-hidden rounded-lg border-2">
+      <div className="bg-muted overflow-hidden rounded-2xl">
         {modules.map((m, i) => (
-          <div key={i} className="border-b last:border-b-0">
+          <div key={i} className="border-background border-b-2 last:border-b-0">
             <ModuleListRow
               code={m.code}
               moduleData={m}
@@ -396,24 +386,26 @@ function ModuleResults({
             />
           </div>
         ))}
-        {footer && <div className="border-t">{footer}</div>}
+        {footer && <div className="p-2">{footer}</div>}
       </div>
     )
   }
 
   if (isLoading) {
     return viewMode === "cards" ? (
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: LOADING_CARD_COUNT }).map((_, i) => (
           <ModuleCardDetailLoading key={i} />
         ))}
       </div>
     ) : (
-      <div className="overflow-hidden rounded-lg border-2">
+      <div className="bg-muted overflow-hidden rounded-2xl">
         {Array.from({ length: LOADING_LIST_COUNT }).map((_, i) => (
           <div
             key={i}
-            className={i !== LOADING_LIST_COUNT - 1 ? "border-b" : ""}>
+            className={
+              i !== LOADING_LIST_COUNT - 1 ? "border-background border-b-2" : ""
+            }>
             <ModuleListRowLoading />
           </div>
         ))}
@@ -433,9 +425,9 @@ function ModuleResults({
           const footer =
             !isExpanded && hidden > 0 ? (
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
-                className="w-full rounded-none"
+                className="w-full"
                 onClick={() => onExpandGroup(key)}>
                 <ChevronDown className="mr-1 size-4" />
                 See {hidden} more
@@ -443,8 +435,8 @@ function ModuleResults({
             ) : undefined
 
           return (
-            <div key={key} className="space-y-3">
-              <h3 className="text-sm font-medium">
+            <div key={key} className="space-y-2">
+              <h3 className="text-sm font-semibold">
                 {label}{" "}
                 <span className="text-muted-foreground">
                   ({modules.length})

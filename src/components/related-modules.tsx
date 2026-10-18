@@ -1,4 +1,4 @@
-import ModuleCard from "./module-card"
+import { ChevronRight } from "lucide-react"
 
 interface Props {
   related: Array<{ code: string; title: string }>
@@ -13,11 +13,21 @@ interface Props {
 // the on-demand path.
 const RelatedModules = ({ related, emptyHref, emptyLabel }: Props) =>
   related.length > 0 ? (
-    <div className="grid grid-cols-1 gap-2 text-sm md:grid-cols-3">
+    <ul className="grid grid-cols-1 gap-x-8 md:grid-cols-2">
       {related.map((module) => (
-        <ModuleCard key={module.code} module={module} />
+        <li key={module.code} className="border-b">
+          <a
+            href={`/mods/${module.code}`}
+            className="hover:bg-accent group -mx-2 flex items-center gap-3 rounded-lg px-2 py-2.5 text-sm transition-colors">
+            <span className="text-muted-foreground w-16 shrink-0 font-mono text-xs">
+              {module.code}
+            </span>
+            <span className="min-w-0 flex-1 truncate">{module.title}</span>
+            <ChevronRight className="text-muted-foreground size-4 shrink-0 opacity-0 transition-opacity group-hover:opacity-100" />
+          </a>
+        </li>
       ))}
-    </div>
+    </ul>
   ) : emptyHref && emptyLabel ? (
     <a
       href={emptyHref}

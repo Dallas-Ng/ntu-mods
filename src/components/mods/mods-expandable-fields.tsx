@@ -4,9 +4,8 @@ import { useState } from "react"
 import { ChevronDown, ChevronUp } from "lucide-react"
 
 import type { DbModule } from "@/lib/server/db/types"
-import { cn } from "@/lib/utils"
 
-import { hasValue, renderModuleValue } from "./mods-info-table"
+import { hasValue, renderModuleValue, ROW_CLASS } from "./mods-info-table"
 
 const FIELDS: Array<{ key: keyof DbModule; label: string }> = [
   { key: "notAvailableToProgramme", label: "Not Available To Programme" },
@@ -39,20 +38,24 @@ const ModsExpandableFields = ({ module }: Props) => {
   const [expanded, setExpanded] = useState(false)
 
   const extrasRows = module.extras ? Object.entries(module.extras) : []
-  const hasContent =
-    FIELDS.some(({ key }) => hasValue(module[key])) || extrasRows.length > 0
+  const count =
+    FIELDS.filter(({ key }) => hasValue(module[key])).length + extrasRows.length
+  const hasContent = count > 0
 
   if (!hasContent) return null
 
   return (
-    <div>
+    <div className="overflow-hidden rounded-2xl border">
       <button
         onClick={() => setExpanded((v) => !v)}
-        className={cn(
-          "hover:bg-muted/50 flex w-full cursor-pointer items-center justify-between rounded-t-md border-2 border-b-0 px-4 py-3 transition-colors",
-          !expanded && "rounded-b-md border-b-2"
-        )}>
-        <span className="text-sm font-medium">Additional Information</span>
+        aria-expanded={expanded}
+        className="hover:bg-muted/50 flex w-full cursor-pointer items-center justify-between px-5 py-3.5 transition-colors">
+        <span className="flex items-center gap-2 text-sm font-semibold">
+          Additional information
+          <span className="bg-muted text-muted-foreground flex size-5 items-center justify-center rounded-full text-xs font-medium">
+            {count}
+          </span>
+        </span>
         {expanded ? (
           <ChevronUp className="text-muted-foreground size-4" />
         ) : (
@@ -60,35 +63,28 @@ const ModsExpandableFields = ({ module }: Props) => {
         )}
       </button>
 
-      <table
-        className={cn("bg-background w-full text-sm", !expanded && "hidden")}>
-        <tbody>
+      {expanded && (
+        <dl className="space-y-3 border-t p-5 text-sm">
           {FIELDS.map(({ key, label }) => {
             const value = module[key]
             const has = hasValue(value)
             return (
-              <tr key={key} className="border-t">
-                <td
-                  className={cn(
-                    "w-[200px] px-4 py-2 font-medium",
-                    !has && "text-muted-foreground"
-                  )}>
-                  {label}
-                </td>
-                <td className="px-4 py-2">
-                  {has && renderModuleValue(key, value)}
-                </td>
-              </tr>
+              <div key={key} className={ROW_CLASS}>
+                <dt className="text-muted-foreground">{label}</dt>
+                <dd className="min-w-0 break-words">
+                  {has ? renderModuleValue(key, value) : "None"}
+                </dd>
+              </div>
             )
           })}
           {extrasRows.map(([label, value]) => (
-            <tr key={label} className="border-t">
-              <td className="w-[200px] px-4 py-2">{label}</td>
-              <td className="px-4 py-2">{value}</td>
-            </tr>
+            <div key={label} className={ROW_CLASS}>
+              <dt className="text-muted-foreground">{label}</dt>
+              <dd className="min-w-0 break-words">{value}</dd>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </dl>
+      )}
     </div>
   )
 }

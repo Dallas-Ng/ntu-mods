@@ -27,19 +27,19 @@ export default function ModsDescription({
   description: string
 }) {
   return (
-    <div className="mt-4 space-y-3">
+    <div className="space-y-3 text-sm">
       {group(description).map((g, i) =>
         g.list ? (
           <ul key={i} className="list-disc space-y-1 pl-5">
             {g.items.map((item, j) => (
-              <li key={j} className="leading-relaxed">
+              <li key={j} className="leading-relaxed text-pretty">
                 {item.replace(LIST_MARKER_RE, "")}
               </li>
             ))}
           </ul>
         ) : (
           g.items.map((para, j) => (
-            <p key={`${i}-${j}`} className="leading-relaxed">
+            <p key={`${i}-${j}`} className="leading-relaxed text-pretty">
               {para}
             </p>
           ))

@@ -102,9 +102,9 @@
     --primary-alt: 222.2 5% 50%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 95.1%;
+    --muted: 235 22% 96%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
+    --accent: 235 22% 93%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -441,7 +441,7 @@ table td {
    marks and side rule. (CTA cards are blockquotes too, but they are replaced
    with .article-cta before they get here.) */
 .prose blockquote {
-  @apply bg-muted text-foreground/80 my-6 rounded-2xl border-0 p-5 text-sm not-italic;
+  @apply bg-primary/10 text-foreground my-8 rounded-2xl border-0 p-6 text-base leading-relaxed not-italic;
 }
 
 .prose blockquote p {
@@ -458,7 +458,13 @@ table td {
 }
 
 .prose blockquote strong {
-  @apply text-foreground;
+  @apply text-foreground font-semibold;
+}
+
+/* A bold lead-in ("Quick summary:", "Ready to try it?") becomes a primary
+   coloured title above the text. */
+.prose blockquote p > strong:first-child {
+  @apply text-primary mb-1.5 block text-base font-semibold;
 }
 
 /* Article images: centred, click-to-zoom (medium-zoom, see articles/[slug].astro),

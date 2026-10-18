@@ -4,7 +4,7 @@ import { Button } from "../ui/button"
 
 const ModsEmptyCard = () => {
   return (
-    <div className="w-full space-y-4 rounded-md border p-4 text-center">
+    <div className="bg-muted w-full space-y-4 rounded-2xl p-8 text-center">
       <div className="flex justify-center">
         <img
           src="/not-found.svg"
@@ -16,12 +16,12 @@ const ModsEmptyCard = () => {
       </div>
 
       <div>
-        <p>No modules found, try changing your filters</p>
+        <p className="text-sm">No modules found, try changing your filters</p>
       </div>
 
       <div>
         <Button
-          variant="outline"
+          variant="secondary"
           onClick={() => window.location.assign("/mods")}>
           Click here to reset filters
         </Button>

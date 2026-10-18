@@ -125,7 +125,7 @@ const ModsAddToTimetableButton = ({
   }
 
   const textEl = (() => {
-    const label = inAnyPlan ? "In Timetable" : "Add to Calendar"
+    const label = inAnyPlan ? "In timetable" : "Add to timetable"
     if (showText === true) return <span>{label}</span>
     if (showText === false) return null
     return <span className="hidden sm:inline">{label}</span>
@@ -136,7 +136,8 @@ const ModsAddToTimetableButton = ({
       variant={triggerVariant ?? (inAnyPlan ? "secondary" : "outline")}
       size="sm"
       disabled={!hasIndexes}
-      aria-label={inAnyPlan ? "In Timetable" : "Add to Calendar"}
+      aria-label={inAnyPlan ? "In timetable" : "Add to timetable"}
+      title={inAnyPlan ? "In timetable" : "Add to timetable"}
       className={cn("gap-1.5", triggerClassName)}>
       {inAnyPlan ? (
         <CalendarCheck className="text-primary size-3.5 shrink-0" />

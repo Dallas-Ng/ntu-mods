@@ -14,12 +14,14 @@ export const ModuleCard = ({ module, cardClassName }: ModuleCardProps) => (
   <a key={module.code} href={`/mods/${module.code}`}>
     <div
       className={cn(
-        "bg-card text-muted-foreground rounded-lg border p-2 text-sm",
+        "hover:bg-accent text-muted-foreground rounded-2xl border p-4 text-sm transition-colors",
         cardClassName
       )}>
-      <p>{module.code}</p>
+      <p className="font-mono text-xs">{module.code}</p>
 
-      <p className="text-foreground truncate">{module.title}</p>
+      <p className="text-foreground mt-1 truncate font-medium">
+        {module.title}
+      </p>
     </div>
   </a>
 )
@@ -62,6 +64,11 @@ function getHref(moduleData: AllModule, code: string) {
       )
 }
 
+const lastOffered = (m: AllModule) =>
+  m.latestYear
+    ? `Last offered AY${m.latestYear.slice(2)}/${String(parseInt(m.latestYear) + 1).slice(2)}`
+    : "Not offered"
+
 export const ModuleCardDetail = ({
   code,
   moduleData,
@@ -72,65 +79,58 @@ export const ModuleCardDetail = ({
   const isCurrentSemester = moduleData.isCurrentSemester !== false
   const categories = moduleData.categories ?? []
   const faculty = moduleData.faculty ?? ""
-  const hasActions = timetableButton || favouriteButton
 
   return (
     <div
       className={cn(
-        "flex h-full overflow-hidden rounded-lg border-2",
-        !isCurrentSemester && "opacity-75"
+        "hover:bg-accent group relative flex h-32 flex-col rounded-2xl border p-4 transition-colors",
+        isCurrentSemester ? "bg-muted border-transparent" : "border-border"
       )}>
-      {/* Left: navigable link area with its own hover */}
       <a
         href={getHref(moduleData, code)}
-        className="hover:bg-accent flex min-w-0 flex-1 flex-col p-3 transition-colors">
-        <p className="line-clamp-1 flex-1 text-sm leading-tight">
+        className="flex min-w-0 flex-1 flex-col pr-20 after:absolute after:inset-0 after:rounded-2xl">
+        <div className="text-muted-foreground flex items-center gap-1.5 text-xs whitespace-nowrap">
+          <span className="font-mono">{highlightText(code, searchTerm)}</span>
+          {moduleData.au && <span>· {moduleData.au} AU</span>}
+          {faculty && <span>· {faculty}</span>}
+        </div>
+        <p className="mt-1 line-clamp-2 text-base leading-snug font-semibold tracking-tight">
           {highlightText(moduleData.title, searchTerm)}
         </p>
-
-        <div className="text-muted-foreground mt-3 flex items-center gap-2 text-xs">
-          <span className="shrink-0 font-mono">
-            {highlightText(code, searchTerm)}
-          </span>
-          <div className="flex min-w-0 flex-1 gap-1 overflow-hidden">
-            {categories.map((category, i) => (
-              <span
-                key={i}
-                className="shrink-0 truncate rounded-full border px-2 py-0">
-                {MODULE_CATEGORY[category]}
-              </span>
-            ))}
-          </div>
-          <div className="flex shrink-0 items-center gap-1.5">
-            {moduleData.au && <span>{moduleData.au} AU</span>}
-            <span>{faculty}</span>
-          </div>
+        <div className="mt-auto flex gap-1 overflow-hidden text-xs">
+          {!isCurrentSemester && (
+            <span className="text-foreground shrink-0 rounded-full border px-2 py-0.5">
+              {lastOffered(moduleData)}
+            </span>
+          )}
+          {categories.map((category, i) => (
+            <span
+              key={i}
+              className={cn(
+                "text-muted-foreground shrink-0 truncate rounded-full px-2 py-0.5",
+                isCurrentSemester ? "bg-background" : "bg-muted"
+              )}>
+              {MODULE_CATEGORY[category]}
+            </span>
+          ))}
         </div>
       </a>
 
-      {/* Right action column — two stacked buttons, no navigation */}
-      {hasActions && (
-        <div className="border-border/60 flex w-9 shrink-0 flex-col divide-y border-l">
-          {timetableButton && (
-            <div className="flex flex-1">{timetableButton}</div>
-          )}
-          {favouriteButton && (
-            <div className="flex flex-1">{favouriteButton}</div>
-          )}
-        </div>
-      )}
+      {/* Quiet icon actions above the full-card link; labelled via title/aria */}
+      <div className="absolute top-3 right-3 z-10 flex gap-1.5">
+        {timetableButton}
+        {favouriteButton}
+      </div>
     </div>
   )
 }
 
 export const ModuleCardDetailLoading = () => (
-  <div className="flex h-[108px] flex-col rounded-lg border-2 p-3">
-    <Skeleton className="mb-1 h-[20px] w-full" />
-    <Skeleton className="h-[20px] w-3/4" />
-    <div className="mt-auto flex justify-between">
-      <Skeleton className="h-[16px] w-[60px]" />
-      <Skeleton className="h-[16px] w-[40px]" />
-    </div>
+  <div className="bg-muted flex h-32 flex-col rounded-2xl p-4">
+    <Skeleton className="bg-foreground/10 dark:bg-background mb-2 h-4 w-16" />
+    <Skeleton className="bg-foreground/10 dark:bg-background mb-1 h-5 w-full" />
+    <Skeleton className="bg-foreground/10 dark:bg-background h-5 w-3/4" />
+    <Skeleton className="bg-foreground/10 dark:bg-background mt-auto h-5 w-24" />
   </div>
 )
 
@@ -146,26 +146,27 @@ export const ModuleListRow = ({
   const faculty = moduleData.faculty ?? ""
 
   return (
-    <div
-      className={cn(
-        "flex overflow-hidden transition-colors",
-        !isCurrentSemester && "opacity-60"
-      )}>
+    <div className={cn("flex overflow-hidden transition-colors")}>
       {/* Left: navigable link area */}
       <a
         href={getHref(moduleData, code)}
-        className="hover:bg-accent flex min-w-0 flex-1 items-center gap-3 px-3 py-2.5 transition-colors">
-        <span className="text-muted-foreground w-[80px] shrink-0 font-mono text-sm">
+        className="hover:bg-accent flex min-w-0 flex-1 flex-col gap-0.5 px-4 py-3 transition-colors sm:flex-row sm:items-center sm:gap-3">
+        <span className="text-muted-foreground shrink-0 font-mono text-xs sm:w-20 sm:text-sm">
           {highlightText(code, searchTerm)}
         </span>
 
-        <span className="min-w-0 flex-1 truncate text-sm">
+        <span className="w-full min-w-0 flex-1 truncate text-sm">
           {highlightText(moduleData.title, searchTerm)}
         </span>
 
         <div className="text-muted-foreground hidden shrink-0 items-center gap-1 text-xs sm:flex">
+          {!isCurrentSemester && (
+            <span className="text-foreground rounded-full border px-2 py-0.5">
+              {lastOffered(moduleData)}
+            </span>
+          )}
           {categories.map((category, i) => (
-            <span key={i} className="rounded-full border px-2 py-0">
+            <span key={i} className="bg-background rounded-full px-2 py-0.5">
               {MODULE_CATEGORY[category]}
             </span>
           ))}
@@ -175,16 +176,16 @@ export const ModuleListRow = ({
           {moduleData.au && `${moduleData.au} AU`}
         </span>
 
-        <span className="text-muted-foreground w-[40px] shrink-0 text-right text-xs">
+        <span className="text-muted-foreground hidden w-10 shrink-0 text-right text-xs sm:block">
           {faculty}
         </span>
       </a>
 
       {/* Right: separate icon buttons */}
       {(timetableButton || favouriteButton) && (
-        <div className="border-border/60 flex shrink-0 divide-x border-l">
-          {timetableButton && <div className="flex w-9">{timetableButton}</div>}
-          {favouriteButton && <div className="flex w-9">{favouriteButton}</div>}
+        <div className="flex shrink-0 items-center gap-1.5 pr-3">
+          {timetableButton}
+          {favouriteButton}
         </div>
       )}
     </div>
@@ -192,11 +193,11 @@ export const ModuleListRow = ({
 }
 
 export const ModuleListRowLoading = () => (
-  <div className="flex items-center gap-3 px-3 py-2.5">
-    <Skeleton className="h-4 w-[80px] shrink-0" />
-    <Skeleton className="h-4 flex-1" />
-    <Skeleton className="hidden h-4 w-[60px] sm:block" />
-    <Skeleton className="h-4 w-[40px] shrink-0" />
+  <div className="flex h-11 items-center gap-3 px-4">
+    <Skeleton className="bg-foreground/10 dark:bg-background h-4 w-20 shrink-0" />
+    <Skeleton className="bg-foreground/10 dark:bg-background h-4 flex-1" />
+    <Skeleton className="bg-foreground/10 dark:bg-background hidden h-4 w-16 sm:block" />
+    <Skeleton className="bg-foreground/10 dark:bg-background h-4 w-10 shrink-0" />
   </div>
 )
 

@@ -1,6 +1,5 @@
 import { MODULE_CODE_RE } from "@/lib/constants"
 import type { DbExam, DbModule } from "@/lib/server/db/types"
-import { cn } from "@/lib/utils"
 
 interface Props {
   module: DbModule
@@ -48,44 +47,48 @@ export function renderModuleValue(
   return String(value)
 }
 
+export const ROW_CLASS =
+  "grid grid-cols-1 gap-0.5 sm:grid-cols-[9rem_1fr] sm:gap-4"
+
 const ModsInfoTable = ({ module, exam, knownCodes }: Props) => (
   <div className="space-y-3">
-    <table className="data-table">
-      <tbody>
-        <tr>
-          <td className="w-[200px]">AUs</td>
-          <td>{module.au} AUs</td>
-        </tr>
+    <dl className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <div className={ROW_CLASS}>
+        <dt className="text-muted-foreground">AUs</dt>
+        <dd>{module.au} AUs</dd>
+      </div>
 
-        {FIELDS.map(({ key, label }) => {
-          const value = module[key]
-          const has = hasValue(value)
-          return (
-            <tr key={key}>
-              <td className={cn(!has && "text-muted-foreground")}>{label}</td>
-              <td>
-                {has &&
-                  renderModuleValue(
+      {FIELDS.map(({ key, label }) => {
+        const value = module[key]
+        const has = hasValue(value)
+        return (
+          <div key={key} className={ROW_CLASS}>
+            <dt className="text-muted-foreground">{label}</dt>
+            <dd className="min-w-0 break-words">
+              {has
+                ? renderModuleValue(
                     key,
                     value,
                     knownCodes && new Set(knownCodes)
-                  )}
-              </td>
-            </tr>
-          )
-        })}
+                  )
+                : "None"}
+            </dd>
+          </div>
+        )
+      })}
 
-        <tr>
-          <td className={cn(!exam && "text-muted-foreground")}>Exam</td>
-          <td>
-            {exam ? `${exam.date}, ${exam.start_time} - ${exam.end_time}` : ""}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <div className={ROW_CLASS}>
+        <dt className="text-muted-foreground">Exam</dt>
+        <dd>
+          {exam
+            ? `${exam.date}, ${exam.start_time} - ${exam.end_time}`
+            : "None"}
+        </dd>
+      </div>
+    </dl>
 
     {exam && (
-      <p className="text-muted-foreground text-xs">
+      <p className="text-muted-foreground px-1 text-xs text-pretty">
         The Exam information shown may be subject to changes. Students are to
         check the finalised exam timetable with exam seat information, which
         will be available at the &apos;Examination Seating Arrangement&apos;

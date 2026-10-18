@@ -9,8 +9,8 @@ interface Props {
 const ModsIndexTable = ({ indexes, precomputedMatrix }: Props) => {
   if (Object.values(indexes).length === 0) {
     return (
-      <div className="rounded-md border p-2 py-5 text-center">
-        <p className="text-muted-foreground w-full">
+      <div className="bg-muted rounded-2xl p-5 text-center text-sm">
+        <p className="text-muted-foreground">
           No indexes available for this semester
         </p>
       </div>

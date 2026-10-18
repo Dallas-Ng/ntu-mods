@@ -55,11 +55,14 @@ const ModsWorkloadTable = ({ indexes }: Props) => {
   const { moduleWorkload, totalHours } = computeWorkload(indexes)
 
   return (
-    <div className="space-y-2">
-      <div className="text-muted-foreground text-sm">
-        Total hours per week: {totalHours} hrs
+    <div className="space-y-3">
+      <div className="flex items-baseline gap-2">
+        <span className="text-4xl font-bold tracking-tighter">
+          {totalHours}
+        </span>
+        <span className="text-muted-foreground text-sm">hrs per week</span>
       </div>
-      <div className="flex flex-wrap gap-[0.25rem] text-sm">
+      <div className="flex flex-wrap gap-1 text-sm">
         {Object.entries(moduleWorkload)
           .filter(([_, v]) => v)
           .map(([key, value], idx) => {
@@ -70,7 +73,7 @@ const ModsWorkloadTable = ({ indexes }: Props) => {
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger>
-                      <div className="flex gap-[0.25rem] text-xs">
+                      <div className="flex gap-1 text-xs">
                         {Array.from({ length: value }).map((_, i) => (
                           <div
                             key={i}

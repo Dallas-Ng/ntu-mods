@@ -16,6 +16,9 @@
 # astro
 /.astro/
 
+# per-worktree vite dependency cache (see cacheDir in astro.config.mjs)
+/.vite-cache/
+
 # generated at build time into dist/client by scripts/build-sitemap.mjs —
 # never commit copies of these into public/
 /public/sitemap.xml

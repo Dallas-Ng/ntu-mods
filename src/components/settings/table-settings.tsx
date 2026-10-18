@@ -66,11 +66,15 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
   const { code: moduleKey, title, index } = randomData
 
   return (
-    <>
+    <div className="space-y-3">
       <div
         id="table-settings"
-        className="flex flex-col items-center justify-center gap-2 lg:flex-row">
-        <div className="relative flex h-[200px] w-full flex-col justify-between rounded-lg border-2 p-3 md:w-10/12 lg:h-[230px] lg:w-[384px]">
+        className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
+        <div
+          className={cn(
+            "bg-background relative flex h-50 w-full flex-col justify-between rounded-xl p-3 lg:h-57.5 lg:w-96 lg:shrink-0",
+            toggleBorder && "border"
+          )}>
           <div className="flex justify-between gap-0 lg:flex-row">
             <table className="h-min w-[65%] border-none">
               <tbody>
@@ -99,23 +103,23 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
             </table>
           </div>
 
-          <div className="flex w-full items-baseline justify-between">
-            <p className="text-muted-foreground w-full truncate text-xs capitalize">
+          <div className="flex w-full items-center justify-between gap-2">
+            <p className="text-muted-foreground min-w-0 flex-1 truncate text-xs capitalize">
               {title}
             </p>
 
             <Button
               onClick={reRollIndex}
-              variant="outline"
+              variant="ghost"
               size="icon"
               aria-label="Show another module"
-              className="ml-2 w-[40px]">
+              className="shrink-0">
               <RefreshCcw className="size-4" />
             </Button>
           </div>
         </div>
 
-        <div className="grid w-full grid-cols-2 gap-1 md:w-10/12 lg:w-fit">
+        <div className="grid w-full grid-cols-2 content-start gap-2">
           {(Object.keys(tableCell) as (keyof typeof tableCell)[]).map((key) => {
             if (["duration"].includes(key)) return
 
@@ -123,16 +127,18 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
               <Toggle
                 key={key}
                 className={cn(
-                  "h-fit w-full py-1 lg:w-[110px]",
-                  key === "remarks" && "col-span-2 lg:w-full",
+                  "bg-background h-14 w-full min-w-0 justify-start rounded-xl px-3 text-left",
+                  key === "remarks" && "col-span-2",
                   toggleBorder && "border"
                 )}
                 pressed={tableCell[key]}
                 onPressedChange={(val) => updateTableCell(val, key)}>
-                <div>
-                  <p className="capitalize">{key === "key" ? "Index" : key} </p>
+                <div className="min-w-0">
+                  <p className="leading-tight capitalize">
+                    {key === "key" ? "Index" : key}
+                  </p>
 
-                  <span className="text-muted-foreground text-xs">
+                  <p className="text-muted-foreground truncate text-xs leading-tight">
                     {!["day", "remarks"].includes(key) && index[key]}
 
                     {key === "day" &&
@@ -141,7 +147,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
 
                     {key === "remarks" &&
                       (index[key] === "" ? "No Remarks" : index[key])}
-                  </span>
+                  </p>
                 </div>
               </Toggle>
             )
@@ -149,54 +155,56 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
         </div>
       </div>
 
-      <div className="mt-4 space-y-2">
-        <label className="flex items-center justify-between gap-4 rounded-lg border px-3 py-2">
-          <span>
-            <p className="text-sm font-medium">Standardised scale</p>
-            <span className="text-muted-foreground text-xs">
-              Give every 30 min timeslot the same height, so breaks and lessons
-              are visually comparable
-            </span>
+      <label
+        className={cn(
+          "bg-background flex h-28 items-center justify-between gap-4 rounded-xl p-4 sm:h-24",
+          toggleBorder && "border"
+        )}>
+        <span className="min-w-0 space-y-1">
+          <p className="text-sm leading-none font-semibold">
+            Standardised scale
+          </p>
+          <span className="text-muted-foreground block text-sm text-pretty">
+            Give every 30 min timeslot the same height, so breaks and lessons
+            are visually comparable.
           </span>
+        </span>
 
-          <Switch
-            checked={standardisedScale}
-            onCheckedChange={(val) => {
-              updateSettings({ standardisedScale: val })
-              track("settings_table_changed", {
-                setting: "standardisedScale",
-                value: val
-              })
-            }}
-            aria-label="Standardised scale"
-          />
-        </label>
-      </div>
-    </>
+        <Switch
+          checked={standardisedScale}
+          onCheckedChange={(val) => {
+            updateSettings({ standardisedScale: val })
+            track("settings_table_changed", {
+              setting: "standardisedScale",
+              value: val
+            })
+          }}
+          aria-label="Standardised scale"
+          className="shrink-0"
+        />
+      </label>
+    </div>
   )
 }
 
 export const TableSettingsLoading = () => {
   return (
-    <div className="flex flex-col items-center justify-center gap-2 lg:flex-row">
-      <div className="relative flex h-[200px] w-10/12 flex-col justify-between rounded-lg border-2 p-3 lg:h-[230px] lg:w-[384px]">
-        <div className="flex justify-between gap-2 lg:flex-row">
-          <Skeleton className="h-[80px] w-[65%] border-none" />
-          <Skeleton className="h-[105px] w-[35%]" />
-        </div>
+    <div className="space-y-3">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
+        <Skeleton className="bg-foreground/10 dark:bg-background h-50 w-full rounded-xl lg:h-57.5 lg:w-96 lg:shrink-0" />
 
-        <div className="flex w-full items-baseline justify-between">
-          <Skeleton className="h-[16px] w-full" />
-          <Skeleton className="ml-2 size-10" />
+        <div className="grid w-full grid-cols-2 content-start gap-2">
+          {Array.from({ length: 6 }, (_, i) => (
+            <Skeleton
+              key={i}
+              className="bg-foreground/10 dark:bg-background h-14 rounded-xl"
+            />
+          ))}
+          <Skeleton className="bg-foreground/10 dark:bg-background col-span-2 h-14 rounded-xl" />
         </div>
       </div>
 
-      <div className="grid w-full grid-cols-2 gap-1 md:w-10/12 lg:w-fit">
-        {Array.from({ length: 6 }, (_, i) => (
-          <Skeleton key={i} className="h-[48px] w-full py-1 lg:w-[110px]" />
-        ))}
-        <Skeleton className="col-span-2 h-[48px] w-full" />
-      </div>
+      <Skeleton className="bg-foreground/10 dark:bg-background h-28 rounded-xl sm:h-24" />
     </div>
   )
 }

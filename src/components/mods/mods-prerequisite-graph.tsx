@@ -21,7 +21,7 @@ const PillCard = ({ code, title, anchorRef }: CardProps) => (
   <a
     ref={anchorRef}
     href={getModuleUrl(code)}
-    className="border-border bg-background hover:bg-muted flex w-full items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors">
+    className="bg-muted hover:bg-accent flex w-full items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors">
     <span className="font-semibold">{code}</span>
     {title && (
       <span className="text-muted-foreground min-w-0 flex-1 truncate">
@@ -32,7 +32,7 @@ const PillCard = ({ code, title, anchorRef }: CardProps) => (
 )
 
 const EmptyPill = ({ label }: { label: string }) => (
-  <div className="border-border/40 text-muted-foreground flex w-full items-center justify-center rounded-full border border-dashed px-3 py-1.5 text-xs italic">
+  <div className="border-border text-muted-foreground flex w-full items-center justify-center rounded-full border border-dashed px-3 py-1.5 text-xs">
     {label}
   </div>
 )
@@ -71,43 +71,34 @@ export default function ModsPrerequisiteGraph({
       const cmx = cx + nr.width / 2
       const cmy = cy + nr.height / 2
 
-      // Detect layout: column if top cards are above the center node
+      // Column (mobile) layout: the prerequisite cards sit over the node, so
+      // they overlap it horizontally. In the row layout they end before it.
+      // (Comparing tops misfires when a tall column of cards starts above a
+      // vertically centred node.)
       const firstTop = topRefs.current.find(Boolean)
       const isColumn = firstTop
-        ? firstTop.getBoundingClientRect().top < nr.top - 10
+        ? firstTop.getBoundingClientRect().right > nr.left + 1
         : false
 
       const newPaths: PathEntry[] = []
 
       if (isColumn) {
-        // Mobile: vertical beziers — top cards bottom → center top
-        topRefs.current.forEach((el) => {
-          if (!el) return
-          const r = el.getBoundingClientRect()
-          const x1 = r.left - cr.left + r.width / 2
-          const y1 = r.bottom - cr.top
-          const x2 = cmx
-          const y2 = cy
-          const my = (y1 + y2) / 2
+        // Mobile: the cards are stacked above and below the node, so one
+        // straight connector per side reads cleaner than a curve per card.
+        const lastTop = topRefs.current.findLast(Boolean)
+        const firstBottom = bottomRefs.current.find(Boolean)
+        if (lastTop) {
           newPaths.push({
-            d: `M ${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`,
+            d: `M ${cmx} ${lastTop.getBoundingClientRect().bottom - cr.top} L ${cmx} ${cy}`,
             color: "amber"
           })
-        })
-        // Center bottom → bottom cards top
-        bottomRefs.current.forEach((el) => {
-          if (!el) return
-          const r = el.getBoundingClientRect()
-          const x1 = cmx
-          const y1 = cy + nr.height
-          const x2 = r.left - cr.left + r.width / 2
-          const y2 = r.top - cr.top
-          const my = (y1 + y2) / 2
+        }
+        if (firstBottom) {
           newPaths.push({
-            d: `M ${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`,
+            d: `M ${cmx} ${cy + nr.height} L ${cmx} ${firstBottom.getBoundingClientRect().top - cr.top}`,
             color: "green"
           })
-        })
+        }
       } else {
         // Desktop: horizontal beziers — left cards right → center left
         topRefs.current.forEach((el) => {
@@ -143,17 +134,26 @@ export default function ModsPrerequisiteGraph({
       setPaths(newPaths)
     }
 
+    // Pill widths can change without the container resizing (fonts loading,
+    // the columns settling after hydration), so watch every endpoint too.
     const ro = new ResizeObserver(update)
     ro.observe(container)
+    ro.observe(center)
+    for (const el of [...topRefs.current, ...bottomRefs.current]) {
+      if (el) ro.observe(el)
+    }
     update()
+    void document.fonts?.ready.then(update)
     return () => ro.disconnect()
   }, [node])
 
   if (!hasRequires && !hasRequiredBy) return null
 
   return (
-    <div>
-      <h2 className="mb-6 text-lg">Prerequisite Graph</h2>
+    <div className="rounded-2xl border p-5">
+      <h2 className="mb-6 text-lg font-semibold tracking-tight">
+        Prerequisite graph
+      </h2>
 
       <div ref={containerRef} className="relative">
         {svgSize.w > 0 && (
@@ -169,7 +169,7 @@ export default function ModsPrerequisiteGraph({
                 fill="none"
                 stroke={p.color === "amber" ? "#f59e0b" : "#22c55e"}
                 strokeWidth={1.5}
-                strokeOpacity={0.45}
+                strokeOpacity={0.7}
               />
             ))}
           </svg>
@@ -181,7 +181,7 @@ export default function ModsPrerequisiteGraph({
           style={{ zIndex: 1 }}>
           {/* Top (mobile) / Left (desktop): prerequisites */}
           <div className="flex w-full flex-col gap-2 sm:flex-1 sm:items-end">
-            <p className="text-muted-foreground w-full text-center text-xs font-medium tracking-wide uppercase sm:text-right">
+            <p className="text-muted-foreground w-full text-center text-xs font-medium sm:text-right">
               Required first
             </p>
             {hasRequires ? (
@@ -204,10 +204,10 @@ export default function ModsPrerequisiteGraph({
           <div className="flex shrink-0 flex-col items-center">
             <div
               ref={centerRef}
-              className="border-primary bg-primary/5 rounded-xl border-2 px-5 py-3 text-center shadow-sm">
+              className="bg-muted rounded-xl px-5 py-3 text-center">
               <span className="text-base font-bold">{moduleCode}</span>
               {graph[moduleCode]?.title && (
-                <p className="text-muted-foreground mt-0.5 max-w-[140px] text-xs leading-snug">
+                <p className="text-muted-foreground mt-0.5 max-w-36 text-xs leading-snug">
                   {graph[moduleCode].title}
                 </p>
               )}
@@ -216,7 +216,7 @@ export default function ModsPrerequisiteGraph({
 
           {/* Bottom (mobile) / Right (desktop): unlocked modules */}
           <div className="flex w-full flex-col gap-2 sm:flex-1 sm:items-start">
-            <p className="bg-background text-muted-foreground relative z-10 w-full text-center text-xs font-medium tracking-wide uppercase sm:text-left">
+            <p className="bg-background text-muted-foreground relative z-10 w-full text-center text-xs font-medium sm:text-left">
               Unlocks
             </p>
             {hasRequiredBy ? (

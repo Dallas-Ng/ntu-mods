@@ -28,6 +28,7 @@ const ModsFavouriteButton = ({ moduleKey, className }: Props) => {
     <button
       onClick={handleClick}
       aria-label={favourited ? "Remove from favourites" : "Add to favourites"}
+      title={favourited ? "Remove from favourites" : "Add to favourites"}
       className={cn(
         "hover:bg-accent flex h-full w-full cursor-pointer items-center justify-center transition-colors",
         className

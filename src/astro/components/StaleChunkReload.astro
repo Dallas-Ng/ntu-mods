@@ -4,13 +4,16 @@
 // hydrating, the AI or generator panel loading) fails with "Failed to fetch
 // dynamically imported module". Reloading picks up the new build.
 //
+// A failed import isn't always a stale build: an ad blocker blocking the
+// PostHog chunk, or a flaky connection, fail the same way. So on a failure
+// this re-fetches the current page and reloads only if it references
+// /_astro/ files this page doesn't, i.e. a newer build is live. It reloads
+// at most once per new build, so a chunk that is really broken can't loop.
+//
 // Imports that go through Vite's preload helper fire vite:preloadError; plain
 // import() calls (Astro islands, React.lazy) surface as an unhandled
-// rejection or an error event, so all three are watched.
-//
-// At most one reload per 10 seconds, so a chunk that is really broken (not
-// just stale) can't put the page in a reload loop. Without sessionStorage
-// there is no guard, so it doesn't reload at all.
+// rejection or an error event, so all three are watched. The error is never
+// swallowed: callers see it as usual, and the reload follows if needed.
 ---
 
 <script is:inline>
@@ -18,31 +21,56 @@
     var KEY = "ntumods-stale-chunk-reload"
     var STALE =
       /Failed to fetch dynamically imported module|error loading dynamically imported module|Importing a module script failed/i
+    var ASSET = /\/_astro\/[^"'\s)]+\.(?:js|css)/g
+    var checking = false
 
-    function reload() {
-      try {
-        var last = Number(sessionStorage.getItem(KEY))
-        if (last && Date.now() - last < 10000) return
-        sessionStorage.setItem(KEY, String(Date.now()))
-      } catch (e) {
-        return
-      }
-      location.reload()
+    function assetsIn(text) {
+      return text.match(ASSET) || []
     }
 
-    function isStale(err) {
-      return STALE.test(String((err && err.message) || err))
+    function checkForNewBuild() {
+      if (checking) return
+      checking = true
+      var current = new Set(assetsIn(document.documentElement.outerHTML))
+      fetch(location.href, { cache: "no-store" })
+        .then(function (res) {
+          return res.ok ? res.text() : ""
+        })
+        .then(function (html) {
+          var fresh = assetsIn(html)
+          var changed = fresh.some(function (a) {
+            return !current.has(a)
+          })
+          if (!changed) return
+          // Identify the new build by its asset list, so a later deploy in
+          // the same session can still trigger one reload of its own.
+          var build = fresh.sort().join(",")
+          try {
+            if (sessionStorage.getItem(KEY) === build) return
+            sessionStorage.setItem(KEY, build)
+          } catch (e) {
+            return
+          }
+          location.reload()
+        })
+        .catch(function () {})
+        .finally(function () {
+          checking = false
+        })
+    }
+
+    function onError(err) {
+      if (STALE.test(String((err && err.message) || err))) checkForNewBuild()
     }
 
     window.addEventListener("vite:preloadError", function (e) {
-      e.preventDefault()
-      reload()
+      onError(e.payload)
     })
     window.addEventListener("unhandledrejection", function (e) {
-      if (isStale(e.reason)) reload()
+      onError(e.reason)
     })
     window.addEventListener("error", function (e) {
-      if (isStale(e.error || e.message)) reload()
+      onError(e.error || e.message)
     })
   })()
 </script>

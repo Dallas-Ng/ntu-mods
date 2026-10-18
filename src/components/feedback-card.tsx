@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 
-import { getDistinctId, track } from "@/lib/analytics"
+import { track, whenAnalyticsReady } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -62,7 +62,6 @@ const FeedbackCard = ({ divClassName }: Props) => {
       author: data.email ?? "anon",
       feedback: data.feedback,
       category: "feedback",
-      distinctId: getDistinctId(),
       url: window.location.href,
       localData: localData ? JSON.stringify(localData) : undefined
     }
@@ -70,13 +69,17 @@ const FeedbackCard = ({ divClassName }: Props) => {
     // fetch only rejects on network failure, a 500 (bad Resend key, say)
     // still resolves, so the status has to be checked explicitly or
     // toast.promise reports success for a submission that never sent.
+    //
+    // PostHog loads after the page does, so wait briefly for its ID: without
+    // it the email and the server-side event can't be tied to this visitor.
     const submitFeedback = async () => {
+      const distinctId = (await whenAnalyticsReady(2000))?.get_distinct_id()
       const res = await fetch("/api/feedback", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify({ ...body, distinctId })
       })
 
       if (!res.ok) throw new Error(`Feedback request failed (${res.status})`)

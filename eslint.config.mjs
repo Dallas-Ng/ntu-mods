@@ -100,6 +100,29 @@ const config = [
         }
       ]
     }
+  },
+  // posthog-js is loaded after the page finishes loading, by a dynamic import
+  // in posthog-client-init. A static import anywhere else puts the SDK back in
+  // every page's initial download. Type-only imports are erased, so they're
+  // fine.
+  {
+    files: REACT_FILES,
+    ignores: ["src/astro/lib/posthog-client-init.ts"],
+    rules: {
+      "@typescript-eslint/no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "posthog-js",
+              allowTypeImports: true,
+              message:
+                "Use track() from @/lib/analytics. posthog-js loads after the page does (see posthog-client-init)."
+            }
+          ]
+        }
+      ]
+    }
   }
 ]
 

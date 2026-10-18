@@ -13,6 +13,7 @@ import Footer from "@/components/footer"
 import MobileTracker from "@/components/mobile-tracker"
 import Navbar from "@/components/navbar"
 import Analytics from "@/astro/components/Analytics.astro"
+import StaleChunkReload from "@/astro/components/StaleChunkReload.astro"
 
 interface Props {
   title?: string
@@ -118,6 +119,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
       media="(prefers-color-scheme: dark)"
       content="black"
     />
+    <StaleChunkReload />
     <link rel="icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />

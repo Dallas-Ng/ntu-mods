@@ -113,6 +113,11 @@ export default defineConfig({
     "/fgo": { status: 301, destination: "/tools/fgo-optimiser" }
   },
   vite: {
+    // Worktrees symlink the main checkout's node_modules, so the default
+    // node_modules/.vite is one cache shared by every running dev server. One
+    // re-optimizing deletes files another still points at ("file does not
+    // exist ... deps_ssr"). Keep the cache inside each worktree instead.
+    cacheDir: fileURLToPath(new URL("./.vite-cache", import.meta.url)),
     server: { fs: { allow: [".", ...WORKTREE_ROOTS] } },
     envPrefix: ["PUBLIC_"],
     define: {

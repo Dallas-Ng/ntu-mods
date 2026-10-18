@@ -71,43 +71,34 @@ export default function ModsPrerequisiteGraph({
       const cmx = cx + nr.width / 2
       const cmy = cy + nr.height / 2
 
-      // Detect layout: column if top cards are above the center node
+      // Column (mobile) layout: the prerequisite cards sit over the node, so
+      // they overlap it horizontally. In the row layout they end before it.
+      // (Comparing tops misfires when a tall column of cards starts above a
+      // vertically centred node.)
       const firstTop = topRefs.current.find(Boolean)
       const isColumn = firstTop
-        ? firstTop.getBoundingClientRect().top < nr.top - 10
+        ? firstTop.getBoundingClientRect().right > nr.left + 1
         : false
 
       const newPaths: PathEntry[] = []
 
       if (isColumn) {
-        // Mobile: vertical beziers — top cards bottom → center top
-        topRefs.current.forEach((el) => {
-          if (!el) return
-          const r = el.getBoundingClientRect()
-          const x1 = r.left - cr.left + r.width / 2
-          const y1 = r.bottom - cr.top
-          const x2 = cmx
-          const y2 = cy
-          const my = (y1 + y2) / 2
+        // Mobile: the cards are stacked above and below the node, so one
+        // straight connector per side reads cleaner than a curve per card.
+        const lastTop = topRefs.current.findLast(Boolean)
+        const firstBottom = bottomRefs.current.find(Boolean)
+        if (lastTop) {
           newPaths.push({
-            d: `M ${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`,
+            d: `M ${cmx} ${lastTop.getBoundingClientRect().bottom - cr.top} L ${cmx} ${cy}`,
             color: "amber"
           })
-        })
-        // Center bottom → bottom cards top
-        bottomRefs.current.forEach((el) => {
-          if (!el) return
-          const r = el.getBoundingClientRect()
-          const x1 = cmx
-          const y1 = cy + nr.height
-          const x2 = r.left - cr.left + r.width / 2
-          const y2 = r.top - cr.top
-          const my = (y1 + y2) / 2
+        }
+        if (firstBottom) {
           newPaths.push({
-            d: `M ${x1} ${y1} C ${x1} ${my}, ${x2} ${my}, ${x2} ${y2}`,
+            d: `M ${cmx} ${cy + nr.height} L ${cmx} ${firstBottom.getBoundingClientRect().top - cr.top}`,
             color: "green"
           })
-        })
+        }
       } else {
         // Desktop: horizontal beziers — left cards right → center left
         topRefs.current.forEach((el) => {
@@ -143,9 +134,16 @@ export default function ModsPrerequisiteGraph({
       setPaths(newPaths)
     }
 
+    // Pill widths can change without the container resizing (fonts loading,
+    // the columns settling after hydration), so watch every endpoint too.
     const ro = new ResizeObserver(update)
     ro.observe(container)
+    ro.observe(center)
+    for (const el of [...topRefs.current, ...bottomRefs.current]) {
+      if (el) ro.observe(el)
+    }
     update()
+    void document.fonts?.ready.then(update)
     return () => ro.disconnect()
   }, [node])
 
@@ -171,7 +169,7 @@ export default function ModsPrerequisiteGraph({
                 fill="none"
                 stroke={p.color === "amber" ? "#f59e0b" : "#22c55e"}
                 strokeWidth={1.5}
-                strokeOpacity={0.45}
+                strokeOpacity={0.7}
               />
             ))}
           </svg>

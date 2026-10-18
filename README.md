@@ -155,9 +155,11 @@ Runs ESLint (including `.astro` files), `astro check`, and `tsc`.
 yarn build
 ```
 
-This runs the static-data build, `astro build`, the sitemap generator, and the
-IndexNow submission (skipped unless `WORKERS_CI`, `CF_PAGES`, or `INDEXNOW=1`
-is set). Preview the built output with `yarn preview`.
+This runs the static-data build, `astro build`, the source map upload to
+PostHog (skipped unless `POSTHOG_CLI_API_KEY` and `POSTHOG_CLI_PROJECT_ID` are
+set; the maps are deleted from `dist` either way), the sitemap generator, and
+the IndexNow submission (skipped unless `WORKERS_CI`, `CF_PAGES`, or
+`INDEXNOW=1` is set). Preview the built output with `yarn preview`.
 
 ## Deployment
 
@@ -184,6 +186,10 @@ Pages → `ntu-mods` → Settings → Builds), not in the repo:
 | Preview command | n/a                                                      | `npx wrangler preview` |
 
 Build variables on both: `CLOUDFLARE_ACCOUNT_ID` and `PUBLIC_POSTHOG_TOKEN`.
+Production also has `POSTHOG_CLI_API_KEY` (a personal API key with the error
+tracking write and organization read scopes) and `POSTHOG_CLI_PROJECT_ID`, so
+error stack traces in PostHog point at real source lines
+([`scripts/upload-sourcemaps.mjs`](scripts/upload-sourcemaps.mjs)).
 `RESEND_KEY` is a runtime secret only (see Secrets below).
 
 A production-only install (`yarn install --production`, with

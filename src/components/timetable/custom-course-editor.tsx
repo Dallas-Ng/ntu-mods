@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { Plus, Trash2, X } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
 import { CUSTOM_LUNCH_TYPE } from "@/lib/custom-course-colors"
 import { formatHhmm } from "@/lib/format"
@@ -653,7 +653,7 @@ const CustomCourseEditor = () => {
                       removeCustomCourse(course.id)
                       if (editingCourse?.id === course.id)
                         setEditingCourse(null)
-                      posthog.capture("custom_course_deleted")
+                      track("custom_course_deleted")
                     }}>
                     <Trash2 className="size-3.5" />
                   </Button>
@@ -705,7 +705,7 @@ const CustomCourseEditor = () => {
           const selected =
             data.indexes.find((i) => i.id === data.selectedIndexId) ??
             data.indexes[0]
-          posthog.capture("custom_course_created", {
+          track("custom_course_created", {
             name_length: data.name.length,
             index_count: data.indexes.length,
             session_count: selected?.sessions.length ?? 0,
@@ -723,7 +723,7 @@ const CustomCourseEditor = () => {
         initial={editingCourse ?? undefined}
         onSave={(data) => {
           if (editingCourse) {
-            posthog.capture("custom_course_edited", {
+            track("custom_course_edited", {
               index_count_delta:
                 data.indexes.length - editingCourse.indexes.length
             })

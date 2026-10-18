@@ -1,8 +1,9 @@
 "use client"
 
 import { useRef, useState } from "react"
-import posthog from "posthog-js"
 
+import { track as trackEvent } from "@/lib/analytics"
+import type { EventSuffix } from "@/lib/analytics-events"
 import {
   classFor,
   gradedTotals,
@@ -20,8 +21,8 @@ import { TranscriptDropzone } from "@/components/tools/transcript-dropzone"
 import { TranscriptSource } from "@/components/tools/transcript-source"
 
 // Events carry flags only: never grades or AU.
-const track = (event: string, props?: Record<string, unknown>) =>
-  posthog.capture(`cgpa_${event}`, props)
+const track = (event: EventSuffix<"cgpa_">, props?: Record<string, unknown>) =>
+  trackEvent(`cgpa_${event}`, props)
 
 const fmt = (n: number) => n.toFixed(2)
 

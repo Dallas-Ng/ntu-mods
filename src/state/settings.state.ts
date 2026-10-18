@@ -20,7 +20,7 @@ export const INIT_SETTINGS: Settings = {
   appearance: DEFAULT_APPEARANCE_SETTINGS,
   modsViewMode: "cards",
   modsGroupBy: "none",
-  standardisedScale: false
+  standardisedScale: true
 }
 
 export interface Settings {

@@ -1,8 +1,8 @@
 "use client"
 
 import { Megaphone } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { useChangelogUnseenCount } from "@/hooks/use-changelog-unseen"
 
@@ -22,9 +22,7 @@ const ChangelogButton = () => {
       }>
       <a
         href="/changelog"
-        onClick={() =>
-          posthog.capture("changelog_opened", { source: "navbar_icon" })
-        }>
+        onClick={() => track("changelog_opened", { source: "navbar_icon" })}>
         <Megaphone className="size-5" />
         {unseen > 0 && (
           <span

@@ -1,8 +1,8 @@
 "use client"
 
 import { ChevronLeftIcon, ChevronRightIcon, SaveIcon } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -56,7 +56,7 @@ const TimetableResultsCycler = ({
                 key={i}
                 onClick={() => {
                   onSaveToPlan(i)
-                  posthog.capture("timetable_generation_result_saved", {
+                  track("timetable_generation_result_saved", {
                     plan_index: i + 1,
                     free_days: current.freeDays,
                     days_with_class: current.daysWithClass,
@@ -97,7 +97,7 @@ const TimetableResultsCycler = ({
           disabled={currentIndex === 0}
           onClick={() => {
             onNavigate(currentIndex - 1)
-            posthog.capture("generation_result_navigated", {
+            track("generation_result_navigated", {
               direction: "prev",
               from_index: currentIndex + 1,
               to_index: currentIndex,
@@ -119,7 +119,7 @@ const TimetableResultsCycler = ({
           disabled={currentIndex === combinations.length - 1}
           onClick={() => {
             onNavigate(currentIndex + 1)
-            posthog.capture("generation_result_navigated", {
+            track("generation_result_navigated", {
               direction: "next",
               from_index: currentIndex + 1,
               to_index: currentIndex + 2,

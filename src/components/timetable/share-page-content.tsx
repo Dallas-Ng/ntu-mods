@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect } from "react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { Button } from "@/components/ui/button"
 import Header from "@/components/header"
 import TimetableCopyButton from "@/components/timetable/buttons/timetable-copy-button"
@@ -14,7 +14,7 @@ import TimetableTable from "@/components/timetable/timetable-table"
 
 const SharePageContent = () => {
   useEffect(() => {
-    posthog.capture("shared_timetable_viewed")
+    track("shared_timetable_viewed")
   }, [])
 
   return (
@@ -32,7 +32,7 @@ const SharePageContent = () => {
         <div className="flex gap-2">
           <a
             href="/timetable"
-            onClick={() => posthog.capture("make_my_timetable_clicked")}>
+            onClick={() => track("make_my_timetable_clicked")}>
             <Button>Make My Timetable</Button>
           </a>
 

@@ -82,6 +82,47 @@ const config = [
       "no-unused-vars": "off",
       "unused-imports/no-unused-imports": "error"
     }
+  },
+  // Client events go through track() in @/lib/analytics, which only accepts
+  // names listed in @/lib/analytics-events. The feedback route captures with
+  // posthog-node and checks its name with `satisfies AnalyticsEvent` instead.
+  {
+    files: REACT_FILES,
+    ignores: ["src/lib/analytics.ts", "src/astro/pages/api/feedback.ts"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "CallExpression[callee.object.name='posthog'][callee.property.name='capture']",
+          message:
+            "Use track() from @/lib/analytics so the event name is checked against ANALYTICS_EVENTS."
+        }
+      ]
+    }
+  },
+  // posthog-js is loaded after the page finishes loading, by a dynamic import
+  // in posthog-client-init. A static import anywhere else puts the SDK back in
+  // every page's initial download. Type-only imports are erased, so they're
+  // fine.
+  {
+    files: REACT_FILES,
+    ignores: ["src/astro/lib/posthog-client-init.ts"],
+    rules: {
+      "@typescript-eslint/no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "posthog-js",
+              allowTypeImports: true,
+              message:
+                "Use track() from @/lib/analytics. posthog-js loads after the page does (see posthog-client-init)."
+            }
+          ]
+        }
+      ]
+    }
   }
 ]
 

@@ -1,7 +1,6 @@
 "use client"
 
-import posthog from "posthog-js"
-
+import { track } from "@/lib/analytics"
 import { MODULE_CATEGORY, MODULE_FACULTY, TRUN_DAY_MAP } from "@/lib/constants"
 import { parseFilterList } from "@/lib/filter-modules"
 import { TIME_OPTIONS } from "@/lib/generation-config"
@@ -94,7 +93,7 @@ export function useFilters(props: ModsFilterProps) {
     if (value === defaultValue || value === "") params.delete(key)
     else params.set(key, value)
     pushSearchParams(pathname, params.toString())
-    posthog.capture(
+    track(
       value === defaultValue || value === ""
         ? "mods_filter_cleared"
         : "mods_filter_applied",
@@ -106,7 +105,7 @@ export function useFilters(props: ModsFilterProps) {
     const params = new URLSearchParams(searchParams.toString())
     keys.forEach((k) => params.delete(k))
     pushSearchParams(pathname, params.toString())
-    posthog.capture("mods_filter_cleared", { filter_type: analyticsType })
+    track("mods_filter_cleared", { filter_type: analyticsType })
   }
 
   const clearTime = () =>

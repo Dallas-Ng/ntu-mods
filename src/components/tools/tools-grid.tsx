@@ -1,9 +1,9 @@
 "use client"
 
 import { ArrowRight, BookOpen } from "lucide-react"
-import posthog from "posthog-js"
 
 import { siteConfig } from "@/config/site"
+import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 
 // Static miniatures of each tool so the cards read differently at a glance.
@@ -136,7 +136,7 @@ const ToolsGrid = () => (
                   <a
                     href={tool.href}
                     onClick={() =>
-                      posthog.capture("tool_opened", {
+                      track("tool_opened", {
                         tool: tool.name,
                         source: "tools_page"
                       })
@@ -182,7 +182,7 @@ const ToolsGrid = () => (
                 <a
                   href={tool.guide.href}
                   onClick={() =>
-                    posthog.capture("tool_guide_clicked", {
+                    track("tool_guide_clicked", {
                       tool: tool.name,
                       source: "tools_page"
                     })

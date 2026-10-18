@@ -1,0 +1,89 @@
+// Every custom event the site sends to PostHog. Capture through track()
+// (@/lib/analytics), which only accepts these names: a typo in a free-text
+// name would silently start a new event and split its data. To add an event,
+// add its name here.
+//
+// Kept apart from analytics.ts, which imports posthog-js, so the server-side
+// feedback route can check its event name without bundling the browser SDK.
+export const ANALYTICS_EVENTS = [
+  "ai_chat_reset",
+  "ai_message_sent",
+  "ai_timetable_generated",
+  "article_viewed",
+  "articles_category_filtered",
+  "articles_searched",
+  "calendar_downloaded",
+  "cgpa_goal_selected",
+  "cgpa_sample_loaded",
+  "cgpa_transcript_link_clicked",
+  "cgpa_transcript_loaded",
+  "cgpa_upload_failed",
+  "cgpa_what_if_used",
+  "changelog_opened",
+  "custom_course_created",
+  "custom_course_deleted",
+  "custom_course_edited",
+  "exams_grouped",
+  "exams_searched",
+  "feedback_submitted",
+  "fgo_extra_used_set",
+  "fgo_list_copied",
+  "fgo_module_toggled",
+  "fgo_optimised",
+  "fgo_picks_cleared",
+  "fgo_quota_changed",
+  "fgo_sample_loaded",
+  "fgo_transcript_changed",
+  "fgo_transcript_link_clicked",
+  "fgo_transcript_loaded",
+  "fgo_type_toggled",
+  "fgo_upload_failed",
+  "generation_result_navigated",
+  "index_picker_toggled",
+  "link_clicked",
+  "make_my_timetable_clicked",
+  "mod_searched",
+  "mods_filter_applied",
+  "mods_filter_cleared",
+  "mods_grouped",
+  "mods_view_changed",
+  "module_added",
+  "module_favourited",
+  "module_removed",
+  "module_unfavourited",
+  "module_viewed",
+  "remark_scope_toggled",
+  "screenshot_controls_hidden",
+  "screenshot_preset_selected",
+  "settings_appearance_changed",
+  "settings_reset",
+  "settings_table_changed",
+  "settings_theme_changed",
+  "settings_timetable_style_changed",
+  "shared_timetable_viewed",
+  "timetable_copied",
+  "timetable_generation_result_saved",
+  "timetable_generation_settings_reset",
+  "timetable_generation_started",
+  "timetable_generation_unique_toggled",
+  "timetable_imported",
+  "timetable_index_changed",
+  "timetable_mode_changed",
+  "timetable_plan_duplicated",
+  "timetable_plan_switched",
+  "timetable_screenshot_clicked",
+  "timetable_shared",
+  "tool_guide_clicked",
+  "tool_opened",
+  "transcript_shared"
+] as const
+
+export type AnalyticsEvent = (typeof ANALYTICS_EVENTS)[number]
+
+// The part after a prefix, for helpers that add one, e.g.
+// EventSuffix<"fgo_"> is "optimised" | "list_copied" | ...
+export type EventSuffix<P extends string> = AnalyticsEvent extends infer E
+  ? E extends `${P}${infer S}`
+    ? S
+    : never
+  : never

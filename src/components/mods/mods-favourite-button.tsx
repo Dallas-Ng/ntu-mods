@@ -1,8 +1,8 @@
 "use client"
 
 import { Heart } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { useFavourites } from "@/hooks/use-favourites"
 
@@ -19,7 +19,7 @@ const ModsFavouriteButton = ({ moduleKey, className }: Props) => {
     e.preventDefault()
     e.stopPropagation()
     toggleFavourite(moduleKey)
-    posthog.capture(favourited ? "module_unfavourited" : "module_favourited", {
+    track(favourited ? "module_unfavourited" : "module_favourited", {
       module_code: moduleKey
     })
   }

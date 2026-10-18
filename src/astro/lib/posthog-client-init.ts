@@ -1,31 +1,37 @@
-import posthog from "posthog-js"
+import { setAnalyticsClient } from "@/lib/analytics"
 
 const token = import.meta.env.PUBLIC_POSTHOG_TOKEN
 
-function initPosthog() {
+async function initPosthog() {
+  // Imported here rather than at the top so the SDK is only downloaded once
+  // the page has loaded. track() calls made before then are queued.
+  const { default: posthog } = await import("posthog-js")
   posthog.init(token, {
     api_host: "/ingest",
     ui_host: "https://us.posthog.com",
-    defaults: "2026-01-30",
+    defaults: "2026-08-30",
     capture_exceptions: true,
     debug: import.meta.env.DEV,
-    // 30% session recording sampling, as configured before the migration.
-    session_recording: {
-      sampleRate: 0.3
-    }
+    disable_session_recording: true,
+    loaded: (ph) => setAnalyticsClient(ph)
   })
 }
 
-// Skip entirely when the token is unset (local dev, forks, preview builds) —
+// Skip entirely when the token is unset (local dev, forks, previews without it) —
 // initialising with an undefined token still wires up autocapture and fires
 // requests at /ingest that can never be attributed to a project.
 //
-// Deferred off the initial render so PostHog's init work doesn't compete with
-// hydration/LCP on first load.
+// Waits for the window load event and then an idle moment, so PostHog never
+// competes with the page's own loading, hydration or first interactions —
+// the same deferral as GA in Analytics.astro.
 if (token) {
-  if (typeof requestIdleCallback === "function") {
-    requestIdleCallback(initPosthog)
-  } else {
-    setTimeout(initPosthog, 0)
+  const schedule = () => {
+    const run = () => void initPosthog().catch(() => setAnalyticsClient(null))
+    if (typeof requestIdleCallback === "function") requestIdleCallback(run)
+    else setTimeout(run, 0)
   }
+  if (document.readyState === "complete") schedule()
+  else window.addEventListener("load", schedule, { once: true })
+} else {
+  setAnalyticsClient(null)
 }

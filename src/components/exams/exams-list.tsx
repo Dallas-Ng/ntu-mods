@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { ChevronDown, Search } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { CODE_QUERY_RE } from "@/lib/filter-modules"
 import type { DbExam } from "@/lib/server/db/types"
 import { cn } from "@/lib/utils"
@@ -260,7 +260,7 @@ export default function ExamsList({ exams }: Props) {
 
   useEffect(() => {
     const q = debouncedSearch.trim()
-    if (q) posthog.capture("exams_searched", { search_term: q })
+    if (q) track("exams_searched", { search_term: q })
   }, [debouncedSearch])
 
   const [filters, setFilters] = useState<Filters>(NO_FILTERS)

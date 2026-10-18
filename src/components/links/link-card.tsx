@@ -1,7 +1,8 @@
 "use client"
 
 import { ExternalLink } from "lucide-react"
-import posthog from "posthog-js"
+
+import { track } from "@/lib/analytics"
 
 interface LinkCardProps {
   name: string
@@ -27,7 +28,7 @@ const LinkCard = ({ name, href, desc, external, category }: LinkCardProps) => {
   )
 
   const handleClick = () =>
-    posthog.capture("link_clicked", {
+    track("link_clicked", {
       link_name: name,
       link_category: category,
       is_external: external

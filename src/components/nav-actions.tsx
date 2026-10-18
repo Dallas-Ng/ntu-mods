@@ -1,8 +1,8 @@
 "use client"
 
 import { Moon, Settings, Sun } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { useTheme } from "@/hooks/use-theme"
 
 import { Button } from "./ui/button"
@@ -20,7 +20,7 @@ const NavActions = () => {
         size="icon"
         onClick={() => {
           setTheme(next)
-          posthog.capture("settings_theme_changed", { theme: next })
+          track("settings_theme_changed", { theme: next })
         }}>
         {theme === "light" ? (
           <Moon className="size-5" />

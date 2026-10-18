@@ -265,7 +265,7 @@ const pageDescription =
           <JsonLd data={[articleLd, faqLd, breadcrumbLd]} />
 
           <div class="mt-5 grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
-            <article class="prose dark:prose-invert max-w-full min-w-0 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto">
+            <article class="prose dark:prose-invert max-w-full min-w-0">
               <MobileSectionDropdown client:idle headings={articleHeadings} />
 
               {article.thumbnail && (
@@ -346,6 +346,25 @@ const pageDescription =
   import PhotoSwipe from "photoswipe"
 
   import "photoswipe/style.css"
+
+  // Edge fades on article tables: flag which sides of each scroll box still
+  // have content, so globals.css can fade that edge.
+  document.querySelectorAll<HTMLElement>(".table-wrap").forEach((wrap) => {
+    const scroller = wrap.querySelector<HTMLElement>(".table-scroll")
+    if (!scroller) return
+
+    const update = () => {
+      const max = scroller.scrollWidth - scroller.clientWidth
+      const sides = []
+      if (scroller.scrollLeft > 2) sides.push("left")
+      if (scroller.scrollLeft < max - 2) sides.push("right")
+      wrap.dataset.more = sides.join(" ")
+    }
+
+    update()
+    scroller.addEventListener("scroll", update, { passive: true })
+    new ResizeObserver(update).observe(scroller)
+  })
 
   // Body figures only; the not-prose hero thumbnail is excluded by the selector.
   // Lightbox with wheel / double-click / pinch zoom and drag-to-pan, so the

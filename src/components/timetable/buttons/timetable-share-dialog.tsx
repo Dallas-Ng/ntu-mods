@@ -2,9 +2,9 @@
 
 import { useMemo, useState } from "react"
 import { ClipboardCopy, LinkIcon } from "lucide-react"
-import posthog from "posthog-js"
 import { toast } from "sonner"
 
+import { track } from "@/lib/analytics"
 import { BASE_URL } from "@/lib/constants"
 import { buildShareLink, encodeTextBundle } from "@/lib/timetable-share"
 import { Button } from "@/components/ui/button"
@@ -62,7 +62,7 @@ const TimetableShareDialog = ({
     const isMobile = /Mobi|Android/i.test(navigator.userAgent)
 
     if (isMobile && navigator.share) {
-      posthog.capture("timetable_shared", {
+      track("timetable_shared", {
         method: "native_share",
         ...captureProps
       })
@@ -80,7 +80,7 @@ const TimetableShareDialog = ({
       return
     }
 
-    posthog.capture("timetable_shared", {
+    track("timetable_shared", {
       method: "clipboard",
       ...captureProps
     })
@@ -90,7 +90,7 @@ const TimetableShareDialog = ({
   }
 
   const handleCopyText = () => {
-    posthog.capture("timetable_shared", { method: "text", ...captureProps })
+    track("timetable_shared", { method: "text", ...captureProps })
     navigator.clipboard.writeText(textBundle)
     toast("Timetable code copied — paste it into Import")
     onOpenChange(false)

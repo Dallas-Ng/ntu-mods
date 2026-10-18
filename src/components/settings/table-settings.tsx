@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { RefreshCcw } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { TRUN_DAY_MAP } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
@@ -58,7 +58,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
       ...settings,
       tableCell: { ...tableCell, [key]: checked }
     })
-    posthog.capture("settings_table_changed", { setting: key, value: checked })
+    track("settings_table_changed", { setting: key, value: checked })
   }
 
   if (!randomData) return <TableSettingsLoading />
@@ -163,7 +163,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
             checked={standardisedScale}
             onCheckedChange={(val) => {
               updateSettings({ standardisedScale: val })
-              posthog.capture("settings_table_changed", {
+              track("settings_table_changed", {
                 setting: "standardisedScale",
                 value: val
               })

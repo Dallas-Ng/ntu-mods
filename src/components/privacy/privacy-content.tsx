@@ -46,57 +46,73 @@ const PrivacyContent = () => {
         </h3>
 
         <p>
-          We use third-party analytics services in production to understand how
-          the Service is used and to improve it. These services may collect:
+          We use two third-party analytics services on the production site to
+          understand how the Service is used and to improve it.
+        </p>
+
+        <p>
+          <strong>Google Analytics 4</strong> collects page views, general usage
+          patterns, browser and device type, and approximate location derived
+          from your IP address. Data is processed by Google. See{" "}
+          <a
+            href="https://policies.google.com/privacy"
+            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
+            rel="external nofollow noopener"
+            target="_blank">
+            Google&apos;s Privacy Policy
+          </a>
+          .
+        </p>
+
+        <p>
+          <strong>PostHog</strong> collects:
         </p>
 
         <ul className="list-outside list-disc pl-10">
           <li>
-            <strong>Google Analytics 4</strong>: collects page views, general
-            usage patterns, browser type, device type, and approximate location
-            derived from your IP address. Data is processed by Google. See{" "}
-            <a
-              href="https://policies.google.com/privacy"
-              className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
-              rel="external nofollow noopener"
-              target="_blank">
-              Google&apos;s Privacy Policy
-            </a>
-            .
+            Page views, the referring site, browser and device type, and
+            approximate location derived from your IP address
           </li>
           <li>
-            <strong>Microsoft Clarity</strong>: records session replays,
-            heatmaps, and click patterns to help us understand how users
-            interact with the interface. Data is processed by Microsoft. See{" "}
-            <a
-              href="https://privacy.microsoft.com/en-us/privacystatement"
-              className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
-              rel="external nofollow noopener"
-              target="_blank">
-              Microsoft&apos;s Privacy Statement
-            </a>
-            .
+            Interactions with the interface, such as clicks and custom events
+            (e.g. adding a module to your timetable, with its module code and
+            index, or downloading a calendar)
           </li>
           <li>
-            <strong>PostHog</strong>: collects page views, custom events (e.g.
-            timetable interactions), and error reports to help us identify
-            issues and improve the Service. Data is processed by PostHog, Inc.
-            Requests are routed through our own domain (ntumods.com) rather than
-            sent straight from your browser. See{" "}
-            <a
-              href="https://posthog.com/privacy"
-              className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
-              rel="external nofollow noopener"
-              target="_blank">
-              PostHog&apos;s Privacy Policy
-            </a>
-            .
+            Error reports when something breaks, including the error message and
+            where in our code it happened
           </li>
         </ul>
+
+        <p>We do not record session replays or screen recordings.</p>
+
+        <p>
+          PostHog requests are routed through our own domain (ntumods.com)
+          rather than sent straight from your browser. Data is processed by
+          PostHog, Inc. in the United States. See{" "}
+          <a
+            href="https://posthog.com/privacy"
+            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
+            rel="external nofollow noopener"
+            target="_blank">
+            PostHog&apos;s Privacy Policy
+          </a>
+          .
+        </p>
 
         <p>
           Analytics are only active on the production site. They are not
           collected during local development.
+        </p>
+
+        <h3 className="text-foreground mt-4 text-base font-semibold">
+          Article View Counts
+        </h3>
+
+        <p>
+          To show how many people have read an article, we store the
+          article&apos;s name and a random visitor ID (the same ID PostHog uses)
+          in our own database. It is used only to count unique readers.
         </p>
 
         <h3 className="text-foreground mt-4 text-base font-semibold">
@@ -113,9 +129,7 @@ const PrivacyContent = () => {
           the PDF file name. We do not link a list of modules and grades to your
           identity, but it could in principle identify you to someone who
           already knows your results. If you opt out, we only record counts and
-          flags, such as how many modules were found. Page interactions may be
-          captured in session replays, so avoid uploading a real transcript if
-          you want no part of it recorded.
+          flags, such as how many modules were found.
         </p>
 
         <h3 className="text-foreground mt-4 text-base font-semibold">
@@ -193,11 +207,11 @@ const PrivacyContent = () => {
         <h2 className="text-foreground text-xl font-semibold">Cookies</h2>
 
         <p>
-          We do not set our own cookies. However, Google Analytics, Microsoft
-          Clarity, and PostHog may set cookies on your device to distinguish
-          users and sessions. You can disable these through your browser
-          settings or by using a browser extension that blocks analytics
-          trackers.
+          We do not set our own cookies. Google Analytics sets cookies, and
+          PostHog stores a random identifier in a cookie and in your
+          browser&apos;s localStorage, to distinguish visitors and sessions. You
+          can block or clear these through your browser settings or with an
+          extension that blocks analytics trackers.
         </p>
       </section>
 
@@ -217,9 +231,8 @@ const PrivacyContent = () => {
             They are kept as emails in the maintainer&apos;s inbox.
           </li>
           <li>
-            <strong>Analytics data</strong>: retained according to the
-            respective retention policies of Google Analytics, Microsoft
-            Clarity, and PostHog.
+            <strong>Analytics data</strong>: retained according to the retention
+            settings of Google Analytics and PostHog for our account.
           </li>
         </ul>
       </section>

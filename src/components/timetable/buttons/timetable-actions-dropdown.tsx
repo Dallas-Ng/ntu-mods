@@ -11,9 +11,9 @@ import {
   MoreHorizontal,
   MousePointerClick
 } from "lucide-react"
-import posthog from "posthog-js"
 import { toast } from "sonner"
 
+import { track } from "@/lib/analytics"
 import { customCoursesToIcsInputs } from "@/lib/custom-course-to-index"
 import { getIcs } from "@/lib/get-ics"
 import { latestSemester, latestYear } from "@/lib/semesters"
@@ -108,7 +108,7 @@ const TimetableActionsDropdown = ({
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
 
-      posthog.capture("calendar_downloaded", {
+      track("calendar_downloaded", {
         module_count: Object.keys(timetable).length
       })
     } catch {
@@ -120,7 +120,7 @@ const TimetableActionsDropdown = ({
 
   const handleDuplicate = (toIndex: number) => {
     duplicateTimetable(timetableIndex, toIndex)
-    posthog.capture("timetable_plan_duplicated", {
+    track("timetable_plan_duplicated", {
       from_plan: timetableIndex + 1,
       to_plan: toIndex + 1
     })

@@ -3,8 +3,8 @@
 import { useMemo, useRef, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { Check } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { customCoursesToIndexMap } from "@/lib/custom-course-to-index"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
 import { latestSemester, latestYear } from "@/lib/semesters"
@@ -69,7 +69,7 @@ const TimetableModulesSelect = () => {
       // If module is already in timetable, remove it
       if (Object.keys(timetable).find((x) => x === moduleKey)) {
         removeItemFromTimetable(moduleKey)
-        posthog.capture("module_removed", { module_code: moduleKey })
+        track("module_removed", { module_code: moduleKey })
         if (isMobile) setInputValue("")
         setDisabled(false)
         setIsLoadingModule(false)
@@ -91,7 +91,7 @@ const TimetableModulesSelect = () => {
       )
 
       addItemToTimetable(moduleKey, selectedIndexKey)
-      posthog.capture("module_added", {
+      track("module_added", {
         module_code: moduleKey,
         index_key: selectedIndexKey,
         total_modules: Object.keys(timetable).length + 1

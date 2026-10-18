@@ -2,9 +2,9 @@
 
 import { useMemo, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
-import posthog from "posthog-js"
 import { toast } from "sonner"
 
+import { track } from "@/lib/analytics"
 import { decodeTextBundle } from "@/lib/timetable-share"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -45,7 +45,7 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
     setCustomCourses(decoded.customCourses, targetPlan)
     updateTimetableIndex(targetPlan)
 
-    posthog.capture("timetable_imported", {
+    track("timetable_imported", {
       target_plan: targetPlan + 1,
       module_count: Object.keys(decoded.timetable).length,
       custom_block_count: decoded.customCourses.length

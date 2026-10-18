@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import MobileTracker from "@/components/mobile-tracker"
 import Analytics from "@/astro/components/Analytics.astro"
+import StaleChunkReload from "@/astro/components/StaleChunkReload.astro"
 
 interface Props {
   title?: string
@@ -64,10 +65,10 @@ const resolvedTitle =
       media="(prefers-color-scheme: dark)"
       content="black"
     />
+    <StaleChunkReload />
     <link rel="icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-    <link rel="dns-prefetch" href="https://www.clarity.ms" />
 
     <Font cssVariable="--font-inter" preload />
 

@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Check, ChevronDown, Search, X } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { formatShortDate } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
@@ -180,7 +180,7 @@ export default function ArticlesList({
     const value = debouncedSearchQuery.trim()
     if (value === queryParam) return
     updateParams({ q: value || null })
-    if (value) posthog.capture("articles_searched", { search_term: value })
+    if (value) track("articles_searched", { search_term: value })
   }, [debouncedSearchQuery, queryParam, updateParams])
 
   useEffect(() => {
@@ -391,7 +391,7 @@ export default function ArticlesList({
                   onClick={() => {
                     updateParams({ category: value })
                     if (value)
-                      posthog.capture("articles_category_filtered", {
+                      track("articles_category_filtered", {
                         category
                       })
                   }}>

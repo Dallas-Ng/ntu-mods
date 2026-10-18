@@ -2,8 +2,8 @@
 
 import { useBoundState } from "@/state/bound.state"
 import { BotIcon, CalendarDaysIcon, WandIcon } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { useSettings } from "@/hooks/use-settings"
 import {
   Tooltip,
@@ -57,7 +57,7 @@ const TimetableModeSelector = () => {
                   onClick={() => {
                     if (m.comingSoon) return
                     setMode(m.id)
-                    posthog.capture("timetable_mode_changed", { mode: m.id })
+                    track("timetable_mode_changed", { mode: m.id })
                   }}
                   disabled={m.comingSoon}
                   className={`focus-visible:ring-ring/50 flex flex-1 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${

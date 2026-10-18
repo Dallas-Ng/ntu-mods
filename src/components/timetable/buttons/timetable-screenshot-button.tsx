@@ -1,8 +1,8 @@
 "use client"
 
 import { ImageDown } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { useSearchParams } from "@/hooks/use-search-params"
 import ButtonCollapsable from "@/components/button-collapsable"
 
@@ -24,9 +24,7 @@ const StarsScreenshotButton = ({ persistQuerystring }: Props) => {
   }
 
   return (
-    <a
-      href={href}
-      onClick={() => posthog.capture("timetable_screenshot_clicked")}>
+    <a href={href} onClick={() => track("timetable_screenshot_clicked")}>
       <ButtonCollapsable icon={ImageDown} text="Export as Image" />
     </a>
   )

@@ -10,8 +10,9 @@ import {
   Sparkles,
   Upload
 } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track as trackEvent } from "@/lib/analytics"
+import type { EventSuffix } from "@/lib/analytics-events"
 import {
   cgpa,
   FGO_CORE_SUBCAP,
@@ -48,8 +49,8 @@ const TRANSCRIPT_URL =
   "https://wis.ntu.edu.sg/webexe/owa/request_transcript_und.LoginN?pType=SH"
 
 // Events carry counts and flags only: never module codes, names or grades.
-const track = (event: string, props?: Record<string, unknown>) =>
-  posthog.capture(`fgo_${event}`, props)
+const track = (event: EventSuffix<"fgo_">, props?: Record<string, unknown>) =>
+  trackEvent(`fgo_${event}`, props)
 
 const fmt = (n: number) => n.toFixed(2)
 const toAu = (v: string) => Math.max(0, Math.round(Number(v) || 0))

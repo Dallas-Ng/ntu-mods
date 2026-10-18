@@ -339,8 +339,6 @@ table td {
 .data-table td {
   @apply border-0 text-left align-top;
   padding: 0.65rem 1rem;
-  /* Keep number columns from collapsing into one-character-wide strips. */
-  min-width: 5.5rem;
   border-right: 1px solid hsl(var(--border));
   border-bottom: 1px solid hsl(var(--border));
 }
@@ -374,12 +372,18 @@ table td {
   background: color-mix(in srgb, hsl(var(--muted)) 40%, hsl(var(--background)));
 }
 
-/* First column stays in view while a wide table scrolls sideways, so the row
-   label is never lost. Cell backgrounds above are opaque for this reason. */
-.prose table th:first-child,
-.prose table td:first-child,
-.data-table th:first-child,
-.data-table td:first-child {
+/* Inside a scrolling article table (.table-scroll): keep number columns from
+   collapsing into one-character-wide strips, and keep the first column in view
+   while the table scrolls sideways so the row label is never lost. Cell
+   backgrounds above are opaque for this reason. Not applied to .data-table,
+   which has no scroll box. */
+.table-scroll th,
+.table-scroll td {
+  min-width: 5.5rem;
+}
+
+.table-scroll th:first-child,
+.table-scroll td:first-child {
   @apply sticky left-0 z-[1];
   min-width: 8rem;
 }
@@ -396,13 +400,15 @@ table td {
   .data-table th,
   .data-table td {
     padding: 0.5rem 0.65rem;
+  }
+
+  .table-scroll th,
+  .table-scroll td {
     min-width: 4.5rem;
   }
 
-  .prose table th:first-child,
-  .prose table td:first-child,
-  .data-table th:first-child,
-  .data-table td:first-child {
+  .table-scroll th:first-child,
+  .table-scroll td:first-child {
     min-width: 7rem;
   }
 }

@@ -8,7 +8,7 @@ const CORE_LINKS = [
   {
     label: "Home",
     href: "/",
-    description: "Overview of NTUMods, timetable, modules, exams, and guides"
+    description: "Overview of NTUMods: timetable, modules, exams, and guides"
   },
   {
     label: "Timetable",
@@ -43,7 +43,7 @@ const CORE_LINKS = [
     label: "Links",
     href: "/links",
     description:
-      "Quick access to top NTU student portals, STARS, NTULearn, CareerAxis, and more"
+      "Quick access to top NTU student portals: STARS, NTULearn, CareerAxis, and more"
   },
   {
     label: "FAQ",

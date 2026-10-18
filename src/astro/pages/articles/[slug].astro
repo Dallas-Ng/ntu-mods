@@ -363,7 +363,12 @@ const pageDescription =
 
     update()
     scroller.addEventListener("scroll", update, { passive: true })
-    new ResizeObserver(update).observe(scroller)
+
+    // Watch the table too: its width can change (late fonts or images in
+    // cells) without the scroll box itself resizing.
+    const observer = new ResizeObserver(update)
+    observer.observe(scroller)
+    if (scroller.firstElementChild) observer.observe(scroller.firstElementChild)
   })
 
   // Body figures only; the not-prose hero thumbnail is excluded by the selector.

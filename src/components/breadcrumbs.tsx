@@ -26,7 +26,9 @@ const Breadcrumbs = (props: Props) => {
                 "hover:text-secondary-foreground truncate transition-colors",
                 // The last crumb is the page title: let it shrink to the space
                 // left (ellipsised) instead of running off the screen.
-                idx === breadcrumbs.length - 1 ? "min-w-0" : "shrink-0"
+                idx === breadcrumbs.length - 1
+                  ? "min-w-0"
+                  : "max-w-[16rem] shrink-0 sm:max-w-none"
               )}>
               {label}
             </a>

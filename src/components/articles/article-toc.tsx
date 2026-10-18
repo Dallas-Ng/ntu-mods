@@ -55,8 +55,10 @@ const useActiveHeading = (visibleHeadings: TocHeading[]) => {
 
       // A short last section never scrolls up to the offset, so at the very
       // bottom of the page it would stay unhighlighted.
+      const pageHeight = document.documentElement.scrollHeight
       const atBottom =
-        window.innerHeight + window.scrollY >= document.body.scrollHeight - 2
+        pageHeight > window.innerHeight + 4 &&
+        window.innerHeight + window.scrollY >= pageHeight - 2
 
       setActiveId((atBottom ? elements[elements.length - 1] : current).id)
     }
@@ -150,6 +152,8 @@ export const MobileSectionDropdown = ({ headings }: Props) => {
         <button
           type="button"
           aria-label="On this page"
+          aria-hidden={!scrolled}
+          tabIndex={scrolled ? 0 : -1}
           className={cn(
             "bg-primary text-primary-foreground not-prose fixed right-4 bottom-4 z-20 flex max-w-[calc(100vw-2rem)] cursor-pointer items-center gap-2 rounded-full px-4 py-3 text-sm font-medium shadow-lg transition-[opacity,transform] duration-200 lg:hidden",
             !scrolled && "pointer-events-none translate-y-2 opacity-0"
@@ -231,8 +235,16 @@ const ArticleToc = ({ headings }: Props) => {
     }
 
     measure()
+
+    // Re-measure when the nav's own size changes (late font load, a heading
+    // wrapping differently), not only on window resize.
+    const observer = new ResizeObserver(measure)
+    if (navRef.current) observer.observe(navRef.current)
     window.addEventListener("resize", measure)
-    return () => window.removeEventListener("resize", measure)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener("resize", measure)
+    }
   }, [activeId, visibleHeadings])
 
   if (!visibleHeadings.length) return null

@@ -65,7 +65,7 @@ const FAQ_CONFIG: FaqConfig[] = [
     id: "what-is-an-index",
     question: "What is an index?",
     answer:
-      "An index is a specific class group for a module, it has a fixed set of timeslots and venues for lectures, tutorials, and labs. Different indexes cover the same course content but meet at different times. You pick one index per module when registering in STARS."
+      "An index is a specific class group for a module. It has a fixed set of timeslots and venues for lectures, tutorials, and labs. Different indexes cover the same course content but meet at different times. You pick one index per module when registering in STARS."
   },
   {
     id: "browse-modules",
@@ -79,18 +79,18 @@ const FAQ_CONFIG: FaqConfig[] = [
           mods
         </a>{" "}
         page to search and filter all NTU modules. Click on any module to see
-        its full details, description, academic units, prerequisites, exam
+        its full details: description, academic units, prerequisites, exam
         schedule, and all available indexes with their timeslots and venues.
       </>
     ),
     answerText:
-      "Use the mods page at /mods to search and filter all NTU modules. Click on any module to see its full details, description, academic units, prerequisites, exam schedule, and all available indexes with their timeslots and venues."
+      "Use the mods page at /mods to search and filter all NTU modules. Click on any module to see its full details: description, academic units, prerequisites, exam schedule, and all available indexes with their timeslots and venues."
   },
   {
     id: "export-timetable",
     question: "How do I export my timetable?",
     answer:
-      "There are two export options on the timetable page. You can download an .ics calendar file to import directly into Google Calendar, Apple Calendar, or Outlook. You can also save your timetable as an image, useful for sharing or setting as a wallpaper."
+      "There are two export options on the timetable page. You can download an .ics calendar file to import directly into Google Calendar, Apple Calendar, or Outlook. You can also save your timetable as an image, which is useful for sharing or setting as a wallpaper."
   },
   {
     id: "share-timetable",
@@ -102,7 +102,7 @@ const FAQ_CONFIG: FaqConfig[] = [
     id: "timetable-disappeared",
     question: "Why did my timetable disappear?",
     answer:
-      "Your timetable is saved in your browser's localStorage, it stays between visits on the same device and browser, but clears if you wipe your browser data, close an incognito window, or switch to a different device or browser. There is no account system, so nothing is synced to the cloud."
+      "Your timetable is saved in your browser's localStorage. It stays between visits on the same device and browser, but clears if you wipe your browser data, close an incognito window, or switch to a different device or browser. There is no account system, so nothing is synced to the cloud."
   },
   {
     id: "live-vacancies",
@@ -150,7 +150,7 @@ export const faqItems = FAQ_CONFIG.map(({ question, answer, answerText }) => ({
 }))
 
 interface Props {
-  /** Rendered as the second grid column ; the .astro page passes its own
+  /** Rendered as the second grid column, the .astro page passes its own
    * ArticleToc island here so this component can stay a zero-JS static
    * render (it has no interactivity of its own). */
   children?: React.ReactNode
@@ -162,7 +162,7 @@ interface Props {
 const FaqContent = ({ children, mobileNav }: Props) => {
   return (
     <Container size="md">
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem] [&>*]:min-w-0">
         <div className="space-y-8">
           {mobileNav}
 

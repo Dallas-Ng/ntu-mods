@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { ArrowUp, Link as LinkIcon } from "lucide-react"
 
 import {
@@ -168,37 +168,44 @@ const getQuarter = (date: string) => {
 const ChangelogContent = () => {
   const [activeFilter, setActiveFilter] = useState<ChangelogFilter>("All")
 
-  const filteredChangelog = CHANGELOG.map((release) => ({
-    ...release,
-    items:
-      activeFilter === "All"
-        ? release.items
-        : release.items.filter((item) => item.category === activeFilter)
-  })).filter((release) => release.items.length > 0)
+  // Memoised so the section nav gets a stable `headings` between renders and
+  // does not re-attach its scroll listeners on every filter click.
+  const { sortedQuarters, headings } = useMemo(() => {
+    const filteredChangelog = CHANGELOG.map((release) => ({
+      ...release,
+      items:
+        activeFilter === "All"
+          ? release.items
+          : release.items.filter((item) => item.category === activeFilter)
+    })).filter((release) => release.items.length > 0)
 
-  const quarters = new Map<
-    string,
-    { id: string; label: string; order: number; releases: ChangelogRelease[] }
-  >()
+    const quarters = new Map<
+      string,
+      { id: string; label: string; order: number; releases: ChangelogRelease[] }
+    >()
 
-  for (const release of filteredChangelog) {
-    const quarter = getQuarter(release.date)
-    const group = quarters.get(quarter.id) ?? { ...quarter, releases: [] }
-    group.releases.push(release)
-    quarters.set(quarter.id, group)
-  }
+    for (const release of filteredChangelog) {
+      const quarter = getQuarter(release.date)
+      const group = quarters.get(quarter.id) ?? { ...quarter, releases: [] }
+      group.releases.push(release)
+      quarters.set(quarter.id, group)
+    }
 
-  const sortedQuarters = [...quarters.values()].sort(
-    (a, b) => b.order - a.order
-  )
+    const sortedQuarters = [...quarters.values()].sort(
+      (a, b) => b.order - a.order
+    )
 
-  const headings = sortedQuarters.map(({ id, label, releases }) => ({
-    id,
-    depth: 2,
-    text: label,
-    group: label.split(" ")[1],
-    count: releases.length
-  }))
+    return {
+      sortedQuarters,
+      headings: sortedQuarters.map(({ id, label, releases }) => ({
+        id,
+        depth: 2,
+        text: label,
+        group: label.split(" ")[1],
+        count: releases.length
+      }))
+    }
+  }, [activeFilter])
 
   return (
     <Container size="md">
@@ -230,10 +237,7 @@ const ChangelogContent = () => {
                 </h2>
 
                 {releases.map((release) => (
-                  <ChangelogReleaseSection
-                    key={release.title}
-                    release={release}
-                  />
+                  <ChangelogReleaseSection key={release.id} release={release} />
                 ))}
               </section>
             ))}

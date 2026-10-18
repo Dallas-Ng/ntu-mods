@@ -19,11 +19,15 @@ export const GET: APIRoute = async () => {
   const { DB } = env
   if (!DB) return json({ error: "DB not bound" }, 500)
 
-  // View counts are cosmetic: if the query fails (for example the table is
-  // missing), answer with no counts rather than a 500 in the browser console.
+  // View counts are cosmetic: if the query fails, answer with no counts
+  // rather than a 500 in the browser console.
   try {
     const { results } = await DB.prepare(
-      "SELECT slug, COUNT(*) AS n FROM article_views GROUP BY slug"
+      `SELECT slug, SUM(n) AS n FROM (
+         SELECT slug, COUNT(*) AS n FROM article_views GROUP BY slug
+         UNION ALL
+         SELECT slug, n FROM article_view_baselines
+       ) GROUP BY slug`
     ).all<{ slug: string; n: number }>()
     const views = Object.fromEntries((results ?? []).map((r) => [r.slug, r.n]))
     return json({ views }, 200, { "Cache-Control": "public, max-age=300" })
@@ -32,7 +36,8 @@ export const GET: APIRoute = async () => {
   }
 }
 
-// Records this visitor (idempotent) and returns the unique-view count.
+// Records this visitor (idempotent) and returns the unique-view count,
+// including the baseline from before the counter existed.
 export const POST: APIRoute = async ({ request }) => {
   const { DB } = env
   if (!DB) return json({ error: "DB not bound" }, 500)
@@ -57,7 +62,9 @@ export const POST: APIRoute = async ({ request }) => {
       .bind(slug, visitorId)
       .all()
     const row = await DB.prepare(
-      "SELECT COUNT(*) AS n FROM article_views WHERE slug = ?"
+      `SELECT (SELECT COUNT(*) FROM article_views WHERE slug = ?1)
+            + COALESCE((SELECT n FROM article_view_baselines WHERE slug = ?1), 0)
+              AS n`
     )
       .bind(slug)
       .first<{ n: number }>()

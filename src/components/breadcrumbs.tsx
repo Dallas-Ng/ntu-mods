@@ -1,6 +1,8 @@
 import { Fragment } from "react"
 import { ChevronRight } from "lucide-react"
 
+import { cn } from "@/lib/utils"
+
 interface BreadcrumbItem {
   href: string
   label: string
@@ -20,7 +22,12 @@ const Breadcrumbs = (props: Props) => {
             {idx > 0 && <ChevronRight className="size-4 shrink-0" />}
             <a
               href={href}
-              className="hover:text-secondary-foreground max-w-[16rem] shrink-0 truncate transition-colors sm:max-w-none">
+              className={cn(
+                "hover:text-secondary-foreground truncate transition-colors",
+                // The last crumb is the page title: let it shrink to the space
+                // left (ellipsised) instead of running off the screen.
+                idx === breadcrumbs.length - 1 ? "min-w-0" : "shrink-0"
+              )}>
               {label}
             </a>
           </Fragment>

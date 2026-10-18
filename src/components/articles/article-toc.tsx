@@ -8,7 +8,7 @@ import {
   useRef,
   useState
 } from "react"
-import { ChevronUp } from "lucide-react"
+import { List } from "lucide-react"
 
 import type { ArticleHeading } from "@/lib/server/articles"
 import { cn } from "@/lib/utils"
@@ -95,9 +95,10 @@ const getVisibleHeadings = (headings: TocHeading[]) =>
 const MOBILE_SCROLL_OFFSET = 128
 
 /**
- * Slim sticky bar for screens without the side nav. It shows the section being
+ * Floating button for screens without the side nav. It shows the section being
  * read; tapping it opens a bottom drawer listing every section, so long
  * headings get a full-width row each instead of being squeezed into chips.
+ * It stays out of the way until the reader has scrolled past the top.
  */
 export const MobileSectionDropdown = ({ headings }: Props) => {
   const visibleHeadings = useMemo(
@@ -106,6 +107,15 @@ export const MobileSectionDropdown = ({ headings }: Props) => {
   )
   const activeId = useActiveHeading(visibleHeadings)
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 400)
+
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   if (!visibleHeadings.length) return null
 
@@ -136,26 +146,18 @@ export const MobileSectionDropdown = ({ headings }: Props) => {
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <div className="bg-background not-prose sticky top-16 z-[5] -mx-3 border-b lg:hidden">
-        <DrawerTrigger asChild>
-          <button
-            type="button"
-            className="flex w-full cursor-pointer items-center justify-between gap-3 px-3 py-2.5 text-left">
-            <span className="min-w-0">
-              <span className="text-muted-foreground block text-xs">
-                On this page
-              </span>
-              <span className="block truncate text-sm font-medium">
-                {active.text}
-              </span>
-            </span>
-            <ChevronUp
-              aria-hidden="true"
-              className="text-muted-foreground size-4 shrink-0"
-            />
-          </button>
-        </DrawerTrigger>
-      </div>
+      <DrawerTrigger asChild>
+        <button
+          type="button"
+          aria-label="On this page"
+          className={cn(
+            "bg-primary text-primary-foreground not-prose fixed right-4 bottom-4 z-20 flex max-w-[calc(100vw-2rem)] cursor-pointer items-center gap-2 rounded-full px-4 py-3 text-sm font-medium shadow-lg transition-[opacity,transform] duration-200 lg:hidden",
+            !scrolled && "pointer-events-none translate-y-2 opacity-0"
+          )}>
+          <List aria-hidden="true" className="size-4 shrink-0" />
+          <span className="max-w-[12rem] truncate">{active.text}</span>
+        </button>
+      </DrawerTrigger>
 
       <DrawerContent>
         <DrawerTitle className="px-4 pt-3 pb-2 text-base">

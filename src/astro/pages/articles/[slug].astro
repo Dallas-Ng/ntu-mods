@@ -265,7 +265,7 @@ const pageDescription =
           <JsonLd data={[articleLd, faqLd, breadcrumbLd]} />
 
           <div class="mt-5 grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
-            <article class="prose dark:prose-invert max-w-full min-w-0">
+            <article class="prose dark:prose-invert max-w-full min-w-0 [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto">
               <MobileSectionDropdown client:idle headings={articleHeadings} />
 
               {article.thumbnail && (

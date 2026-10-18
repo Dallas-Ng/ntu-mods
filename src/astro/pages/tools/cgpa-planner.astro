@@ -117,7 +117,7 @@ const FAQ = [
     <CgpaPlanner client:load />
   </div>
 
-  <section class="space-y-3 border-t pt-10" aria-labelledby="about-cgpa">
+  <section class="space-y-3 pt-4" aria-labelledby="about-cgpa">
     <h2 id="about-cgpa" class="text-lg font-semibold tracking-tight">
       About NTU honours classification
     </h2>
@@ -132,7 +132,7 @@ const FAQ = [
     <div class="space-y-3 pt-2">
       <a
         href={MAIN_GUIDE.href}
-        class="bg-card hover:bg-accent group block space-y-2 rounded-lg border-2 p-6 transition-colors">
+        class="bg-muted hover:bg-accent group block space-y-2 rounded-2xl p-5 transition-colors">
         <p
           class="text-muted-foreground text-xs font-medium tracking-wide uppercase">
           Main guide
@@ -152,7 +152,7 @@ const FAQ = [
           RELATED_GUIDES.map(({ href, title, description }) => (
             <a
               href={href}
-              class="bg-card hover:bg-accent group rounded-lg border p-3 transition-colors">
+              class="hover:bg-accent group rounded-2xl border p-4 transition-colors">
               <p class="group-hover:text-primary text-sm leading-snug font-medium">
                 {title}
               </p>
@@ -166,7 +166,7 @@ const FAQ = [
     </div>
   </section>
 
-  <section class="space-y-4 border-t pt-10" aria-labelledby="cgpa-faq">
+  <section class="space-y-4 pt-4" aria-labelledby="cgpa-faq">
     <h2 id="cgpa-faq" class="text-lg font-semibold tracking-tight">
       Frequently asked questions
     </h2>

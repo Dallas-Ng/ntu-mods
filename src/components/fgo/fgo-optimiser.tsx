@@ -1,15 +1,7 @@
 "use client"
 
 import { useMemo, useRef, useState } from "react"
-import {
-  Check,
-  Copy,
-  FileText,
-  FileUp,
-  Lock,
-  Sparkles,
-  Upload
-} from "lucide-react"
+import { Check, Copy, Sparkles } from "lucide-react"
 import posthog from "posthog-js"
 
 import {
@@ -42,10 +34,12 @@ import {
   SelectValue
 } from "@/components/ui/select"
 import { Toggle } from "@/components/ui/toggle"
-import { ShareCheckbox } from "@/components/tools/share-checkbox"
-
-const TRANSCRIPT_URL =
-  "https://wis.ntu.edu.sg/webexe/owa/request_transcript_und.LoginN?pType=SH"
+import { ToolSteps } from "@/components/tools/tool-steps"
+import {
+  TRANSCRIPT_URL,
+  TranscriptDropzone
+} from "@/components/tools/transcript-dropzone"
+import { TranscriptSource } from "@/components/tools/transcript-source"
 
 // Events carry counts and flags only: never module codes, names or grades.
 const track = (event: string, props?: Record<string, unknown>) =>
@@ -72,6 +66,8 @@ const SAMPLE_LINES = [
   "SC4003 INTELLIGENT AGENTS 3.0 F",
   "SC4079 FINAL YEAR PROJECT 8.0 A-"
 ]
+
+const SAMPLE_NAME = "Sample transcript"
 
 export default function FgoOptimiser() {
   const [data, setData] = useState<ParsedTranscript | null>(null)
@@ -118,7 +114,7 @@ export default function FgoOptimiser() {
 
   function loadSample() {
     setData(parseTranscriptLines(SAMPLE_LINES))
-    setFileName("Sample transcript")
+    setFileName(SAMPLE_NAME)
     setBde(new Set())
     setPicked(new Set())
     setExtraCore("0")
@@ -223,45 +219,20 @@ export default function FgoOptimiser() {
     return (
       <div className="space-y-8">
         {fileInput}
-        <div
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault()
-            void load(e.dataTransfer.files[0])
-          }}
-          className="flex flex-col items-center gap-6 rounded-xl border-2 border-dashed px-6 py-14 text-center sm:py-16">
-          <span className="bg-muted flex size-14 items-center justify-center rounded-full">
-            <FileUp className="text-muted-foreground size-6" />
-          </span>
-          <div className="space-y-2">
-            <h2 className="text-lg font-semibold tracking-tight">
-              {busy
-                ? "Reading your transcript..."
-                : "Upload your NTU transcript"}
-            </h2>
-            <p className="text-muted-foreground mx-auto max-w-md text-sm leading-relaxed">
-              Drop the official PDF here, or choose it from your device. NIE
-              students can use the Academic Progress Report.
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <Button disabled={busy} onClick={() => input.current?.click()}>
-              <Upload /> Choose PDF
-            </Button>
-            <Button variant="outline" disabled={busy} onClick={loadSample}>
-              Try with sample data
-            </Button>
-          </div>
-          <p className="text-muted-foreground flex items-center gap-1.5 text-xs">
-            <Lock className="size-3.5" /> Your PDF is read in your browser and
-            never uploaded.
-          </p>
-          <ShareCheckbox checked={share} onChange={setShare} />
-          {error && <p className="text-destructive text-sm">{error}</p>}
-        </div>
+        <TranscriptDropzone
+          busy={busy}
+          error={error}
+          share={share}
+          onShareChange={setShare}
+          onFile={(f) => void load(f)}
+          onChoose={() => input.current?.click()}
+          onSample={loadSample}
+          onLinkClick={() => track("transcript_link_clicked")}
+          description="Drop the official PDF here, or choose it from your device. NIE students can use the Academic Progress Report."
+        />
 
-        <ol className="grid gap-4 sm:grid-cols-3">
-          {[
+        <ToolSteps
+          steps={[
             {
               title: "Get your transcript",
               body: (
@@ -287,20 +258,8 @@ export default function FgoOptimiser() {
               title: "Pick your modules",
               body: "Run Auto-optimise, or click modules yourself and watch the projected CGPA change."
             }
-          ].map((step, i) => (
-            <li
-              key={step.title}
-              className="bg-card space-y-2 rounded-lg border p-4">
-              <span className="bg-muted text-muted-foreground flex size-6 items-center justify-center rounded-full text-xs font-semibold">
-                {i + 1}
-              </span>
-              <p className="text-sm font-medium">{step.title}</p>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {step.body}
-              </p>
-            </li>
-          ))}
-        </ol>
+          ]}
+        />
       </div>
     )
   }
@@ -310,322 +269,328 @@ export default function FgoOptimiser() {
   const terms = [...new Set(mods.map((m) => m.term))]
 
   return (
-    <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
+    <div className="space-y-6">
       {fileInput}
-
-      {/* Result and quota: first on mobile, sticky on the right on desktop */}
-      <aside className="space-y-3 lg:sticky lg:top-20 lg:order-2">
-        <div className="space-y-4 rounded-lg border-2 p-4">
-          <div>
-            <p className="text-muted-foreground text-xs">Projected CGPA</p>
-            <p className="flex items-baseline gap-2">
-              <span className="text-4xl font-semibold tabular-nums">
-                {fmt(projected)}
-              </span>
-              {gained > 0 && (
-                <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
-                  +{fmt(gained)}
+      <TranscriptSource
+        sample={fileName === SAMPLE_NAME}
+        fileName={fileName}
+        summary={`${letterGraded(mods)} graded modules`}
+        onUpload={() => {
+          track("transcript_changed")
+          input.current?.click()
+        }}
+      />
+      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
+        {/* Result and quota: first on mobile, sticky on the right on desktop */}
+        <aside className="space-y-3 lg:sticky lg:top-20 lg:order-2">
+          <div className="bg-muted space-y-4 rounded-2xl p-5">
+            <div className="bg-background rounded-xl p-4">
+              <p className="text-muted-foreground text-xs">Projected CGPA</p>
+              <p className="flex items-baseline gap-2">
+                <span className="text-4xl font-bold tracking-tighter tabular-nums md:text-5xl">
+                  {fmt(projected)}
                 </span>
-              )}
-            </p>
-            <p className="text-muted-foreground text-xs">
-              Current {fmt(current)}
-              {data.statedCgpa !== null &&
-                Math.abs(data.statedCgpa - current) > 0.01 &&
-                `, transcript shows ${fmt(data.statedCgpa)}`}
-            </p>
-          </div>
-
-          <div className="space-y-2.5">
-            <Meter
-              label="FGO quota"
-              used={usage.total}
-              max={quotaAu}
-              over={usage.total > quotaAu}
-            />
-            <Meter
-              label="Core, ICC and MPE"
-              used={usage.core}
-              max={FGO_CORE_SUBCAP}
-              over={usage.core > FGO_CORE_SUBCAP}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Button className="w-full" size="sm" onClick={autoOptimise}>
-              <Sparkles /> Auto-optimise
-            </Button>
-            {picked.size > 0 && (
-              <Button
-                className="w-full"
-                size="sm"
-                variant="ghost"
-                onClick={() => {
-                  track("picks_cleared", { picks: picked.size })
-                  resetPicks()
-                }}>
-                Clear {picked.size} {picked.size === 1 ? "pick" : "picks"}
-              </Button>
-            )}
-          </div>
-
-          <div className="space-y-1.5 border-t pt-3">
-            <label htmlFor="fgo-quota" className="text-xs font-medium">
-              Programme quota
-            </label>
-            <Select
-              value={quota}
-              onValueChange={(v) => {
-                setQuota(v)
-                resetPicks()
-                track("quota_changed", { quota: Number(v) })
-              }}>
-              <SelectTrigger id="fgo-quota" size="sm" className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="24">
-                  24 AU, most 4-year programmes
-                </SelectItem>
-                <SelectItem value="21">
-                  21 AU, 3-year and some other programmes
-                </SelectItem>
-              </SelectContent>
-            </Select>
-            <p className="text-muted-foreground text-xs">
-              {priorAu} AU already used on this transcript ({priorMods.length}{" "}
-              {priorMods.length === 1 ? "module" : "modules"} graded Pass),{" "}
-              {left} AU left.
-            </p>
-          </div>
-
-          <Accordion type="single" collapsible className="-mb-2 border-t">
-            <AccordionItem value="extra" className="border-b-0">
-              <AccordionTrigger className="py-3 text-xs font-medium">
-                Used FGO not on your transcript
-                {extra.core + extra.bde > 0 &&
-                  ` (${extra.core + extra.bde} AU)`}
-              </AccordionTrigger>
-              <AccordionContent className="space-y-3">
-                <p className="text-muted-foreground text-xs">
-                  A module you declared FGO on and then failed becomes No Record
-                  and leaves your transcript, but still uses quota. Add those AU
-                  here, with any S/U from before the FGO rules.
-                </p>
-                <div className="flex gap-3">
-                  <label className="flex-1 space-y-1 text-xs">
-                    Core, ICC, MPE
-                    <Input
-                      type="number"
-                      min={0}
-                      inputMode="numeric"
-                      value={extraCore}
-                      onChange={(e) => {
-                        setExtraCore(e.target.value)
-                        resetPicks()
-                      }}
-                      onBlur={() =>
-                        track("extra_used_set", {
-                          kind: "core",
-                          au: extra.core
-                        })
-                      }
-                      className="h-8"
-                    />
-                  </label>
-                  <label className="flex-1 space-y-1 text-xs">
-                    BDE
-                    <Input
-                      type="number"
-                      min={0}
-                      inputMode="numeric"
-                      value={extraBde}
-                      onChange={(e) => {
-                        setExtraBde(e.target.value)
-                        resetPicks()
-                      }}
-                      onBlur={() =>
-                        track("extra_used_set", { kind: "bde", au: extra.bde })
-                      }
-                      className="h-8"
-                    />
-                  </label>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
-
-        {pickedMods.length > 0 && (
-          <div className="overflow-hidden rounded-lg border-2">
-            <div className="bg-muted/50 text-muted-foreground flex items-center justify-between border-b px-3 py-1.5 text-xs font-medium tracking-wide uppercase">
-              Declare in the FGO portal
-              <Button
-                variant="ghost"
-                size="xs"
-                onClick={() => void copyList()}
-                className="normal-case">
-                {copied ? <Check /> : <Copy />}
-                {copied ? "Copied" : "Copy"}
-              </Button>
-            </div>
-            <ul className="divide-y text-sm">
-              {pickedMods.map((m) => (
-                <li key={m.id} className="flex items-baseline gap-2 px-3 py-2">
-                  <span className="text-muted-foreground font-mono text-xs">
-                    {m.code}
+                {gained > 0 && (
+                  <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                    +{fmt(gained)}
                   </span>
-                  <span className="min-w-0 flex-1 truncate">{m.name}</span>
-                  <span className="font-medium">{m.grade}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="text-muted-foreground border-t px-3 py-2 text-xs">
-              Declarations are final once submitted. Check the list against the
-              official FGO portal first.
-            </p>
-          </div>
-        )}
-      </aside>
-
-      <div className="min-w-0 space-y-3 lg:order-1">
-        <div className="flex items-center justify-between gap-3">
-          <p className="text-muted-foreground flex h-8 min-w-0 items-center gap-2 text-sm">
-            <FileText className="size-4 shrink-0" />
-            <span className="truncate">
-              {fileName} · {letterGraded(mods)} graded modules
-            </span>
-          </p>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              track("transcript_changed")
-              input.current?.click()
-            }}>
-            <Upload /> Change transcript
-          </Button>
-        </div>
-        {error && <p className="text-destructive text-sm">{error}</p>}
-
-        <div className="overflow-hidden rounded-lg border-2">
-          <div className="bg-muted/50 text-muted-foreground flex items-center gap-3 border-b px-3 py-2 text-xs font-medium tracking-wide uppercase">
-            <span className="w-8 shrink-0">FGO</span>
-            <span className="flex-1">Module</span>
-            <span className="w-12 shrink-0 text-center">Grade</span>
-            <span className="w-8 shrink-0 text-center">AU</span>
-            <span
-              className="hidden w-12 shrink-0 text-right sm:block"
-              title="Change in CGPA if only this module is Flexible-Graded">
-              Impact
-            </span>
-            <span className="w-14 shrink-0 text-center">Type</span>
-          </div>
-
-          {terms.map((term) => (
-            <div key={term}>
-              <p className="bg-muted/30 text-muted-foreground border-b px-3 py-1.5 text-xs font-medium">
-                {term}
+                )}
               </p>
-              <div className="divide-y border-b last:border-b-0">
-                {mods
-                  .filter((m) => m.term === term)
-                  .map((m) => {
-                    const prior = m.status === "fgo"
-                    const on = prior || picked.has(m.id)
-                    const full = !on && !m.locked && !canAdd(m)
-                    const delta = impact.get(m.id)
-                    const selectable = !prior && !m.locked && !full
-                    return (
-                      <div
-                        key={m.id}
-                        onClick={
-                          selectable
-                            ? () => togglePick(m.id, !on, "row")
-                            : undefined
-                        }
-                        className={cn(
-                          "flex items-center gap-3 px-3 py-2",
-                          selectable && "hover:bg-accent/50 cursor-pointer",
-                          on && !prior && "bg-primary/5",
-                          m.locked && "opacity-60"
-                        )}>
-                        <div
-                          className="w-8 shrink-0"
-                          onClick={(e) => e.stopPropagation()}
-                          title={
-                            full ? "No quota left for this module" : undefined
-                          }>
-                          <Checkbox
-                            aria-label={`FGO ${m.code}`}
-                            disabled={prior || m.locked || full}
-                            checked={on}
-                            onCheckedChange={(c) =>
-                              togglePick(m.id, c === true, "checkbox")
-                            }
-                          />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm">
-                            <span className="text-muted-foreground mr-2 font-mono text-xs">
-                              {m.code}
-                            </span>
-                            {m.name}
-                          </p>
-                          {(prior || m.locked) && (
-                            <p className="text-muted-foreground text-xs">
-                              {prior
-                                ? "Already used FGO"
-                                : "Not eligible for FGO"}
-                            </p>
-                          )}
-                        </div>
-                        <span className="w-12 shrink-0 text-center text-sm font-medium">
-                          {m.grade}
-                        </span>
-                        <span className="text-muted-foreground w-8 shrink-0 text-center text-xs">
-                          {m.au}
-                        </span>
-                        <span
-                          className={cn(
-                            "hidden w-12 shrink-0 text-right text-xs tabular-nums sm:block",
-                            delta !== undefined && delta > 0.005
-                              ? "text-emerald-600 dark:text-emerald-400"
-                              : "text-muted-foreground"
-                          )}>
-                          {delta === undefined
-                            ? ""
-                            : `${delta >= 0 ? "+" : ""}${fmt(delta)}`}
-                        </span>
-                        <Toggle
-                          variant="outline"
-                          size="sm"
-                          disabled={m.locked}
-                          pressed={bde.has(m.id)}
-                          aria-label={`${m.code} is a BDE`}
-                          onClick={(e) => e.stopPropagation()}
-                          onPressedChange={(p) => {
-                            setBde(flip(bde, m.id, p))
-                            resetPicks()
-                            track("type_toggled", { type: p ? "bde" : "core" })
-                          }}
-                          className="h-7 w-14 shrink-0 text-xs">
-                          {bde.has(m.id) ? "BDE" : "Core"}
-                        </Toggle>
-                      </div>
-                    )
-                  })}
-              </div>
+              <p className="text-muted-foreground text-xs">
+                Current {fmt(current)}
+                {data.statedCgpa !== null &&
+                  Math.abs(data.statedCgpa - current) > 0.01 &&
+                  `, transcript shows ${fmt(data.statedCgpa)}`}
+              </p>
             </div>
-          ))}
-        </div>
 
-        <p className="text-muted-foreground text-xs">
-          Set Type to BDE for your Broadening and Deepening Electives, since
-          only Core, ICC and MPE count towards the 12 AU cap. This tool does not
-          check your minimum letter-graded AU or academic sanctions, and it is
-          not official. Confirm against the NTU FGO portal before declaring.
-        </p>
+            <div className="space-y-2.5">
+              <Meter
+                label="FGO quota"
+                used={usage.total}
+                max={quotaAu}
+                over={usage.total > quotaAu}
+              />
+              <Meter
+                label="Core, ICC and MPE"
+                used={usage.core}
+                max={FGO_CORE_SUBCAP}
+                over={usage.core > FGO_CORE_SUBCAP}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Button className="w-full" size="sm" onClick={autoOptimise}>
+                <Sparkles /> Auto-optimise
+              </Button>
+              {picked.size > 0 && (
+                <Button
+                  className="w-full"
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    track("picks_cleared", { picks: picked.size })
+                    resetPicks()
+                  }}>
+                  Clear {picked.size} {picked.size === 1 ? "pick" : "picks"}
+                </Button>
+              )}
+            </div>
+
+            <div className="space-y-1.5 border-t pt-3">
+              <label htmlFor="fgo-quota" className="text-xs font-medium">
+                Programme quota
+              </label>
+              <Select
+                value={quota}
+                onValueChange={(v) => {
+                  setQuota(v)
+                  resetPicks()
+                  track("quota_changed", { quota: Number(v) })
+                }}>
+                <SelectTrigger
+                  id="fgo-quota"
+                  size="sm"
+                  className="bg-background w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="24">
+                    24 AU, most 4-year programmes
+                  </SelectItem>
+                  <SelectItem value="21">
+                    21 AU, 3-year and some other programmes
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-muted-foreground text-xs">
+                {priorAu} AU already used on this transcript ({priorMods.length}{" "}
+                {priorMods.length === 1 ? "module" : "modules"} graded Pass),{" "}
+                {left} AU left.
+              </p>
+            </div>
+
+            <Accordion type="single" collapsible className="-mb-2 border-t">
+              <AccordionItem value="extra" className="border-b-0">
+                <AccordionTrigger className="py-3 text-xs font-medium">
+                  Used FGO not on your transcript
+                  {extra.core + extra.bde > 0 &&
+                    ` (${extra.core + extra.bde} AU)`}
+                </AccordionTrigger>
+                <AccordionContent className="space-y-3">
+                  <p className="text-muted-foreground text-xs">
+                    A module you declared FGO on and then failed becomes No
+                    Record and leaves your transcript, but still uses quota. Add
+                    those AU here, with any S/U from before the FGO rules.
+                  </p>
+                  <div className="flex gap-3">
+                    <label className="flex-1 space-y-1 text-xs">
+                      Core, ICC, MPE
+                      <Input
+                        type="number"
+                        min={0}
+                        inputMode="numeric"
+                        value={extraCore}
+                        onChange={(e) => {
+                          setExtraCore(e.target.value)
+                          resetPicks()
+                        }}
+                        onBlur={() =>
+                          track("extra_used_set", {
+                            kind: "core",
+                            au: extra.core
+                          })
+                        }
+                        className="bg-background h-8"
+                      />
+                    </label>
+                    <label className="flex-1 space-y-1 text-xs">
+                      BDE
+                      <Input
+                        type="number"
+                        min={0}
+                        inputMode="numeric"
+                        value={extraBde}
+                        onChange={(e) => {
+                          setExtraBde(e.target.value)
+                          resetPicks()
+                        }}
+                        onBlur={() =>
+                          track("extra_used_set", {
+                            kind: "bde",
+                            au: extra.bde
+                          })
+                        }
+                        className="bg-background h-8"
+                      />
+                    </label>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </div>
+
+          {pickedMods.length > 0 && (
+            <div className="bg-muted overflow-hidden rounded-2xl">
+              <div className="bg-background/50 text-muted-foreground flex items-center justify-between border-b px-3 py-1.5 text-xs font-medium tracking-wide uppercase">
+                Declare in the FGO portal
+                <Button
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => void copyList()}
+                  className="normal-case">
+                  {copied ? <Check /> : <Copy />}
+                  {copied ? "Copied" : "Copy"}
+                </Button>
+              </div>
+              <ul className="divide-y text-sm">
+                {pickedMods.map((m) => (
+                  <li
+                    key={m.id}
+                    className="flex items-baseline gap-2 px-3 py-2">
+                    <span className="text-muted-foreground font-mono text-xs">
+                      {m.code}
+                    </span>
+                    <span className="min-w-0 flex-1 truncate">{m.name}</span>
+                    <span className="font-medium">{m.grade}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-muted-foreground border-t px-3 py-2 text-xs">
+                Declarations are final once submitted. Check the list against
+                the official FGO portal first.
+              </p>
+            </div>
+          )}
+        </aside>
+
+        <div className="min-w-0 space-y-3 lg:order-1">
+          {error && <p className="text-destructive text-sm">{error}</p>}
+
+          <div className="bg-muted overflow-hidden rounded-2xl">
+            <div className="bg-background/50 text-muted-foreground flex items-center gap-3 border-b px-3 py-2 text-xs font-medium tracking-wide uppercase">
+              <span className="w-8 shrink-0">FGO</span>
+              <span className="flex-1">Module</span>
+              <span className="w-12 shrink-0 text-center">Grade</span>
+              <span className="hidden w-8 shrink-0 text-center sm:block">
+                AU
+              </span>
+              <span
+                className="hidden w-12 shrink-0 text-right sm:block"
+                title="Change in CGPA if only this module is Flexible-Graded">
+                Impact
+              </span>
+              <span className="w-14 shrink-0 text-center">Type</span>
+            </div>
+
+            {terms.map((term) => (
+              <div key={term}>
+                <p className="bg-background/30 text-muted-foreground border-b px-3 py-1.5 text-xs font-medium">
+                  {term}
+                </p>
+                <div className="divide-y border-b last:border-b-0">
+                  {mods
+                    .filter((m) => m.term === term)
+                    .map((m) => {
+                      const prior = m.status === "fgo"
+                      const on = prior || picked.has(m.id)
+                      const full = !on && !m.locked && !canAdd(m)
+                      const delta = impact.get(m.id)
+                      const selectable = !prior && !m.locked && !full
+                      return (
+                        <div
+                          key={m.id}
+                          onClick={
+                            selectable
+                              ? () => togglePick(m.id, !on, "row")
+                              : undefined
+                          }
+                          className={cn(
+                            "flex items-center gap-3 px-3 py-2",
+                            selectable && "hover:bg-accent/50 cursor-pointer",
+                            on && !prior && "bg-primary/10",
+                            m.locked && "opacity-60"
+                          )}>
+                          <div
+                            className="w-8 shrink-0"
+                            onClick={(e) => e.stopPropagation()}
+                            title={
+                              full ? "No quota left for this module" : undefined
+                            }>
+                            <Checkbox
+                              aria-label={`FGO ${m.code}`}
+                              disabled={prior || m.locked || full}
+                              checked={on}
+                              onCheckedChange={(c) =>
+                                togglePick(m.id, c === true, "checkbox")
+                              }
+                            />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="line-clamp-3 text-sm sm:truncate">
+                              <span className="text-muted-foreground block font-mono text-xs sm:mr-2 sm:inline">
+                                {m.code}
+                              </span>
+                              {m.name}
+                            </p>
+                            {(prior || m.locked) && (
+                              <p className="text-muted-foreground text-xs">
+                                {prior
+                                  ? "Already used FGO"
+                                  : "Not eligible for FGO"}
+                              </p>
+                            )}
+                          </div>
+                          <span className="w-12 shrink-0 text-center text-sm font-medium">
+                            {m.grade}
+                          </span>
+                          <span className="text-muted-foreground hidden w-8 shrink-0 text-center text-xs sm:block">
+                            {m.au}
+                          </span>
+                          <span
+                            className={cn(
+                              "hidden w-12 shrink-0 text-right text-xs tabular-nums sm:block",
+                              delta !== undefined && delta > 0.005
+                                ? "text-emerald-600 dark:text-emerald-400"
+                                : "text-muted-foreground"
+                            )}>
+                            {delta === undefined
+                              ? ""
+                              : `${delta >= 0 ? "+" : ""}${fmt(delta)}`}
+                          </span>
+                          <Toggle
+                            variant="outline"
+                            size="sm"
+                            disabled={m.locked}
+                            pressed={bde.has(m.id)}
+                            aria-label={`${m.code} is a BDE`}
+                            onClick={(e) => e.stopPropagation()}
+                            onPressedChange={(p) => {
+                              setBde(flip(bde, m.id, p))
+                              resetPicks()
+                              track("type_toggled", {
+                                type: p ? "bde" : "core"
+                              })
+                            }}
+                            className="bg-background h-7 w-14 shrink-0 text-xs">
+                            {bde.has(m.id) ? "BDE" : "Core"}
+                          </Toggle>
+                        </div>
+                      )
+                    })}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-muted-foreground text-xs">
+            Set Type to BDE for your Broadening and Deepening Electives, since
+            only Core, ICC and MPE count towards the 12 AU cap. This tool does
+            not check your minimum letter-graded AU or academic sanctions, and
+            it is not official. Confirm against the NTU FGO portal before
+            declaring.
+          </p>
+        </div>
       </div>
     </div>
   )
@@ -653,7 +618,7 @@ function Meter({
           {used} / {max} AU
         </span>
       </div>
-      <div className="bg-muted h-1.5 overflow-hidden rounded-full">
+      <div className="bg-background h-1.5 overflow-hidden rounded-full">
         <div
           className={cn(
             "h-full rounded-full transition-all",

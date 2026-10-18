@@ -120,6 +120,12 @@ export const siteConfig = {
       icon: "graduation-cap",
       isNew: true,
       desc: "Upload your transcript and find the modules to Flexible-Grade for the highest CGPA",
+      facts: [
+        "Reads your transcript PDF",
+        "24 or 21 AU quota",
+        "Auto-optimise"
+      ],
+      time: "5 min",
       guide: {
         label: "Step-by-step guide",
         href: "/articles/ntu-fgo-optimiser-guide"
@@ -131,6 +137,12 @@ export const siteConfig = {
       icon: "calculator",
       isNew: true,
       desc: "See the average grade you need over your remaining AU to reach Merit, Distinction or Highest Distinction",
+      facts: [
+        "Type your CGPA or upload",
+        "Grade needed per class",
+        "What-if slider"
+      ],
+      time: "2 min",
       guide: {
         label: "Step-by-step guide",
         href: "/articles/ntu-cgpa-planner-guide"
@@ -142,6 +154,8 @@ export const siteConfig = {
       icon: "smartphone",
       isNew: false,
       desc: "Export your timetable as a phone wallpaper or shareable image",
+      facts: ["Phone sized", "Uses your timetable", "Save as image"],
+      time: "1 min",
       guide: null
     }
   ],

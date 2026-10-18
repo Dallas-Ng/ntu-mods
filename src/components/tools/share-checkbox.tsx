@@ -8,7 +8,7 @@ export function ShareCheckbox({
   onChange: (v: boolean) => void
 }) {
   return (
-    <label className="text-muted-foreground flex max-w-md cursor-pointer items-start gap-2 text-left text-xs">
+    <label className="text-muted-foreground mx-auto flex max-w-md cursor-pointer items-start gap-2 text-left text-xs">
       <Checkbox
         checked={checked}
         onCheckedChange={(v) => onChange(v === true)}

@@ -12,9 +12,9 @@ const { href, title, description } = Astro.props
      itself, not found in a related-guides list further down the page. -->
 <a
   href={href}
-  class="bg-card hover:bg-accent group flex items-center gap-4 rounded-lg border-2 p-4 transition-colors">
+  class="bg-muted hover:bg-accent group flex items-center gap-4 rounded-2xl p-5 transition-colors">
   <span
-    class="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-md">
+    class="bg-background text-foreground flex size-10 shrink-0 items-center justify-center rounded-xl">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="20"
@@ -34,17 +34,17 @@ const { href, title, description } = Astro.props
   </span>
   <span class="min-w-0 flex-1 space-y-0.5">
     <span
-      class="text-muted-foreground block text-xs font-medium tracking-wide uppercase">
+      class="text-foreground/60 block text-xs font-medium tracking-wide uppercase">
       Step-by-step guide
     </span>
-    <span class="group-hover:text-primary block text-sm font-semibold">
+    <span class="block text-sm font-semibold">
       {title}
     </span>
-    <span class="text-muted-foreground block text-sm leading-relaxed">
+    <span class="text-foreground/70 block text-sm leading-relaxed">
       {description}
     </span>
   </span>
-  <span class="text-primary hidden shrink-0 text-sm font-medium sm:inline">
+  <span class="text-foreground hidden shrink-0 text-sm font-medium sm:inline">
     Read the guide →
   </span>
 </a>

@@ -9,6 +9,29 @@ import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 export const prerender = true
 
 const { title, desc } = siteConfig.metatags.tools
+
+const MORE = [
+  {
+    href: "/timetable",
+    title: "Timetable Planner",
+    desc: "Build a clash-free STARS timetable."
+  },
+  {
+    href: "/exams",
+    title: "Exam Schedule",
+    desc: "Check exam dates and times by module."
+  },
+  {
+    href: "/links",
+    title: "Student Links",
+    desc: "STARS, NTULearn, Degree Audit and the FGO portal."
+  },
+  {
+    href: "/articles",
+    title: "Articles",
+    desc: "Guides on FGO, BDEs, Common Core and more."
+  }
+]
 ---
 
 <BaseLayout
@@ -32,28 +55,31 @@ const { title, desc } = siteConfig.metatags.tools
   />
   <Header
     title="NTU Student Tools"
-    subtitle="Free tools that run in your browser. Nothing you enter is uploaded."
+    subtitle="Free tools for grades, CGPA and timetables. Everything runs in your browser, nothing you enter is uploaded, and there is no login."
   />
 
   <div>
     <ToolsGrid client:idle />
   </div>
 
-  <div class="space-y-1.5 rounded-lg border p-4">
-    <p class="text-sm font-medium">More for NTU students</p>
-    <div class="flex flex-col gap-1">
-      <a href="/timetable" class="text-sm text-blue-500 hover:underline">
-        Timetable Planner: build a clash-free STARS timetable →
-      </a>
-      <a href="/exams" class="text-sm text-blue-500 hover:underline">
-        Exam Schedule: check your exam dates by module →
-      </a>
-      <a href="/links" class="text-sm text-blue-500 hover:underline">
-        Student Links: STARS, NTULearn, Degree Audit and the FGO portal →
-      </a>
-      <a href="/articles" class="text-sm text-blue-500 hover:underline">
-        Articles: guides on FGO, BDEs, Common Core and more →
-      </a>
+  <section class="space-y-3" aria-labelledby="more-tools">
+    <h2 id="more-tools" class="text-lg font-semibold tracking-tight">
+      More for NTU students
+    </h2>
+    <div class="grid gap-3 sm:grid-cols-2">
+      {
+        MORE.map(({ href, title, desc }) => (
+          <a
+            href={href}
+            class="hover:bg-accent group flex items-start justify-between gap-3 rounded-2xl border p-4 transition-colors">
+            <span class="min-w-0 space-y-1">
+              <span class="block text-sm font-semibold">{title}</span>
+              <span class="text-muted-foreground block text-sm">{desc}</span>
+            </span>
+            <span class="text-muted-foreground mt-0.5 shrink-0">→</span>
+          </a>
+        ))
+      }
     </div>
-  </div>
+  </section>
 </BaseLayout>

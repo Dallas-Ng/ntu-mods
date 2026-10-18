@@ -35,7 +35,7 @@ const CircleButton = ({
     type="button"
     aria-label={label}
     onClick={onClick}
-    className="bg-background hover:bg-accent relative flex size-9 items-center justify-center rounded-full transition-[background-color,transform] duration-150 active:scale-[0.94] motion-reduce:transition-none md:size-10">
+    className="bg-background hover:bg-accent relative flex size-9 items-center justify-center rounded-full transition-colors duration-150 motion-reduce:transition-none md:size-10">
     <Icon aria-hidden="true" className="size-5" />
     {ring && (
       <svg
@@ -80,9 +80,12 @@ const LandingCarouselControls = ({
   ring
 }: Props) => (
   <div className="flex w-full shrink-0 items-center justify-between gap-3 md:w-auto md:justify-end">
+    {/* Reserve the width of the longest label ("10 / 10") so the row never
+        resizes when the count reaches two digits. */}
     <p
       aria-hidden="true"
-      className="text-muted-foreground text-sm font-semibold tabular-nums">
+      className="text-muted-foreground text-right text-sm font-semibold tabular-nums"
+      style={{ minWidth: `${String(total).length * 2 + 3}ch` }}>
       {index + 1} / {total}
     </p>
     <div className="flex gap-2">

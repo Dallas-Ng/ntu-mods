@@ -38,7 +38,7 @@ const LandingTools = () => {
             <div className="flex flex-wrap gap-3">
               <a
                 href={tool.href}
-                className="bg-primary text-primary-foreground inline-flex h-12 items-center rounded-md px-6 text-sm font-semibold transition-transform active:scale-[0.98] md:px-8">
+                className="bg-primary text-primary-foreground inline-flex h-12 items-center rounded-md px-6 text-sm font-semibold transition-transform md:px-8">
                 Open the tool
               </a>
               {tool.guide && (

@@ -19,12 +19,17 @@ export const GET: APIRoute = async () => {
   const { DB } = env
   if (!DB) return json({ error: "DB not bound" }, 500)
 
-  const { results } = await DB.prepare(
-    "SELECT slug, COUNT(*) AS n FROM article_views GROUP BY slug"
-  ).all<{ slug: string; n: number }>()
-  const views = Object.fromEntries((results ?? []).map((r) => [r.slug, r.n]))
-
-  return json({ views }, 200, { "Cache-Control": "public, max-age=300" })
+  // View counts are cosmetic: if the query fails (for example the table is
+  // missing), answer with no counts rather than a 500 in the browser console.
+  try {
+    const { results } = await DB.prepare(
+      "SELECT slug, COUNT(*) AS n FROM article_views GROUP BY slug"
+    ).all<{ slug: string; n: number }>()
+    const views = Object.fromEntries((results ?? []).map((r) => [r.slug, r.n]))
+    return json({ views }, 200, { "Cache-Control": "public, max-age=300" })
+  } catch {
+    return json({ views: {} })
+  }
 }
 
 // Records this visitor (idempotent) and returns the unique-view count.
@@ -45,16 +50,20 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: "Invalid slug or visitorId" }, 400)
   }
 
-  await DB.prepare(
-    "INSERT OR IGNORE INTO article_views (slug, visitor_id) VALUES (?, ?)"
-  )
-    .bind(slug, visitorId)
-    .all()
-  const row = await DB.prepare(
-    "SELECT COUNT(*) AS n FROM article_views WHERE slug = ?"
-  )
-    .bind(slug)
-    .first<{ n: number }>()
+  try {
+    await DB.prepare(
+      "INSERT OR IGNORE INTO article_views (slug, visitor_id) VALUES (?, ?)"
+    )
+      .bind(slug, visitorId)
+      .all()
+    const row = await DB.prepare(
+      "SELECT COUNT(*) AS n FROM article_views WHERE slug = ?"
+    )
+      .bind(slug)
+      .first<{ n: number }>()
 
-  return json({ views: row?.n ?? 0 })
+    return json({ views: row?.n ?? 0 })
+  } catch {
+    return json({ views: 0 })
+  }
 }

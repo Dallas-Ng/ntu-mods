@@ -4,11 +4,9 @@ import "@/styles/globals.css"
 import { Font } from "astro:assets"
 
 import { siteConfig } from "@/config/site"
-import { IS_PROD } from "@/lib/constants"
 import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import MobileTracker from "@/components/mobile-tracker"
-import Analytics from "@/astro/components/Analytics.astro"
 
 interface Props {
   title?: string
@@ -65,9 +63,6 @@ const resolvedTitle =
       content="black"
     />
     <link rel="icon" href="/favicon.ico" />
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-    <link rel="dns-prefetch" href="https://www.clarity.ms" />
 
     <Font cssVariable="--font-inter" preload />
 
@@ -95,6 +90,5 @@ const resolvedTitle =
     <slot />
     <MobileTracker client:idle />
     <Toaster client:idle position="top-center" />
-    {IS_PROD && <Analytics />}
   </body>
 </html>

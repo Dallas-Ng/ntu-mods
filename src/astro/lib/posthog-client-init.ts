@@ -6,17 +6,24 @@ function initPosthog() {
   posthog.init(token, {
     api_host: "/ingest",
     ui_host: "https://us.posthog.com",
-    defaults: "2026-01-30",
+    defaults: "2026-08-30",
     capture_exceptions: true,
     debug: import.meta.env.DEV,
-    // 30% session recording sampling, as configured before the migration.
+    // Replay records only sessions where an error happens. That is set in the
+    // project's replay settings (an event trigger on $exception), not here: a
+    // sampleRate set in code overrides the project's settings, so none is set.
+    // While waiting for a trigger, the SDK keeps the last minute of the
+    // session in memory, so a replay shows what led up to the error.
     session_recording: {
-      sampleRate: 0.3
+      // The privacy policy promises typed text is masked. This is the SDK
+      // default; it is set here so a later change to the defaults can't
+      // quietly turn it off.
+      maskAllInputs: true
     }
   })
 }
 
-// Skip entirely when the token is unset (local dev, forks, preview builds) —
+// Skip entirely when the token is unset (local dev, forks, previews without it) —
 // initialising with an undefined token still wires up autocapture and fires
 // requests at /ingest that can never be attributed to a project.
 //

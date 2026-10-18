@@ -2,6 +2,7 @@
 import { render } from "astro:content"
 
 import { siteConfig } from "@/config/site"
+import { formatLongDate } from "@/lib/format"
 import {
   articleJsonLd,
   breadcrumbListJsonLd,
@@ -277,12 +278,8 @@ const pageDescription =
               )}
 
               <div class="text-foreground/70 not-prose mb-6 border-b pb-4 text-sm sm:mb-8 sm:pb-5">
-                {new Date(article.date).toLocaleDateString("en-SG", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric"
-                })}{" "}
-                · {article.readingTime} · {article.author}
+                {formatLongDate(article.date)} · {article.readingTime} ·{" "}
+                {article.author}
                 <ArticleViewTracker client:idle slug={slug} />
               </div>
 

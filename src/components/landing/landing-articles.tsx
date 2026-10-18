@@ -1,3 +1,4 @@
+import { formatShortDate } from "@/lib/format"
 import { getAllArticles, type Article } from "@/astro/lib/articles"
 
 // Article slugs ranked by human views, most read first. Source: PostHog
@@ -15,16 +16,9 @@ const POPULAR_ARTICLE_SLUGS: string[] = [
   "ntu-stars-guide"
 ]
 
-const fmt = (date: string) =>
-  new Date(date).toLocaleDateString("en-SG", {
-    day: "numeric",
-    month: "short",
-    year: "numeric"
-  })
-
 const Meta = ({ a }: { a: Article }) => (
   <p className="text-foreground/75 text-sm">
-    {a.category} · {fmt(a.date)} · {a.readingTime}
+    {a.category} · {formatShortDate(a.date)} · {a.readingTime}
   </p>
 )
 

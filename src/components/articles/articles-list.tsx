@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Check, ChevronDown, Search, X } from "lucide-react"
 
 import { track } from "@/lib/analytics"
+import { formatShortDate } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
 import { usePathname } from "@/hooks/use-pathname"
@@ -68,13 +69,6 @@ const getSearchText = (article: ArticleListItem) =>
     " "
   )
 
-const formatArticleDate = (date: string) =>
-  new Date(date).toLocaleDateString("en-SG", {
-    day: "numeric",
-    month: "short",
-    year: "numeric"
-  })
-
 function ArticleCard({
   article,
   showCategory,
@@ -97,7 +91,7 @@ function ArticleCard({
       )}
       <div className="p-4">
         <div className="text-foreground/70 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
-          <span>{formatArticleDate(article.date)}</span>
+          <span>{formatShortDate(article.date)}</span>
           <span aria-hidden="true">·</span>
           <span>{article.readingTime}</span>
           {views !== undefined && (

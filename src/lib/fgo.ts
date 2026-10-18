@@ -25,8 +25,10 @@ const LOCKED_NAME_RE =
 const TERM_RE = /^(\d{4}-\d{4})\s+(SEMESTER\s+\d|SPECIAL TERM(?:\s+\d)?)/i
 // pdf.js merges a long name with the AU next to it ("SECURITY3.0"), so the gap
 // between name and AU is optional.
+// Some transcripts add a grade-points column after the grade ("3.0 B- 3.00"),
+// so an optional trailing number is allowed.
 const ROW_RE =
-  /^\*?\s*([A-Z]{2,5}\d{1,4}[A-Z]?)\s+(?:(.*?)\s*)?(?<!\d)(\d{1,2}\.\d)\s+([A-Z][A-Za-z+-]*)$/
+  /^\*?\s*([A-Z]{2,5}\d{1,4}[A-Z]?)\s+(?:(.*?)\s*)?(?<!\d)(\d{1,2}\.\d)\s+([A-Z][A-Za-z+-]*)(?:\s+\d{1,2}\.\d{1,2})?$/
 const CGPA_RE = /Cumulative Grade Point Average\s*:\s*(\d\.\d+)/i
 
 export type ModStatus =

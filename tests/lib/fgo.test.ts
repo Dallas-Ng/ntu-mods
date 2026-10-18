@@ -58,6 +58,17 @@ describe("parseTranscriptLines edge cases", () => {
     ])
     expect(mods[0]).toMatchObject({ name: "MATHEMATICS 1", au: 3 })
   })
+
+  it("reads rows that end with a grade-points column", () => {
+    const { mods } = parseTranscriptLines([
+      "2023-2024 SEMESTER 1",
+      "CC0003 ETHICS & CIVICS IN A MULTICULTURAL 2.0 B- 3.00",
+      "MH1810 MATHEMATICS 1 3.0 A 5.00"
+    ])
+    expect(mods).toHaveLength(2)
+    expect(mods[0]).toMatchObject({ code: "CC0003", au: 2, grade: "B-", gp: 3 })
+    expect(mods[1]).toMatchObject({ name: "MATHEMATICS 1", au: 3, grade: "A" })
+  })
 })
 
 describe("optimise", () => {

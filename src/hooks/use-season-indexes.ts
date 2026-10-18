@@ -9,7 +9,7 @@ export type SeasonIndexes = Record<string, Record<string, Index[]>>
 const cache = new Map<string, SeasonIndexes>()
 const pending = new Map<string, Promise<SeasonIndexes>>()
 
-function fetchSeasonIndexes(
+export function fetchSeasonIndexes(
   year: string,
   semester: string
 ): Promise<SeasonIndexes> {

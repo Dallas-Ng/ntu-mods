@@ -98,6 +98,47 @@ test.describe("machine-readable files", () => {
     })
   }
 
+  test("ai-catalog.json is valid and every entry resolves", async ({
+    request
+  }) => {
+    const res = await request.get("/.well-known/ai-catalog.json")
+    expect(res.status()).toBe(200)
+    expect(res.headers()["access-control-allow-origin"]).toBe("*")
+    const catalog = await res.json()
+    expect(catalog.specVersion).toBe("1.0")
+    expect(catalog.entries.length).toBeGreaterThan(0)
+    const bad: string[] = []
+    for (const entry of catalog.entries) {
+      expect(entry.identifier).toBeTruthy()
+      expect(entry.type).toBeTruthy()
+      const r = await request.get(local(entry.url), { maxRedirects: 0 })
+      if (r.status() !== 200) bad.push(`${entry.url} -> ${r.status()}`)
+    }
+    expect(bad).toEqual([])
+  })
+
+  test("webmcp.json lists the tools the catalog points at", async ({
+    request
+  }) => {
+    const res = await request.get("/.well-known/webmcp.json")
+    expect(res.status()).toBe(200)
+    const { tools } = await res.json()
+    expect(tools.length).toBeGreaterThan(20)
+    for (const tool of tools) {
+      expect(tool.name).toMatch(/^[a-z][a-z0-9_]*$/)
+      expect(tool.inputSchema.type).toBe("object")
+    }
+  })
+
+  test("/api/modules/:code returns a module and 404s an unknown code", async ({
+    request
+  }) => {
+    const ok = await request.get("/api/modules/SC1003")
+    expect(ok.status()).toBe(200)
+    expect(await ok.json()).toMatchObject({ code: "SC1003" })
+    expect((await request.get("/api/modules/NOPE9999")).status()).toBe(404)
+  })
+
   test("IndexNow key file is served and matches its name", async ({
     request
   }) => {

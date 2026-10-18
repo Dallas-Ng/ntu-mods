@@ -8,7 +8,7 @@ import { reportError } from "@/lib/analytics"
 let modulesCache: AllModule[] | null = null
 let fetchPromise: Promise<AllModule[]> | null = null
 
-function fetchAllModules(): Promise<AllModule[]> {
+export function fetchAllModules(): Promise<AllModule[]> {
   if (!fetchPromise) {
     fetchPromise = fetch("/data/api/modules.json")
       .then((res) => {

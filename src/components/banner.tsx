@@ -69,6 +69,13 @@ export const Banner = {
       </BannerWrapper>
     </a>
   ),
+  aiAgents: () => (
+    <a href="/articles/ntu-ai-agents-webmcp-guide">
+      <BannerWrapper>
+        New: AI agents can now search modules and build timetables on NTUMods →
+      </BannerWrapper>
+    </a>
+  ),
   ay2026s2: () => (
     <a href="/articles/ntu-ay2026-semester-2-whats-new">
       <BannerWrapper divClass="bg-yellow-300">

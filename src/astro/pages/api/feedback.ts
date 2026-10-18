@@ -2,7 +2,7 @@ import type { APIRoute } from "astro"
 import { env, waitUntil } from "cloudflare:workers"
 
 import type { AnalyticsEvent } from "@/lib/analytics-events"
-import { createPostHogClient } from "@/lib/posthog-server"
+import { createPostHogClient, reportServerError } from "@/lib/posthog-server"
 
 export const prerender = false
 
@@ -54,7 +54,12 @@ export const POST: APIRoute = async ({ request }) => {
       : ""
 
   if (!RESEND_KEY) {
-    console.error("Feedback: RESEND_KEY is not bound")
+    reportServerError(
+      PUBLIC_POSTHOG_TOKEN,
+      waitUntil,
+      "feedback",
+      new Error("RESEND_KEY is not bound")
+    )
     return json({ success: false, error: "Feedback is not configured" }, 500)
   }
 
@@ -85,7 +90,12 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (!res.ok) {
     const error = await res.text()
-    console.error("Resend error:", error)
+    reportServerError(
+      PUBLIC_POSTHOG_TOKEN,
+      waitUntil,
+      "feedback",
+      new Error(`Resend ${res.status}: ${error.slice(0, 500)}`)
+    )
     return json({ success: false, error: "Failed to send feedback" }, 500)
   }
 

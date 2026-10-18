@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 
 import type { AllModule } from "@/types/mods"
+import { reportError } from "@/lib/analytics"
 
 let modulesCache: AllModule[] | null = null
 let fetchPromise: Promise<AllModule[]> | null = null
@@ -18,7 +19,8 @@ function fetchAllModules(): Promise<AllModule[]> {
         modulesCache = data.modules
         return data.modules
       })
-      .catch(() => {
+      .catch((e) => {
+        reportError("modules_fetch", e)
         fetchPromise = null
         return []
       })

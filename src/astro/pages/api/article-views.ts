@@ -1,5 +1,7 @@
 import type { APIRoute } from "astro"
-import { env } from "cloudflare:workers"
+import { env, waitUntil } from "cloudflare:workers"
+
+import { reportServerError } from "@/lib/posthog-server"
 
 export const prerender = false
 
@@ -31,7 +33,13 @@ export const GET: APIRoute = async () => {
     ).all<{ slug: string; n: number }>()
     const views = Object.fromEntries((results ?? []).map((r) => [r.slug, r.n]))
     return json({ views }, 200, { "Cache-Control": "public, max-age=300" })
-  } catch {
+  } catch (e) {
+    reportServerError(
+      env.PUBLIC_POSTHOG_TOKEN,
+      waitUntil,
+      "article_views_get",
+      e
+    )
     return json({ views: {} })
   }
 }
@@ -70,7 +78,14 @@ export const POST: APIRoute = async ({ request }) => {
       .first<{ n: number }>()
 
     return json({ views: row?.n ?? 0 })
-  } catch {
+  } catch (e) {
+    reportServerError(
+      env.PUBLIC_POSTHOG_TOKEN,
+      waitUntil,
+      "article_views_post",
+      e,
+      { slug }
+    )
     return json({ views: 0 })
   }
 }

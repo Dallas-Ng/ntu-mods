@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { RefreshCcw } from "lucide-react"
 
-import { track } from "@/lib/analytics"
+import { reportError, track } from "@/lib/analytics"
 import { TRUN_DAY_MAP } from "@/lib/constants"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
@@ -39,14 +39,19 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
     }
     const controller = new AbortController()
     fetch("/data/api/random-samples.json", { signal: controller.signal })
-      .then((res) => (res.ok ? res.json() : []))
+      .then((res) => {
+        if (!res.ok) throw new Error(`random-samples.json ${res.status}`)
+        return res.json()
+      })
       .then((data: RandomModuleData[]) => {
         if (data.length > 0) {
           setSamples(data)
           setRandomData(data[rerollKey % data.length])
         }
       })
-      .catch(() => {})
+      .catch((e) => {
+        if (!controller.signal.aborted) reportError("random_samples_fetch", e)
+      })
     return () => controller.abort()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerollKey])

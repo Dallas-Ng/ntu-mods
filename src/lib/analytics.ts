@@ -10,7 +10,7 @@ export type { AnalyticsEvent } from "@/lib/analytics-events"
 // file only imports PostHog's types, so importing track() doesn't pull the
 // SDK into the page's initial download.
 let client: PostHog | null = null
-let queue: [AnalyticsEvent, Properties | undefined][] | null = []
+let queue: ((ph: PostHog) => void)[] | null = []
 let resolveReady: (ph: PostHog | null) => void = () => {}
 const ready = new Promise<PostHog | null>((resolve) => (resolveReady = resolve))
 
@@ -18,7 +18,7 @@ const ready = new Promise<PostHog | null>((resolve) => (resolveReady = resolve))
 // with null when PostHog is off (no token), which drops anything queued.
 export function setAnalyticsClient(ph: PostHog | null) {
   client = ph
-  for (const [event, properties] of queue ?? []) ph?.capture(event, properties)
+  if (ph) for (const send of queue ?? []) send(ph)
   queue = null
   resolveReady(ph)
 }
@@ -27,7 +27,22 @@ export function setAnalyticsClient(ph: PostHog | null) {
 // every event name is checked against ANALYTICS_EVENTS.
 export function track(event: AnalyticsEvent, properties?: Properties) {
   if (client) client.capture(event, properties)
-  else queue?.push([event, properties])
+  else queue?.push((ph) => ph.capture(event, properties))
+}
+
+// Reports a caught error to PostHog error tracking, tagged with the feature it
+// came from so it can be filtered there (`feature` property). Use it in every
+// catch that swallows an error, so failures the user sees (or never sees) are
+// visible to us. Never put personal data (transcript text, names) in properties.
+export function reportError(
+  feature: string,
+  error: unknown,
+  properties?: Properties
+) {
+  const props = { feature, ...properties }
+  if (import.meta.env.DEV) console.error(`[${feature}]`, error, props)
+  if (client) client.captureException(error, props)
+  else queue?.push((ph) => ph.captureException(error, props))
 }
 
 // Resolves with PostHog once loaded, or null if it is off or takes longer

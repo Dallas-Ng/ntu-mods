@@ -4,7 +4,7 @@ import { useMemo, useRef, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { Check } from "lucide-react"
 
-import { track } from "@/lib/analytics"
+import { reportError, track } from "@/lib/analytics"
 import { customCoursesToIndexMap } from "@/lib/custom-course-to-index"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
 import { latestSemester, latestYear } from "@/lib/semesters"
@@ -69,7 +69,7 @@ const TimetableModulesSelect = () => {
       // If module is already in timetable, remove it
       if (Object.keys(timetable).find((x) => x === moduleKey)) {
         removeItemFromTimetable(moduleKey)
-        track("module_removed", { module_code: moduleKey })
+        track("module_removed", { module_code: moduleCode })
         if (isMobile) setInputValue("")
         setDisabled(false)
         setIsLoadingModule(false)
@@ -99,7 +99,7 @@ const TimetableModulesSelect = () => {
       if (isMobile) setInputValue("")
       return true
     } catch (error) {
-      console.error("Error selecting module:", error)
+      reportError("module_select", error, { module_code: moduleCode })
       return false
     } finally {
       setDisabled(false)

@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react"
 import type { MLCEngine } from "@mlc-ai/web-llm"
 
+import { reportError } from "@/lib/analytics"
+
 const MODEL_ID = "Phi-3-mini-4k-instruct-q4f16_1-MLC"
 
 // Module-level persistent state — survives component unmount/remount
@@ -98,6 +100,7 @@ export function useWebLLM() {
       globalProgress = 100
       notify()
     } catch (e) {
+      reportError("webllm_load", e)
       globalLoadPromise = null
       globalIsLoading = false
       globalError = e instanceof Error ? e.message : "Failed to load model"

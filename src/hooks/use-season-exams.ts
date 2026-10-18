@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 
+import { reportError } from "@/lib/analytics"
+
 export type SeasonExams = Record<string, Exam>
 
 const cache = new Map<string, SeasonExams>()
@@ -16,13 +18,19 @@ function fetchSeasonExams(
   if (pending.has(key)) return pending.get(key)!
 
   const promise = fetch(`/data/api/exams/${key}.json`)
-    .then((res) => (res.ok ? res.json() : {}))
+    .then((res) => {
+      // 404: this semester has no file yet. Empty, not an error.
+      if (res.status === 404) return {}
+      if (!res.ok) throw new Error(`exams ${res.status}`)
+      return res.json()
+    })
     .then((data: SeasonExams) => {
       cache.set(key, data)
       pending.delete(key)
       return data
     })
-    .catch(() => {
+    .catch((e) => {
+      reportError("exams_fetch", e, { year, semester })
       pending.delete(key)
       return {} as SeasonExams
     })

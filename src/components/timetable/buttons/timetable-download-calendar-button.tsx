@@ -5,7 +5,7 @@ import { useBoundState } from "@/state/bound.state"
 import { Calendar } from "lucide-react"
 import { toast } from "sonner"
 
-import { track } from "@/lib/analytics"
+import { reportError, track } from "@/lib/analytics"
 import { customCoursesToIcsInputs } from "@/lib/custom-course-to-index"
 import { getIcs } from "@/lib/get-ics"
 import { latestSemester, latestYear } from "@/lib/semesters"
@@ -80,7 +80,8 @@ const TimetableDownloadCalendarButton = () => {
         module_count: Object.keys(timetable).length,
         source: "standalone_button"
       })
-    } catch {
+    } catch (e) {
+      reportError("calendar_download", e)
       toast.error("Something went wrong, please try again later")
     }
 

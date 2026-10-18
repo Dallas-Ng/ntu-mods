@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest"
 
-import { cgpa, optimise, parseTranscriptLines, quotaUsage } from "@/lib/fgo"
+import {
+  cgpa,
+  optimise,
+  parseTranscriptLines,
+  quotaUsage,
+  transcriptErrorProps,
+  TranscriptReadError
+} from "@/lib/fgo"
 
 const LINES = [
   "2024-2025 SEMESTER 1",
@@ -135,5 +142,36 @@ describe("earlier FGO use", () => {
       extra: { core: 9, bde: 0 }
     })
     expect(pick.size).toBe(0)
+  })
+})
+
+describe("transcriptErrorProps", () => {
+  const file = {
+    size: 1234,
+    type: "application/pdf",
+    name: "Jane Tan.pdf"
+  } as File
+
+  it("reports the failing stage and counts, never the file name", () => {
+    const e = new TranscriptReadError("extract_text", new Error("x"), {
+      bytes: 1234,
+      pages: 3
+    })
+    const props = transcriptErrorProps(e, file)
+    expect(props).toEqual({
+      stage: "extract_text",
+      bytes: 1234,
+      pages: 3,
+      file_type: "application/pdf"
+    })
+    expect(JSON.stringify(props)).not.toContain("Jane")
+  })
+
+  it("treats any other error as no_modules", () => {
+    expect(transcriptErrorProps(new Error("no modules found"), file)).toEqual({
+      stage: "no_modules",
+      bytes: 1234,
+      file_type: "application/pdf"
+    })
   })
 })

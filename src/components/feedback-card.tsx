@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 
-import { track, whenAnalyticsReady } from "@/lib/analytics"
+import { reportError, track, whenAnalyticsReady } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -101,8 +101,9 @@ const FeedbackCard = ({ divClassName }: Props) => {
         .unwrap()
 
       form.reset()
-    } catch {
+    } catch (e) {
       // Toast already surfaced it; keep the input so it isn't retyped.
+      reportError("feedback_submit", e)
     } finally {
       setLoading(false)
     }

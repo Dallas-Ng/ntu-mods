@@ -1,5 +1,6 @@
-import { env } from "cloudflare:workers"
+import { env, waitUntil } from "cloudflare:workers"
 
+import { reportServerError } from "@/lib/posthog-server"
 import {
   buildModuleTitlesSql,
   LATEST_SEMESTER_SQL,
@@ -66,7 +67,13 @@ function getLatestSem(db: D1Database): Promise<string | null> {
     .prepare(LATEST_SEMESTER_SQL)
     .first<DbSemesterRow>()
     .then((row) => row?.sem ?? null)
-    .catch(() => {
+    .catch((e) => {
+      reportServerError(
+        env.PUBLIC_POSTHOG_TOKEN,
+        waitUntil,
+        "latest_semester_query",
+        e
+      )
       latestSemPromise = null
       return null
     })

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 
+import { reportError } from "@/lib/analytics"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
@@ -22,9 +23,18 @@ const TimetableOverview = () => {
     fetch(`/data/api/exams/${year}_${semester}.json`, {
       signal: controller.signal
     })
-      .then((res) => (res.ok ? res.json() : {}))
+      .then((res) => {
+        // 404: exam timetable not published yet. Empty, not an error.
+        if (res.status === 404) return {}
+        if (!res.ok) throw new Error(`exams ${res.status}`)
+        return res.json()
+      })
       .then((data) => setExamMap(data ?? {}))
-      .catch(() => setExamMap({}))
+      .catch((e) => {
+        if (controller.signal.aborted) return
+        reportError("exams_fetch", e, { year, semester })
+        setExamMap({})
+      })
 
     return () => controller.abort()
   }, [year, semester])

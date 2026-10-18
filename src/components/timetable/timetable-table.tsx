@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
+import { useIndexHover } from "@/state/index-hover.state"
 
 import {
   customCourseIdFromKey,
@@ -55,7 +56,20 @@ const TimetablePageTable = ({
     if (!stillPresent) setActiveModuleKey(null)
   }, [activeModuleKey, indexPickerEnabled, timetable, customCourses])
 
+  const hovered = useIndexHover((s) => s.hovered)
+
   const previewModuleIndexMap = useMemo(() => {
+    const hoveredSlots =
+      hovered && allModuleIndexes[hovered.moduleKey]?.[hovered.indexKey]
+    if (hovered && hoveredSlots?.length)
+      return {
+        ...moduleIndexMap,
+        [hovered.moduleKey]:
+          hovered.indexKey === hovered.currentKey
+            ? hoveredSlots
+            : [...(moduleIndexMap[hovered.moduleKey] ?? []), ...hoveredSlots]
+      }
+
     if (!indexPickerEnabled || !activeModuleKey) return moduleIndexMap
 
     const activeModuleIndexes = allModuleIndexes[activeModuleKey]
@@ -68,7 +82,13 @@ const TimetablePageTable = ({
       ...moduleIndexMap,
       [activeModuleKey]: allSlots
     }
-  }, [activeModuleKey, allModuleIndexes, indexPickerEnabled, moduleIndexMap])
+  }, [
+    activeModuleKey,
+    allModuleIndexes,
+    hovered,
+    indexPickerEnabled,
+    moduleIndexMap
+  ])
 
   const activeIndexKey = !activeModuleKey
     ? undefined
@@ -82,8 +102,27 @@ const TimetablePageTable = ({
     return <TimetableTableLoader />
   }
 
+  const showHoverLegend =
+    hovered && hovered.currentKey && hovered.currentKey !== hovered.indexKey
+
   return (
     <div className="space-y-2">
+      {showHoverLegend && (
+        // Zero-height sticky anchor so the pill follows scroll without
+        // pushing the table down when it appears.
+        <div className="pointer-events-none sticky top-16 z-30 h-0">
+          <div className="bg-background/95 absolute top-7 left-1/2 flex -translate-x-1/2 items-center gap-3 rounded-full border px-3 py-1 text-xs shadow-md">
+            <span className="flex items-center gap-1.5">
+              <span className="outline-foreground/50 size-3 rounded-[3px] outline-2 -outline-offset-1" />
+              Current {hovered.currentKey}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="outline-primary size-3 rounded-[3px] outline-2 -outline-offset-1 outline-dashed" />
+              Preview {hovered.indexKey}
+            </span>
+          </div>
+        </div>
+      )}
       <TimetableTable
         moduleIndexMap={previewModuleIndexMap}
         indexPicker={{

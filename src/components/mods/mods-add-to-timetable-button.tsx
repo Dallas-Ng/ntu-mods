@@ -87,18 +87,24 @@ const ModsAddToTimetableButton = ({
   const { timetables, updateTimetable } = useTimetable()
   const { isMobile } = useSettings()
   const [open, setOpen] = useState(false)
-  // Other modules' indexes are only needed to resolve clashes once the user
-  // opens the plan picker, so defer the (large) season-wide fetch until then.
+  // The season-wide index file is over 1 MB. List pages render dozens of these
+  // buttons, so fetch it only once the plan picker opens (or if another part of
+  // the page already did), not on mount.
   const { indexes: seasonIndexes, isLoading: seasonLoading } = useSeasonIndexes(
     year,
     semester,
-    moduleIndexesProp == null || open
+    moduleIndexesProp == null && open
   )
 
   const moduleIndexes = moduleIndexesProp ?? seasonIndexes[moduleKey]
   const isLoading = moduleIndexesProp == null && seasonLoading
+  // Until the season file has loaded, keep the button enabled: whether the
+  // module has a schedule is only known after the first open.
+  const seasonLoaded = Object.keys(seasonIndexes).length > 0
   const hasIndexes =
-    !isLoading && moduleIndexes && Object.keys(moduleIndexes).length > 0
+    moduleIndexesProp == null && !seasonLoaded
+      ? true
+      : !isLoading && moduleIndexes && Object.keys(moduleIndexes).length > 0
   const inAnyPlan = timetables.some((t) => t[moduleKey] != null)
 
   const handlePlanClick = (planIndex: number) => {

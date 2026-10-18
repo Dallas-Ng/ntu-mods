@@ -62,7 +62,6 @@ const ModsPage = () => {
   const semester = latestSemester
   const nextYear = parseInt(year) + 1
   const { modules: allModules, isLoading } = useAllModules()
-  const { indexes } = useSeasonIndexes(year, semester)
   const { modsViewMode, modsGroupBy, updateSettings } = useSettings()
   const { favouriteModules } = useFavourites()
   const { setValue: setFavouritesOnly } = useModsSearchParams(
@@ -83,6 +82,16 @@ const ModsPage = () => {
   const timeStart =
     moduleTimeStart !== "all" ? parseInt(moduleTimeStart) : undefined
   const timeEnd = moduleTimeEnd !== "all" ? parseInt(moduleTimeEnd) : undefined
+
+  // Day/time filters are the only thing here that reads the (1 MB+) season
+  // index file, so only fetch it once one is set.
+  const { indexes } = useSeasonIndexes(
+    year,
+    semester,
+    allowedDays !== undefined ||
+      timeStart !== undefined ||
+      timeEnd !== undefined
+  )
 
   const hasActiveFilters =
     searchTerm !== "" ||

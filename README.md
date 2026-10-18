@@ -188,16 +188,17 @@ Consequences:
   `devDependencies`. That is why `tailwindcss`, `@tailwindcss/typography`,
   `tsx` and `wrangler` are there. A build tool left in `devDependencies` fails
   the production build with `Can't resolve '<package>'`.
-- **Previews do not use these settings.** Preview builds use the Previews Base
-  config (see below), so a preview can pass while production fails for the
-  reason above. Test with `NODE_ENV=production yarn install --frozen-lockfile
-  && yarn build` in a clean checkout when adding build-time packages.
+- **Previews use the same build command and variables** (set on the **Previews
+  Base** tab, see below), so a missing `dependencies` entry fails the preview
+  instead of only production. Test locally with `NODE_ENV=production yarn
+  install --production --frozen-lockfile && yarn build` in a clean checkout.
 - If these settings are ever recreated, the plain defaults (`yarn build`, no
   extra variables) also work. They are slower by roughly 10 to 25 seconds.
 
-Reference timings for a production build: about 2m 31s before the build
-optimisations, and about 1m 20s after (build phase about 20s, deploy about 15s).
-Most of the remaining time is Workers Builds restoring its dependency cache.
+Measured on Workers Builds (October 2026): about 1m 40s to 3m 10s per build.
+Install ("Installing" step plus `yarn install`) is 1 to 1m 40s and varies with
+whether the dependency cache restores; the build itself is 17 to 40s; deploy is
+9 to 47s.
 
 ### Preview deployments
 
@@ -223,7 +224,11 @@ Setup is in the dashboard (Workers & Pages → `ntu-mods` → Settings → Build
    `npx wrangler preview base-config secret put <NAME>` if you want the
    feedback form and PostHog on previews.
 
-5. **Access control**: previews are served on `*.ntumods.com`, which (unlike
+5. **Build settings**: on the **Previews Base** tab, use the same build
+   command, `NODE_ENV` and `SKIP_DEPENDENCY_INSTALL` as production (above) so
+   previews install and build exactly as production does. Keep the preview
+   command from step 2; production's deploy command does not apply to previews.
+6. **Access control**: previews are served on `*.ntumods.com`, which (unlike
    `workers.dev` previews) gets no automatic `X-Robots-Tag: noindex`. Protect
    them with Cloudflare Access instead: Workers & Pages → `ntu-mods` →
    Settings → Domains & Routes → **Enable Cloudflare Access** on Preview URLs

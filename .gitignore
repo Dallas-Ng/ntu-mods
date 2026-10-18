@@ -227,3 +227,6 @@ cython_debug/
 # playwright
 /test-results/
 /playwright-report/
+
+# yarn seo:report output (Search Console + PostHog numbers, not for the repo)
+/reports/

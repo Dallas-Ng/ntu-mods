@@ -338,6 +338,17 @@ const MIN_DATE = new Date("YYYY-MM-DD")
 
 This date is used to calculate recurring calendar events in `.ics` exports. The correct date can be found in the NTU academic calendar.
 
+### Each Month: SEO report
+
+`yarn seo:report [--days 28]` joins Google Search Console (queries,
+impressions, ranking) with PostHog (how far people read, whether they go on to
+use the planner) and writes a to-do list of articles to update, plus content
+gaps for new articles, to `reports/seo/` (gitignored). It needs
+`GSC_CREDENTIALS` (a service-account key added as a user on the Search Console
+property) or `GSC_ACCESS_TOKEN`, and `POSTHOG_PERSONAL_API_KEY` with
+`query:read`. See the header of
+[`scripts/seo-report/index.mts`](scripts/seo-report/index.mts).
+
 ### Each Academic Year
 
 #### 3. Update banner and landing page

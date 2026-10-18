@@ -286,25 +286,22 @@ const CgpaPlanner = () => {
                     <p className="hidden text-xs sm:block">
                       CGPA {fmt(b.min)}+
                     </p>
-                    <p className="hidden items-center gap-1.5 text-xs sm:flex">
+                    <p className="flex items-center gap-1.5 text-xs">
                       <span
                         className={cn(
                           "size-1.5 shrink-0 rounded-full",
                           STATUS_DOT[b.status]
                         )}
                       />
-                      {STATUS_TEXT[b.status]}
-                    </p>
-                    {/* Phones: one compact line, the status is the dot */}
-                    <p className="flex items-center gap-1.5 text-xs sm:hidden">
-                      <span
-                        className={cn(
-                          "size-1.5 shrink-0 rounded-full",
-                          STATUS_DOT[b.status]
-                        )}
-                      />
-                      <span className="sr-only">{STATUS_TEXT[b.status]}</span>
-                      {fmt(b.min)}+
+                      <span className="sm:hidden">
+                        <span className="sr-only">
+                          {STATUS_TEXT[b.status]}{" "}
+                        </span>
+                        {fmt(b.min)}+
+                      </span>
+                      <span className="hidden sm:inline">
+                        {STATUS_TEXT[b.status]}
+                      </span>
                     </p>
                   </button>
                 ))}

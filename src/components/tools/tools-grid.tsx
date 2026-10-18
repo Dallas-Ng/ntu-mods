@@ -159,7 +159,7 @@ const ToolsGrid = () => (
                 {tool.desc}
               </p>
               <p className="text-muted-foreground flex flex-wrap gap-x-2 text-sm">
-                {[...tool.facts.slice(0, 2), tool.time].map((f, i) => (
+                {[...tool.facts, tool.time].map((f, i) => (
                   <span
                     key={f}
                     className={cn(

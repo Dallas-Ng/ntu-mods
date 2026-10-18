@@ -11,8 +11,10 @@ export const prerender = true
   title={siteConfig.metatags.settings.title}
   description={siteConfig.metatags.settings.desc}
   canonical="/settings"
-  size="sm"
-  outerClassName="bg-slate-100 dark:bg-slate-950">
-  <SettingsPageContent client:load />
-  <div hidden data-commit={GIT_COMMIT_SHA} data-build-time={BUILD_TIME}></div>
+  size="sm">
+  <SettingsPageContent
+    client:load
+    commit={GIT_COMMIT_SHA}
+    buildTime={BUILD_TIME}
+  />
 </BaseLayout>

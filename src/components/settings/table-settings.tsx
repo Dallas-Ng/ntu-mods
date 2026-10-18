@@ -191,17 +191,20 @@ export const TableSettingsLoading = () => {
   return (
     <div className="space-y-3">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-stretch">
-        <Skeleton className="bg-background h-50 w-full rounded-xl lg:h-57.5 lg:w-96 lg:shrink-0" />
+        <Skeleton className="bg-foreground/10 dark:bg-background h-50 w-full rounded-xl lg:h-57.5 lg:w-96 lg:shrink-0" />
 
         <div className="grid w-full grid-cols-2 content-start gap-2">
           {Array.from({ length: 6 }, (_, i) => (
-            <Skeleton key={i} className="bg-background h-14 rounded-xl" />
+            <Skeleton
+              key={i}
+              className="bg-foreground/10 dark:bg-background h-14 rounded-xl"
+            />
           ))}
-          <Skeleton className="bg-background col-span-2 h-14 rounded-xl" />
+          <Skeleton className="bg-foreground/10 dark:bg-background col-span-2 h-14 rounded-xl" />
         </div>
       </div>
 
-      <Skeleton className="bg-background h-28 rounded-xl sm:h-24" />
+      <Skeleton className="bg-foreground/10 dark:bg-background h-28 rounded-xl sm:h-24" />
     </div>
   )
 }

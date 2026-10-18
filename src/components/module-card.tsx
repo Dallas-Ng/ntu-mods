@@ -127,10 +127,10 @@ export const ModuleCardDetail = ({
 
 export const ModuleCardDetailLoading = () => (
   <div className="bg-muted flex h-32 flex-col rounded-2xl p-4">
-    <Skeleton className="bg-background mb-2 h-4 w-16" />
-    <Skeleton className="bg-background mb-1 h-5 w-full" />
-    <Skeleton className="bg-background h-5 w-3/4" />
-    <Skeleton className="bg-background mt-auto h-5 w-24" />
+    <Skeleton className="bg-foreground/10 dark:bg-background mb-2 h-4 w-16" />
+    <Skeleton className="bg-foreground/10 dark:bg-background mb-1 h-5 w-full" />
+    <Skeleton className="bg-foreground/10 dark:bg-background h-5 w-3/4" />
+    <Skeleton className="bg-foreground/10 dark:bg-background mt-auto h-5 w-24" />
   </div>
 )
 
@@ -194,10 +194,10 @@ export const ModuleListRow = ({
 
 export const ModuleListRowLoading = () => (
   <div className="flex h-11 items-center gap-3 px-4">
-    <Skeleton className="bg-background h-4 w-20 shrink-0" />
-    <Skeleton className="bg-background h-4 flex-1" />
-    <Skeleton className="bg-background hidden h-4 w-16 sm:block" />
-    <Skeleton className="bg-background h-4 w-10 shrink-0" />
+    <Skeleton className="bg-foreground/10 dark:bg-background h-4 w-20 shrink-0" />
+    <Skeleton className="bg-foreground/10 dark:bg-background h-4 flex-1" />
+    <Skeleton className="bg-foreground/10 dark:bg-background hidden h-4 w-16 sm:block" />
+    <Skeleton className="bg-foreground/10 dark:bg-background h-4 w-10 shrink-0" />
   </div>
 )
 

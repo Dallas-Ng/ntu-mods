@@ -8,6 +8,20 @@ import { defineConfig, fontProviders, sessionDrivers } from "astro/config"
 
 import hastFigure from "./src/lib/hast-figure.mjs"
 
+// Baked in at build time (Workers Builds checks out the real repo, so this
+// resolves there too) and shown only on /settings. Keep them off BaseLayout:
+// stamping every page changes every HTML hash, so each deploy re-uploads all
+// of them.
+const GIT_COMMIT_SHA = (() => {
+  try {
+    return execSync("git rev-parse --short=10 HEAD").toString().trim()
+  } catch {
+    return "unknown"
+  }
+})()
+
+const BUILD_TIME = new Date().toISOString()
+
 // Claude Code worktrees (.claude/worktrees/*) symlink node_modules back to the
 // main checkout instead of a duplicate install — Vite's dev server otherwise
 // refuses to serve files outside its project root, which the symlink target
@@ -102,6 +116,8 @@ export default defineConfig({
     server: { fs: { allow: [".", ...WORKTREE_ROOTS] } },
     envPrefix: ["PUBLIC_"],
     define: {
+      "import.meta.env.PUBLIC_GIT_COMMIT_SHA": JSON.stringify(GIT_COMMIT_SHA),
+      "import.meta.env.PUBLIC_BUILD_TIME": JSON.stringify(BUILD_TIME),
       "import.meta.env.PUBLIC_BUILD_ENV": JSON.stringify(BUILD_ENV)
     },
     plugins: [tailwindcss()],

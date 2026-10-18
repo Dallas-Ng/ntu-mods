@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 
-import { track } from "@/lib/analytics"
+import { reportError, track } from "@/lib/analytics"
 
 const VISITOR_KEY = "ntumods-visitor-id"
 const POSTHOG_STORE = `ph_${import.meta.env.PUBLIC_POSTHOG_TOKEN}_posthog`
@@ -61,11 +61,16 @@ const ArticleViewTracker = ({ slug }: { slug: string }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slug, visitorId })
     })
-      .then((res) => (res.ok ? res.json() : null))
+      .then((res) => {
+        if (!res.ok) throw new Error(`article-views ${res.status}`)
+        return res.json()
+      })
       .then((data) => {
         if (!ignore && typeof data?.views === "number") setViews(data.views)
       })
-      .catch(() => {})
+      .catch((e) => {
+        if (!ignore) reportError("article_views_post", e, { slug })
+      })
     return () => {
       ignore = true
     }

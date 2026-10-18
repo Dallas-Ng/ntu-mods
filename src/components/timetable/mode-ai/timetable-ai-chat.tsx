@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { RefreshCwIcon, SendIcon, WandIcon } from "lucide-react"
 
-import { track } from "@/lib/analytics"
+import { reportError, track } from "@/lib/analytics"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { TIMETABLE_AI_SYSTEM_PROMPT } from "@/lib/timetable-ai-system-prompt"
 import { useAllModules } from "@/hooks/use-all-modules"
@@ -77,7 +77,8 @@ function extractConfig(text: string): GenerationConfig | null {
       preferredDayOrder: config.preferredDayOrder ?? "none",
       avoidBackToBackTypes: config.avoidBackToBackTypes ?? []
     }
-  } catch {
+  } catch (e) {
+    reportError("ai_config_parse", e)
     return null
   }
 }

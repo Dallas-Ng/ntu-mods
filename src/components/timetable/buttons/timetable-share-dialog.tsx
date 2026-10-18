@@ -4,7 +4,7 @@ import { useMemo, useState } from "react"
 import { ClipboardCopy, LinkIcon } from "lucide-react"
 import { toast } from "sonner"
 
-import { track } from "@/lib/analytics"
+import { reportError, track } from "@/lib/analytics"
 import { BASE_URL } from "@/lib/constants"
 import { buildShareLink, encodeTextBundle } from "@/lib/timetable-share"
 import { Button } from "@/components/ui/button"
@@ -72,7 +72,9 @@ const TimetableShareDialog = ({
           text: "You can use this to plan your mods too!",
           url: link
         })
-        .catch(() => {
+        .catch((e) => {
+          // AbortError is the user dismissing the share sheet
+          if (e?.name !== "AbortError") reportError("timetable_share", e)
           navigator.clipboard.writeText(link)
           toast("Share link copied to clipboard")
         })

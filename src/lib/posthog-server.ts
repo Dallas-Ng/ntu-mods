@@ -13,3 +13,19 @@ export function createPostHogClient(token: string) {
     flushInterval: 0
   })
 }
+
+// Reports a server-side error to PostHog error tracking, flushed after the
+// response via waitUntil. No-op without a token (local dev, forks).
+export function reportServerError(
+  token: string | undefined,
+  waitUntil: (p: Promise<unknown>) => void,
+  feature: string,
+  error: unknown,
+  properties?: Record<string, unknown>
+) {
+  console.error(`[${feature}]`, error)
+  if (!token) return
+  const posthog = createPostHogClient(token)
+  posthog.captureException(error, "server", { feature, ...properties })
+  waitUntil(posthog.shutdown())
+}

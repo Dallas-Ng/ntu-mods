@@ -249,22 +249,58 @@ export function itemsToLines(items: TextItem[], pageWidth: number): string[] {
   return lines
 }
 
-export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
-  const pdfjs = await import("pdfjs-dist")
-  const { default: PdfWorker } =
-    await import("pdfjs-dist/build/pdf.worker.min.mjs?worker")
-  pdfjs.GlobalWorkerOptions.workerPort = new PdfWorker()
-  const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() })
-    .promise
-  const lines: string[] = []
-  for (let p = 1; p <= pdf.numPages; p++) {
-    const page = await pdf.getPage(p)
-    const { width } = page.getViewport({ scale: 1 })
-    const content = await page.getTextContent()
-    const items = content.items.flatMap((i) =>
-      "str" in i ? [{ str: i.str, x: i.transform[4], y: i.transform[5] }] : []
+// Where reading a transcript failed, for error reports. Carries counts only,
+// never transcript text.
+export type TranscriptStage = "load_pdf" | "extract_text" | "parse"
+export class TranscriptReadError extends Error {
+  constructor(
+    readonly stage: TranscriptStage,
+    readonly cause: unknown,
+    readonly info: { pages?: number; lines?: number; bytes: number }
+  ) {
+    super(
+      `Transcript ${stage} failed: ${cause instanceof Error ? cause.message : String(cause)}`
     )
-    lines.push(...itemsToLines(items, width))
+    this.name = "TranscriptReadError"
   }
-  return parseTranscriptLines(lines)
+}
+
+export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
+  const info: { pages?: number; lines?: number; bytes: number } = {
+    bytes: file.size
+  }
+  let stage: TranscriptStage = "load_pdf"
+  try {
+    const pdfjs = await import("pdfjs-dist")
+    const { default: PdfWorker } =
+      await import("pdfjs-dist/build/pdf.worker.min.mjs?worker")
+    pdfjs.GlobalWorkerOptions.workerPort = new PdfWorker()
+    const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() })
+      .promise
+    info.pages = pdf.numPages
+    stage = "extract_text"
+    const lines: string[] = []
+    for (let p = 1; p <= pdf.numPages; p++) {
+      const page = await pdf.getPage(p)
+      const { width } = page.getViewport({ scale: 1 })
+      const content = await page.getTextContent()
+      const items = content.items.flatMap((i) =>
+        "str" in i ? [{ str: i.str, x: i.transform[4], y: i.transform[5] }] : []
+      )
+      lines.push(...itemsToLines(items, width))
+    }
+    info.lines = lines.length
+    stage = "parse"
+    return parseTranscriptLines(lines)
+  } catch (e) {
+    throw new TranscriptReadError(stage, e, info)
+  }
+}
+
+// Properties for reportError when a transcript upload fails. File name is
+// left out (it often holds the student's name).
+export function transcriptErrorProps(e: unknown, file: File) {
+  return e instanceof TranscriptReadError
+    ? { stage: e.stage, ...e.info, file_type: file.type }
+    : { stage: "no_modules", bytes: file.size, file_type: file.type }
 }

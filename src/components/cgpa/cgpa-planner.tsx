@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react"
 
-import { track as trackEvent } from "@/lib/analytics"
+import { reportError, track as trackEvent } from "@/lib/analytics"
 import type { EventSuffix } from "@/lib/analytics-events"
 import {
   classFor,
@@ -12,7 +12,7 @@ import {
   projectedCgpa,
   type BandResult
 } from "@/lib/cgpa"
-import { readTranscriptPdf } from "@/lib/fgo"
+import { readTranscriptPdf, transcriptErrorProps } from "@/lib/fgo"
 import { shareTranscript } from "@/lib/transcript-share"
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
@@ -127,7 +127,11 @@ const CgpaPlanner = () => {
       setTimeout(() => document.getElementById("left")?.focus(), 0)
       track("transcript_loaded")
       if (share) shareTranscript("cgpa", mods)
-    } catch {
+    } catch (e) {
+      reportError("transcript_upload", e, {
+        tool: "cgpa",
+        ...transcriptErrorProps(e, file)
+      })
       track("upload_failed")
       setError(
         "Could not read that PDF. Use the official transcript from the NTU Self-Help Transcript System, or type your CGPA."

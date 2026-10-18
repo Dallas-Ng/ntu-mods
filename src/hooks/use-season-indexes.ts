@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 
+import { reportError } from "@/lib/analytics"
+
 export type SeasonIndexes = Record<string, Record<string, Index[]>>
 
 const cache = new Map<string, SeasonIndexes>()
@@ -16,13 +18,17 @@ function fetchSeasonIndexes(
   if (pending.has(key)) return pending.get(key)!
 
   const promise = fetch(`/data/api/indexes/${key}.json`)
-    .then((res) => (res.ok ? res.json() : {}))
+    .then((res) => {
+      if (!res.ok) throw new Error(`indexes ${res.status}`)
+      return res.json()
+    })
     .then((data: SeasonIndexes) => {
       cache.set(key, data)
       pending.delete(key)
       return data
     })
-    .catch(() => {
+    .catch((e) => {
+      reportError("indexes_fetch", e, { year, semester })
       pending.delete(key)
       return {} as SeasonIndexes
     })

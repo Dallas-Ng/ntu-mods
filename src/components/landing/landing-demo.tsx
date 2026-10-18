@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 
+import { reportError } from "@/lib/analytics"
+
 import { TimetableTable } from "../timetable-table/table"
 import LandingCarouselControls from "./landing-carousel-controls"
 import type { DemoPersona } from "./landing-demo-data"
@@ -21,11 +23,14 @@ const LandingDemo = () => {
   useEffect(() => {
     let cancelled = false
     fetch("/landing-personas.json")
-      .then((r) => (r.ok ? r.json() : []))
+      .then((r) => {
+        if (!r.ok) throw new Error(`landing-personas.json ${r.status}`)
+        return r.json()
+      })
       .then((data: DemoPersona[]) => {
         if (!cancelled) setPersonas(data)
       })
-      .catch(() => {})
+      .catch((e) => reportError("landing_demo_fetch", e))
     return () => {
       cancelled = true
     }

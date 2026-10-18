@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Check, ChevronDown, Search, X } from "lucide-react"
 
-import { track } from "@/lib/analytics"
+import { reportError, track } from "@/lib/analytics"
 import { formatShortDate } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
@@ -167,9 +167,12 @@ export default function ArticlesList({
 
   useEffect(() => {
     fetch("/api/article-views")
-      .then((res) => (res.ok ? res.json() : null))
+      .then((res) => {
+        if (!res.ok) throw new Error(`article-views ${res.status}`)
+        return res.json()
+      })
       .then((data) => data?.views && setViews(data.views))
-      .catch(() => {})
+      .catch((e) => reportError("article_views_fetch", e))
   }, [])
 
   useEffect(() => {

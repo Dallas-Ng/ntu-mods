@@ -3,7 +3,7 @@
 import { useMemo, useRef, useState } from "react"
 import { Check, Copy, Sparkles } from "lucide-react"
 
-import { track as trackEvent } from "@/lib/analytics"
+import { reportError, track as trackEvent } from "@/lib/analytics"
 import type { EventSuffix } from "@/lib/analytics-events"
 import {
   cgpa,
@@ -12,6 +12,7 @@ import {
   parseTranscriptLines,
   quotaUsage,
   readTranscriptPdf,
+  transcriptErrorProps,
   type ExtraUsage,
   type Mod,
   type ParsedTranscript
@@ -145,7 +146,11 @@ export default function FgoOptimiser() {
         graded: parsed.mods.filter((m) => m.status === "graded").length,
         previously_fgo: parsed.mods.filter((m) => m.status === "fgo").length
       })
-    } catch {
+    } catch (e) {
+      reportError("transcript_upload", e, {
+        tool: "fgo",
+        ...transcriptErrorProps(e, file)
+      })
       track("upload_failed")
       setError(
         "Could not read that PDF. Use the official transcript from the NTU Self-Help Transcript System, or the NIE Academic Progress Report."

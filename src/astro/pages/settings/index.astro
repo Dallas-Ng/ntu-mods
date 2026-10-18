@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from "@/config/site"
+import { BUILD_TIME, GIT_COMMIT_SHA } from "@/lib/constants"
 import SettingsPageContent from "@/components/settings/settings-page-content"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
@@ -13,4 +14,5 @@ export const prerender = true
   size="sm"
   outerClassName="bg-slate-100 dark:bg-slate-950">
   <SettingsPageContent client:load />
+  <div hidden data-commit={GIT_COMMIT_SHA} data-build-time={BUILD_TIME}></div>
 </BaseLayout>

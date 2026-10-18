@@ -8,9 +8,10 @@ import { defineConfig, fontProviders, sessionDrivers } from "astro/config"
 
 import hastFigure from "./src/lib/hast-figure.mjs"
 
-// Cloudflare Workers Builds checks out the real repo (not a tarball), so this
-// resolves there too — baked in at build time so a deployed worker's bundle
-// always carries the commit it was built from, for prod debugging.
+// Baked in at build time (Workers Builds checks out the real repo, so this
+// resolves there too) and shown only on /settings. Keep them off BaseLayout:
+// stamping every page changes every HTML hash, so each deploy re-uploads all
+// of them.
 const GIT_COMMIT_SHA = (() => {
   try {
     return execSync("git rev-parse --short=10 HEAD").toString().trim()

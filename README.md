@@ -184,7 +184,7 @@ Pages → `ntu-mods` → Settings → Builds), not in the repo:
 | Preview command | n/a                                                      | `npx wrangler preview` |
 
 Build variables on both: `CLOUDFLARE_ACCOUNT_ID` and `PUBLIC_POSTHOG_TOKEN`.
-`RESEND_KEY` is a runtime secret only (see Environment variables).
+`RESEND_KEY` is a runtime secret only (see Secrets below).
 
 A production-only install (`yarn install --production`, with
 `SKIP_DEPENDENCY_INSTALL=1`) was used before. It bypassed the dependency cache

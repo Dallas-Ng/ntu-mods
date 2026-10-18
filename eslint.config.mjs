@@ -82,6 +82,24 @@ const config = [
       "no-unused-vars": "off",
       "unused-imports/no-unused-imports": "error"
     }
+  },
+  // Client events go through track() in @/lib/analytics, which only accepts
+  // names listed in @/lib/analytics-events. The feedback route captures with
+  // posthog-node and checks its name with `satisfies AnalyticsEvent` instead.
+  {
+    files: REACT_FILES,
+    ignores: ["src/lib/analytics.ts", "src/astro/pages/api/feedback.ts"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "CallExpression[callee.object.name='posthog'][callee.property.name='capture']",
+          message:
+            "Use track() from @/lib/analytics so the event name is checked against ANALYTICS_EVENTS."
+        }
+      ]
+    }
   }
 ]
 

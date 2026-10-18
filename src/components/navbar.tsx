@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react"
 import { Megaphone, Menu, Moon, Settings, Sun, X } from "lucide-react"
-import posthog from "posthog-js"
 
 import { siteConfig } from "@/config/site"
+import { track } from "@/lib/analytics"
 import { LATEST_SEMESTER_LABEL_SHORT } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useChangelogUnseenCount } from "@/hooks/use-changelog-unseen"
@@ -184,7 +184,7 @@ const Navbar = () => {
                   <a
                     href="/changelog"
                     onClick={() =>
-                      posthog.capture("changelog_opened", {
+                      track("changelog_opened", {
                         source: "navbar_mobile_menu"
                       })
                     }

@@ -2,11 +2,11 @@
 
 import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import posthog from "posthog-js"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 
+import { getDistinctId, track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -62,7 +62,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
       author: data.email ?? "anon",
       feedback: data.feedback,
       category: "feedback",
-      distinctId: posthog.get_distinct_id(),
+      distinctId: getDistinctId(),
       url: window.location.href,
       localData: localData ? JSON.stringify(localData) : undefined
     }
@@ -82,7 +82,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
       if (!res.ok) throw new Error(`Feedback request failed (${res.status})`)
     }
 
-    posthog.capture("feedback_submitted", {
+    track("feedback_submitted", {
       has_email: !!data.email,
       feedback_length: data.feedback.length,
       included_local_data: data.includeLocalData

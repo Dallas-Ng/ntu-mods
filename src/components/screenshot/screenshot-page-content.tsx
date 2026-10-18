@@ -10,8 +10,8 @@ import {
   ZoomIn,
   ZoomOut
 } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
@@ -81,7 +81,7 @@ const ScreenshotPageInner = () => {
 
   const hide = () => {
     setShowControls(false)
-    posthog.capture("screenshot_controls_hidden", { preset })
+    track("screenshot_controls_hidden", { preset })
   }
 
   return (
@@ -172,7 +172,7 @@ const ScreenshotPageInner = () => {
                 onValueChange={(value) => {
                   if (!value) return
                   setPreset(value as CanvasPreset)
-                  posthog.capture("screenshot_preset_selected", {
+                  track("screenshot_preset_selected", {
                     preset: value
                   })
                 }}>

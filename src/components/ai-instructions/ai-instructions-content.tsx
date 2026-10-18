@@ -275,10 +275,10 @@ A: Your timetable is saved in your browser's localStorage. It persists between v
 A: All timetable data - your selected modules, indexes, and preferences - is stored only in your browser's localStorage. It is never transmitted to NTUMods servers.
 
 **Q: Does NTUMods collect personal data?**
-A: NTUMods uses two analytics tools, Google Analytics 4 and PostHog, which collect usage data such as page views, click patterns and error reports. PostHog records a session replay only when an error occurs. It does not collect names or contact details. Timetable data stays on your device and is never sent to servers. Feedback submissions optionally include an email address, which is stored securely and used only to respond.
+A: NTUMods uses two analytics tools, Google Analytics 4 and PostHog, which collect usage data such as page views, click patterns and error reports. NTUMods does not record session replays. It does not collect names or contact details. Timetable data stays on your device and is never sent to servers. Feedback submissions optionally include an email address, which is stored securely and used only to respond.
 
 **Q: What analytics tools does NTUMods use?**
-A: NTUMods uses Google Analytics 4 (page views and usage patterns) and PostHog (product analytics events, error tracking, and session replays of sessions where an error occurred). Events such as adding a module include the module code and index, but your saved timetable itself stays in your browser.
+A: NTUMods uses Google Analytics 4 (page views and usage patterns) and PostHog (product analytics events and error tracking; session replay is turned off). Events such as adding a module include the module code and index, but your saved timetable itself stays in your browser.
 
 **Q: How do I submit feedback or report a bug on NTUMods?**
 A: Go to ntumods.com/feedback. You can submit a message describing your feedback, issue, or suggestion. Providing an email address is optional.

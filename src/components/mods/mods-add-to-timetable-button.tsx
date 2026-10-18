@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { CalendarCheck, CalendarPlus, Check } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
 import { cn } from "@/lib/utils"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
@@ -107,14 +107,14 @@ const ModsAddToTimetableButton = ({
     if (plan[moduleKey]) {
       const { [moduleKey]: _, ...rest } = plan
       updateTimetable(rest, planIndex)
-      posthog.capture("module_removed", {
+      track("module_removed", {
         module_code: moduleKey,
         source: "mods_page"
       })
     } else {
       const bestIndex = resolveBestIndex(moduleIndexes, plan, seasonIndexes)
       updateTimetable({ ...plan, [moduleKey]: bestIndex }, planIndex)
-      posthog.capture("module_added", {
+      track("module_added", {
         module_code: moduleKey,
         index_key: bestIndex,
         total_modules: Object.keys(plan).length + 1,

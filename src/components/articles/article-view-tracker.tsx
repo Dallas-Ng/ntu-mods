@@ -1,15 +1,17 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import posthog from "posthog-js"
+
+import { track, whenAnalyticsReady } from "@/lib/analytics"
 
 const VISITOR_KEY = "ntumods-visitor-id"
 
 // PostHog's distinct_id matches the rows seeded from PostHog history, so past
-// visitors are not counted twice. localStorage UUID is the fallback.
-function getVisitorId() {
+// visitors are not counted twice. localStorage UUID is the fallback. PostHog
+// loads after the page does, so this waits for it, but not for long.
+async function getVisitorId() {
+  const phId = (await whenAnalyticsReady(5000))?.get_distinct_id()
   try {
-    const phId = posthog.get_distinct_id()
     if (phId) return phId
     let id = localStorage.getItem(VISITOR_KEY)
     if (!id) {
@@ -26,16 +28,19 @@ const ArticleViewTracker = ({ slug }: { slug: string }) => {
   const [views, setViews] = useState<number | null>(null)
 
   useEffect(() => {
-    posthog.capture("article_viewed", { article_slug: slug })
+    track("article_viewed", { article_slug: slug })
 
-    const visitorId = getVisitorId()
-    if (!visitorId) return
-    fetch("/api/article-views", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug, visitorId })
-    })
-      .then((res) => (res.ok ? res.json() : null))
+    getVisitorId()
+      .then((visitorId) =>
+        visitorId
+          ? fetch("/api/article-views", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ slug, visitorId })
+            })
+          : null
+      )
+      .then((res) => (res?.ok ? res.json() : null))
       .then((data) => typeof data?.views === "number" && setViews(data.views))
       .catch(() => {})
   }, [slug])

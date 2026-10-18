@@ -3,9 +3,9 @@
 import { useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { Calendar } from "lucide-react"
-import posthog from "posthog-js"
 import { toast } from "sonner"
 
+import { track } from "@/lib/analytics"
 import { customCoursesToIcsInputs } from "@/lib/custom-course-to-index"
 import { getIcs } from "@/lib/get-ics"
 import { latestSemester, latestYear } from "@/lib/semesters"
@@ -76,7 +76,7 @@ const TimetableDownloadCalendarButton = () => {
       a.click()
       document.body.removeChild(a)
       URL.revokeObjectURL(url)
-      posthog.capture("calendar_downloaded", {
+      track("calendar_downloaded", {
         module_count: Object.keys(timetable).length,
         source: "standalone_button"
       })

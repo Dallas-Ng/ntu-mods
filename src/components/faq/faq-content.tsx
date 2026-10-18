@@ -116,10 +116,10 @@ const FAQ_CONFIG: FaqConfig[] = [
     answer: (
       <>
         We use two analytics tools, Google Analytics and PostHog, to collect
-        page views, usage patterns and error reports, plus a session replay only
-        when an error occurs. We don&apos;t collect your name or contact
-        details. Everything you add to your timetable is stored only in your
-        browser and never sent to our servers. See the{" "}
+        page views, usage patterns and error reports. We don&apos;t record your
+        screen or sessions. We don&apos;t collect your name or contact details.
+        Everything you add to your timetable is stored only in your browser and
+        never sent to our servers. See the{" "}
         <a
           href="/privacy"
           className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
@@ -132,7 +132,7 @@ const FAQ_CONFIG: FaqConfig[] = [
       </>
     ),
     answerText:
-      "We use two analytics tools, Google Analytics and PostHog, to collect page views, usage patterns and error reports, plus a session replay only when an error occurs. We don't collect your name or contact details. Everything you add to your timetable is stored only in your browser and never sent to our servers. The CGPA and FGO tools read your transcript PDF in your browser and never upload the file. By default, module codes, terms and grades (never your name or matric number) are also sent for analytics. Untick the share box before uploading to opt out."
+      "We use two analytics tools, Google Analytics and PostHog, to collect page views, usage patterns and error reports. We don't record your screen or sessions. We don't collect your name or contact details. Everything you add to your timetable is stored only in your browser and never sent to our servers. The CGPA and FGO tools read your transcript PDF in your browser and never upload the file. By default, module codes, terms and grades (never your name or matric number) are also sent for analytics. Untick the share box before uploading to opt out."
   }
 ]
 

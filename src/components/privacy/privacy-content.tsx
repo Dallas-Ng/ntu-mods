@@ -82,14 +82,9 @@ const PrivacyContent = () => {
             Error reports when something breaks, including the error message and
             where in our code it happened
           </li>
-          <li>
-            Session replays,{" "}
-            <strong>only for sessions where an error occurs</strong>. A replay
-            is a reconstruction of what was on the page around the error, so we
-            can see what went wrong. Text you type into form fields is masked.
-            Sessions without an error are not recorded.
-          </li>
         </ul>
+
+        <p>We do not record session replays or screen recordings.</p>
 
         <p>
           PostHog requests are routed through our own domain (ntumods.com)
@@ -134,10 +129,7 @@ const PrivacyContent = () => {
           the PDF file name. We do not link a list of modules and grades to your
           identity, but it could in principle identify you to someone who
           already knows your results. If you opt out, we only record counts and
-          flags, such as how many modules were found. Page interactions may be
-          captured in a session replay if an error occurs while you use the
-          tool, so avoid uploading a real transcript if you want no part of it
-          recorded.
+          flags, such as how many modules were found.
         </p>
 
         <h3 className="text-foreground mt-4 text-base font-semibold">

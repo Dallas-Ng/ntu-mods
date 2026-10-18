@@ -14,10 +14,5 @@ export const prerender = true
   size="sm"
   outerClassName="bg-slate-100 dark:bg-slate-950">
   <SettingsPageContent client:load />
-  <p
-    class="text-muted-foreground mt-8 text-center text-xs"
-    data-commit={GIT_COMMIT_SHA}
-    data-build-time={BUILD_TIME}>
-    Build {GIT_COMMIT_SHA} · {BUILD_TIME}
-  </p>
+  <div hidden data-commit={GIT_COMMIT_SHA} data-build-time={BUILD_TIME}></div>
 </BaseLayout>

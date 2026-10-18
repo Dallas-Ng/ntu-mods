@@ -214,7 +214,7 @@ const PrivacyContent = () => {
           <li>
             <strong>Feedback submissions</strong>: retained until we have
             processed and acted on them, or upon your request to delete them.
-            They are kept as emails in the maintainer's inbox.
+            They are kept as emails in the maintainer&apos;s inbox.
           </li>
           <li>
             <strong>Analytics data</strong>: retained according to the

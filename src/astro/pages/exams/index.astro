@@ -1,4 +1,6 @@
 ---
+import { ArrowRight } from "lucide-react"
+
 import { siteConfig } from "@/config/site"
 import { datasetJsonLd } from "@/lib/json-ld"
 import {
@@ -33,6 +35,33 @@ async function getExamData() {
 const { exams, label } = await getExamData()
 const examList = Object.values(exams)
 const total = examList.length
+
+// Exam dates are "23 November 2026" strings, so sort them as dates.
+const dates = [...new Set(examList.map((e) => e.date))].sort(
+  (a, b) => new Date(a).getTime() - new Date(b).getTime()
+)
+const fmt = (d: string, year = false) =>
+  new Date(d).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    ...(year && { year: "numeric" })
+  })
+const period =
+  dates.length > 0
+    ? `${fmt(dates[0])} to ${fmt(dates[dates.length - 1], true)}`
+    : "TBC"
+const updated = new Date(`${LAST_UPDATED} UTC`).toLocaleDateString("en-GB", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC"
+})
+const facts = [
+  { label: "Exam period", value: period, wide: true },
+  { label: "Modules", value: String(total) },
+  { label: "Exam days", value: String(dates.length) },
+  { label: "Last updated", value: updated }
+]
 ---
 
 <BaseLayout
@@ -52,40 +81,48 @@ const total = examList.length
       dateModified: new Date(`${LAST_UPDATED} UTC`).toISOString().slice(0, 10)
     })}
   />
-  <div class="flex items-end justify-between gap-4">
-    <Header
-      title="NTU Exam Schedule"
-      subtitle={total > 0
-        ? `${total} exams for ${label}`
-        : `No exam data available for ${label}`}
-    />
-    <p class="text-muted-foreground shrink-0 pb-1 text-xs">
-      Updated {LAST_UPDATED}
-    </p>
+  <Header
+    title="NTU Exam Schedule"
+    subtitle={total > 0
+      ? `Final exam dates, times and durations for ${label}, from NTU's official timetable.`
+      : `No exam data available for ${label}`}
+  />
+
+  <div
+    class="bg-muted flex flex-col gap-4 rounded-2xl p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+    <div class="min-w-0 space-y-1">
+      <p class="text-xl font-bold tracking-tight">Find your exam dates</p>
+      <p class="text-muted-foreground text-sm text-pretty">
+        Check when and where you sit each paper, and what to bring on the day.
+      </p>
+    </div>
+    <a
+      href="/articles/ntu-exam-schedule-ay2026"
+      class="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full px-5 text-sm font-medium whitespace-nowrap transition-colors">
+      Read the guide
+      <ArrowRight class="size-4" />
+    </a>
   </div>
 
-  <div class="space-y-3 rounded-lg border p-4">
-    <p class="text-muted-foreground text-sm">
-      Showing {total} NTU exams for {label}. Search by module code or name, or
-      group by date or school to plan your revision schedule. Exam data is
-      sourced from NTU's official timetable and updated each semester.
-    </p>
-    <div class="space-y-1.5">
-      <p class="text-sm font-medium">Related guides</p>
-      <div class="flex flex-col gap-1">
-        <a
-          href="/articles/ntu-exam-schedule-ay2026"
-          class="text-sm text-blue-500 hover:underline">
-          NTU Exam Schedule AY2026/2027 — How to Find Your Exam Dates →
-        </a>
-        <a
-          href="/articles/how-to-plan-for-modules"
-          class="text-sm text-blue-500 hover:underline">
-          How to Plan NTU Modules Before STARS Opens →
-        </a>
-      </div>
-    </div>
-  </div>
+  <dl class="grid grid-cols-6 gap-x-4 gap-y-5 md:grid-cols-4 md:gap-x-0">
+    {
+      facts.map(({ label, value, wide }, i) => (
+        <div
+          class:list={[
+            "space-y-1 md:col-span-1",
+            wide ? "col-span-6" : "col-span-2",
+            i > 0 && "md:border-l md:pl-6"
+          ]}>
+          <dt class="text-muted-foreground text-sm whitespace-nowrap">
+            {label}
+          </dt>
+          <dd class="text-xl font-bold tracking-tight whitespace-nowrap md:text-2xl md:tracking-tighter">
+            {value}
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
 
   <ExamsList client:load exams={examList} />
 </BaseLayout>

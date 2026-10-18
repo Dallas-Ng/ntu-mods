@@ -10,8 +10,9 @@ const load = async () => {
 
 const fakeClient = () => {
   const capture = vi.fn()
-  const ph = { capture } as unknown as PostHogInterface
-  return { ph, capture }
+  const captureException = vi.fn()
+  const ph = { capture, captureException } as unknown as PostHogInterface
+  return { ph, capture, captureException }
 }
 
 describe("analytics", () => {
@@ -29,6 +30,31 @@ describe("analytics", () => {
     ])
     a.track("timetable_copied")
     expect(capture).toHaveBeenLastCalledWith("timetable_copied", undefined)
+  })
+
+  it("reportError tags the feature and queues until PostHog loads", async () => {
+    const a = await load()
+    const err = new Error("boom")
+    a.reportError("modules_fetch", err, { year: "2026" })
+    const { ph, captureException } = fakeClient()
+    a.setAnalyticsClient(ph)
+    expect(captureException).toHaveBeenCalledWith(err, {
+      feature: "modules_fetch",
+      year: "2026"
+    })
+    a.reportError("exams_fetch", err)
+    expect(captureException).toHaveBeenLastCalledWith(err, {
+      feature: "exams_fetch"
+    })
+  })
+
+  it("reportError is dropped when PostHog is off", async () => {
+    const a = await load()
+    a.reportError("modules_fetch", new Error("boom"))
+    a.setAnalyticsClient(null)
+    const { ph, captureException } = fakeClient()
+    a.setAnalyticsClient(ph)
+    expect(captureException).not.toHaveBeenCalled()
   })
 
   it("drops queued and later events when PostHog is off", async () => {

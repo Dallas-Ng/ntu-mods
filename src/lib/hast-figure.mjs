@@ -101,11 +101,40 @@ const ctaCard = {
   }
 }
 
+/**
+ * Wraps each table in a rounded frame (`.table-wrap`) around a scroll box
+ * (`.table-scroll`), so a table wider than the screen scrolls inside its own
+ * box instead of stretching the page. The frame stays put and shows an edge
+ * fade while there is more to scroll to (see globals.css and the script in
+ * articles/[slug].astro).
+ */
+const wrappedTables = new WeakSet()
+
+const wrapTable = (node, ctx) => {
+  if (wrappedTables.has(node)) return
+  const table = { ...node }
+  wrappedTables.add(table)
+  ctx.replaceNode(node, {
+    type: "element",
+    tagName: "div",
+    properties: { className: ["table-wrap", "not-prose"] },
+    children: [
+      {
+        type: "element",
+        tagName: "div",
+        properties: { className: ["table-scroll"] },
+        children: [table]
+      }
+    ]
+  })
+}
+
 export default {
   name: "figure-captions",
   element: {
-    filter: ["p", "blockquote"],
+    filter: ["p", "blockquote", "table"],
     visit(node, ctx) {
+      if (node.tagName === "table") return wrapTable(node, ctx)
       if (node.tagName === "blockquote") return ctaCard.visit(node, ctx)
       const kids = node.children.filter((c) => !isBlank(c))
       const img = kids[0]

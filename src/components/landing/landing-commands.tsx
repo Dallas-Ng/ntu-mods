@@ -79,7 +79,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
         onKeyDown={onKeyDown}
         placeholder="Find a feature or tool"
         aria-label="Find a feature or tool"
-        className="bg-muted placeholder:text-foreground/60 focus-visible:ring-primary h-14 w-full rounded-xl px-5 text-xl font-semibold tracking-tight outline-none focus-visible:ring-2 md:h-16 md:px-8 md:text-3xl"
+        className="bg-muted placeholder:text-foreground/60 focus-visible:ring-primary h-14 w-full rounded-xl px-5 text-lg font-semibold tracking-tight outline-none focus-visible:ring-2 md:h-16 md:px-8 md:text-2xl"
       />
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[7fr_5fr]">
@@ -125,7 +125,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                     </span>
                   )}
                   <span className="min-w-0 flex-1">
-                    <span className="block text-3xl leading-[1.1] font-bold tracking-tight md:text-4xl">
+                    <span className="block text-2xl leading-[1.1] font-bold tracking-tight md:text-3xl">
                       {c.name}
                       {c.isNew && (
                         <span className="ml-3 inline-block rounded-full bg-yellow-400 px-3 py-1 align-middle text-sm font-semibold tracking-normal text-black">
@@ -133,7 +133,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                         </span>
                       )}
                     </span>
-                    <span className="mt-1 block max-w-xl text-base md:text-lg lg:hidden">
+                    <span className="mt-1 block max-w-xl text-sm md:text-base lg:hidden">
                       {c.desc}
                     </span>
                   </span>
@@ -142,7 +142,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
             )
           })}
           {!rows.length && (
-            <li className="px-5 py-8 text-xl md:px-6">
+            <li className="px-5 py-8 text-lg md:px-6">
               Nothing matches &ldquo;{query}&rdquo;.
             </li>
           )}
@@ -153,7 +153,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
             type="button"
             aria-expanded={showAll}
             onClick={() => setShowAll((v) => !v)}
-            className="bg-muted hover:bg-accent flex h-12 w-full items-center justify-center gap-2 rounded-xl text-base font-semibold transition-colors duration-150 lg:hidden">
+            className="bg-muted hover:bg-accent flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-colors duration-150 lg:hidden">
             {showAll ? "Show fewer" : `Show all ${rows.length} features`}
             <ChevronDown
               aria-hidden="true"
@@ -184,11 +184,11 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                   className="min-h-0 flex-1 object-contain"
                 />
               ) : (
-                <p className="text-4xl leading-tight font-bold tracking-tight">
+                <p className="text-3xl leading-tight font-bold tracking-tight">
                   {c.name}
                 </p>
               )}
-              <p className="text-base md:text-lg">{c.desc}</p>
+              <p className="text-sm md:text-base">{c.desc}</p>
             </div>
           ))}
         </div>

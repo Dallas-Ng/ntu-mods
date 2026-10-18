@@ -45,12 +45,12 @@ const LandingArticles = async () => {
   return (
     <section className="mx-auto max-w-7xl px-4">
       <div className="mb-10 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <h2 className="landing-reveal max-w-2xl text-4xl leading-none font-bold tracking-tighter md:text-5xl">
+        <h2 className="landing-reveal max-w-2xl text-3xl leading-none font-bold tracking-tighter md:text-4xl">
           Guides for planning your semester
         </h2>
         <a
           href="/articles"
-          className="text-primary text-lg font-semibold underline-offset-4 hover:underline">
+          className="text-primary text-base font-semibold underline-offset-4 hover:underline">
           View all articles
         </a>
       </div>
@@ -61,10 +61,10 @@ const LandingArticles = async () => {
           className="landing-reveal group bg-muted flex flex-col overflow-hidden rounded-2xl">
           <div className="relative flex flex-1 flex-col justify-center gap-3 p-5 md:p-6 lg:min-h-[300px]">
             <Meta a={lead} />
-            <h3 className="line-clamp-2 text-2xl leading-tight font-bold tracking-tight md:text-3xl">
+            <h3 className="line-clamp-2 text-xl leading-tight font-bold tracking-tight md:text-2xl">
               {lead.title}
             </h3>
-            <p className="text-foreground/80 line-clamp-3 text-lg">
+            <p className="text-foreground/80 line-clamp-3 text-base">
               {lead.description}
             </p>
           </div>
@@ -78,7 +78,7 @@ const LandingArticles = async () => {
                 className="hover:bg-muted group flex h-full gap-4 rounded-2xl p-4 transition-colors duration-150">
                 <div className="flex min-w-0 flex-col justify-center gap-1">
                   <Meta a={a} />
-                  <h3 className="line-clamp-3 text-lg leading-snug font-semibold">
+                  <h3 className="line-clamp-3 text-base leading-snug font-semibold">
                     {a.title}
                   </h3>
                 </div>

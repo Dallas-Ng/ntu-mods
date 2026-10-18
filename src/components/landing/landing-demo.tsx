@@ -82,10 +82,10 @@ const LandingDemo = () => {
         <div aria-live="polite" className="min-w-0">
           <p
             key={current.id}
-            className="animate-in fade-in slide-in-from-bottom-2 text-2xl leading-tight font-bold tracking-tight duration-300 md:text-3xl">
+            className="animate-in fade-in slide-in-from-bottom-2 text-xl leading-tight font-bold tracking-tight duration-300 md:text-2xl">
             {current.label}
           </p>
-          <p className="mt-2 text-base md:text-lg">
+          <p className="mt-2 text-sm md:text-base">
             {Object.keys(current.timetable).length} modules · {current.note}
             {current.bdes.length > 0 &&
               `, incl. ${current.bdes.length} BDE${current.bdes.length > 1 ? "s" : ""}`}

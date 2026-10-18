@@ -67,7 +67,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
       localData: localData ? JSON.stringify(localData) : undefined
     }
 
-    // fetch only rejects on network failure — a 500 (bad Resend key, say)
+    // fetch only rejects on network failure, a 500 (bad Resend key, say)
     // still resolves, so the status has to be checked explicitly or
     // toast.promise reports success for a submission that never sent.
     const submitFeedback = async () => {
@@ -106,7 +106,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
   }
 
   return (
-    <div className={cn("rounded-md border p-3 shadow", divClassName)}>
+    <div className={cn("bg-muted rounded-2xl p-5", divClassName)}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -119,7 +119,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
                   <Input
                     autoComplete="off"
                     placeholder="your@email.com"
-                    className="placeholder:text-sm"
+                    className="bg-background placeholder:text-sm"
                     {...field}
                   />
                 </FormControl>
@@ -142,7 +142,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
                   <Textarea
                     placeholder="Share your thoughts, report an issue, or suggest an improvement..."
                     {...field}
-                    className="h-[200px] placeholder:text-sm lg:h-[100px]"
+                    className="bg-background min-h-[160px] placeholder:text-sm"
                   />
                 </FormControl>
 
@@ -160,7 +160,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
                   <FormLabel>Include my timetable data</FormLabel>
                   <FormDescription>
                     Attaches your saved timetables and settings to help debug
-                    the issue. On by default — turn off to exclude it.
+                    the issue. On by default, turn off to exclude it.
                   </FormDescription>
                 </div>
                 <FormControl>
@@ -176,7 +176,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
           <div className="flex justify-end">
             <Button
               type="submit"
-              className="self w-full lg:w-[200px]"
+              className="w-full lg:w-[200px]"
               disabled={loading}>
               Submit
             </Button>

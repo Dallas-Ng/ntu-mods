@@ -14,10 +14,10 @@ const RECENT = RELEASES.slice(0, 4)
 // Proof the site is looked after: how often it changes, and the latest changes.
 const LandingActivity = () => (
   <section className="mx-auto max-w-7xl px-4">
-    <h2 className="landing-reveal max-w-3xl text-5xl leading-none font-bold tracking-tighter md:text-6xl">
+    <h2 className="landing-reveal max-w-3xl text-4xl leading-none font-bold tracking-tighter md:text-5xl">
       Built in 2023. Still improving.
     </h2>
-    <p className="mt-4 max-w-2xl text-base md:text-lg">
+    <p className="mt-4 max-w-2xl text-sm md:text-base">
       NTUMods is still looked after, with new features and fresh course data
       added over time.
     </p>
@@ -31,10 +31,10 @@ const LandingActivity = () => (
           <div
             key={s.label}
             className="bg-muted landing-reveal flex flex-col justify-between gap-4 rounded-2xl p-5 md:p-6 xl:flex-1">
-            <p className="text-5xl leading-none font-bold tracking-tighter md:text-6xl">
+            <p className="text-4xl leading-none font-bold tracking-tighter md:text-5xl">
               {s.value}
             </p>
-            <p className="text-xl font-semibold">{s.label}</p>
+            <p className="text-lg font-semibold">{s.label}</p>
           </div>
         ))}
       </div>
@@ -61,7 +61,7 @@ const LandingActivity = () => (
                     {release.date}
                     <span className="md:hidden"> · {kinds.join(", ")}</span>
                   </span>
-                  <span className="flex-1 text-lg font-semibold">
+                  <span className="flex-1 text-base font-semibold">
                     {release.title}
                   </span>
                   <span className="hidden text-sm md:block md:text-right">
@@ -74,7 +74,7 @@ const LandingActivity = () => (
         </ol>
         <a
           href="/changelog"
-          className="text-primary mt-1 mb-1 ml-6 inline-block text-lg font-semibold underline-offset-4 hover:underline">
+          className="text-primary mt-1 mb-1 ml-6 inline-block text-base font-semibold underline-offset-4 hover:underline">
           See everything we have added
         </a>
       </div>

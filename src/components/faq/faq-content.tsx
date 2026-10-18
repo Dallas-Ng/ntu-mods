@@ -16,7 +16,7 @@ const FAQ_CONFIG: FaqConfig[] = [
     id: "what-is-ntu-mods",
     question: "What is NTU Mods?",
     answer:
-      "NTU Mods is a timetable planner and module browser for Nanyang Technological University (NTU) students. It lets you browse modules, compare indexes, and plan your schedule — without needing to log into STARS."
+      "NTU Mods is a timetable planner and module browser for Nanyang Technological University (NTU) students. It lets you browse modules, compare indexes, and plan your schedule, without needing to log into STARS."
   },
   {
     id: "ntu-affiliation",
@@ -65,7 +65,7 @@ const FAQ_CONFIG: FaqConfig[] = [
     id: "what-is-an-index",
     question: "What is an index?",
     answer:
-      "An index is a specific class group for a module — it has a fixed set of timeslots and venues for lectures, tutorials, and labs. Different indexes cover the same course content but meet at different times. You pick one index per module when registering in STARS."
+      "An index is a specific class group for a module. It has a fixed set of timeslots and venues for lectures, tutorials, and labs. Different indexes cover the same course content but meet at different times. You pick one index per module when registering in STARS."
   },
   {
     id: "browse-modules",
@@ -79,18 +79,18 @@ const FAQ_CONFIG: FaqConfig[] = [
           mods
         </a>{" "}
         page to search and filter all NTU modules. Click on any module to see
-        its full details — description, academic units, prerequisites, exam
+        its full details: description, academic units, prerequisites, exam
         schedule, and all available indexes with their timeslots and venues.
       </>
     ),
     answerText:
-      "Use the mods page at /mods to search and filter all NTU modules. Click on any module to see its full details — description, academic units, prerequisites, exam schedule, and all available indexes with their timeslots and venues."
+      "Use the mods page at /mods to search and filter all NTU modules. Click on any module to see its full details: description, academic units, prerequisites, exam schedule, and all available indexes with their timeslots and venues."
   },
   {
     id: "export-timetable",
     question: "How do I export my timetable?",
     answer:
-      "There are two export options on the timetable page. You can download an .ics calendar file to import directly into Google Calendar, Apple Calendar, or Outlook. You can also save your timetable as an image — useful for sharing or setting as a wallpaper."
+      "There are two export options on the timetable page. You can download an .ics calendar file to import directly into Google Calendar, Apple Calendar, or Outlook. You can also save your timetable as an image, which is useful for sharing or setting as a wallpaper."
   },
   {
     id: "share-timetable",
@@ -102,21 +102,21 @@ const FAQ_CONFIG: FaqConfig[] = [
     id: "timetable-disappeared",
     question: "Why did my timetable disappear?",
     answer:
-      "Your timetable is saved in your browser's localStorage — it stays between visits on the same device and browser, but clears if you wipe your browser data, close an incognito window, or switch to a different device or browser. There is no account system, so nothing is synced to the cloud."
+      "Your timetable is saved in your browser's localStorage. It stays between visits on the same device and browser, but clears if you wipe your browser data, close an incognito window, or switch to a different device or browser. There is no account system, so nothing is synced to the cloud."
   },
   {
     id: "live-vacancies",
     question: "Can you show live vacancies for indexes?",
     answer:
-      "No — vacancy data is not publicly available from NTU's systems. Use NTU Mods to figure out which indexes fit your schedule, then check STARS for real-time availability when registration opens."
+      "No. Vacancy data is not publicly available from NTU's systems. Use NTU Mods to figure out which indexes fit your schedule, then check STARS for real-time availability when registration opens."
   },
   {
     id: "data-tracking",
     question: "Do you track my data?",
     answer: (
       <>
-        We use analytics tools — Google Analytics, Microsoft Clarity, and
-        PostHog — to collect page views, usage patterns, and session replays. No
+        We use analytics tools (Google Analytics, Microsoft Clarity, and
+        PostHog) to collect page views, usage patterns, and session replays. No
         personal data is collected. Everything you add to your timetable is
         stored only in your browser and never sent to our servers. See the{" "}
         <a
@@ -131,7 +131,7 @@ const FAQ_CONFIG: FaqConfig[] = [
       </>
     ),
     answerText:
-      "We use analytics tools — Google Analytics, Microsoft Clarity, and PostHog — to collect page views, usage patterns, and session replays. No personal data is collected. Everything you add to your timetable is stored only in your browser and never sent to our servers. The CGPA and FGO tools read your transcript PDF in your browser and never upload the file. By default, module codes, terms and grades (never your name or matric number) are also sent for analytics. Untick the share box before uploading to opt out."
+      "We use analytics tools (Google Analytics, Microsoft Clarity, and PostHog) to collect page views, usage patterns, and session replays. No personal data is collected. Everything you add to your timetable is stored only in your browser and never sent to our servers. The CGPA and FGO tools read your transcript PDF in your browser and never upload the file. By default, module codes, terms and grades (never your name or matric number) are also sent for analytics. Untick the share box before uploading to opt out."
   }
 ]
 
@@ -150,38 +150,43 @@ export const faqItems = FAQ_CONFIG.map(({ question, answer, answerText }) => ({
 }))
 
 interface Props {
-  /** Rendered as the second grid column — the .astro page passes its own
+  /** Rendered as the second grid column, the .astro page passes its own
    * ArticleToc island here so this component can stay a zero-JS static
    * render (it has no interactivity of its own). */
   children?: React.ReactNode
+  /** Sticky section picker for screens without the side nav; passed as the
+   * `mobileNav` named slot for the same reason as `children`. */
+  mobileNav?: React.ReactNode
 }
 
-const FaqContent = ({ children }: Props) => {
+const FaqContent = ({ children, mobileNav }: Props) => {
   return (
     <Container size="md">
-      <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem] [&>*]:min-w-0">
         <div className="space-y-8">
+          {mobileNav}
+
           <Header
             title="Frequently Asked Questions"
             subtitle="Answers for planning timetables, browsing modules, exporting schedules, and understanding how your data is stored."
           />
 
-          <div className="space-y-6">
+          <div className="space-y-3">
             {FAQ_CONFIG.map(({ id, question, answer }) => (
               <section
                 id={id}
                 key={id}
-                className="border-border scroll-mt-20 space-y-3 border-t pt-6 first:border-t-0 first:pt-0">
+                className="bg-muted scroll-mt-20 space-y-3 rounded-2xl p-5">
                 <h2 className="text-xl font-semibold">{question}</h2>
 
-                <p className="text-muted-foreground">{answer}</p>
+                <p className="text-muted-foreground text-sm">{answer}</p>
               </section>
             ))}
           </div>
 
-          <hr />
-
-          <div id="feedback" className="space-y-3">
+          <div
+            id="feedback"
+            className="bg-muted flex scroll-mt-20 flex-col justify-between gap-4 rounded-2xl p-5 sm:flex-row sm:items-center">
             <div>
               <h2 className="text-xl font-semibold">Feedback</h2>
 
@@ -191,7 +196,7 @@ const FaqContent = ({ children }: Props) => {
             </div>
 
             <a href="/feedback">
-              <Button variant="outline">Share Feedback</Button>
+              <Button>Share Feedback</Button>
             </a>
           </div>
         </div>

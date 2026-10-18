@@ -51,19 +51,19 @@ const stats = await getSemesterStats(year, semester)
 
   <section class="mx-auto mt-24 mb-12 max-w-7xl px-4 md:mt-36 md:mb-20">
     <h2
-      class="landing-reveal mb-10 max-w-3xl text-4xl leading-none font-bold tracking-tighter md:text-5xl">
+      class="landing-reveal mb-10 max-w-3xl text-3xl leading-none font-bold tracking-tighter md:text-4xl">
       See a week for every course
     </h2>
     <LandingDemo client:visible={{ rootMargin: "1200px" }} />
     <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
       <a
         href="/timetable"
-        class="bg-primary text-primary-foreground inline-flex h-12 items-center justify-center rounded-md px-6 text-base font-semibold transition-transform active:scale-[0.98] md:px-8">
+        class="bg-primary text-primary-foreground inline-flex h-12 items-center justify-center rounded-md px-6 text-sm font-semibold transition-transform md:px-8">
         Build my timetable
       </a>
       <a
         href="/mods"
-        class="bg-secondary hover:bg-secondary/80 inline-flex h-12 items-center justify-center rounded-md px-6 text-base font-semibold transition-colors md:px-8">
+        class="bg-secondary hover:bg-secondary/80 inline-flex h-12 items-center justify-center rounded-md px-6 text-sm font-semibold transition-colors md:px-8">
         Browse modules
       </a>
     </div>

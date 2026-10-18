@@ -280,16 +280,57 @@ table td {
   padding: var(--table-padding);
 }
 
-/* Standard content table: tinted header with a primary rule, rounded frame,
-   roomy cells, row dividers only. Used for article prose and `.data-table`
-   (changelog, module info). The timetable grid keeps the dense global style
-   above. */
+/* Standard content table: a bordered, rounded grid with a tinted header,
+   cell dividers and striped rows. Used for article prose and `.data-table`
+   (module info). The timetable grid keeps the dense global style above.
+   Article tables sit in a .table-wrap (src/lib/hast-figure.mjs), which draws
+   the rounded outline and scrolls sideways when the table is too wide. */
+.table-wrap {
+  @apply relative my-6 overflow-hidden rounded-xl border;
+  border-color: hsl(var(--border));
+}
+
+.table-scroll {
+  @apply overflow-x-auto;
+}
+
+.table-wrap table {
+  @apply m-0;
+}
+
+/* Edge fades: shown while there is more table to scroll to on that side. The
+   script in articles/[slug].astro sets data-more="left right". */
+.table-wrap::before,
+.table-wrap::after {
+  content: "";
+  @apply pointer-events-none absolute inset-y-0 z-10 w-8 opacity-0 transition-opacity;
+}
+
+.table-wrap::before {
+  @apply left-0;
+  background: linear-gradient(to right, hsl(var(--background)), transparent);
+}
+
+.table-wrap::after {
+  @apply right-0;
+  background: linear-gradient(to left, hsl(var(--background)), transparent);
+}
+
+.table-wrap[data-more~="left"]::before,
+.table-wrap[data-more~="right"]::after {
+  @apply opacity-100;
+}
+
 .prose table,
 .data-table {
-  @apply overflow-hidden rounded-lg border bg-transparent text-sm;
-  border-color: hsl(var(--border));
+  @apply border-0 bg-transparent text-sm;
   border-collapse: separate;
   border-spacing: 0;
+}
+
+.data-table {
+  @apply overflow-hidden rounded-xl border;
+  border-color: hsl(var(--border));
 }
 
 .prose table th,
@@ -297,25 +338,79 @@ table td {
 .data-table th,
 .data-table td {
   @apply border-0 text-left align-top;
-  padding: 0.7rem 1rem;
+  padding: 0.65rem 1rem;
+  border-right: 1px solid hsl(var(--border));
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+.prose table th:last-child,
+.prose table td:last-child,
+.data-table th:last-child,
+.data-table td:last-child {
+  border-right: 0;
+}
+
+.prose table tbody tr:last-child td,
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 .prose table th,
 .data-table th {
   @apply text-foreground font-semibold;
   background: hsl(var(--muted));
-  border-bottom: 2px solid hsl(var(--primary));
+  border-bottom: 2px solid hsl(var(--border));
 }
 
 .prose table td,
 .data-table td {
-  background: hsl(var(--card));
-  border-top: 1px solid hsl(var(--border));
+  background: hsl(var(--background));
 }
 
-.prose table tbody tr:first-child td,
-.data-table tbody tr:first-child td {
-  border-top: 0;
+.prose table tbody tr:nth-child(even) td,
+.data-table tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, hsl(var(--muted)) 40%, hsl(var(--background)));
+}
+
+/* Inside a scrolling article table (.table-scroll): keep number columns from
+   collapsing into one-character-wide strips, and keep the first column in view
+   while the table scrolls sideways so the row label is never lost. Cell
+   backgrounds above are opaque for this reason. Not applied to .data-table,
+   which has no scroll box. */
+.table-scroll th,
+.table-scroll td {
+  min-width: 5.5rem;
+}
+
+.table-scroll th:first-child,
+.table-scroll td:first-child {
+  @apply sticky left-0 z-[1];
+  min-width: 8rem;
+}
+
+@media (max-width: 640px) {
+  .prose table,
+  .data-table {
+    font-size: 0.8125rem;
+    line-height: 1.35;
+  }
+
+  .prose table th,
+  .prose table td,
+  .data-table th,
+  .data-table td {
+    padding: 0.5rem 0.65rem;
+  }
+
+  .table-scroll th,
+  .table-scroll td {
+    min-width: 4.5rem;
+  }
+
+  .table-scroll th:first-child,
+  .table-scroll td:first-child {
+    min-width: 7rem;
+  }
 }
 
 .prose table td:first-child,
@@ -326,8 +421,7 @@ table td {
 /* CTA card in articles (src/lib/hast-figure.mjs): a blockquote ending in a
    link titled "cta". */
 .article-cta {
-  @apply bg-card my-6 flex flex-col items-start gap-3 rounded-lg border-2 p-5;
-  border-color: hsl(var(--primary) / 0.4);
+  @apply bg-muted my-6 flex flex-col items-start gap-3 rounded-2xl p-5;
 }
 
 .article-cta p {
@@ -335,11 +429,36 @@ table td {
 }
 
 .article-cta .article-cta-title {
-  @apply text-foreground text-lg font-semibold;
+  @apply text-foreground text-xl font-semibold;
 }
 
 .article-cta .article-cta-button {
   @apply bg-primary text-primary-foreground inline-flex items-center rounded-md px-5 py-2.5 text-sm font-semibold no-underline transition-opacity hover:opacity-90;
+}
+
+/* Quotes and "Quick summary" callouts in articles: the same rounded grey card
+   as the rest of the site, without the typography plugin's italics, quote
+   marks and side rule. (CTA cards are blockquotes too, but they are replaced
+   with .article-cta before they get here.) */
+.prose blockquote {
+  @apply bg-muted text-foreground/80 my-6 rounded-2xl border-0 p-5 text-sm not-italic;
+}
+
+.prose blockquote p {
+  @apply m-0;
+}
+
+.prose blockquote p + p {
+  @apply mt-3;
+}
+
+.prose blockquote p::before,
+.prose blockquote p::after {
+  content: none;
+}
+
+.prose blockquote strong {
+  @apply text-foreground;
 }
 
 /* Article images: centred, click-to-zoom (medium-zoom, see articles/[slug].astro),
@@ -349,7 +468,7 @@ table td {
 }
 
 .prose figure img {
-  @apply mx-auto my-0 block h-auto max-w-full cursor-zoom-in rounded-md border;
+  @apply mx-auto my-0 block h-auto max-w-full cursor-zoom-in rounded-2xl border;
 }
 
 .prose figcaption {

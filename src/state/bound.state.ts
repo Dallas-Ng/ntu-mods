@@ -64,9 +64,13 @@ const selectAll = (state: StoreState) => state
  * defaulting to an identity selector keeps the server snapshot in effect.
  */
 export const useBoundState = Object.assign(
-  (<U = StoreState>(selector?: (state: StoreState) => U) =>
+  (<U = StoreState>(
+    selector?: (state: StoreState) => U,
+    equalityFn?: (a: U, b: U) => boolean
+  ) =>
     useBoundStore(
-      (selector ?? selectAll) as (state: StoreState) => U
+      (selector ?? selectAll) as (state: StoreState) => U,
+      equalityFn as (a: U, b: U) => boolean
     )) as typeof useBoundStore,
   useBoundStore
 )

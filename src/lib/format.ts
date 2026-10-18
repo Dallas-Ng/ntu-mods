@@ -25,28 +25,37 @@ export const formatRemarks = (remarks: string) => {
 /** 1138 -> "1,138". Fixed locale so builds do not depend on the host. */
 export const formatCount = (n: number) => n.toLocaleString("en-US")
 
-const SHORT_MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
   "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec"
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
 ]
 
 /**
- * "2026-09-03" -> "3 Sep 2026". Read in UTC with fixed month names, so the
+ * Reads the YYYY-MM-DD prefix as written rather than through Date, so the
  * prerendered HTML and the browser agree whatever the visitor's timezone or
  * ICU build (toLocaleDateString shifted the day west of UTC and spells
- * September "Sept" or "Sep" depending on the engine).
+ * September "Sept" or "Sep" depending on the engine). Anything else is
+ * returned unchanged.
  */
-export const formatShortDate = (date: string) => {
-  const d = new Date(date)
-  return `${d.getUTCDate()} ${SHORT_MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`
+const formatDate = (date: string, short: boolean) => {
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(date)
+  const month = match && MONTHS[Number(match[2]) - 1]
+  if (!month) return date
+  return `${Number(match[3])} ${short ? month.slice(0, 3) : month} ${match[1]}`
 }
+
+/** "2026-09-03" -> "3 Sep 2026" */
+export const formatShortDate = (date: string) => formatDate(date, true)
+
+/** "2026-09-03" -> "3 September 2026" */
+export const formatLongDate = (date: string) => formatDate(date, false)

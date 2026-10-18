@@ -23,8 +23,7 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx,astro}\" --cache",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test",
-    "seo:report": "tsx scripts/seo-report/index.mts"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.1.4",

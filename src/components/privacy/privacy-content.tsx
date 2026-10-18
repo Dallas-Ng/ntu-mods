@@ -46,9 +46,26 @@ const PrivacyContent = () => {
         </h3>
 
         <p>
-          We use one third-party analytics service, <strong>PostHog</strong>, on
-          the production site to understand how the Service is used and to
-          improve it. PostHog collects:
+          We use two third-party analytics services on the production site to
+          understand how the Service is used and to improve it.
+        </p>
+
+        <p>
+          <strong>Google Analytics 4</strong> collects page views, general usage
+          patterns, browser and device type, and approximate location derived
+          from your IP address. Data is processed by Google. See{" "}
+          <a
+            href="https://policies.google.com/privacy"
+            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
+            rel="external nofollow noopener"
+            target="_blank">
+            Google&apos;s Privacy Policy
+          </a>
+          .
+        </p>
+
+        <p>
+          <strong>PostHog</strong> collects:
         </p>
 
         <ul className="list-outside list-disc pl-10">
@@ -75,9 +92,9 @@ const PrivacyContent = () => {
         </ul>
 
         <p>
-          Requests are routed through our own domain (ntumods.com) rather than
-          sent straight from your browser. Data is processed by PostHog, Inc. in
-          the United States. See{" "}
+          PostHog requests are routed through our own domain (ntumods.com)
+          rather than sent straight from your browser. Data is processed by
+          PostHog, Inc. in the United States. See{" "}
           <a
             href="https://posthog.com/privacy"
             className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
@@ -198,10 +215,11 @@ const PrivacyContent = () => {
         <h2 className="text-foreground text-xl font-semibold">Cookies</h2>
 
         <p>
-          We do not set our own cookies. PostHog stores a random identifier in a
-          cookie and in your browser&apos;s localStorage to distinguish visitors
-          and sessions. You can block or clear these through your browser
-          settings or with an extension that blocks analytics trackers.
+          We do not set our own cookies. Google Analytics sets cookies, and
+          PostHog stores a random identifier in a cookie and in your
+          browser&apos;s localStorage, to distinguish visitors and sessions. You
+          can block or clear these through your browser settings or with an
+          extension that blocks analytics trackers.
         </p>
       </section>
 
@@ -221,8 +239,8 @@ const PrivacyContent = () => {
             They are kept as emails in the maintainer&apos;s inbox.
           </li>
           <li>
-            <strong>Analytics data</strong>: retained according to
-            PostHog&apos;s retention policy for our plan.
+            <strong>Analytics data</strong>: retained according to the retention
+            settings of Google Analytics and PostHog for our account.
           </li>
         </ul>
       </section>

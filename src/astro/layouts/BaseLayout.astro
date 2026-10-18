@@ -4,7 +4,7 @@ import "@/styles/globals.css"
 import { Font } from "astro:assets"
 
 import { siteConfig } from "@/config/site"
-import { BUILD_ENV } from "@/lib/constants"
+import { BUILD_ENV, IS_PROD } from "@/lib/constants"
 import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import { Banner } from "@/components/banner"
@@ -12,6 +12,7 @@ import Container from "@/components/container"
 import Footer from "@/components/footer"
 import MobileTracker from "@/components/mobile-tracker"
 import Navbar from "@/components/navbar"
+import Analytics from "@/astro/components/Analytics.astro"
 
 interface Props {
   title?: string
@@ -118,6 +119,8 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
       content="black"
     />
     <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
     <Font cssVariable="--font-inter" preload />
 
@@ -157,5 +160,6 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
     </div>
     <MobileTracker client:idle />
     <Toaster client:idle position="top-center" />
+    {IS_PROD && <Analytics />}
   </body>
 </html>

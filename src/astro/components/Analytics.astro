@@ -1,0 +1,39 @@
+---
+// GA, shared by both layouts. Rendered only in production — the
+// layouts gate on IS_PROD at the call site, because a `<script>` written
+// inside an .astro expression has its children treated as raw text rather
+// than evaluated, so the tag has to sit at the top level of a component.
+//
+// The tag ran under next/script's `lazyOnload` before the migration —
+// injected after the window load event, so it never competes with hydration
+// or LCP. Plain inline tags run during parse instead, which is a real
+// regression on mobile, so the deferral is reproduced by hand here.
+const GA_ID = "G-70VD9Q58Y0"
+---
+
+<script is:inline define:vars={{ GA_ID }}>
+  ;(function () {
+    function load() {
+      var s = document.createElement("script")
+      s.async = true
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID
+      document.head.appendChild(s)
+
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        window.dataLayer.push(arguments)
+      }
+      window.gtag = gtag
+      gtag("js", new Date())
+      gtag("config", GA_ID)
+    }
+
+    function schedule() {
+      if (typeof requestIdleCallback === "function") requestIdleCallback(load)
+      else setTimeout(load, 0)
+    }
+
+    if (document.readyState === "complete") schedule()
+    else window.addEventListener("load", schedule)
+  })()
+</script>

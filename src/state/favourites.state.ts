@@ -5,9 +5,7 @@ export interface FavouritesSlice {
   toggleFavourite: (moduleKey: string) => void
 }
 
-export const createFavouritesSlice: StateCreator<FavouritesSlice> = (
-  set
-) => ({
+export const createFavouritesSlice: StateCreator<FavouritesSlice> = (set) => ({
   favouriteModules: [],
   toggleFavourite: (moduleKey) =>
     set((state) => ({

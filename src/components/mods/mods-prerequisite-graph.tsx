@@ -21,7 +21,7 @@ const PillCard = ({ code, title, anchorRef }: CardProps) => (
   <a
     ref={anchorRef}
     href={getModuleUrl(code)}
-    className="border-border bg-background hover:bg-muted flex w-full items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors">
+    className="bg-muted hover:bg-accent flex w-full items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors">
     <span className="font-semibold">{code}</span>
     {title && (
       <span className="text-muted-foreground min-w-0 flex-1 truncate">
@@ -32,7 +32,7 @@ const PillCard = ({ code, title, anchorRef }: CardProps) => (
 )
 
 const EmptyPill = ({ label }: { label: string }) => (
-  <div className="border-border/40 text-muted-foreground flex w-full items-center justify-center rounded-full border border-dashed px-3 py-1.5 text-xs italic">
+  <div className="border-border text-muted-foreground flex w-full items-center justify-center rounded-full border border-dashed px-3 py-1.5 text-xs">
     {label}
   </div>
 )
@@ -152,8 +152,10 @@ export default function ModsPrerequisiteGraph({
   if (!hasRequires && !hasRequiredBy) return null
 
   return (
-    <div>
-      <h2 className="mb-6 text-lg">Prerequisite Graph</h2>
+    <div className="rounded-2xl border p-5">
+      <h2 className="mb-6 text-lg font-semibold tracking-tight">
+        Prerequisite graph
+      </h2>
 
       <div ref={containerRef} className="relative">
         {svgSize.w > 0 && (
@@ -181,7 +183,7 @@ export default function ModsPrerequisiteGraph({
           style={{ zIndex: 1 }}>
           {/* Top (mobile) / Left (desktop): prerequisites */}
           <div className="flex w-full flex-col gap-2 sm:flex-1 sm:items-end">
-            <p className="text-muted-foreground w-full text-center text-xs font-medium tracking-wide uppercase sm:text-right">
+            <p className="text-muted-foreground w-full text-center text-xs font-medium sm:text-right">
               Required first
             </p>
             {hasRequires ? (
@@ -204,10 +206,10 @@ export default function ModsPrerequisiteGraph({
           <div className="flex shrink-0 flex-col items-center">
             <div
               ref={centerRef}
-              className="border-primary bg-primary/5 rounded-xl border-2 px-5 py-3 text-center shadow-sm">
+              className="bg-muted rounded-xl px-5 py-3 text-center">
               <span className="text-base font-bold">{moduleCode}</span>
               {graph[moduleCode]?.title && (
-                <p className="text-muted-foreground mt-0.5 max-w-[140px] text-xs leading-snug">
+                <p className="text-muted-foreground mt-0.5 max-w-36 text-xs leading-snug">
                   {graph[moduleCode].title}
                 </p>
               )}
@@ -216,7 +218,7 @@ export default function ModsPrerequisiteGraph({
 
           {/* Bottom (mobile) / Right (desktop): unlocked modules */}
           <div className="flex w-full flex-col gap-2 sm:flex-1 sm:items-start">
-            <p className="bg-background text-muted-foreground relative z-10 w-full text-center text-xs font-medium tracking-wide uppercase sm:text-left">
+            <p className="bg-background text-muted-foreground relative z-10 w-full text-center text-xs font-medium sm:text-left">
               Unlocks
             </p>
             {hasRequiredBy ? (

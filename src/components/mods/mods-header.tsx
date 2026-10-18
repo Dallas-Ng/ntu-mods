@@ -19,7 +19,7 @@ const ModsHeader = ({
     currentSemester === "S" ? "Special Term" : `Semester ${currentSemester}`
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       <Breadcrumbs
         breadcrumbs={[
           { label: "Mods", href: "/mods" },
@@ -29,11 +29,11 @@ const ModsHeader = ({
           }
         ]}
       />
-      <h1 className="text-3xl font-semibold">
+      <h1 className="text-3xl font-bold tracking-tighter text-balance sm:text-4xl">
         {module.code} {module.title}
       </h1>
       <p className="text-muted-foreground text-sm">
-        {isCurrentOffering ? "Current offering" : "Last offered"} — AY
+        {isCurrentOffering ? "Current offering" : "Last offered"}: AY
         {currentYear}/{parseInt(currentYear) + 1} {semName}
       </p>
     </div>

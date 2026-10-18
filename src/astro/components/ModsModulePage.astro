@@ -19,6 +19,7 @@ import ModsViewTracker from "@/components/mods/mods-view-tracker"
 import ModsWorkloadTable from "@/components/mods/mods-workload-table"
 import RelatedModules from "@/components/related-modules"
 import JsonLd from "@/astro/components/JsonLd.astro"
+import { getAllArticles } from "@/astro/lib/articles"
 
 // Shared body for the /mods/[module] "current offering" view — used by both
 // the static build (active-semester codes) and the on-demand fallback in
@@ -89,6 +90,12 @@ const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS } = generateTimetableMatrix(
   9
 )
 
+const allArticles = relatedArticles.length > 0 ? await getAllArticles() : []
+const guides = relatedArticles
+  .map((r) => allArticles.find((a) => r.href === `/articles/${a.slug}`))
+  .filter((a): a is NonNullable<typeof a> => Boolean(a))
+  .slice(0, 3)
+
 const semesterLabel = (s: { year: string; semester: string }) => {
   const semName = s.semester === "S" ? "Special Term" : `Semester ${s.semester}`
   return `AY${s.year}/${parseInt(s.year) + 1} ${semName}`
@@ -131,15 +138,15 @@ const jsonLd = [
 />
 {
   !isCurrentOffering && (
-    <div class="mb-4 rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
-      Not offered in the current semester · Last offered{" "}
+    <div class="mb-4 rounded-2xl border border-amber-300 bg-amber-50 px-5 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
+      Not offered in the current semester. Last offered{" "}
       {semesterLabelForCurrent}
     </div>
   )
 }
 
-<div class="flex flex-col gap-6 xl:flex-row">
-  <div class="w-full space-y-4 xl:w-3/6">
+<div class="flex flex-col gap-8 xl:flex-row xl:gap-12">
+  <div class="w-full space-y-6 xl:w-3/6">
     <ModsHeader
       module={moduleData}
       currentYear={year}
@@ -176,108 +183,122 @@ const jsonLd = [
   <div class="h-fit w-full space-y-4 xl:w-3/6">
     <ModsWorkloadTable indexes={indexes} />
 
-    <hr />
-
     <ModsInfoTable module={moduleData} exam={exam} knownCodes={knownCodes} />
 
     <ModsExpandableFields client:idle module={moduleData} />
   </div>
 </div>
 
-<div class="mt-10 space-y-10">
+<div class="mt-12 flex flex-col gap-12">
   {
     graphNode && (
-      <>
-        <hr />
-        <ModsPrerequisiteGraph
-          client:visible
-          moduleCode={moduleKey}
-          node={graphNode}
-          graph={prereqTitles}
-        />
-
-        <hr class="mt-10" />
-      </>
+      <ModsPrerequisiteGraph
+        client:visible
+        moduleCode={moduleKey}
+        node={graphNode}
+        graph={prereqTitles}
+      />
     )
   }
 
-  <h2 class="text-lg">Available Indexes</h2>
-
-  <ModsIndexTable
-    indexes={indexes}
-    precomputedMatrix={{ TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS }}
-  />
+  <section class="space-y-4">
+    <h2 class="text-lg font-semibold tracking-tight">Available indexes</h2>
+    <ModsIndexTable
+      indexes={indexes}
+      precomputedMatrix={{ TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS }}
+    />
+  </section>
 
   {
     otherSemesters.length > 0 && (
-      <div>
-        <hr class="mb-6" />
-        <h2 class="mb-4 text-lg">Other offerings</h2>
-        <div class="flex gap-1 overflow-x-auto pb-1 xl:flex-wrap xl:overflow-x-visible xl:pb-0">
+      <section class="space-y-4">
+        <h2 class="text-lg font-semibold tracking-tight">Other offerings</h2>
+        <div class="rounded-2xl border p-2 text-sm">
+          <div class="text-muted-foreground grid grid-cols-[4.5rem_repeat(3,minmax(0,1fr))] items-center gap-1 px-1 pb-1 text-xs font-medium sm:grid-cols-[6rem_repeat(3,minmax(0,1fr))]">
+            <span class="px-2">Year</span>
+            <span class="text-center">Sem 1</span>
+            <span class="text-center">Sem 2</span>
+            <span class="text-center">Special</span>
+          </div>
           {sortedYears.map((yr) => {
             const sems = offeringsByYear[yr]
-            const find = (sem: string) => sems.find((s) => s.semester === sem)
             return (
-              <div
-                key={yr}
-                class="bg-muted/40 flex min-w-27.5 flex-col overflow-hidden rounded-lg">
-                <span class="text-muted-foreground border-border/50 border-b px-3 py-2 text-xs font-medium">
+              <div class="grid grid-cols-[4.5rem_repeat(3,minmax(0,1fr))] items-center gap-1 border-t p-1 sm:grid-cols-[6rem_repeat(3,minmax(0,1fr))]">
+                <span class="px-2 font-medium whitespace-nowrap">
                   AY{yr.slice(2)}/{String(parseInt(yr) + 1).slice(2)}
                 </span>
-                <div class="flex flex-col gap-1 p-2">
-                  {(["1", "2", "S"] as const).map((sem) => {
-                    const s = find(sem)
-                    const label = sem === "S" ? "Sp. Term" : `Semester ${sem}`
-                    return s ? (
-                      <a
-                        href={getModuleVersionUrl(
-                          moduleKey,
-                          s.year,
-                          s.semester
-                        )}
-                        class="hover:bg-background border-border/60 rounded-md border px-2 py-1 text-center text-sm transition-colors">
-                        {label}
-                      </a>
-                    ) : (
-                      <span class="text-muted-foreground px-2 py-1 text-center text-sm line-through">
-                        {label}
-                      </span>
-                    )
-                  })}
-                </div>
+                {(["1", "2", "S"] as const).map((sem) => {
+                  const s = sems.find((o) => o.semester === sem)
+                  return s ? (
+                    <a
+                      href={getModuleVersionUrl(moduleKey, s.year, s.semester)}
+                      class="bg-muted hover:bg-accent mx-auto w-16 rounded-full py-1 text-center whitespace-nowrap transition-colors">
+                      View
+                    </a>
+                  ) : (
+                    <span class="text-muted-foreground py-1 text-center">
+                      -
+                    </span>
+                  )
+                })}
               </div>
             )
           })}
         </div>
-      </div>
+      </section>
     )
   }
 
-  <div>
-    <hr class="mb-6" />
-    <h2 class="mb-2 text-lg">Other Relevant Mods</h2>
+  <section class="space-y-4">
+    <h2 class="text-lg font-semibold tracking-tight">Other relevant mods</h2>
     <RelatedModules
       related={related}
       emptyHref="/mods"
       emptyLabel="No Mods Found. Click here to see all Mods"
     />
-  </div>
+  </section>
 
   {
-    relatedArticles.length > 0 && (
-      <div>
-        <hr class="mb-6" />
-        <h2 class="mb-2 text-lg">Planning Guides</h2>
-        <div class="flex flex-wrap gap-2">
-          {relatedArticles.map((a) => (
+    guides.length > 0 && (
+      <section class="space-y-4">
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 class="text-lg font-semibold tracking-tight">Planning guides</h2>
+          <a
+            href="/articles"
+            class="text-primary text-sm font-medium whitespace-nowrap hover:underline">
+            View all articles
+          </a>
+        </div>
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {guides.map((g) => (
             <a
-              href={a.href}
-              class="bg-card hover:bg-accent rounded-md border px-3 py-1.5 text-sm transition-colors">
-              {a.label}
+              href={g.url}
+              class="group bg-muted hover:bg-accent overflow-hidden rounded-2xl transition-colors">
+              {g.thumbnail && (
+                <img
+                  src={g.thumbnail}
+                  alt={g.thumbnailAlt}
+                  width="640"
+                  height="360"
+                  loading="lazy"
+                  class="aspect-video w-full object-cover"
+                />
+              )}
+              <div class="p-4">
+                <p class="text-foreground/70 text-xs">
+                  {g.category} · {g.readingTime}
+                </p>
+                <h3 class="group-hover:text-primary mt-2 line-clamp-2 font-semibold transition-colors">
+                  {g.title}
+                </h3>
+                <p class="text-foreground/80 mt-2 line-clamp-2 text-sm text-pretty">
+                  {g.description}
+                </p>
+              </div>
             </a>
           ))}
         </div>
-      </div>
+      </section>
     )
   }
 </div>

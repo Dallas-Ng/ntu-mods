@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Check, ChevronDown, Search, X } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
+import { formatShortDate } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
 import { usePathname } from "@/hooks/use-pathname"
@@ -68,13 +69,6 @@ const getSearchText = (article: ArticleListItem) =>
     " "
   )
 
-const formatArticleDate = (date: string) =>
-  new Date(date).toLocaleDateString("en-SG", {
-    day: "numeric",
-    month: "short",
-    year: "numeric"
-  })
-
 function ArticleCard({
   article,
   showCategory,
@@ -97,7 +91,7 @@ function ArticleCard({
       )}
       <div className="p-4">
         <div className="text-foreground/70 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
-          <span>{formatArticleDate(article.date)}</span>
+          <span>{formatShortDate(article.date)}</span>
           <span aria-hidden="true">·</span>
           <span>{article.readingTime}</span>
           {views !== undefined && (
@@ -186,7 +180,7 @@ export default function ArticlesList({
     const value = debouncedSearchQuery.trim()
     if (value === queryParam) return
     updateParams({ q: value || null })
-    if (value) posthog.capture("articles_searched", { search_term: value })
+    if (value) track("articles_searched", { search_term: value })
   }, [debouncedSearchQuery, queryParam, updateParams])
 
   useEffect(() => {
@@ -397,7 +391,7 @@ export default function ArticlesList({
                   onClick={() => {
                     updateParams({ category: value })
                     if (value)
-                      posthog.capture("articles_category_filtered", {
+                      track("articles_category_filtered", {
                         category
                       })
                   }}>

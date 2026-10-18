@@ -11,9 +11,9 @@ import {
   WandIcon,
   XIcon
 } from "lucide-react"
-import posthog from "posthog-js"
 import { Dialog as DialogPrimitive } from "radix-ui"
 
+import { track } from "@/lib/analytics"
 import { COURSE_TYPE } from "@/lib/constants"
 import { customCourseModuleKey } from "@/lib/custom-course-colors"
 import { formatHhmm } from "@/lib/format"
@@ -453,7 +453,7 @@ const SettingsForm = () => {
           disabled={isPristine}
           onClick={() => {
             resetConfig()
-            posthog.capture("timetable_generation_settings_reset", {
+            track("timetable_generation_settings_reset", {
               locked_modules: lockedModules.length,
               blacklisted_slots: config.blacklistedTimeslots.length
             })
@@ -601,7 +601,7 @@ const TimetableGenerationConfig = () => {
     (value: boolean) => {
       setUniqueTimeslotsOnly(value)
       if (hasGenerated) generate(generationConfig, undefined, value)
-      posthog.capture("timetable_generation_unique_toggled", {
+      track("timetable_generation_unique_toggled", {
         unique_only: value,
         regenerated: hasGenerated
       })
@@ -650,7 +650,7 @@ const TimetableGenerationConfig = () => {
           <Button
             onClick={() => {
               generate()
-              posthog.capture("timetable_generation_started", {
+              track("timetable_generation_started", {
                 module_count: Object.keys(timetable).length,
                 unique_only: uniqueTimeslotsOnly,
                 load_preference: generationConfig.loadPreference,

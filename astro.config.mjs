@@ -158,6 +158,13 @@ export default defineConfig({
         "zustand/middleware"
       ]
     },
+    // Source maps for the browser bundles only, so PostHog can show real stack
+    // traces. "hidden" leaves out the sourceMappingURL comment, and
+    // scripts/upload-sourcemaps.mjs deletes the .map files after uploading
+    // them, so they are never served from ntumods.com.
+    environments: {
+      client: { build: { sourcemap: "hidden" } }
+    },
     build: {
       rollupOptions: {
         output: {
@@ -190,6 +197,11 @@ export default defineConfig({
                 return "vendor-forms"
               return "vendor"
             }
+            // track() is imported by the PostHog init script on every page and
+            // by most islands. In the shared "lib" chunk it would make every
+            // page download all of src/lib and src/hooks just to queue events.
+            if (/\/src\/lib\/analytics(-events)?\.ts$/.test(id))
+              return "analytics"
             if (id.includes("/src/components/ui/")) return "ui"
             if (id.includes("/src/hooks/")) return "hooks"
             if (id.includes("/src/state/")) return "state"

@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect } from "react"
-import posthog from "posthog-js"
+
+import { track } from "@/lib/analytics"
 
 interface Props {
   moduleCode: string
@@ -10,7 +11,7 @@ interface Props {
 
 const ModsViewTracker = ({ moduleCode, isCurrentOffering }: Props) => {
   useEffect(() => {
-    posthog.capture("module_viewed", {
+    track("module_viewed", {
       module_code: moduleCode,
       is_current_offering: isCurrentOffering
     })

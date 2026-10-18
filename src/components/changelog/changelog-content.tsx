@@ -6,7 +6,6 @@ import { ArrowUp, Link as LinkIcon } from "lucide-react"
 import {
   CHANGELOG,
   type ChangelogCategory,
-  type ChangelogItem,
   type ChangelogRelease
 } from "@/config/changelog-data"
 import { cn } from "@/lib/utils"

@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { ChevronDown, Heart, LayoutGrid, List } from "lucide-react"
-import posthog from "posthog-js"
 
 import type { AllModule } from "@/types/mods"
+import { track } from "@/lib/analytics"
 import { filterModules, groupModules } from "@/lib/filter-modules"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
@@ -98,13 +98,13 @@ const ModsPage = () => {
     const params = new URLSearchParams(searchParams.toString())
     FILTER_KEYS.forEach((k) => params.delete(k))
     pushSearchParams(pathname, params.toString())
-    posthog.capture("mods_filter_cleared", { filter_type: "all" })
+    track("mods_filter_cleared", { filter_type: "all" })
   }
 
   const setViewMode = useCallback(
     (mode: "cards" | "list") => {
       updateSettings({ modsViewMode: mode })
-      posthog.capture("mods_view_changed", { view: mode })
+      track("mods_view_changed", { view: mode })
     },
     [updateSettings]
   )

@@ -3,9 +3,9 @@
 import { useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { Copy } from "lucide-react"
-import posthog from "posthog-js"
 import { toast } from "sonner"
 
+import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSettings } from "@/hooks/use-settings"
@@ -43,7 +43,7 @@ const TimetableCopyButton = () => {
       // shared link — including when it carries none.
       setCustomCourses(qsCustomCourses ?? [], overrideIndex)
       updateTimetableIndex(overrideIndex)
-      posthog.capture("timetable_copied", {
+      track("timetable_copied", {
         target_plan: overrideIndex + 1,
         module_count: Object.keys(qsTimetable).length,
         custom_block_count: qsCustomCourses?.length ?? 0

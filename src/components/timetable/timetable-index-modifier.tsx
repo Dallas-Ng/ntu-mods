@@ -4,8 +4,8 @@ import { Fragment, useEffect, useRef, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { useIndexHover } from "@/state/index-hover.state"
 import { Check } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { DAY_MAP } from "@/lib/constants"
 import { getIndexType } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
@@ -121,7 +121,7 @@ const TimetableIndexNote = ({
     }
 
     setScope(nextScope)
-    posthog.capture("remark_scope_toggled", {
+    track("remark_scope_toggled", {
       module_code: moduleKey,
       scope: nextScope
     })
@@ -247,7 +247,7 @@ const TimetableIndexModifier = (props: Props) => {
 
   const handleSelect = (val: string) => {
     updateItemIndex(moduleKey, val)
-    posthog.capture("timetable_index_changed", {
+    track("timetable_index_changed", {
       module_code: moduleKey,
       index_key: val
     })

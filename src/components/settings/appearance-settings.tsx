@@ -1,7 +1,6 @@
 "use client"
 
 import { Check, RotateCcw } from "lucide-react"
-import posthog from "posthog-js"
 
 import {
   APPEARANCE_DENSITIES,
@@ -10,6 +9,7 @@ import {
   INDEX_TYPE_COLOR_KEYS,
   TIMETABLE_STYLE_PRESETS
 } from "@/config/appearance-settings"
+import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 
@@ -144,7 +144,7 @@ const AppearanceSettings = () => {
             size="icon"
             onClick={() => {
               updateSettings({ appearance: DEFAULT_APPEARANCE_SETTINGS })
-              posthog.capture("settings_reset")
+              track("settings_reset")
             }}
             aria-label="Reset appearance">
             <RotateCcw className="size-4" />
@@ -192,7 +192,7 @@ const AppearanceSettings = () => {
               updateAppearance({ radius: Number(event.target.value) })
             }
             onMouseUp={(event) =>
-              posthog.capture("settings_appearance_changed", {
+              track("settings_appearance_changed", {
                 setting: "radius",
                 value: Number((event.target as HTMLInputElement).value)
               })
@@ -218,7 +218,7 @@ const AppearanceSettings = () => {
                 updateAppearance({
                   density: v as keyof typeof APPEARANCE_DENSITIES
                 })
-                posthog.capture("settings_appearance_changed", {
+                track("settings_appearance_changed", {
                   setting: "density",
                   value: v
                 })
@@ -248,7 +248,7 @@ const AppearanceSettings = () => {
                 updateAppearance({
                   contrast: v as keyof typeof CONTRAST_PRESETS
                 })
-                posthog.capture("settings_appearance_changed", {
+                track("settings_appearance_changed", {
                   setting: "contrast",
                   value: v
                 })
@@ -281,7 +281,7 @@ const AppearanceSettings = () => {
                   updateAppearance({
                     timetableStyle: key as keyof typeof TIMETABLE_STYLE_PRESETS
                   })
-                  posthog.capture("settings_timetable_style_changed", {
+                  track("settings_timetable_style_changed", {
                     preset_name: key
                   })
                 }}

@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import Header from "@/components/header"
 import { Migration } from "@/components/migration"
 import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile-timetable-modifier-button"
@@ -20,7 +20,7 @@ const TimetablePageContent = () => {
 
   const toggleIndexPicker = () => {
     setIndexPickerEnabled((v) => {
-      posthog.capture("index_picker_toggled", { enabled: !v })
+      track("index_picker_toggled", { enabled: !v })
       return !v
     })
   }

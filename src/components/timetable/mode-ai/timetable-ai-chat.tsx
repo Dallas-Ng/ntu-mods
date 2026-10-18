@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { RefreshCwIcon, SendIcon, WandIcon } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { TIMETABLE_AI_SYSTEM_PROMPT } from "@/lib/timetable-ai-system-prompt"
 import { useAllModules } from "@/hooks/use-all-modules"
@@ -166,7 +166,7 @@ const TimetableAiChat = () => {
   const sendMessage = async () => {
     if (!input.trim() || isChatting) return
 
-    posthog.capture("ai_message_sent", {
+    track("ai_message_sent", {
       message_count: messages.length + 1,
       module_count: Object.keys(timetable).length
     })
@@ -249,7 +249,7 @@ const TimetableAiChat = () => {
 
   const handleGenerate = () => {
     if (!pendingConfig) return
-    posthog.capture("ai_timetable_generated", {
+    track("ai_timetable_generated", {
       module_count: Object.keys(timetable).length,
       preferred_free_days: pendingConfig.preferredFreeDays?.length ?? 0
     })
@@ -259,7 +259,7 @@ const TimetableAiChat = () => {
   }
 
   const handleReset = () => {
-    posthog.capture("ai_chat_reset", {
+    track("ai_chat_reset", {
       messages_count: messages.length,
       had_pending_config: pendingConfig !== null
     })

@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro"
 import { env, waitUntil } from "cloudflare:workers"
 
+import type { AnalyticsEvent } from "@/lib/analytics-events"
 import { createPostHogClient } from "@/lib/posthog-server"
 
 export const prerender = false
@@ -92,7 +93,7 @@ export const POST: APIRoute = async ({ request }) => {
     const posthog = createPostHogClient(PUBLIC_POSTHOG_TOKEN)
     posthog.capture({
       distinctId: posthogDistinctId || authorLine || "anonymous",
-      event: "feedback_submitted",
+      event: "feedback_submitted" satisfies AnalyticsEvent,
       properties: {
         has_email: !!authorLine && authorLine !== "anon",
         feedback_length: feedback.length,

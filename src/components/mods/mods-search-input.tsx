@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Search } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
 import { useModsSearchParams } from "@/hooks/use-mods-search-params"
@@ -19,7 +19,7 @@ const ModsSearchInput = ({ paramsValue }: { paramsValue: string }) => {
   useEffect(() => {
     setValue(dbSearchTerm)
     if (dbSearchTerm.length > 0) {
-      posthog.capture("mod_searched", { search_term: dbSearchTerm })
+      track("mod_searched", { search_term: dbSearchTerm })
     }
   }, [dbSearchTerm, setValue])
 

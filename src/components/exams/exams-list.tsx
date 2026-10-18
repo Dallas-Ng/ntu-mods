@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react"
 import { Search } from "lucide-react"
-import posthog from "posthog-js"
 
+import { track } from "@/lib/analytics"
 import { CODE_QUERY_RE } from "@/lib/filter-modules"
 import type { DbExam } from "@/lib/server/db/types"
 import { useDebounce } from "@/hooks/use-debounce"
@@ -181,7 +181,7 @@ export default function ExamsList({ exams }: Props) {
 
   useEffect(() => {
     const q = debouncedSearch.trim()
-    if (q) posthog.capture("exams_searched", { search_term: q })
+    if (q) track("exams_searched", { search_term: q })
   }, [debouncedSearch])
 
   const filtered = useMemo(() => {
@@ -232,7 +232,7 @@ export default function ExamsList({ exams }: Props) {
           value={groupBy}
           onValueChange={(v) => {
             setGroupBy(v as GroupBy)
-            posthog.capture("exams_grouped", { group_by: v })
+            track("exams_grouped", { group_by: v })
           }}>
           <SelectTrigger aria-label="Group exams" className="w-full sm:w-44">
             <SelectValue />

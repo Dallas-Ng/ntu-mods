@@ -19,6 +19,8 @@ function fetchSeasonExams(
 
   const promise = fetch(`/data/api/exams/${key}.json`)
     .then((res) => {
+      // 404: this semester has no file yet. Empty, not an error.
+      if (res.status === 404) return {}
       if (!res.ok) throw new Error(`exams ${res.status}`)
       return res.json()
     })

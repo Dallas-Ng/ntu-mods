@@ -24,6 +24,8 @@ const TimetableOverview = () => {
       signal: controller.signal
     })
       .then((res) => {
+        // 404: exam timetable not published yet. Empty, not an error.
+        if (res.status === 404) return {}
         if (!res.ok) throw new Error(`exams ${res.status}`)
         return res.json()
       })

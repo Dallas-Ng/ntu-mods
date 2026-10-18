@@ -19,6 +19,8 @@ function fetchSeasonIndexes(
 
   const promise = fetch(`/data/api/indexes/${key}.json`)
     .then((res) => {
+      // 404: this semester has no file yet. Empty, not an error.
+      if (res.status === 404) return {}
       if (!res.ok) throw new Error(`indexes ${res.status}`)
       return res.json()
     })

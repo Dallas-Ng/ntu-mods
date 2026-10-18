@@ -54,7 +54,10 @@ function cleanAssistantContent(text: string): string {
   return stripRoleLabels(stripCodeBlocks(text))
 }
 
-function extractConfig(text: string): GenerationConfig | null {
+function extractConfig(
+  text: string,
+  onParseError?: (errorName: string) => void
+): GenerationConfig | null {
   const match = text.match(JSON_BLOCK_REGEX)
   if (!match) return null
   try {
@@ -78,7 +81,7 @@ function extractConfig(text: string): GenerationConfig | null {
       avoidBackToBackTypes: config.avoidBackToBackTypes ?? []
     }
   } catch (e) {
-    reportError("ai_config_parse", e)
+    onParseError?.(e instanceof Error ? e.name : "unknown")
     return null
   }
 }
@@ -219,6 +222,7 @@ const TimetableAiChat = () => {
 
     let full = ""
     let detectedConfig: GenerationConfig | null = null
+    let reportedParseError = false
 
     await chat(
       apiMessages,
@@ -233,7 +237,16 @@ const TimetableAiChat = () => {
           return prev
         })
 
-        const config = extractConfig(full)
+        // Once a config is found stop re-parsing, and report a bad block once
+        // per reply. Only the error name is sent: a SyntaxError message can
+        // quote the model output.
+        const config =
+          detectedConfig ??
+          extractConfig(full, (name) => {
+            if (reportedParseError) return
+            reportedParseError = true
+            reportError("ai_config_parse", new Error(`AI config ${name}`))
+          })
         if (config && !detectedConfig) {
           detectedConfig = config
         }

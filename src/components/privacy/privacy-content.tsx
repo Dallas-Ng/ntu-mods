@@ -165,13 +165,50 @@ const PrivacyContent = () => {
         </p>
 
         <h3 className="text-foreground mt-4 text-base font-semibold">
+          Public API and Open Data
+        </h3>
+
+        <p>
+          The{" "}
+          <a
+            href="/developers"
+            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+            developers page
+          </a>{" "}
+          documents a free, read-only API and open data files with NTU module,
+          class index and exam data. They contain no personal data, and we do
+          not ask callers for an account or an API key. To limit abuse, we count
+          requests to the API per IP address using Cloudflare&apos;s rate
+          limiting. We do not store those addresses or counts in our own
+          database. The &quot;Try it&quot; box on that page only sends a request
+          to our own API, with the module code you type.
+        </p>
+
+        <h3 className="text-foreground mt-4 text-base font-semibold">
+          AI Assistants (WebMCP, Developer Preview)
+        </h3>
+
+        <p>
+          In a browser that supports WebMCP, an AI assistant you use can call
+          tools that NTUMods offers on the page, such as searching modules or
+          reading and changing your saved timetables, favourites and settings.
+          These tools run in your browser on the data stored there. They do not
+          send your plans to our servers. The assistant itself is a separate
+          service: what it reads, and what you tell it, is handled by its
+          provider under that provider&apos;s own privacy policy, which we do
+          not control. This is an early developer preview, and most visitors
+          will not see any change.
+        </p>
+
+        <h3 className="text-foreground mt-4 text-base font-semibold">
           Usage Data
         </h3>
 
         <p>
           Like most web services, our hosting provider (Cloudflare) may
           automatically collect standard server logs, including IP addresses and
-          request metadata, for operational and security purposes.
+          request metadata, for operational and security purposes. This includes
+          requests to the public API and open data files.
         </p>
       </section>
 
@@ -233,6 +270,10 @@ const PrivacyContent = () => {
           <li>
             <strong>Analytics data</strong>: retained according to the retention
             settings of Google Analytics and PostHog for our account.
+          </li>
+          <li>
+            <strong>Server logs</strong>: retained according to the log settings
+            of our hosting provider (Cloudflare) for our account.
           </li>
         </ul>
       </section>

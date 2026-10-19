@@ -3,6 +3,9 @@ import { siteConfig } from "@/config/site"
 import { webPageJsonLd } from "@/lib/json-ld"
 import { buildOpenApi } from "@/lib/openapi"
 import { getLatestExamSemester, getLatestSemester } from "@/lib/server/db/repo"
+import ArticleToc, {
+  MobileSectionDropdown
+} from "@/components/articles/article-toc"
 import ApiExplorer from "@/components/developers/api-explorer"
 import type { ApiGroup } from "@/components/developers/api-explorer"
 import JsonLd from "@/astro/components/JsonLd.astro"
@@ -169,103 +172,151 @@ const jsonLd = webPageJsonLd({
 })
 
 const link = "text-primary underline underline-offset-2"
+
+// Sections for the side nav. The explorer's group ids come from the group names.
+const slug = (name: string) => name.toLowerCase().replace(/\s+/g, "-")
+const headings = [
+  { id: "terms", depth: 2, text: "Terms of use" },
+  { id: "basics", depth: 2, text: "Basics" },
+  { id: "practices", depth: 2, text: "Best practices" },
+  ...groups.map((g) => ({
+    id: slug(g.name),
+    depth: 2,
+    text: g.name,
+    count: g.ops.length
+  })),
+  { id: "webmcp", depth: 2, text: "AI assistants and WebMCP" }
+]
 ---
 
-<BaseLayout
-  title={title}
-  description={desc}
-  canonical="/developers"
-  size="md"
-  containerClassName="space-y-8">
+<BaseLayout title={title} description={desc} canonical="/developers" size="md">
   <JsonLd data={jsonLd} />
 
-  <div class="space-y-3">
-    <h1 class="text-3xl leading-[1] font-semibold">Developers</h1>
-    <p class="text-foreground/80 text-sm">
-      A free, read-only API and open data for NTU modules, class indexes and
-      exams. Built for student projects and AI tools.
-    </p>
-  </div>
+  <MobileSectionDropdown client:idle headings={headings} />
 
-  <section
-    class="prose dark:prose-invert max-w-none [&_blockquote]:text-sm! [&_blockquote_p>strong:first-child]:text-sm!"
-    aria-labelledby="terms">
-    <blockquote>
-      <p id="terms"><strong>Terms of use (no opt out)</strong></p>
-      <p>
-        By using any API or file on this page, you accept these terms. There is
-        no opt out. If you do not accept them, do not use the APIs.
-      </p>
-      <ul class="marker:text-foreground">
-        <li>
-          You use these APIs entirely at your own risk. The owner of NTUMods is
-          not responsible for, and is not implicated in, anything you build or
-          do with them.
-        </li>
-        <li>
-          The owner can change, restrict or remove any API, dataset or response
-          format at any time, without notice.
-        </li>
-      </ul>
-    </blockquote>
-  </section>
+  <div class="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem] [&>*]:min-w-0">
+    <div class="space-y-8">
+      <div class="space-y-3">
+        <h1 class="text-3xl leading-[1] font-semibold">Developers</h1>
+        <p class="text-foreground/80 text-sm">
+          A free, read-only API and open data for NTU modules, class indexes and
+          exams. Built for student projects and AI tools.
+        </p>
+      </div>
 
-  <section class="space-y-3" aria-labelledby="basics">
-    <h2 id="basics" class="text-lg font-semibold tracking-tight">Basics</h2>
-    <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
-      <li>
-        Free to use. No API key and no sign-up. Every endpoint is a plain <code
-          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">GET</code
-        >.
-      </li>
-      <li>
-        The data is NTU public course data. It can be out of date or wrong, so
-        always check STARS before you rely on it.
-      </li>
-      <li>
-        A machine-readable <a class={link} href="/developers/openapi.json"
-          >OpenAPI 3.1 file</a
-        > is available.
-      </li>
-    </ul>
-  </section>
+      <section class="space-y-3" aria-labelledby="terms">
+        <h2
+          id="terms"
+          class="group scroll-mt-28 text-lg font-semibold tracking-tight">
+          Terms of use (no opt out)
+          <a
+            href="#terms"
+            class="text-foreground/50 hover:text-foreground ml-1 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+            aria-label="Link to Terms of use (no opt out)">#</a
+          >
+        </h2>
+        <div class="bg-primary/10 space-y-3 rounded-2xl p-5 text-sm">
+          <p>
+            By using any API or file on this page, you accept these terms. There
+            is no opt out. If you do not accept them, do not use the APIs.
+          </p>
+          <ul class="list-disc space-y-1.5 pl-5">
+            <li>
+              You use these APIs entirely at your own risk. The owner of NTUMods
+              is not responsible for, and is not implicated in, anything you
+              build or do with them.
+            </li>
+            <li>
+              The owner can change, restrict or remove any API, dataset or
+              response format at any time, without notice.
+            </li>
+          </ul>
+        </div>
+      </section>
 
-  <section class="space-y-3" aria-labelledby="practices">
-    <h2 id="practices" class="text-lg font-semibold tracking-tight">
-      Best practices
-    </h2>
-    <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
-      {
-        practices.map(([lead, body]) => (
+      <section class="space-y-3" aria-labelledby="basics">
+        <h2
+          id="basics"
+          class="group scroll-mt-28 text-lg font-semibold tracking-tight">
+          Basics
+          <a
+            href="#basics"
+            class="text-foreground/50 hover:text-foreground ml-1 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+            aria-label="Link to Basics">#</a
+          >
+        </h2>
+        <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
           <li>
-            <Fragment
-              set:html={`${lead} ${body}`.replace(
-                /`([^`]+)`/g,
-                '<code class="bg-muted text-foreground rounded px-1 py-0.5 font-mono text-sm">$1</code>'
-              )}
-            />
+            Free to use. No API key and no sign-up. Every endpoint is a plain <code
+              class="bg-muted rounded px-1 py-0.5 font-mono text-sm">GET</code
+            >.
           </li>
-        ))
-      }
-    </ul>
-  </section>
+          <li>
+            The data is NTU public course data. It can be out of date or wrong,
+            so always check STARS before you rely on it.
+          </li>
+          <li>
+            A machine-readable <a class={link} href="/developers/openapi.json"
+              >OpenAPI 3.1 file</a
+            > is available.
+          </li>
+        </ul>
+      </section>
 
-  <div>
-    <ApiExplorer client:load groups={groups} />
+      <section class="space-y-3" aria-labelledby="practices">
+        <h2
+          id="practices"
+          class="group scroll-mt-28 text-lg font-semibold tracking-tight">
+          Best practices
+          <a
+            href="#practices"
+            class="text-foreground/50 hover:text-foreground ml-1 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+            aria-label="Link to Best practices">#</a
+          >
+        </h2>
+        <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
+          {
+            practices.map(([lead, body]) => (
+              <li>
+                <Fragment
+                  set:html={`${lead} ${body}`.replace(
+                    /`([^`]+)`/g,
+                    '<code class="bg-muted text-foreground rounded px-1 py-0.5 font-mono text-sm">$1</code>'
+                  )}
+                />
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <div>
+        <ApiExplorer client:load groups={groups} />
+      </div>
+
+      <section class="space-y-3" aria-labelledby="webmcp">
+        <h2
+          id="webmcp"
+          class="group scroll-mt-28 text-lg font-semibold tracking-tight">
+          AI assistants and WebMCP
+          <a
+            href="#webmcp"
+            class="text-foreground/50 hover:text-foreground ml-1 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+            aria-label="Link to AI assistants and WebMCP">#</a
+          >
+        </h2>
+        <p class="text-foreground/80 text-sm">
+          NTUMods also offers its tools to browser AI assistants through WebMCP.
+          This is an early developer preview. The standard is still a draft and
+          support is limited, so treat it as something to test, not to build on.
+          The discovery files above list what is available. For setup steps,
+          read the <a class={link} href="/articles/ntu-ai-agents-webmcp-guide"
+            >WebMCP guide</a
+          >.
+        </p>
+      </section>
+    </div>
+
+    <ArticleToc client:idle headings={headings} />
   </div>
-
-  <section class="space-y-3" aria-labelledby="webmcp">
-    <h2 id="webmcp" class="text-lg font-semibold tracking-tight">
-      AI assistants and WebMCP
-    </h2>
-    <p class="text-foreground/80 text-sm">
-      NTUMods also offers its tools to browser AI assistants through WebMCP.
-      This is an early developer preview. The standard is still a draft and
-      support is limited, so treat it as something to test, not to build on. The
-      discovery files above list what is available. For setup steps, read the <a
-        class={link}
-        href="/articles/ntu-ai-agents-webmcp-guide">WebMCP guide</a
-      >.
-    </p>
-  </section>
 </BaseLayout>

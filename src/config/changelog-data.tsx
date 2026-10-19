@@ -62,6 +62,15 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
             data, with a try-it box and an OpenAPI file for student projects.
           </>
         )
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            The <ChangelogLink href="/privacy">privacy policy</ChangelogLink>{" "}
+            now covers the public API and AI assistants that use WebMCP.
+          </>
+        )
       }
     ]
   },

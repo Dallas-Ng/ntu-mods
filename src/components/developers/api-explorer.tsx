@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect, useState } from "react"
+
 import {
   Accordion,
   AccordionContent,
@@ -191,50 +193,86 @@ const Operation = ({ op }: { op: ApiOp }) => {
   )
 }
 
-const ApiExplorer = ({ groups }: { groups: ApiGroup[] }) => (
-  <div className="space-y-8">
-    {groups.map((g) => (
-      <section key={g.name} className="space-y-3">
-        <div className="space-y-1">
-          <h2 className="text-lg font-semibold tracking-tight">{g.name}</h2>
-          {g.description && (
-            <p className="text-foreground/80 text-sm">{g.description}</p>
-          )}
-        </div>
-        <Accordion type="multiple" className="space-y-2">
-          {g.ops.map((op) => (
-            <AccordionItem
-              key={op.id}
-              value={op.id}
-              className="rounded-xl border px-4 last:border-b">
-              <AccordionTrigger className="items-center py-3 hover:no-underline">
-                <span className="flex min-w-0 flex-1 flex-col gap-1">
-                  <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                    <span className="bg-primary text-primary-foreground shrink-0 rounded-md px-2 py-0.5 text-sm font-semibold">
-                      GET
+const slug = (name: string) => name.toLowerCase().replace(/\s+/g, "-")
+
+const ApiExplorer = ({ groups }: { groups: ApiGroup[] }) => {
+  const [open, setOpen] = useState<string[]>([])
+
+  // A link like /developers#getModule opens that endpoint and scrolls to it.
+  useEffect(() => {
+    const openFromHash = () => {
+      const id = window.location.hash.slice(1)
+      if (!groups.some((g) => g.ops.some((op) => op.id === id))) return
+      setOpen((prev) => (prev.includes(id) ? prev : [...prev, id]))
+      requestAnimationFrame(() =>
+        document.getElementById(id)?.scrollIntoView({ block: "start" })
+      )
+    }
+    openFromHash()
+    window.addEventListener("hashchange", openFromHash)
+    return () => window.removeEventListener("hashchange", openFromHash)
+  }, [groups])
+
+  return (
+    <div className="space-y-8">
+      {groups.map((g) => (
+        <section key={g.name} className="space-y-3">
+          <div className="space-y-1">
+            <h2
+              id={slug(g.name)}
+              className="group scroll-mt-28 text-lg font-semibold tracking-tight">
+              {g.name}
+              <a
+                href={`#${slug(g.name)}`}
+                aria-label={`Link to ${g.name}`}
+                className="text-foreground/50 hover:text-foreground ml-1 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100">
+                #
+              </a>
+            </h2>
+            {g.description && (
+              <p className="text-foreground/80 text-sm">{g.description}</p>
+            )}
+          </div>
+          <Accordion
+            type="multiple"
+            value={open}
+            onValueChange={setOpen}
+            className="space-y-2">
+            {g.ops.map((op) => (
+              <AccordionItem
+                key={op.id}
+                value={op.id}
+                id={op.id}
+                className="scroll-mt-28 rounded-xl border px-4 last:border-b">
+                <AccordionTrigger className="items-center py-3 hover:no-underline">
+                  <span className="flex min-w-0 flex-1 flex-col gap-1">
+                    <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                      <span className="bg-primary text-primary-foreground shrink-0 rounded-md px-2 py-0.5 text-sm font-semibold">
+                        GET
+                      </span>
+                      <code className="text-sm font-semibold break-all">
+                        {op.path}
+                      </code>
                     </span>
-                    <code className="text-sm font-semibold break-all">
-                      {op.path}
-                    </code>
-                  </span>
-                  <span className="text-foreground/80 text-sm font-normal">
-                    {op.summary}
-                    <span className="text-foreground/60">
-                      {" "}
-                      · Last updated {op.updated}
+                    <span className="text-foreground/80 text-sm font-normal">
+                      {op.summary}
+                      <span className="text-foreground/60">
+                        {" "}
+                        · Last updated {op.updated}
+                      </span>
                     </span>
                   </span>
-                </span>
-              </AccordionTrigger>
-              <AccordionContent>
-                <Operation op={op} />
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </section>
-    ))}
-  </div>
-)
+                </AccordionTrigger>
+                <AccordionContent>
+                  <Operation op={op} />
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </section>
+      ))}
+    </div>
+  )
+}
 
 export default ApiExplorer

@@ -9,6 +9,8 @@ import {
   type ChangelogRelease
 } from "@/config/changelog-data"
 import { cn } from "@/lib/utils"
+import { UNSEEN_CHANGELOG_IDS } from "@/hooks/use-changelog-unseen"
+import { useHydrated } from "@/hooks/use-hydrated"
 import ArticleToc, {
   MobileSectionDropdown
 } from "@/components/articles/article-toc"
@@ -103,16 +105,23 @@ const getReleaseSlug = ({ title, date }: ChangelogRelease) => {
 }
 
 const ChangelogReleaseSection = ({
-  release
+  release,
+  isUnseen
 }: {
   release: ChangelogRelease
+  isUnseen: boolean
 }) => {
   const slug = getReleaseSlug(release)
 
   return (
     <section
       id={slug}
-      className="bg-muted scroll-mt-32 rounded-2xl p-5 md:p-6 lg:scroll-mt-20">
+      className="bg-muted relative scroll-mt-32 rounded-2xl p-5 md:p-6 lg:scroll-mt-20">
+      {isUnseen && (
+        <span className="absolute top-4 right-4 rounded-full bg-yellow-400 px-2 py-0.5 text-[10px] font-semibold text-black md:top-6 md:right-6">
+          New
+        </span>
+      )}
       <p className="text-foreground/75 text-sm">{release.date}</p>
       <h2 className="mt-1 text-xl font-semibold">
         <a
@@ -166,6 +175,8 @@ const getQuarter = (date: string) => {
 
 const ChangelogContent = () => {
   const [activeFilter, setActiveFilter] = useState<ChangelogFilter>("All")
+  // Unseen state is client-only, so the badges wait for hydration to avoid a mismatch.
+  const hydrated = useHydrated()
 
   // Memoised so the section nav gets a stable `headings` between renders and
   // does not re-attach its scroll listeners on every filter click.
@@ -236,7 +247,11 @@ const ChangelogContent = () => {
                 </h2>
 
                 {releases.map((release) => (
-                  <ChangelogReleaseSection key={release.id} release={release} />
+                  <ChangelogReleaseSection
+                    key={release.id}
+                    release={release}
+                    isUnseen={hydrated && UNSEEN_CHANGELOG_IDS.has(release.id)}
+                  />
                 ))}
               </section>
             ))}

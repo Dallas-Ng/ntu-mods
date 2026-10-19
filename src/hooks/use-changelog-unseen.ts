@@ -10,12 +10,23 @@ import { usePathname } from "./use-pathname"
 const SEEN_KEY = "changelog-last-seen"
 const SEEN_EVENT = "ntumods:changelog-seen"
 
-const computeUnseen = (): number => {
-  const seenId = localStorage.getItem(SEEN_KEY)
+const countUnseen = (seenId: string | null): number => {
   if (seenId === null) return CHANGELOG_IDS.length
   const idx = CHANGELOG_IDS.indexOf(seenId)
   return idx === -1 ? CHANGELOG_IDS.length : idx
 }
+
+const computeUnseen = (): number => countUnseen(localStorage.getItem(SEEN_KEY))
+
+// Read once at module load, before any effect marks the changelog as seen,
+// so the changelog page can still flag the releases that were new on arrival.
+// Full page loads only (no client router), so this is fresh per visit.
+const seenIdOnLoad =
+  typeof window === "undefined" ? null : localStorage.getItem(SEEN_KEY)
+
+export const UNSEEN_CHANGELOG_IDS = new Set(
+  CHANGELOG_IDS.slice(0, countUnseen(seenIdOnLoad))
+)
 
 export function useChangelogUnseenCount() {
   const hydrated = useHydrated()

@@ -49,6 +49,40 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Campus map",
+    date: "20 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            New <ChangelogLink href="/maps">campus map</ChangelogLink>. Search
+            any lecture theatre, tutorial room, hall or canteen, see which level
+            it is on with indoor floor plans from Basement 7 to Level 9, and get
+            walking directions with times between classes. Switch between
+            standard, hybrid and satellite views, browse halls, food, bus stops,
+            car parks and toilets, and share a link that opens the exact view.
+            Guide:{" "}
+            <ChangelogLink href="/articles/ntu-campus-map-guide">
+              NTU Campus Map: Find Any Lecture Theatre, Room and Walking Route
+            </ChangelogLink>
+            .
+          </>
+        )
+      },
+      {
+        category: "Data",
+        content: (
+          <>
+            Venues from the last two semesters are matched to rooms using the
+            official facilities list and room codes. A few are matched by name
+            only and are marked as approximate on the map.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Developers page",
     date: "19 Oct 2026",
     items: [

@@ -1,0 +1,108 @@
+---
+import { ArrowRight } from "lucide-react"
+
+import MapsPageContent from "@/components/map/maps-page-content"
+import MapGuide from "@/astro/components/MapGuide.astro"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
+
+const CREDITS = [
+  {
+    label: "Buildings and rooms",
+    text: "NTU Maps",
+    href: "https://maps.ntu.edu.sg/",
+    note: "powered by MazeMap"
+  },
+  {
+    label: "Roads and greenery",
+    text: "OpenStreetMap contributors",
+    href: "https://www.openstreetmap.org/copyright",
+    prefix: "© "
+  },
+  { label: "Satellite imagery", text: "Esri, Maxar, Earthstar Geographics" }
+]
+---
+
+<BaseLayout
+  title="NTU Campus Map"
+  description="Find any NTU lecture theatre, tutorial room, hall or canteen, see which level it is on, and get walking directions with times."
+  canonical="/maps">
+  <MapsPageContent client:load />
+
+  <MapGuide />
+
+  <a
+    href="/articles/ntu-campus-map-guide"
+    class="bg-card hover:bg-accent group mx-auto mt-12 flex max-w-3xl flex-col overflow-hidden rounded-xl border transition-colors sm:flex-row">
+    <div class="bg-muted/50 sm:w-80 sm:shrink-0">
+      <img
+        src="/articles/ntu-campus-map-guide/overview.webp"
+        alt="The NTUMods campus map with search, category chips and a side panel"
+        width="2040"
+        height="1038"
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full object-cover object-left-top dark:hidden"
+      />
+      <img
+        src="/articles/ntu-campus-map-guide/overview-dark.webp"
+        alt="The NTUMods campus map with search, category chips and a side panel"
+        width="2040"
+        height="1038"
+        loading="lazy"
+        decoding="async"
+        class="hidden h-full w-full object-cover object-left-top dark:block"
+      />
+    </div>
+    <div class="flex flex-col justify-center gap-2 p-5">
+      <p class="text-muted-foreground text-xs font-medium">Guide</p>
+      <h2 class="text-lg leading-snug font-semibold tracking-tight">
+        NTU Campus Map: Find Any Lecture Theatre, Room and Walking Route
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Never be late to a lecture again. Learn how to find any lecture theatre
+        or tutorial room, read NTU room codes, pick the right level and time
+        the walk between back-to-back classes, with screenshots of every step.
+      </p>
+      <span
+        class="text-primary mt-1 inline-flex items-center gap-1 text-sm font-medium">
+        Read the guide
+        <ArrowRight
+          className="size-4 transition-transform duration-150 group-hover:translate-x-0.5"
+        />
+      </span>
+    </div>
+  </a>
+
+  <footer class="text-muted-foreground mt-12 space-y-3 border-t pt-5 text-xs">
+    <dl class="grid gap-x-8 gap-y-1.5 sm:grid-cols-[auto_1fr]">
+      {
+        CREDITS.map(({ label, text, href, note, prefix }) => (
+          <>
+            <dt class="text-foreground/80 font-medium">{label}</dt>
+            <dd>
+              {prefix}
+              {href ? (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="hover:text-foreground underline underline-offset-2 transition-colors">
+                  {text}
+                </a>
+              ) : (
+                text
+              )}
+              {note && `, ${note}`}
+            </dd>
+          </>
+        ))
+      }
+    </dl>
+    <p class="leading-relaxed">
+      Venues are matched to rooms by name, so a few pins may be approximate.
+      Walking times are estimates.
+    </p>
+  </footer>
+</BaseLayout>

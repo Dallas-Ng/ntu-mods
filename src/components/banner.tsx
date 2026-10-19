@@ -69,6 +69,13 @@ export const Banner = {
       </BannerWrapper>
     </a>
   ),
+  campusMap: () => (
+    <a href="/maps">
+      <BannerWrapper divClass="bg-yellow-300">
+        New: campus map with indoor floor plans and walking times →
+      </BannerWrapper>
+    </a>
+  ),
   ay2026s2: () => (
     <a href="/articles/ntu-ay2026-semester-2-whats-new">
       <BannerWrapper divClass="bg-yellow-300">

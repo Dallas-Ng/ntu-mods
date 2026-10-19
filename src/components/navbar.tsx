@@ -83,6 +83,7 @@ const Navbar = () => {
                   i === 3 && "hidden min-[520px]:flex",
                   i === 4 && "hidden min-[640px]:flex",
                   i === 5 && "hidden min-[700px]:flex",
+                  i === 6 && "hidden min-[760px]:flex",
                   pathname.includes(link.route)
                     ? "text-foreground"
                     : "text-muted-foreground"
@@ -92,6 +93,13 @@ const Navbar = () => {
                   <NewDot
                     storageKey="seen-tools"
                     triggerRoute="/tools"
+                    className="absolute top-0 right-0 hidden h-2 w-2 md:flex"
+                  />
+                )}
+                {link.route === "/maps" && (
+                  <NewDot
+                    storageKey="seen-maps"
+                    triggerRoute="/maps"
                     className="absolute top-0 right-0 hidden h-2 w-2 md:flex"
                   />
                 )}

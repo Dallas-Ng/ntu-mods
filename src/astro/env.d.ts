@@ -36,6 +36,7 @@ interface WorkerEnv {
   MODULE_API_LIMITER?: RateLimiter
   FEEDBACK_LIMITER?: RateLimiter
   VIEWS_LIMITER?: RateLimiter
+  WALK_LIMITER?: RateLimiter
   PUBLIC_POSTHOG_TOKEN?: string
 }
 

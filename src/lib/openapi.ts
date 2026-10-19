@@ -390,8 +390,8 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
         Module: {
           type: "object",
           properties: {
-            code: { type: "string" },
-            title: { type: "string" },
+            code: { type: "string", description: "Module code." },
+            title: { type: "string", description: "Module title." },
             au: { type: "number", description: "Academic units." },
             description: nullable("string", "Course description."),
             gradeType: nullable("string", "Grading scheme, when stated."),
@@ -450,9 +450,18 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
             latestOffering: {
               type: "object",
               properties: {
-                year: { type: "string" },
-                semester: { type: "string" },
-                isCurrentSemester: { type: "boolean" },
+                year: {
+                  type: "string",
+                  description: "Academic year, such as `2025`."
+                },
+                semester: {
+                  type: "string",
+                  description: "`1`, `2` or `S` (special term)."
+                },
+                isCurrentSemester: {
+                  type: "boolean",
+                  description: "True if that is the latest semester."
+                },
                 indexCount: {
                   type: "integer",
                   description: "Number of class indexes in that semester."
@@ -554,7 +563,10 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
               description: "`LEC`, `TUT`, `LAB`, `SEM` and so on."
             },
             group: { type: "string" },
-            day: { type: "integer", description: "1 Monday to 6 Saturday." },
+            day: {
+              type: "integer",
+              description: "Day of the week, `1` Monday to `6` Saturday."
+            },
             time: {
               type: "string",
               description: "`HHMM-HHMM`, 24 hour clock."

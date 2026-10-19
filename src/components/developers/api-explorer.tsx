@@ -117,25 +117,33 @@ const Operation = ({ op }: { op: ApiOp }) => {
                 <Rich text={op.fieldsNote} />
               </p>
             )}
-            <ul>
-              {op.fields.map(([name, type, description]) => (
-                <li
-                  key={name}
-                  className="space-y-0.5 border-t py-2 text-sm first:border-t-0">
-                  <div className="flex flex-wrap items-baseline gap-x-2">
-                    <code className="text-xs font-semibold break-all">
-                      {name}
-                    </code>
-                    <code className="text-foreground/70 text-xs">{type}</code>
-                  </div>
-                  {description && (
-                    <p className="text-foreground/80">
-                      <Rich text={description} />
-                    </p>
-                  )}
-                </li>
-              ))}
-            </ul>
+            <div className="overflow-hidden rounded-lg border">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-muted text-xs">
+                  <tr>
+                    <th className="w-2/5 px-3 py-2 font-semibold">Field</th>
+                    <th className="px-3 py-2 font-semibold">Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {op.fields.map(([name, type, description]) => (
+                    <tr key={name} className="border-t align-top">
+                      <td className="px-3 py-2">
+                        <code className="text-xs font-semibold break-all">
+                          {name}
+                        </code>
+                        <div className="text-foreground/70 font-mono text-xs break-all">
+                          {type}
+                        </div>
+                      </td>
+                      <td className="text-foreground/80 px-3 py-2">
+                        <Rich text={description} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </TabsContent>
         )}
         <TabsContent value="example" className="space-y-3">

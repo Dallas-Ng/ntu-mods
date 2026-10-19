@@ -7,7 +7,10 @@
 // The tag ran under next/script's `lazyOnload` before the migration —
 // injected after the window load event, so it never competes with hydration
 // or LCP. Plain inline tags run during parse instead, which is a real
-// regression on mobile, so the deferral is reproduced by hand here.
+// regression on mobile, so the deferral is reproduced by hand here. It waits
+// for the first interaction or 4 s after load, whichever comes first: the
+// 176 KB script costs ~100 ms of main thread even when idle-scheduled.
+// Visitors who leave within 4 s without touching the page are not counted.
 const GA_ID = "G-70VD9Q58Y0"
 ---
 
@@ -28,9 +31,22 @@ const GA_ID = "G-70VD9Q58Y0"
       gtag("config", GA_ID)
     }
 
+    var events = ["pointerdown", "keydown", "scroll", "touchstart"]
+    var done = false
+    function once() {
+      if (done) return
+      done = true
+      events.forEach(function (e) {
+        window.removeEventListener(e, once)
+      })
+      load()
+    }
+
     function schedule() {
-      if (typeof requestIdleCallback === "function") requestIdleCallback(load)
-      else setTimeout(load, 0)
+      events.forEach(function (e) {
+        window.addEventListener(e, once, { passive: true, once: true })
+      })
+      setTimeout(once, 4000)
     }
 
     if (document.readyState === "complete") schedule()

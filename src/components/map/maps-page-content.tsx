@@ -1,10 +1,18 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react"
 import {
   ArrowDownUp,
   ArrowLeft,
   ArrowUpDown,
+  Check,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -107,7 +115,10 @@ const polyMetres = (data: VenueData, pts: number[]) => {
   return Math.round(m / 5) * 5
 }
 
-/** Share the current view: the phone's share sheet where there is one, else copy. */
+/**
+ * Share the current view: the phone's share sheet where there is one, else
+ * copy. Resolves true once the link was shared or copied.
+ */
 const shareLink = async (title: string, view: string) => {
   const url = window.location.href
   if (
@@ -117,32 +128,68 @@ const shareLink = async (title: string, view: string) => {
     try {
       await navigator.share({ title, url })
       track("map_shared", { method: "native", view })
-      return
+      return true
     } catch (e) {
-      if ((e as Error).name === "AbortError") return
+      if ((e as Error).name === "AbortError") return false
     }
   }
   try {
     await navigator.clipboard.writeText(url)
     toast.success("Link copied")
     track("map_shared", { method: "copy", view })
+    return true
   } catch {
     toast.error("Could not copy the link")
     track("map_shared", { method: "failed", view })
+    return false
   }
 }
 
-/** Small round share button for panel headers. */
-const HeaderShare = ({ title, view }: { title: string; view: string }) => (
-  <button
-    type="button"
-    aria-label="Share this view"
-    title="Share this view"
-    onClick={() => shareLink(title, view)}
-    className="hover:bg-accent flex size-8 cursor-pointer items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
-    <Share2 className="size-4" />
-  </button>
+/** shareLink plus a flag that stays on for 1.5 s after a successful share. */
+const useShare = (title: string, view: string) => {
+  const [done, setDone] = useState(false)
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  useEffect(() => () => clearTimeout(timer.current), [])
+  const share = async () => {
+    if (!(await shareLink(title, view))) return
+    clearTimeout(timer.current)
+    setDone(true)
+    timer.current = setTimeout(() => setDone(false), 1500)
+  }
+  return [done, share] as const
+}
+
+const ICON_SWAP =
+  "absolute inset-0 size-4 transition-[opacity,scale,filter] duration-200 ease-out motion-reduce:transition-opacity"
+
+/** Share icon that cross-fades to a tick while `done`. */
+const ShareIcon = ({ done }: { done: boolean }) => (
+  <span className="relative inline-flex size-4 shrink-0">
+    <Share2
+      aria-hidden
+      className={cn(ICON_SWAP, done && "scale-50 opacity-0 blur-[2px]")}
+    />
+    <Check
+      aria-hidden
+      className={cn(ICON_SWAP, !done && "scale-50 opacity-0 blur-[2px]")}
+    />
+  </span>
 )
+
+/** Small round share button for panel headers. */
+const HeaderShare = ({ title, view }: { title: string; view: string }) => {
+  const [done, share] = useShare(title, view)
+  return (
+    <button
+      type="button"
+      aria-label={done ? "Link shared" : "Share this view"}
+      title="Share this view"
+      onClick={share}
+      className="hover:bg-accent flex size-8 cursor-pointer items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
+      <ShareIcon done={done} />
+    </button>
+  )
+}
 
 const sortPlaces = (rows: PickerPlace[]) =>
   rows.sort((a, b) =>
@@ -150,6 +197,9 @@ const sortPlaces = (rows: PickerPlace[]) =>
   )
 
 // --- bottom sheet geometry (phones) ---
+/** The desktop map never drags shorter than this (30rem). */
+const MIN_DESK_H = 480
+const DRAWER_TIP_KEY = "ntumods-map-drawer-tip"
 const PEEK = 148
 const SHEET_FRACTION = 0.88
 /** Apple's momentum projection: where a flick would come to rest. */
@@ -611,7 +661,142 @@ const MapsPageContent = () => {
     ro.observe(el)
     return () => ro.disconnect()
   }, [data])
+  const [fullscreen, setFullscreen] = useState(false)
+  // The shell stays fixed while it shrinks back, so it can be clipped smoothly.
+  const [pinned, setPinned] = useState(false)
+  // Desktop only: the map can be dragged taller from its bottom edge.
+  const [deskH, setDeskH] = useState<number | null>(null)
+  const resize = useRef<{ y: number; h: number } | null>(null)
+  const slotRef = useRef<HTMLDivElement>(null)
+  const wasFullscreen = useRef(false)
+  // Everything a toggle starts, so the next toggle can take over mid-flight.
+  const live = useRef<{
+    clip: Animation | null
+    fades: Animation[]
+    timers: number[]
+  }>({ clip: null, fades: [], timers: [] })
+  // While the shell resizes, the drawer and controls must not slide to their new spots.
+  const [snap, setSnap] = useState(false)
+  const toggleFullscreen = () => {
+    setSnap(true)
+    setPinned(true)
+    setFullscreen((f) => !f)
+  }
+  // Reveal by clipping, not resizing: the map lays out once, the edge moves.
+  useLayoutEffect(() => {
+    if (wasFullscreen.current === fullscreen) return
+    wasFullscreen.current = fullscreen
+    const el = shellRef.current
+    const slot = slotRef.current
+    if (!el || !slot) return
+    const state = live.current
+    const clearSnap = () => {
+      state.timers.forEach(window.clearTimeout)
+      state.timers = [window.setTimeout(() => setSnap(false), 360)]
+    }
+    clearSnap()
+    const r = slot.getBoundingClientRect()
+    const small = `inset(${r.top}px ${window.innerWidth - r.right}px ${window.innerHeight - r.bottom}px ${r.left}px round 16px)`
+    const full = "inset(0px 0px 0px 0px round 0px)"
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (!fullscreen) setPinned(false)
+      return
+    }
+    // Interrupting: carry on from where the edge and the menus are now, instead
+    // of jumping to the far end and starting again.
+    const midFlight = state.clip?.playState === "running"
+    const ui = [...el.querySelectorAll<HTMLElement>("[data-ui]")].filter(
+      // Skip what is hidden on purpose, such as the zoom stack with no room.
+      (n) => getComputedStyle(n).pointerEvents !== "none"
+    )
+    const opacities = ui.map((n) => +getComputedStyle(n).opacity)
+    const edge = state.clip ? getComputedStyle(el).clipPath : "none"
+    state.clip?.cancel()
+    state.fades.forEach((f) => f.cancel())
+    state.fades = []
+
+    // Staggered, and opacity only: the drawer already positions itself with transform.
+    const fade = (
+      to: number,
+      duration: number,
+      delay = 0,
+      stagger = 0,
+      fresh = false
+    ) =>
+      ui.map((n, i) =>
+        n.animate(
+          {
+            opacity: [midFlight && !fresh ? opacities[i] : to === 1 ? 0 : 1, to]
+          },
+          {
+            duration,
+            delay: midFlight && !fresh ? 0 : delay + i * stagger,
+            easing: "cubic-bezier(0.25, 0.1, 0.25, 1)",
+            fill: "both"
+          }
+        )
+      )
+    // Entering: the controls wait for the edge to open up, then ease in one by
+    // one. Leaving: they fade out first, and ease back in at the small-box spots.
+    state.fades = fullscreen ? fade(1, 1000, 300, 40) : fade(0, 110)
+    const from = edge !== "none" ? edge : fullscreen ? small : full
+    const anim = el.animate(
+      { clipPath: [from, fullscreen ? full : small] },
+      {
+        // A big shape change reads best eased at both ends; ease-out alone snaps.
+        duration: 300,
+        easing: "cubic-bezier(0.65, 0, 0.35, 1)",
+        fill: "forwards"
+      }
+    )
+    state.clip = anim
+    anim.onfinish = () => {
+      if (fullscreen) {
+        // The fades outlast the edge: each cleans up after itself. The full
+        // clip stays on, since dropping it would re-raster the whole map.
+        state.fades.forEach((f) => (f.onfinish = () => f.cancel()))
+        return
+      }
+      state.clip = null
+      state.fades.forEach((f) => f.cancel())
+      setPinned(false)
+      const back = fade(1, 600, 0, 40, true)
+      state.fades = back
+      requestAnimationFrame(() => anim.cancel())
+      state.timers.push(
+        window.setTimeout(() => back.forEach((f) => f.cancel()), 900)
+      )
+    }
+  }, [fullscreen])
+  // Second intro step, once in fullscreen on a phone: show the drawer slides.
+  const [tip, setTip] = useState(false)
+  useEffect(() => {
+    try {
+      setTip(fullscreen && !desktop && !localStorage.getItem(DRAWER_TIP_KEY))
+    } catch {}
+  }, [fullscreen, desktop])
+  const changeDetent = (d: number) => {
+    setDetent(d)
+    if (!tip || d === detent) return
+    setTip(false)
+    try {
+      localStorage.setItem(DRAWER_TIP_KEY, "1")
+    } catch {}
+  }
+  // Lock page scroll before paint and release it only once the shell is back in
+  // the page: the scrollbar appearing or going mid-animation resizes the map.
+  useLayoutEffect(() => {
+    if (!pinned) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [pinned])
+  // How high the drawer stands right now, following a drag, for the controls.
+  const [dragH, setDragH] = useState<number | null>(null)
   const visible = [PEEK, shellH * 0.46, shellH * SHEET_FRACTION]
+  const lift = desktop ? 0 : Math.min(dragH ?? visible[detent], shellH * 0.5)
   const insets = desktop
     ? { left: 384, bottom: 0, top: 0 }
     : { left: 0, bottom: Math.min(visible[detent], shellH * 0.5), top: 108 }
@@ -637,149 +822,217 @@ const MapsPageContent = () => {
       />
 
       <div
-        ref={shellRef}
-        className="bg-card relative h-[calc(100svh-11rem)] min-h-[34rem] overflow-hidden rounded-2xl border lg:h-[calc(100svh-13rem)]">
-        {data ? (
-          <>
-            <CampusMap
-              data={data}
-              level={level}
-              onLevel={(z) => pickLevel(z, "picker")}
-              pins={pins}
-              routes={routes}
-              onPin={(id) => select(id, "map")}
-              onPick={(id) => select(id, "map")}
-              marker={marker}
-              selectedId={selectedId}
-              mapStyle={mapStyle}
-              hybridTone={hybridTone}
-              highlights={highlights}
-              cats={mapCats}
-              buildingLabels={buildingLabels}
-              roomLabels={roomLabels}
-              focus={focus}
-              insets={insets}
-              className="absolute inset-0"
-              extraControls={
-                <MapOptions
-                  mapStyle={mapStyle}
-                  onMapStyle={changeMapStyle}
-                  hybridTone={hybridTone}
-                  onHybridTone={changeTone}
-                  cats={cats}
-                  onCats={changeCats}
-                  buildingLabels={buildingLabels}
-                  onBuildingLabels={changeBuildingLabels}
-                  roomLabels={roomLabels}
-                  onRoomLabels={changeRoomLabels}
-                  onTurnOffAll={turnOffAll}
-                  onReset={resetSettings}
-                />
-              }
-            />
-
-            <div
-              className={cn(
-                "absolute top-3 right-3 left-3 z-20 flex flex-col gap-2",
-                "lg:right-auto lg:w-[360px]"
-              )}>
-              <SearchPill
-                q={q}
-                onQ={onQ}
-                pending={q !== dq}
-                results={results}
-                categoryHit={categoryHit}
-                onCategory={(key) => chooseCat(key, "search")}
-                scope={
-                  activeCat
-                    ? (BROWSE.find((b) => b.key === activeCat)?.label ?? null)
-                    : null
-                }
-                onClearScope={() => chooseCat(null)}
-                onEnterScoped={() => {
-                  // Use what is typed now, not the debounced copy.
-                  const top = q.trim()
-                    ? searchPlaces(catBase, q, 1)[0]
-                    : catPlaces[0]
-                  if (top) select(top.id)
+        ref={slotRef}
+        className="relative h-[calc(100svh-11rem)] min-h-[34rem] lg:h-[clamp(30rem,calc(100dvh-22rem),40rem)] lg:min-h-0"
+        style={desktop && deskH !== null ? { height: deskH } : undefined}>
+        <div
+          ref={shellRef}
+          className={cn(
+            "bg-card overflow-hidden",
+            pinned
+              ? "fixed inset-0 z-[80]"
+              : "absolute inset-0 rounded-2xl border"
+          )}>
+          {data ? (
+            <>
+              <CampusMap
+                data={data}
+                level={level}
+                onLevel={(z) => pickLevel(z, "picker")}
+                pins={pins}
+                routes={routes}
+                onPin={(id) => select(id, "map")}
+                onPick={(id) => select(id, "map")}
+                marker={marker}
+                selectedId={selectedId}
+                mapStyle={mapStyle}
+                hybridTone={hybridTone}
+                highlights={highlights}
+                cats={mapCats}
+                buildingLabels={buildingLabels}
+                roomLabels={roomLabels}
+                focus={focus}
+                insets={insets}
+                onHelp={() => {
+                  setFullscreen(false)
+                  setTimeout(
+                    () =>
+                      document
+                        .getElementById("how-to-use")
+                        ?.scrollIntoView({ block: "start" }),
+                    50
+                  )
                 }}
-                onSelect={(id) => select(id, "search")}
-                onDirections={() => startDirections(selected?.id)}
+                fullscreen={fullscreen}
+                snap={snap}
+                lift={lift}
+                dragging={dragH !== null}
+                pinned={pinned}
+                preview={!desktop && !pinned}
+                onFullscreen={toggleFullscreen}
+                className="absolute inset-0"
+                extraControls={
+                  <MapOptions
+                    mapStyle={mapStyle}
+                    onMapStyle={changeMapStyle}
+                    hybridTone={hybridTone}
+                    onHybridTone={changeTone}
+                    cats={cats}
+                    onCats={changeCats}
+                    buildingLabels={buildingLabels}
+                    onBuildingLabels={changeBuildingLabels}
+                    roomLabels={roomLabels}
+                    onRoomLabels={changeRoomLabels}
+                    onTurnOffAll={turnOffAll}
+                    onReset={resetSettings}
+                  />
+                }
               />
-            </div>
 
-            <CategoryChips
-              active={activeCat}
-              onChange={chooseCat}
-              className="absolute top-[64px] right-3 left-3 z-10 lg:top-3 lg:right-28 lg:left-[384px]"
-            />
-
-            <Sheet
-              desktop={desktop}
-              detent={detent}
-              onDetent={setDetent}
-              shellH={shellH}
-              visible={visible}>
               <div
-                key={panelKey}
-                className="animate-in fade-in-0 slide-in-from-bottom-1 duration-200 motion-reduce:animate-none">
-                {directions ? (
-                  <DirectionsPanel
-                    data={data}
-                    places={places}
-                    fromId={fromId}
-                    toId={toId}
-                    setFromId={setFromId}
-                    setToId={setToId}
-                    from={from}
-                    to={to}
-                    solo={solo}
-                    onClose={() => setDirections(false)}
-                  />
-                ) : selected ? (
-                  <PlacePanel
-                    data={data}
-                    place={selected}
-                    places={places}
-                    backLabel={
-                      activeCat
-                        ? (BROWSE.find((b) => b.key === activeCat)?.label ??
-                          "Back")
-                        : "Explore"
-                    }
-                    onBack={() => {
-                      setSelectedId(null)
-                      setLevel(null)
-                    }}
-                    level={level}
-                    onSelect={select}
-                    onLevel={(z) => pickLevel(z, "chip")}
-                    onDirections={startDirections}
-                  />
-                ) : activeCat ? (
-                  <CategoryPanel
-                    data={data}
-                    cat={activeCat}
-                    rows={catPlaces}
-                    level={level}
-                    onLevel={(z) => pickLevel(z, "chip")}
-                    onSelect={select}
-                    onClose={() => chooseCat(null)}
-                  />
-                ) : (
-                  <ExplorePanel
-                    data={data}
-                    places={places}
-                    onSelect={select}
-                    onCat={(k) => chooseCat(k, "explore")}
-                  />
-                )}
+                data-ui
+                className={cn(
+                  "absolute top-3 right-3 left-3 z-20 flex flex-col gap-2",
+                  "lg:right-auto lg:w-[360px]"
+                )}>
+                <SearchPill
+                  q={q}
+                  onQ={onQ}
+                  pending={q !== dq}
+                  results={results}
+                  categoryHit={categoryHit}
+                  onCategory={(key) => chooseCat(key, "search")}
+                  scope={
+                    activeCat
+                      ? (BROWSE.find((b) => b.key === activeCat)?.label ?? null)
+                      : null
+                  }
+                  onClearScope={() => chooseCat(null)}
+                  onEnterScoped={() => {
+                    // Use what is typed now, not the debounced copy.
+                    const top = q.trim()
+                      ? searchPlaces(catBase, q, 1)[0]
+                      : catPlaces[0]
+                    if (top) select(top.id)
+                  }}
+                  onSelect={(id) => select(id, "search")}
+                  onDirections={() => startDirections(selected?.id)}
+                />
               </div>
-            </Sheet>
-          </>
-        ) : (
-          <MapSkeleton />
-        )}
+
+              <CategoryChips
+                active={activeCat}
+                onChange={chooseCat}
+                className="absolute top-[64px] right-3 left-3 z-10 lg:top-3 lg:right-28 lg:left-[384px]"
+              />
+
+              <Sheet
+                desktop={desktop}
+                detent={detent}
+                onDetent={changeDetent}
+                tip={tip}
+                snap={snap}
+                onDrag={setDragH}
+                shellH={shellH}
+                visible={visible}>
+                <div
+                  key={panelKey}
+                  className="animate-in fade-in-0 slide-in-from-bottom-1 duration-200 motion-reduce:animate-none">
+                  {directions ? (
+                    <DirectionsPanel
+                      data={data}
+                      places={places}
+                      fromId={fromId}
+                      toId={toId}
+                      setFromId={setFromId}
+                      setToId={setToId}
+                      from={from}
+                      to={to}
+                      solo={solo}
+                      onClose={() => setDirections(false)}
+                    />
+                  ) : selected ? (
+                    <PlacePanel
+                      data={data}
+                      place={selected}
+                      places={places}
+                      backLabel={
+                        activeCat
+                          ? (BROWSE.find((b) => b.key === activeCat)?.label ??
+                            "Back")
+                          : "Explore"
+                      }
+                      onBack={() => {
+                        setSelectedId(null)
+                        setLevel(null)
+                      }}
+                      level={level}
+                      onSelect={select}
+                      onLevel={(z) => pickLevel(z, "chip")}
+                      onDirections={startDirections}
+                    />
+                  ) : activeCat ? (
+                    <CategoryPanel
+                      data={data}
+                      cat={activeCat}
+                      rows={catPlaces}
+                      level={level}
+                      onLevel={(z) => pickLevel(z, "chip")}
+                      onSelect={select}
+                      onClose={() => chooseCat(null)}
+                    />
+                  ) : (
+                    <ExplorePanel
+                      data={data}
+                      places={places}
+                      onSelect={select}
+                      onRoute={(a, b) => {
+                        setFromId(a)
+                        setToId(b)
+                        startDirections()
+                      }}
+                    />
+                  )}
+                </div>
+              </Sheet>
+            </>
+          ) : (
+            <MapSkeleton />
+          )}
+          {desktop && !pinned && (
+            <div
+              role="separator"
+              aria-orientation="horizontal"
+              aria-label="Drag down to make the map taller, double-click to reset"
+              title="Drag down for a taller map"
+              onDoubleClick={() => setDeskH(null)}
+              onPointerDown={(e) => {
+                const slot = slotRef.current
+                if (!slot) return
+                e.currentTarget.setPointerCapture(e.pointerId)
+                resize.current = {
+                  y: e.clientY,
+                  h: slot.getBoundingClientRect().height
+                }
+              }}
+              onPointerMove={(e) => {
+                const r = resize.current
+                if (!r) return
+                setDeskH(
+                  // Stops 160px short of the window, so it never runs off the bottom.
+                  Math.max(
+                    MIN_DESK_H,
+                    Math.min(window.innerHeight - 160, r.h + e.clientY - r.y)
+                  )
+                )
+              }}
+              onPointerUp={() => (resize.current = null)}
+              onPointerCancel={() => (resize.current = null)}
+              className="group absolute inset-x-0 bottom-0 z-30 flex h-4 cursor-row-resize touch-none items-end justify-center pb-1">
+              <span className="bg-foreground/25 group-hover:bg-foreground/50 h-1 w-10 rounded-full transition-colors duration-150" />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
@@ -856,7 +1109,7 @@ const SearchPill = ({
               scope ? `Search in ${scope}` : "Search a room, building or place"
             }
             aria-label="Search the campus map"
-            className="placeholder:text-muted-foreground h-full min-w-0 flex-1 bg-transparent text-sm outline-none"
+            className="placeholder:text-muted-foreground h-full min-w-0 flex-1 bg-transparent text-base outline-none lg:text-sm"
           />
           {q ? (
             <button
@@ -1006,7 +1259,7 @@ const CategoryChips = ({
   )
 
   return (
-    <div className={cn("flex h-11 items-center gap-2", className)}>
+    <div data-ui className={cn("flex h-11 items-center gap-2", className)}>
       {edge.overflow && arrow("left")}
       <div
         ref={ref}
@@ -1076,7 +1329,10 @@ const ScrollHint = ({
         ref={ref}
         onScroll={update}
         style={more ? { maskImage: fade, WebkitMaskImage: fade } : undefined}
-        className={cn("min-h-0 flex-1 overflow-y-auto overscroll-contain", className)}>
+        className={cn(
+          "min-h-0 flex-1 overflow-y-auto overscroll-contain",
+          className
+        )}>
         {children}
       </div>
       {more && (
@@ -1106,18 +1362,25 @@ const Sheet = ({
   desktop,
   detent,
   onDetent,
+  tip,
+  snap,
+  onDrag,
   shellH,
   visible,
   children
 }: {
+  snap: boolean
+  onDrag: (h: number | null) => void
   desktop: boolean
   detent: number
   onDetent: (d: number) => void
+  tip: boolean
   shellH: number
   visible: number[]
   children: React.ReactNode
 }) => {
   const [drag, setDrag] = useState<number | null>(null)
+  useEffect(() => onDrag(drag), [drag, onDrag])
   const track = useRef<{
     y: number
     v0: number
@@ -1128,6 +1391,7 @@ const Sheet = ({
   if (desktop)
     return (
       <div
+        data-ui
         className={cn(
           FLOATING,
           "bg-card/95 absolute top-[68px] left-3 z-10 flex max-h-[calc(100%-80px)] w-[360px] flex-col overflow-hidden rounded-2xl"
@@ -1140,73 +1404,98 @@ const Sheet = ({
   const shown = drag ?? visible[detent]
 
   return (
-    <div
-      className="bg-card absolute inset-x-0 bottom-0 z-10 flex flex-col rounded-t-2xl border-t shadow-[0_-8px_30px_-12px_hsl(var(--foreground)/0.25)]"
-      style={{
-        height: sheetH,
-        transform: `translateY(${sheetH - shown}px)`,
-        transition:
-          drag === null
-            ? "transform 320ms cubic-bezier(0.32, 0.72, 0, 1)"
-            : "none"
-      }}>
+    <>
+      {tip && (
+        // Swallow input so nothing but the drawer can be used.
+        <div
+          className="absolute inset-0 z-[90] touch-none overscroll-none bg-black/65"
+          aria-hidden="true"
+          onPointerDown={(e) => e.stopPropagation()}
+          onWheel={(e) => e.stopPropagation()}
+        />
+      )}
       <div
-        className="flex h-7 shrink-0 cursor-grab touch-none items-center justify-center active:cursor-grabbing"
-        onPointerDown={(e) => {
-          e.currentTarget.setPointerCapture(e.pointerId)
-          track.current = {
-            y: e.clientY,
-            v0: visible[detent],
-            last: [[e.clientY, performance.now()]],
-            moved: false
-          }
-        }}
-        onPointerMove={(e) => {
-          const t = track.current
-          if (!t) return
-          if (Math.abs(t.y - e.clientY) > 3) t.moved = true
-          if (!t.moved) return
-          t.last = [...t.last.slice(-3), [e.clientY, performance.now()]]
-          // Past the ends the sheet resists instead of stopping dead.
-          const raw = t.v0 + (t.y - e.clientY)
-          const lo = visible[0]
-          const hi = visible[2]
-          setDrag(
-            raw < lo
-              ? lo - (lo - raw) * 0.35
-              : raw > hi
-                ? hi + (raw - hi) * 0.35
-                : raw
-          )
-        }}
-        onPointerUp={() => {
-          const t = track.current
-          track.current = null
-          if (!t) return
-          if (!t.moved) {
-            onDetent(detent === 2 ? 1 : 2)
-            return
-          }
-          const [a, b] = [t.last[0], t.last[t.last.length - 1]]
-          const v = b[1] > a[1] ? ((a[0] - b[0]) / (b[1] - a[1])) * 1000 : 0
-          const rest = (drag ?? visible[detent]) + project1d(v)
-          const next = visible.reduce(
-            (best, h, i) =>
-              Math.abs(h - rest) < Math.abs(visible[best] - rest) ? i : best,
-            0
-          )
-          onDetent(next)
-          setDrag(null)
-        }}
-        onPointerCancel={() => {
-          // iOS cancels the pointer for system gestures; snap back.
-          track.current = null
-          setDrag(null)
+        data-ui
+        className={cn(
+          "bg-card absolute inset-x-0 bottom-0 z-10 flex flex-col rounded-t-2xl border-t shadow-[0_-8px_30px_-12px_hsl(var(--foreground)/0.25)]",
+          tip && "z-[100]"
+        )}
+        style={{
+          height: sheetH,
+          transform: `translateY(${sheetH - shown}px)`,
+          transition:
+            drag === null && !snap
+              ? "transform 320ms cubic-bezier(0.32, 0.72, 0, 1)"
+              : "none"
         }}>
-        <span className="bg-muted-foreground/40 h-1 w-10 rounded-full" />
+        <div
+          className="flex h-7 shrink-0 cursor-grab touch-none items-center justify-center active:cursor-grabbing"
+          onPointerDown={(e) => {
+            e.currentTarget.setPointerCapture(e.pointerId)
+            track.current = {
+              y: e.clientY,
+              v0: visible[detent],
+              last: [[e.clientY, performance.now()]],
+              moved: false
+            }
+          }}
+          onPointerMove={(e) => {
+            const t = track.current
+            if (!t) return
+            if (Math.abs(t.y - e.clientY) > 3) t.moved = true
+            if (!t.moved) return
+            t.last = [...t.last.slice(-3), [e.clientY, performance.now()]]
+            // Past the ends the sheet resists instead of stopping dead.
+            const raw = t.v0 + (t.y - e.clientY)
+            const lo = visible[0]
+            const hi = visible[2]
+            setDrag(
+              raw < lo
+                ? lo - (lo - raw) * 0.35
+                : raw > hi
+                  ? hi + (raw - hi) * 0.35
+                  : raw
+            )
+          }}
+          onPointerUp={() => {
+            const t = track.current
+            track.current = null
+            if (!t) return
+            if (!t.moved) {
+              onDetent(detent === 2 ? 1 : 2)
+              return
+            }
+            const [a, b] = [t.last[0], t.last[t.last.length - 1]]
+            const v = b[1] > a[1] ? ((a[0] - b[0]) / (b[1] - a[1])) * 1000 : 0
+            const rest = (drag ?? visible[detent]) + project1d(v)
+            const next = visible.reduce(
+              (best, h, i) =>
+                Math.abs(h - rest) < Math.abs(visible[best] - rest) ? i : best,
+              0
+            )
+            onDetent(next)
+            setDrag(null)
+          }}
+          onPointerCancel={() => {
+            // iOS cancels the pointer for system gestures; snap back.
+            track.current = null
+            setDrag(null)
+          }}>
+          <span className="bg-muted-foreground/40 h-1 w-10 rounded-full" />
+          {tip && (
+            <div className="bg-card pointer-events-none absolute bottom-full left-1/2 mb-3 w-64 -translate-x-1/2 rounded-xl border p-3 text-sm shadow-lg">
+              <p className="font-semibold">Slide the drawer</p>
+              <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+                Drag this handle up for details, or down to see more of the map.
+              </p>
+            </div>
+          )}
+        </div>
+        <ScrollHint className={cn("px-4 pb-6", tip && "pointer-events-none")}>
+          {children}
+        </ScrollHint>
       </div>
-      <ScrollHint className="px-4 pb-6">{children}</ScrollHint>
-    </div>
+    </>
   )
 }
 
@@ -1234,13 +1523,28 @@ const ExplorePanel = ({
   data,
   places,
   onSelect,
-  onCat
+  onRoute
 }: {
   data: VenueData
   places: PickerPlace[]
   onSelect: (id: string) => void
-  onCat: (key: string) => void
+  onRoute: (fromId: string, toId: string) => void
 }) => {
+  const routes = useMemo(
+    () =>
+      POPULAR_WALKS.flatMap(([a, b]) => {
+        const pa = places.find((p) => p.kind === "building" && p.name === a)
+        const pb = places.find((p) => p.kind === "building" && p.name === b)
+        return pa && pb ? [[pa, pb] as const] : []
+      }),
+    [places]
+  )
+  // Walk each suggestion once in the background, so tapping one is instant.
+  useEffect(() => {
+    const warm = () => routes.forEach(([a, b]) => fetchWalk(a, b))
+    const id = window.setTimeout(warm, 1500)
+    return () => window.clearTimeout(id)
+  }, [routes])
   const popular = useMemo(
     () =>
       Object.entries(data.venues)
@@ -1250,11 +1554,6 @@ const ExplorePanel = ({
         .map(([k]) => k),
     [data]
   )
-  const count = (key: string) =>
-    key === "lt"
-      ? places.filter(isLectureTheatre).length
-      : places.filter((p) => p.cat === key).length
-
   return (
     <div className="space-y-5">
       <div>
@@ -1281,33 +1580,48 @@ const ExplorePanel = ({
         </div>
       </section>
 
-      <section className="space-y-2">
-        <h3 className="text-sm font-semibold">Browse by type</h3>
-        <ul className="-mx-2 space-y-0.5">
-          {BROWSE.map((c) => (
-            <li key={c.key}>
-              <button
-                type="button"
-                onClick={() => onCat(c.key)}
-                className="group hover:bg-accent focus-visible:ring-ring/50 flex h-11 w-full cursor-pointer items-center gap-3 rounded-xl px-2 text-left transition-[background-color,transform] duration-150 ease-out outline-none focus-visible:ring-[3px] active:scale-[0.99]">
-                <span className="bg-muted group-hover:bg-background flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors duration-150">
-                  <PlaceIcon name={c.key} className="size-4" />
-                </span>
-                <span className="min-w-0 flex-1 truncate text-sm font-medium">
-                  {c.label}
-                </span>
-                <span className="text-muted-foreground text-xs tabular-nums">
-                  {count(c.key)}
-                </span>
-                <ChevronRight className="text-muted-foreground -ml-1 size-4 -translate-x-1 opacity-0 transition-[opacity,transform] duration-150 group-hover:translate-x-0 group-hover:opacity-100" />
-              </button>
-            </li>
-          ))}
-        </ul>
-      </section>
+      {routes.length > 0 && (
+        <section className="space-y-2">
+          <h3 className="text-sm font-semibold">Popular walks</h3>
+          <ul className="-mx-2 space-y-0.5">
+            {routes.map(([a, b]) => (
+              <li key={a.id + b.id}>
+                <button
+                  type="button"
+                  onClick={() => onRoute(a.id, b.id)}
+                  className="group hover:bg-accent focus-visible:ring-ring/50 flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-xl px-2 py-1.5 text-left transition-[background-color,transform] duration-150 ease-out outline-none focus-visible:ring-[3px] active:scale-[0.99]">
+                  <span className="bg-muted group-hover:bg-background flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors duration-150">
+                    <Footprints className="size-4" />
+                  </span>
+                  <span className="min-w-0 flex-1 text-sm font-medium">
+                    {shortName(a.name)}
+                    <span className="text-muted-foreground font-normal">
+                      {" to "}
+                    </span>
+                    {shortName(b.name)}
+                  </span>
+                  <ChevronRight className="text-muted-foreground -ml-1 size-4 -translate-x-1 opacity-0 transition-[opacity,transform] duration-150 group-hover:translate-x-0 group-hover:opacity-100" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   )
 }
+
+/** Walks students make most, as building names in the map data. */
+const POPULAR_WALKS = [
+  ["North Spine", "South Spine"],
+  ["North Spine", "The Arc (Learning Hub North)"],
+  ["South Spine", "Nanyang Business School (S3)"],
+  ["North Spine", "Sports & Recreation Centre (SRC)"],
+  ["South Spine", "Student Services Centre (SSC)"]
+] as const
+
+/** "Nanyang Business School (S3)" -> "Nanyang Business School". */
+const shortName = (name: string) => name.replace(/\s*\([^)]*\)\s*$/, "")
 
 /** "Female Toilet (North Spine)" -> ["Female Toilet", "North Spine"]. */
 const splitName = (name: string): [string, string | null] => {
@@ -1487,6 +1801,7 @@ const PlacePanel = ({
   onLevel: (z: number | null) => void
   onDirections: (id?: string, as?: "from" | "to") => void
 }) => {
+  const [shared, share] = useShare(place.name, "place")
   const venue = place.kind === "venue" ? data.venues[place.name] : undefined
   const building = data.buildings.find((b) => b.id === place.b)
   const inside =
@@ -1551,9 +1866,9 @@ const PlacePanel = ({
         <Button
           variant="outline"
           size="icon"
-          aria-label="Share this view"
-          onClick={() => shareLink(place.name, "place")}>
-          <Share2 />
+          aria-label={shared ? "Link shared" : "Share this view"}
+          onClick={share}>
+          <ShareIcon done={shared} />
         </Button>
       </div>
 

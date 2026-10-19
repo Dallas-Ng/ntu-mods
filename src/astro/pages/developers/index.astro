@@ -3,8 +3,8 @@ import { siteConfig } from "@/config/site"
 import { webPageJsonLd } from "@/lib/json-ld"
 import { buildOpenApi } from "@/lib/openapi"
 import { getLatestExamSemester, getLatestSemester } from "@/lib/server/db/repo"
-import TryModuleApi from "@/components/developers/try-module-api"
-import Header from "@/components/header"
+import ApiExplorer from "@/components/developers/api-explorer"
+import type { ApiGroup } from "@/components/developers/api-explorer"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
@@ -49,26 +49,47 @@ const fields = (schema: Schema, prefix = ""): [string, string, string][] =>
     ][]
   })
 
-const operations = Object.entries(spec.paths).map(([path, item]) => ({
-  path,
-  ...((item as Record<string, any>).get as Schema)
+const moduleSchema = spec.paths["/api/modules/{code}"].get.responses["200"]
+  .content["application/json"].schema as Schema
+
+const groups: ApiGroup[] = spec.tags.map((tag) => ({
+  name: tag.name,
+  description: tag.description,
+  ops: Object.entries(spec.paths).flatMap(([path, item]) => {
+    const op = (item as Record<string, any>).get as Schema
+    if (op.tags[0] !== tag.name) return []
+    const media = Object.values(op.responses["200"]?.content ?? {})[0] as
+      | Schema
+      | undefined
+    const isModule = op.operationId === "getModule"
+    return [
+      {
+        id: op.operationId,
+        path,
+        tag: tag.name,
+        summary: op.summary,
+        description: op.description,
+        params: (op.parameters ?? []).map((p: Schema) => ({
+          name: p.name,
+          description:
+            `${p.description ?? p.schema.description ?? ""}` +
+            `${p.schema.pattern ? ` Pattern: ${p.schema.pattern}.` : ""}` +
+            `${p.schema.example ? ` Example: ${p.schema.example}.` : ""}`
+        })),
+        responses: Object.entries(op.responses).map(([status, r]) => ({
+          status,
+          description: (r as Schema).description
+        })),
+        fields: isModule ? fields(moduleSchema) : undefined,
+        example: media?.example
+          ? JSON.stringify(media.example, null, 2)
+          : undefined,
+        exampleLabel: isModule ? "GET /api/modules/SC1003" : undefined,
+        tryIt: isModule
+      }
+    ]
+  })
 }))
-
-const mediaOf = (res: Schema) =>
-  Object.entries(res.content ?? {})[0] as [string, Schema] | undefined
-
-const moduleOp = operations.find((o) => o.operationId === "getModule")
-const moduleFields = fields(
-  (moduleOp?.responses["200"].content["application/json"].schema ??
-    {}) as Schema
-)
-
-const STATUS_STYLE: Record<string, string> = {
-  "2": "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
-  "3": "bg-sky-500/15 text-sky-700 dark:text-sky-400",
-  "4": "bg-amber-500/15 text-amber-700 dark:text-amber-400",
-  "5": "bg-rose-500/15 text-rose-700 dark:text-rose-400"
-}
 
 const jsonLd = webPageJsonLd({
   name: title,
@@ -84,16 +105,19 @@ const jsonLd = webPageJsonLd({
   size="md"
   containerClassName="space-y-8">
   <JsonLd data={jsonLd} />
-  <Header
-    title="Developers"
-    subtitle="A free, read-only API and open data for NTU modules, class indexes and exams. Built for student projects and AI tools."
-  />
+  <div class="space-y-3">
+    <h1 class="text-3xl leading-[1] font-semibold">Developers</h1>
+    <p class="text-foreground/80">
+      A free, read-only API and open data for NTU modules, class indexes and
+      exams. Built for student projects and AI tools.
+    </p>
+  </div>
 
   <section class="space-y-3" aria-labelledby="usage">
     <h2 id="usage" class="text-lg font-semibold tracking-tight">
       Before you start
     </h2>
-    <ul class="text-muted-foreground list-disc space-y-1.5 pl-5 text-sm">
+    <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
       <li>
         Free to use. No API key and no sign-up. Every endpoint is a plain GET.
       </li>
@@ -123,137 +147,13 @@ const jsonLd = webPageJsonLd({
     </ul>
   </section>
 
-  {
-    operations.map((op) => {
-      const media = mediaOf(op.responses["200"] ?? {})
-      const example = media?.[1].example
-      const isModule = op.operationId === "getModule"
-      return (
-        <section
-          class="space-y-3 rounded-2xl border p-4 sm:p-5"
-          aria-labelledby={op.operationId}>
-          <div class="space-y-1.5">
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="bg-primary text-primary-foreground rounded-md px-2 py-0.5 text-xs font-semibold">
-                GET
-              </span>
-              <code id={op.operationId} class="text-sm font-semibold break-all">
-                {op.path}
-              </code>
-            </div>
-            <p class="text-sm font-medium">{op.summary}</p>
-            {op.description && (
-              <p class="text-muted-foreground text-sm">{op.description}</p>
-            )}
-          </div>
-
-          {op.parameters && (
-            <div class="space-y-1.5">
-              <h3 class="text-sm font-semibold">Parameters</h3>
-              <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
-                  <tbody>
-                    {op.parameters.map((p: Schema) => (
-                      <tr class="border-t">
-                        <td class="py-2 pr-3 align-top font-mono whitespace-nowrap">
-                          {p.name}
-                        </td>
-                        <td class="text-muted-foreground py-2 align-top">
-                          {p.description ?? p.schema.description}
-                          {p.schema.pattern && (
-                            <>
-                              {" "}
-                              Pattern:{" "}
-                              <code class="text-xs">{p.schema.pattern}</code>.
-                            </>
-                          )}
-                          {p.schema.example && (
-                            <>
-                              {" "}
-                              Example:{" "}
-                              <code class="text-xs">{p.schema.example}</code>.
-                            </>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          <div class="space-y-1.5">
-            <h3 class="text-sm font-semibold">Responses</h3>
-            <div class="overflow-x-auto">
-              <table class="w-full text-left text-sm">
-                <tbody>
-                  {Object.entries(op.responses).map(([status, res]) => (
-                    <tr class="border-t">
-                      <td class="py-2 pr-3 align-top">
-                        <span
-                          class={`rounded-md px-2 py-0.5 font-mono text-xs font-semibold ${STATUS_STYLE[status[0]]}`}>
-                          {status}
-                        </span>
-                      </td>
-                      <td class="text-muted-foreground py-2 align-top">
-                        {(res as Schema).description}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {isModule && (
-            <div class="space-y-1.5">
-              <h3 class="text-sm font-semibold">Response fields</h3>
-              <ul>
-                {moduleFields.map(([name, type, description]) => (
-                  <li class="space-y-0.5 border-t py-2 text-sm">
-                    <div class="flex flex-wrap items-baseline gap-x-2">
-                      <code class="text-xs font-semibold break-all">
-                        {name}
-                      </code>
-                      <code class="text-muted-foreground text-xs">{type}</code>
-                    </div>
-                    {description && (
-                      <p class="text-muted-foreground">{description}</p>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {example && (
-            <div class="space-y-1.5">
-              <h3 class="text-sm font-semibold">
-                Example: <code class="text-xs">GET /api/modules/SC1003</code>
-              </h3>
-              <pre class="bg-muted max-h-96 overflow-auto rounded-lg p-3 text-xs">
-                {JSON.stringify(example, null, 2)}
-              </pre>
-            </div>
-          )}
-
-          {isModule && (
-            <div class="space-y-1.5">
-              <h3 class="text-sm font-semibold">Try it</h3>
-              <TryModuleApi client:idle />
-            </div>
-          )}
-        </section>
-      )
-    })
-  }
+  <ApiExplorer client:load groups={groups} />
 
   <section class="space-y-2" aria-labelledby="webmcp">
     <h2 id="webmcp" class="text-lg font-semibold tracking-tight">
       AI assistants and WebMCP
     </h2>
-    <p class="text-muted-foreground text-sm">
+    <p class="text-foreground/80 text-sm">
       NTUMods also offers its tools to browser AI assistants through WebMCP.
       This is an early developer preview: the standard is still a draft and
       support is limited, so treat it as something to test, not to build on. The

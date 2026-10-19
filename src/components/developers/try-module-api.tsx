@@ -61,7 +61,7 @@ const TryModuleApi = () => {
         </Button>
       </form>
       {!valid && (
-        <p className="text-muted-foreground text-sm">
+        <p className="text-foreground/80 text-sm">
           Use 2 to 12 letters or digits, for example SC1003.
         </p>
       )}

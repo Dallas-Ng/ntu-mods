@@ -825,6 +825,8 @@ const MapsPageContent = () => {
                   )
                 }}
                 fullscreen={fullscreen}
+                snap={snap}
+                pinned={pinned}
                 onFullscreen={toggleFullscreen}
                 className="absolute inset-0"
                 extraControls={

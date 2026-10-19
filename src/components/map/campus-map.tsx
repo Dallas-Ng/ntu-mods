@@ -1,6 +1,13 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react"
 import {
   CircleHelp,
   LocateFixed,
@@ -118,6 +125,8 @@ interface Props {
   /** Fill the screen: phones get the whole viewport instead of a squeezed box. */
   fullscreen?: boolean
   onFullscreen?: () => void
+  /** The box is laid out fullscreen (also true while it shrinks back). */
+  pinned?: boolean
   /** Skip the controls' slide while the box itself is resizing. */
   snap?: boolean
   className?: string
@@ -175,6 +184,7 @@ const CampusMap = ({
   onPick,
   fullscreen = false,
   onFullscreen,
+  pinned = false,
   snap = false,
   className
 }: Props) => {
@@ -259,14 +269,45 @@ const CampusMap = ({
   )
 
   // --- size ---
+  // Where the box centre sits on screen. When the box jumps (fullscreen on or
+  // off) the camera shifts by the same amount, so the map stays put under the
+  // finger instead of sliding to the new centre.
+  const centre = useRef<{ x: number; y: number } | null>(null)
+  const relayout = useRef(false)
+  useLayoutEffect(() => {
+    relayout.current = true
+  }, [pinned])
   useEffect(() => {
     const el = box.current
     if (!el) return
-    const ro = new ResizeObserver(() =>
+    const measure = () => {
+      const r = el.getBoundingClientRect()
+      return { x: r.left + el.clientWidth / 2, y: r.top + el.clientHeight / 2 }
+    }
+    const ro = new ResizeObserver(() => {
+      const now = measure()
+      const was = centre.current
+      if (relayout.current && was) {
+        const v = viewRef.current
+        cancelAnimationFrame(anim.current)
+        camTarget.current = null
+        setView({
+          cx: v.cx + (now.x - was.x) * v.mpp,
+          cy: v.cy + (now.y - was.y) * v.mpp,
+          mpp: v.mpp
+        })
+      }
+      relayout.current = false
+      centre.current = now
       setSize({ w: el.clientWidth, h: el.clientHeight })
-    )
+    })
     ro.observe(el)
-    return () => ro.disconnect()
+    const onScroll = () => (centre.current = measure())
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => {
+      ro.disconnect()
+      window.removeEventListener("scroll", onScroll)
+    }
   }, [])
 
   // --- camera ---
@@ -1494,7 +1535,7 @@ const RouteLines = ({
               style={{ stroke: colour }}
               strokeWidth={2.5}
             />
-            {/* Lucide arrow-up-down, same as the step in the directions list. */}
+            {/* The same glyphs as the steps in the directions list: stairs, or a lift. */}
             <g
               transform="scale(0.55) translate(-12 -12)"
               fill="none"
@@ -1502,7 +1543,11 @@ const RouteLines = ({
               strokeLinejoin="round"
               strokeWidth={3.3}
               style={{ stroke: colour }}>
-              <path d="m21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16" />
+              {c.stairs ? (
+                <path d="M3 20h5v-5h5v-5h5V5h3" />
+              ) : (
+                <path d="m21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16" />
+              )}
             </g>
           </g>
         )

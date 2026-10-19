@@ -63,17 +63,23 @@ describe("registerTools", () => {
     expect(registerTool).toHaveBeenCalledTimes(1)
   })
 
-  it("returns structured results as JSON text", async () => {
+  it("resolves plain values and never undefined", async () => {
     const { tools } = stubDocumentContext()
     registerTools(
-      [def("a"), def("b")],
-      { a: () => ({ ok: true }), b: () => "hi" },
+      [def("a"), def("b"), def("c")],
+      { a: () => ({ ok: 1 }), b: () => "hi", c: () => undefined },
       "/"
     )
-    expect(await tools.get("a")!.execute({})).toBe(
-      JSON.stringify({ ok: true }, null, 2)
-    )
+    expect(await tools.get("a")!.execute({})).toEqual({ ok: 1 })
     expect(await tools.get("b")!.execute({})).toBe("hi")
+    expect(await tools.get("c")!.execute({})).toEqual({ ok: true })
+  })
+
+  it("accepts JSON-string input as well as an object", async () => {
+    const { tools } = stubDocumentContext()
+    registerTools([def("a")], { a: (args) => args }, "/")
+    expect(await tools.get("a")!.execute('{"x":1}' as never)).toEqual({ x: 1 })
+    expect(await tools.get("a")!.execute({ y: 2 })).toEqual({ y: 2 })
   })
 
   it("removes its tools when cleaned up, via the abort signal", () => {
@@ -120,7 +126,25 @@ describe("registerTools", () => {
     expect(warn).toHaveBeenCalledTimes(2)
   })
 
-  it("rejects with the message for tool errors and hides unexpected ones", async () => {
+  it("stays quiet when cleanup aborts the register promise", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    vi.stubGlobal("window", {})
+    vi.stubGlobal("document", {
+      modelContext: {
+        // As in the draft: aborting the signal rejects the register promise.
+        registerTool: (_t: unknown, o: { signal: AbortSignal }) =>
+          new Promise((_, reject) =>
+            o.signal.addEventListener("abort", () => reject(o.signal.reason))
+          )
+      }
+    })
+    vi.stubGlobal("navigator", {})
+    registerTools([def("a")], { a: () => 1 }, "/")()
+    await new Promise((r) => setTimeout(r))
+    expect(warn).not.toHaveBeenCalled()
+  })
+
+  it("returns tool errors as a result, because a rejection hides the reason", async () => {
     const { tools } = stubDocumentContext()
     vi.spyOn(console, "error").mockImplementation(() => {})
     registerTools(
@@ -135,13 +159,10 @@ describe("registerTools", () => {
       },
       "/"
     )
-    await expect(tools.get("known")!.execute({})).rejects.toThrow(
-      "No module XX0000"
-    )
-    const hidden = await tools
-      .get("bug")!
-      .execute({})
-      .catch((e: Error) => e.message)
+    expect(await tools.get("known")!.execute({})).toEqual({
+      error: "No module XX0000"
+    })
+    const hidden = JSON.stringify(await tools.get("bug")!.execute({}))
     expect(hidden).toContain("failed unexpectedly")
     expect(hidden).not.toContain("secret")
   })

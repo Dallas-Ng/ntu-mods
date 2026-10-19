@@ -35,7 +35,7 @@ import { fetchAllModules } from "@/hooks/use-all-modules"
 import { fetchSeasonExams } from "@/hooks/use-season-exams"
 import { fetchSeasonIndexes } from "@/hooks/use-season-indexes"
 
-import { ToolError, type ToolHandler } from "./core"
+import { isToolError, ToolError, type ToolHandler } from "./core"
 import type { WebMcpToolName } from "./definitions"
 
 // ─── small helpers ──────────────────────────────────────────────────────────
@@ -698,7 +698,7 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
           await addModule(moduleCode({ code: raw }), undefined, planIndex)
         )
       } catch (error) {
-        if (!(error instanceof ToolError)) throw error
+        if (!isToolError(error)) throw error
         skipped.push({ code: String(raw), reason: error.message })
       }
     }

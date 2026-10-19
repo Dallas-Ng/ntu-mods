@@ -41,7 +41,7 @@ interface RegisterableTool {
   description: string
   inputSchema: JsonSchema
   annotations: ToolAnnotations
-  execute: (args: Record<string, unknown>) => Promise<string>
+  execute: (args: Record<string, unknown> | string) => Promise<unknown>
 }
 
 interface ModelContext {
@@ -54,7 +54,15 @@ interface ModelContext {
 }
 
 /** A failure the agent should read and act on, as opposed to a bug. */
-export class ToolError extends Error {}
+export class ToolError extends Error {
+  name = "ToolError"
+}
+
+// Matched by name as well as by class: a hot-reloaded or duplicated copy of
+// this module would otherwise make a ToolError look like an unexpected bug.
+export const isToolError = (error: unknown): error is Error =>
+  error instanceof ToolError ||
+  (error as Error | undefined)?.name === "ToolError"
 
 export function getModelContext(): ModelContext | undefined {
   if (typeof window === "undefined") return undefined
@@ -64,9 +72,19 @@ export function getModelContext(): ModelContext | undefined {
   return typeof candidate?.registerTool === "function" ? candidate : undefined
 }
 
-/** executeTool() hands the agent a string, so structured results are JSON text. */
-export const serialise = (value: unknown): string =>
-  typeof value === "string" ? value : JSON.stringify(value, null, 2)
+/**
+ * The browser JSON-serialises whatever execute() resolves to, so return plain
+ * values (a string would arrive double-encoded) and never undefined, which is
+ * an "unserializable result".
+ */
+export const normalise = (value: unknown): unknown => value ?? { ok: true }
+
+/**
+ * A rejected execute() reaches the agent only as "tool rejected": the reason
+ * is not forwarded. Failures the agent can act on therefore resolve with an
+ * error object instead of throwing.
+ */
+export const failure = (message: string) => ({ error: message })
 
 export const toAnnotations = (def: ToolDefinition): ToolAnnotations => ({
   readOnlyHint: def.readOnly,
@@ -100,21 +118,25 @@ export function registerTools(
       description: def.description,
       inputSchema: def.inputSchema,
       annotations: toAnnotations(def),
-      execute: async (args) => {
+      execute: async (input) => {
         try {
-          return serialise(await handler(args ?? {}))
+          // Chrome is deprecating JSON-string input; accept either for now.
+          const args = typeof input === "string" ? JSON.parse(input) : input
+          return normalise(await handler(args ?? {}))
         } catch (error) {
-          // ToolError messages are written for the agent; anything else is a
-          // bug, so keep its detail out of the reply but still log it.
-          if (error instanceof ToolError) throw new Error(error.message)
+          if (isToolError(error)) return failure(error.message)
+          // Anything else is a bug: log it, keep its detail from the agent.
           console.error(`[webmcp] ${def.name} failed`, error)
-          throw new Error("The tool failed unexpectedly.")
+          return failure("The tool failed unexpectedly.")
         }
       }
     }
 
-    const onFailure = (error: unknown) =>
+    const onFailure = (error: unknown) => {
+      // Aborting the signal on cleanup rejects the register promise; expected.
+      if (controller.signal.aborted) return
       console.warn(`[webmcp] could not register ${def.name}`, error)
+    }
 
     try {
       // Older builds throw on a duplicate name; clear any leftover first.

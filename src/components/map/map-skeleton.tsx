@@ -8,6 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton"
  */
 const CHIPS = [160, 83, 83, 141, 139, 115, 94, 121, 94, 163]
 const BUSY = [75, 57, 60, 66, 56, 50, 85, 48]
+/** Bar widths per walk; a second width is a second line. */
+const WALKS: [number, number?][] = [[190], [200], [220, 80], [210], [205, 90]]
 
 const FLOAT = "bg-accent/80"
 
@@ -18,11 +20,11 @@ const Line = ({ h, w }: { h: number; w: number | string }) => (
   </div>
 )
 
-/** The home panel: heading, busy rooms, browse by type. */
+/** The home panel: heading, busy rooms, popular walks. */
 const HomeContent = () => (
   <div className="space-y-5">
     <div>
-      <Line h={23} w={240} />
+      <Line h={22.5} w={240} />
       <div className="mt-1">
         <Line h={20} w="85%" />
       </div>
@@ -42,11 +44,16 @@ const HomeContent = () => (
     <section className="space-y-2">
       <Line h={20} w={110} />
       <ul className="-mx-2 space-y-0.5">
-        {Array.from({ length: 10 }).map((_, i) => (
-          <li key={i} className="flex h-11 items-center gap-3 px-2">
+        {WALKS.map((w, i) => (
+          <li
+            key={i}
+            // The three long names wrap to a second line in the real list.
+            className={`flex items-center gap-3 px-2 ${w[1] ? "h-[52px]" : "h-11"}`}>
             <Skeleton className="size-8 shrink-0 rounded-lg" />
-            <Skeleton className="h-4 w-32" />
-            <Skeleton className="ml-auto h-3 w-5" />
+            <div className="space-y-1.5">
+              <Skeleton className="h-3.5" style={{ width: w[0] }} />
+              {w[1] && <Skeleton className="h-3.5" style={{ width: w[1] }} />}
+            </div>
           </li>
         ))}
       </ul>
@@ -70,9 +77,9 @@ const MapSkeleton = () => (
       className={`${FLOAT} absolute top-[70px] left-3 size-8 rounded-full lg:top-[18px] lg:left-[384px]`}
     />
     <Skeleton
-      className={`${FLOAT} absolute top-[70px] right-3 size-8 rounded-full lg:top-[18px] lg:right-[104px]`}
+      className={`${FLOAT} absolute top-[70px] right-3 size-8 rounded-full lg:top-[18px] lg:right-[112px]`}
     />
-    <div className="absolute top-[68px] right-[53px] left-[52px] flex gap-2 overflow-hidden lg:top-4 lg:right-[145px] lg:left-[424px]">
+    <div className="absolute top-[68px] right-[53px] left-[52px] flex gap-2 overflow-hidden lg:top-4 lg:right-[152px] lg:left-[424px]">
       {CHIPS.map((w, i) => (
         <Skeleton
           key={i}
@@ -83,14 +90,18 @@ const MapSkeleton = () => (
     </div>
 
     {/* Side sheet (desktop) */}
-    <div className="bg-card absolute top-[68px] left-3 hidden w-[360px] rounded-2xl border p-4 lg:block">
+    <div className="bg-card absolute top-[68px] left-3 hidden max-h-[calc(100%-80px)] w-[360px] overflow-hidden rounded-2xl border p-4 lg:block">
       <HomeContent />
     </div>
 
     {/* Bottom sheet (phones), cut off by the frame like the real one */}
     <div className="bg-card absolute inset-x-0 bottom-0 h-[46.4%] overflow-hidden rounded-t-2xl border-t p-4 lg:hidden">
-      <Skeleton className="mx-auto mb-3 h-1 w-10 rounded-full" />
-      <HomeContent />
+      <div className="-mx-4 -mt-4 flex h-7 items-center justify-center">
+        <Skeleton className="h-1 w-10 rounded-full" />
+      </div>
+      <div className="pt-1">
+        <HomeContent />
+      </div>
     </div>
 
     {/* Map and Level buttons, then fullscreen */}

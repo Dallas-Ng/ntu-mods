@@ -5,9 +5,8 @@ date: "2026-10-19"
 author: "NTUMods"
 category: "General"
 tags: ["ntu campus map", "ntu lecture theatre map", "ntu map", "ntu classroom location", "find ntu lecture theatre", "ntu indoor map", "ntu venue finder", "ntu walking time between classes", "ntu north spine map", "ntu south spine map", "ntu halls map", "ntu car park map", "ntu toilet map", "ntu room code"]
-thumbnail: "/articles/ntu-campus-map-guide/overview.webp"
-thumbnailDark: "/articles/ntu-campus-map-guide/overview-dark.webp"
-thumbnailAlt: "The NTUMods campus map showing the Nanyang Technological University campus with search, category chips and a side panel"
+thumbnail: "/og/maps.png"
+thumbnailAlt: "NTUMods campus map: find any room on campus, with levels and walking times"
 ---
 
 # NTU Campus Map: Find Any Lecture Theatre, Room and Walking Route
@@ -22,7 +21,7 @@ The [NTUMods campus map](/maps) is built to answer that question quickly. It cov
 
 ## Find your lecture theatre or tutorial room
 
-![The NTUMods campus map search box showing LKC-LT and two related results with their level, above the browse by type list](/articles/ntu-campus-map-guide/search.webp "Type the venue exactly as it appears on your timetable. Results show the building and the level.")
+![The NTUMods campus map search box showing LKC-LT and three related results with their level, above the popular walks list](/articles/ntu-campus-map-guide/search.webp "Type the venue exactly as it appears on your timetable. Results show the building and the level.")
 
 Use the search box at the top left. Type the venue from your timetable or from STARS, such as LKC-LT, LT19A, TR+3 or LHN-TR+12. Matches appear as you type, ranked so that an exact room code comes first.
 

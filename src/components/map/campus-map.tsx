@@ -129,6 +129,10 @@ interface Props {
   pinned?: boolean
   /** Skip the controls' slide while the box itself is resizing. */
   snap?: boolean
+  /** How far the drawer covers the bottom right now (follows a drag). */
+  lift?: number
+  /** The drawer is being dragged: the controls follow it with no easing. */
+  dragging?: boolean
   className?: string
 }
 
@@ -186,12 +190,25 @@ const CampusMap = ({
   onFullscreen,
   pinned = false,
   snap = false,
+  lift = insets.bottom,
+  dragging = false,
   className
 }: Props) => {
   // First visit: dim the app and point at the fullscreen button until it is used.
   const [intro, setIntro] = useState(false)
+  // The controls ride the drawer with transform, not `bottom`, so moving them
+  // never re-lays out. Dragging tracks the finger; a settle eases on the
+  // drawer's curve; a resize slides nothing and only fades.
+  const ride = (fade: string) => ({
+    transform: `translateY(${-lift}px)`,
+    transition: dragging
+      ? fade
+      : snap
+        ? "opacity 1000ms ease 300ms"
+        : `transform 320ms cubic-bezier(0.32, 0.72, 0, 1), ${fade}`
+  })
   const stackFits = (h: number) =>
-    h - insets.top - CONTROLS_TOP - insets.bottom - 12 >= STACK_H
+    h - insets.top - CONTROLS_TOP - lift - 12 >= STACK_H
   useEffect(() => {
     try {
       if (!fullscreen && !localStorage.getItem(INTRO_KEY)) setIntro(true)
@@ -1294,13 +1311,10 @@ const CampusMap = ({
         data-ui
         onPointerDown={(e) => e.stopPropagation()}
         className={cn(
-          "absolute right-3 flex flex-col gap-2 transition-[bottom,opacity,transform] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
-          // Resizing: do not slide, but let the stack fade in with the menus.
-          snap &&
-            "[transition-property:opacity,transform] delay-300 duration-1000",
+          "absolute right-3 bottom-3 flex flex-col gap-2 motion-reduce:transition-none!",
           !stackFits(size.h) && "pointer-events-none translate-y-2 opacity-0"
         )}
-        style={{ bottom: 12 + insets.bottom }}>
+        style={ride("opacity 300ms ease-out, translate 300ms ease-out")}>
         <div className={cn(FLOATING, "flex flex-col overflow-hidden")}>
           <MapButton label="Zoom in" onClick={() => zoomBy(0.6)}>
             <Plus />
@@ -1354,10 +1368,12 @@ const CampusMap = ({
           data-ui
           className={cn(
             FLOATING,
-            "text-muted-foreground absolute flex h-[42px] items-center gap-3 px-3 text-xs transition-[bottom] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
-            snap && "transition-none"
+            "text-muted-foreground absolute bottom-3 flex h-[42px] items-center gap-3 px-3 text-xs motion-reduce:transition-none!"
           )}
-          style={{ left: 12 + insets.left, bottom: 12 + insets.bottom }}>
+          style={{
+            left: 12 + insets.left,
+            ...ride("opacity 300ms ease-out")
+          }}>
           <span className="text-foreground font-semibold">
             {levelLabel(data, level)}
           </span>

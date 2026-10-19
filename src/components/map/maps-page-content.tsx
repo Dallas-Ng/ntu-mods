@@ -664,12 +664,16 @@ const MapsPageContent = () => {
   const [pinned, setPinned] = useState(false)
   const slotRef = useRef<HTMLDivElement>(null)
   const wasFullscreen = useRef(false)
-  const held = useRef<Animation | null>(null)
+  // Everything a toggle starts, so the next toggle can take over mid-flight.
+  const live = useRef<{
+    clip: Animation | null
+    fades: Animation[]
+    timers: number[]
+  }>({ clip: null, fades: [], timers: [] })
   // While the shell resizes, the drawer and controls must not slide to their new spots.
   const [snap, setSnap] = useState(false)
   const toggleFullscreen = () => {
     setSnap(true)
-    setTimeout(() => setSnap(false), 360)
     setPinned(true)
     setFullscreen((f) => !f)
   }
@@ -680,6 +684,12 @@ const MapsPageContent = () => {
     const el = shellRef.current
     const slot = slotRef.current
     if (!el || !slot) return
+    const state = live.current
+    const clearSnap = () => {
+      state.timers.forEach(window.clearTimeout)
+      state.timers = [window.setTimeout(() => setSnap(false), 360)]
+    }
+    clearSnap()
     const r = slot.getBoundingClientRect()
     const small = `inset(${r.top}px ${window.innerWidth - r.right}px ${window.innerHeight - r.bottom}px ${r.left}px round 16px)`
     const full = "inset(0px 0px 0px 0px round 0px)"
@@ -687,24 +697,35 @@ const MapsPageContent = () => {
       if (!fullscreen) setPinned(false)
       return
     }
-    // Skip anything already hidden, such as the zoom stack with no room.
+    // Interrupting: carry on from where the edge and the menus are now, instead
+    // of jumping to the far end and starting again.
+    const midFlight = state.clip?.playState === "running"
     const ui = [...el.querySelectorAll<HTMLElement>("[data-ui]")].filter(
-      (n) => getComputedStyle(n).opacity !== "0"
+      // Skip what is hidden on purpose, such as the zoom stack with no room.
+      (n) => getComputedStyle(n).pointerEvents !== "none"
     )
+    const opacities = ui.map((n) => +getComputedStyle(n).opacity)
+    const edge = state.clip ? getComputedStyle(el).clipPath : "none"
+    state.clip?.cancel()
+    state.fades.forEach((f) => f.cancel())
+    state.fades = []
+
     // Staggered, and opacity only: the drawer already positions itself with transform.
     const fade = (
-      from: number,
       to: number,
       duration: number,
       delay = 0,
-      stagger = 0
+      stagger = 0,
+      fresh = false
     ) =>
       ui.map((n, i) =>
         n.animate(
-          { opacity: [from, to] },
+          {
+            opacity: [midFlight && !fresh ? opacities[i] : to === 1 ? 0 : 1, to]
+          },
           {
             duration,
-            delay: delay + i * stagger,
+            delay: midFlight && !fresh ? 0 : delay + i * stagger,
             easing: "cubic-bezier(0.25, 0.1, 0.25, 1)",
             fill: "both"
           }
@@ -712,11 +733,10 @@ const MapsPageContent = () => {
       )
     // Entering: the controls wait for the edge to open up, then ease in one by
     // one. Leaving: they fade out first, and ease back in at the small-box spots.
-    const fades = fullscreen ? fade(0, 1, 1000, 300, 40) : fade(1, 0, 110)
-    // The clip from the last toggle stayed on; replace it in the same frame.
-    held.current?.cancel()
+    state.fades = fullscreen ? fade(1, 1000, 300, 40) : fade(0, 110)
+    const from = edge !== "none" ? edge : fullscreen ? small : full
     const anim = el.animate(
-      { clipPath: fullscreen ? [small, full] : [full, small] },
+      { clipPath: [from, fullscreen ? full : small] },
       {
         // A big shape change reads best eased at both ends; ease-out alone snaps.
         duration: 300,
@@ -724,22 +744,24 @@ const MapsPageContent = () => {
         fill: "forwards"
       }
     )
+    state.clip = anim
     anim.onfinish = () => {
       if (fullscreen) {
-        // The fades outlast the edge: each cleans up after itself.
-        fades.forEach((f) => (f.onfinish = () => f.cancel()))
-        // Keep the full clip on: dropping it would re-raster the whole map.
-        held.current = anim
+        // The fades outlast the edge: each cleans up after itself. The full
+        // clip stays on, since dropping it would re-raster the whole map.
+        state.fades.forEach((f) => (f.onfinish = () => f.cancel()))
         return
       }
-      held.current = null
-      fades.forEach((f) => f.cancel())
+      state.clip = null
+      state.fades.forEach((f) => f.cancel())
       setPinned(false)
-      const back = fade(0, 1, 600, 0, 40)
+      const back = fade(1, 600, 0, 40, true)
+      state.fades = back
       requestAnimationFrame(() => anim.cancel())
-      setTimeout(() => back.forEach((f) => f.cancel()), 900)
+      state.timers.push(
+        window.setTimeout(() => back.forEach((f) => f.cancel()), 900)
+      )
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullscreen])
   // Second intro step, once in fullscreen on a phone: show the drawer slides.
   const [tip, setTip] = useState(false)
@@ -766,7 +788,10 @@ const MapsPageContent = () => {
       document.body.style.overflow = prev
     }
   }, [pinned])
+  // How high the drawer stands right now, following a drag, for the controls.
+  const [dragH, setDragH] = useState<number | null>(null)
   const visible = [PEEK, shellH * 0.46, shellH * SHEET_FRACTION]
+  const lift = desktop ? 0 : Math.min(dragH ?? visible[detent], shellH * 0.5)
   const insets = desktop
     ? { left: 384, bottom: 0, top: 0 }
     : { left: 0, bottom: Math.min(visible[detent], shellH * 0.5), top: 108 }
@@ -834,6 +859,8 @@ const MapsPageContent = () => {
                 }}
                 fullscreen={fullscreen}
                 snap={snap}
+                lift={lift}
+                dragging={dragH !== null}
                 pinned={pinned}
                 onFullscreen={toggleFullscreen}
                 className="absolute inset-0"
@@ -898,6 +925,7 @@ const MapsPageContent = () => {
                 onDetent={changeDetent}
                 tip={tip}
                 snap={snap}
+                onDrag={setDragH}
                 shellH={shellH}
                 visible={visible}>
                 <div
@@ -1293,11 +1321,13 @@ const Sheet = ({
   onDetent,
   tip,
   snap,
+  onDrag,
   shellH,
   visible,
   children
 }: {
   snap: boolean
+  onDrag: (h: number | null) => void
   desktop: boolean
   detent: number
   onDetent: (d: number) => void
@@ -1307,6 +1337,7 @@ const Sheet = ({
   children: React.ReactNode
 }) => {
   const [drag, setDrag] = useState<number | null>(null)
+  useEffect(() => onDrag(drag), [drag, onDrag])
   const track = useRef<{
     y: number
     v0: number

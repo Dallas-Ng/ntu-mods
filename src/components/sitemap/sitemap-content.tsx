@@ -74,6 +74,12 @@ const TOOL_LINKS = [
     description: "Instructions for AI assistants to understand NTUMods"
   },
   {
+    label: "Developers",
+    href: "/developers",
+    description:
+      "Free public API and open data for NTU modules, indexes and exams"
+  },
+  {
     label: "Settings",
     href: "/settings",
     description: "Customize themes, colors, density, and display preferences"

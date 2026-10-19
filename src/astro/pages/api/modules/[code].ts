@@ -40,6 +40,16 @@ export const GET: APIRoute = async ({ params, url, request }) => {
   const raw = params.code ?? ""
   const code = raw.toUpperCase()
 
+  // Before the cheap branches too, so a flood of unique junk URLs (each one a
+  // cache miss that still costs a worker run) is counted. Cached responses
+  // never reach here.
+  const limited = await rateLimit("MODULE_API_LIMITER", request)
+  if (limited) {
+    // Without this a browser on another origin cannot read the 429.
+    limited.headers.set("Access-Control-Allow-Origin", "*")
+    return limited
+  }
+
   if (!CODE.test(code)) {
     return reply({ error: "Invalid module code" }, 400, {
       "Cache-Control": MISS_CACHE
@@ -56,10 +66,6 @@ export const GET: APIRoute = async ({ params, url, request }) => {
       }
     })
   }
-
-  // Cached responses never reach here, so this only counts real work.
-  const limited = await rateLimit("MODULE_API_LIMITER", request)
-  if (limited) return limited
 
   let snapshot
   try {

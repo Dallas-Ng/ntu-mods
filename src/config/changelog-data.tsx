@@ -49,6 +49,32 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Developers page",
+    date: "19 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            New{" "}
+            <ChangelogLink href="/developers">developers page</ChangelogLink>{" "}
+            documents the free module API and the open module, index and exam
+            data, with a try-it box and an OpenAPI file for student projects.
+          </>
+        )
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            The <ChangelogLink href="/privacy">privacy policy</ChangelogLink>{" "}
+            now covers the public API and AI assistants that use WebMCP.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "AI agent support",
     date: "18 Oct 2026",
     items: [

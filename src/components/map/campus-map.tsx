@@ -125,6 +125,11 @@ interface Props {
   /** Fill the screen: phones get the whole viewport instead of a squeezed box. */
   fullscreen?: boolean
   onFullscreen?: () => void
+  /**
+   * A phone's inline map: a drag scrolls the page instead of panning the map,
+   * and a tap on empty map opens fullscreen, where every gesture works.
+   */
+  preview?: boolean
   /** The box is laid out fullscreen (also true while it shrinks back). */
   pinned?: boolean
   /** Skip the controls' slide while the box itself is resizing. */
@@ -189,6 +194,7 @@ const CampusMap = ({
   fullscreen = false,
   onFullscreen,
   pinned = false,
+  preview = false,
   snap = false,
   lift = insets.bottom,
   dragging = false,
@@ -422,6 +428,12 @@ const CampusMap = ({
   // --- pointer: drag to pan, pinch to zoom, wheel to zoom ---
   const pointers = useRef(new Map<number, { x: number; y: number }>())
   const dragged = useRef(false)
+  /** A building, pin or label took this tap, so it is not a tap on empty map. */
+  const handled = useRef(false)
+  const pick = (id: string) => {
+    handled.current = true
+    onPick?.(id)
+  }
   /** Where the finger or cursor went down, to tell a tap from a drag. */
   const downAt = useRef({ x: 0, y: 0 })
   const pinch = useRef(0)
@@ -470,6 +482,12 @@ const CampusMap = ({
       }
       pinch.current = d
       dragged.current = true
+      return
+    }
+    if (preview) {
+      // One finger belongs to the page here: it may scroll, it never pans.
+      if (Math.hypot(cur.x - downAt.current.x, cur.y - downAt.current.y) > 10)
+        dragged.current = true
       return
     }
     const dx = cur.x - prev.x
@@ -863,14 +881,23 @@ const CampusMap = ({
     <div
       ref={box}
       className={cn(
-        "relative touch-none overflow-hidden select-none",
+        "relative overflow-hidden select-none",
+        preview ? "touch-pan-y" : "touch-none",
         sat ? "bg-neutral-900" : "bg-muted/50",
         className
       )}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}>
+      onPointerCancel={onPointerUp}
+      onClick={(e) => {
+        const taken = handled.current
+        handled.current = false
+        if (!preview || taken || dragged.current) return
+        // Controls and the like handle their own taps.
+        if ((e.target as Element).closest("button, a, input, [data-ui]")) return
+        onFullscreen?.()
+      }}>
       <style>{`
         @keyframes marker-ping { 0% { transform: scale(0.6); opacity: 0.45; } 100% { transform: scale(1.1); opacity: 0; } }
         .marker-ping { animation: marker-ping 1.6s ease-out infinite; transform-box: fill-box; transform-origin: center; }
@@ -958,7 +985,7 @@ const CampusMap = ({
                 fillRule="evenodd"
                 strokeWidth={marker?.building === b.id ? 2.5 : 1}
                 vectorEffect="non-scaling-stroke"
-                onClick={() => onPick?.(`b:${b.id}`)}
+                onClick={() => pick(`b:${b.id}`)}
                 className={cn(
                   onPick && "cursor-pointer",
                   marker?.building === b.id
@@ -1027,7 +1054,7 @@ const CampusMap = ({
                   fillRule="evenodd"
                   strokeWidth={1.4}
                   vectorEffect="non-scaling-stroke"
-                  onClick={() => onPick?.(`v:${room.v}`)}
+                  onClick={() => pick(`v:${room.v}`)}
                   className={cn(
                     "cursor-pointer",
                     marker?.venue === room.v
@@ -1068,7 +1095,7 @@ const CampusMap = ({
               key={l.id}
               transform={`translate(${l.x} ${l.y}) scale(${px})`}
               className={onPick ? "cursor-pointer" : undefined}
-              onClick={() => onPick?.(`l:${l.id}`)}>
+              onClick={() => pick(`l:${l.id}`)}>
               <circle r={10} fill="transparent" />
               {l.c === "hall" ? (
                 <rect
@@ -1110,7 +1137,7 @@ const CampusMap = ({
                 key={h.id}
                 transform={`translate(${h.x} ${h.y}) scale(${px})`}
                 className="cursor-pointer"
-                onClick={() => onPick?.(h.id)}>
+                onClick={() => pick(h.id)}>
                 <circle
                   r={13}
                   className="fill-primary stroke-background"
@@ -1176,7 +1203,10 @@ const CampusMap = ({
               key={p.id}
               transform={`translate(${p.x} ${p.y}) scale(${px})`}
               className={cn("cursor-pointer", dim && "opacity-35")}
-              onClick={() => onPin(p.id)}>
+              onClick={() => {
+                handled.current = true
+                onPin(p.id)
+              }}>
               {sel && <circle r={w / 2 + 6} className="fill-primary/20" />}
               <rect
                 x={-w / 2}

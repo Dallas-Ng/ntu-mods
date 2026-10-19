@@ -862,6 +862,7 @@ const MapsPageContent = () => {
                 lift={lift}
                 dragging={dragH !== null}
                 pinned={pinned}
+                preview={!desktop && !pinned}
                 onFullscreen={toggleFullscreen}
                 className="absolute inset-0"
                 extraControls={

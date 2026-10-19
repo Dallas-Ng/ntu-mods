@@ -1,5 +1,6 @@
 ---
 import { render } from "astro:content"
+import { FileText } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { formatLongDate } from "@/lib/format"
@@ -305,16 +306,22 @@ const pageDescription =
                 {moreArticles.map((item) => (
                   <a
                     href={`/articles/${item.slug}`}
-                    class="group bg-muted hover:bg-accent overflow-hidden rounded-2xl transition-colors">
-                    {item.thumbnail && (
+                    class="group bg-muted hover:bg-accent flex flex-col overflow-hidden rounded-2xl transition-colors">
+                    {item.thumbnail ? (
                       <img
                         src={item.thumbnail}
                         alt={item.thumbnailAlt}
                         loading="lazy"
                         class="aspect-video w-full object-cover"
                       />
+                    ) : (
+                      <div
+                        aria-hidden="true"
+                        class="bg-background/50 text-muted-foreground/40 flex aspect-video w-full items-center justify-center">
+                        <FileText className="size-10" />
+                      </div>
                     )}
-                    <div class="p-3">
+                    <div class="flex-1 p-3">
                       <div class="text-foreground/70 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
                         <span class="bg-background text-muted-foreground rounded px-1.5 py-0.5">
                           {item.category}

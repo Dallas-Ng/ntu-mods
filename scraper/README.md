@@ -125,6 +125,26 @@ a new semester appears once its metadata lands. Afterwards, from the repo root:
 yarn db:verify   # D1 matches src/data/api exactly
 ```
 
+## Walking routes (D1 `walks` table)
+
+`/api/walk` routes through MazeMap once per pair, then keeps the answer in the
+`walks` D1 table (and the edge cache), so a pair is never routed twice. Seed
+the busiest pairs up front so their first request is already a hit:
+
+```bash
+yarn db:seed-walks --limit 3000      # polite, resumable; writes db/out/walks.sql
+npx wrangler d1 execute DB --remote --file db/out/walks.sql
+```
+
+Pairs are venues with back-to-back classes (next starts within an hour of the
+last ending), ranked by class count. `--sem` picks the semester (default the
+newest), `--workers` is how many calls run at once.
+
+**When the venue data changes** (`scraper/venues.py` rebuilt), purge and reseed:
+bump `ROUTE_CACHE_VERSION` in `src/lib/walk-route.ts`, run
+`npx wrangler d1 execute DB --remote --command "DELETE FROM walks"`, then seed
+again. Old rows are ignored by version even before the delete.
+
 ## Semester codes
 
 `YYYY;S` where `YYYY` is the **academic** year: `2025;1` = Aug–Nov 2025, `2025;2` = Jan–Apr 2026,

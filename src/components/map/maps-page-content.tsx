@@ -1350,7 +1350,7 @@ const Sheet = ({
           height: sheetH,
           transform: `translateY(${sheetH - shown}px)`,
           transition:
-            drag === null
+            drag === null && !snap
               ? "transform 320ms cubic-bezier(0.32, 0.72, 0, 1)"
               : "none"
         }}>

@@ -16,6 +16,7 @@
     "db:dump": "node scripts/db/reseed-d1.mjs",
     "db:seed-local": "yarn db:build && rm -rf .wrangler/state/v3/d1 && node scripts/db/reseed-d1.mjs --max-stmt-bytes 60000 && wrangler d1 migrations apply DB --local && wrangler d1 execute DB --local --file db/out/full.sql",
     "db:load": "node scripts/db/load-semester.mjs",
+    "db:seed-walks": "npx tsx scripts/db/seed-walks.mts",
     "db:verify": "node scripts/db/verify-parity.mjs && npx tsx scripts/db/verify-readers.mts",
     "lint": "eslint . && astro check && tsc",
     "lint:fix": "eslint . --fix",

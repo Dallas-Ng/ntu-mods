@@ -1,4 +1,4 @@
-import { type WalkResult } from "@/lib/venue-map"
+import type { WalkResult } from "@/lib/venue-map"
 
 /**
  * MazeMap's pedestrian router, and how its answer becomes a WalkResult. Shared

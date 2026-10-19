@@ -181,13 +181,15 @@ const link = "text-primary underline underline-offset-2"
 
   <div class="space-y-3">
     <h1 class="text-3xl leading-[1] font-semibold">Developers</h1>
-    <p class="text-foreground/80">
+    <p class="text-foreground/80 text-sm">
       A free, read-only API and open data for NTU modules, class indexes and
       exams. Built for student projects and AI tools.
     </p>
   </div>
 
-  <section class="prose dark:prose-invert max-w-none" aria-labelledby="terms">
+  <section
+    class="prose dark:prose-invert max-w-none [&_blockquote]:text-sm! [&_blockquote_p>strong:first-child]:text-sm!"
+    aria-labelledby="terms">
     <blockquote>
       <p id="terms"><strong>Terms of use (no opt out)</strong></p>
       <p>
@@ -213,7 +215,7 @@ const link = "text-primary underline underline-offset-2"
     <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
       <li>
         Free to use. No API key and no sign-up. Every endpoint is a plain <code
-          class="bg-muted rounded px-1 py-0.5 font-mono text-[0.85em]">GET</code
+          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">GET</code
         >.
       </li>
       <li>
@@ -239,7 +241,7 @@ const link = "text-primary underline underline-offset-2"
             <Fragment
               set:html={`${lead} ${body}`.replace(
                 /`([^`]+)`/g,
-                '<code class="bg-muted text-foreground rounded px-1 py-0.5 font-mono text-[0.85em]">$1</code>'
+                '<code class="bg-muted text-foreground rounded px-1 py-0.5 font-mono text-sm">$1</code>'
               )}
             />
           </li>

@@ -25,7 +25,7 @@ export const Code = ({
 }) => {
   const lines = useHighlightedCode(code, lang)
   return (
-    <CodeBlock size="sm" className={className}>
+    <CodeBlock className={className}>
       {title && (
         <CodeBlockHeader>
           <CodeBlockTitle>{title}</CodeBlockTitle>
@@ -50,7 +50,7 @@ export const Rich = ({ text }: { text: string }) => (
       i % 2 ? (
         <code
           key={i}
-          className="bg-muted text-foreground rounded px-1 py-0.5 font-mono text-[0.85em] break-all">
+          className="bg-muted text-foreground rounded px-1 py-0.5 font-mono text-sm break-all">
           {part}
         </code>
       ) : (

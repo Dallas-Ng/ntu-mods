@@ -74,7 +74,7 @@ const Operation = ({ op }: { op: ApiOp }) => {
       {op.params.length > 0 && (
         <div className="space-y-1.5">
           <h3 className="text-sm font-semibold">Parameters</h3>
-          <table className="data-table">
+          <table className="data-table text-sm!">
             <thead>
               <tr>
                 <th>Name</th>
@@ -85,8 +85,8 @@ const Operation = ({ op }: { op: ApiOp }) => {
               {op.params.map((p) => (
                 <tr key={p.name}>
                   <td>
-                    <code className="text-xs">{p.name}</code>
-                    <div className="text-foreground/70 text-xs font-normal">
+                    <code className="text-sm">{p.name}</code>
+                    <div className="text-foreground/70 text-sm font-normal">
                       {p.where}, required
                     </div>
                   </td>
@@ -95,12 +95,12 @@ const Operation = ({ op }: { op: ApiOp }) => {
                       <Rich text={p.description} />
                     </p>
                     {p.pattern && (
-                      <p className="text-foreground/80 text-xs">
+                      <p className="text-foreground/80 text-sm">
                         <Rich text={`Format: \`${p.pattern}\``} />
                       </p>
                     )}
                     {p.example && (
-                      <p className="text-foreground/80 text-xs">
+                      <p className="text-foreground/80 text-sm">
                         <Rich text={`Example: \`${p.example}\``} />
                       </p>
                     )}
@@ -129,7 +129,7 @@ const Operation = ({ op }: { op: ApiOp }) => {
                 key={r.status}
                 className="flex items-baseline gap-3 border-t py-2 text-sm first:border-t-0">
                 <span
-                  className={`shrink-0 rounded-md px-2 py-0.5 font-mono text-xs font-semibold ${STATUS_STYLE[r.status[0]]}`}>
+                  className={`shrink-0 rounded-md px-2 py-0.5 font-mono text-sm font-semibold ${STATUS_STYLE[r.status[0]]}`}>
                   {r.status}
                 </span>
                 <span className="text-foreground/80">
@@ -146,7 +146,7 @@ const Operation = ({ op }: { op: ApiOp }) => {
                 <Rich text={op.fieldsNote} />
               </p>
             )}
-            <table className="data-table">
+            <table className="data-table text-sm!">
               <thead>
                 <tr>
                   <th>Field</th>
@@ -157,8 +157,8 @@ const Operation = ({ op }: { op: ApiOp }) => {
                 {op.fields.map(([name, type, description]) => (
                   <tr key={name}>
                     <td>
-                      <code className="text-xs break-all">{name}</code>
-                      <div className="text-foreground/70 font-mono text-xs font-normal break-all">
+                      <code className="text-sm break-all">{name}</code>
+                      <div className="text-foreground/70 font-mono text-sm font-normal break-all">
                         {type}
                       </div>
                     </td>
@@ -210,14 +210,14 @@ const ApiExplorer = ({ groups }: { groups: ApiGroup[] }) => (
               <AccordionTrigger className="items-center py-3 hover:no-underline">
                 <span className="flex min-w-0 flex-1 flex-col gap-1">
                   <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                    <span className="bg-primary text-primary-foreground shrink-0 rounded-md px-2 py-0.5 text-xs font-semibold">
+                    <span className="bg-primary text-primary-foreground shrink-0 rounded-md px-2 py-0.5 text-sm font-semibold">
                       GET
                     </span>
                     <code className="text-sm font-semibold break-all">
                       {op.path}
                     </code>
                   </span>
-                  <span className="text-foreground/80 text-xs font-normal">
+                  <span className="text-foreground/80 text-sm font-normal">
                     {op.summary}
                     <span className="text-foreground/60">
                       {" "}

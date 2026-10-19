@@ -138,7 +138,7 @@ npx wrangler d1 execute DB --remote --file db/out/walks.sql
 
 Pairs are venues with back-to-back classes (next starts within an hour of the
 last ending), ranked by class count. `--sem` picks the semester (default the
-newest), `--rate` is requests per second.
+newest), `--workers` is how many calls run at once.
 
 **When the venue data changes** (`scraper/venues.py` rebuilt), purge and reseed:
 bump `ROUTE_CACHE_VERSION` in `src/lib/walk-route.ts`, run

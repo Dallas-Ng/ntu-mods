@@ -271,23 +271,11 @@ const pageDescription =
               <MobileSectionDropdown client:idle headings={articleHeadings} />
 
               {article.thumbnail && (
-                <>
-                  <img
-                    src={article.thumbnail}
-                    alt={article.thumbnailAlt}
-                    class:list={[
-                      "not-prose mb-5 aspect-video w-full rounded-2xl object-cover sm:mb-6",
-                      article.thumbnailDark && "dark:hidden"
-                    ]}
-                  />
-                  {article.thumbnailDark && (
-                    <img
-                      src={article.thumbnailDark}
-                      alt={article.thumbnailAlt}
-                      class="not-prose mb-5 hidden aspect-video w-full rounded-2xl object-cover sm:mb-6 dark:block"
-                    />
-                  )}
-                </>
+                <img
+                  src={article.thumbnail}
+                  alt={article.thumbnailAlt}
+                  class="not-prose mb-5 aspect-video w-full rounded-2xl object-cover sm:mb-6"
+                />
               )}
 
               <div class="text-foreground/70 not-prose mb-6 border-b pb-4 text-sm sm:mb-8 sm:pb-5">
@@ -320,25 +308,12 @@ const pageDescription =
                     href={`/articles/${item.slug}`}
                     class="group bg-muted hover:bg-accent flex flex-col overflow-hidden rounded-2xl transition-colors">
                     {item.thumbnail ? (
-                      <>
-                        <img
-                          src={item.thumbnail}
-                          alt={item.thumbnailAlt}
-                          loading="lazy"
-                          class:list={[
-                            "aspect-video w-full object-cover",
-                            item.thumbnailDark && "dark:hidden"
-                          ]}
-                        />
-                        {item.thumbnailDark && (
-                          <img
-                            src={item.thumbnailDark}
-                            alt={item.thumbnailAlt}
-                            loading="lazy"
-                            class="hidden aspect-video w-full object-cover dark:block"
-                          />
-                        )}
-                      </>
+                      <img
+                        src={item.thumbnail}
+                        alt={item.thumbnailAlt}
+                        loading="lazy"
+                        class="aspect-video w-full object-cover"
+                      />
                     ) : (
                       <div
                         aria-hidden="true"

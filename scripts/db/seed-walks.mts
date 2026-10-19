@@ -7,10 +7,10 @@
  * second starts within an hour of the first ending); pairs are ranked by how
  * many classes sit at each end, and the top --limit are routed.
  *
- *   npx tsx scripts/db/seed-walks.mts [--sem 2026_1] [--limit 3000] [--rate 4]
+ *   npx tsx scripts/db/seed-walks.mts [--sem 2026_1] [--limit 3000] [--workers 6]
  *
- * MazeMap is a public service: --rate is requests per second across --workers
- * parallel calls (default 4), keep it low.
+ * MazeMap is a public service: --workers parallel calls, each pausing 250 ms,
+ * so keep it modest.
  * Routes are appended to db/out/walks.jsonl as they arrive, so an interrupted
  * run resumes where it stopped. It then writes db/out/walks.sql; apply with
  *   npx wrangler d1 execute DB --local  --file db/out/walks.sql
@@ -45,7 +45,6 @@ const sem =
     .sort()
     .at(-1)!
 const limit = Number(arg("limit", "3000"))
-const gapMs = 1000 / Number(arg("rate", "4"))
 
 interface Venue extends RoutePoint {
   slots: number
@@ -139,15 +138,14 @@ const route = async (p: (typeof wanted)[number]) => {
     console.warn(`  skip ${p.key}: ${(e as Error).message}`)
   }
 }
-// A few at a time, each worker pausing between its own calls: a call takes ~2 s,
-// so one at a time would be far below --rate.
-const workers = Number(arg("workers", "4"))
+// A few at a time: a call takes ~2 s, so one at a time would take hours.
+const workers = Number(arg("workers", "6"))
 let next = 0
 await Promise.all(
   Array.from({ length: workers }, async () => {
     while (next < todo.length) {
       await route(todo[next++])
-      await sleep(gapMs * workers)
+      await sleep(250)
     }
   })
 )

@@ -26,7 +26,6 @@ export interface ArticleListItem {
   category: string
   tags: string[]
   thumbnail: string
-  thumbnailDark?: string
   thumbnailAlt: string
   readingTime: string
 }
@@ -85,23 +84,11 @@ function ArticleCard({
       className="group bg-muted hover:bg-accent flex flex-col overflow-hidden rounded-2xl transition-colors">
       {/* Every card has the same picture area, so a missing thumbnail leaves a placeholder. */}
       {article.thumbnail ? (
-        <>
-          <img
-            src={article.thumbnail}
-            alt={article.thumbnailAlt}
-            className={cn(
-              "aspect-video w-full object-cover",
-              article.thumbnailDark && "dark:hidden"
-            )}
-          />
-          {article.thumbnailDark && (
-            <img
-              src={article.thumbnailDark}
-              alt={article.thumbnailAlt}
-              className="hidden aspect-video w-full object-cover dark:block"
-            />
-          )}
-        </>
+        <img
+          src={article.thumbnail}
+          alt={article.thumbnailAlt}
+          className="aspect-video w-full object-cover"
+        />
       ) : (
         <div
           aria-hidden="true"

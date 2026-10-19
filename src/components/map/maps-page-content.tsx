@@ -197,6 +197,8 @@ const sortPlaces = (rows: PickerPlace[]) =>
   )
 
 // --- bottom sheet geometry (phones) ---
+/** The desktop map never drags shorter than this (30rem). */
+const MIN_DESK_H = 480
 const DRAWER_TIP_KEY = "ntumods-map-drawer-tip"
 const PEEK = 148
 const SHEET_FRACTION = 0.88
@@ -664,8 +666,7 @@ const MapsPageContent = () => {
   const [pinned, setPinned] = useState(false)
   // Desktop only: the map can be dragged taller from its bottom edge.
   const [deskH, setDeskH] = useState<number | null>(null)
-  const deskBase = useRef<number | null>(null)
-  const resize = useRef<{ y: number; h: number; lo: number } | null>(null)
+  const resize = useRef<{ y: number; h: number } | null>(null)
   const slotRef = useRef<HTMLDivElement>(null)
   const wasFullscreen = useRef(false)
   // Everything a toggle starts, so the next toggle can take over mid-flight.
@@ -1009,11 +1010,10 @@ const MapsPageContent = () => {
                 const slot = slotRef.current
                 if (!slot) return
                 e.currentTarget.setPointerCapture(e.pointerId)
-                const base = slot.getBoundingClientRect().height
-                // Never shorter than the standard height, never nearly as tall as the window.
-                if (deskH === null) deskBase.current = base
-                const lo = deskBase.current ?? base
-                resize.current = { y: e.clientY, h: base, lo }
+                resize.current = {
+                  y: e.clientY,
+                  h: slot.getBoundingClientRect().height
+                }
               }}
               onPointerMove={(e) => {
                 const r = resize.current
@@ -1021,7 +1021,7 @@ const MapsPageContent = () => {
                 setDeskH(
                   // Stops 160px short of the window, so it never runs off the bottom.
                   Math.max(
-                    r.lo,
+                    MIN_DESK_H,
                     Math.min(window.innerHeight - 160, r.h + e.clientY - r.y)
                   )
                 )

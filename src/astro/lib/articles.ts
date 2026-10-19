@@ -21,7 +21,6 @@ export interface Article {
   tags: string[]
   thumbnail: string
   thumbnailAlt: string
-  thumbnailDark?: string
   url: string
   content: string
   headings: { id: string; depth: number; text: string }[]
@@ -42,7 +41,6 @@ const toArticle = (entry: CollectionEntry<"articles">): Article => {
     tags: data.tags,
     thumbnail: data.thumbnail,
     thumbnailAlt: data.thumbnailAlt || data.title,
-    thumbnailDark: data.thumbnailDark,
     url: `${siteConfig.url}/articles/${id}`,
     content: body,
     headings: getHeadings(body),

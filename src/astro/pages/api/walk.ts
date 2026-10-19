@@ -19,6 +19,9 @@ const UPSTREAM = "https://routing.mazemap.com/routing/path/"
  */
 const ROUTE_CACHE_VERSION = "1"
 
+// The Workers edge cache; the DOM typings do not know `default`.
+const edge = () => (caches as unknown as { default: Cache }).default
+
 const json = (body: unknown, status = 200, headers?: HeadersInit) =>
   new Response(JSON.stringify(body), {
     status,
@@ -54,18 +57,6 @@ export const GET: APIRoute = async ({ url, request }) => {
   if (!a || !b)
     return json({ error: "a and b must be lon,lat,z on campus" }, 400)
 
-  // Key on the rounded points, so the same pair always shares one entry. Hits
-  // skip the rate limit and MazeMap entirely.
-  const cache = (globalThis.caches as unknown as { default?: Cache }).default
-  const cacheKey = new Request(
-    `${url.origin}/api/walk?v=${ROUTE_CACHE_VERSION}&a=${a.lon.toFixed(5)},${a.lat.toFixed(5)},${a.z}&b=${b.lon.toFixed(5)},${b.lat.toFixed(5)},${b.z}`
-  )
-  const hit = await cache?.match(cacheKey)
-  if (hit) return hit
-
-  const limited = await rateLimit("WALK_LIMITER", request)
-  if (limited) return limited
-
   // Round to ~1 m so near-identical requests share a cache entry.
   const q = new URLSearchParams({
     srid: "4326",
@@ -80,6 +71,16 @@ export const GET: APIRoute = async ({ url, request }) => {
     targetlat: b.lat.toFixed(5),
     targetz: String(b.z)
   })
+
+  // The same pair always shares one entry. Hits skip the rate limit and MazeMap.
+  const cacheKey = new Request(
+    `${url.origin}/api/walk?v=${ROUTE_CACHE_VERSION}&${q}`
+  )
+  const hit = await edge().match(cacheKey)
+  if (hit) return hit
+
+  const limited = await rateLimit("WALK_LIMITER", request)
+  if (limited) return limited
 
   let features: Feature[]
   try {
@@ -133,8 +134,8 @@ export const GET: APIRoute = async ({ url, request }) => {
   // Browsers cannot be purged, so they keep it a day; the edge keeps it until
   // the version above changes.
   const response = json(result, 200, {
-    "Cache-Control": "public, max-age=86400, s-maxage=31536000, immutable"
+    "Cache-Control": "public, max-age=86400, s-maxage=31536000"
   })
-  if (cache) waitUntil(cache.put(cacheKey, response.clone()))
+  waitUntil(edge().put(cacheKey, response.clone()))
   return response
 }

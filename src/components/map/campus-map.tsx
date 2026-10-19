@@ -143,9 +143,11 @@ const MAX_MPP = 3
 const ROOM_TYPES_TEACHING =
   /lecture|tutorial|seminar|lab|studio|auditorium|exam/i
 
-/** Top-right stack (options + level) reaches this far down; zoom stack is this tall. */
+/** Top-right stack (options + level) reaches this far down. */
 const CONTROLS_TOP = 112
-const CONTROLS_H = 234
+/** Zoom stack height, then each extra button under it: drop them when short on room. */
+const ZOOM_H = 82
+const BTN_H = 48
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 
@@ -176,6 +178,9 @@ const CampusMap = ({
 }: Props) => {
   // First visit: dim the app and point at the fullscreen button until it is used.
   const [intro, setIntro] = useState(false)
+  // Room between the level button and the sheet: fullscreen always stays, the rest yields.
+  const room = (h: number) => h - insets.top - CONTROLS_TOP - insets.bottom - 12
+  const extras = (h: number) => Math.floor((room(h) - ZOOM_H - BTN_H) / BTN_H) // buttons beyond fullscreen that fit
   useEffect(() => {
     try {
       if (!fullscreen && !localStorage.getItem(INTRO_KEY)) setIntro(true)
@@ -1199,17 +1204,7 @@ const CampusMap = ({
       <div
         onPointerDown={(e) => e.stopPropagation()}
         className="absolute right-3 flex flex-col gap-2"
-        style={{
-          bottom:
-            12 +
-            Math.max(
-              0,
-              Math.min(
-                insets.bottom,
-                size.h - insets.top - CONTROLS_TOP - CONTROLS_H - 12
-              )
-            )
-        }}>
+        style={{ bottom: 12 + insets.bottom }}>
         <div className={cn(FLOATING, "flex flex-col overflow-hidden")}>
           <MapButton label="Zoom in" onClick={() => zoomBy(0.6)}>
             <Plus />
@@ -1219,24 +1214,26 @@ const CampusMap = ({
             <Minus />
           </MapButton>
         </div>
-        <div className={cn(FLOATING, "overflow-hidden")}>
-          <MapButton
-            label="Fit the chosen place, route or campus"
-            onClick={() => {
-              const pts = pins.map((p) => [p.x, p.y])
-              if (focus) fit(focus.bounds)
-              else if (pts.length)
-                fit([
-                  Math.min(...pts.map((p) => p[0])),
-                  Math.min(...pts.map((p) => p[1])),
-                  Math.max(...pts.map((p) => p[0])),
-                  Math.max(...pts.map((p) => p[1]))
-                ])
-              else fit([0, 0, data.size.width, data.size.height], 10)
-            }}>
-            <LocateFixed />
-          </MapButton>
-        </div>
+        {extras(size.h) >= 1 && (
+          <div className={cn(FLOATING, "overflow-hidden")}>
+            <MapButton
+              label="Fit the chosen place, route or campus"
+              onClick={() => {
+                const pts = pins.map((p) => [p.x, p.y])
+                if (focus) fit(focus.bounds)
+                else if (pts.length)
+                  fit([
+                    Math.min(...pts.map((p) => p[0])),
+                    Math.min(...pts.map((p) => p[1])),
+                    Math.max(...pts.map((p) => p[0])),
+                    Math.max(...pts.map((p) => p[1]))
+                  ])
+                else fit([0, 0, data.size.width, data.size.height], 10)
+              }}>
+              <LocateFixed />
+            </MapButton>
+          </div>
+        )}
         {onFullscreen && (
           <div className={cn(FLOATING, "relative", intro && "z-[100]")}>
             <MapButton
@@ -1254,7 +1251,7 @@ const CampusMap = ({
             )}
           </div>
         )}
-        {onHelp && (
+        {onHelp && extras(size.h) >= 2 && (
           <div className={cn(FLOATING, "overflow-hidden")}>
             <MapButton label="How to use the map" onClick={onHelp}>
               <CircleHelp />

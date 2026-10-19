@@ -664,6 +664,7 @@ const MapsPageContent = () => {
   const [pinned, setPinned] = useState(false)
   const slotRef = useRef<HTMLDivElement>(null)
   const wasFullscreen = useRef(false)
+  const held = useRef<Animation | null>(null)
   // While the shell resizes, the drawer and controls must not slide to their new spots.
   const [snap, setSnap] = useState(false)
   const toggleFullscreen = () => {
@@ -712,6 +713,8 @@ const MapsPageContent = () => {
     // Entering: the controls wait for the edge to open up, then ease in one by
     // one. Leaving: they fade out first, and ease back in at the small-box spots.
     const fades = fullscreen ? fade(0, 1, 1000, 300, 40) : fade(1, 0, 110)
+    // The clip from the last toggle stayed on; replace it in the same frame.
+    held.current?.cancel()
     const anim = el.animate(
       { clipPath: fullscreen ? [small, full] : [full, small] },
       {
@@ -725,8 +728,11 @@ const MapsPageContent = () => {
       if (fullscreen) {
         // The fades outlast the edge: each cleans up after itself.
         fades.forEach((f) => (f.onfinish = () => f.cancel()))
-        return anim.cancel()
+        // Keep the full clip on: dropping it would re-raster the whole map.
+        held.current = anim
+        return
       }
+      held.current = null
       fades.forEach((f) => f.cancel())
       setPinned(false)
       const back = fade(0, 1, 600, 0, 40)

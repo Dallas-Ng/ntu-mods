@@ -1010,7 +1010,7 @@ const MapsPageContent = () => {
                 if (!slot) return
                 e.currentTarget.setPointerCapture(e.pointerId)
                 const base = slot.getBoundingClientRect().height
-                // Never shorter than the standard height, never taller than the window.
+                // Never shorter than the standard height, never nearly as tall as the window.
                 if (deskH === null) deskBase.current = base
                 const lo = deskBase.current ?? base
                 resize.current = { y: e.clientY, h: base, lo }
@@ -1019,9 +1019,10 @@ const MapsPageContent = () => {
                 const r = resize.current
                 if (!r) return
                 setDeskH(
-                  Math.min(
-                    window.innerHeight,
-                    Math.max(r.lo, r.h + e.clientY - r.y)
+                  // Stops 160px short of the window, so it never runs off the bottom.
+                  Math.max(
+                    r.lo,
+                    Math.min(window.innerHeight - 160, r.h + e.clientY - r.y)
                   )
                 )
               }}

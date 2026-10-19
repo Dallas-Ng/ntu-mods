@@ -41,15 +41,34 @@ NTUMods still does not register you for modules. STARS does that. The data also 
 
 ## How to try it
 
-1. Use a recent version of Chrome and turn on WebMCP. It is an early preview, so the way to enable it can change; [Chrome's WebMCP documentation](https://developer.chrome.com/docs/ai/webmcp/imperative-api) has the current steps.
-2. Open [the timetable planner](/timetable) and start an assistant that supports WebMCP tools.
-3. Ask for something specific, such as the examples above.
+WebMCP is an early preview, so setup takes a few minutes and is aimed at people comfortable installing a browser extension. If you would rather wait, nothing is lost: it will get easier as browsers and assistants catch up.
 
-Few assistants use WebMCP today, and this will grow over time. The [timetable planner guide](/articles/ntu-timetable-planner-guide) explains the features the assistant is using, which is also a good way to check its work.
+1. **Use a recent Chrome.** Chrome's origin trial starts from Chrome 149, and the steps below work for local testing.
+2. **Turn WebMCP on.** Open **chrome://flags/#enable-webmcp-testing** in the address bar, set the flag to **Enabled**, then relaunch Chrome.
+3. **Add an assistant that can use website tools.** Chrome does not include one that is documented to call WebMCP tools yet, so testers use an extension. Chrome's documentation lists two:
+   - The [Model Context Tool Inspector](https://chromewebstore.google.com/detail/model-context-tool-inspec/gbpdfapgefenggkahomfgkhfehlcenpd) from the Chrome Web Store. It shows the tools a page offers and lets you try them with prompts. It needs a Gemini API key.
+   - The [Example Agentic Chrome Extension](https://github.com/GoogleChromeLabs/webmcp-extension/) on GitHub. It needs a small local server and your own API key, so it suits developers more than most students.
+4. **Open NTUMods and check the tools appear.** Go to [the timetable planner](/timetable) and open the extension. You should see about 30 NTUMods tools listed. If you see none, check that the flag is enabled and that you relaunched Chrome.
+5. **Ask for something specific**, such as the examples above, and check the result on the page.
+
+New to this? Run the [comparison demo](https://googlechromelabs.github.io/webmcp-tools/demos/explainer/#compare) with the same extension first. It is a small page with two tools, so it is an easy way to confirm your setup works before you try NTUMods.
+
+A few things to know before you start. An API key is tied to your own account and usage, so only paste it into an extension you trust, and keep an eye on any usage limits. Gemini in Chrome is a separate feature, and Chrome's documentation does not say it can call WebMCP tools. You can also read the full list of NTUMods tools, with no setup, in [webmcp.json](/.well-known/webmcp.json).
+
+### What to read
+
+- [WebMCP comparison demo](https://googlechromelabs.github.io/webmcp-tools/demos/explainer/#compare): a two-minute look at why this approach is more reliable than an assistant guessing at a page.
+- [WebMCP on Chrome for Developers](https://developer.chrome.com/docs/ai/webmcp): the overview, with setup and testing tools. Start here.
+- [Imperative API guide](https://developer.chrome.com/docs/ai/webmcp/imperative-api): how a site registers tools, which is the approach NTUMods uses.
+- [WebMCP on GitHub](https://github.com/webmachinelearning/webmcp) and the [specification](https://webmachinelearning.github.io/webmcp/): the standard itself, where you can also follow progress and report issues.
+
+The [timetable planner guide](/articles/ntu-timetable-planner-guide) explains the features the assistant is using, which is also a good way to check its work.
 
 ## What is WebMCP?
 
 WebMCP is a new web standard that lets a website tell a browser assistant what it can do. Today, an assistant that wants to use a site has to look at the page and guess which buttons to press, which is slow and often wrong. With WebMCP, the site offers a list of actions with clear descriptions, such as "search modules" or "add a module to the plan". The assistant picks the right action and the site carries it out.
+
+To see the difference side by side, try Google's [WebMCP comparison demo](https://googlechromelabs.github.io/webmcp-tools/demos/explainer/#compare). It has an assistant book the same appointment twice, once by guessing at the page and once by calling the actions the page offers.
 
 The standard is being drafted by a W3C community group, with Google and Microsoft involved, and Chrome has an early preview. NTUMods offers about 30 of these actions. They are the same things you can already do on the site, so an assistant can never do more than you could do yourself.
 

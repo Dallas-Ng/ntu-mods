@@ -405,6 +405,8 @@ const CampusMap = ({
   // --- pointer: drag to pan, pinch to zoom, wheel to zoom ---
   const pointers = useRef(new Map<number, { x: number; y: number }>())
   const dragged = useRef(false)
+  /** Where the finger or cursor went down, to tell a tap from a drag. */
+  const downAt = useRef({ x: 0, y: 0 })
   const pinch = useRef(0)
 
   useEffect(() => {
@@ -427,6 +429,7 @@ const CampusMap = ({
     camTarget.current = null
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
     dragged.current = false
+    downAt.current = { x: e.clientX, y: e.clientY }
     if (pointers.current.size === 2) {
       const [a, b] = [...pointers.current.values()]
       pinch.current = Math.hypot(a.x - b.x, a.y - b.y)
@@ -454,7 +457,15 @@ const CampusMap = ({
     }
     const dx = cur.x - prev.x
     const dy = cur.y - prev.y
-    if (!dragged.current && Math.hypot(dx, dy) < 3) return
+    // A drag starts once the finger has moved far enough from where it went
+    // down, however slowly. Until then it is still a tap, so a wobbly press on
+    // a building selects it and a slow pan never does.
+    if (
+      !dragged.current &&
+      Math.hypot(cur.x - downAt.current.x, cur.y - downAt.current.y) <
+        (e.pointerType === "touch" ? 10 : 4)
+    )
+      return
     if (!dragged.current) box.current?.setPointerCapture(e.pointerId)
     dragged.current = true
     const v = viewRef.current

@@ -823,7 +823,7 @@ const MapsPageContent = () => {
 
       <div
         ref={slotRef}
-        className="relative h-[calc(100dvh-11rem)] min-h-[34rem] lg:h-[clamp(30rem,calc(100dvh-22rem),40rem)] lg:min-h-0"
+        className="relative h-[calc(100svh-11rem)] min-h-[34rem] lg:h-[clamp(30rem,calc(100dvh-22rem),40rem)] lg:min-h-0"
         style={desktop && deskH !== null ? { height: deskH } : undefined}>
         <div
           ref={shellRef}
@@ -1329,7 +1329,10 @@ const ScrollHint = ({
         ref={ref}
         onScroll={update}
         style={more ? { maskImage: fade, WebkitMaskImage: fade } : undefined}
-        className={cn("min-h-0 flex-1 overflow-y-auto", className)}>
+        className={cn(
+          "min-h-0 flex-1 overflow-y-auto overscroll-contain",
+          className
+        )}>
         {children}
       </div>
       {more && (
@@ -1471,6 +1474,11 @@ const Sheet = ({
               0
             )
             onDetent(next)
+            setDrag(null)
+          }}
+          onPointerCancel={() => {
+            // iOS cancels the pointer for system gestures; snap back.
+            track.current = null
             setDrag(null)
           }}>
           <span className="bg-muted-foreground/40 h-1 w-10 rounded-full" />

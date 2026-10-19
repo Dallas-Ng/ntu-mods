@@ -17,7 +17,13 @@ export interface ApiOp {
   description?: string
   /** Display date, e.g. "19 Oct 2026". */
   updated: string
-  params: { name: string; description: string }[]
+  params: {
+    name: string
+    where: string
+    description: string
+    pattern?: string
+    example?: string
+  }[]
   responses: { status: string; description: string }[]
   fields?: [string, string, string][]
   /** Where the fields sit in the response. */
@@ -68,18 +74,41 @@ const Operation = ({ op }: { op: ApiOp }) => {
       {op.params.length > 0 && (
         <div className="space-y-1.5">
           <h3 className="text-sm font-semibold">Parameters</h3>
-          <ul className="space-y-2 text-sm">
-            {op.params.map((p) => (
-              <li key={p.name} className="space-y-0.5">
-                <code className="bg-muted rounded px-1 py-0.5 text-xs font-semibold">
-                  {p.name}
-                </code>
-                <p className="text-foreground/80">
-                  <Rich text={p.description} />
-                </p>
-              </li>
-            ))}
-          </ul>
+          <table className="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {op.params.map((p) => (
+                <tr key={p.name}>
+                  <td>
+                    <code className="text-xs">{p.name}</code>
+                    <div className="text-foreground/70 text-xs font-normal">
+                      {p.where}, required
+                    </div>
+                  </td>
+                  <td className="space-y-1">
+                    <p>
+                      <Rich text={p.description} />
+                    </p>
+                    {p.pattern && (
+                      <p className="text-foreground/80 text-xs">
+                        <Rich text={`Format: \`${p.pattern}\``} />
+                      </p>
+                    )}
+                    {p.example && (
+                      <p className="text-foreground/80 text-xs">
+                        <Rich text={`Example: \`${p.example}\``} />
+                      </p>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
       <Tabs defaultValue="responses">
@@ -117,33 +146,29 @@ const Operation = ({ op }: { op: ApiOp }) => {
                 <Rich text={op.fieldsNote} />
               </p>
             )}
-            <div className="overflow-hidden rounded-lg border">
-              <table className="w-full text-left text-sm">
-                <thead className="bg-muted text-xs">
-                  <tr>
-                    <th className="w-2/5 px-3 py-2 font-semibold">Field</th>
-                    <th className="px-3 py-2 font-semibold">Description</th>
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {op.fields.map(([name, type, description]) => (
+                  <tr key={name}>
+                    <td>
+                      <code className="text-xs break-all">{name}</code>
+                      <div className="text-foreground/70 font-mono text-xs font-normal break-all">
+                        {type}
+                      </div>
+                    </td>
+                    <td>
+                      <Rich text={description} />
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {op.fields.map(([name, type, description]) => (
-                    <tr key={name} className="border-t align-top">
-                      <td className="px-3 py-2">
-                        <code className="text-xs font-semibold break-all">
-                          {name}
-                        </code>
-                        <div className="text-foreground/70 font-mono text-xs break-all">
-                          {type}
-                        </div>
-                      </td>
-                      <td className="text-foreground/80 px-3 py-2">
-                        <Rich text={description} />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </TabsContent>
         )}
         <TabsContent value="example" className="space-y-3">

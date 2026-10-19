@@ -109,10 +109,10 @@ const groups: ApiGroup[] = spec.tags.map((tag) => ({
         updated: formatDate(op["x-last-updated"]),
         params: (op.parameters ?? []).map((p: Schema) => ({
           name: p.name,
-          description:
-            `${p.description ?? p.schema.description ?? ""}` +
-            `${p.schema.pattern ? ` Pattern: \`${p.schema.pattern}\`.` : ""}` +
-            ` Example: \`${p.schema.example}\`.`
+          where: p.in,
+          description: p.description ?? p.schema.description ?? "",
+          pattern: p.schema.pattern,
+          example: p.schema.example
         })),
         responses: Object.entries(op.responses).map(([status, r]) => ({
           status,
@@ -187,27 +187,25 @@ const link = "text-primary underline underline-offset-2"
     </p>
   </div>
 
-  <section
-    class="bg-card space-y-3 rounded-2xl border p-4 sm:p-5"
-    aria-labelledby="terms">
-    <h2 id="terms" class="text-lg font-semibold tracking-tight">
-      Terms of use (no opt out)
-    </h2>
-    <p class="text-sm">
-      By using any API or file on this page, you accept these terms. There is no
-      opt out. If you do not accept them, do not use the APIs.
-    </p>
-    <ul class="list-disc space-y-1.5 pl-5 text-sm">
-      <li>
-        You use these APIs entirely at your own risk. The owner of NTUMods is
-        not responsible for, and is not implicated in, anything you build or do
-        with them.
-      </li>
-      <li>
-        The owner can change, restrict or remove any API, dataset or response
-        format at any time, without notice.
-      </li>
-    </ul>
+  <section class="prose dark:prose-invert max-w-none" aria-labelledby="terms">
+    <blockquote>
+      <p id="terms"><strong>Terms of use (no opt out)</strong></p>
+      <p>
+        By using any API or file on this page, you accept these terms. There is
+        no opt out. If you do not accept them, do not use the APIs.
+      </p>
+      <ul class="marker:text-foreground">
+        <li>
+          You use these APIs entirely at your own risk. The owner of NTUMods is
+          not responsible for, and is not implicated in, anything you build or
+          do with them.
+        </li>
+        <li>
+          The owner can change, restrict or remove any API, dataset or response
+          format at any time, without notice.
+        </li>
+      </ul>
+    </blockquote>
   </section>
 
   <section class="space-y-3" aria-labelledby="basics">

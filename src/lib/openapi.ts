@@ -16,7 +16,7 @@ const SEMESTER = {
   type: "string",
   pattern: "^[0-9]{4}_(1|2|S)$",
   description:
-    "Academic year and semester, as year_semester: 1, 2 or S (special term)."
+    "Academic year and semester as `year_semester`, where the semester is `1`, `2` or `S` (special term)."
 }
 
 const SLOW_DOWN = {
@@ -449,6 +449,7 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
             },
             latestOffering: {
               type: "object",
+              description: "The most recent semester the module was offered.",
               properties: {
                 year: {
                   type: "string",

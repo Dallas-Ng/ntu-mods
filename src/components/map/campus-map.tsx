@@ -286,7 +286,7 @@ const CampusMap = ({
         const goal = camTarget.current
         if (!goal) return
         const v = viewRef.current
-        const k = 1 - Math.exp(-(now - last) / 85)
+        const k = 1 - Math.exp(-(now - last) / 55)
         last = now
         const mpp = Math.exp(
           Math.log(v.mpp) + (Math.log(goal.mpp) - Math.log(v.mpp)) * k

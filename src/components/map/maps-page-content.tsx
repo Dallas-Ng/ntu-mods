@@ -1434,6 +1434,12 @@ const ExplorePanel = ({
       }),
     [places]
   )
+  // Walk each suggestion once in the background, so tapping one is instant.
+  useEffect(() => {
+    const warm = () => routes.forEach(([a, b]) => fetchWalk(a, b))
+    const id = window.setTimeout(warm, 1500)
+    return () => window.clearTimeout(id)
+  }, [routes])
   const popular = useMemo(
     () =>
       Object.entries(data.venues)

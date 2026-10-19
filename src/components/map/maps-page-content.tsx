@@ -750,14 +750,16 @@ const MapsPageContent = () => {
       localStorage.setItem(DRAWER_TIP_KEY, "1")
     } catch {}
   }
-  useEffect(() => {
-    if (!fullscreen) return
+  // Lock page scroll before paint and release it only once the shell is back in
+  // the page: the scrollbar appearing or going mid-animation resizes the map.
+  useLayoutEffect(() => {
+    if (!pinned) return
     const prev = document.body.style.overflow
     document.body.style.overflow = "hidden"
     return () => {
       document.body.style.overflow = prev
     }
-  }, [fullscreen])
+  }, [pinned])
   const visible = [PEEK, shellH * 0.46, shellH * SHEET_FRACTION]
   const insets = desktop
     ? { left: 384, bottom: 0, top: 0 }

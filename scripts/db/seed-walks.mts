@@ -9,7 +9,8 @@
  *
  *   npx tsx scripts/db/seed-walks.mts [--sem 2026_1] [--limit 3000] [--rate 4]
  *
- * MazeMap is a public service: --rate is requests per second, keep it low.
+ * MazeMap is a public service: --rate is requests per second across --workers
+ * parallel calls (default 4), keep it low.
  * Routes are appended to db/out/walks.jsonl as they arrive, so an interrupted
  * run resumes where it stopped. It then writes db/out/walks.sql; apply with
  *   npx wrangler d1 execute DB --local  --file db/out/walks.sql
@@ -116,8 +117,8 @@ if (fs.existsSync(jsonl))
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 let fetched = 0
 let failed = 0
-for (const p of wanted) {
-  if (done.has(p.key)) continue
+const todo = wanted.filter((p) => !done.has(p.key))
+const route = async (p: (typeof wanted)[number]) => {
   try {
     const res = await fetch(`${UPSTREAM}?${upstreamQuery(p.s, p.t)}`, {
       signal: AbortSignal.timeout(8000)
@@ -137,8 +138,19 @@ for (const p of wanted) {
     failed++
     console.warn(`  skip ${p.key}: ${(e as Error).message}`)
   }
-  await sleep(gapMs)
 }
+// A few at a time, each worker pausing between its own calls: a call takes ~2 s,
+// so one at a time would be far below --rate.
+const workers = Number(arg("workers", "4"))
+let next = 0
+await Promise.all(
+  Array.from({ length: workers }, async () => {
+    while (next < todo.length) {
+      await route(todo[next++])
+      await sleep(gapMs * workers)
+    }
+  })
+)
 
 const q = (s: string) => `'${s.replaceAll("'", "''")}'`
 const sql = wanted

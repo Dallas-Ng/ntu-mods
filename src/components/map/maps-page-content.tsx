@@ -818,7 +818,7 @@ const MapsPageContent = () => {
 
       <div
         ref={slotRef}
-        className="relative h-[calc(100dvh-11rem)] min-h-[34rem] lg:h-[calc(100dvh-13rem)]">
+        className="relative h-[calc(100dvh-11rem)] min-h-[34rem] lg:h-[clamp(30rem,calc(100dvh-22rem),40rem)] lg:min-h-0">
         <div
           ref={shellRef}
           className={cn(

@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro"
+import { env } from "cloudflare:workers"
 
 import { ON_DEMAND_CACHE_CONTROL } from "@/lib/edge-cache"
 import { getLatestModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
@@ -7,21 +8,83 @@ export const prerender = false
 
 const headers = {
   "Content-Type": "application/json; charset=utf-8",
-  "Access-Control-Allow-Origin": "*"
+  "Access-Control-Allow-Origin": "*",
+  // A JSON duplicate of /mods/CODE: keep it out of search results.
+  "X-Robots-Tag": "noindex"
 }
+
+// Same shape the data layer accepts; rejecting the rest here costs no D1 query.
+const CODE = /^[A-Z0-9]{2,12}$/
+
+// A miss is one cheap D1 query, but every distinct code is a cache miss, so
+// unknown codes are cached too.
+const MISS_CACHE = "public, max-age=300, s-maxage=86400"
+
+const reply = (body: unknown, status: number, extra: HeadersInit = {}) =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { ...headers, ...extra }
+  })
 
 /**
  * One module as JSON: the record behind /mods/CODE. Read by the WebMCP
  * get_module tool and listed in ai-catalog.json. Read-only, no personal data.
+ *
+ * Public and built on by third parties, and a cold request costs about a dozen
+ * D1 queries, so it is hardened: one canonical URL per module (uppercase code,
+ * no query string) so the edge cache key cannot be varied to force misses, a
+ * format check before any query, cached 404s, a per-IP limit on what does reach
+ * the worker, and a 503 rather than an uncaught error if D1 fails.
  */
-export const GET: APIRoute = async ({ params }) => {
-  const code = (params.code ?? "").toUpperCase()
-  const snapshot = await getLatestModuleSnapshot(code)
+export const GET: APIRoute = async ({ params, url, request }) => {
+  const raw = params.code ?? ""
+  const code = raw.toUpperCase()
+
+  if (!CODE.test(code)) {
+    return reply({ error: "Invalid module code" }, 400, {
+      "Cache-Control": MISS_CACHE
+    })
+  }
+
+  if (url.search || raw !== code) {
+    return new Response(null, {
+      status: 308,
+      headers: {
+        Location: `/api/modules/${encodeURIComponent(code)}`,
+        "Cache-Control": "public, max-age=86400",
+        "Access-Control-Allow-Origin": "*"
+      }
+    })
+  }
+
+  // Cached responses never reach here, so this only counts real work.
+  // ponytail: limits are per Cloudflare location; add a WAF rule for a global cap.
+  const limiter = env.MODULE_API_LIMITER
+  if (limiter) {
+    const ip = request.headers.get("cf-connecting-ip") ?? "unknown"
+    const { success } = await limiter.limit({ key: ip })
+    if (!success) {
+      return reply({ error: "Rate limit exceeded. Retry in a minute." }, 429, {
+        "Retry-After": "60",
+        "Cache-Control": "no-store"
+      })
+    }
+  }
+
+  let snapshot
+  try {
+    snapshot = await getLatestModuleSnapshot(code)
+  } catch (error) {
+    console.error("[api/modules] snapshot failed", error)
+    return reply({ error: "Temporarily unavailable" }, 503, {
+      "Retry-After": "30",
+      "Cache-Control": "no-store"
+    })
+  }
 
   if (!snapshot) {
-    return new Response(JSON.stringify({ error: `No module ${code}` }), {
-      status: 404,
-      headers
+    return reply({ error: `No module ${code}` }, 404, {
+      "Cache-Control": MISS_CACHE
     })
   }
 

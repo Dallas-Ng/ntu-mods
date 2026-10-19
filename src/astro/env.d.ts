@@ -28,6 +28,10 @@ interface WorkerEnv {
   // dev runs that have no remote binding configured.
   DB?: D1Database
   RESEND_KEY?: string
+  // Workers Rate Limiting binding; absent in local dev.
+  MODULE_API_LIMITER?: {
+    limit(options: { key: string }): Promise<{ success: boolean }>
+  }
   PUBLIC_POSTHOG_TOKEN?: string
 }
 

@@ -83,7 +83,7 @@ export function buildAiCatalog({
         "application/json",
         "/api/modules/SC1003",
         "Module record API",
-        "GET /api/modules/{code} returns one NTU module as JSON: description, AU, prerequisites, exclusions, restrictions and exam. The URL shown is an example; replace SC1003 with any module code. No authentication, CORS open, read-only.",
+        "GET /api/modules/{code} returns one NTU module as JSON: description, AU, prerequisites, exclusions, restrictions and exam. The URL shown is an example; replace SC1003 with any module code. No authentication, CORS open, read-only. Cache responses and keep to about 60 requests a minute per IP; beyond that you get 429.",
         ["api", "modules", "ntu"]
       ),
       entry(

@@ -1171,6 +1171,7 @@ const CampusMap = ({
 
       {/* Top right: label filter, then the level picker. */}
       <div
+        data-ui
         onPointerDown={(e) => e.stopPropagation()}
         className="absolute right-3 flex flex-col items-end gap-2"
         style={{ top: 12 + insets.top }}>
@@ -1238,6 +1239,7 @@ const CampusMap = ({
       {/* Bottom right: zoom, frame and fullscreen. Sits above any bottom sheet,
           but never climbs into the level button at the top right. */}
       <div
+        data-ui
         onPointerDown={(e) => e.stopPropagation()}
         className={cn(
           "absolute right-3 flex flex-col gap-2 transition-[bottom,opacity,transform] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
@@ -1295,6 +1297,7 @@ const CampusMap = ({
 
       {level !== null && (
         <div
+          data-ui
           className={cn(
             FLOATING,
             "text-muted-foreground absolute flex h-[42px] items-center gap-3 px-3 text-xs transition-[bottom] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",

@@ -686,6 +686,20 @@ const MapsPageContent = () => {
       if (!fullscreen) setPinned(false)
       return
     }
+    // Skip anything already hidden, such as the zoom stack with no room.
+    const ui = [...el.querySelectorAll<HTMLElement>("[data-ui]")].filter(
+      (n) => getComputedStyle(n).opacity !== "0"
+    )
+    const fade = (from: number, to: number, duration: number, delay = 0) =>
+      ui.map((n) =>
+        n.animate(
+          { opacity: [from, to] },
+          { duration, delay, easing: "ease-out", fill: "both" }
+        )
+      )
+    // Entering: the controls wait for the edge, then fade in. Leaving: they
+    // fade out first, and fade back in once they are in their small-box spots.
+    const fades = fullscreen ? fade(0, 1, 260, 160) : fade(1, 0, 140)
     const anim = el.animate(
       { clipPath: fullscreen ? [small, full] : [full, small] },
       {
@@ -696,9 +710,12 @@ const MapsPageContent = () => {
       }
     )
     anim.onfinish = () => {
+      fades.forEach((f) => f.cancel())
       if (fullscreen) return anim.cancel()
       setPinned(false)
+      const back = fade(0, 1, 220)
       requestAnimationFrame(() => anim.cancel())
+      setTimeout(() => back.forEach((f) => f.cancel()), 260)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullscreen])
@@ -813,6 +830,7 @@ const MapsPageContent = () => {
               />
 
               <div
+                data-ui
                 className={cn(
                   "absolute top-3 right-3 left-3 z-20 flex flex-col gap-2",
                   "lg:right-auto lg:w-[360px]"
@@ -1147,7 +1165,7 @@ const CategoryChips = ({
   )
 
   return (
-    <div className={cn("flex h-11 items-center gap-2", className)}>
+    <div data-ui className={cn("flex h-11 items-center gap-2", className)}>
       {edge.overflow && arrow("left")}
       <div
         ref={ref}
@@ -1273,6 +1291,7 @@ const Sheet = ({
   if (desktop)
     return (
       <div
+        data-ui
         className={cn(
           FLOATING,
           "bg-card/95 absolute top-[68px] left-3 z-10 flex max-h-[calc(100%-80px)] w-[360px] flex-col overflow-hidden rounded-2xl"
@@ -1296,6 +1315,7 @@ const Sheet = ({
         />
       )}
       <div
+        data-ui
         className={cn(
           "bg-card absolute inset-x-0 bottom-0 z-10 flex flex-col rounded-t-2xl border-t shadow-[0_-8px_30px_-12px_hsl(var(--foreground)/0.25)]",
           tip && "z-[100]"

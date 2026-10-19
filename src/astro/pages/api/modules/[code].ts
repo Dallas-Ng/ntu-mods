@@ -2,6 +2,7 @@ import type { APIRoute } from "astro"
 
 import { ON_DEMAND_CACHE_CONTROL } from "@/lib/edge-cache"
 import { getLatestModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
+import { getKnownCodes } from "@/lib/server/edge/known-codes"
 import { rateLimit } from "@/lib/server/guard"
 
 export const prerender = false
@@ -64,6 +65,15 @@ export const GET: APIRoute = async ({ params, url, request }) => {
         "Cache-Control": "public, max-age=86400",
         "Access-Control-Allow-Origin": "*"
       }
+    })
+  }
+
+  // Made-up codes stop here without a D1 query, so D1 work is capped at one
+  // lookup per real module (then cached), however fast someone guesses codes.
+  const codes = await getKnownCodes(url)
+  if (codes && !codes.has(code)) {
+    return reply({ error: `No module ${code}` }, 404, {
+      "Cache-Control": MISS_CACHE
     })
   }
 

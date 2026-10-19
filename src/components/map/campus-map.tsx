@@ -1284,7 +1284,9 @@ const CampusMap = ({
         onPointerDown={(e) => e.stopPropagation()}
         className={cn(
           "absolute right-3 flex flex-col gap-2 transition-[bottom,opacity,transform] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
-          snap && "transition-none",
+          // Resizing: do not slide, but let the stack fade in with the menus.
+          snap &&
+            "[transition-property:opacity,transform] delay-300 duration-1000",
           !stackFits(size.h) && "pointer-events-none translate-y-2 opacity-0"
         )}
         style={{ bottom: 12 + insets.bottom }}>

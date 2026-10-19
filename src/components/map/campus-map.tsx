@@ -143,11 +143,10 @@ const MAX_MPP = 3
 const ROOM_TYPES_TEACHING =
   /lecture|tutorial|seminar|lab|studio|auditorium|exam/i
 
-/** Top-right stack (options + level) reaches this far down. */
-const CONTROLS_TOP = 112
-/** Zoom stack height, then each extra button under it: drop them when short on room. */
-const ZOOM_H = 82
-const BTN_H = 48
+/** Top-right stack (options, level, fullscreen) reaches this far down. */
+const CONTROLS_TOP = 160
+/** Zoom, fit and help stacked: it shows only when all of it fits above the sheet. */
+const STACK_H = 82 + 48 * 2 + 8
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 
@@ -178,9 +177,8 @@ const CampusMap = ({
 }: Props) => {
   // First visit: dim the app and point at the fullscreen button until it is used.
   const [intro, setIntro] = useState(false)
-  // Room between the level button and the sheet: fullscreen always stays, the rest yields.
-  const room = (h: number) => h - insets.top - CONTROLS_TOP - insets.bottom - 12
-  const extras = (h: number) => Math.floor((room(h) - ZOOM_H - BTN_H) / BTN_H) // buttons beyond fullscreen that fit
+  const stackFits = (h: number) =>
+    h - insets.top - CONTROLS_TOP - insets.bottom - 12 >= STACK_H
   useEffect(() => {
     try {
       if (!fullscreen && !localStorage.getItem(INTRO_KEY)) setIntro(true)
@@ -1197,13 +1195,33 @@ const CampusMap = ({
             />
           ))}
         </MapMenu>
+        {onFullscreen && (
+          <div className={cn(FLOATING, "relative", intro && "z-[100]")}>
+            <MapButton
+              label={fullscreen ? "Exit full screen" : "Full screen"}
+              onClick={onFullscreen}>
+              {fullscreen ? <Minimize2 /> : <Maximize2 />}
+            </MapButton>
+            {intro && (
+              <div className="bg-card absolute top-1/2 right-full mr-3 w-56 -translate-y-1/2 rounded-xl border p-3 text-sm shadow-lg">
+                <p className="font-semibold">Use the whole screen</p>
+                <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+                  Tap this button for a bigger map. Tap it again to come back.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Bottom right: zoom, frame and fullscreen. Sits above any bottom sheet,
           but never climbs into the level button at the top right. */}
       <div
         onPointerDown={(e) => e.stopPropagation()}
-        className="absolute right-3 flex flex-col gap-2"
+        className={cn(
+          "absolute right-3 flex flex-col gap-2 transition-opacity duration-150",
+          !stackFits(size.h) && "pointer-events-none opacity-0"
+        )}
         style={{ bottom: 12 + insets.bottom }}>
         <div className={cn(FLOATING, "flex flex-col overflow-hidden")}>
           <MapButton label="Zoom in" onClick={() => zoomBy(0.6)}>
@@ -1214,7 +1232,7 @@ const CampusMap = ({
             <Minus />
           </MapButton>
         </div>
-        {extras(size.h) >= 1 && (
+        {
           <div className={cn(FLOATING, "overflow-hidden")}>
             <MapButton
               label="Fit the chosen place, route or campus"
@@ -1233,25 +1251,8 @@ const CampusMap = ({
               <LocateFixed />
             </MapButton>
           </div>
-        )}
-        {onFullscreen && (
-          <div className={cn(FLOATING, "relative", intro && "z-[100]")}>
-            <MapButton
-              label={fullscreen ? "Exit full screen" : "Full screen"}
-              onClick={onFullscreen}>
-              {fullscreen ? <Minimize2 /> : <Maximize2 />}
-            </MapButton>
-            {intro && (
-              <div className="bg-card absolute top-1/2 right-full mr-3 w-56 -translate-y-1/2 rounded-xl border p-3 text-sm shadow-lg">
-                <p className="font-semibold">Use the whole screen</p>
-                <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
-                  Tap this button for a bigger map. Tap it again to come back.
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-        {onHelp && extras(size.h) >= 2 && (
+        }
+        {onHelp && (
           <div className={cn(FLOATING, "overflow-hidden")}>
             <MapButton label="How to use the map" onClick={onHelp}>
               <CircleHelp />

@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Code, Rich } from "@/components/developers/code"
 
 const CODE = /^[A-Z0-9]{2,12}$/
 const MAX_CHARS = 4000
@@ -12,7 +13,9 @@ const MAX_CHARS = 4000
 const TryModuleApi = () => {
   const [value, setValue] = useState("SC1003")
   const [busy, setBusy] = useState(false)
-  const [output, setOutput] = useState<string | null>(null)
+  const [output, setOutput] = useState<{ status: string; body: string } | null>(
+    null
+  )
 
   const code = value.trim().toUpperCase()
   const valid = CODE.test(code)
@@ -29,9 +32,12 @@ const TryModuleApi = () => {
       } catch {}
       const clipped =
         body.length > MAX_CHARS ? `${body.slice(0, MAX_CHARS)}\n...` : body
-      setOutput(`HTTP ${res.status}\n${clipped}`)
+      setOutput({ status: `HTTP ${res.status}`, body: clipped })
     } catch {
-      setOutput("Request failed. Check your connection and try again.")
+      setOutput({
+        status: "Request failed",
+        body: "Check your connection and try again."
+      })
     }
     // Cooldown so the button cannot be hammered.
     await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -62,14 +68,10 @@ const TryModuleApi = () => {
       </form>
       {!valid && (
         <p className="text-foreground/80 text-sm">
-          Use 2 to 12 letters or digits, for example SC1003.
+          <Rich text="Use 2 to 12 letters or digits, for example `SC1003`." />
         </p>
       )}
-      {output && (
-        <pre className="bg-muted max-h-96 overflow-auto rounded-lg p-3 text-xs">
-          {output}
-        </pre>
-      )}
+      {output && <Code code={output.body} lang="json" title={output.status} />}
     </div>
   )
 }

@@ -21,7 +21,7 @@ const SEMESTER = {
 
 const SLOW_DOWN = {
   description:
-    "Too many requests. Wait for the number of seconds in the Retry-After header, then try again.",
+    "Too many requests. Wait the number of seconds in the `Retry-After` header, then try again.",
   headers: {
     "Retry-After": {
       description: "Seconds to wait before retrying.",
@@ -32,6 +32,9 @@ const SLOW_DOWN = {
     "application/json": { schema: { $ref: "#/components/schemas/Error" } }
   }
 }
+
+// Bump when an endpoint's behavior or response shape changes.
+const UPDATED = "2026-10-19"
 
 const ref = (name: string) => ({ $ref: `#/components/schemas/${name}` })
 
@@ -92,8 +95,7 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
       version: "1.0.0",
       summary: "Open, read-only NTU module, class index and exam data.",
       description:
-        "Free to use, no API key. The data is NTU public course data and may be out of date or wrong. Always check STARS for anything that affects your registration. Please cache responses and keep to a modest request rate; excessive use returns 429 with a Retry-After header.",
-      license: { name: "Free to use with attribution to NTUMods" }
+        "Free to use, no API key. The data is NTU public course data and may be out of date or wrong, so check STARS before you rely on it. Use is at your own risk. The operator may change, limit or remove any API or dataset at any time, without notice. Please cache responses and keep to a modest request rate; excessive use returns `429` with a `Retry-After` header."
     },
     servers: [{ url: siteConfig.url }],
     tags: [
@@ -106,15 +108,16 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
         get: {
           tags: ["Modules"],
           operationId: "getModule",
+          "x-last-updated": UPDATED,
           summary: "Get one module",
           description:
-            "The record behind the module page at /mods/{code}. Use the uppercase code with no query string; anything else is redirected to that form.",
+            "Returns the record behind the module page `/mods/{code}`. Use an uppercase code and no query string. A lowercase code or a query string gets a `308` redirect to the canonical URL.",
           parameters: [
             {
               name: "code",
               in: "path",
               required: true,
-              description: "Module code, uppercase letters and digits.",
+              description: "Module code: uppercase letters and digits.",
               schema: {
                 type: "string",
                 pattern: "^[A-Z0-9]{2,12}$",
@@ -129,21 +132,22 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
             },
             "308": {
               description:
-                "Lowercase code or a query string. Follow the Location header to the canonical URL.",
+                "Lowercase code or a query string. Follow the `Location` header to the canonical URL.",
               headers: { Location: { schema: { type: "string" } } }
             },
             "400": {
-              description: "Not a valid module code.",
+              description:
+                "The code is not 2 to 12 uppercase letters or digits.",
               content: json(ref("Error"), { error: "Invalid module code" })
             },
             "404": {
-              description: "No such module.",
+              description: "No module with that code.",
               content: json(ref("Error"), { error: "No module ZZ9999" })
             },
             "429": SLOW_DOWN,
             "503": {
               description:
-                "Temporarily unavailable. Retry after the number of seconds in the Retry-After header.",
+                "Temporarily unavailable. Retry after the number of seconds in the `Retry-After` header.",
               headers: SLOW_DOWN.headers,
               content: json(ref("Error"), { error: "Temporarily unavailable" })
             }
@@ -154,18 +158,39 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
         get: {
           tags: ["Open data"],
           operationId: "getModuleList",
+          "x-last-updated": UPDATED,
           summary: "All modules",
           description:
-            "Every module NTUMods knows about since AY2014, with its most recent offering. A large file: download it once and cache it rather than fetching it repeatedly.",
-          responses: ok("The module list.", json(ref("ModuleList")))
+            "Every module since AY2014, with its most recent offering. This is a large file: download it once and cache it instead of fetching it repeatedly.",
+          responses: ok("The module list.", {
+            "application/json": {
+              schema: ref("ModuleList"),
+              "x-example-text": `{
+  "modules": [
+    {
+      "code": "AAA08A",
+      "title": "Art As Commodity",
+      "au": "3.0",
+      "faculty": "NIE",
+      "categories": ["CORE", "GLOAD"],
+      "latestYear": "2019",
+      "latestSemester": "2",
+      "isCurrentSemester": false
+    },
+    ...
+  ]
+}`
+            }
+          })
         }
       },
       "/data/api/indexes/{semester}.json": {
         get: {
           tags: ["Open data"],
           operationId: "getIndexes",
+          "x-last-updated": UPDATED,
           summary: "Class indexes for a semester",
-          description: `Every class index in the semester, keyed by module code, then by index number. The latest semester is ${indexSemester}.`,
+          description: `Every class index in one semester, keyed by module code and then by index number. The latest semester is \`${indexSemester}\`.`,
           parameters: [
             {
               name: "semester",
@@ -175,7 +200,30 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
             }
           ],
           responses: {
-            ...ok("Indexes by module code.", json(ref("IndexMap"))),
+            ...ok("Indexes by module code.", {
+              "application/json": {
+                schema: ref("IndexMap"),
+                "x-example-text": `{
+  "SC1003": {
+    "10001": [
+      {
+        "key": "10001",
+        "type": "LEC",
+        "group": "LE",
+        "day": 1,
+        "time": "0930-1020",
+        "venue": "LT1",
+        "remarks": "",
+        "duration": 2
+      },
+      ...
+    ],
+    ...
+  },
+  ...
+}`
+              }
+            }),
             "404": { description: "No data for that semester." }
           }
         }
@@ -184,9 +232,10 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
         get: {
           tags: ["Open data"],
           operationId: "getExams",
+          "x-last-updated": UPDATED,
           summary: "Exam timetable for a semester",
-          description: `Exam date, start and end time and duration by module code. Venues are not published in this data.${
-            examSemester ? ` The latest semester is ${examSemester}.` : ""
+          description: `Exam date, start and end time, and duration, by module code. Venues are not in this data.${
+            examSemester ? ` The latest semester is \`${examSemester}\`.` : ""
           }`,
           parameters: [
             {
@@ -197,7 +246,23 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
             }
           ],
           responses: {
-            ...ok("Exams by module code.", json(ref("ExamMap"))),
+            ...ok("Exams by module code.", {
+              "application/json": {
+                schema: ref("ExamMap"),
+                "x-example-text": `{
+  "AB0403": {
+    "key": "AB0403",
+    "name": "DECISION MAKING WITH PROGRAMMING & ANALYTICS",
+    "date": "24 November 2026",
+    "day": 2,
+    "start_time": "5.00 pm",
+    "end_time": "6.30 pm",
+    "duration": 3
+  },
+  ...
+}`
+              }
+            }),
             "404": { description: "No data for that semester." }
           }
         }
@@ -206,29 +271,82 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
         get: {
           tags: ["Discovery"],
           operationId: "getAiCatalog",
+          "x-last-updated": UPDATED,
           summary: "AI catalog",
           description:
-            "Machine-readable list of what an AI agent can use on this site, in the ai-catalog format. It always names the latest semester files.",
-          responses: ok("The catalog.", json({ type: "object" }))
+            "A machine-readable list of what an AI agent can use on this site, in the ai-catalog format. It always points to the latest semester files.",
+          responses: ok("The catalog.", {
+            "application/json": {
+              schema: { type: "object" },
+              "x-example-text": `{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "NTUMods",
+    "identifier": "https://ntumods.com",
+    ...
+  },
+  "entries": [
+    {
+      "displayName": "Module record API",
+      "type": "application/json",
+      "url": "https://ntumods.com/api/modules/SC1003",
+      ...
+    },
+    ...
+  ]
+}`
+            }
+          })
         }
       },
       "/.well-known/webmcp.json": {
         get: {
           tags: ["Discovery"],
           operationId: "getWebMcpTools",
+          "x-last-updated": UPDATED,
           summary: "WebMCP tool list (early developer preview)",
           description:
-            "Names and input schemas of the tools the site registers through WebMCP. The tools only run inside a supporting browser tab on ntumods.com, on the visitor's own saved plans. This file is for discovery.",
-          responses: ok("The tool list.", json({ type: "object" }))
+            "The names and input schemas of the tools the site registers through WebMCP. The tools only run inside a supporting browser tab on ntumods.com, on the visitor's own saved plans. This file is for discovery.",
+          responses: ok("The tool list.", {
+            "application/json": {
+              schema: { type: "object" },
+              "x-example-text": `{
+  "name": "NTUMods",
+  "url": "https://ntumods.com",
+  "tools": [
+    {
+      "name": "search_modules",
+      "title": "Search modules",
+      "description": "Search NTU modules by code or title. ...",
+      "inputSchema": { ... },
+      ...
+    },
+    ...
+  ]
+}`
+            }
+          })
         }
       },
       "/llms.txt": {
         get: {
           tags: ["Discovery"],
           operationId: "getLlmsTxt",
+          "x-last-updated": UPDATED,
           summary: "Site summary for language models",
           responses: ok("Plain text.", {
-            "text/plain": { schema: { type: "string" } }
+            "text/plain": {
+              schema: { type: "string" },
+              "x-example-text": `# NTUMods
+
+> NTUMods is a free, independent timetable planner, module browser, and exam schedule for Nanyang Technological University (NTU) students in Singapore. ...
+
+## Core Tools
+
+- [Timetable Planner](https://ntumods.com/timetable): Visual timetable builder with automatic clash detection ...
+- [Module Browser](https://ntumods.com/mods): Search NTU modules by code or title ...
+...`
+            }
           })
         }
       },
@@ -236,9 +354,21 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
         get: {
           tags: ["Discovery"],
           operationId: "getLlmsMd",
+          "x-last-updated": UPDATED,
           summary: "Site summary for language models, as Markdown",
+          description: "The same content as `/llms.txt`, served as Markdown.",
           responses: ok("Markdown.", {
-            "text/markdown": { schema: { type: "string" } }
+            "text/markdown": {
+              schema: { type: "string" },
+              "x-example-text": `# NTUMods
+
+> NTUMods is a free, independent timetable planner, module browser, and exam schedule ...
+
+## Core Tools
+
+- [Timetable Planner](https://ntumods.com/timetable): ...
+...`
+            }
           })
         }
       }
@@ -269,7 +399,7 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
             categories: {
               type: "array",
               items: { type: "string" },
-              description: "Labels such as CORE, GLOAD or MLOAD."
+              description: "Labels such as `CORE`, `GLOAD` or `MLOAD`."
             },
             prerequisites: {
               type: "array",
@@ -401,11 +531,14 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
             key: { type: "string", description: "Index number." },
             type: {
               type: "string",
-              description: "LEC, TUT, LAB, SEM and so on."
+              description: "`LEC`, `TUT`, `LAB`, `SEM` and so on."
             },
             group: { type: "string" },
             day: { type: "integer", description: "1 Monday to 6 Saturday." },
-            time: { type: "string", description: "HHMM-HHMM, 24 hour clock." },
+            time: {
+              type: "string",
+              description: "`HHMM-HHMM`, 24 hour clock."
+            },
             venue: { type: "string" },
             remarks: { type: "string", description: "Week pattern and notes." },
             duration: { type: "integer", description: "Length in half hours." }

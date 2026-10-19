@@ -1219,8 +1219,8 @@ const CampusMap = ({
       <div
         onPointerDown={(e) => e.stopPropagation()}
         className={cn(
-          "absolute right-3 flex flex-col gap-2 transition-opacity duration-150",
-          !stackFits(size.h) && "pointer-events-none opacity-0"
+          "absolute right-3 flex flex-col gap-2 transition-[bottom,opacity,transform] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
+          !stackFits(size.h) && "pointer-events-none translate-y-2 opacity-0"
         )}
         style={{ bottom: 12 + insets.bottom }}>
         <div className={cn(FLOATING, "flex flex-col overflow-hidden")}>
@@ -1275,7 +1275,7 @@ const CampusMap = ({
         <div
           className={cn(
             FLOATING,
-            "text-muted-foreground absolute flex h-[42px] items-center gap-3 px-3 text-xs"
+            "text-muted-foreground absolute flex h-[42px] items-center gap-3 px-3 text-xs transition-[bottom] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none"
           )}
           style={{ left: 12 + insets.left, bottom: 12 + insets.bottom }}>
           <span className="text-foreground font-semibold">

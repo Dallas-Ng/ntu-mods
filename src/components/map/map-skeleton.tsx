@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton"
  * The map's layout drawn in grey, so the page looks right from the first paint
  * (it is in the prerendered HTML) and nothing jumps when the data arrives.
  * Sizes and positions are measured from the real controls (search pill, chips,
- * home sheet, Map/Level buttons, zoom stack), so keep them in step with those.
+ * home sheet, Map/Level/fullscreen buttons, zoom stack), so keep them in step with those.
  */
 const CHIPS = [160, 83, 83, 141, 139, 115, 94, 121, 94, 163]
 const BUSY = [75, 57, 60, 66, 56, 50, 85, 48]
@@ -93,15 +93,18 @@ const MapSkeleton = () => (
       <HomeContent />
     </div>
 
-    {/* Map and Level buttons */}
+    {/* Map and Level buttons, then fullscreen */}
     <div className="absolute top-[120px] right-3 flex flex-col items-end gap-2 lg:top-3">
       <Skeleton className={`${FLOAT} h-11 w-[84px] rounded-xl`} />
       <Skeleton className={`${FLOAT} h-11 w-[84px] rounded-xl`} />
+      <Skeleton className={`${FLOAT} size-[42px] rounded-xl`} />
     </div>
 
-    {/* Zoom stack and frame button; above the bottom sheet on phones */}
-    <div className="absolute right-3 bottom-[calc(46.4%+12px)] flex flex-col gap-2 lg:bottom-3">
+    {/* Zoom, fit and help. On phones the real stack hides when the sheet
+        leaves no room, so only desktop draws it. */}
+    <div className="absolute right-3 bottom-3 hidden flex-col gap-2 lg:flex">
       <Skeleton className={`${FLOAT} h-[83px] w-[42px] rounded-xl`} />
+      <Skeleton className={`${FLOAT} size-[42px] rounded-xl`} />
       <Skeleton className={`${FLOAT} size-[42px] rounded-xl`} />
     </div>
   </div>

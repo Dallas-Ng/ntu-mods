@@ -651,6 +651,15 @@ const MapsPageContent = () => {
     ro.observe(el)
     return () => ro.disconnect()
   }, [data])
+  const [fullscreen, setFullscreen] = useState(false)
+  useEffect(() => {
+    if (!fullscreen) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [fullscreen])
   const visible = [PEEK, shellH * 0.46, shellH * SHEET_FRACTION]
   const insets = desktop
     ? { left: 384, bottom: 0, top: 0 }
@@ -678,7 +687,12 @@ const MapsPageContent = () => {
 
       <div
         ref={shellRef}
-        className="bg-card relative h-[calc(100dvh-11rem)] min-h-[34rem] overflow-hidden rounded-2xl border lg:h-[calc(100dvh-13rem)]">
+        className={cn(
+          "bg-card relative overflow-hidden border",
+          fullscreen
+            ? "fixed inset-0 z-[80] h-dvh"
+            : "h-[calc(100dvh-11rem)] min-h-[34rem] rounded-2xl lg:h-[calc(100dvh-13rem)]"
+        )}>
         {data ? (
           <>
             <CampusMap
@@ -699,11 +713,18 @@ const MapsPageContent = () => {
               roomLabels={roomLabels}
               focus={focus}
               insets={insets}
-              onHelp={() =>
-                document
-                  .getElementById("how-to-use")
-                  ?.scrollIntoView({ block: "start" })
-              }
+              onHelp={() => {
+                setFullscreen(false)
+                setTimeout(
+                  () =>
+                    document
+                      .getElementById("how-to-use")
+                      ?.scrollIntoView({ block: "start" }),
+                  50
+                )
+              }}
+              fullscreen={fullscreen}
+              onFullscreen={() => setFullscreen((f) => !f)}
               className="absolute inset-0"
               extraControls={
                 <MapOptions
@@ -901,7 +922,7 @@ const SearchPill = ({
               scope ? `Search in ${scope}` : "Search a room, building or place"
             }
             aria-label="Search the campus map"
-            className="placeholder:text-muted-foreground h-full min-w-0 flex-1 bg-transparent text-sm outline-none"
+            className="placeholder:text-muted-foreground h-full min-w-0 flex-1 bg-transparent text-base outline-none lg:text-sm"
           />
           {q ? (
             <button

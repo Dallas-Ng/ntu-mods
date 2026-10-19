@@ -1,7 +1,14 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { CircleHelp, Maximize2, Minus, Plus } from "lucide-react"
+import {
+  CircleHelp,
+  LocateFixed,
+  Maximize2,
+  Minimize2,
+  Minus,
+  Plus
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import {
@@ -108,8 +115,13 @@ interface Props {
   onHelp?: () => void
   /** Tap a building, landmark or class room: "b:<id>", "l:<id>" or "v:<venue>". */
   onPick?: (id: string) => void
+  /** Fill the screen: phones get the whole viewport instead of a squeezed box. */
+  fullscreen?: boolean
+  onFullscreen?: () => void
   className?: string
 }
+
+const INTRO_KEY = "ntumods-map-fullscreen-intro"
 
 interface View {
   cx: number
@@ -130,6 +142,10 @@ const MIN_MPP = 0.06
 const MAX_MPP = 3
 const ROOM_TYPES_TEACHING =
   /lecture|tutorial|seminar|lab|studio|auditorium|exam/i
+
+/** Top-right stack (options + level) reaches this far down; zoom stack is this tall. */
+const CONTROLS_TOP = 112
+const CONTROLS_H = 234
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 
@@ -154,8 +170,24 @@ const CampusMap = ({
   extraControls,
   onHelp,
   onPick,
+  fullscreen = false,
+  onFullscreen,
   className
 }: Props) => {
+  // First visit: dim the app and point at the fullscreen button until it is used.
+  const [intro, setIntro] = useState(false)
+  useEffect(() => {
+    try {
+      if (!fullscreen && !localStorage.getItem(INTRO_KEY)) setIntro(true)
+    } catch {}
+  }, [fullscreen])
+  useEffect(() => {
+    if (!fullscreen) return
+    setIntro(false)
+    try {
+      localStorage.setItem(INTRO_KEY, "1")
+    } catch {}
+  }, [fullscreen])
   const box = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ w: 0, h: 0 })
   const [view, setView] = useState<View>({
@@ -1154,11 +1186,22 @@ const CampusMap = ({
         </MapMenu>
       </div>
 
-      {/* Bottom right: zoom and recentre. Sits above any bottom sheet. */}
+      {/* Bottom right: zoom, frame and fullscreen. Sits above any bottom sheet,
+          but never climbs into the level button at the top right. */}
       <div
         onPointerDown={(e) => e.stopPropagation()}
         className="absolute right-3 flex flex-col gap-2"
-        style={{ bottom: 12 + insets.bottom }}>
+        style={{
+          bottom:
+            12 +
+            Math.max(
+              0,
+              Math.min(
+                insets.bottom,
+                size.h - insets.top - CONTROLS_TOP - CONTROLS_H - 12
+              )
+            )
+        }}>
         <div className={cn(FLOATING, "flex flex-col overflow-hidden")}>
           <MapButton label="Zoom in" onClick={() => zoomBy(0.6)}>
             <Plus />
@@ -1170,10 +1213,11 @@ const CampusMap = ({
         </div>
         <div className={cn(FLOATING, "overflow-hidden")}>
           <MapButton
-            label="Frame the route or campus"
+            label="Fit the chosen place, route or campus"
             onClick={() => {
               const pts = pins.map((p) => [p.x, p.y])
-              if (pts.length)
+              if (focus) fit(focus.bounds)
+              else if (pts.length)
                 fit([
                   Math.min(...pts.map((p) => p[0])),
                   Math.min(...pts.map((p) => p[1])),
@@ -1182,9 +1226,26 @@ const CampusMap = ({
                 ])
               else fit([0, 0, data.size.width, data.size.height], 10)
             }}>
-            <Maximize2 />
+            <LocateFixed />
           </MapButton>
         </div>
+        {onFullscreen && (
+          <div className={cn(FLOATING, "relative", intro && "z-[100]")}>
+            <MapButton
+              label={fullscreen ? "Exit full screen" : "Full screen"}
+              onClick={onFullscreen}>
+              {fullscreen ? <Minimize2 /> : <Maximize2 />}
+            </MapButton>
+            {intro && (
+              <div className="bg-card absolute top-1/2 right-full mr-3 w-56 -translate-y-1/2 rounded-xl border p-3 text-sm shadow-lg">
+                <p className="font-semibold">Use the whole screen</p>
+                <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+                  Tap this button for a bigger map. Tap it again to come back.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
         {onHelp && (
           <div className={cn(FLOATING, "overflow-hidden")}>
             <MapButton label="How to use the map" onClick={onHelp}>
@@ -1193,6 +1254,9 @@ const CampusMap = ({
           </div>
         )}
       </div>
+      {intro && (
+        <div className="fixed inset-0 z-[90] bg-black/65" aria-hidden="true" />
+      )}
 
       {level !== null && (
         <div

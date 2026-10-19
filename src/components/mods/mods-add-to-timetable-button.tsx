@@ -169,7 +169,18 @@ const ModsAddToTimetableButton = ({
     triggerBtn
   )
 
-  const planItems = (
+  // Buttons start enabled before the season file is fetched, so the picker is
+  // where a module without a schedule (or a slow fetch) has to be explained.
+  const pickerNote = !hasIndexes
+    ? "No schedule available"
+    : moduleIndexes == null
+      ? "Loading schedule…"
+      : null
+  const planItems = pickerNote ? (
+    <p className="text-muted-foreground px-2 py-3 text-center text-sm">
+      {pickerNote}
+    </p>
+  ) : (
     <PlanItems
       timetables={timetables}
       moduleKey={moduleKey}

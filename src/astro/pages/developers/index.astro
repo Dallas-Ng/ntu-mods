@@ -52,6 +52,24 @@ const fields = (schema: Schema, prefix = ""): [string, string, string][] =>
 const moduleSchema = spec.paths["/api/modules/{code}"].get.responses["200"]
   .content["application/json"].schema as Schema
 
+// Field tables for the module API and the open data files, with where the
+// fields sit in the response. Discovery files have none.
+const FIELD_DOCS: Record<string, { schema: Schema; note?: string }> = {
+  getModule: { schema: moduleSchema },
+  getModuleList: {
+    schema: schemas.ModuleList.properties.modules.items,
+    note: "Each item in the `modules` array."
+  },
+  getIndexes: {
+    schema: schemas.ClassSlot,
+    note: "Each class slot, found at `{code}.{index}[]`."
+  },
+  getExams: {
+    schema: schemas.Exam,
+    note: "Each exam, found at `{code}`."
+  }
+}
+
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -76,6 +94,7 @@ const groups: ApiGroup[] = spec.tags.map((tag) => ({
       op.responses["200"]?.content ?? {}
     )[0] ?? []) as [string | undefined, Schema | undefined]
     const isModule = op.operationId === "getModule"
+    const fieldDocs = FIELD_DOCS[op.operationId]
     const examplePath = path.replace(
       /\{(\w+)\}/g,
       (_, name) =>
@@ -99,7 +118,8 @@ const groups: ApiGroup[] = spec.tags.map((tag) => ({
           status,
           description: (r as Schema).description
         })),
-        fields: isModule ? fields(moduleSchema) : undefined,
+        fields: fieldDocs ? fields(fieldDocs.schema) : undefined,
+        fieldsNote: fieldDocs?.note,
         request: `curl ${spec.servers[0].url}${examplePath}`,
         response:
           media?.["x-example-text"] ??
@@ -168,7 +188,7 @@ const link = "text-primary underline underline-offset-2"
   </div>
 
   <section
-    class="border-foreground space-y-3 rounded-2xl border-2 p-4 sm:p-5"
+    class="bg-card space-y-3 rounded-2xl border p-4 sm:p-5"
     aria-labelledby="terms">
     <h2 id="terms" class="text-lg font-semibold tracking-tight">
       Terms of use (no opt out)
@@ -214,13 +234,12 @@ const link = "text-primary underline underline-offset-2"
     <h2 id="practices" class="text-lg font-semibold tracking-tight">
       Best practices
     </h2>
-    <ul class="text-foreground/80 space-y-2 text-sm">
+    <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
       {
         practices.map(([lead, body]) => (
           <li>
-            <strong class="text-foreground">{lead}</strong>{" "}
             <Fragment
-              set:html={body.replace(
+              set:html={`${lead} ${body}`.replace(
                 /`([^`]+)`/g,
                 '<code class="bg-muted text-foreground rounded px-1 py-0.5 font-mono text-[0.85em]">$1</code>'
               )}

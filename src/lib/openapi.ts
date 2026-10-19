@@ -483,18 +483,38 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
               items: {
                 type: "object",
                 properties: {
-                  code: { type: "string" },
-                  title: { type: "string" },
-                  au: { type: "string" },
+                  code: { type: "string", description: "Module code." },
+                  title: { type: "string", description: "Module title." },
+                  au: {
+                    type: "string",
+                    description: "Academic units, as text such as `3.0`."
+                  },
                   faculty: {
                     type: "string",
                     description: "School code, or empty."
                   },
-                  categories: { type: "array", items: { type: "string" } },
-                  latestYear: { type: "string" },
-                  latestSemester: { type: "string" },
-                  isCurrentSemester: { type: "boolean" },
-                  notAvailableToProgramme: { type: "string" }
+                  categories: {
+                    type: "array",
+                    items: { type: "string" },
+                    description: "Labels such as `CORE`, `GLOAD` or `MLOAD`."
+                  },
+                  latestYear: {
+                    type: "string",
+                    description: "Year of the most recent offering."
+                  },
+                  latestSemester: {
+                    type: "string",
+                    description: "Semester of the most recent offering."
+                  },
+                  isCurrentSemester: {
+                    type: "boolean",
+                    description: "True if it is offered in the latest semester."
+                  },
+                  notAvailableToProgramme: {
+                    type: "string",
+                    description:
+                      "Programmes that cannot take it. Only present when set."
+                  }
                 }
               }
             }
@@ -548,11 +568,26 @@ export function buildOpenApi({ indexSemester, examSemester }: OpenApiInput) {
           type: "object",
           properties: {
             key: { type: "string", description: "Module code." },
-            name: { type: "string" },
-            date: { type: "string", example: "23 November 2026" },
-            day: { type: "integer" },
-            start_time: { type: "string", example: "9.00 am" },
-            end_time: { type: "string", example: "11.30 am" },
+            name: { type: "string", description: "Module title." },
+            date: {
+              type: "string",
+              description: "Exam date as text.",
+              example: "23 November 2026"
+            },
+            day: {
+              type: "integer",
+              description: "Day of the week, `1` Monday to `7` Sunday."
+            },
+            start_time: {
+              type: "string",
+              description: "Start time as text.",
+              example: "9.00 am"
+            },
+            end_time: {
+              type: "string",
+              description: "End time as text.",
+              example: "11.30 am"
+            },
             duration: { type: "integer", description: "Length in half hours." }
           }
         },

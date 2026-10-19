@@ -20,6 +20,8 @@ export interface ApiOp {
   params: { name: string; description: string }[]
   responses: { status: string; description: string }[]
   fields?: [string, string, string][]
+  /** Where the fields sit in the response. */
+  fieldsNote?: string
   /** A curl command for the example request. */
   request: string
   /** Example response body, truncated with "..." where long. */
@@ -110,6 +112,11 @@ const Operation = ({ op }: { op: ApiOp }) => {
         </TabsContent>
         {op.fields && (
           <TabsContent value="fields">
+            {op.fieldsNote && (
+              <p className="text-foreground/80 pb-2 text-sm">
+                <Rich text={op.fieldsNote} />
+              </p>
+            )}
             <ul>
               {op.fields.map(([name, type, description]) => (
                 <li

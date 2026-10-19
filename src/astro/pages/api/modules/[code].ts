@@ -1,8 +1,8 @@
 import type { APIRoute } from "astro"
-import { env } from "cloudflare:workers"
 
 import { ON_DEMAND_CACHE_CONTROL } from "@/lib/edge-cache"
 import { getLatestModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
+import { rateLimit } from "@/lib/server/guard"
 
 export const prerender = false
 
@@ -58,18 +58,8 @@ export const GET: APIRoute = async ({ params, url, request }) => {
   }
 
   // Cached responses never reach here, so this only counts real work.
-  // ponytail: limits are per Cloudflare location; add a WAF rule for a global cap.
-  const limiter = env.MODULE_API_LIMITER
-  if (limiter) {
-    const ip = request.headers.get("cf-connecting-ip") ?? "unknown"
-    const { success } = await limiter.limit({ key: ip })
-    if (!success) {
-      return reply({ error: "Rate limit exceeded. Retry in a minute." }, 429, {
-        "Retry-After": "60",
-        "Cache-Control": "no-store"
-      })
-    }
-  }
+  const limited = await rateLimit("MODULE_API_LIMITER", request)
+  if (limited) return limited
 
   let snapshot
   try {

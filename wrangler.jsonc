@@ -76,14 +76,25 @@
       }
     ]
   },
-  // Per-IP cap for the public /api/modules/:code route. Cached responses are
-  // served before the worker runs, so this only counts cache misses. Local to
-  // each Cloudflare location, so it blunts abuse rather than capping it.
+  // Per-IP caps for the public routes (see src/lib/server/guard.ts). Cached
+  // responses are served before the worker runs, so these only count real
+  // work. Local to each Cloudflare location, so they blunt abuse rather than
+  // cap it; add a WAF rule for a global limit.
   "ratelimits": [
     {
       "name": "MODULE_API_LIMITER",
       "namespace_id": "1001",
       "simple": { "limit": 60, "period": 60 }
+    },
+    {
+      "name": "FEEDBACK_LIMITER",
+      "namespace_id": "1002",
+      "simple": { "limit": 3, "period": 60 }
+    },
+    {
+      "name": "VIEWS_LIMITER",
+      "namespace_id": "1003",
+      "simple": { "limit": 30, "period": 60 }
     }
   ],
   // The MODULE_DATA KV namespace (98c8dfc5fcfb4dd180c30d37b4d000aa) held

@@ -3,6 +3,7 @@ import { env, waitUntil } from "cloudflare:workers"
 
 import type { AnalyticsEvent } from "@/lib/analytics-events"
 import { createPostHogClient, reportServerError } from "@/lib/posthog-server"
+import { bodyTooLarge, isCrossSite, rateLimit } from "@/lib/server/guard"
 
 export const prerender = false
 
@@ -16,7 +17,20 @@ function json(body: unknown, status: number) {
   })
 }
 
+// Feedback text plus the optional local-data dump, with room for JSON escaping.
+const MAX_BODY_BYTES = 500_000
+
 export const POST: APIRoute = async ({ request }) => {
+  // Each accepted request sends an email, so refuse cross-site, oversized and
+  // repeated posts before doing any work.
+  if (isCrossSite(request))
+    return json({ success: false, error: "Forbidden" }, 403)
+  if (bodyTooLarge(request, MAX_BODY_BYTES)) {
+    return json({ success: false, error: "Request too large" }, 413)
+  }
+  const limited = await rateLimit("FEEDBACK_LIMITER", request)
+  if (limited) return limited
+
   // Bindings, not process.env — Cloudflare only populates process.env through
   // nodejs_compat's process shim, which this worker deliberately runs an older
   // version of (see disable_nodejs_process_v2 in wrangler.jsonc). Astro v6

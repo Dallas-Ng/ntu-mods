@@ -1,5 +1,6 @@
 ---
 import { render } from "astro:content"
+import { FileText } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { formatLongDate } from "@/lib/format"
@@ -270,11 +271,23 @@ const pageDescription =
               <MobileSectionDropdown client:idle headings={articleHeadings} />
 
               {article.thumbnail && (
-                <img
-                  src={article.thumbnail}
-                  alt={article.thumbnailAlt}
-                  class="not-prose mb-5 aspect-video w-full rounded-2xl object-cover sm:mb-6"
-                />
+                <>
+                  <img
+                    src={article.thumbnail}
+                    alt={article.thumbnailAlt}
+                    class:list={[
+                      "not-prose mb-5 aspect-video w-full rounded-2xl object-cover sm:mb-6",
+                      article.thumbnailDark && "dark:hidden"
+                    ]}
+                  />
+                  {article.thumbnailDark && (
+                    <img
+                      src={article.thumbnailDark}
+                      alt={article.thumbnailAlt}
+                      class="not-prose mb-5 hidden aspect-video w-full rounded-2xl object-cover sm:mb-6 dark:block"
+                    />
+                  )}
+                </>
               )}
 
               <div class="text-foreground/70 not-prose mb-6 border-b pb-4 text-sm sm:mb-8 sm:pb-5">
@@ -305,16 +318,35 @@ const pageDescription =
                 {moreArticles.map((item) => (
                   <a
                     href={`/articles/${item.slug}`}
-                    class="group bg-muted hover:bg-accent overflow-hidden rounded-2xl transition-colors">
-                    {item.thumbnail && (
-                      <img
-                        src={item.thumbnail}
-                        alt={item.thumbnailAlt}
-                        loading="lazy"
-                        class="aspect-video w-full object-cover"
-                      />
+                    class="group bg-muted hover:bg-accent flex flex-col overflow-hidden rounded-2xl transition-colors">
+                    {item.thumbnail ? (
+                      <>
+                        <img
+                          src={item.thumbnail}
+                          alt={item.thumbnailAlt}
+                          loading="lazy"
+                          class:list={[
+                            "aspect-video w-full object-cover",
+                            item.thumbnailDark && "dark:hidden"
+                          ]}
+                        />
+                        {item.thumbnailDark && (
+                          <img
+                            src={item.thumbnailDark}
+                            alt={item.thumbnailAlt}
+                            loading="lazy"
+                            class="hidden aspect-video w-full object-cover dark:block"
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <div
+                        aria-hidden="true"
+                        class="bg-background/50 text-muted-foreground/40 flex aspect-video w-full items-center justify-center">
+                        <FileText className="size-10" />
+                      </div>
                     )}
-                    <div class="p-3">
+                    <div class="flex-1 p-3">
                       <div class="text-foreground/70 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
                         <span class="bg-background text-muted-foreground rounded px-1.5 py-0.5">
                           {item.category}

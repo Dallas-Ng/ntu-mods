@@ -6,6 +6,7 @@ author: "NTUMods"
 category: "General"
 tags: ["ntu campus map", "ntu lecture theatre map", "ntu map", "ntu classroom location", "find ntu lecture theatre", "ntu indoor map", "ntu venue finder", "ntu walking time between classes", "ntu north spine map", "ntu south spine map", "ntu halls map", "ntu car park map", "ntu toilet map", "ntu room code"]
 thumbnail: "/articles/ntu-campus-map-guide/overview.webp"
+thumbnailDark: "/articles/ntu-campus-map-guide/overview-dark.webp"
 thumbnailAlt: "The NTUMods campus map showing the Nanyang Technological University campus with search, category chips and a side panel"
 ---
 

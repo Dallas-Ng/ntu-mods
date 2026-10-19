@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Check, ChevronDown, Search, X } from "lucide-react"
+import { Check, ChevronDown, FileText, Search, X } from "lucide-react"
 
 import { reportError, track } from "@/lib/analytics"
 import { formatShortDate } from "@/lib/format"
@@ -26,6 +26,7 @@ export interface ArticleListItem {
   category: string
   tags: string[]
   thumbnail: string
+  thumbnailDark?: string
   thumbnailAlt: string
   readingTime: string
 }
@@ -81,15 +82,34 @@ function ArticleCard({
   return (
     <a
       href={`/articles/${article.slug}`}
-      className="group bg-muted hover:bg-accent overflow-hidden rounded-2xl transition-colors">
-      {article.thumbnail && (
-        <img
-          src={article.thumbnail}
-          alt={article.thumbnailAlt}
-          className="aspect-video w-full object-cover"
-        />
+      className="group bg-muted hover:bg-accent flex flex-col overflow-hidden rounded-2xl transition-colors">
+      {/* Every card has the same picture area, so a missing thumbnail leaves a placeholder. */}
+      {article.thumbnail ? (
+        <>
+          <img
+            src={article.thumbnail}
+            alt={article.thumbnailAlt}
+            className={cn(
+              "aspect-video w-full object-cover",
+              article.thumbnailDark && "dark:hidden"
+            )}
+          />
+          {article.thumbnailDark && (
+            <img
+              src={article.thumbnailDark}
+              alt={article.thumbnailAlt}
+              className="hidden aspect-video w-full object-cover dark:block"
+            />
+          )}
+        </>
+      ) : (
+        <div
+          aria-hidden="true"
+          className="bg-background/50 text-muted-foreground/40 flex aspect-video w-full items-center justify-center">
+          <FileText className="size-10" />
+        </div>
       )}
-      <div className="p-4">
+      <div className="flex-1 p-4">
         <div className="text-foreground/70 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
           <span>{formatShortDate(article.date)}</span>
           <span aria-hidden="true">·</span>

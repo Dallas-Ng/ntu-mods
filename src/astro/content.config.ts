@@ -26,7 +26,9 @@ const articles = defineCollection({
           .filter(Boolean)
       }),
     thumbnail: z.string().optional().default(""),
-    thumbnailAlt: z.string().optional()
+    thumbnailAlt: z.string().optional(),
+    /** Shown instead of `thumbnail` in dark mode, on the article page. */
+    thumbnailDark: z.string().optional()
   })
 })
 

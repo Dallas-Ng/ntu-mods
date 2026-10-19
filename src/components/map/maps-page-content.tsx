@@ -638,7 +638,7 @@ const MapsPageContent = () => {
 
       <div
         ref={shellRef}
-        className="bg-card relative h-[calc(100dvh-11rem)] min-h-[34rem] overflow-hidden rounded-2xl border lg:h-[calc(100dvh-13rem)]">
+        className="bg-card relative h-[calc(100svh-11rem)] min-h-[34rem] overflow-hidden rounded-2xl border lg:h-[calc(100svh-13rem)]">
         {data ? (
           <>
             <CampusMap
@@ -1076,7 +1076,7 @@ const ScrollHint = ({
         ref={ref}
         onScroll={update}
         style={more ? { maskImage: fade, WebkitMaskImage: fade } : undefined}
-        className={cn("min-h-0 flex-1 overflow-y-auto", className)}>
+        className={cn("min-h-0 flex-1 overflow-y-auto overscroll-contain", className)}>
         {children}
       </div>
       {more && (
@@ -1196,6 +1196,11 @@ const Sheet = ({
             0
           )
           onDetent(next)
+          setDrag(null)
+        }}
+        onPointerCancel={() => {
+          // iOS cancels the pointer for system gestures; snap back.
+          track.current = null
           setDrag(null)
         }}>
         <span className="bg-muted-foreground/40 h-1 w-10 rounded-full" />

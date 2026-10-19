@@ -164,6 +164,12 @@ async function main() {
   await write(path.join(PUBLIC_DATA, "modules.json"), modules)
   console.log(`  Built modules.json (${modules.modules.length} modules)`)
 
+  // Codes only, for the module API to reject made-up codes before querying D1.
+  await write(
+    path.join(PUBLIC_DATA, "module-codes.json"),
+    modules.modules.map((m) => m.code).sort()
+  )
+
   const samples = buildRandomSamples(latest.sem)
   await write(path.join(PUBLIC_DATA, "random-samples.json"), samples)
   console.log(`  Built random-samples.json (${samples.length} samples)`)

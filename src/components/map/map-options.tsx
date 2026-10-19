@@ -17,13 +17,9 @@ import {
   type LandmarkCat
 } from "@/lib/venue-map"
 import { Button } from "@/components/ui/button"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from "@/components/ui/popover"
 import { Switch } from "@/components/ui/switch"
 import { FLOATING } from "@/components/map/campus-map"
+import { MapMenu } from "@/components/map/map-menu"
 import { PlaceIcon } from "@/components/map/category-icons"
 
 export type MapStyle = "standard" | "satellite" | "hybrid"
@@ -104,8 +100,10 @@ const MapOptions = ({
     onCats(next)
   }
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <MapMenu
+      title="Map"
+      className="max-h-[75vh] w-72 overflow-y-auto p-3"
+      trigger={
         <button
           type="button"
           className={cn(
@@ -114,10 +112,7 @@ const MapOptions = ({
           )}>
           <Layers className="size-4" /> Map
         </button>
-      </PopoverTrigger>
-      <PopoverContent
-        align="end"
-        className="max-h-[75vh] w-72 overflow-y-auto rounded-xl p-3">
+      }>
         <p className="text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase">
           Map type
         </p>
@@ -219,8 +214,7 @@ const MapOptions = ({
             <RotateCcw /> Reset
           </Button>
         </div>
-      </PopoverContent>
-    </Popover>
+    </MapMenu>
   )
 }
 

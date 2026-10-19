@@ -24,11 +24,7 @@ import {
   type VenueData,
   type WalkResult
 } from "@/lib/venue-map"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from "@/components/ui/popover"
+import { MapMenu } from "@/components/map/map-menu"
 import { PlaceIcon } from "@/components/map/category-icons"
 
 export interface Pin {
@@ -1100,7 +1096,7 @@ const CampusMap = ({
             ? "text-white/85 [text-shadow:0_0_3px_rgb(0_0_0/0.9)]"
             : "text-muted-foreground"
         )}
-        style={{ left: 12 + insets.left, bottom: 4 }}>
+        style={{ left: 12 + insets.left, bottom: 1 }}>
         {sat
           ? "Imagery © Esri, Maxar, Earthstar Geographics"
           : "Roads and greenery © OpenStreetMap contributors"}
@@ -1112,8 +1108,12 @@ const CampusMap = ({
         className="absolute right-3 flex flex-col items-end gap-2"
         style={{ top: 12 + insets.top }}>
         {extraControls}
-        <Popover open={levelsOpen} onOpenChange={setLevelsOpen}>
-          <PopoverTrigger asChild>
+        <MapMenu
+          title="Level"
+          open={levelsOpen}
+          onOpenChange={setLevelsOpen}
+          className="max-h-[60vh] w-auto min-w-40 overflow-y-auto p-1"
+          trigger={
             <button
               type="button"
               aria-label="Choose a level"
@@ -1126,33 +1126,29 @@ const CampusMap = ({
                 {level === null ? "All" : levelShort(data, level)}
               </span>
             </button>
-          </PopoverTrigger>
-          <PopoverContent
-            align="end"
-            className="max-h-[60vh] w-auto min-w-40 overflow-y-auto rounded-xl p-1">
+          }>
+          <LevelOption
+            active={level === null}
+            onClick={() => {
+              onLevel(null)
+              setLevelsOpen(false)
+            }}
+            title="All"
+            hint="Campus view"
+          />
+          {levels.map((l) => (
             <LevelOption
-              active={level === null}
+              key={l.z}
+              active={level === l.z}
               onClick={() => {
-                onLevel(null)
+                onLevel(l.z)
                 setLevelsOpen(false)
               }}
-              title="All"
-              hint="Campus view"
+              title={levelShort(data, l.z)}
+              hint={levelLabel(data, l.z)}
             />
-            {levels.map((l) => (
-              <LevelOption
-                key={l.z}
-                active={level === l.z}
-                onClick={() => {
-                  onLevel(l.z)
-                  setLevelsOpen(false)
-                }}
-                title={levelShort(data, l.z)}
-                hint={levelLabel(data, l.z)}
-              />
-            ))}
-          </PopoverContent>
-        </Popover>
+          ))}
+        </MapMenu>
       </div>
 
       {/* Bottom right: zoom and recentre. Sits above any bottom sheet. */}
@@ -1192,9 +1188,9 @@ const CampusMap = ({
         <div
           className={cn(
             FLOATING,
-            "text-muted-foreground absolute bottom-3 flex items-center gap-3 px-3 py-2 text-xs"
+            "text-muted-foreground absolute flex h-[42px] items-center gap-3 px-3 text-xs"
           )}
-          style={{ left: 12 + insets.left, bottom: 26 + insets.bottom }}>
+          style={{ left: 12 + insets.left, bottom: 12 + insets.bottom }}>
           <span className="text-foreground font-semibold">
             {levelLabel(data, level)}
           </span>
@@ -1263,7 +1259,7 @@ const LevelOption = ({
     aria-pressed={active}
     onClick={onClick}
     className={cn(
-      "flex w-full cursor-pointer items-center justify-between gap-4 rounded-md px-2.5 py-1.5 text-left text-sm transition-colors",
+      "flex w-full cursor-pointer items-center justify-between gap-4 rounded-md px-2.5 py-1.5 text-left text-sm transition-colors max-lg:py-3",
       active
         ? "bg-primary text-primary-foreground"
         : "hover:bg-accent text-foreground"
@@ -1377,7 +1373,6 @@ const RouteLines = ({
       {route.walk.changes.map((c, i) => {
         if (level !== null && c.from !== level && c.to !== level) return null
         const [x, y] = toP(c.lon, c.lat)
-        const up = c.to > c.from
         return (
           <g key={i} transform={`translate(${x} ${y}) scale(${px})`}>
             <circle
@@ -1386,11 +1381,16 @@ const RouteLines = ({
               style={{ stroke: colour }}
               strokeWidth={2.5}
             />
-            <path
-              d={up ? "M-3.5 2 L0 -3 L3.5 2" : "M-3.5 -2 L0 3 L3.5 -2"}
-              style={{ stroke: colour }}
-              strokeWidth={2}
-            />
+            {/* Lucide arrow-up-down, same as the step in the directions list. */}
+            <g
+              transform="scale(0.55) translate(-12 -12)"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={3.3}
+              style={{ stroke: colour }}>
+              <path d="m21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16" />
+            </g>
           </g>
         )
       })}

@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro"
+import { waitUntil } from "cloudflare:workers"
 
 import { rateLimit } from "@/lib/server/guard"
 import type { WalkResult } from "@/lib/venue-map"
@@ -10,6 +11,13 @@ export const prerender = false
 // cached at the edge and a student's venues are not sent to a third party
 // directly.
 const UPSTREAM = "https://routing.mazemap.com/routing/path/"
+
+/**
+ * Routes only change when the map does, so they are kept at the edge with no
+ * expiry. To purge them all, bump this when the venue data is rebuilt
+ * (scraper/venues.py); old entries are never read again.
+ */
+const ROUTE_CACHE_VERSION = "1"
 
 const json = (body: unknown, status = 200, headers?: HeadersInit) =>
   new Response(JSON.stringify(body), {
@@ -41,13 +49,22 @@ interface Feature {
 }
 
 export const GET: APIRoute = async ({ url, request }) => {
-  const limited = await rateLimit("WALK_LIMITER", request)
-  if (limited) return limited
-
   const a = point(url.searchParams.get("a"))
   const b = point(url.searchParams.get("b"))
   if (!a || !b)
     return json({ error: "a and b must be lon,lat,z on campus" }, 400)
+
+  // Key on the rounded points, so the same pair always shares one entry. Hits
+  // skip the rate limit and MazeMap entirely.
+  const cache = (globalThis.caches as unknown as { default?: Cache }).default
+  const cacheKey = new Request(
+    `${url.origin}/api/walk?v=${ROUTE_CACHE_VERSION}&a=${a.lon.toFixed(5)},${a.lat.toFixed(5)},${a.z}&b=${b.lon.toFixed(5)},${b.lat.toFixed(5)},${b.z}`
+  )
+  const hit = await cache?.match(cacheKey)
+  if (hit) return hit
+
+  const limited = await rateLimit("WALK_LIMITER", request)
+  if (limited) return limited
 
   // Round to ~1 m so near-identical requests share a cache entry.
   const q = new URLSearchParams({
@@ -113,7 +130,11 @@ export const GET: APIRoute = async ({ url, request }) => {
   result.metres = Math.round(result.metres)
   result.seconds = Math.round(result.seconds)
 
-  return json(result, 200, {
-    "Cache-Control": "public, max-age=86400, s-maxage=604800"
+  // Browsers cannot be purged, so they keep it a day; the edge keeps it until
+  // the version above changes.
+  const response = json(result, 200, {
+    "Cache-Control": "public, max-age=86400, s-maxage=31536000, immutable"
   })
+  if (cache) waitUntil(cache.put(cacheKey, response.clone()))
+  return response
 }

@@ -49,6 +49,72 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Developers page",
+    date: "19 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            New{" "}
+            <ChangelogLink href="/developers">developers page</ChangelogLink>{" "}
+            documents the free module API and the open module, index and exam
+            data, with a try-it box and an OpenAPI file for student projects.
+          </>
+        )
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            The <ChangelogLink href="/privacy">privacy policy</ChangelogLink>{" "}
+            now covers the public API and AI assistants that use WebMCP.
+          </>
+        )
+      }
+    ]
+  },
+  {
+    title: "AI agent support",
+    date: "18 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            [Dev preview] NTUMods now offers its tools to AI agents through
+            WebMCP, a new browser standard that is still in early testing and
+            depends mostly on the Chrome team. In a supporting browser, an
+            assistant can search modules, check which indexes fit your plan,
+            generate timetables and plan your CGPA, all on your own saved plans.
+            Nothing is sent to our servers. Most students will not see a change
+            yet. Guide:{" "}
+            <ChangelogLink href="/articles/ntu-ai-agents-webmcp-guide">
+              Plan your NTU timetable with an AI assistant
+            </ChangelogLink>
+            .
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            A public{" "}
+            <ChangelogLink href="/.well-known/ai-catalog.json">
+              AI catalog
+            </ChangelogLink>{" "}
+            and a{" "}
+            <ChangelogLink href="/api/modules/SC1003">module API</ChangelogLink>{" "}
+            help assistants that cannot run the site find the{" "}
+            <ChangelogLink href="/llms.txt">llms.txt</ChangelogLink> summary and
+            the open module, index and exam data.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Privacy policy updated",
     date: "17 Oct 2026",
     items: [

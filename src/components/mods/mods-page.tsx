@@ -45,7 +45,7 @@ const GROUP_DEFAULT_VISIBLE = 10
 const LOADING_CARD_COUNT = 9
 const LOADING_LIST_COUNT = 12
 
-const ModsPage = () => {
+const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const searchTerm = searchParams.get("searchTerm") ?? ""
@@ -62,7 +62,6 @@ const ModsPage = () => {
   const semester = latestSemester
   const nextYear = parseInt(year) + 1
   const { modules: allModules, isLoading } = useAllModules()
-  const { indexes } = useSeasonIndexes(year, semester)
   const { modsViewMode, modsGroupBy, updateSettings } = useSettings()
   const { favouriteModules } = useFavourites()
   const { setValue: setFavouritesOnly } = useModsSearchParams(
@@ -83,6 +82,16 @@ const ModsPage = () => {
   const timeStart =
     moduleTimeStart !== "all" ? parseInt(moduleTimeStart) : undefined
   const timeEnd = moduleTimeEnd !== "all" ? parseInt(moduleTimeEnd) : undefined
+
+  // Day/time filters are the only thing here that reads the (1 MB+) season
+  // index file, so only fetch it once one is set.
+  const { indexes } = useSeasonIndexes(
+    year,
+    semester,
+    allowedDays !== undefined ||
+      timeStart !== undefined ||
+      timeEnd !== undefined
+  )
 
   const hasActiveFilters =
     searchTerm !== "" ||
@@ -280,6 +289,16 @@ const ModsPage = () => {
 
       <ModuleResults
         isLoading={isLoading}
+        // Prerendered first cards of the default view, shown instead of
+        // skeletons until the full list arrives. Only valid for the default
+        // view: any URL filter makes them the wrong results.
+        initialModules={
+          hasActiveFilters ||
+          favouritesOnly === "true" ||
+          modsGroupBy !== "none"
+            ? undefined
+            : initialModules
+        }
         viewMode={modsViewMode}
         groupedModules={groupedModules}
         displayedModules={displayedModules}
@@ -312,6 +331,7 @@ const ModsPage = () => {
 
 interface ModuleResultsProps {
   isLoading: boolean
+  initialModules?: AllModule[]
   viewMode: "cards" | "list"
   groupedModules: ReturnType<typeof groupModules> | null
   displayedModules: AllModule[]
@@ -324,6 +344,7 @@ interface ModuleResultsProps {
 
 function ModuleResults({
   isLoading,
+  initialModules,
   viewMode,
   groupedModules,
   displayedModules,
@@ -390,6 +411,8 @@ function ModuleResults({
       </div>
     )
   }
+
+  if (isLoading && initialModules) return renderModules(initialModules)
 
   if (isLoading) {
     return viewMode === "cards" ? (

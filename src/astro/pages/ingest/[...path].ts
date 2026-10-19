@@ -1,5 +1,7 @@
 import type { APIRoute } from "astro"
 
+import { bodyTooLarge } from "@/lib/server/guard"
+
 // PostHog reverse-proxy — replaces the Vercel-only rewrite rules previously
 // in vercel.json. Cloudflare Pages' declarative _redirects can only "proxy"
 // (200 status) to relative paths, not external domains, so this runs as a
@@ -24,7 +26,13 @@ const STRIPPED_REQUEST_HEADERS = ["host", "cookie", "cf-connecting-ip"]
 // the proxy.
 const STRIPPED_RESPONSE_HEADERS = ["set-cookie"]
 
+// PostHog batches (and session recordings) are the only legitimate bodies.
+const MAX_BODY_BYTES = 5_000_000
+
 const handler: APIRoute = async ({ params, request }) => {
+  if (bodyTooLarge(request, MAX_BODY_BYTES)) {
+    return new Response("Request too large", { status: 413 })
+  }
   const path = params.path ?? ""
   const url = new URL(request.url)
   const target = targetFor(path) + url.search

@@ -11,6 +11,7 @@ import { Banner } from "@/components/banner"
 import Container from "@/components/container"
 import Footer from "@/components/footer"
 import MobileTracker from "@/components/mobile-tracker"
+import WebMcpProvider from "@/components/webmcp-provider"
 import Navbar from "@/components/navbar"
 import Analytics from "@/astro/components/Analytics.astro"
 import StaleChunkReload from "@/astro/components/StaleChunkReload.astro"
@@ -121,6 +122,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
     />
     <StaleChunkReload />
     <link rel="icon" href="/favicon.ico" />
+    <link rel="ai-catalog" href="/.well-known/ai-catalog.json" />
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
@@ -161,6 +163,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
       <Footer />
     </div>
     <MobileTracker client:idle />
+    <WebMcpProvider client:idle />
     <Toaster client:idle position="top-center" />
     {IS_PROD && <Analytics />}
   </body>

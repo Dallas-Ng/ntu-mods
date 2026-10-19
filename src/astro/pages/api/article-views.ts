@@ -2,6 +2,8 @@ import type { APIRoute } from "astro"
 import { env, waitUntil } from "cloudflare:workers"
 
 import { reportServerError } from "@/lib/posthog-server"
+import { isCrossSite, rateLimit } from "@/lib/server/guard"
+import { getAllArticles } from "@/astro/lib/articles"
 
 export const prerender = false
 
@@ -17,7 +19,18 @@ function json(body: unknown, status = 200, headers?: HeadersInit) {
 
 // All counts at once, for the articles list. Briefly cached: a stale list
 // count is harmless and this scans the whole table.
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ url }) => {
+  // One cache key: a query string would otherwise bypass the edge cache and
+  // rerun the table scan.
+  if (url.search) {
+    return new Response(null, {
+      status: 308,
+      headers: {
+        Location: url.pathname,
+        "Cache-Control": "public, max-age=86400"
+      }
+    })
+  }
   const { DB } = env
   if (!DB) return json({ error: "DB not bound" }, 500)
 
@@ -32,7 +45,9 @@ export const GET: APIRoute = async () => {
        ) GROUP BY slug`
     ).all<{ slug: string; n: number }>()
     const views = Object.fromEntries((results ?? []).map((r) => [r.slug, r.n]))
-    return json({ views }, 200, { "Cache-Control": "public, max-age=300" })
+    return json({ views }, 200, {
+      "Cache-Control": "public, max-age=300, s-maxage=300"
+    })
   } catch (e) {
     reportServerError(
       env.PUBLIC_POSTHOG_TOKEN,
@@ -47,6 +62,10 @@ export const GET: APIRoute = async () => {
 // Records this visitor (idempotent) and returns the unique-view count,
 // including the baseline from before the counter existed.
 export const POST: APIRoute = async ({ request }) => {
+  if (isCrossSite(request)) return json({ error: "Forbidden" }, 403)
+  const limited = await rateLimit("VIEWS_LIMITER", request)
+  if (limited) return limited
+
   const { DB } = env
   if (!DB) return json({ error: "DB not bound" }, 500)
 
@@ -61,6 +80,13 @@ export const POST: APIRoute = async ({ request }) => {
     !VISITOR.test(visitorId)
   ) {
     return json({ error: "Invalid slug or visitorId" }, 400)
+  }
+
+  // Only real articles get rows; otherwise anyone can grow the table with
+  // made-up slugs.
+  const articles = await getAllArticles()
+  if (!articles.some((article) => article.slug === slug)) {
+    return json({ error: "Unknown article" }, 404)
   }
 
   try {

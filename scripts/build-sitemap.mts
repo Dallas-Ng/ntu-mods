@@ -117,6 +117,7 @@ const CORE_ROUTES = [
   "/ai-instructions",
   "/articles",
   "/changelog",
+  "/developers",
   "/exams",
   "/faq",
   "/feedback",

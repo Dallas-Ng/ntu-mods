@@ -368,6 +368,20 @@ const pageDescription =
     if (scroller.firstElementChild) observer.observe(scroller.firstElementChild)
   })
 
+  // "#" link beside each section heading (see .heading-anchor in globals.css).
+  document
+    .querySelectorAll<HTMLHeadingElement>(
+      "article.prose h2[id], article.prose h3[id]"
+    )
+    .forEach((heading) => {
+      const link = document.createElement("a")
+      link.href = `#${heading.id}`
+      link.className = "heading-anchor"
+      link.setAttribute("aria-label", "Link to this section")
+      link.textContent = "#"
+      heading.append(link)
+    })
+
   // Body figures only; the not-prose hero thumbnail is excluded by the selector.
   // Lightbox with wheel / double-click / pinch zoom and drag-to-pan, so the
   // screenshots can be read at full resolution, not just enlarged to fit.

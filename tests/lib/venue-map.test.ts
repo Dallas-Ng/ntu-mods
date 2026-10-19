@@ -7,6 +7,7 @@ import {
   levelLabel,
   levelShort,
   project,
+  reverseWalk,
   ringsBounds,
   ringsPath,
   type MapVenue,
@@ -96,5 +97,33 @@ describe("geometry helpers", () => {
     expect(levelShort(data, 4)).toBe("L4")
     expect(levelShort(data, 0)).toBe("G")
     expect(fmtMin(545)).toBe("09:05")
+  })
+})
+
+describe("reverseWalk", () => {
+  const walk = {
+    metres: 100,
+    seconds: 80,
+    segments: [
+      { z: 1, pts: [1, 2, 3, 4] },
+      { z: 0, pts: [3, 4, 5, 6] }
+    ],
+    changes: [{ lon: 3, lat: 4, from: 1, to: 0, stairs: true }]
+  }
+
+  it("flips the path, the levels and the order", () => {
+    const back = reverseWalk(walk)
+    expect(back.segments).toEqual([
+      { z: 0, pts: [5, 6, 3, 4] },
+      { z: 1, pts: [3, 4, 1, 2] }
+    ])
+    expect(back.changes).toEqual([
+      { lon: 3, lat: 4, from: 0, to: 1, stairs: true }
+    ])
+    expect(back.seconds).toBe(80)
+  })
+
+  it("is its own inverse", () => {
+    expect(reverseWalk(reverseWalk(walk))).toEqual(walk)
   })
 })

@@ -207,15 +207,33 @@ export const loadChunk = (id: number) => {
 
 // --- walking ------------------------------------------------------------
 
+/** The same walk the other way round: same time and distance, path reversed. */
+export const reverseWalk = (w: WalkResult): WalkResult => ({
+  ...w,
+  segments: w.segments
+    .map((s) => {
+      const pts: number[] = []
+      for (let i = s.pts.length - 2; i >= 0; i -= 2)
+        pts.push(s.pts[i], s.pts[i + 1])
+      return { z: s.z, pts }
+    })
+    .reverse(),
+  changes: w.changes.map((c) => ({ ...c, from: c.to, to: c.from })).reverse()
+})
+
 const walkCache = new Map<string, Promise<WalkResult | null>>()
+const walkKey = (p: Place) => `${p.lon},${p.lat},${p.z}`
 
 export const fetchWalk = (a: Place, b: Place) => {
-  const key = `${a.lon},${a.lat},${a.z}>${b.lon},${b.lat},${b.z}`
+  const key = `${walkKey(a)}>${walkKey(b)}`
+  const back = walkCache.get(`${walkKey(b)}>${walkKey(a)}`)
   let p = walkCache.get(key)
   if (!p) {
-    p = fetch(`/api/walk?a=${a.lon},${a.lat},${a.z}&b=${b.lon},${b.lat},${b.z}`)
-      .then((r) => (r.ok ? (r.json() as Promise<WalkResult>) : null))
-      .catch(() => null)
+    p = back
+      ? back.then((w) => w && reverseWalk(w))
+      : fetch(`/api/walk?a=${walkKey(a)}&b=${walkKey(b)}`)
+          .then((r) => (r.ok ? (r.json() as Promise<WalkResult>) : null))
+          .catch(() => null)
     walkCache.set(key, p)
   }
   return p

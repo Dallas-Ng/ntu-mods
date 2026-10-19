@@ -2,7 +2,7 @@ import type { APIRoute } from "astro"
 import { waitUntil } from "cloudflare:workers"
 
 import { rateLimit } from "@/lib/server/guard"
-import type { WalkResult } from "@/lib/venue-map"
+import { reverseWalk, type WalkResult } from "@/lib/venue-map"
 
 export const prerender = false
 
@@ -57,27 +57,38 @@ export const GET: APIRoute = async ({ url, request }) => {
   if (!a || !b)
     return json({ error: "a and b must be lon,lat,z on campus" }, 400)
 
-  // Round to ~1 m so near-identical requests share a cache entry.
+  // Round to ~1 m so near-identical requests share a cache entry. A to B and B
+  // to A share one too: always ask and store in sorted order, and flip the
+  // answer when the caller asked the other way round.
+  const at = (p: typeof a) => `${p.lon.toFixed(5)},${p.lat.toFixed(5)},${p.z}`
+  const flip = at(a) > at(b)
+  const [s, t] = flip ? [b, a] : [a, b]
   const q = new URLSearchParams({
     srid: "4326",
     hc: "false",
     lang: "en",
     distanceunitstype: "metric",
     mode: "PEDESTRIAN",
-    sourcelon: a.lon.toFixed(5),
-    sourcelat: a.lat.toFixed(5),
-    sourcez: String(a.z),
-    targetlon: b.lon.toFixed(5),
-    targetlat: b.lat.toFixed(5),
-    targetz: String(b.z)
+    sourcelon: s.lon.toFixed(5),
+    sourcelat: s.lat.toFixed(5),
+    sourcez: String(s.z),
+    targetlon: t.lon.toFixed(5),
+    targetlat: t.lat.toFixed(5),
+    targetz: String(t.z)
   })
+  // Browsers cannot be purged, so they keep it a day; the edge keeps it until
+  // the version above changes.
+  const headers = {
+    "Cache-Control": "public, max-age=86400, s-maxage=31536000"
+  }
+  const reply = (r: WalkResult) => json(flip ? reverseWalk(r) : r, 200, headers)
 
-  // The same pair always shares one entry. Hits skip the rate limit and MazeMap.
+  // Hits skip the rate limit and MazeMap.
   const cacheKey = new Request(
     `${url.origin}/api/walk?v=${ROUTE_CACHE_VERSION}&${q}`
   )
   const hit = await edge().match(cacheKey)
-  if (hit) return hit
+  if (hit) return reply(await hit.json())
 
   const limited = await rateLimit("WALK_LIMITER", request)
   if (limited) return limited
@@ -131,11 +142,6 @@ export const GET: APIRoute = async ({ url, request }) => {
   result.metres = Math.round(result.metres)
   result.seconds = Math.round(result.seconds)
 
-  // Browsers cannot be purged, so they keep it a day; the edge keeps it until
-  // the version above changes.
-  const response = json(result, 200, {
-    "Cache-Control": "public, max-age=86400, s-maxage=31536000"
-  })
-  waitUntil(edge().put(cacheKey, response.clone()))
-  return response
+  waitUntil(edge().put(cacheKey, json(result, 200, headers)))
+  return reply(result)
 }

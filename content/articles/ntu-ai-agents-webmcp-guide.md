@@ -72,7 +72,7 @@ WebMCP is a new web standard that lets a website tell a browser assistant what i
 
 To see the difference side by side, try Google's [WebMCP comparison demo](https://googlechromelabs.github.io/webmcp-tools/demos/explainer/#compare). It has an assistant book the same appointment twice, once by guessing at the page and once by calling the actions the page offers.
 
-The standard is being drafted by a W3C community group, with Google and Microsoft involved, and Chrome has an early preview. NTUMods offers about 30 of these actions. They are the same things you can already do on the site, so an assistant can never do more than you could do yourself.
+The standard is being drafted by a W3C community group, with Google and Microsoft involved, and Chrome has an early preview. NTUMods offers 32 of these actions. They are the same things you can already do on the site, so an assistant can never do more than you could do yourself.
 
 ## Why NTUMods is taking this step
 

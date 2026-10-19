@@ -19,14 +19,17 @@ const WebMcpProvider = () => {
     const supported = "modelContext" in document || "modelContext" in navigator
     if (!supported) return
 
-    import("@/lib/webmcp/handlers").then(({ webMcpHandlers }) => {
-      if (cancelled) return
-      cleanup = registerTools(
-        WEBMCP_TOOLS,
-        webMcpHandlers,
-        window.location.pathname
-      )
-    })
+    import("@/lib/webmcp/handlers")
+      .then(({ webMcpHandlers }) => {
+        if (cancelled) return
+        cleanup = registerTools(
+          WEBMCP_TOOLS,
+          webMcpHandlers,
+          window.location.pathname
+        )
+      })
+      // Experimental: a failed chunk load (stale deploy) must not surface as an error.
+      .catch(() => {})
 
     return () => {
       cancelled = true

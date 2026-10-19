@@ -20,6 +20,10 @@ interface D1Database {
   prepare(query: string): D1PreparedStatement
 }
 
+interface RateLimiter {
+  limit(options: { key: string }): Promise<{ success: boolean }>
+}
+
 interface WorkerEnv {
   ASSETS: {
     fetch(input: string | URL | Request): Promise<Response>
@@ -28,6 +32,10 @@ interface WorkerEnv {
   // dev runs that have no remote binding configured.
   DB?: D1Database
   RESEND_KEY?: string
+  // Workers Rate Limiting bindings; absent in local dev.
+  MODULE_API_LIMITER?: RateLimiter
+  FEEDBACK_LIMITER?: RateLimiter
+  VIEWS_LIMITER?: RateLimiter
   PUBLIC_POSTHOG_TOKEN?: string
 }
 

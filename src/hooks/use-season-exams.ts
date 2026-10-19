@@ -9,7 +9,7 @@ export type SeasonExams = Record<string, Exam>
 const cache = new Map<string, SeasonExams>()
 const pending = new Map<string, Promise<SeasonExams>>()
 
-function fetchSeasonExams(
+export function fetchSeasonExams(
   year: string,
   semester: string
 ): Promise<SeasonExams> {

@@ -1,5 +1,6 @@
 /*
   X-Content-Type-Options: nosniff
+  Link: </.well-known/ai-catalog.json>; rel="ai-catalog"
   Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800
 
 # Rules that match more than one block are joined with commas, so a later
@@ -14,7 +15,23 @@
 /data/api/*
   ! Cache-Control
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
 
 /debug
   ! Cache-Control
   Cache-Control: no-cache
+
+# Machine-readable discovery files: any agent or crawler may read them.
+/.well-known/ai-catalog.json
+  ! Cache-Control
+  Cache-Control: public, max-age=3600, s-maxage=86400
+  Content-Type: application/ai-catalog+json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+
+/.well-known/webmcp.json
+  ! Cache-Control
+  Cache-Control: public, max-age=3600, s-maxage=86400
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex

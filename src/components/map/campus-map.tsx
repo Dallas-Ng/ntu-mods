@@ -182,6 +182,14 @@ const CampusMap = ({
     } catch {}
   }, [fullscreen])
   useEffect(() => {
+    if (!intro) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [intro])
+  useEffect(() => {
     if (!fullscreen) return
     setIntro(false)
     try {
@@ -1255,7 +1263,14 @@ const CampusMap = ({
         )}
       </div>
       {intro && (
-        <div className="fixed inset-0 z-[90] bg-black/65" aria-hidden="true" />
+        // Swallow input: React events bubble to the map, which would pan under it.
+        <div
+          className="fixed inset-0 z-[90] touch-none overscroll-none bg-black/65"
+          aria-hidden="true"
+          onPointerDown={(e) => e.stopPropagation()}
+          onWheel={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
+        />
       )}
 
       {level !== null && (

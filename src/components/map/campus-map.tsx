@@ -118,6 +118,8 @@ interface Props {
   /** Fill the screen: phones get the whole viewport instead of a squeezed box. */
   fullscreen?: boolean
   onFullscreen?: () => void
+  /** Skip the controls' slide while the box itself is resizing. */
+  snap?: boolean
   className?: string
 }
 
@@ -173,6 +175,7 @@ const CampusMap = ({
   onPick,
   fullscreen = false,
   onFullscreen,
+  snap = false,
   className
 }: Props) => {
   // First visit: dim the app and point at the fullscreen button until it is used.
@@ -1220,6 +1223,7 @@ const CampusMap = ({
         onPointerDown={(e) => e.stopPropagation()}
         className={cn(
           "absolute right-3 flex flex-col gap-2 transition-[bottom,opacity,transform] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
+          snap && "transition-none",
           !stackFits(size.h) && "pointer-events-none translate-y-2 opacity-0"
         )}
         style={{ bottom: 12 + insets.bottom }}>
@@ -1275,7 +1279,8 @@ const CampusMap = ({
         <div
           className={cn(
             FLOATING,
-            "text-muted-foreground absolute flex h-[42px] items-center gap-3 px-3 text-xs transition-[bottom] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none"
+            "text-muted-foreground absolute flex h-[42px] items-center gap-3 px-3 text-xs transition-[bottom] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
+            snap && "transition-none"
           )}
           style={{ left: 12 + insets.left, bottom: 12 + insets.bottom }}>
           <span className="text-foreground font-semibold">

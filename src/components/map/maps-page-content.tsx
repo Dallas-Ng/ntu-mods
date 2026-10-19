@@ -664,7 +664,11 @@ const MapsPageContent = () => {
   const [pinned, setPinned] = useState(false)
   const slotRef = useRef<HTMLDivElement>(null)
   const wasFullscreen = useRef(false)
+  // While the shell resizes, the drawer and controls must not slide to their new spots.
+  const [snap, setSnap] = useState(false)
   const toggleFullscreen = () => {
+    setSnap(true)
+    setTimeout(() => setSnap(false), 520)
     setPinned(true)
     setFullscreen((f) => !f)
   }
@@ -849,6 +853,7 @@ const MapsPageContent = () => {
                 detent={detent}
                 onDetent={changeDetent}
                 tip={tip}
+                snap={snap}
                 shellH={shellH}
                 visible={visible}>
                 <div
@@ -1239,10 +1244,12 @@ const Sheet = ({
   detent,
   onDetent,
   tip,
+  snap,
   shellH,
   visible,
   children
 }: {
+  snap: boolean
   desktop: boolean
   detent: number
   onDetent: (d: number) => void

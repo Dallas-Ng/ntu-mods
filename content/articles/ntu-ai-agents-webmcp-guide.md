@@ -1,6 +1,6 @@
 ---
-title: "Plan Your NTU Timetable With an AI Assistant: What Is New in NTUMods"
-description: "NTUMods now works with AI assistants that run in your browser. Ask for clash-free indexes, a free day, exam checks or the CGPA you need, and your plan updates for you. Here is what you can ask and what stays under your control."
+title: "[Dev Preview] Plan Your NTU Timetable With an AI Assistant"
+description: "Early developer preview: NTUMods now offers its tools to browser AI assistants through WebMCP. Here is what you will be able to ask, what stays under your control, and how testers can try it today."
 date: "2026-10-18"
 updated: "2026-10-19"
 author: "NTUMods"
@@ -8,15 +8,17 @@ category: "General"
 tags: ["ntumods ai", "ai timetable planner ntu", "ntu timetable ai", "webmcp", "ai assistant ntu modules", "ntu clash free timetable", "ntu cgpa ai", "ai-catalog.json", "llms.txt"]
 ---
 
-# Plan Your NTU Timetable With an AI Assistant
+# [Dev Preview] Plan Your NTU Timetable With an AI Assistant
 
-Planning a semester usually means switching between STARS, a module list, your exam dates and a calculator. NTUMods now lets an AI assistant in your browser do that legwork with you. You describe what you want in plain words, and the assistant searches modules, checks clashes and updates your plan on NTUMods.
+> **Dev preview:** This feature is at an early stage and depends mostly on the Chrome team. WebMCP is a new browser standard that is still being drafted, and browsers and assistants are only starting to support it. Today it is for testers and developers. Most students will not see any change yet, and NTUMods works exactly as before.
 
-> **Quick summary:** If you use a browser assistant that supports WebMCP, you can ask it things like "build me a timetable with Fridays free" while NTUMods is open. It works on your own plans, in your own browser, and it asks you before it does anything hard to undo. This is an early feature, so only some assistants can use it yet. NTUMods works exactly as before without one.
+Planning a semester usually means switching between STARS, a module list, your exam dates and a calculator. NTUMods now offers its tools to AI assistants in your browser, so that once your assistant supports it, it can do that legwork with you. You describe what you want in plain words, and the assistant searches modules, checks clashes and updates your plan on NTUMods.
+
+> **Quick summary:** With a browser assistant that supports WebMCP, you can ask things like "build me a timetable with Fridays free" while NTUMods is open. It works on your own plans, in your own browser, and it asks you before it does anything hard to undo. Support is limited today, so see "How to try it" below if you want to test it now.
 
 ## What you can ask for
 
-These requests now work, with the NTUMods page open in the same browser. The wording does not need to match exactly.
+These requests work in a test setup, with the NTUMods page open in the same browser. The wording does not need to match exactly.
 
 | You want to | You could ask | What the assistant does |
 |---|---|---|

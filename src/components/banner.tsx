@@ -72,7 +72,7 @@ export const Banner = {
   aiAgents: () => (
     <a href="/articles/ntu-ai-agents-webmcp-guide">
       <BannerWrapper>
-        New: AI agents can now search modules and build timetables on NTUMods →
+        [Dev preview] NTUMods tools for AI assistants (WebMCP), early testing →
       </BannerWrapper>
     </a>
   ),

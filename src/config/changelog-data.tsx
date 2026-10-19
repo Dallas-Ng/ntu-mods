@@ -56,13 +56,15 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         category: "New Feature",
         content: (
           <>
-            NTUMods now offers its tools to AI agents through WebMCP, a new
-            browser standard. In a supporting browser, an assistant can search
-            modules, check which indexes fit your plan, generate timetables and
-            plan your CGPA, all on your own saved plans. Nothing is sent to our
-            servers. Guide:{" "}
+            [Dev preview] NTUMods now offers its tools to AI agents through
+            WebMCP, a new browser standard that is still in early testing and
+            depends mostly on the Chrome team. In a supporting browser, an
+            assistant can search modules, check which indexes fit your plan,
+            generate timetables and plan your CGPA, all on your own saved plans.
+            Nothing is sent to our servers. Most students will not see a change
+            yet. Guide:{" "}
             <ChangelogLink href="/articles/ntu-ai-agents-webmcp-guide">
-              Use an AI agent with NTUMods
+              Plan your NTU timetable with an AI assistant
             </ChangelogLink>
             .
           </>

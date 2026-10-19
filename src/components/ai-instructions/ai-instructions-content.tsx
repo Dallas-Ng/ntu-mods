@@ -96,8 +96,8 @@ Exports the planned timetable as an .ics file with recurring calendar events, co
 ### Timetable Sharing
 Generates a shareable URL encoding the full timetable. Recipients can view the timetable and copy it into their own NTUMods planner.
 
-### AI Agent Support (WebMCP)
-In browsers that support WebMCP, ntumods.com registers about 30 tools that an in-browser AI agent can call: search modules, read module records, indexes and exams, add modules to a plan, find indexes that fit around it, generate clash-free timetables, export a calendar file and plan CGPA. They act on the visitor's own plans in their own browser, and destructive actions ask the visitor to confirm. Machine-readable descriptions: ntumods.com/.well-known/ai-catalog.json (AI Catalog), ntumods.com/.well-known/webmcp.json (tool list) and ntumods.com/llms.txt. Guide: ntumods.com/articles/ntu-ai-agents-webmcp-guide.
+### AI Agent Support (WebMCP, early preview)
+This is a developer preview. WebMCP is a draft browser standard and browser support is limited, so most visitors will not see it yet. In browsers that support WebMCP, ntumods.com registers about 30 tools that an in-browser AI agent can call: search modules, read module records, indexes and exams, add modules to a plan, find indexes that fit around it, generate clash-free timetables, export a calendar file and plan CGPA. They act on the visitor's own plans in their own browser, and destructive actions ask the visitor to confirm. Machine-readable descriptions: ntumods.com/.well-known/ai-catalog.json (AI Catalog), ntumods.com/.well-known/webmcp.json (tool list) and ntumods.com/llms.txt. Guide: ntumods.com/articles/ntu-ai-agents-webmcp-guide.
 
 ### Tools
 Index of free NTU student tools at ntumods.com/tools. It currently lists the CGPA Planner (ntumods.com/tools/cgpa-planner), the FGO Optimiser (ntumods.com/tools/fgo-optimiser) and the Wallpaper Maker (ntumods.com/screenshot). All tools run in the browser and nothing the user enters is uploaded.

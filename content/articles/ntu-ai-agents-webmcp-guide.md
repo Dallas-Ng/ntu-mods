@@ -16,49 +16,17 @@ Planning a semester usually means switching between STARS, a module list, your e
 
 ## What you can ask for
 
-These are the kinds of requests that now work, with the NTUMods page open in the same browser.
+These requests now work, with the NTUMods page open in the same browser. The wording does not need to match exactly.
 
-**Find modules**
-
-> "Which Year 2 CSC modules are offered this semester, and which are 3 AU?"
-
-The assistant searches the full module list and reads prerequisites, exclusions and programme restrictions for you.
-
-**Fit a module around your plan**
-
-> "I want to add SC1001. Which of its indexes clash with what I already have?"
-
-It lists every index of the module, marks the ones that fit around your current plan and names the module each clash would be with.
-
-**Build a plan from preferences**
-
-> "Add these six modules, keep Fridays free, and no classes before 10am."
-
-It adds the modules, then uses the same timetable generator as the site to find clash-free combinations that respect your preferences. It reports the options it found, and you can ask it to apply a different one.
-
-**Check your exams**
-
-> "Do any of my exams fall on the same day or overlap?"
-
-It reads your plan and the exam timetable and tells you about any overlap before it becomes a problem.
-
-**Protect your own commitments**
-
-> "Add gym on Monday and Wednesday from 6pm to 7pm and plan around it."
-
-Personal blocks are checked for clashes just like modules.
-
-**Work out your grades**
-
-> "My CGPA is 4.1 with 80 AU done and 60 left. What do I need for Distinction?"
-
-It gives the average grade needed for each honours class and the lowest letter grade that gets you there. This uses the same maths as the [CGPA Planner](/tools/cgpa-planner), and the result is unofficial, because some programmes set their own bands.
-
-**Share and export**
-
-> "Give me a share link for plan 2 and export it to my calendar."
-
-You get a link your friends can open, and the assistant can produce your plan as a calendar (.ics) text that you save and import into Google Calendar, Apple Calendar or Outlook. Whether it can hand you a file depends on the assistant.
+| You want to | You could ask | What the assistant does |
+|---|---|---|
+| Find modules | "Which Year 2 CSC modules are offered this semester, and which are 3 AU?" | Searches the full module list and reads prerequisites, exclusions and programme restrictions. |
+| Fit a module around your plan | "I want to add SC1001. Which of its indexes clash with what I already have?" | Lists every index, marks the ones that fit your plan and names the module each clash is with. |
+| Build a plan from preferences | "Add these six modules, keep Fridays free, and no classes before 10am." | Adds the modules, then uses the same generator as the site to find clash-free combinations. It reports the options, and you can ask it to apply a different one. |
+| Check your exams | "Do any of my exams fall on the same day or overlap?" | Compares your plan with the exam timetable and flags overlaps early. |
+| Protect your own commitments | "Add gym on Monday and Wednesday from 6pm to 7pm and plan around it." | Adds personal blocks that are clash-checked like modules. |
+| Work out your grades | "My CGPA is 4.1 with 80 AU done and 60 left. What do I need for Distinction?" | Gives the average grade needed for each honours class and the lowest letter grade that gets you there. This uses the same maths as the [CGPA Planner](/tools/cgpa-planner) and is unofficial, because some programmes set their own bands. |
+| Share and export | "Give me a share link for plan 2 and export it to my calendar." | Creates a link your friends can open, and can produce your plan as calendar (.ics) text to save and import into Google Calendar, Apple Calendar or Outlook. Whether it can hand you a file depends on the assistant. |
 
 ## What stays in your control
 

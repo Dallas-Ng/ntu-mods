@@ -214,6 +214,8 @@ const CampusMap = ({
   const [chunks, setChunks] = useState<Record<number, BuildingChunk>>({})
   const [terrain, setTerrain] = useState<Terrain | null>(null)
   const anim = useRef(0)
+  /** Where a running camera move is headed; null when idle. */
+  const camTarget = useRef<View | null>(null)
   const [levelsOpen, setLevelsOpen] = useState(false)
 
   // Keep the camera over the campus: it can be panned to the edge and no further.
@@ -276,20 +278,33 @@ const CampusMap = ({
         "(prefers-reduced-motion: reduce)"
       ).matches
       if (reduce) return setView(to)
-      const from = viewRef.current
-      const t0 = performance.now()
+      // Chase the target instead of tweening to it: aiming somewhere new
+      // mid-flight keeps the speed, so repeated taps feel continuous.
+      camTarget.current = to
+      let last = performance.now()
       const step = (now: number) => {
-        const t = Math.min(1, (now - t0) / 450)
-        const e = 1 - Math.pow(1 - t, 3)
-        // Interpolate zoom in log space so it feels even.
-        setView({
-          cx: from.cx + (to.cx - from.cx) * e,
-          cy: from.cy + (to.cy - from.cy) * e,
-          mpp: Math.exp(
-            Math.log(from.mpp) + (Math.log(to.mpp) - Math.log(from.mpp)) * e
-          )
-        })
-        if (t < 1) anim.current = requestAnimationFrame(step)
+        const goal = camTarget.current
+        if (!goal) return
+        const v = viewRef.current
+        const k = 1 - Math.exp(-(now - last) / 85)
+        last = now
+        const mpp = Math.exp(
+          Math.log(v.mpp) + (Math.log(goal.mpp) - Math.log(v.mpp)) * k
+        )
+        const done =
+          Math.abs(Math.log(goal.mpp / mpp)) < 0.002 &&
+          Math.hypot(goal.cx - v.cx, goal.cy - v.cy) < 0.3 * mpp
+        setView(
+          done
+            ? goal
+            : {
+                cx: v.cx + (goal.cx - v.cx) * k,
+                cy: v.cy + (goal.cy - v.cy) * k,
+                mpp
+              }
+        )
+        if (done) camTarget.current = null
+        else anim.current = requestAnimationFrame(step)
       }
       anim.current = requestAnimationFrame(step)
     },
@@ -326,7 +341,8 @@ const CampusMap = ({
   }, [focus?.nonce, measured])
 
   const zoomBy = (factor: number) => {
-    const v = viewRef.current
+    // Taps stack: zoom from where the camera is going, not where it is.
+    const v = camTarget.current ?? viewRef.current
     flyTo({ ...v, mpp: clamp(v.mpp * factor, MIN_MPP, MAX_MPP) })
   }
 
@@ -356,6 +372,7 @@ const CampusMap = ({
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
       cancelAnimationFrame(anim.current)
+      camTarget.current = null
       const r = el.getBoundingClientRect()
       zoomAt(e.clientX - r.left, e.clientY - r.top, Math.exp(e.deltaY * 0.0016))
     }
@@ -366,6 +383,7 @@ const CampusMap = ({
 
   const onPointerDown = (e: React.PointerEvent) => {
     cancelAnimationFrame(anim.current)
+    camTarget.current = null
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
     dragged.current = false
     if (pointers.current.size === 2) {

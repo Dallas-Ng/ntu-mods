@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro"
 
+import { rateLimit } from "@/lib/server/guard"
 import type { WalkResult } from "@/lib/venue-map"
 
 export const prerender = false
@@ -7,9 +8,8 @@ export const prerender = false
 // Walking route between two places on the NTU campus, via MazeMap's public
 // routing service. Proxied (not called from the browser) so answers can be
 // cached at the edge and a student's venues are not sent to a third party
-// directly. Dev-only until the map ships.
+// directly.
 const UPSTREAM = "https://routing.mazemap.com/routing/path/"
-const ENABLED = import.meta.env.DEV
 
 const json = (body: unknown, status = 200, headers?: HeadersInit) =>
   new Response(JSON.stringify(body), {
@@ -40,8 +40,9 @@ interface Feature {
   }
 }
 
-export const GET: APIRoute = async ({ url }) => {
-  if (!ENABLED) return new Response(null, { status: 404 })
+export const GET: APIRoute = async ({ url, request }) => {
+  const limited = await rateLimit("WALK_LIMITER", request)
+  if (limited) return limited
 
   const a = point(url.searchParams.get("a"))
   const b = point(url.searchParams.get("b"))

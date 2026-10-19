@@ -11,8 +11,8 @@ import { Banner } from "@/components/banner"
 import Container from "@/components/container"
 import Footer from "@/components/footer"
 import MobileTracker from "@/components/mobile-tracker"
-import WebMcpProvider from "@/components/webmcp-provider"
 import Navbar from "@/components/navbar"
+import WebMcpProvider from "@/components/webmcp-provider"
 import Analytics from "@/astro/components/Analytics.astro"
 import StaleChunkReload from "@/astro/components/StaleChunkReload.astro"
 
@@ -149,7 +149,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
   </head>
   <body class="antialiased" data-build-env={BUILD_ENV}>
     <AppearanceStyleProvider client:load />
-    <Banner.ay2026s2 />
+    <Banner.campusMap />
     <div
       class={`bg-background flex min-h-screen flex-col ${outerClassName ?? ""}`}>
       <Navbar client:load />

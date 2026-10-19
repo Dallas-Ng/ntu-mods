@@ -1194,7 +1194,7 @@ const CampusMap = ({
             FLOATING,
             "text-muted-foreground absolute bottom-3 flex items-center gap-3 px-3 py-2 text-xs"
           )}
-          style={{ left: 12 + insets.left, bottom: 12 + insets.bottom }}>
+          style={{ left: 12 + insets.left, bottom: 26 + insets.bottom }}>
           <span className="text-foreground font-semibold">
             {levelLabel(data, level)}
           </span>

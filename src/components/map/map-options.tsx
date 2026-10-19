@@ -39,6 +39,7 @@ interface Props {
   onBuildingLabels: (v: boolean) => void
   roomLabels: boolean
   onRoomLabels: (v: boolean) => void
+  onTurnOffAll: () => void
   onReset: () => void
 }
 
@@ -92,6 +93,7 @@ const MapOptions = ({
   onBuildingLabels,
   roomLabels,
   onRoomLabels,
+  onTurnOffAll,
   onReset
 }: Props) => {
   const anyLabels = cats.size > 0 || buildingLabels || roomLabels
@@ -210,11 +212,7 @@ const MapOptions = ({
             variant="outline"
             size="sm"
             disabled={!anyLabels}
-            onClick={() => {
-              onCats(new Set())
-              onBuildingLabels(false)
-              onRoomLabels(false)
-            }}>
+            onClick={onTurnOffAll}>
             <EyeOff /> Turn off all
           </Button>
           <Button variant="outline" size="sm" onClick={onReset}>

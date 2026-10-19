@@ -124,6 +124,7 @@ const CORE_ROUTES = [
   "/links",
   "/llms.txt",
   "/llms.md",
+  "/maps",
   "/mods",
   "/privacy",
   "/timetable",

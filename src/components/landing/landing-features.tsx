@@ -50,6 +50,12 @@ const FEATURES: Command[] = [
     desc: "Browse exam dates, times and durations by module code for the current semester."
   },
   {
+    name: "Campus map",
+    art: "/landing/maps.svg",
+    href: "/maps",
+    desc: "Find any lecture theatre or room, see which level it is on and get walking directions."
+  },
+  {
     name: "Student links",
     art: "/landing/links.svg",
     href: "/links",

@@ -187,10 +187,13 @@ const chunkLoaders = import.meta.glob<{ default: BuildingChunk }>(
 )
 const chunkCache = new Map<number, Promise<BuildingChunk | null>>()
 
+let venueDataPromise: Promise<VenueData> | null = null
+
+/** One shared load, so it can start before the page has finished hydrating. */
 export const loadVenueData = () =>
-  import("@/data/venues/venues.json").then(
+  (venueDataPromise ??= import("@/data/venues/venues.json").then(
     (m) => m.default as unknown as VenueData
-  )
+  ))
 
 export const loadChunk = (id: number) => {
   let p = chunkCache.get(id)

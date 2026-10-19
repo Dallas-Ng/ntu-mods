@@ -1,6 +1,10 @@
 import { env } from "cloudflare:workers"
 
-type LimiterName = "MODULE_API_LIMITER" | "FEEDBACK_LIMITER" | "VIEWS_LIMITER"
+type LimiterName =
+  | "MODULE_API_LIMITER"
+  | "FEEDBACK_LIMITER"
+  | "VIEWS_LIMITER"
+  | "WALK_LIMITER"
 
 /**
  * 429 when this IP is over the named Workers Rate Limiting binding, else null.

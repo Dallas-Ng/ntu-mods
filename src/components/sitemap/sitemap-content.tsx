@@ -29,6 +29,12 @@ const CORE_LINKS = [
       "Check NTU exam dates and times by module for the current semester"
   },
   {
+    label: "Campus map",
+    href: "/maps",
+    description:
+      "Find NTU lecture theatres, rooms and halls by level, with walking directions"
+  },
+  {
     label: "Tools",
     href: "/tools",
     description:

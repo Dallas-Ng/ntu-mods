@@ -113,6 +113,7 @@ export const siteConfig = {
     { label: "Timetable", route: "/timetable" },
     { label: "Mods", route: "/mods" },
     { label: "Exams", route: "/exams" },
+    { label: "Maps", route: "/maps" },
     { label: "Tools", route: "/tools" },
     { label: "Articles", route: "/articles" },
     { label: "Links", route: "/links" }

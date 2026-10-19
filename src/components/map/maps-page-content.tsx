@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 import { toast } from "sonner"
 
+import { track } from "@/lib/analytics"
 import { searchPlaces } from "@/lib/place-search"
 import { cn } from "@/lib/utils"
 import {
@@ -43,7 +44,6 @@ import {
   CommandItem,
   CommandList
 } from "@/components/ui/command"
-import { Skeleton } from "@/components/ui/skeleton"
 import Header from "@/components/header"
 import CampusMap, {
   FLOATING,
@@ -55,12 +55,17 @@ import CampusMap, {
 } from "@/components/map/campus-map"
 import { PlaceIcon } from "@/components/map/category-icons"
 import MapOptions, { type MapStyle } from "@/components/map/map-options"
+import MapSkeleton from "@/components/map/map-skeleton"
 import PlacePicker, {
   buildPlaces,
   type PickerPlace
 } from "@/components/map/place-picker"
 
 const PREFS_KEY = "ntumods-map-prefs"
+
+// Start fetching the map data as soon as this script runs, in parallel with
+// React hydrating, instead of waiting for the first effect.
+if (typeof window !== "undefined") loadVenueData()
 
 /** Lecture theatres are not a MazeMap category, so recognise them by name. */
 const isLectureTheatre = (p: PickerPlace) =>
@@ -103,7 +108,7 @@ const polyMetres = (data: VenueData, pts: number[]) => {
 }
 
 /** Share the current view: the phone's share sheet where there is one, else copy. */
-const shareLink = async (title: string) => {
+const shareLink = async (title: string, view: string) => {
   const url = window.location.href
   if (
     typeof navigator.share === "function" &&
@@ -111,6 +116,7 @@ const shareLink = async (title: string) => {
   ) {
     try {
       await navigator.share({ title, url })
+      track("map_shared", { method: "native", view })
       return
     } catch (e) {
       if ((e as Error).name === "AbortError") return
@@ -119,18 +125,20 @@ const shareLink = async (title: string) => {
   try {
     await navigator.clipboard.writeText(url)
     toast.success("Link copied")
+    track("map_shared", { method: "copy", view })
   } catch {
     toast.error("Could not copy the link")
+    track("map_shared", { method: "failed", view })
   }
 }
 
 /** Small round share button for panel headers. */
-const HeaderShare = ({ title }: { title: string }) => (
+const HeaderShare = ({ title, view }: { title: string; view: string }) => (
   <button
     type="button"
     aria-label="Share this view"
     title="Share this view"
-    onClick={() => shareLink(title)}
+    onClick={() => shareLink(title, view)}
     className="hover:bg-accent flex size-8 cursor-pointer items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
     <Share2 className="size-4" />
   </button>
@@ -202,7 +210,48 @@ const MapsPageContent = () => {
     } catch {}
   }, [prefsLoaded, cats, buildingLabels, roomLabels, mapStyle, hybridTone])
 
+  const pickLevel = (z: number | null, source: string) => {
+    track("map_level_changed", {
+      level: z === null ? "all" : data ? levelShort(data, z) : String(z),
+      source
+    })
+    setLevel(z)
+  }
+
+  const trackOption = (setting: string, value?: string | boolean) =>
+    track("map_options_changed", { setting, value })
+
+  const changeMapStyle = (style: MapStyle) => {
+    trackOption("map_type", style)
+    setMapStyle(style)
+  }
+  const changeTone = (tone: HybridTone) => {
+    trackOption("hybrid_tone", tone)
+    setHybridTone(tone)
+  }
+  const changeCats = (next: Set<LandmarkCat>) => {
+    const all = Object.keys(CATEGORIES) as LandmarkCat[]
+    const changed = all.find((c) => cats.has(c) !== next.has(c))
+    if (changed) trackOption(`label_${changed}`, next.has(changed))
+    setCats(next)
+  }
+  const changeBuildingLabels = (on: boolean) => {
+    trackOption("label_buildings", on)
+    setBuildingLabels(on)
+  }
+  const changeRoomLabels = (on: boolean) => {
+    trackOption("label_rooms", on)
+    setRoomLabels(on)
+  }
+  const turnOffAll = () => {
+    trackOption("turn_off_all")
+    setCats(new Set())
+    setBuildingLabels(false)
+    setRoomLabels(false)
+  }
+
   const resetSettings = () => {
+    trackOption("reset")
     setCats(
       new Set(
         (Object.keys(CATEGORIES) as LandmarkCat[]).filter(
@@ -242,9 +291,15 @@ const MapsPageContent = () => {
   }, [])
 
   const select = useCallback(
-    (id: string) => {
+    (id: string, source = "list") => {
       const p = byId.get(id)
       if (!p) return
+      track("map_place_selected", {
+        kind: p.kind,
+        source,
+        category: p.cat,
+        has_level: p.z !== 0
+      })
       setSelectedId(id)
       setDirections(false)
       setDetent(1)
@@ -254,7 +309,8 @@ const MapsPageContent = () => {
     [byId, flyTo]
   )
 
-  const chooseCat = (key: string | null) => {
+  const chooseCat = (key: string | null, source = "chip") => {
+    if (key) track("map_category_selected", { category: key, source })
     setQ("")
     setActiveCat(key)
     setSelectedId(null)
@@ -282,6 +338,11 @@ const MapsPageContent = () => {
   useEffect(() => {
     if (!data || linked) return
     setLinked(true)
+    track("map_loaded", {
+      shared_link: window.location.search.length > 1,
+      map_type:
+        new URLSearchParams(window.location.search).get("map") ?? "default"
+    })
     const q = new URLSearchParams(window.location.search)
     const f = q.get("from")
     const t = q.get("to")
@@ -352,11 +413,16 @@ const MapsPageContent = () => {
     let live = true
     fetchWalk(from, to).then((w) => {
       if (!live) return
-      setSolo(
-        w
-          ? { walk: w, estimated: false }
-          : { walk: estimateWalk(from, to), estimated: true }
-      )
+      const result = w
+        ? { walk: w, estimated: false }
+        : { walk: estimateWalk(from, to), estimated: true }
+      setSolo(result)
+      track("map_directions_shown", {
+        minutes: Math.max(1, Math.ceil(result.walk.seconds / 60)),
+        metres: result.walk.metres,
+        level_changes: result.walk.changes.length,
+        estimated: result.estimated
+      })
       setLevel(null)
       setFocus({
         bounds: [
@@ -374,6 +440,7 @@ const MapsPageContent = () => {
   }, [data, from, to])
 
   const startDirections = (id?: string, as: "from" | "to" = "to") => {
+    track("map_directions_opened", { from_place: Boolean(id) })
     if (id) {
       if (as === "from") setFromId(id)
       else setToId(id)
@@ -443,6 +510,22 @@ const MapsPageContent = () => {
     () => (!activeCat && dq.trim() ? searchPlaces(places, dq, 30) : []),
     [places, dq, activeCat]
   )
+  // One event per finished search, not per keystroke.
+  const searchSettled = useDebounce(q, 900)
+  const resultCount = activeCat ? catPlaces.length : results.length
+  const resultCountRef = useRef(resultCount)
+  resultCountRef.current = resultCount
+  useEffect(() => {
+    const term = searchSettled.trim()
+    if (term.length < 2) return
+    track("map_searched", {
+      search_term: term,
+      scoped_to: activeCat ?? undefined,
+      results: resultCountRef.current
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchSettled])
+
   // "toilet", "food", "lt": offer the whole category before hundreds of rooms.
   const categoryHit = useMemo(() => {
     const t = dq.trim().toLowerCase()
@@ -561,11 +644,11 @@ const MapsPageContent = () => {
             <CampusMap
               data={data}
               level={level}
-              onLevel={setLevel}
+              onLevel={(z) => pickLevel(z, "picker")}
               pins={pins}
               routes={routes}
-              onPin={select}
-              onPick={select}
+              onPin={(id) => select(id, "map")}
+              onPick={(id) => select(id, "map")}
               marker={marker}
               selectedId={selectedId}
               mapStyle={mapStyle}
@@ -580,15 +663,16 @@ const MapsPageContent = () => {
               extraControls={
                 <MapOptions
                   mapStyle={mapStyle}
-                  onMapStyle={setMapStyle}
+                  onMapStyle={changeMapStyle}
                   hybridTone={hybridTone}
-                  onHybridTone={setHybridTone}
+                  onHybridTone={changeTone}
                   cats={cats}
-                  onCats={setCats}
+                  onCats={changeCats}
                   buildingLabels={buildingLabels}
-                  onBuildingLabels={setBuildingLabels}
+                  onBuildingLabels={changeBuildingLabels}
                   roomLabels={roomLabels}
-                  onRoomLabels={setRoomLabels}
+                  onRoomLabels={changeRoomLabels}
+                  onTurnOffAll={turnOffAll}
                   onReset={resetSettings}
                 />
               }
@@ -605,7 +689,7 @@ const MapsPageContent = () => {
                 pending={q !== dq}
                 results={results}
                 categoryHit={categoryHit}
-                onCategory={(key) => chooseCat(key)}
+                onCategory={(key) => chooseCat(key, "search")}
                 scope={
                   activeCat
                     ? (BROWSE.find((b) => b.key === activeCat)?.label ?? null)
@@ -619,7 +703,7 @@ const MapsPageContent = () => {
                     : catPlaces[0]
                   if (top) select(top.id)
                 }}
-                onSelect={select}
+                onSelect={(id) => select(id, "search")}
                 onDirections={() => startDirections(selected?.id)}
               />
             </div>
@@ -669,7 +753,7 @@ const MapsPageContent = () => {
                     }}
                     level={level}
                     onSelect={select}
-                    onLevel={setLevel}
+                    onLevel={(z) => pickLevel(z, "chip")}
                     onDirections={startDirections}
                   />
                 ) : activeCat ? (
@@ -678,7 +762,7 @@ const MapsPageContent = () => {
                     cat={activeCat}
                     rows={catPlaces}
                     level={level}
-                    onLevel={setLevel}
+                    onLevel={(z) => pickLevel(z, "chip")}
                     onSelect={select}
                     onClose={() => chooseCat(null)}
                   />
@@ -687,14 +771,14 @@ const MapsPageContent = () => {
                     data={data}
                     places={places}
                     onSelect={select}
-                    onCat={chooseCat}
+                    onCat={(k) => chooseCat(k, "explore")}
                   />
                 )}
               </div>
             </Sheet>
           </>
         ) : (
-          <Skeleton className="absolute inset-0 rounded-none" />
+          <MapSkeleton />
         )}
       </div>
     </div>
@@ -1268,7 +1352,7 @@ const CategoryPanel = ({
             {rows.length} on the map
           </p>
         </div>
-        <HeaderShare title={label} />
+        <HeaderShare title={label} view="category" />
         <button
           type="button"
           aria-label="Close list"
@@ -1463,7 +1547,7 @@ const PlacePanel = ({
           variant="outline"
           size="icon"
           aria-label="Share this view"
-          onClick={() => shareLink(place.name)}>
+          onClick={() => shareLink(place.name, "place")}>
           <Share2 />
         </Button>
       </div>
@@ -1550,7 +1634,7 @@ const DirectionsPanel = ({
     <div className="flex items-center justify-between">
       <h2 className="text-lg leading-tight font-semibold">Directions</h2>
       <div className="-mr-1 flex items-center">
-        <HeaderShare title="NTU walking directions" />
+        <HeaderShare title="NTU walking directions" view="directions" />
         <button
           type="button"
           aria-label="Close directions"

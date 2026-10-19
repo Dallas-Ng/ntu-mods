@@ -70,20 +70,20 @@ const TIPS = [
             aria-hidden="true">
             <div class="w-full max-w-56">
               {i === 0 && (
-                <div class="space-y-2">
-                  <div class="bg-card flex h-10 items-center gap-2 rounded-full border pr-1.5 pl-3 text-sm shadow-sm">
-                    <Search class="text-muted-foreground size-4" />
-                    LT19
-                    <span class="bg-primary text-primary-foreground ml-auto flex size-7 items-center justify-center rounded-full">
-                      <Navigation class="size-3.5" />
+                <div class="relative">
+                  <div class="bg-card flex h-11 items-center gap-2 rounded-full border pr-1.5 pl-4 text-sm shadow-sm">
+                    <Search className="text-muted-foreground size-4 shrink-0" />
+                    <span class="flex-1">LT19</span>
+                    <span class="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-full">
+                      <Navigation className="size-4" />
                     </span>
                   </div>
-                  <div class="bg-card rounded-xl border p-1 text-sm shadow-sm">
-                    <div class="bg-accent flex items-center gap-2.5 rounded-lg px-2 py-1.5">
-                      <DoorOpen class="text-muted-foreground size-4" />
-                      <span>
-                        <span class="block leading-tight">LT19A</span>
-                        <span class="text-muted-foreground block text-xs">
+                  <div class="bg-popover absolute top-[calc(100%+8px)] right-0 left-0 rounded-2xl border p-1 text-sm shadow-sm">
+                    <div class="bg-accent flex items-center gap-2 rounded-lg px-2 py-1.5">
+                      <DoorOpen className="text-muted-foreground size-4" />
+                      <span class="min-w-0">
+                        <span class="block truncate">LT19A</span>
+                        <span class="text-muted-foreground block truncate text-xs">
                           LT19A (NS)
                         </span>
                       </span>
@@ -128,8 +128,8 @@ const TIPS = [
 
               {i === 2 && (
                 <div class="space-y-2.5">
-                  <span class="bg-primary text-primary-foreground inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-medium">
-                    <Utensils class="size-3.5" /> Food
+                  <span class="bg-primary text-primary-foreground inline-flex h-9 items-center gap-1.5 rounded-full border border-transparent px-3.5 text-sm font-medium shadow-sm">
+                    <Utensils className="size-3.5" /> Food
                   </span>
                   <div class="bg-card divide-y rounded-xl border text-sm shadow-sm">
                     {[
@@ -138,7 +138,7 @@ const TIPS = [
                     ].map(([name, level]) => (
                       <div class="flex items-center justify-between px-3 py-2">
                         {name}
-                        <span class="text-muted-foreground text-xs">
+                        <span class="text-muted-foreground text-xs tabular-nums">
                           {level}
                         </span>
                       </div>
@@ -149,31 +149,38 @@ const TIPS = [
 
               {i === 3 && (
                 <div class="space-y-3">
-                  <div class="flex items-baseline gap-2.5">
-                    <span class="text-3xl leading-none font-semibold tabular-nums">
+                  <div class="flex items-baseline gap-3">
+                    <span class="text-4xl leading-none font-semibold tabular-nums">
                       12
-                      <span class="text-muted-foreground ml-1 text-sm font-medium">
+                      <span class="text-muted-foreground ml-1 text-base font-medium">
                         min
                       </span>
                     </span>
-                    <span class="text-muted-foreground text-xs tabular-nums">
+                    <span class="text-muted-foreground text-sm tabular-nums">
                       654 m
                     </span>
                   </div>
-                  <div class="space-y-2 text-xs">
-                    <div class="flex items-center gap-2.5">
-                      <span class="bg-muted flex size-6 items-center justify-center rounded-full">
-                        <Footprints class="size-3.5" />
+                  <ol>
+                    <li class="flex gap-3">
+                      <div class="flex w-6 flex-col items-center">
+                        <span class="bg-muted text-muted-foreground flex size-6 items-center justify-center rounded-full">
+                          <Footprints className="size-3.5" />
+                        </span>
+                        <span class="bg-border my-0.5 h-3 w-px" />
+                      </div>
+                      <p class="text-muted-foreground pt-0.5 text-sm">
+                        Walk on Level 1
+                      </p>
+                    </li>
+                    <li class="flex gap-3">
+                      <span class="bg-muted text-muted-foreground flex size-6 items-center justify-center rounded-full">
+                        <ArrowUpDown className="size-3.5" />
                       </span>
-                      Walk on Level 1
-                    </div>
-                    <div class="flex items-center gap-2.5">
-                      <span class="bg-muted flex size-6 items-center justify-center rounded-full">
-                        <ArrowUpDown class="size-3.5" />
-                      </span>
-                      Take the stairs to Level 2
-                    </div>
-                  </div>
+                      <p class="text-muted-foreground pt-0.5 text-sm">
+                        Take the stairs to Level 2
+                      </p>
+                    </li>
+                  </ol>
                 </div>
               )}
 
@@ -209,7 +216,7 @@ const TIPS = [
                       Directions
                     </span>
                     <span class="bg-card inline-flex size-9 items-center justify-center rounded-md border">
-                      <Share2 class="size-4" />
+                      <Share2 className="size-4" />
                     </span>
                   </div>
                   <div class="bg-card text-muted-foreground truncate rounded-lg border px-3 py-2 text-xs">
@@ -236,9 +243,9 @@ const TIPS = [
           <span
             class="bg-muted text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-lg"
             aria-hidden="true">
-            {i === 0 && <CornerUpLeft class="size-4" />}
-            {i === 1 && <Move class="size-4" />}
-            {i === 2 && <CircleDashed class="size-4" />}
+            {i === 0 && <CornerUpLeft className="size-4" />}
+            {i === 1 && <Move className="size-4" />}
+            {i === 2 && <CircleDashed className="size-4" />}
           </span>
           <div class="min-w-0 space-y-0.5">
             <p class="text-sm font-medium">{title}</p>

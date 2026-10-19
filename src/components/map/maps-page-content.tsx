@@ -907,7 +907,11 @@ const MapsPageContent = () => {
                       data={data}
                       places={places}
                       onSelect={select}
-                      onCat={(k) => chooseCat(k, "explore")}
+                      onRoute={(a, b) => {
+                        setFromId(a)
+                        setToId(b)
+                        startDirections()
+                      }}
                     />
                   )}
                 </div>
@@ -1394,13 +1398,22 @@ const ExplorePanel = ({
   data,
   places,
   onSelect,
-  onCat
+  onRoute
 }: {
   data: VenueData
   places: PickerPlace[]
   onSelect: (id: string) => void
-  onCat: (key: string) => void
+  onRoute: (fromId: string, toId: string) => void
 }) => {
+  const routes = useMemo(
+    () =>
+      POPULAR_WALKS.flatMap(([a, b]) => {
+        const pa = places.find((p) => p.kind === "building" && p.name === a)
+        const pb = places.find((p) => p.kind === "building" && p.name === b)
+        return pa && pb ? [[pa, pb] as const] : []
+      }),
+    [places]
+  )
   const popular = useMemo(
     () =>
       Object.entries(data.venues)
@@ -1410,11 +1423,6 @@ const ExplorePanel = ({
         .map(([k]) => k),
     [data]
   )
-  const count = (key: string) =>
-    key === "lt"
-      ? places.filter(isLectureTheatre).length
-      : places.filter((p) => p.cat === key).length
-
   return (
     <div className="space-y-5">
       <div>
@@ -1441,33 +1449,48 @@ const ExplorePanel = ({
         </div>
       </section>
 
-      <section className="space-y-2">
-        <h3 className="text-sm font-semibold">Browse by type</h3>
-        <ul className="-mx-2 space-y-0.5">
-          {BROWSE.map((c) => (
-            <li key={c.key}>
-              <button
-                type="button"
-                onClick={() => onCat(c.key)}
-                className="group hover:bg-accent focus-visible:ring-ring/50 flex h-11 w-full cursor-pointer items-center gap-3 rounded-xl px-2 text-left transition-[background-color,transform] duration-150 ease-out outline-none focus-visible:ring-[3px] active:scale-[0.99]">
-                <span className="bg-muted group-hover:bg-background flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors duration-150">
-                  <PlaceIcon name={c.key} className="size-4" />
-                </span>
-                <span className="min-w-0 flex-1 truncate text-sm font-medium">
-                  {c.label}
-                </span>
-                <span className="text-muted-foreground text-xs tabular-nums">
-                  {count(c.key)}
-                </span>
-                <ChevronRight className="text-muted-foreground -ml-1 size-4 -translate-x-1 opacity-0 transition-[opacity,transform] duration-150 group-hover:translate-x-0 group-hover:opacity-100" />
-              </button>
-            </li>
-          ))}
-        </ul>
-      </section>
+      {routes.length > 0 && (
+        <section className="space-y-2">
+          <h3 className="text-sm font-semibold">Popular walks</h3>
+          <ul className="-mx-2 space-y-0.5">
+            {routes.map(([a, b]) => (
+              <li key={a.id + b.id}>
+                <button
+                  type="button"
+                  onClick={() => onRoute(a.id, b.id)}
+                  className="group hover:bg-accent focus-visible:ring-ring/50 flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-xl px-2 py-1.5 text-left transition-[background-color,transform] duration-150 ease-out outline-none focus-visible:ring-[3px] active:scale-[0.99]">
+                  <span className="bg-muted group-hover:bg-background flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors duration-150">
+                    <Footprints className="size-4" />
+                  </span>
+                  <span className="min-w-0 flex-1 text-sm font-medium">
+                    {shortName(a.name)}
+                    <span className="text-muted-foreground font-normal">
+                      {" to "}
+                    </span>
+                    {shortName(b.name)}
+                  </span>
+                  <ChevronRight className="text-muted-foreground -ml-1 size-4 -translate-x-1 opacity-0 transition-[opacity,transform] duration-150 group-hover:translate-x-0 group-hover:opacity-100" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   )
 }
+
+/** Walks students make most, as building names in the map data. */
+const POPULAR_WALKS = [
+  ["North Spine", "South Spine"],
+  ["North Spine", "The Arc (Learning Hub North)"],
+  ["South Spine", "Nanyang Business School (S3)"],
+  ["North Spine", "Sports & Recreation Centre (SRC)"],
+  ["South Spine", "Student Services Centre (SSC)"]
+] as const
+
+/** "Nanyang Business School (S3)" -> "Nanyang Business School". */
+const shortName = (name: string) => name.replace(/\s*\([^)]*\)\s*$/, "")
 
 /** "Female Toilet (North Spine)" -> ["Female Toilet", "North Spine"]. */
 const splitName = (name: string): [string, string | null] => {

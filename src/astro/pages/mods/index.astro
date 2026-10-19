@@ -1,4 +1,7 @@
 ---
+import { readFile } from "node:fs/promises"
+
+import type { AllModule } from "@/types/mods"
 import { siteConfig } from "@/config/site"
 import { formatCount } from "@/lib/format"
 import { collectionPageJsonLd } from "@/lib/json-ld"
@@ -32,6 +35,17 @@ const directory = [...groups.entries()]
 const moduleCount = formatCount(Object.keys(modules).length)
 const coverage = `AY${year} Semester ${semester} with ${moduleCount} modules`
 
+// The first cards of the default view (current semester, no filters), in the
+// order the client list shows them. Rendering these in the HTML lets the page
+// paint real content without waiting for hydration and the modules.json fetch.
+const INITIAL_CARDS = 12
+const { modules: allModules } = JSON.parse(
+  await readFile("public/data/api/modules.json", "utf-8")
+) as { modules: AllModule[] }
+const initialModules = allModules
+  .filter((m) => m.isCurrentSemester)
+  .slice(0, INITIAL_CARDS)
+
 const modsJsonLd = collectionPageJsonLd({
   name: siteConfig.metatags.mods.title,
   description: siteConfig.metatags.mods.desc,
@@ -46,7 +60,7 @@ const modsJsonLd = collectionPageJsonLd({
   ogImage={`${siteConfig.url}/og/mods.png`}
   ogImageAlt="NTUMods module browser searching NTU modules, listing Digital Logic and other SC modules">
   <JsonLd data={modsJsonLd} />
-  <ModsPage client:load />
+  <ModsPage client:load initialModules={initialModules} />
 
   <section class="mt-12 space-y-3" aria-labelledby="mods-about">
     <h2 id="mods-about" class="text-lg font-semibold tracking-tight">

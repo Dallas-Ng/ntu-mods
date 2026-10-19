@@ -102,7 +102,7 @@ export default defineConfig({
   // serves a directory-style build at /faq/ and 307s /faq to it — so with the
   // default format every canonical, sitemap and internal URL (all slashless)
   // would cost a redirect hop before rendering. "file" serves them directly.
-  build: { format: "file" },
+  build: { format: "file", inlineStylesheets: "always" },
   // 301, not Astro's shorthand default of 302 — these were `permanent: true`
   // redirects under Next, and demoting them would drop the accumulated link
   // equity on /stars in particular.

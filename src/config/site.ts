@@ -64,6 +64,10 @@ export const siteConfig = {
       title: "NTU Module Planning Guides",
       desc: "Read NTUMods guides on planning NTU modules, choosing BDEs, understanding Common Core modules, balancing workload, and preparing for STARS."
     },
+    developers: {
+      title: "NTUMods API for Developers",
+      desc: "Free public API and open data for NTU modules, class indexes and exam timetables. No key needed. Built for student projects and AI tools."
+    },
     sitemap: {
       title: "Sitemap",
       desc: "Browse every major NTUMods page, planning guide, and NTU module detail page from one organized sitemap."

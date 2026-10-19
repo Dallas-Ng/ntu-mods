@@ -1,0 +1,270 @@
+---
+import { siteConfig } from "@/config/site"
+import { webPageJsonLd } from "@/lib/json-ld"
+import { buildOpenApi } from "@/lib/openapi"
+import { getLatestExamSemester, getLatestSemester } from "@/lib/server/db/repo"
+import TryModuleApi from "@/components/developers/try-module-api"
+import Header from "@/components/header"
+import JsonLd from "@/astro/components/JsonLd.astro"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
+
+const { title, desc } = siteConfig.metatags.developers
+
+const { year, semester } = await getLatestSemester()
+const exams = await getLatestExamSemester()
+const spec = buildOpenApi({
+  indexSemester: `${year}_${semester}`,
+  examSemester: exams ? `${exams.year}_${exams.semester}` : null
+})
+
+type Schema = Record<string, any>
+const schemas = spec.components.schemas as Record<string, Schema>
+const resolve = (s: Schema): Schema =>
+  s?.$ref ? schemas[s.$ref.split("/").pop() as string] : s
+
+const typeOf = (s: Schema): string => {
+  if (s.$ref) return s.$ref.split("/").pop() as string
+  if (s.oneOf) return s.oneOf.map(typeOf).join(" | ")
+  if (s.type === "array") return `${typeOf(s.items ?? {})}[]`
+  return Array.isArray(s.type) ? s.type.join(" | ") : (s.type ?? "any")
+}
+
+// Flattens an object schema one level deep into table rows.
+const fields = (schema: Schema, prefix = ""): [string, string, string][] =>
+  Object.entries(resolve(schema).properties ?? {}).flatMap(([name, raw]) => {
+    const prop = raw as Schema
+    const inner = resolve(prop)
+    if (!prefix && inner.type === "object" && inner.properties) {
+      return [
+        [name, "object", prop.description ?? ""],
+        ...fields(inner, `${name}.`)
+      ] as [string, string, string][]
+    }
+    return [[prefix + name, typeOf(prop), prop.description ?? ""]] as [
+      string,
+      string,
+      string
+    ][]
+  })
+
+const operations = Object.entries(spec.paths).map(([path, item]) => ({
+  path,
+  ...((item as Record<string, any>).get as Schema)
+}))
+
+const mediaOf = (res: Schema) =>
+  Object.entries(res.content ?? {})[0] as [string, Schema] | undefined
+
+const moduleOp = operations.find((o) => o.operationId === "getModule")
+const moduleFields = fields(
+  (moduleOp?.responses["200"].content["application/json"].schema ??
+    {}) as Schema
+)
+
+const STATUS_STYLE: Record<string, string> = {
+  "2": "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
+  "3": "bg-sky-500/15 text-sky-700 dark:text-sky-400",
+  "4": "bg-amber-500/15 text-amber-700 dark:text-amber-400",
+  "5": "bg-rose-500/15 text-rose-700 dark:text-rose-400"
+}
+
+const jsonLd = webPageJsonLd({
+  name: title,
+  description: desc,
+  path: "/developers"
+})
+---
+
+<BaseLayout
+  title={title}
+  description={desc}
+  canonical="/developers"
+  size="md"
+  containerClassName="space-y-8">
+  <JsonLd data={jsonLd} />
+  <Header
+    title="Developers"
+    subtitle="A free, read-only API and open data for NTU modules, class indexes and exams. Built for student projects and AI tools."
+  />
+
+  <section class="space-y-3" aria-labelledby="usage">
+    <h2 id="usage" class="text-lg font-semibold tracking-tight">
+      Before you start
+    </h2>
+    <ul class="text-muted-foreground list-disc space-y-1.5 pl-5 text-sm">
+      <li>
+        Free to use. No API key and no sign-up. Every endpoint is a plain GET.
+      </li>
+      <li>
+        The data is NTU public course data. It can be out of date or wrong, so
+        always check STARS before you act on it.
+      </li>
+      <li>
+        Please credit NTUMods if you publish something built on it, and do not
+        present it as an official NTU service.
+      </li>
+      <li>
+        Please cache responses and keep to a modest request rate. Excessive use
+        returns 429 with a Retry-After header, and you should wait that long
+        before retrying.
+      </li>
+      <li>
+        Prefer the open data files for bulk work. Download a file once instead
+        of calling the module endpoint for every code.
+      </li>
+      <li>
+        Machine-readable spec: <a
+          class="text-primary underline underline-offset-2"
+          href="/developers/openapi.json">/developers/openapi.json</a
+        > (OpenAPI 3.1).
+      </li>
+    </ul>
+  </section>
+
+  {
+    operations.map((op) => {
+      const media = mediaOf(op.responses["200"] ?? {})
+      const example = media?.[1].example
+      const isModule = op.operationId === "getModule"
+      return (
+        <section
+          class="space-y-3 rounded-2xl border p-4 sm:p-5"
+          aria-labelledby={op.operationId}>
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="bg-primary text-primary-foreground rounded-md px-2 py-0.5 text-xs font-semibold">
+                GET
+              </span>
+              <code id={op.operationId} class="text-sm font-semibold break-all">
+                {op.path}
+              </code>
+            </div>
+            <p class="text-sm font-medium">{op.summary}</p>
+            {op.description && (
+              <p class="text-muted-foreground text-sm">{op.description}</p>
+            )}
+          </div>
+
+          {op.parameters && (
+            <div class="space-y-1.5">
+              <h3 class="text-sm font-semibold">Parameters</h3>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                  <tbody>
+                    {op.parameters.map((p: Schema) => (
+                      <tr class="border-t">
+                        <td class="py-2 pr-3 align-top font-mono whitespace-nowrap">
+                          {p.name}
+                        </td>
+                        <td class="text-muted-foreground py-2 align-top">
+                          {p.description ?? p.schema.description}
+                          {p.schema.pattern && (
+                            <>
+                              {" "}
+                              Pattern:{" "}
+                              <code class="text-xs">{p.schema.pattern}</code>.
+                            </>
+                          )}
+                          {p.schema.example && (
+                            <>
+                              {" "}
+                              Example:{" "}
+                              <code class="text-xs">{p.schema.example}</code>.
+                            </>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          <div class="space-y-1.5">
+            <h3 class="text-sm font-semibold">Responses</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm">
+                <tbody>
+                  {Object.entries(op.responses).map(([status, res]) => (
+                    <tr class="border-t">
+                      <td class="py-2 pr-3 align-top">
+                        <span
+                          class={`rounded-md px-2 py-0.5 font-mono text-xs font-semibold ${STATUS_STYLE[status[0]]}`}>
+                          {status}
+                        </span>
+                      </td>
+                      <td class="text-muted-foreground py-2 align-top">
+                        {(res as Schema).description}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {isModule && (
+            <div class="space-y-1.5">
+              <h3 class="text-sm font-semibold">Response fields</h3>
+              <ul>
+                {moduleFields.map(([name, type, description]) => (
+                  <li class="space-y-0.5 border-t py-2 text-sm">
+                    <div class="flex flex-wrap items-baseline gap-x-2">
+                      <code class="text-xs font-semibold break-all">
+                        {name}
+                      </code>
+                      <code class="text-muted-foreground text-xs">{type}</code>
+                    </div>
+                    {description && (
+                      <p class="text-muted-foreground">{description}</p>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {example && (
+            <div class="space-y-1.5">
+              <h3 class="text-sm font-semibold">
+                Example: <code class="text-xs">GET /api/modules/SC1003</code>
+              </h3>
+              <pre class="bg-muted max-h-96 overflow-auto rounded-lg p-3 text-xs">
+                {JSON.stringify(example, null, 2)}
+              </pre>
+            </div>
+          )}
+
+          {isModule && (
+            <div class="space-y-1.5">
+              <h3 class="text-sm font-semibold">Try it</h3>
+              <TryModuleApi client:idle />
+            </div>
+          )}
+        </section>
+      )
+    })
+  }
+
+  <section class="space-y-2" aria-labelledby="webmcp">
+    <h2 id="webmcp" class="text-lg font-semibold tracking-tight">
+      AI assistants and WebMCP
+    </h2>
+    <p class="text-muted-foreground text-sm">
+      NTUMods also offers its tools to browser AI assistants through WebMCP.
+      This is an early developer preview: the standard is still a draft and
+      support is limited, so treat it as something to test, not to build on. The
+      discovery files above list what is available. For setup steps, read the{
+        " "
+      }
+      <a
+        class="text-primary underline underline-offset-2"
+        href="/articles/ntu-ai-agents-webmcp-guide">
+        WebMCP guide
+      </a>.
+    </p>
+  </section>
+</BaseLayout>

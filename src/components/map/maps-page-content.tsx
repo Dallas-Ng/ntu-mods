@@ -5,6 +5,7 @@ import {
   ArrowDownUp,
   ArrowLeft,
   ArrowUpDown,
+  Check,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -107,7 +108,10 @@ const polyMetres = (data: VenueData, pts: number[]) => {
   return Math.round(m / 5) * 5
 }
 
-/** Share the current view: the phone's share sheet where there is one, else copy. */
+/**
+ * Share the current view: the phone's share sheet where there is one, else
+ * copy. Resolves true once the link was shared or copied.
+ */
 const shareLink = async (title: string, view: string) => {
   const url = window.location.href
   if (
@@ -117,32 +121,68 @@ const shareLink = async (title: string, view: string) => {
     try {
       await navigator.share({ title, url })
       track("map_shared", { method: "native", view })
-      return
+      return true
     } catch (e) {
-      if ((e as Error).name === "AbortError") return
+      if ((e as Error).name === "AbortError") return false
     }
   }
   try {
     await navigator.clipboard.writeText(url)
     toast.success("Link copied")
     track("map_shared", { method: "copy", view })
+    return true
   } catch {
     toast.error("Could not copy the link")
     track("map_shared", { method: "failed", view })
+    return false
   }
 }
 
-/** Small round share button for panel headers. */
-const HeaderShare = ({ title, view }: { title: string; view: string }) => (
-  <button
-    type="button"
-    aria-label="Share this view"
-    title="Share this view"
-    onClick={() => shareLink(title, view)}
-    className="hover:bg-accent flex size-8 cursor-pointer items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
-    <Share2 className="size-4" />
-  </button>
+/** shareLink plus a flag that stays on for 1.5 s after a successful share. */
+const useShare = (title: string, view: string) => {
+  const [done, setDone] = useState(false)
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  useEffect(() => () => clearTimeout(timer.current), [])
+  const share = async () => {
+    if (!(await shareLink(title, view))) return
+    clearTimeout(timer.current)
+    setDone(true)
+    timer.current = setTimeout(() => setDone(false), 1500)
+  }
+  return [done, share] as const
+}
+
+const ICON_SWAP =
+  "absolute inset-0 size-4 transition-[opacity,scale,filter] duration-200 ease-out motion-reduce:transition-opacity"
+
+/** Share icon that cross-fades to a tick while `done`. */
+const ShareIcon = ({ done }: { done: boolean }) => (
+  <span className="relative inline-flex size-4 shrink-0">
+    <Share2
+      aria-hidden
+      className={cn(ICON_SWAP, done && "scale-50 opacity-0 blur-[2px]")}
+    />
+    <Check
+      aria-hidden
+      className={cn(ICON_SWAP, !done && "scale-50 opacity-0 blur-[2px]")}
+    />
+  </span>
 )
+
+/** Small round share button for panel headers. */
+const HeaderShare = ({ title, view }: { title: string; view: string }) => {
+  const [done, share] = useShare(title, view)
+  return (
+    <button
+      type="button"
+      aria-label={done ? "Link shared" : "Share this view"}
+      title="Share this view"
+      onClick={share}
+      className="hover:bg-accent flex size-8 cursor-pointer items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
+      <ShareIcon done={done} />
+    </button>
+  )
+}
 
 const sortPlaces = (rows: PickerPlace[]) =>
   rows.sort((a, b) =>
@@ -659,6 +699,11 @@ const MapsPageContent = () => {
               roomLabels={roomLabels}
               focus={focus}
               insets={insets}
+              onHelp={() =>
+                document
+                  .getElementById("how-to-use")
+                  ?.scrollIntoView({ block: "start" })
+              }
               className="absolute inset-0"
               extraControls={
                 <MapOptions
@@ -1482,6 +1527,7 @@ const PlacePanel = ({
   onLevel: (z: number | null) => void
   onDirections: (id?: string, as?: "from" | "to") => void
 }) => {
+  const [shared, share] = useShare(place.name, "place")
   const venue = place.kind === "venue" ? data.venues[place.name] : undefined
   const building = data.buildings.find((b) => b.id === place.b)
   const inside =
@@ -1546,9 +1592,9 @@ const PlacePanel = ({
         <Button
           variant="outline"
           size="icon"
-          aria-label="Share this view"
-          onClick={() => shareLink(place.name, "place")}>
-          <Share2 />
+          aria-label={shared ? "Link shared" : "Share this view"}
+          onClick={share}>
+          <ShareIcon done={shared} />
         </Button>
       </div>
 

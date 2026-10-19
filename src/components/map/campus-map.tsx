@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Maximize2, Minus, Plus } from "lucide-react"
+import { CircleHelp, Maximize2, Minus, Plus } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import {
@@ -24,8 +24,8 @@ import {
   type VenueData,
   type WalkResult
 } from "@/lib/venue-map"
-import { MapMenu } from "@/components/map/map-menu"
 import { PlaceIcon } from "@/components/map/category-icons"
+import { MapMenu } from "@/components/map/map-menu"
 
 export interface Pin {
   id: string
@@ -104,6 +104,8 @@ interface Props {
   insets?: { left: number; bottom: number; top: number }
   /** Extra buttons stacked above the level button, top right. */
   extraControls?: React.ReactNode
+  /** Shows a help button under the zoom controls. */
+  onHelp?: () => void
   /** Tap a building, landmark or class room: "b:<id>", "l:<id>" or "v:<venue>". */
   onPick?: (id: string) => void
   className?: string
@@ -150,6 +152,7 @@ const CampusMap = ({
   highlights,
   insets = { left: 0, bottom: 0, top: 0 },
   extraControls,
+  onHelp,
   onPick,
   className
 }: Props) => {
@@ -1182,6 +1185,13 @@ const CampusMap = ({
             <Maximize2 />
           </MapButton>
         </div>
+        {onHelp && (
+          <div className={cn(FLOATING, "overflow-hidden")}>
+            <MapButton label="How to use the map" onClick={onHelp}>
+              <CircleHelp />
+            </MapButton>
+          </div>
+        )}
       </div>
 
       {level !== null && (

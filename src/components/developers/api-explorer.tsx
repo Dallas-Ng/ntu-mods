@@ -11,6 +11,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Code, Rich } from "@/components/developers/code"
 import TryModuleApi from "@/components/developers/try-module-api"
+import HeadingAnchor from "@/components/heading-anchor"
 
 export interface ApiOp {
   id: string
@@ -220,14 +221,9 @@ const ApiExplorer = ({ groups }: { groups: ApiGroup[] }) => {
           <div className="space-y-1">
             <h2
               id={slug(g.name)}
-              className="group scroll-mt-28 text-lg font-semibold tracking-tight">
+              className="scroll-mt-28 text-lg font-semibold tracking-tight">
               {g.name}
-              <a
-                href={`#${slug(g.name)}`}
-                aria-label={`Link to ${g.name}`}
-                className="text-foreground/50 hover:text-foreground ml-1 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100">
-                #
-              </a>
+              <HeadingAnchor id={slug(g.name)} label={g.name} />
             </h2>
             {g.description && (
               <p className="text-foreground/80 text-sm">{g.description}</p>

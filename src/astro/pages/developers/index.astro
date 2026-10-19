@@ -8,6 +8,7 @@ import ArticleToc, {
 } from "@/components/articles/article-toc"
 import ApiExplorer from "@/components/developers/api-explorer"
 import type { ApiGroup } from "@/components/developers/api-explorer"
+import HeadingAnchor from "@/components/heading-anchor"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
@@ -207,13 +208,11 @@ const headings = [
       <section class="space-y-3" aria-labelledby="terms">
         <h2
           id="terms"
-          class="group scroll-mt-28 text-lg font-semibold tracking-tight">
-          Terms of use (no opt out)
-          <a
-            href="#terms"
-            class="text-foreground/50 hover:text-foreground ml-1 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
-            aria-label="Link to Terms of use (no opt out)">#</a
-          >
+          class="scroll-mt-28 text-lg font-semibold tracking-tight">
+          Terms of use (no opt out)<HeadingAnchor
+            id="terms"
+            label="Terms of use (no opt out)"
+          />
         </h2>
         <div class="bg-primary/10 space-y-3 rounded-2xl p-5 text-sm">
           <p>
@@ -237,13 +236,8 @@ const headings = [
       <section class="space-y-3" aria-labelledby="basics">
         <h2
           id="basics"
-          class="group scroll-mt-28 text-lg font-semibold tracking-tight">
-          Basics
-          <a
-            href="#basics"
-            class="text-foreground/50 hover:text-foreground ml-1 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
-            aria-label="Link to Basics">#</a
-          >
+          class="scroll-mt-28 text-lg font-semibold tracking-tight">
+          Basics<HeadingAnchor id="basics" label="Basics" />
         </h2>
         <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
           <li>
@@ -266,13 +260,8 @@ const headings = [
       <section class="space-y-3" aria-labelledby="practices">
         <h2
           id="practices"
-          class="group scroll-mt-28 text-lg font-semibold tracking-tight">
-          Best practices
-          <a
-            href="#practices"
-            class="text-foreground/50 hover:text-foreground ml-1 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
-            aria-label="Link to Best practices">#</a
-          >
+          class="scroll-mt-28 text-lg font-semibold tracking-tight">
+          Best practices<HeadingAnchor id="practices" label="Best practices" />
         </h2>
         <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
           {
@@ -297,13 +286,11 @@ const headings = [
       <section class="space-y-3" aria-labelledby="webmcp">
         <h2
           id="webmcp"
-          class="group scroll-mt-28 text-lg font-semibold tracking-tight">
-          AI assistants and WebMCP
-          <a
-            href="#webmcp"
-            class="text-foreground/50 hover:text-foreground ml-1 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
-            aria-label="Link to AI assistants and WebMCP">#</a
-          >
+          class="scroll-mt-28 text-lg font-semibold tracking-tight">
+          AI assistants and WebMCP<HeadingAnchor
+            id="webmcp"
+            label="AI assistants and WebMCP"
+          />
         </h2>
         <p class="text-foreground/80 text-sm">
           NTUMods also offers its tools to browser AI assistants through WebMCP.

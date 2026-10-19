@@ -3,6 +3,7 @@ import type { ArticleHeading } from "@/lib/server/articles"
 import { Button } from "@/components/ui/button"
 import Container from "@/components/container"
 import Header from "@/components/header"
+import HeadingAnchor from "@/components/heading-anchor"
 
 interface FaqConfig {
   id: string
@@ -178,7 +179,10 @@ const FaqContent = ({ children, mobileNav }: Props) => {
                 id={id}
                 key={id}
                 className="bg-muted scroll-mt-20 space-y-3 rounded-2xl p-5">
-                <h2 className="text-xl font-semibold">{question}</h2>
+                <h2 className="text-xl font-semibold">
+                  {question}
+                  <HeadingAnchor id={id} label={question} />
+                </h2>
 
                 <p className="text-muted-foreground text-sm">{answer}</p>
               </section>
@@ -189,7 +193,10 @@ const FaqContent = ({ children, mobileNav }: Props) => {
             id="feedback"
             className="bg-muted flex scroll-mt-20 flex-col justify-between gap-4 rounded-2xl p-5 sm:flex-row sm:items-center">
             <div>
-              <h2 className="text-xl font-semibold">Feedback</h2>
+              <h2 className="text-xl font-semibold">
+                Feedback
+                <HeadingAnchor id="feedback" label="Feedback" />
+              </h2>
 
               <p className="text-muted-foreground text-sm">
                 Have a problem or suggestion? Let us know.

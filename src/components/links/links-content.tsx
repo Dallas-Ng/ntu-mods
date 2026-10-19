@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { MobileSectionDropdown } from "@/components/articles/article-toc"
 import Container from "@/components/container"
 import Header from "@/components/header"
+import HeadingAnchor from "@/components/heading-anchor"
 import LinkCard from "@/components/links/link-card"
 
 interface InternalLink {
@@ -276,7 +277,10 @@ const LinksContent = ({ children }: Props) => {
             {visible.map(({ id, title, type, links }) => (
               <section id={id} key={id} className="scroll-mt-20 space-y-4">
                 <div className="space-y-0.5">
-                  <h2 className="text-xl font-semibold">{title}</h2>
+                  <h2 className="text-xl font-semibold">
+                    {title}
+                    <HeadingAnchor id={id} label={title} />
+                  </h2>
                   <p className="text-muted-foreground text-xs">
                     {type === "internal"
                       ? "NTUMods (unofficial)"

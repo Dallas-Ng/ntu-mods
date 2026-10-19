@@ -461,6 +461,22 @@ table td {
   @apply text-foreground font-semibold;
 }
 
+/* "#" link beside a heading (articles, FAQ, links, developers): hidden until
+   the heading is hovered or the link is focused. */
+.heading-anchor {
+  @apply text-foreground/50 hover:text-foreground ml-2 font-normal no-underline opacity-0 transition-opacity focus-visible:opacity-100;
+}
+
+:is(h1, h2, h3, h4):hover > .heading-anchor {
+  @apply opacity-100;
+}
+
+@media (hover: none) {
+  .heading-anchor {
+    @apply opacity-60;
+  }
+}
+
 /* A bold lead-in ("Quick summary:", "Ready to try it?") becomes a primary
    coloured title above the text. */
 .prose blockquote p > strong:first-child {

@@ -711,7 +711,7 @@ const MapsPageContent = () => {
       )
     // Entering: the controls wait for the edge to open up, then ease in one by
     // one. Leaving: they fade out first, and ease back in at the small-box spots.
-    const fades = fullscreen ? fade(0, 1, 380, 140, 50) : fade(1, 0, 110)
+    const fades = fullscreen ? fade(0, 1, 1000, 300, 40) : fade(1, 0, 110)
     const anim = el.animate(
       { clipPath: fullscreen ? [small, full] : [full, small] },
       {
@@ -729,9 +729,9 @@ const MapsPageContent = () => {
       }
       fades.forEach((f) => f.cancel())
       setPinned(false)
-      const back = fade(0, 1, 280, 0, 40)
+      const back = fade(0, 1, 600, 0, 40)
       requestAnimationFrame(() => anim.cancel())
-      setTimeout(() => back.forEach((f) => f.cancel()), 520)
+      setTimeout(() => back.forEach((f) => f.cancel()), 900)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullscreen])

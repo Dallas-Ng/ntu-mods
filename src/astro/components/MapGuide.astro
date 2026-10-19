@@ -1,0 +1,251 @@
+---
+// A short walkthrough under the campus map. Each preview is a small static copy
+// of the real control (same tokens and shapes), so it follows light and dark
+// themes and cannot go stale like a screenshot.
+import {
+  ArrowUpDown,
+  CircleDashed,
+  CornerUpLeft,
+  DoorOpen,
+  Footprints,
+  Move,
+  Navigation,
+  Search,
+  Share2,
+  Utensils
+} from "lucide-react"
+
+const STEPS = [
+  {
+    title: "Find a room",
+    body: "Type a venue from your timetable, like LT19A or TR+3. You can also search for a building, hall, canteen or gym."
+  },
+  {
+    title: "Pick a level",
+    body: "Use the Level button to see any floor, from Basement 7 to Level 9. Rooms with classes are highlighted."
+  },
+  {
+    title: "Browse by type",
+    body: "Use the chips for lecture theatres, halls, food, study spaces, car parks and toilets, then search within one."
+  },
+  {
+    title: "Get directions",
+    body: "Choose a start and an end for the walking time, the distance and which stairs or lifts to take."
+  },
+  {
+    title: "Change the view",
+    body: "Switch between standard, hybrid and satellite, and turn labels on or off, from the Map button."
+  },
+  {
+    title: "Share what you see",
+    body: "Every view is a link, so the other person opens the same place, level and map type."
+  }
+]
+
+const TIPS = [
+  {
+    title: "Step back",
+    text: "Leaves a place, a category or directions."
+  },
+  {
+    title: "Move and zoom",
+    text: "Drag, scroll or pinch. The frame button shows the whole route."
+  },
+  {
+    title: "Approximate pins",
+    text: "Matched by name, so check the room number when you arrive."
+  }
+]
+---
+
+<section class="mt-12 space-y-6">
+  <h2 class="text-lg font-semibold tracking-tight">How to use the map</h2>
+
+  <ul class="grid gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      STEPS.map(({ title, body }, i) => (
+        <li class="space-y-3">
+          <div
+            class="bg-muted/50 flex h-40 items-center justify-center rounded-xl border px-5"
+            aria-hidden="true">
+            <div class="w-full max-w-56">
+              {i === 0 && (
+                <div class="space-y-2">
+                  <div class="bg-card flex h-10 items-center gap-2 rounded-full border pr-1.5 pl-3 text-sm shadow-sm">
+                    <Search class="text-muted-foreground size-4" />
+                    LT19
+                    <span class="bg-primary text-primary-foreground ml-auto flex size-7 items-center justify-center rounded-full">
+                      <Navigation class="size-3.5" />
+                    </span>
+                  </div>
+                  <div class="bg-card rounded-xl border p-1 text-sm shadow-sm">
+                    <div class="bg-accent flex items-center gap-2.5 rounded-lg px-2 py-1.5">
+                      <DoorOpen class="text-muted-foreground size-4" />
+                      <span>
+                        <span class="block leading-tight">LT19A</span>
+                        <span class="text-muted-foreground block text-xs">
+                          LT19A (NS)
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {i === 1 && (
+                <div class="flex items-start justify-center gap-3">
+                  <div class="bg-card flex h-11 w-[84px] shrink-0 items-center justify-center gap-2 rounded-xl border text-sm font-semibold shadow-sm">
+                    <svg
+                      viewBox="0 0 24 24"
+                      class="size-4"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M3 20h5v-5h5v-5h5V5h3" />
+                    </svg>
+                    L4
+                  </div>
+                  <div class="bg-card w-28 space-y-0.5 rounded-xl border p-1 text-xs shadow-sm">
+                    {["L5", "L4", "L3", "B1"].map((l) => (
+                      <div
+                        class:list={[
+                          "flex items-center justify-between rounded-md px-2 py-1",
+                          l === "L4"
+                            ? "bg-primary text-primary-foreground"
+                            : "text-muted-foreground"
+                        ]}>
+                        <span class="font-medium">{l}</span>
+                        <span class="opacity-80">
+                          {l === "B1" ? "Basement 1" : `Level ${l.slice(1)}`}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {i === 2 && (
+                <div class="space-y-2.5">
+                  <span class="bg-primary text-primary-foreground inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-xs font-medium">
+                    <Utensils class="size-3.5" /> Food
+                  </span>
+                  <div class="bg-card divide-y rounded-xl border text-sm shadow-sm">
+                    {[
+                      ["7 Tea / 7 Link", "L1"],
+                      ["Each-A-Cup", "L1"]
+                    ].map(([name, level]) => (
+                      <div class="flex items-center justify-between px-3 py-2">
+                        {name}
+                        <span class="text-muted-foreground text-xs">
+                          {level}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {i === 3 && (
+                <div class="space-y-3">
+                  <div class="flex items-baseline gap-2.5">
+                    <span class="text-3xl leading-none font-semibold tabular-nums">
+                      12
+                      <span class="text-muted-foreground ml-1 text-sm font-medium">
+                        min
+                      </span>
+                    </span>
+                    <span class="text-muted-foreground text-xs tabular-nums">
+                      654 m
+                    </span>
+                  </div>
+                  <div class="space-y-2 text-xs">
+                    <div class="flex items-center gap-2.5">
+                      <span class="bg-muted flex size-6 items-center justify-center rounded-full">
+                        <Footprints class="size-3.5" />
+                      </span>
+                      Walk on Level 1
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                      <span class="bg-muted flex size-6 items-center justify-center rounded-full">
+                        <ArrowUpDown class="size-3.5" />
+                      </span>
+                      Take the stairs to Level 2
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {i === 4 && (
+                <div class="space-y-3">
+                  <div class="grid grid-cols-3 gap-2 text-center text-[11px] font-medium">
+                    <div class="bg-card rounded-lg border p-1.5">
+                      <div class="bg-muted mb-1 h-7 rounded" />
+                      Standard
+                    </div>
+                    <div class="border-primary bg-primary/10 text-primary rounded-lg border p-1.5">
+                      <div class="mb-1 h-7 rounded bg-emerald-900/70" />
+                      Hybrid
+                    </div>
+                    <div class="bg-card rounded-lg border p-1.5">
+                      <div class="mb-1 h-7 rounded bg-emerald-900/90" />
+                      Satellite
+                    </div>
+                  </div>
+                  <div class="flex justify-center gap-3">
+                    <span class="ring-border size-5 rounded-full bg-gray-500 ring-1" />
+                    <span class="ring-border size-5 rounded-full bg-gray-800 ring-1" />
+                    <span class="ring-primary/40 size-5 rounded-full bg-[#0a1f5c] ring-2" />
+                    <span class="ring-border size-5 rounded-full bg-[#050d2e] ring-1" />
+                  </div>
+                </div>
+              )}
+
+              {i === 5 && (
+                <div class="space-y-2.5">
+                  <div class="flex items-center gap-2">
+                    <span class="bg-primary text-primary-foreground inline-flex h-9 flex-1 items-center justify-center rounded-md text-sm font-medium">
+                      Directions
+                    </span>
+                    <span class="bg-card inline-flex size-9 items-center justify-center rounded-md border">
+                      <Share2 class="size-4" />
+                    </span>
+                  </div>
+                  <div class="bg-card text-muted-foreground truncate rounded-lg border px-3 py-2 text-xs">
+                    ntumods.org/maps?place=LT19A
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <h3 class="text-sm font-semibold">{title}</h3>
+            <p class="text-muted-foreground text-sm leading-relaxed">{body}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  <ul class="grid gap-x-5 gap-y-4 border-t pt-6 sm:grid-cols-3">
+    {
+      TIPS.map(({ title, text }, i) => (
+        <li class="flex items-start gap-3">
+          <span
+            class="bg-muted text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-lg"
+            aria-hidden="true">
+            {i === 0 && <CornerUpLeft class="size-4" />}
+            {i === 1 && <Move class="size-4" />}
+            {i === 2 && <CircleDashed class="size-4" />}
+          </span>
+          <div class="min-w-0 space-y-0.5">
+            <p class="text-sm font-medium">{title}</p>
+            <p class="text-muted-foreground text-sm leading-relaxed">{text}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</section>

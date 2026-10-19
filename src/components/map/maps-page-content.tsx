@@ -668,7 +668,7 @@ const MapsPageContent = () => {
   const [snap, setSnap] = useState(false)
   const toggleFullscreen = () => {
     setSnap(true)
-    setTimeout(() => setSnap(false), 520)
+    setTimeout(() => setSnap(false), 360)
     setPinned(true)
     setFullscreen((f) => !f)
   }
@@ -699,12 +699,12 @@ const MapsPageContent = () => {
       )
     // Entering: the controls wait for the edge, then fade in. Leaving: they
     // fade out first, and fade back in once they are in their small-box spots.
-    const fades = fullscreen ? fade(0, 1, 260, 160) : fade(1, 0, 140)
+    const fades = fullscreen ? fade(0, 1, 200, 100) : fade(1, 0, 100)
     const anim = el.animate(
       { clipPath: fullscreen ? [small, full] : [full, small] },
       {
         // A big shape change reads best eased at both ends; ease-out alone snaps.
-        duration: 450,
+        duration: 300,
         easing: "cubic-bezier(0.65, 0, 0.35, 1)",
         fill: "forwards"
       }
@@ -713,9 +713,9 @@ const MapsPageContent = () => {
       fades.forEach((f) => f.cancel())
       if (fullscreen) return anim.cancel()
       setPinned(false)
-      const back = fade(0, 1, 220)
+      const back = fade(0, 1, 160)
       requestAnimationFrame(() => anim.cancel())
-      setTimeout(() => back.forEach((f) => f.cancel()), 260)
+      setTimeout(() => back.forEach((f) => f.cancel()), 200)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullscreen])

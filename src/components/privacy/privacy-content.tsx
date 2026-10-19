@@ -133,6 +133,47 @@ const PrivacyContent = () => {
         </p>
 
         <h3 className="text-foreground mt-4 text-base font-semibold">
+          Campus Map
+        </h3>
+
+        <p>
+          The campus map does not use your device&apos;s location. Buildings,
+          rooms, floor plans and roads are served from our own site, and your
+          map settings (map type, labels and categories shown) are saved in
+          localStorage.
+        </p>
+
+        <ul className="list-outside list-disc pl-10">
+          <li>
+            <strong>Satellite and Hybrid views</strong> load imagery directly
+            from Esri&apos;s servers, so Esri receives your IP address and the
+            part of the campus you are viewing. See{" "}
+            <a
+              href="https://www.esri.com/en-us/privacy/overview"
+              className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
+              rel="external nofollow noopener"
+              target="_blank">
+              Esri&apos;s Privacy Statement
+            </a>
+            .
+          </li>
+          <li>
+            <strong>Walking directions</strong> send the start and end points to
+            our server, which asks MazeMap&apos;s routing service for the route.
+            Your IP address is not passed on to MazeMap. Routes are cached by
+            Cloudflare without any visitor information, and requests are counted
+            per IP address to limit abuse, as with the public API.
+          </li>
+          <li>
+            <strong>Analytics</strong>: PostHog records what you type into the
+            map search, the type of place you open, the length of routes shown,
+            map settings you change and when you share a link. Page views
+            include the page address, which names the place or route on screen
+            when you open a shared link.
+          </li>
+        </ul>
+
+        <h3 className="text-foreground mt-4 text-base font-semibold">
           Feedback Submissions
         </h3>
 

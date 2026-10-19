@@ -1,6 +1,7 @@
 ---
 import { ArrowRight } from "lucide-react"
 
+import { siteConfig } from "@/config/site"
 import MapsPageContent from "@/components/map/maps-page-content"
 import MapGuide from "@/astro/components/MapGuide.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -27,7 +28,9 @@ const CREDITS = [
 <BaseLayout
   title="NTU Campus Map"
   description="Find any NTU lecture theatre, tutorial room, hall or canteen, see which level it is on, and get walking directions with times."
-  canonical="/maps">
+  canonical="/maps"
+  ogImage={`${siteConfig.url}/og/maps.png`}
+  ogImageAlt="NTUMods campus map with North Spine pinned, floor plans and walking directions">
   <MapsPageContent client:load />
 
   <MapGuide />
@@ -62,8 +65,8 @@ const CREDITS = [
       </h2>
       <p class="text-muted-foreground text-sm leading-relaxed">
         Never be late to a lecture again. Learn how to find any lecture theatre
-        or tutorial room, read NTU room codes, pick the right level and time
-        the walk between back-to-back classes, with screenshots of every step.
+        or tutorial room, read NTU room codes, pick the right level and time the
+        walk between back-to-back classes, with screenshots of every step.
       </p>
       <span
         class="text-primary mt-1 inline-flex items-center gap-1 text-sm font-medium">

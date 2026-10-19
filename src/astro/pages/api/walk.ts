@@ -1,8 +1,17 @@
 import type { APIRoute } from "astro"
-import { waitUntil } from "cloudflare:workers"
+import { env, waitUntil } from "cloudflare:workers"
 
 import { rateLimit } from "@/lib/server/guard"
 import { reverseWalk, type WalkResult } from "@/lib/venue-map"
+import {
+  buildWalk,
+  parsePoint,
+  ROUTE_CACHE_VERSION,
+  sortPair,
+  UPSTREAM,
+  upstreamQuery,
+  type Feature
+} from "@/lib/walk-route"
 
 export const prerender = false
 
@@ -10,14 +19,6 @@ export const prerender = false
 // routing service. Proxied (not called from the browser) so answers can be
 // cached at the edge and a student's venues are not sent to a third party
 // directly.
-const UPSTREAM = "https://routing.mazemap.com/routing/path/"
-
-/**
- * Routes only change when the map does, so they are kept at the edge with no
- * expiry. To purge them all, bump this when the venue data is rebuilt
- * (scraper/venues.py); old entries are never read again.
- */
-const ROUTE_CACHE_VERSION = "1"
 
 // The Workers edge cache; the DOM typings do not know `default`.
 const edge = () => (caches as unknown as { default: Cache }).default
@@ -28,54 +29,15 @@ const json = (body: unknown, status = 200, headers?: HeadersInit) =>
     headers: { "Content-Type": "application/json", ...headers }
   })
 
-/** "lon,lat,z" inside the campus box, or null. */
-const point = (raw: string | null) => {
-  const [lon, lat, z] = (raw ?? "").split(",").map(Number)
-  const ok =
-    lon > 103.67 &&
-    lon < 103.7 &&
-    lat > 1.33 &&
-    lat < 1.36 &&
-    z >= -8 &&
-    z <= 15
-  return ok ? { lon, lat, z: Math.round(z) } : null
-}
-
-interface Feature {
-  geometry: { coordinates: [number, number][] }
-  properties: {
-    m: number
-    z: number
-    timeEstimateSeconds: number
-    flags: string[]
-  }
-}
-
 export const GET: APIRoute = async ({ url, request }) => {
-  const a = point(url.searchParams.get("a"))
-  const b = point(url.searchParams.get("b"))
+  const a = parsePoint(url.searchParams.get("a"))
+  const b = parsePoint(url.searchParams.get("b"))
   if (!a || !b)
     return json({ error: "a and b must be lon,lat,z on campus" }, 400)
 
-  // Round to ~1 m so near-identical requests share a cache entry. A to B and B
-  // to A share one too: always ask and store in sorted order, and flip the
-  // answer when the caller asked the other way round.
-  const at = (p: typeof a) => `${p.lon.toFixed(5)},${p.lat.toFixed(5)},${p.z}`
-  const flip = at(a) > at(b)
-  const [s, t] = flip ? [b, a] : [a, b]
-  const q = new URLSearchParams({
-    srid: "4326",
-    hc: "false",
-    lang: "en",
-    distanceunitstype: "metric",
-    mode: "PEDESTRIAN",
-    sourcelon: s.lon.toFixed(5),
-    sourcelat: s.lat.toFixed(5),
-    sourcez: String(s.z),
-    targetlon: t.lon.toFixed(5),
-    targetlat: t.lat.toFixed(5),
-    targetz: String(t.z)
-  })
+  // A to B and B to A share one entry; flip the answer when asked the other way.
+  const { s, t, flip, key } = sortPair(a, b)
+  const q = upstreamQuery(s, t)
   // Browsers cannot be purged, so they keep it a day; the edge keeps it until
   // the version above changes.
   const headers = {
@@ -89,6 +51,20 @@ export const GET: APIRoute = async ({ url, request }) => {
   )
   const hit = await edge().match(cacheKey)
   if (hit) return reply(await hit.json())
+
+  // Then the permanent copy: it outlives edge eviction and is shared by every
+  // Cloudflare location. A missing table or binding just means no copy.
+  const saved = await env.DB?.prepare(
+    "SELECT route FROM walks WHERE key = ?1 AND v = ?2"
+  )
+    .bind(key, ROUTE_CACHE_VERSION)
+    .first<{ route: string }>()
+    .catch(() => null)
+  if (saved) {
+    const route = JSON.parse(saved.route) as WalkResult
+    waitUntil(edge().put(cacheKey, json(route, 200, headers)))
+    return reply(route)
+  }
 
   const limited = await rateLimit("WALK_LIMITER", request)
   if (limited) return limited
@@ -105,43 +81,17 @@ export const GET: APIRoute = async ({ url, request }) => {
   }
   if (!features.length) return json({ error: "no route" }, 404)
 
-  // Group consecutive path pieces by level; a change of level is a stairs/lift hop.
-  const result: WalkResult = {
-    metres: 0,
-    seconds: 0,
-    segments: [],
-    changes: []
-  }
-  for (const f of features) {
-    const { z, m, timeEstimateSeconds, flags } = f.properties
-    const pts = f.geometry.coordinates
-    result.metres += m
-    result.seconds += timeEstimateSeconds
-    const last = result.segments.at(-1)
-    if (last && last.z === z) {
-      last.pts.push(
-        ...pts
-          .slice(1)
-          .flat()
-          .map((c) => +c.toFixed(6))
-      )
-      continue
-    }
-    if (last) {
-      const [lon, lat] = pts[0]
-      result.changes.push({
-        lon,
-        lat,
-        from: last.z,
-        to: z,
-        stairs: flags.includes("STAIR")
-      })
-    }
-    result.segments.push({ z, pts: pts.flat().map((c) => +c.toFixed(6)) })
-  }
-  result.metres = Math.round(result.metres)
-  result.seconds = Math.round(result.seconds)
+  const result = buildWalk(features)
 
   waitUntil(edge().put(cacheKey, json(result, 200, headers)))
+  if (env.DB)
+    waitUntil(
+      env.DB.prepare(
+        "INSERT OR REPLACE INTO walks (key, v, route) VALUES (?1, ?2, ?3)"
+      )
+        .bind(key, ROUTE_CACHE_VERSION, JSON.stringify(result))
+        .all()
+        .catch(() => null)
+    )
   return reply(result)
 }

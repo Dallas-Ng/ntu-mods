@@ -49,7 +49,7 @@ const TIPS = [
   },
   {
     title: "Move and zoom",
-    text: "Drag, scroll or pinch. The frame button shows the whole route."
+    text: "Drag, scroll or pinch. The target button frames your place or route, and the expand button makes the map full screen."
   },
   {
     title: "Approximate pins",
@@ -58,7 +58,7 @@ const TIPS = [
 ]
 ---
 
-<section class="mt-12 space-y-6">
+<section id="how-to-use" class="mt-12 scroll-mt-28 space-y-6">
   <h2 class="text-lg font-semibold tracking-tight">How to use the map</h2>
 
   <ul class="grid gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -70,7 +70,7 @@ const TIPS = [
             aria-hidden="true">
             <div class="w-full max-w-56">
               {i === 0 && (
-                <div class="relative">
+                <div>
                   <div class="bg-card flex h-11 items-center gap-2 rounded-full border pr-1.5 pl-4 text-sm shadow-sm">
                     <Search className="text-muted-foreground size-4 shrink-0" />
                     <span class="flex-1">LT19</span>
@@ -78,7 +78,7 @@ const TIPS = [
                       <Navigation className="size-4" />
                     </span>
                   </div>
-                  <div class="bg-popover absolute top-[calc(100%+8px)] right-0 left-0 rounded-2xl border p-1 text-sm shadow-sm">
+                  <div class="bg-popover mt-2 rounded-2xl border p-1 text-sm shadow-sm">
                     <div class="bg-accent flex items-center gap-2 rounded-lg px-2 py-1.5">
                       <DoorOpen className="text-muted-foreground size-4" />
                       <span class="min-w-0">

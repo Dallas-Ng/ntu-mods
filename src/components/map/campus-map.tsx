@@ -1,7 +1,21 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Maximize2, Minus, Plus } from "lucide-react"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react"
+import {
+  CircleHelp,
+  LocateFixed,
+  Maximize2,
+  Minimize2,
+  Minus,
+  Plus
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import {
@@ -24,8 +38,8 @@ import {
   type VenueData,
   type WalkResult
 } from "@/lib/venue-map"
-import { MapMenu } from "@/components/map/map-menu"
 import { PlaceIcon } from "@/components/map/category-icons"
+import { MapMenu } from "@/components/map/map-menu"
 
 export interface Pin {
   id: string
@@ -104,10 +118,30 @@ interface Props {
   insets?: { left: number; bottom: number; top: number }
   /** Extra buttons stacked above the level button, top right. */
   extraControls?: React.ReactNode
+  /** Shows a help button under the zoom controls. */
+  onHelp?: () => void
   /** Tap a building, landmark or class room: "b:<id>", "l:<id>" or "v:<venue>". */
   onPick?: (id: string) => void
+  /** Fill the screen: phones get the whole viewport instead of a squeezed box. */
+  fullscreen?: boolean
+  onFullscreen?: () => void
+  /**
+   * A phone's inline map: a drag scrolls the page instead of panning the map,
+   * and a tap on empty map opens fullscreen, where every gesture works.
+   */
+  preview?: boolean
+  /** The box is laid out fullscreen (also true while it shrinks back). */
+  pinned?: boolean
+  /** Skip the controls' slide while the box itself is resizing. */
+  snap?: boolean
+  /** How far the drawer covers the bottom right now (follows a drag). */
+  lift?: number
+  /** The drawer is being dragged: the controls follow it with no easing. */
+  dragging?: boolean
   className?: string
 }
+
+const INTRO_KEY = "ntumods-map-fullscreen-intro"
 
 interface View {
   cx: number
@@ -128,6 +162,11 @@ const MIN_MPP = 0.06
 const MAX_MPP = 3
 const ROOM_TYPES_TEACHING =
   /lecture|tutorial|seminar|lab|studio|auditorium|exam/i
+
+/** Top-right stack (options, level, fullscreen) reaches this far down. */
+const CONTROLS_TOP = 160
+/** Zoom, fit and help stacked: it shows only when all of it fits above the sheet. */
+const STACK_H = 82 + 48 * 2 + 8
 
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 
@@ -150,9 +189,52 @@ const CampusMap = ({
   highlights,
   insets = { left: 0, bottom: 0, top: 0 },
   extraControls,
+  onHelp,
   onPick,
+  fullscreen = false,
+  onFullscreen,
+  pinned = false,
+  preview = false,
+  snap = false,
+  lift = insets.bottom,
+  dragging = false,
   className
 }: Props) => {
+  // First visit: dim the app and point at the fullscreen button until it is used.
+  const [intro, setIntro] = useState(false)
+  // The controls ride the drawer with transform, not `bottom`, so moving them
+  // never re-lays out. Dragging tracks the finger; a settle eases on the
+  // drawer's curve; a resize slides nothing and only fades.
+  const ride = (fade: string) => ({
+    transform: `translateY(${-lift}px)`,
+    transition: dragging
+      ? fade
+      : snap
+        ? "opacity 1000ms ease 300ms"
+        : `transform 320ms cubic-bezier(0.32, 0.72, 0, 1), ${fade}`
+  })
+  const stackFits = (h: number) =>
+    h - insets.top - CONTROLS_TOP - lift - 12 >= STACK_H
+  useEffect(() => {
+    try {
+      if (!fullscreen && !localStorage.getItem(INTRO_KEY)) setIntro(true)
+    } catch {}
+  }, [fullscreen])
+  useEffect(() => {
+    if (!intro) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [intro])
+  useEffect(() => {
+    if (!fullscreen) return
+    setIntro(false)
+    try {
+      localStorage.setItem(INTRO_KEY, "1")
+    } catch {}
+  }, [fullscreen])
   const box = useRef<HTMLDivElement>(null)
   const [size, setSize] = useState({ w: 0, h: 0 })
   const [view, setView] = useState<View>({
@@ -165,6 +247,8 @@ const CampusMap = ({
   const [chunks, setChunks] = useState<Record<number, BuildingChunk>>({})
   const [terrain, setTerrain] = useState<Terrain | null>(null)
   const anim = useRef(0)
+  /** Where a running camera move is headed; null when idle. */
+  const camTarget = useRef<View | null>(null)
   const [levelsOpen, setLevelsOpen] = useState(false)
 
   // Keep the camera over the campus: it can be panned to the edge and no further.
@@ -208,14 +292,45 @@ const CampusMap = ({
   )
 
   // --- size ---
+  // Where the box centre sits on screen. When the box jumps (fullscreen on or
+  // off) the camera shifts by the same amount, so the map stays put under the
+  // finger instead of sliding to the new centre.
+  const centre = useRef<{ x: number; y: number } | null>(null)
+  const relayout = useRef(false)
+  useLayoutEffect(() => {
+    relayout.current = true
+  }, [pinned])
   useEffect(() => {
     const el = box.current
     if (!el) return
-    const ro = new ResizeObserver(() =>
+    const measure = () => {
+      const r = el.getBoundingClientRect()
+      return { x: r.left + el.clientWidth / 2, y: r.top + el.clientHeight / 2 }
+    }
+    const ro = new ResizeObserver(() => {
+      const now = measure()
+      const was = centre.current
+      if (relayout.current && was) {
+        const v = viewRef.current
+        cancelAnimationFrame(anim.current)
+        camTarget.current = null
+        setView({
+          cx: v.cx + (now.x - was.x) * v.mpp,
+          cy: v.cy + (now.y - was.y) * v.mpp,
+          mpp: v.mpp
+        })
+      }
+      relayout.current = false
+      centre.current = now
       setSize({ w: el.clientWidth, h: el.clientHeight })
-    )
+    })
     ro.observe(el)
-    return () => ro.disconnect()
+    const onScroll = () => (centre.current = measure())
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => {
+      ro.disconnect()
+      window.removeEventListener("scroll", onScroll)
+    }
   }, [])
 
   // --- camera ---
@@ -227,20 +342,33 @@ const CampusMap = ({
         "(prefers-reduced-motion: reduce)"
       ).matches
       if (reduce) return setView(to)
-      const from = viewRef.current
-      const t0 = performance.now()
+      // Chase the target instead of tweening to it: aiming somewhere new
+      // mid-flight keeps the speed, so repeated taps feel continuous.
+      camTarget.current = to
+      let last = performance.now()
       const step = (now: number) => {
-        const t = Math.min(1, (now - t0) / 450)
-        const e = 1 - Math.pow(1 - t, 3)
-        // Interpolate zoom in log space so it feels even.
-        setView({
-          cx: from.cx + (to.cx - from.cx) * e,
-          cy: from.cy + (to.cy - from.cy) * e,
-          mpp: Math.exp(
-            Math.log(from.mpp) + (Math.log(to.mpp) - Math.log(from.mpp)) * e
-          )
-        })
-        if (t < 1) anim.current = requestAnimationFrame(step)
+        const goal = camTarget.current
+        if (!goal) return
+        const v = viewRef.current
+        const k = 1 - Math.exp(-(now - last) / 55)
+        last = now
+        const mpp = Math.exp(
+          Math.log(v.mpp) + (Math.log(goal.mpp) - Math.log(v.mpp)) * k
+        )
+        const done =
+          Math.abs(Math.log(goal.mpp / mpp)) < 0.002 &&
+          Math.hypot(goal.cx - v.cx, goal.cy - v.cy) < 0.3 * mpp
+        setView(
+          done
+            ? goal
+            : {
+                cx: v.cx + (goal.cx - v.cx) * k,
+                cy: v.cy + (goal.cy - v.cy) * k,
+                mpp
+              }
+        )
+        if (done) camTarget.current = null
+        else anim.current = requestAnimationFrame(step)
       }
       anim.current = requestAnimationFrame(step)
     },
@@ -277,7 +405,8 @@ const CampusMap = ({
   }, [focus?.nonce, measured])
 
   const zoomBy = (factor: number) => {
-    const v = viewRef.current
+    // Taps stack: zoom from where the camera is going, not where it is.
+    const v = camTarget.current ?? viewRef.current
     flyTo({ ...v, mpp: clamp(v.mpp * factor, MIN_MPP, MAX_MPP) })
   }
 
@@ -299,6 +428,14 @@ const CampusMap = ({
   // --- pointer: drag to pan, pinch to zoom, wheel to zoom ---
   const pointers = useRef(new Map<number, { x: number; y: number }>())
   const dragged = useRef(false)
+  /** A building, pin or label took this tap, so it is not a tap on empty map. */
+  const handled = useRef(false)
+  const pick = (id: string) => {
+    handled.current = true
+    onPick?.(id)
+  }
+  /** Where the finger or cursor went down, to tell a tap from a drag. */
+  const downAt = useRef({ x: 0, y: 0 })
   const pinch = useRef(0)
 
   useEffect(() => {
@@ -307,6 +444,7 @@ const CampusMap = ({
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
       cancelAnimationFrame(anim.current)
+      camTarget.current = null
       const r = el.getBoundingClientRect()
       zoomAt(e.clientX - r.left, e.clientY - r.top, Math.exp(e.deltaY * 0.0016))
     }
@@ -317,8 +455,10 @@ const CampusMap = ({
 
   const onPointerDown = (e: React.PointerEvent) => {
     cancelAnimationFrame(anim.current)
+    camTarget.current = null
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
     dragged.current = false
+    downAt.current = { x: e.clientX, y: e.clientY }
     if (pointers.current.size === 2) {
       const [a, b] = [...pointers.current.values()]
       pinch.current = Math.hypot(a.x - b.x, a.y - b.y)
@@ -344,9 +484,23 @@ const CampusMap = ({
       dragged.current = true
       return
     }
+    if (preview) {
+      // One finger belongs to the page here: it may scroll, it never pans.
+      if (Math.hypot(cur.x - downAt.current.x, cur.y - downAt.current.y) > 10)
+        dragged.current = true
+      return
+    }
     const dx = cur.x - prev.x
     const dy = cur.y - prev.y
-    if (!dragged.current && Math.hypot(dx, dy) < 3) return
+    // A drag starts once the finger has moved far enough from where it went
+    // down, however slowly. Until then it is still a tap, so a wobbly press on
+    // a building selects it and a slow pan never does.
+    if (
+      !dragged.current &&
+      Math.hypot(cur.x - downAt.current.x, cur.y - downAt.current.y) <
+        (e.pointerType === "touch" ? 10 : 4)
+    )
+      return
     if (!dragged.current) box.current?.setPointerCapture(e.pointerId)
     dragged.current = true
     const v = viewRef.current
@@ -727,14 +881,23 @@ const CampusMap = ({
     <div
       ref={box}
       className={cn(
-        "relative touch-none overflow-hidden select-none",
+        "relative overflow-hidden select-none",
+        preview ? "touch-pan-y" : "touch-none",
         sat ? "bg-neutral-900" : "bg-muted/50",
         className
       )}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}>
+      onPointerCancel={onPointerUp}
+      onClick={(e) => {
+        const taken = handled.current
+        handled.current = false
+        if (!preview || taken || dragged.current) return
+        // Controls and the like handle their own taps.
+        if ((e.target as Element).closest("button, a, input, [data-ui]")) return
+        onFullscreen?.()
+      }}>
       <style>{`
         @keyframes marker-ping { 0% { transform: scale(0.6); opacity: 0.45; } 100% { transform: scale(1.1); opacity: 0; } }
         .marker-ping { animation: marker-ping 1.6s ease-out infinite; transform-box: fill-box; transform-origin: center; }
@@ -822,7 +985,7 @@ const CampusMap = ({
                 fillRule="evenodd"
                 strokeWidth={marker?.building === b.id ? 2.5 : 1}
                 vectorEffect="non-scaling-stroke"
-                onClick={() => onPick?.(`b:${b.id}`)}
+                onClick={() => pick(`b:${b.id}`)}
                 className={cn(
                   onPick && "cursor-pointer",
                   marker?.building === b.id
@@ -891,7 +1054,7 @@ const CampusMap = ({
                   fillRule="evenodd"
                   strokeWidth={1.4}
                   vectorEffect="non-scaling-stroke"
-                  onClick={() => onPick?.(`v:${room.v}`)}
+                  onClick={() => pick(`v:${room.v}`)}
                   className={cn(
                     "cursor-pointer",
                     marker?.venue === room.v
@@ -932,7 +1095,7 @@ const CampusMap = ({
               key={l.id}
               transform={`translate(${l.x} ${l.y}) scale(${px})`}
               className={onPick ? "cursor-pointer" : undefined}
-              onClick={() => onPick?.(`l:${l.id}`)}>
+              onClick={() => pick(`l:${l.id}`)}>
               <circle r={10} fill="transparent" />
               {l.c === "hall" ? (
                 <rect
@@ -974,7 +1137,7 @@ const CampusMap = ({
                 key={h.id}
                 transform={`translate(${h.x} ${h.y}) scale(${px})`}
                 className="cursor-pointer"
-                onClick={() => onPick?.(h.id)}>
+                onClick={() => pick(h.id)}>
                 <circle
                   r={13}
                   className="fill-primary stroke-background"
@@ -1040,7 +1203,10 @@ const CampusMap = ({
               key={p.id}
               transform={`translate(${p.x} ${p.y}) scale(${px})`}
               className={cn("cursor-pointer", dim && "opacity-35")}
-              onClick={() => onPin(p.id)}>
+              onClick={() => {
+                handled.current = true
+                onPin(p.id)
+              }}>
               {sel && <circle r={w / 2 + 6} className="fill-primary/20" />}
               <rect
                 x={-w / 2}
@@ -1104,6 +1270,7 @@ const CampusMap = ({
 
       {/* Top right: label filter, then the level picker. */}
       <div
+        data-ui
         onPointerDown={(e) => e.stopPropagation()}
         className="absolute right-3 flex flex-col items-end gap-2"
         style={{ top: 12 + insets.top }}>
@@ -1149,13 +1316,35 @@ const CampusMap = ({
             />
           ))}
         </MapMenu>
+        {onFullscreen && (
+          <div className={cn(FLOATING, "relative", intro && "z-[100]")}>
+            <MapButton
+              label={fullscreen ? "Exit full screen" : "Full screen"}
+              onClick={onFullscreen}>
+              {fullscreen ? <Minimize2 /> : <Maximize2 />}
+            </MapButton>
+            {intro && (
+              <div className="bg-card absolute top-1/2 right-full mr-3 w-56 -translate-y-1/2 rounded-xl border p-3 text-sm shadow-lg">
+                <p className="font-semibold">Use the whole screen</p>
+                <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+                  Tap this button for a bigger map. Tap it again to come back.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Bottom right: zoom and recentre. Sits above any bottom sheet. */}
+      {/* Bottom right: zoom, frame and fullscreen. Sits above any bottom sheet,
+          but never climbs into the level button at the top right. */}
       <div
+        data-ui
         onPointerDown={(e) => e.stopPropagation()}
-        className="absolute right-3 flex flex-col gap-2"
-        style={{ bottom: 12 + insets.bottom }}>
+        className={cn(
+          "absolute right-3 bottom-3 flex flex-col gap-2 motion-reduce:transition-none!",
+          !stackFits(size.h) && "pointer-events-none translate-y-2 opacity-0"
+        )}
+        style={ride("opacity 300ms ease-out, translate 300ms ease-out")}>
         <div className={cn(FLOATING, "flex flex-col overflow-hidden")}>
           <MapButton label="Zoom in" onClick={() => zoomBy(0.6)}>
             <Plus />
@@ -1165,32 +1354,56 @@ const CampusMap = ({
             <Minus />
           </MapButton>
         </div>
-        <div className={cn(FLOATING, "overflow-hidden")}>
-          <MapButton
-            label="Frame the route or campus"
-            onClick={() => {
-              const pts = pins.map((p) => [p.x, p.y])
-              if (pts.length)
-                fit([
-                  Math.min(...pts.map((p) => p[0])),
-                  Math.min(...pts.map((p) => p[1])),
-                  Math.max(...pts.map((p) => p[0])),
-                  Math.max(...pts.map((p) => p[1]))
-                ])
-              else fit([0, 0, data.size.width, data.size.height], 10)
-            }}>
-            <Maximize2 />
-          </MapButton>
-        </div>
+        {
+          <div className={cn(FLOATING, "overflow-hidden")}>
+            <MapButton
+              label="Fit the chosen place, route or campus"
+              onClick={() => {
+                const pts = pins.map((p) => [p.x, p.y])
+                if (focus) fit(focus.bounds)
+                else if (pts.length)
+                  fit([
+                    Math.min(...pts.map((p) => p[0])),
+                    Math.min(...pts.map((p) => p[1])),
+                    Math.max(...pts.map((p) => p[0])),
+                    Math.max(...pts.map((p) => p[1]))
+                  ])
+                else fit([0, 0, data.size.width, data.size.height], 10)
+              }}>
+              <LocateFixed />
+            </MapButton>
+          </div>
+        }
+        {onHelp && (
+          <div className={cn(FLOATING, "overflow-hidden")}>
+            <MapButton label="How to use the map" onClick={onHelp}>
+              <CircleHelp />
+            </MapButton>
+          </div>
+        )}
       </div>
+      {intro && (
+        // Swallow input: React events bubble to the map, which would pan under it.
+        <div
+          className="fixed inset-0 z-[90] touch-none overscroll-none bg-black/65"
+          aria-hidden="true"
+          onPointerDown={(e) => e.stopPropagation()}
+          onWheel={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()}
+        />
+      )}
 
       {level !== null && (
         <div
+          data-ui
           className={cn(
             FLOATING,
-            "text-muted-foreground absolute flex h-[42px] items-center gap-3 px-3 text-xs"
+            "text-muted-foreground absolute bottom-3 flex h-[42px] items-center gap-3 px-3 text-xs motion-reduce:transition-none!"
           )}
-          style={{ left: 12 + insets.left, bottom: 12 + insets.bottom }}>
+          style={{
+            left: 12 + insets.left,
+            ...ride("opacity 300ms ease-out")
+          }}>
           <span className="text-foreground font-semibold">
             {levelLabel(data, level)}
           </span>
@@ -1381,7 +1594,7 @@ const RouteLines = ({
               style={{ stroke: colour }}
               strokeWidth={2.5}
             />
-            {/* Lucide arrow-up-down, same as the step in the directions list. */}
+            {/* The same glyphs as the steps in the directions list: stairs, or a lift. */}
             <g
               transform="scale(0.55) translate(-12 -12)"
               fill="none"
@@ -1389,7 +1602,11 @@ const RouteLines = ({
               strokeLinejoin="round"
               strokeWidth={3.3}
               style={{ stroke: colour }}>
-              <path d="m21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16" />
+              {c.stairs ? (
+                <path d="M3 20h5v-5h5v-5h5V5h3" />
+              ) : (
+                <path d="m21 16-4 4-4-4M17 20V4M3 8l4-4 4 4M7 4v16" />
+              )}
             </g>
           </g>
         )

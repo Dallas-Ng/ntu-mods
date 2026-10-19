@@ -1,6 +1,13 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react"
 import {
   ArrowDownUp,
   ArrowLeft,
@@ -190,6 +197,7 @@ const sortPlaces = (rows: PickerPlace[]) =>
   )
 
 // --- bottom sheet geometry (phones) ---
+const DRAWER_TIP_KEY = "ntumods-map-drawer-tip"
 const PEEK = 148
 const SHEET_FRACTION = 0.88
 /** Apple's momentum projection: where a flick would come to rest. */
@@ -652,6 +660,58 @@ const MapsPageContent = () => {
     return () => ro.disconnect()
   }, [data])
   const [fullscreen, setFullscreen] = useState(false)
+  // The shell stays fixed while it shrinks back, so it can be clipped smoothly.
+  const [pinned, setPinned] = useState(false)
+  const slotRef = useRef<HTMLDivElement>(null)
+  const wasFullscreen = useRef(false)
+  const toggleFullscreen = () => {
+    setPinned(true)
+    setFullscreen((f) => !f)
+  }
+  // Reveal by clipping, not resizing: the map lays out once, the edge moves.
+  useLayoutEffect(() => {
+    if (wasFullscreen.current === fullscreen) return
+    wasFullscreen.current = fullscreen
+    const el = shellRef.current
+    const slot = slotRef.current
+    if (!el || !slot) return
+    const r = slot.getBoundingClientRect()
+    const small = `inset(${r.top}px ${window.innerWidth - r.right}px ${window.innerHeight - r.bottom}px ${r.left}px round 16px)`
+    const full = "inset(0px 0px 0px 0px round 0px)"
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      if (!fullscreen) setPinned(false)
+      return
+    }
+    const anim = el.animate(
+      { clipPath: fullscreen ? [small, full] : [full, small] },
+      {
+        duration: 320,
+        easing: "cubic-bezier(0.32, 0.72, 0, 1)",
+        fill: "forwards"
+      }
+    )
+    anim.onfinish = () => {
+      if (fullscreen) return anim.cancel()
+      setPinned(false)
+      requestAnimationFrame(() => anim.cancel())
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fullscreen])
+  // Second intro step, once in fullscreen on a phone: show the drawer slides.
+  const [tip, setTip] = useState(false)
+  useEffect(() => {
+    try {
+      setTip(fullscreen && !desktop && !localStorage.getItem(DRAWER_TIP_KEY))
+    } catch {}
+  }, [fullscreen, desktop])
+  const changeDetent = (d: number) => {
+    setDetent(d)
+    if (!tip || d === detent) return
+    setTip(false)
+    try {
+      localStorage.setItem(DRAWER_TIP_KEY, "1")
+    } catch {}
+  }
   useEffect(() => {
     if (!fullscreen) return
     const prev = document.body.style.overflow
@@ -686,166 +746,171 @@ const MapsPageContent = () => {
       />
 
       <div
-        ref={shellRef}
-        className={cn(
-          "bg-card relative overflow-hidden border",
-          fullscreen
-            ? "fixed inset-0 z-[80] h-dvh"
-            : "h-[calc(100dvh-11rem)] min-h-[34rem] rounded-2xl lg:h-[calc(100dvh-13rem)]"
-        )}>
-        {data ? (
-          <>
-            <CampusMap
-              data={data}
-              level={level}
-              onLevel={(z) => pickLevel(z, "picker")}
-              pins={pins}
-              routes={routes}
-              onPin={(id) => select(id, "map")}
-              onPick={(id) => select(id, "map")}
-              marker={marker}
-              selectedId={selectedId}
-              mapStyle={mapStyle}
-              hybridTone={hybridTone}
-              highlights={highlights}
-              cats={mapCats}
-              buildingLabels={buildingLabels}
-              roomLabels={roomLabels}
-              focus={focus}
-              insets={insets}
-              onHelp={() => {
-                setFullscreen(false)
-                setTimeout(
-                  () =>
-                    document
-                      .getElementById("how-to-use")
-                      ?.scrollIntoView({ block: "start" }),
-                  50
-                )
-              }}
-              fullscreen={fullscreen}
-              onFullscreen={() => setFullscreen((f) => !f)}
-              className="absolute inset-0"
-              extraControls={
-                <MapOptions
-                  mapStyle={mapStyle}
-                  onMapStyle={changeMapStyle}
-                  hybridTone={hybridTone}
-                  onHybridTone={changeTone}
-                  cats={cats}
-                  onCats={changeCats}
-                  buildingLabels={buildingLabels}
-                  onBuildingLabels={changeBuildingLabels}
-                  roomLabels={roomLabels}
-                  onRoomLabels={changeRoomLabels}
-                  onTurnOffAll={turnOffAll}
-                  onReset={resetSettings}
-                />
-              }
-            />
-
-            <div
-              className={cn(
-                "absolute top-3 right-3 left-3 z-20 flex flex-col gap-2",
-                "lg:right-auto lg:w-[360px]"
-              )}>
-              <SearchPill
-                q={q}
-                onQ={onQ}
-                pending={q !== dq}
-                results={results}
-                categoryHit={categoryHit}
-                onCategory={(key) => chooseCat(key, "search")}
-                scope={
-                  activeCat
-                    ? (BROWSE.find((b) => b.key === activeCat)?.label ?? null)
-                    : null
-                }
-                onClearScope={() => chooseCat(null)}
-                onEnterScoped={() => {
-                  // Use what is typed now, not the debounced copy.
-                  const top = q.trim()
-                    ? searchPlaces(catBase, q, 1)[0]
-                    : catPlaces[0]
-                  if (top) select(top.id)
+        ref={slotRef}
+        className="relative h-[calc(100dvh-11rem)] min-h-[34rem] lg:h-[calc(100dvh-13rem)]">
+        <div
+          ref={shellRef}
+          className={cn(
+            "bg-card overflow-hidden",
+            pinned
+              ? "fixed inset-0 z-[80]"
+              : "absolute inset-0 rounded-2xl border"
+          )}>
+          {data ? (
+            <>
+              <CampusMap
+                data={data}
+                level={level}
+                onLevel={(z) => pickLevel(z, "picker")}
+                pins={pins}
+                routes={routes}
+                onPin={(id) => select(id, "map")}
+                onPick={(id) => select(id, "map")}
+                marker={marker}
+                selectedId={selectedId}
+                mapStyle={mapStyle}
+                hybridTone={hybridTone}
+                highlights={highlights}
+                cats={mapCats}
+                buildingLabels={buildingLabels}
+                roomLabels={roomLabels}
+                focus={focus}
+                insets={insets}
+                onHelp={() => {
+                  setFullscreen(false)
+                  setTimeout(
+                    () =>
+                      document
+                        .getElementById("how-to-use")
+                        ?.scrollIntoView({ block: "start" }),
+                    50
+                  )
                 }}
-                onSelect={(id) => select(id, "search")}
-                onDirections={() => startDirections(selected?.id)}
+                fullscreen={fullscreen}
+                onFullscreen={toggleFullscreen}
+                className="absolute inset-0"
+                extraControls={
+                  <MapOptions
+                    mapStyle={mapStyle}
+                    onMapStyle={changeMapStyle}
+                    hybridTone={hybridTone}
+                    onHybridTone={changeTone}
+                    cats={cats}
+                    onCats={changeCats}
+                    buildingLabels={buildingLabels}
+                    onBuildingLabels={changeBuildingLabels}
+                    roomLabels={roomLabels}
+                    onRoomLabels={changeRoomLabels}
+                    onTurnOffAll={turnOffAll}
+                    onReset={resetSettings}
+                  />
+                }
               />
-            </div>
 
-            <CategoryChips
-              active={activeCat}
-              onChange={chooseCat}
-              className="absolute top-[64px] right-3 left-3 z-10 lg:top-3 lg:right-28 lg:left-[384px]"
-            />
-
-            <Sheet
-              desktop={desktop}
-              detent={detent}
-              onDetent={setDetent}
-              shellH={shellH}
-              visible={visible}>
               <div
-                key={panelKey}
-                className="animate-in fade-in-0 slide-in-from-bottom-1 duration-200 motion-reduce:animate-none">
-                {directions ? (
-                  <DirectionsPanel
-                    data={data}
-                    places={places}
-                    fromId={fromId}
-                    toId={toId}
-                    setFromId={setFromId}
-                    setToId={setToId}
-                    from={from}
-                    to={to}
-                    solo={solo}
-                    onClose={() => setDirections(false)}
-                  />
-                ) : selected ? (
-                  <PlacePanel
-                    data={data}
-                    place={selected}
-                    places={places}
-                    backLabel={
-                      activeCat
-                        ? (BROWSE.find((b) => b.key === activeCat)?.label ??
-                          "Back")
-                        : "Explore"
-                    }
-                    onBack={() => {
-                      setSelectedId(null)
-                      setLevel(null)
-                    }}
-                    level={level}
-                    onSelect={select}
-                    onLevel={(z) => pickLevel(z, "chip")}
-                    onDirections={startDirections}
-                  />
-                ) : activeCat ? (
-                  <CategoryPanel
-                    data={data}
-                    cat={activeCat}
-                    rows={catPlaces}
-                    level={level}
-                    onLevel={(z) => pickLevel(z, "chip")}
-                    onSelect={select}
-                    onClose={() => chooseCat(null)}
-                  />
-                ) : (
-                  <ExplorePanel
-                    data={data}
-                    places={places}
-                    onSelect={select}
-                    onCat={(k) => chooseCat(k, "explore")}
-                  />
-                )}
+                className={cn(
+                  "absolute top-3 right-3 left-3 z-20 flex flex-col gap-2",
+                  "lg:right-auto lg:w-[360px]"
+                )}>
+                <SearchPill
+                  q={q}
+                  onQ={onQ}
+                  pending={q !== dq}
+                  results={results}
+                  categoryHit={categoryHit}
+                  onCategory={(key) => chooseCat(key, "search")}
+                  scope={
+                    activeCat
+                      ? (BROWSE.find((b) => b.key === activeCat)?.label ?? null)
+                      : null
+                  }
+                  onClearScope={() => chooseCat(null)}
+                  onEnterScoped={() => {
+                    // Use what is typed now, not the debounced copy.
+                    const top = q.trim()
+                      ? searchPlaces(catBase, q, 1)[0]
+                      : catPlaces[0]
+                    if (top) select(top.id)
+                  }}
+                  onSelect={(id) => select(id, "search")}
+                  onDirections={() => startDirections(selected?.id)}
+                />
               </div>
-            </Sheet>
-          </>
-        ) : (
-          <MapSkeleton />
-        )}
+
+              <CategoryChips
+                active={activeCat}
+                onChange={chooseCat}
+                className="absolute top-[64px] right-3 left-3 z-10 lg:top-3 lg:right-28 lg:left-[384px]"
+              />
+
+              <Sheet
+                desktop={desktop}
+                detent={detent}
+                onDetent={changeDetent}
+                tip={tip}
+                shellH={shellH}
+                visible={visible}>
+                <div
+                  key={panelKey}
+                  className="animate-in fade-in-0 slide-in-from-bottom-1 duration-200 motion-reduce:animate-none">
+                  {directions ? (
+                    <DirectionsPanel
+                      data={data}
+                      places={places}
+                      fromId={fromId}
+                      toId={toId}
+                      setFromId={setFromId}
+                      setToId={setToId}
+                      from={from}
+                      to={to}
+                      solo={solo}
+                      onClose={() => setDirections(false)}
+                    />
+                  ) : selected ? (
+                    <PlacePanel
+                      data={data}
+                      place={selected}
+                      places={places}
+                      backLabel={
+                        activeCat
+                          ? (BROWSE.find((b) => b.key === activeCat)?.label ??
+                            "Back")
+                          : "Explore"
+                      }
+                      onBack={() => {
+                        setSelectedId(null)
+                        setLevel(null)
+                      }}
+                      level={level}
+                      onSelect={select}
+                      onLevel={(z) => pickLevel(z, "chip")}
+                      onDirections={startDirections}
+                    />
+                  ) : activeCat ? (
+                    <CategoryPanel
+                      data={data}
+                      cat={activeCat}
+                      rows={catPlaces}
+                      level={level}
+                      onLevel={(z) => pickLevel(z, "chip")}
+                      onSelect={select}
+                      onClose={() => chooseCat(null)}
+                    />
+                  ) : (
+                    <ExplorePanel
+                      data={data}
+                      places={places}
+                      onSelect={select}
+                      onCat={(k) => chooseCat(k, "explore")}
+                    />
+                  )}
+                </div>
+              </Sheet>
+            </>
+          ) : (
+            <MapSkeleton />
+          )}
+        </div>
       </div>
     </div>
   )
@@ -1172,6 +1237,7 @@ const Sheet = ({
   desktop,
   detent,
   onDetent,
+  tip,
   shellH,
   visible,
   children
@@ -1179,6 +1245,7 @@ const Sheet = ({
   desktop: boolean
   detent: number
   onDetent: (d: number) => void
+  tip: boolean
   shellH: number
   visible: number[]
   children: React.ReactNode
@@ -1206,68 +1273,92 @@ const Sheet = ({
   const shown = drag ?? visible[detent]
 
   return (
-    <div
-      className="bg-card absolute inset-x-0 bottom-0 z-10 flex flex-col rounded-t-2xl border-t shadow-[0_-8px_30px_-12px_hsl(var(--foreground)/0.25)]"
-      style={{
-        height: sheetH,
-        transform: `translateY(${sheetH - shown}px)`,
-        transition:
-          drag === null
-            ? "transform 320ms cubic-bezier(0.32, 0.72, 0, 1)"
-            : "none"
-      }}>
+    <>
+      {tip && (
+        // Swallow input so nothing but the drawer can be used.
+        <div
+          className="absolute inset-0 z-[90] touch-none overscroll-none bg-black/65"
+          aria-hidden="true"
+          onPointerDown={(e) => e.stopPropagation()}
+          onWheel={(e) => e.stopPropagation()}
+        />
+      )}
       <div
-        className="flex h-7 shrink-0 cursor-grab touch-none items-center justify-center active:cursor-grabbing"
-        onPointerDown={(e) => {
-          e.currentTarget.setPointerCapture(e.pointerId)
-          track.current = {
-            y: e.clientY,
-            v0: visible[detent],
-            last: [[e.clientY, performance.now()]],
-            moved: false
-          }
-        }}
-        onPointerMove={(e) => {
-          const t = track.current
-          if (!t) return
-          if (Math.abs(t.y - e.clientY) > 3) t.moved = true
-          if (!t.moved) return
-          t.last = [...t.last.slice(-3), [e.clientY, performance.now()]]
-          // Past the ends the sheet resists instead of stopping dead.
-          const raw = t.v0 + (t.y - e.clientY)
-          const lo = visible[0]
-          const hi = visible[2]
-          setDrag(
-            raw < lo
-              ? lo - (lo - raw) * 0.35
-              : raw > hi
-                ? hi + (raw - hi) * 0.35
-                : raw
-          )
-        }}
-        onPointerUp={() => {
-          const t = track.current
-          track.current = null
-          if (!t) return
-          if (!t.moved) {
-            onDetent(detent === 2 ? 1 : 2)
-            return
-          }
-          const [a, b] = [t.last[0], t.last[t.last.length - 1]]
-          const v = b[1] > a[1] ? ((a[0] - b[0]) / (b[1] - a[1])) * 1000 : 0
-          const rest = (drag ?? visible[detent]) + project1d(v)
-          const next = visible.reduce(
-            (best, h, i) =>
-              Math.abs(h - rest) < Math.abs(visible[best] - rest) ? i : best,
-            0
-          )
-          onDetent(next)
-          setDrag(null)
+        className={cn(
+          "bg-card absolute inset-x-0 bottom-0 z-10 flex flex-col rounded-t-2xl border-t shadow-[0_-8px_30px_-12px_hsl(var(--foreground)/0.25)]",
+          tip && "z-[100]"
+        )}
+        style={{
+          height: sheetH,
+          transform: `translateY(${sheetH - shown}px)`,
+          transition:
+            drag === null
+              ? "transform 320ms cubic-bezier(0.32, 0.72, 0, 1)"
+              : "none"
         }}>
-        <span className="bg-muted-foreground/40 h-1 w-10 rounded-full" />
+        <div
+          className="flex h-7 shrink-0 cursor-grab touch-none items-center justify-center active:cursor-grabbing"
+          onPointerDown={(e) => {
+            e.currentTarget.setPointerCapture(e.pointerId)
+            track.current = {
+              y: e.clientY,
+              v0: visible[detent],
+              last: [[e.clientY, performance.now()]],
+              moved: false
+            }
+          }}
+          onPointerMove={(e) => {
+            const t = track.current
+            if (!t) return
+            if (Math.abs(t.y - e.clientY) > 3) t.moved = true
+            if (!t.moved) return
+            t.last = [...t.last.slice(-3), [e.clientY, performance.now()]]
+            // Past the ends the sheet resists instead of stopping dead.
+            const raw = t.v0 + (t.y - e.clientY)
+            const lo = visible[0]
+            const hi = visible[2]
+            setDrag(
+              raw < lo
+                ? lo - (lo - raw) * 0.35
+                : raw > hi
+                  ? hi + (raw - hi) * 0.35
+                  : raw
+            )
+          }}
+          onPointerUp={() => {
+            const t = track.current
+            track.current = null
+            if (!t) return
+            if (!t.moved) {
+              onDetent(detent === 2 ? 1 : 2)
+              return
+            }
+            const [a, b] = [t.last[0], t.last[t.last.length - 1]]
+            const v = b[1] > a[1] ? ((a[0] - b[0]) / (b[1] - a[1])) * 1000 : 0
+            const rest = (drag ?? visible[detent]) + project1d(v)
+            const next = visible.reduce(
+              (best, h, i) =>
+                Math.abs(h - rest) < Math.abs(visible[best] - rest) ? i : best,
+              0
+            )
+            onDetent(next)
+            setDrag(null)
+          }}>
+          <span className="bg-muted-foreground/40 h-1 w-10 rounded-full" />
+          {tip && (
+            <div className="bg-card pointer-events-none absolute bottom-full left-1/2 mb-3 w-64 -translate-x-1/2 rounded-xl border p-3 text-sm shadow-lg">
+              <p className="font-semibold">Slide the drawer</p>
+              <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+                Drag this handle up for details, or down to see more of the map.
+              </p>
+            </div>
+          )}
+        </div>
+        <ScrollHint className={cn("px-4 pb-6", tip && "pointer-events-none")}>
+          {children}
+        </ScrollHint>
       </div>
-      <ScrollHint className="px-4 pb-6">{children}</ScrollHint>
-    </div>
+    </>
   )
 }
 

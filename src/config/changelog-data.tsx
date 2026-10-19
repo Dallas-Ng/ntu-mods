@@ -50,7 +50,7 @@ export const ChangelogLink = ({
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
     title: "Campus map",
-    date: "19 Oct 2026",
+    date: "20 Oct 2026",
     items: [
       {
         category: "New Feature",

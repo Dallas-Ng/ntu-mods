@@ -1,56 +1,96 @@
 ---
-title: "Use an AI Agent With NTUMods: WebMCP Tools and the AI Catalog Explained"
-description: "NTUMods now exposes its module search, timetable, exam and CGPA features to AI agents through WebMCP, and publishes an AI catalog. Here is what that means and how to try it."
+title: "Plan Your NTU Timetable With an AI Assistant: What Is New in NTUMods"
+description: "NTUMods now works with AI assistants that run in your browser. Ask for clash-free indexes, a free day, exam checks or the CGPA you need, and your plan updates for you. Here is what you can ask and what stays under your control."
 date: "2026-10-18"
+updated: "2026-10-19"
 author: "NTUMods"
 category: "General"
-tags: ["ntumods ai", "webmcp", "ai agent ntu timetable", "ntu timetable ai", "ai-catalog.json", "llms.txt", "ntu module search ai"]
+tags: ["ntumods ai", "ai timetable planner ntu", "ntu timetable ai", "webmcp", "ai assistant ntu modules", "ntu clash free timetable", "ntu cgpa ai", "ai-catalog.json", "llms.txt"]
 ---
 
-# Use an AI Agent With NTUMods
+# Plan Your NTU Timetable With an AI Assistant
 
-An AI assistant that can read a web page can already tell you a little about NTU. An assistant that can use the page can do much more: search modules, check whether an index clashes with your plan, and build a timetable for you. NTUMods now supports the second kind, using a new browser standard called WebMCP.
+Planning a semester usually means switching between STARS, a module list, your exam dates and a calculator. NTUMods now lets an AI assistant in your browser do that legwork with you. You describe what you want in plain words, and the assistant searches modules, checks clashes and updates your plan on NTUMods.
 
-> **Quick summary:** In a browser and assistant that support WebMCP, NTUMods offers about thirty tools to the assistant while you have the site open. They work on your own saved plans, in your own browser. Nothing is sent to an NTUMods server to make this work. Two public files, `llms.txt` and `ai-catalog.json`, describe the site for assistants that do not run inside your browser.
+> **Quick summary:** If you use a browser assistant that supports WebMCP, you can ask it things like "build me a timetable with Fridays free" while NTUMods is open. It works on your own plans, in your own browser, and it asks you before it does anything hard to undo. This is an early feature, so only some assistants can use it yet. NTUMods works exactly as before without one.
 
-## What WebMCP is
+## What you can ask for
 
-WebMCP lets a web page tell an in-browser assistant what it can do. Instead of guessing which button to click, the assistant calls a named tool with typed inputs, such as "search modules with the query data structures". The page runs the tool and returns the result.
+These are the kinds of requests that now work, with the NTUMods page open in the same browser.
 
-WebMCP is an early preview. At the time of writing it needs a recent version of Chrome with an experimental flag turned on, and only some assistants call these tools. If your browser does not support it, NTUMods behaves exactly as before and nothing extra is loaded.
+**Find modules**
 
-## What the tools can do
+> "Which Year 2 CSC modules are offered this semester, and which are 3 AU?"
 
-| Area | Examples |
-|---|---|
-| Find modules | Search by code, title, school, level or AU. Read a full module record with prerequisites. |
-| Classes and exams | List the indexes of a module with their timeslots. Look up an exam date and time. |
-| Your timetable | Add or remove modules, change an index, switch between your five plans, and add personal time blocks. |
-| Planning | Ask which indexes of a module fit around your current plan, or generate clash-free combinations from your preferences. |
-| Sharing | Get a share link, load a shared timetable, or export your plan as a calendar file. |
-| Grades | Work out the average grade you need for each honours class, or project your CGPA. |
+The assistant searches the full module list and reads prerequisites, exclusions and programme restrictions for you.
 
-The tools can only do what you could do yourself on the site. Anything destructive, such as clearing a plan or replacing it with a shared one, asks you to confirm first.
+**Fit a module around your plan**
 
-## Try it
+> "I want to add SC1001. Which of its indexes clash with what I already have?"
 
-1. Open `chrome://flags/#enable-webmcp-testing` in a recent Chrome and enable it, then restart.
-2. Open [the timetable planner](/timetable) and start an assistant that supports WebMCP tools.
-3. Ask something concrete: "Add SC1003 and MH1810 to my plan, pick indexes that do not clash, and tell me which days I am free."
+It lists every index of the module, marks the ones that fit around your current plan and names the module each clash would be with.
 
-Your plans stay in your browser. The [timetable planner guide](/articles/ntu-timetable-planner-guide) explains the features the tools use.
+**Build a plan from preferences**
 
-## For assistants outside the browser
+> "Add these six modules, keep Fridays free, and no classes before 10am."
 
-Two public files help assistants that cannot run the site.
+It adds the modules, then uses the same timetable generator as the site to find clash-free combinations that respect your preferences. It reports the options it found, and you can ask it to apply a different one.
 
-- [llms.txt](/llms.txt) summarises the site and lists its pages.
-- [ai-catalog.json](/.well-known/ai-catalog.json) follows the AI Catalog format. It points to the llms.txt file, the module API, the open data files for modules, indexes and exams, and a [list of the WebMCP tools](/.well-known/webmcp.json) with their input schemas.
+**Check your exams**
+
+> "Do any of my exams fall on the same day or overlap?"
+
+It reads your plan and the exam timetable and tells you about any overlap before it becomes a problem.
+
+**Protect your own commitments**
+
+> "Add gym on Monday and Wednesday from 6pm to 7pm and plan around it."
+
+Personal blocks are checked for clashes just like modules.
+
+**Work out your grades**
+
+> "My CGPA is 4.1 with 80 AU done and 60 left. What do I need for Distinction?"
+
+It gives the average grade needed for each honours class and the lowest letter grade that gets you there. This uses the same maths as the [CGPA Planner](/tools/cgpa-planner), and the result is unofficial, because some programmes set their own bands.
+
+**Share and export**
+
+> "Give me a share link for plan 2 and export it to my calendar."
+
+You get a link your friends can open, and the assistant can produce your plan as a calendar (.ics) text that you save and import into Google Calendar, Apple Calendar or Outlook. Whether it can hand you a file depends on the assistant.
+
+## What stays in your control
+
+- **Your plans stay in your browser.** The assistant works on the plans saved in your own browser, the same ones you see on the site. NTUMods does not receive them, and nothing is uploaded to make this feature work.
+- **Hard-to-undo actions ask first.** Clearing a plan, or replacing a plan with a shared timetable, shows a confirmation that you answer, not the assistant.
+- **Everything else is easy to reverse.** Adding, removing and swapping modules works the same as doing it by hand, and you can switch between your five plans as usual.
+- **It is optional.** If your browser or assistant does not support it, nothing changes and nothing extra is loaded.
 
 ## What it does not do
 
-NTUMods still does not register you for modules. STARS does that. The data has no live index vacancies and no exam venues, so an assistant using these tools cannot know them either. Treat any plan an assistant builds as a draft and check it against STARS before registration opens.
+NTUMods still does not register you for modules. STARS does that. The data also has no live index vacancies and no exam venues, so an assistant cannot know either. Treat any plan an assistant builds as a draft, and check it against STARS before registration opens. Assistants can also misread a request, so look at the plan on screen before you rely on it.
+
+## How to try it
+
+1. Use a recent version of Chrome and turn on WebMCP. It is an early preview, so the way to enable it can change; [Chrome's WebMCP documentation](https://developer.chrome.com/docs/ai/webmcp/imperative-api) has the current steps.
+2. Open [the timetable planner](/timetable) and start an assistant that supports WebMCP tools.
+3. Ask for something specific, such as the examples above.
+
+Few assistants use WebMCP today, and this will grow over time. The [timetable planner guide](/articles/ntu-timetable-planner-guide) explains the features the assistant is using, which is also a good way to check its work.
+
+## What is WebMCP?
+
+WebMCP is a new web standard that lets a website tell a browser assistant what it can do. Today, an assistant that wants to use a site has to look at the page and guess which buttons to press, which is slow and often wrong. With WebMCP, the site offers a list of actions with clear descriptions, such as "search modules" or "add a module to the plan". The assistant picks the right action and the site carries it out.
+
+The standard is being drafted by a W3C community group, with Google and Microsoft involved, and Chrome has an early preview. NTUMods offers about 30 of these actions. They are the same things you can already do on the site, so an assistant can never do more than you could do yourself.
+
+## Why NTUMods is taking this step
+
+More students now ask an AI assistant for help with planning, and the assistants are getting better at doing tasks rather than only answering questions. I would rather NTUMods work well with that than be misread by it. When an assistant guesses at a web page, it can pick the wrong index, miss a clash or quote last semester's data. When it uses actions the site provides, it uses the same data and the same clash checks you see on screen.
+
+Alongside this, NTUMods now publishes plain files for assistants that do not run in your browser. [llms.txt](/llms.txt) summarises the site, and [ai-catalog.json](/.well-known/ai-catalog.json) lists what is available, including the open module, index and exam data. If you build tools for NTU students, those are the places to start. Everything in them describes data that is already public on the site.
 
 ## Final thoughts
 
-I built this because planning a semester is exactly the kind of task people already ask assistants to help with, and a tool call is far more reliable than an assistant guessing at a web page. If something behaves oddly, please tell me through the [feedback page](/feedback).
+The goal is not to replace planning with an assistant. It is to remove the tedious parts, such as checking every index against your plan, so you spend your time on the choices that matter. If something behaves oddly, please tell me through the [feedback page](/feedback).

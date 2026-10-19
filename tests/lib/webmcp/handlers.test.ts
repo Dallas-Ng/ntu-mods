@@ -173,10 +173,12 @@ describe("timetable tools", () => {
     await h.import_modules({ codes: ["AA1001", "BB1002"] })
     const result = (await h.generate_timetables({ apply: 1 })) as {
       found: number
+      appliedIndexes: Record<string, string>
       options: { indexes: Record<string, string> }[]
     }
     expect(result.found).toBeGreaterThan(0)
     expect(result.options[0].indexes.BB1002).toBe("201")
+    expect(result.appliedIndexes.BB1002).toBe("201")
     expect(useBoundState.getState().timetables[0].BB1002).toBe("201")
   })
 

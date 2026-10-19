@@ -232,7 +232,8 @@ export const WEBMCP_TOOLS = [
     description:
       "Full record for one module: description, AU, grade type, prerequisites, mutually exclusive modules, programme restrictions, exam and semesters offered. Prerequisites are groups: every group must be satisfied and any module inside a group satisfies it.",
     inputSchema: object({ code: CODE }, ["code"]),
-    readOnly: true
+    readOnly: true,
+    untrusted: true
   },
   {
     name: "get_module_indexes",
@@ -368,7 +369,8 @@ export const WEBMCP_TOOLS = [
     description:
       "Remove every module and custom block from a plan. Asks the user to confirm first.",
     inputSchema: object({ plan: PLAN }),
-    readOnly: false
+    readOnly: false,
+    consequential: true
   },
   {
     name: "add_custom_block",
@@ -424,7 +426,7 @@ export const WEBMCP_TOOLS = [
     name: "generate_timetables",
     title: "Generate timetables",
     description:
-      "Search for clash-free combinations of the modules in the plan under the given preferences (merged over the saved ones, not saved). Returns ranked options. Set apply to a rank to write that option into the plan.",
+      "Search for clash-free combinations of the modules in the plan under the given preferences (merged over the saved ones, not saved). Returns ranked options. Set apply to a rank to write that option into the plan; the result then lists exactly what was applied (the search has a time budget, so a rerun can rank options differently).",
     inputSchema: object({
       config: GENERATION_CONFIG,
       plan: PLAN,
@@ -459,7 +461,8 @@ export const WEBMCP_TOOLS = [
     description:
       "Replace a plan with a shared timetable, from a /share link or an NTUMODS1- text code. Asks the user to confirm if the plan is not empty.",
     inputSchema: object({ link: { type: "string" }, plan: PLAN }, ["link"]),
-    readOnly: false
+    readOnly: false,
+    consequential: true
   },
   {
     name: "export_calendar_ics",
@@ -535,6 +538,7 @@ export const WEBMCP_TOOLS = [
       "On a module page, the full record of the module being viewed. Same output as get_module.",
     inputSchema: object({}),
     readOnly: true,
+    untrusted: true,
     pathPrefix: "/mods/"
   }
 ] as const satisfies readonly ToolDefinition[]

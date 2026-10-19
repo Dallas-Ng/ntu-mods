@@ -1,7 +1,12 @@
-// WebMCP plumbing: feature detection and registration. WebMCP is an early
-// preview, so everything here tolerates the API being absent, and tolerates
-// both of the spellings seen in the wild (`navigator.modelContext` and
-// `document.modelContext`).
+// WebMCP plumbing: feature detection and registration, following the W3C
+// Community Group draft (https://webmachinelearning.github.io/webmcp/):
+//   document.modelContext.registerTool(tool, { signal })
+// A tool is removed by aborting its signal; execute() receives the input
+// object and resolves to the result, and a rejection reports an error.
+//
+// WebMCP is an early preview, so everything here tolerates the API being
+// absent, and tolerates the older shape some builds still ship
+// (`navigator.modelContext` and `unregisterTool(name)`).
 
 export type JsonSchema = Record<string, unknown>
 
@@ -12,38 +17,39 @@ export interface ToolDefinition {
   inputSchema: JsonSchema
   /** False for anything that changes the user's saved data. */
   readOnly: boolean
+  /** Hard to undo: agents are told to confirm with the user first. */
+  consequential?: boolean
+  /** Returns text that came from outside the site, so agents treat it as data. */
+  untrusted?: boolean
   /** Register only on paths with this prefix; omitted means every page. */
   pathPrefix?: string
 }
 
-export interface WebMcpAgent {
-  requestUserInteraction?: <T>(callback: () => Promise<T> | T) => Promise<T>
-}
-
-export interface ToolResult {
-  content: { type: "text"; text: string }[]
-  isError?: boolean
-}
-
 export type ToolHandler = (
-  args: Record<string, unknown>,
-  agent?: WebMcpAgent
+  args: Record<string, unknown>
 ) => Promise<unknown> | unknown
+
+interface ToolAnnotations {
+  readOnlyHint: boolean
+  consequentialHint?: boolean
+  untrustedContentHint?: boolean
+}
 
 interface RegisterableTool {
   name: string
   title: string
   description: string
   inputSchema: JsonSchema
-  annotations: { readOnlyHint: boolean }
-  execute: (
-    args: Record<string, unknown>,
-    agent?: WebMcpAgent
-  ) => Promise<ToolResult>
+  annotations: ToolAnnotations
+  execute: (args: Record<string, unknown>) => Promise<string>
 }
 
 interface ModelContext {
-  registerTool: (tool: RegisterableTool) => unknown
+  registerTool: (
+    tool: RegisterableTool,
+    options?: { signal?: AbortSignal }
+  ) => unknown
+  /** Older builds only; the draft removes tools through the signal instead. */
   unregisterTool?: (name: string) => void
 }
 
@@ -58,23 +64,14 @@ export function getModelContext(): ModelContext | undefined {
   return typeof candidate?.registerTool === "function" ? candidate : undefined
 }
 
-export const toResult = (value: unknown): ToolResult => ({
-  content: [
-    {
-      type: "text",
-      text: typeof value === "string" ? value : JSON.stringify(value, null, 2)
-    }
-  ]
-})
+/** executeTool() hands the agent a string, so structured results are JSON text. */
+export const serialise = (value: unknown): string =>
+  typeof value === "string" ? value : JSON.stringify(value, null, 2)
 
-export const toErrorResult = (error: unknown): ToolResult => ({
-  content: [
-    {
-      type: "text",
-      text: error instanceof Error ? error.message : "Tool call failed."
-    }
-  ],
-  isError: true
+export const toAnnotations = (def: ToolDefinition): ToolAnnotations => ({
+  readOnlyHint: def.readOnly,
+  ...(def.consequential ? { consequentialHint: true } : {}),
+  ...(def.untrusted ? { untrustedContentHint: true } : {})
 })
 
 /**
@@ -89,7 +86,8 @@ export function registerTools(
   const context = getModelContext()
   if (!context) return () => {}
 
-  const registered: { name: string; handle: unknown }[] = []
+  const controller = new AbortController()
+  const names: string[] = []
 
   for (const def of definitions) {
     if (def.pathPrefix && !pathname.startsWith(def.pathPrefix)) continue
@@ -101,34 +99,42 @@ export function registerTools(
       title: def.title,
       description: def.description,
       inputSchema: def.inputSchema,
-      annotations: { readOnlyHint: def.readOnly },
-      execute: async (args, agent) => {
+      annotations: toAnnotations(def),
+      execute: async (args) => {
         try {
-          return toResult(await handler(args ?? {}, agent))
+          return serialise(await handler(args ?? {}))
         } catch (error) {
           // ToolError messages are written for the agent; anything else is a
           // bug, so keep its detail out of the reply but still log it.
-          if (error instanceof ToolError) return toErrorResult(error)
+          if (error instanceof ToolError) throw new Error(error.message)
           console.error(`[webmcp] ${def.name} failed`, error)
-          return toErrorResult(new Error("The tool failed unexpectedly."))
+          throw new Error("The tool failed unexpectedly.")
         }
       }
     }
 
-    try {
-      // A hot reload or a second provider may have registered it already.
-      context.unregisterTool?.(def.name)
-      registered.push({ name: def.name, handle: context.registerTool(tool) })
-    } catch (error) {
+    const onFailure = (error: unknown) =>
       console.warn(`[webmcp] could not register ${def.name}`, error)
+
+    try {
+      // Older builds throw on a duplicate name; clear any leftover first.
+      context.unregisterTool?.(def.name)
+      // registerTool returns a promise in the draft, so a rejection must be
+      // caught as well as a synchronous throw.
+      Promise.resolve(
+        context.registerTool(tool, { signal: controller.signal })
+      ).catch(onFailure)
+      names.push(def.name)
+    } catch (error) {
+      onFailure(error)
     }
   }
 
   return () => {
-    for (const { name, handle } of registered) {
+    controller.abort()
+    for (const name of names) {
       try {
-        if (context.unregisterTool) context.unregisterTool(name)
-        else (handle as { unregister?: () => void } | undefined)?.unregister?.()
+        context.unregisterTool?.(name)
       } catch {
         // already gone
       }

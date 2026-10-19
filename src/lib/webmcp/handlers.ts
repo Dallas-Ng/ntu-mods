@@ -35,7 +35,7 @@ import { fetchAllModules } from "@/hooks/use-all-modules"
 import { fetchSeasonExams } from "@/hooks/use-season-exams"
 import { fetchSeasonIndexes } from "@/hooks/use-season-indexes"
 
-import { ToolError, type ToolHandler, type WebMcpAgent } from "./core"
+import { ToolError, type ToolHandler } from "./core"
 import type { WebMcpToolName } from "./definitions"
 
 // ─── small helpers ──────────────────────────────────────────────────────────
@@ -103,12 +103,10 @@ const hasFixedTime = (slot: Index) =>
   slot.day > 0 && /^\d{4}-\d{4}$/.test(slot.time)
 
 /** Ask the user before something destructive; the agent cannot answer for them. */
-async function confirmWithUser(message: string, agent?: WebMcpAgent) {
-  const ask = async () => window.confirm(message)
-  const ok = agent?.requestUserInteraction
-    ? await agent.requestUserInteraction(ask)
-    : await ask()
-  if (!ok) throw new ToolError("The user declined, so nothing was changed.")
+function confirmWithUser(message: string) {
+  if (!window.confirm(message)) {
+    throw new ToolError("The user declined, so nothing was changed.")
+  }
 }
 
 const toMinutes = (hhmm: number) => Math.floor(hhmm / 100) * 60 + (hhmm % 100)
@@ -744,17 +742,14 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
     return { activePlan: planIndex + 1 }
   },
 
-  clear_plan: async (args, agent) => {
+  clear_plan: (args) => {
     const planIndex = planOf(args)
     const state = store()
     const count =
       Object.keys(state.timetables[planIndex] ?? {}).length +
       (state.customCourses[planIndex] ?? []).length
     if (count === 0) return { plan: planIndex + 1, cleared: 0 }
-    await confirmWithUser(
-      `Clear all ${count} item(s) from plan ${planIndex + 1}?`,
-      agent
-    )
+    confirmWithUser(`Clear all ${count} item(s) from plan ${planIndex + 1}?`)
     state.updateTimetable({}, planIndex)
     state.setCustomCourses([], planIndex)
     return { plan: planIndex + 1, cleared: count }
@@ -877,6 +872,7 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
     }
 
     let applied: number | undefined
+    let appliedIndexes: Timetable | undefined
     if (wanted !== undefined) {
       const chosen = result.combinations[wanted - 1]
       if (!chosen) {
@@ -902,12 +898,14 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
         )
       }
       applied = wanted
+      appliedIndexes = moduleTimetable
     }
 
     return {
       found: result.combinations.length,
       truncated: result.truncated,
       appliedRank: applied ?? null,
+      appliedIndexes: appliedIndexes ?? null,
       options: result.combinations.slice(0, maxResults).map((c, i) => ({
         rank: i + 1,
         score: c.score,
@@ -928,7 +926,7 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
     }
   },
 
-  load_shared_timetable: async (args, agent) => {
+  load_shared_timetable: (args) => {
     const decoded = decodeTextBundle(String(args.link ?? ""))
     if (!decoded)
       throw new ToolError(
@@ -940,9 +938,8 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
       Object.keys(state.timetables[planIndex] ?? {}).length +
       (state.customCourses[planIndex] ?? []).length
     if (existing > 0) {
-      await confirmWithUser(
-        `Replace the ${existing} item(s) in plan ${planIndex + 1}?`,
-        agent
+      confirmWithUser(
+        `Replace the ${existing} item(s) in plan ${planIndex + 1}?`
       )
     }
     state.updateTimetable(decoded.timetable, planIndex)

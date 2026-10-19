@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro"
 
 import { siteConfig } from "@/config/site"
+import { toAnnotations } from "@/lib/webmcp/core"
 import { WEBMCP_TOOLS } from "@/lib/webmcp/definitions"
 
 export const prerender = true
@@ -15,14 +16,14 @@ export const GET: APIRoute = () =>
       {
         name: siteConfig.name,
         url: siteConfig.url,
-        api: "WebMCP: navigator.modelContext.registerTool (Chrome early preview)",
+        api: "WebMCP: document.modelContext.registerTool (W3C Web Machine Learning Community Group draft)",
         note: "These tools exist only inside a browser tab on this site that supports WebMCP. They act on the visitor's own saved plans. This file is for discovery.",
         tools: WEBMCP_TOOLS.map((tool) => ({
           name: tool.name,
           title: tool.title,
           description: tool.description,
           inputSchema: tool.inputSchema,
-          annotations: { readOnlyHint: tool.readOnly },
+          annotations: toAnnotations(tool),
           ...("pathPrefix" in tool ? { pathPrefix: tool.pathPrefix } : {})
         }))
       },

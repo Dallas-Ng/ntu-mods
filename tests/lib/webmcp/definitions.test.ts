@@ -33,6 +33,13 @@ describe("WebMCP tool definitions", () => {
     }
   })
 
+  it("marks the destructive tools as consequential", () => {
+    const flagged = WEBMCP_TOOLS.filter(
+      (t) => "consequential" in t && t.consequential
+    ).map((t) => t.name)
+    expect(flagged.sort()).toEqual(["clear_plan", "load_shared_timetable"])
+  })
+
   it("never uses em dashes in copy an agent or user can read", () => {
     for (const tool of WEBMCP_TOOLS) {
       expect(JSON.stringify(tool)).not.toContain("—")

@@ -51,7 +51,7 @@ export function buildAiCatalog({
         WEBMCP_MEDIA_TYPE,
         "/.well-known/webmcp.json",
         "NTUMods WebMCP tools",
-        "Tools the site registers with WebMCP (navigator.modelContext) in supporting browsers: search modules, read indexes and exams, build and generate timetables, export to calendar, and plan CGPA. This file lists their names and input schemas; calling them needs a browser tab on ntumods.com.",
+        "Tools the site registers with WebMCP (document.modelContext) in supporting browsers: search modules, read indexes and exams, build and generate timetables, export to calendar, and plan CGPA. This file lists their names and input schemas; calling them needs a browser tab on ntumods.com.",
         ["webmcp", "tools", "timetable", "ntu"]
       ),
       entry(

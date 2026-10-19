@@ -690,16 +690,28 @@ const MapsPageContent = () => {
     const ui = [...el.querySelectorAll<HTMLElement>("[data-ui]")].filter(
       (n) => getComputedStyle(n).opacity !== "0"
     )
-    const fade = (from: number, to: number, duration: number, delay = 0) =>
-      ui.map((n) =>
+    // Staggered, and opacity only: the drawer already positions itself with transform.
+    const fade = (
+      from: number,
+      to: number,
+      duration: number,
+      delay = 0,
+      stagger = 0
+    ) =>
+      ui.map((n, i) =>
         n.animate(
           { opacity: [from, to] },
-          { duration, delay, easing: "ease-out", fill: "both" }
+          {
+            duration,
+            delay: delay + i * stagger,
+            easing: "cubic-bezier(0.25, 0.1, 0.25, 1)",
+            fill: "both"
+          }
         )
       )
-    // Entering: the controls wait for the edge, then fade in. Leaving: they
-    // fade out first, and fade back in once they are in their small-box spots.
-    const fades = fullscreen ? fade(0, 1, 200, 100) : fade(1, 0, 100)
+    // Entering: the controls wait for the edge to open up, then ease in one by
+    // one. Leaving: they fade out first, and ease back in at the small-box spots.
+    const fades = fullscreen ? fade(0, 1, 380, 140, 50) : fade(1, 0, 110)
     const anim = el.animate(
       { clipPath: fullscreen ? [small, full] : [full, small] },
       {
@@ -710,12 +722,16 @@ const MapsPageContent = () => {
       }
     )
     anim.onfinish = () => {
+      if (fullscreen) {
+        // The fades outlast the edge: each cleans up after itself.
+        fades.forEach((f) => (f.onfinish = () => f.cancel()))
+        return anim.cancel()
+      }
       fades.forEach((f) => f.cancel())
-      if (fullscreen) return anim.cancel()
       setPinned(false)
-      const back = fade(0, 1, 160)
+      const back = fade(0, 1, 280, 0, 40)
       requestAnimationFrame(() => anim.cancel())
-      setTimeout(() => back.forEach((f) => f.cancel()), 200)
+      setTimeout(() => back.forEach((f) => f.cancel()), 520)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullscreen])

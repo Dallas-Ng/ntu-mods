@@ -662,6 +662,10 @@ const MapsPageContent = () => {
   const [fullscreen, setFullscreen] = useState(false)
   // The shell stays fixed while it shrinks back, so it can be clipped smoothly.
   const [pinned, setPinned] = useState(false)
+  // Desktop only: the map can be dragged taller from its bottom edge.
+  const [deskH, setDeskH] = useState<number | null>(null)
+  const deskBase = useRef<number | null>(null)
+  const resize = useRef<{ y: number; h: number; lo: number } | null>(null)
   const slotRef = useRef<HTMLDivElement>(null)
   const wasFullscreen = useRef(false)
   // Everything a toggle starts, so the next toggle can take over mid-flight.
@@ -818,7 +822,8 @@ const MapsPageContent = () => {
 
       <div
         ref={slotRef}
-        className="relative h-[calc(100dvh-11rem)] min-h-[34rem] lg:h-[clamp(30rem,calc(100dvh-22rem),40rem)] lg:min-h-0">
+        className="relative h-[calc(100dvh-11rem)] min-h-[34rem] lg:h-[clamp(30rem,calc(100dvh-22rem),40rem)] lg:min-h-0"
+        style={desktop && deskH !== null ? { height: deskH } : undefined}>
         <div
           ref={shellRef}
           className={cn(
@@ -992,6 +997,39 @@ const MapsPageContent = () => {
             </>
           ) : (
             <MapSkeleton />
+          )}
+          {desktop && !pinned && (
+            <div
+              role="separator"
+              aria-orientation="horizontal"
+              aria-label="Drag down to make the map taller, double-click to reset"
+              title="Drag down for a taller map"
+              onDoubleClick={() => setDeskH(null)}
+              onPointerDown={(e) => {
+                const slot = slotRef.current
+                if (!slot) return
+                e.currentTarget.setPointerCapture(e.pointerId)
+                const base = slot.getBoundingClientRect().height
+                // Never shorter than the standard height, never taller than the window.
+                if (deskH === null) deskBase.current = base
+                const lo = deskBase.current ?? base
+                resize.current = { y: e.clientY, h: base, lo }
+              }}
+              onPointerMove={(e) => {
+                const r = resize.current
+                if (!r) return
+                setDeskH(
+                  Math.min(
+                    window.innerHeight,
+                    Math.max(r.lo, r.h + e.clientY - r.y)
+                  )
+                )
+              }}
+              onPointerUp={() => (resize.current = null)}
+              onPointerCancel={() => (resize.current = null)}
+              className="group absolute inset-x-0 bottom-0 z-30 flex h-4 cursor-row-resize touch-none items-end justify-center pb-1">
+              <span className="bg-foreground/25 group-hover:bg-foreground/50 h-1 w-10 rounded-full transition-colors duration-150" />
+            </div>
           )}
         </div>
       </div>

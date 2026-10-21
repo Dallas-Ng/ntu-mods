@@ -3,7 +3,6 @@
 import { useCallback, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import {
-  InfoIcon,
   LockIcon,
   LockOpenIcon,
   RotateCcwIcon,
@@ -41,13 +40,8 @@ import {
   SelectValue
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from "@/components/ui/tooltip"
 
+import InfoTip from "../info-tip"
 import TimetableBlacklistEditor from "./timetable-blacklist-editor"
 import TimetableResultsCycler from "./timetable-results-cycler"
 
@@ -80,21 +74,10 @@ const SectionLabel = ({
   children: React.ReactNode
   tip?: string
 }) => (
-  <TooltipProvider delayDuration={200}>
-    <div className="flex items-center gap-1">
-      <span className="text-foreground text-xs font-medium">{children}</span>
-      {tip && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <InfoIcon className="text-muted-foreground/60 hover:text-muted-foreground size-3 cursor-help transition-colors" />
-          </TooltipTrigger>
-          <TooltipContent side="top" className="max-w-52 text-xs">
-            {tip}
-          </TooltipContent>
-        </Tooltip>
-      )}
-    </div>
-  </TooltipProvider>
+  <div className="flex items-center">
+    <span className="text-foreground text-xs font-medium">{children}</span>
+    {tip && <InfoTip>{tip}</InfoTip>}
+  </div>
 )
 
 const CollisionIgnoreSection = () => {

@@ -149,7 +149,7 @@ export const TimetableTableCell = (props: Props) => {
         />
       )}
 
-      <div className="w-full">
+      <div className="w-full" data-cell-fit data-duration={index.duration}>
         {/*  */}
         <TimetableTableCellContent
           index={{

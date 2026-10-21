@@ -4,6 +4,7 @@ import {
   Fragment,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState
@@ -85,7 +86,13 @@ export const TimetableTable = (props: Props) => {
   // for content that genuinely needs more (CSS 2.1 §17.5.3). Standardised
   // scale then additionally clamps each cell (see `clamp` below) so
   // content can no longer grow the row past this value.
-  const rowHeightStyle = { height: TABLE_SETTINGS.ROW_HEIGHT_PX }
+  // Standardised scale: every 30 min slot gets one height, taken from the
+  // cell that needs the most room per slot (measured below), so no cell is
+  // cut off. Otherwise slots keep the baseline height.
+  const tableRef = useRef<HTMLTableElement>(null)
+  const [fitPx, setFitPx] = useState<number>(TABLE_SETTINGS.ROW_HEIGHT_PX)
+  const rowPx = standardisedScale ? fitPx : TABLE_SETTINGS.ROW_HEIGHT_PX
+  const rowHeightStyle = { height: rowPx }
 
   const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS, TABLE_OVERFLOW_THRESHOLD } =
     useMemo(() => {
@@ -104,6 +111,30 @@ export const TimetableTable = (props: Props) => {
         isMobile ? 6 : 9
       )
     }, [moduleIndexMap, isMobile, precomputedMatrix])
+
+  useLayoutEffect(() => {
+    const table = tableRef.current
+    if (!standardisedScale || !table) return
+    const measure = () => {
+      let need: number = TABLE_SETTINGS.ROW_HEIGHT_PX
+      table.querySelectorAll<HTMLElement>("[data-cell-fit]").forEach((el) => {
+        const box = el.parentElement
+        if (!box) return
+        const cs = getComputedStyle(box)
+        const pad = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+        const slots = Number(el.dataset.duration) || 1
+        need = Math.max(need, (el.offsetHeight + pad) / slots)
+      })
+      setFitPx((prev) => {
+        const next = Math.ceil(need)
+        return prev === next ? prev : next
+      })
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(table)
+    return () => ro.disconnect()
+  }, [standardisedScale, TABLE_MATRIX, isMobile])
 
   const hoveredPicker = useIndexHover((s) => s.hovered)
   const [currentHoverKey, setCurrentHoverKey] = useState("")
@@ -172,6 +203,7 @@ export const TimetableTable = (props: Props) => {
           onScroll={measure}
           className={cn(TABLE_OVERFLOW_THRESHOLD && "overflow-x-auto")}>
           <table
+            ref={tableRef}
             className={cn(
               "w-full text-[0.6rem] lg:text-xs",
               TABLE_OVERFLOW_THRESHOLD ? "table-auto" : "table-fixed"
@@ -263,7 +295,7 @@ export const TimetableTable = (props: Props) => {
                                   }
                                   hideIndex={hideIndex}
                                   fullCell={fullCell}
-                                  rowHeightPx={TABLE_SETTINGS.ROW_HEIGHT_PX}
+                                  rowHeightPx={rowPx}
                                   clamp={standardisedScale}
                                   common={common}
                                   dimmed={

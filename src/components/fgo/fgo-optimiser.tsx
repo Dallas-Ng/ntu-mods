@@ -131,9 +131,6 @@ export default function FgoOptimiser() {
     setError("")
     try {
       const parsed = await readTranscriptPdf(file)
-      if (!parsed.mods.some((m) => m.status === "graded")) {
-        throw new Error("no modules found")
-      }
       setData(parsed)
       setFileName(file.name)
       setBde(new Set())

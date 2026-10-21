@@ -2,6 +2,7 @@
 import {
   ArrowRight,
   CalendarPlus,
+  ChevronDown,
   Footprints,
   GraduationCap,
   Layers,
@@ -129,7 +130,9 @@ const GUIDES = [
       </p>
     </div>
 
-    <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <ul
+      id="timetable-steps"
+      class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 max-sm:[&:not([data-open])>li:nth-child(n+4)]:hidden">
       {
         STEPS.map(({ title, body, Icon }) => (
           <li class="bg-card flex gap-3 rounded-xl border p-4">
@@ -148,6 +151,16 @@ const GUIDES = [
         ))
       }
     </ul>
+
+    <button
+      id="timetable-steps-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="timetable-steps"
+      class="hover:bg-accent text-foreground -mt-3 flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg border text-sm font-medium transition-colors sm:hidden">
+      <span data-label>Read more</span>
+      <ChevronDown className="size-4 transition-transform" data-chevron />
+    </button>
 
     <p
       class="text-muted-foreground max-w-3xl border-t pt-5 text-xs leading-relaxed text-pretty">
@@ -190,3 +203,16 @@ const GUIDES = [
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  // On phones the steps stop after three; the rest are in the page already.
+  const list = document.getElementById("timetable-steps")
+  const toggle = document.getElementById("timetable-steps-toggle")
+  toggle?.addEventListener("click", () => {
+    const open = list?.toggleAttribute("data-open")
+    toggle.setAttribute("aria-expanded", String(Boolean(open)))
+    const label = toggle.querySelector("[data-label]")
+    if (label) label.textContent = open ? "Show less" : "Read more"
+    toggle.querySelector("[data-chevron]")?.classList.toggle("rotate-180", open)
+  })
+</script>

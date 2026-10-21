@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { ArrowUpRight } from "lucide-react"
 
 import { reportError } from "@/lib/analytics"
 import { latestSemester, latestYear } from "@/lib/semesters"
@@ -75,19 +76,17 @@ const TimetableOverview = () => {
                 <tr key={moduleKey}>
                   <td>{indexKey}</td>
 
-                  <td>
-                    <a
-                      href={`/mods/${moduleKey}`}
-                      className="hover:text-primary-alt font-medium transition-colors">
-                      {moduleKey}
-                    </a>
-                  </td>
+                  <td className="font-medium">{moduleKey}</td>
 
                   <td className="hidden lg:table-cell">
                     <a
                       href={`/mods/${moduleKey}`}
-                      className="hover:text-primary-alt transition-colors">
+                      className="hover:text-primary-alt group inline-flex items-center gap-1 transition-colors">
                       {moduleTitle}
+                      <ArrowUpRight
+                        aria-hidden
+                        className="text-muted-foreground size-3.5 shrink-0 transition-colors group-hover:text-current"
+                      />
                     </a>
                   </td>
 

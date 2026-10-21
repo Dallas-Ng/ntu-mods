@@ -6,6 +6,7 @@ import { ChevronDown, Pencil } from "lucide-react"
 import { track } from "@/lib/analytics"
 import { MAX_PLAN_NAME } from "@/lib/plan-name"
 import { cn } from "@/lib/utils"
+import { useHydrated } from "@/hooks/use-hydrated"
 import { usePlanNames } from "@/hooks/use-plan-names"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   Tooltip,
   TooltipContent,
@@ -92,6 +94,7 @@ const TimetablePlanSwitcher = () => {
   const { timetables, timetableIndex, updateTimetableIndex } = useTimetable()
   const { label, named } = usePlanNames()
   const { isMobile } = useSettings()
+  const hydrated = useHydrated()
 
   const [isContainerOpen, setIsContainerOpen] = useState(false)
   const [renameOpen, setRenameOpen] = useState(false)
@@ -164,6 +167,10 @@ const TimetablePlanSwitcher = () => {
   )
 
   const rename = <RenameDialog open={renameOpen} onOpenChange={setRenameOpen} />
+
+  // Saved plans and their names load after hydration: hold the button's
+  // place so it does not flash the default name first.
+  if (!hydrated) return <Skeleton className="h-8 w-32 sm:w-40" />
 
   if (isMobile) {
     return (

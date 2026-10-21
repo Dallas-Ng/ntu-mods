@@ -1,6 +1,6 @@
 "use client"
 
-import { lazy, Suspense, useState, type MouseEvent } from "react"
+import { useState, type MouseEvent } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { Trash2 } from "lucide-react"
 
@@ -23,14 +23,11 @@ import {
 
 import CustomCourseEditor from "./custom-course-editor"
 import InfoTip from "./info-tip"
+import TimetableGenerationConfig from "./mode-generation/timetable-generation-config"
 import { RemarkTooltipContent } from "./remark-tooltip-content"
 import TimetableDayRoute from "./timetable-day-route"
 import TimetableIndexModifier from "./timetable-index-modifier"
 import TimetableModulesSelect from "./timetable-modules-select"
-
-const TimetableGenerationConfig = lazy(
-  () => import("./mode-generation/timetable-generation-config")
-)
 
 interface ModuleRowProps {
   moduleKey: string
@@ -268,9 +265,7 @@ const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
                     "px-4 transition-opacity",
                     count === 0 && "pointer-events-none opacity-50"
                   )}>
-                  <Suspense fallback={null}>
-                    <TimetableGenerationConfig />
-                  </Suspense>
+                  <TimetableGenerationConfig />
                 </div>
               </AccordionContent>
             </AccordionItem>

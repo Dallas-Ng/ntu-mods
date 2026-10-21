@@ -3,6 +3,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react"
 import { Maximize2 } from "lucide-react"
 
+import { track } from "@/lib/analytics"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import { Skeleton } from "@/components/ui/skeleton"
 import CampusMap from "@/components/map/campus-map"
@@ -85,6 +86,10 @@ const Preview = () => {
 
 const TimetableDayRoute = () => {
   const [open, setOpen] = useState(false)
+  const openRoute = () => {
+    setOpen(true)
+    track("walk_route_opened")
+  }
   return (
     <>
       {/* Not a <button>: the map inside has its own buttons. */}
@@ -92,11 +97,11 @@ const TimetableDayRoute = () => {
         role="button"
         tabIndex={0}
         aria-label="Open walking between classes"
-        onClick={() => setOpen(true)}
+        onClick={openRoute}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault()
-            setOpen(true)
+            openRoute()
           }
         }}
         className="group focus-visible:ring-ring/50 block w-full cursor-pointer rounded-lg text-left outline-none focus-visible:ring-[3px]">

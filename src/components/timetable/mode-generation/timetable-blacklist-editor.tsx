@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
+import { track } from "@/lib/analytics"
 import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
 import { formatHhmm } from "@/lib/format"
 
@@ -132,6 +133,7 @@ const TimetableBlacklistEditor = () => {
       })
       .filter((v): v is NonNullable<typeof v> => v !== null)
     updateGenerationConfig({ blacklistedTimeslots: result })
+    track("timetable_blacklist_changed", { slots: result.length })
     bump()
   }
 
@@ -181,7 +183,10 @@ const TimetableBlacklistEditor = () => {
     lunchBreaks
   ])
 
-  const clearAll = () => updateGenerationConfig({ blacklistedTimeslots: [] })
+  const clearAll = () => {
+    updateGenerationConfig({ blacklistedTimeslots: [] })
+    track("timetable_blacklist_changed", { slots: 0, cleared: true })
+  }
 
   const hasUserBlocked = blacklistedTimeslots.length > 0
   const hasConstraints = constraintKeys.size > 0

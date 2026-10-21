@@ -252,11 +252,73 @@ export function itemsToLines(items: TextItem[], pageWidth: number): string[] {
 // Where reading a transcript failed, for error reports. Carries counts only,
 // never transcript text.
 export type TranscriptStage = "load_pdf" | "extract_text" | "parse"
+type TranscriptInfo = {
+  pages?: number
+  lines?: number
+  bytes: number
+} & Partial<TranscriptDiagnostics>
+
+// Anonymous shape of what was read, to tell "wrong file" from "our parser
+// missed a real transcript" when nothing parses. Counts, flags and masked line
+// shapes only (letters become A/a, digits 9), never transcript text.
+interface TranscriptDiagnostics {
+  chars: number
+  term_lines: number
+  code_lines: number
+  has_cgpa_line: boolean
+  markers: string[]
+  unmatched_shapes: string[]
+}
+
+// Loose phrases any NTU transcript, results printout or NIE progress report
+// tends to carry (other programmes word these differently, so match widely).
+const MARKERS: [string, RegExp][] = [
+  ["ntu", /nanyang|\bNTU\b|national institute of education/i],
+  ["student", /(name\s+of\s+student|student\s+name|\bstudent\b)/i],
+  ["matric", /matric/i],
+  ["programme", /programme|program\b/i],
+  ["results", /transcript|examination\s+results|academic\s+(record|progress)/i],
+  ["au", /academic\s+units|\bAUs?\b/i],
+  ["grades", /grade\s*point|\bCGPA\b|\bGPA\b/i],
+  ["end", /end\s+of\s+(results|transcript|record)/i]
+]
+
+// Code-like row start (NTU codes such as SC1003 or HW0288), kept loose.
+const CODE_LINE_RE = /^\*?\s*[A-Z]{2,6}\s?\d{3,4}[A-Z]?\b/
+
+export function transcriptDiagnostics(lines: string[]): TranscriptDiagnostics {
+  const text = lines.join("\n")
+  const shape = (l: string) =>
+    l
+      .replace(/\s+/g, " ")
+      .trim()
+      .replace(/[A-Z]/g, "A")
+      .replace(/[a-z]/g, "a")
+      .replace(/\d/g, "9")
+      .replace(/(.)\1+/g, "$1")
+      .slice(0, 40)
+  const codeLines = lines.filter((l) => CODE_LINE_RE.test(l))
+  return {
+    chars: text.length,
+    term_lines: lines.filter((l) => TERM_RE.test(l.trim())).length,
+    code_lines: codeLines.length,
+    has_cgpa_line: CGPA_RE.test(text),
+    markers: MARKERS.filter(([, re]) => re.test(text)).map(([k]) => k),
+    unmatched_shapes: [
+      ...new Set(
+        codeLines
+          .filter((l) => !ROW_RE.test(l.replace(/\s+/g, " ").trim()))
+          .map(shape)
+      )
+    ].slice(0, 3)
+  }
+}
+
 export class TranscriptReadError extends Error {
   constructor(
     readonly stage: TranscriptStage,
     readonly cause: unknown,
-    readonly info: { pages?: number; lines?: number; bytes: number }
+    readonly info: TranscriptInfo
   ) {
     super(
       `Transcript ${stage} failed: ${cause instanceof Error ? cause.message : String(cause)}`
@@ -266,14 +328,12 @@ export class TranscriptReadError extends Error {
 }
 
 export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
-  const info: { pages?: number; lines?: number; bytes: number } = {
-    bytes: file.size
-  }
+  const info: TranscriptInfo = { bytes: file.size }
   let stage: TranscriptStage = "load_pdf"
   try {
-    const pdfjs = await import("pdfjs-dist")
+    const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs")
     const { default: PdfWorker } =
-      await import("pdfjs-dist/build/pdf.worker.min.mjs?worker")
+      await import("pdfjs-dist/legacy/build/pdf.worker.min.mjs?worker")
     pdfjs.GlobalWorkerOptions.workerPort = new PdfWorker()
     const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() })
       .promise
@@ -291,7 +351,12 @@ export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
     }
     info.lines = lines.length
     stage = "parse"
-    return parseTranscriptLines(lines)
+    const parsed = parseTranscriptLines(lines)
+    if (!parsed.mods.some((m) => m.status === "graded")) {
+      Object.assign(info, transcriptDiagnostics(lines))
+      throw new Error("no modules found")
+    }
+    return parsed
   } catch (e) {
     throw new TranscriptReadError(stage, e, info)
   }

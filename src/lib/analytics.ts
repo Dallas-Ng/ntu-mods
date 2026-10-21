@@ -39,6 +39,12 @@ export function reportError(
   error: unknown,
   properties?: Properties
 ) {
+  // Dropped connections (offline, tab closed, blocker) are not our bugs.
+  if (
+    error instanceof TypeError &&
+    /^(Failed to fetch|Load failed|NetworkError)/.test(error.message)
+  )
+    return
   const props = { feature, ...properties }
   if (import.meta.env.DEV) console.error(`[${feature}]`, error, props)
   if (client) client.captureException(error, props)

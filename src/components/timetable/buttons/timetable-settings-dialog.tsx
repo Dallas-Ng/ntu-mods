@@ -13,7 +13,7 @@ const TimetableSettingsDialog = ({ open, onOpenChange }: Props) => {
     <ResponsiveModal
       open={open}
       onOpenChange={onOpenChange}
-      dialogOnly
+      nested={false}
       title="Table Settings"
       showDescription
       description="Customise the appearance of the timetable table."

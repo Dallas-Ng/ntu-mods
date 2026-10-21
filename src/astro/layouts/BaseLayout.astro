@@ -34,6 +34,8 @@ interface Props {
   noindex?: boolean
   /** Set for articles; emits og:type=article plus article:* times. */
   article?: { publishedTime: string; modifiedTime?: string }
+  /** Tool pages with many fields: stop iOS zooming in on focus. */
+  lockZoom?: boolean
 }
 
 const defaults = siteConfig.metatags.default
@@ -48,7 +50,8 @@ const {
   outerClassName,
   noTitleSuffix = false,
   noindex = false,
-  article
+  article,
+  lockZoom = false
 } = Astro.props
 
 const canonicalUrl = canonical
@@ -70,7 +73,10 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
 <html lang="en" data-scroll-behavior="smooth">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content={`width=device-width, initial-scale=1${lockZoom ? ", maximum-scale=1" : ""}`}
+    />
     <title>{resolvedTitle}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />

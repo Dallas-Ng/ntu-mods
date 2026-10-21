@@ -32,8 +32,6 @@ interface Props {
   children: React.ReactNode
   /** Buttons pinned under the scrolling content, always in view. */
   footer?: React.ReactNode
-  /** Keep a centred dialog on phones too, instead of a drawer. */
-  dialogOnly?: boolean
   /** Extra classes for the desktop dialog. */
   className?: string
 }
@@ -52,13 +50,12 @@ export const ResponsiveModal = ({
   nested = true,
   children,
   footer,
-  dialogOnly = false,
   className
 }: Props) => {
   const { isMobile } = useSettings()
   const Root = nested ? DrawerNestedRoot : Drawer
 
-  if (isMobile && !dialogOnly)
+  if (isMobile)
     return (
       <Root open={open} onOpenChange={onOpenChange}>
         <DrawerContent className="border-primary overflow-hidden p-2 !duration-150 focus:outline-none data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[calc(100svh-6rem)] data-[vaul-drawer-direction=bottom]:rounded-t-3xl data-[vaul-drawer-direction=bottom]:border-4 data-[vaul-drawer-direction=bottom]:border-b-0">

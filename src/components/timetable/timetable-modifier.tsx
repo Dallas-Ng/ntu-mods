@@ -182,6 +182,7 @@ const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
               value="modules"
               className={cn(horizontal && "border-b-0")}>
               <AccordionTrigger
+                headingAs="h2"
                 className={cn(triggerClass, horizontal && fixedTrigger)}
                 tabIndex={horizontal ? -1 : undefined}>
                 <span className="inline-flex items-center">
@@ -225,6 +226,7 @@ const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
               value="custom"
               className={cn(horizontal && "border-b-0 border-l")}>
               <AccordionTrigger
+                headingAs="h2"
                 className={cn(triggerClass, horizontal && fixedTrigger)}
                 tabIndex={horizontal ? -1 : undefined}>
                 <span className="inline-flex items-center">
@@ -247,6 +249,7 @@ const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
                 horizontal && "border-b-0 border-l last:border-b-0"
               )}>
               <AccordionTrigger
+                headingAs="h2"
                 className={cn(triggerClass, horizontal && fixedTrigger)}
                 tabIndex={horizontal ? -1 : undefined}>
                 <span className="inline-flex items-center">

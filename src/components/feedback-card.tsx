@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -32,9 +32,11 @@ const FormSchema = z.object({
 
 interface Props {
   divClassName?: string
+  /** Text to start the message with; a new value replaces what is typed. */
+  starter?: { text: string; id: number }
 }
 
-const FeedbackCard = ({ divClassName }: Props) => {
+const FeedbackCard = ({ divClassName, starter }: Props) => {
   const [loading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -45,6 +47,12 @@ const FeedbackCard = ({ divClassName }: Props) => {
       includeLocalData: true
     }
   })
+
+  useEffect(() => {
+    if (!starter) return
+    form.setValue("feedback", starter.text, { shouldValidate: false })
+    form.setFocus("feedback")
+  }, [starter, form])
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setLoading(true)
@@ -162,7 +170,7 @@ const FeedbackCard = ({ divClassName }: Props) => {
               <FormItem className="flex flex-row items-center justify-between gap-4">
                 <div className="space-y-0.5">
                   <FormLabel>Include my timetable data</FormLabel>
-                  <FormDescription>
+                  <FormDescription className="text-pretty">
                     Attaches your saved timetables and settings to help debug
                     the issue. On by default, turn off to exclude it.
                   </FormDescription>

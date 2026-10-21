@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import { Banner, BANNER_ID } from "@/components/banner"
 import Container from "@/components/container"
+import FeedbackSection from "@/components/feedback-section"
 import Footer from "@/components/footer"
 import MobileTracker from "@/components/mobile-tracker"
 import Navbar from "@/components/navbar"
@@ -53,6 +54,10 @@ const {
   article,
   lockZoom = false
 } = Astro.props
+
+// Every page ends with a way to report a problem, except the form itself and
+// error pages.
+const showFeedback = !noindex && Astro.url.pathname !== "/feedback"
 
 const canonicalUrl = canonical
   ? canonical === "/"
@@ -196,6 +201,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
           <slot />
         </Container>
       </main>
+      {showFeedback && <FeedbackSection client:visible />}
       <Footer />
     </div>
     <MobileTracker client:idle />

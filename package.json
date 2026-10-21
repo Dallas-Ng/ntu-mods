@@ -2,19 +2,20 @@
   "name": "ntu-mods",
   "version": "0.1.0",
   "private": true,
-  "//engines": "yarn build/dev no longer touch node:sqlite (they read src/data/api directly via json-source.ts) - the db: scripts still need it for publishing to D1, which is why this stays >=22.5. See also .node-version, which is what Cloudflare Workers Builds reads.",
+  "//engines": "pnpm build/dev no longer touch node:sqlite (they read src/data/api directly via json-source.ts) - the db: scripts still need it for publishing to D1, which is why this stays >=22.5. See also .node-version, which is what Cloudflare Workers Builds reads.",
   "engines": {
     "node": ">=22.5"
   },
   "scripts": {
     "data": "tsx scripts/build-static-data.mts",
-    "dev": "yarn data && astro dev --port ${PORT:-4321}",
-    "build": "yarn data && astro build && node scripts/upload-sourcemaps.mjs && tsx scripts/build-sitemap.mts && node scripts/indexnow.mjs ../dist/client",
+    "dev": "pnpm data && astro dev --port ${PORT:-4321}",
+    "build": "pnpm data && astro build && node scripts/upload-sourcemaps.mjs && tsx scripts/build-sitemap.mts && node scripts/indexnow.mjs ../dist/client",
+    "build:ci": "pnpm install --frozen-lockfile --prod && pnpm build",
     "preview": "astro preview --port ${PORT:-4321}",
     "db:build": "node scripts/db/sync-db.mjs --from json",
     "db:pull": "node scripts/db/sync-db.mjs --from d1",
     "db:dump": "node scripts/db/reseed-d1.mjs",
-    "db:seed-local": "yarn db:build && rm -rf .wrangler/state/v3/d1 && node scripts/db/reseed-d1.mjs --max-stmt-bytes 60000 && wrangler d1 migrations apply DB --local && wrangler d1 execute DB --local --file db/out/full.sql",
+    "db:seed-local": "pnpm db:build && rm -rf .wrangler/state/v3/d1 && node scripts/db/reseed-d1.mjs --max-stmt-bytes 60000 && wrangler d1 migrations apply DB --local && wrangler d1 execute DB --local --file db/out/full.sql",
     "db:load": "node scripts/db/load-semester.mjs",
     "db:seed-walks": "npx tsx scripts/db/seed-walks.mts",
     "db:verify": "node scripts/db/verify-parity.mjs && npx tsx scripts/db/verify-readers.mts",
@@ -32,6 +33,7 @@
     "@astrojs/react": "^6.0.1",
     "@hookform/resolvers": "^3.3.4",
     "@mlc-ai/web-llm": "^0.2.83",
+    "@posthog/cli": "^0.18.10",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.1.3",
@@ -64,7 +66,6 @@
     "@astrojs/check": "^0.9",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@playwright/test": "^1.64.0",
-    "@posthog/cli": "^0.18.10",
     "@types/node": "^22",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
@@ -99,5 +100,5 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "pnpm@12.14.0"
 }

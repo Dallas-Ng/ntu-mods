@@ -43,7 +43,7 @@ flowchart LR
         API -- commit + push --> BUILD[Workers Build → site]
     end
 
-    D1 -.-> V[yarn db:verify]
+    D1 -.-> V[pnpm db:verify]
     API -.-> V
 ```
 
@@ -113,16 +113,16 @@ Two independent destinations; both are needed:
 A load is a `DELETE` of that scope's rows followed by `INSERT`s, applied as one
 file through `wrangler d1 execute` (atomic). Replace rather than merge, because
 merging cannot express a cancelled index. The loader stages into `db/ntu-mods.sqlite`,
-which must be a replica of the database being loaded — `yarn db:pull` pulls
+which must be a replica of the database being loaded — `pnpm db:pull` pulls
 `ntu-mods-dev` by default while the loader writes `ntu-mods`, so pull the one you
-intend to load (`NTU_MODS_D1=ntu-mods yarn db:pull`). It refuses a >20% row drop
+intend to load (`NTU_MODS_D1=ntu-mods pnpm db:pull`). It refuses a >20% row drop
 without `--force`.
 
 `src/data/api/semesters.json` is generated at build time from the metadata files;
 a new semester appears once its metadata lands. Afterwards, from the repo root:
 
 ```bash
-yarn db:verify   # D1 matches src/data/api exactly
+pnpm db:verify   # D1 matches src/data/api exactly
 ```
 
 ## Walking routes (D1 `walks` table)
@@ -132,7 +132,7 @@ yarn db:verify   # D1 matches src/data/api exactly
 the busiest pairs up front so their first request is already a hit:
 
 ```bash
-yarn db:seed-walks --limit 3000      # polite, resumable; writes db/out/walks.sql
+pnpm db:seed-walks --limit 3000      # polite, resumable; writes db/out/walks.sql
 npx wrangler d1 execute DB --remote --file db/out/walks.sql
 ```
 

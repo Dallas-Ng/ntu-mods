@@ -18,7 +18,7 @@ Rules:
    reach for `--force` yourself — report the problems, re-run the scrape once if it
    looks like a portal hiccup, and let the user decide. `--force` is theirs to say.
 3. **Both destinations or neither.** A publish is `--load --upsync`, then
-   `yarn db:verify`, then a commit of `src/data/api` (and `scraper/data/exams/*.csv`
+   `pnpm db:verify`, then a commit of `src/data/api` (and `scraper/data/exams/*.csv`
    if it changed). Stopping halfway leaves D1 and the site disagreeing; say so if it happens.
 4. **Quote semester codes** (`"2026;1"`). `;` is a shell separator.
 5. **Report plainly.** End with: semester, the check's `+N -N ~N` counts, whether the

@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-.yarn/install-state.gz
 
 # testing
 /coverage
@@ -26,7 +25,7 @@
 /public/robots.txt
 
 # generated from the module database by scripts/build-static-data.mts on every
-# `yarn dev` and `yarn build`. Was 67MB of committed build output that had to be
+# `pnpm dev` and `pnpm build`. Was 67MB of committed build output that had to be
 # regenerated wholesale whenever any semester changed.
 /public/data/api/
 
@@ -50,8 +49,7 @@
 
 # debug
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+pnpm-debug.log*
 
 # local env files
 .env*.local

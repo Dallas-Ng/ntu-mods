@@ -7,6 +7,6 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src")
     }
   },
-  // Playwright specs live in e2e/ and run via `yarn test:e2e`.
+  // Playwright specs live in e2e/ and run via `pnpm test:e2e`.
   test: { exclude: [...configDefaults.exclude, "e2e/**"] }
 })

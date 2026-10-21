@@ -4,7 +4,7 @@ package.json
 package-lock.json
 public
 CHANGELOG.md
-.yarn
+.pnpm-store
 dist
 node_modules
 .astro

@@ -35,9 +35,9 @@ To re-run only the gate: `python3 check.py "2026;1"`. To refresh only exams:
 Confirm with the user before this step.
 
 ```bash
-NTU_MODS_D1=ntu-mods yarn --cwd .. db:pull        # local sqlite must mirror the DB being loaded
+NTU_MODS_D1=ntu-mods pnpm -C .. db:pull        # local sqlite must mirror the DB being loaded
 python3 main.py --load --upsync                   # reuses the scrape from step 1; check runs again
-yarn --cwd .. db:verify                           # D1 matches src/data/api exactly
+pnpm -C .. db:verify                           # D1 matches src/data/api exactly
 ```
 
 `--load` refuses a >20% row drop without `--force`. `--dry-run` previews either flag.

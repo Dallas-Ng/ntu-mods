@@ -2,8 +2,8 @@ import { defineConfig } from "@playwright/test"
 
 import { BASE_URL as baseURL } from "./e2e/lib/urls"
 
-// Runs against `astro preview` of an existing build (yarn build) with a seeded
-// local D1 (yarn db:seed-local) - dev is skipped on purpose, its HMR/React
+// Runs against `astro preview` of an existing build (pnpm build) with a seeded
+// local D1 (pnpm db:seed-local) - dev is skipped on purpose, its HMR/React
 // warnings would drown the console checks. Set E2E_BASE_URL to reuse a server.
 const PORT = process.env.E2E_PORT || "4399"
 
@@ -29,7 +29,7 @@ export default defineConfig({
   webServer: process.env.E2E_BASE_URL
     ? undefined
     : {
-        command: "yarn preview",
+        command: "pnpm preview",
         env: { PORT },
         url: baseURL,
         reuseExistingServer: true,

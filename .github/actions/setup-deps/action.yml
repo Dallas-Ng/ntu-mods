@@ -6,11 +6,15 @@ description: >
 runs:
   using: composite
   steps:
+    - name: Enable pnpm (version from packageManager)
+      shell: bash
+      run: corepack enable
+
     - name: Set up Node.js
       uses: actions/setup-node@v5
       with:
         node-version-file: .node-version
-        package-manager-cache: false # setup-node auto-caches yarn from packageManager; we cache node_modules instead
+        package-manager-cache: false # setup-node auto-caches the package manager from packageManager; we cache node_modules instead
 
     # Installs dominate the fast jobs, so cache node_modules itself: a
     # lockfile-unchanged run skips install entirely.
@@ -19,9 +23,9 @@ runs:
       uses: actions/cache@v4
       with:
         path: node_modules
-        key: node-modules-${{ runner.os }}-${{ hashFiles('.node-version', 'yarn.lock') }}
+        key: node-modules-${{ runner.os }}-${{ hashFiles('.node-version', 'pnpm-lock.yaml') }}
 
     - name: Install dependencies
       if: steps.deps.outputs.cache-hit != 'true'
       shell: bash
-      run: yarn install --frozen-lockfile --prefer-offline --ignore-scripts
+      run: pnpm install --frozen-lockfile --prefer-offline --ignore-scripts

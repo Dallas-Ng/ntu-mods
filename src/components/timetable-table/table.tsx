@@ -40,6 +40,8 @@ interface Props {
   alwaysHighlightLectures?: boolean
   /** Ids from `findCommonLectures`: these lectures are labelled and hover as one. */
   commonLectures?: Set<string>
+  /** Called when the grid becomes wider than its box (it then scrolls sideways). */
+  onOverflowChange?: (overflow: boolean) => void
   precomputedMatrix?: PrecomputedTimetableMatrix
   indexPicker?: {
     enabled: boolean
@@ -66,6 +68,7 @@ export const TimetableTable = (props: Props) => {
     showModuleKeyAsCommon = false,
     alwaysHighlightLectures = false,
     commonLectures,
+    onOverflowChange,
     precomputedMatrix,
     indexPicker
   } = props
@@ -132,7 +135,8 @@ export const TimetableTable = (props: Props) => {
     const left = el.scrollLeft > 2
     const right = el.scrollLeft + el.clientWidth < el.scrollWidth - 2
     setMore((m) => (m.left === left && m.right === right ? m : { left, right }))
-  }, [])
+    onOverflowChange?.(el.scrollWidth > el.clientWidth + 2)
+  }, [onOverflowChange])
   useEffect(() => {
     const el = scroller.current
     if (!el) return
@@ -140,8 +144,11 @@ export const TimetableTable = (props: Props) => {
     const ro = new ResizeObserver(measure)
     ro.observe(el)
     if (el.firstElementChild) ro.observe(el.firstElementChild)
-    return () => ro.disconnect()
-  }, [measure, TABLE_MATRIX, TABLE_OVERFLOW_THRESHOLD])
+    return () => {
+      ro.disconnect()
+      onOverflowChange?.(false)
+    }
+  }, [measure, onOverflowChange, TABLE_MATRIX, TABLE_OVERFLOW_THRESHOLD])
 
   const handleIndexMouseOver = (
     indexKey: string,

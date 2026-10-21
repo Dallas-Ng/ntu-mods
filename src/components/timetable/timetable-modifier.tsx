@@ -124,7 +124,19 @@ const ModuleRow = ({
   )
 }
 
-const TimetableModifier = () => {
+interface ModifierProps {
+  /** Sections side by side (panel below the grid) instead of stacked. */
+  horizontal?: boolean
+}
+
+const ALL_SECTIONS = ["modules", "custom", "generate"]
+const triggerClass =
+  "items-center px-4 py-3.5 font-semibold hover:no-underline [&>svg]:translate-y-0"
+// A header that is only a title: no chevron, no click.
+const fixedTrigger = "pointer-events-none [&>svg]:hidden"
+
+const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
+  const [open, setOpen] = useState(ALL_SECTIONS)
   const { timetable, removeItemFromTimetable } = useTimetable()
   const [activeKey, setActiveKey] = useState<string | null>(null)
 
@@ -153,12 +165,23 @@ const TimetableModifier = () => {
 
       {/* No side padding on the card: rows highlight edge to edge. Their text,
           and everything that is not a row, is inset 16px to match the headers. */}
-      <div className="bg-card rounded-lg border">
+      <div
+        className={cn(
+          "bg-card rounded-lg border",
+          horizontal && "grid grid-cols-4"
+        )}>
         <Accordion
           type="multiple"
-          defaultValue={["modules", "custom", "generate"]}>
-          <AccordionItem value="modules">
-            <AccordionTrigger className="items-center px-4 py-3.5 font-semibold hover:no-underline [&>svg]:translate-y-0">
+          // Side by side everything stays open and the headers are plain titles.
+          value={horizontal ? ALL_SECTIONS : open}
+          onValueChange={(v) => !horizontal && setOpen(v)}
+          className={horizontal ? "contents" : undefined}>
+          <AccordionItem
+            value="modules"
+            className={cn(horizontal && "border-b-0")}>
+            <AccordionTrigger
+              className={cn(triggerClass, horizontal && fixedTrigger)}
+              tabIndex={horizontal ? -1 : undefined}>
               <span>
                 Registered modules
                 {count > 0 && (
@@ -193,8 +216,12 @@ const TimetableModifier = () => {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="custom">
-            <AccordionTrigger className="items-center px-4 py-3.5 font-semibold hover:no-underline [&>svg]:translate-y-0">
+          <AccordionItem
+            value="custom"
+            className={cn(horizontal && "border-b-0 border-l")}>
+            <AccordionTrigger
+              className={cn(triggerClass, horizontal && fixedTrigger)}
+              tabIndex={horizontal ? -1 : undefined}>
               Custom blocks
             </AccordionTrigger>
             <AccordionContent className="pb-3">
@@ -202,8 +229,15 @@ const TimetableModifier = () => {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="generate" className="last:border-b">
-            <AccordionTrigger className="items-center px-4 py-3.5 font-semibold hover:no-underline [&>svg]:translate-y-0">
+          <AccordionItem
+            value="generate"
+            className={cn(
+              "last:border-b",
+              horizontal && "border-b-0 border-l last:border-b-0"
+            )}>
+            <AccordionTrigger
+              className={cn(triggerClass, horizontal && fixedTrigger)}
+              tabIndex={horizontal ? -1 : undefined}>
               Generate timetable
             </AccordionTrigger>
             <AccordionContent className="pb-3">
@@ -217,7 +251,7 @@ const TimetableModifier = () => {
         </Accordion>
 
         {/* The map stays open: same header and divider, no toggle. */}
-        <div>
+        <div className={cn(horizontal && "border-l")}>
           <h2 className="px-4 py-3.5 text-sm font-semibold">
             Walking between classes
           </h2>

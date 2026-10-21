@@ -9,6 +9,7 @@ import {
   ImageDown,
   Link as LinkIcon,
   MousePointerClick,
+  PanelRight,
   Settings2,
   Wrench,
   X
@@ -59,7 +60,7 @@ const TimetableActionsDropdown = ({
   const semester = latestSemester
   const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const { modules } = useAllModules()
-  const { settings } = useSettings()
+  const { settings, updateSettings } = useSettings()
   const moduleRemarks = useBoundState((s) => s.moduleRemarks)
   const indexRemarks = useBoundState((s) => s.indexRemarks)
   const [calendarLoading, setCalendarLoading] = useState(false)
@@ -199,6 +200,37 @@ const TimetableActionsDropdown = ({
                 ? "ease-out-strong opacity-100 duration-[280ms] [clip-path:inset(-8px_0_-8px_0)]"
                 : "pointer-events-none opacity-0 duration-[380ms] ease-[cubic-bezier(0.65,0,0.35,1)] [clip-path:inset(-8px_0_-8px_100%)]"
             )}>
+            {/* One button: the icon is the panel on the right, and turns a
+                quarter to put it below. Phones always use the drawer. */}
+            <div className="flex items-center max-md:hidden">
+              {(() => {
+                const below = settings.timetableLayout === "below"
+                const next = below ? "side" : "below"
+                const label = below ? "Panel on the right" : "Panel below"
+                const hint = below
+                  ? "Put the panel beside the grid."
+                  : "Lay the panel out under the grid."
+                return tool(
+                  label,
+                  hint,
+                  <PanelRight
+                    className={cn(
+                      "ease-out-strong size-4 transition-transform duration-300 motion-reduce:transition-none",
+                      below && "rotate-90"
+                    )}
+                  />,
+                  (icon) =>
+                    iconButton(label, {
+                      children: icon,
+                      onClick: () => {
+                        updateSettings({ timetableLayout: next })
+                        track("timetable_layout_changed", { layout: next })
+                      }
+                    })
+                )
+              })()}
+            </div>
+            <span className="bg-border mx-1 h-4 w-px max-md:hidden" />
             <div className="flex items-center gap-0.5">
               {tool(
                 "Pick indexes",

@@ -20,7 +20,8 @@ export const INIT_SETTINGS: Settings = {
   appearance: DEFAULT_APPEARANCE_SETTINGS,
   modsViewMode: "cards",
   modsGroupBy: "none",
-  standardisedScale: false
+  standardisedScale: false,
+  timetableLayout: "side"
 }
 
 export interface Settings {
@@ -41,6 +42,8 @@ export interface Settings {
   /** Force every timeslot row to the same fixed height, so lesson length
    * vs. break length is visually proportional across the grid. */
   standardisedScale: boolean
+  /** Timetable page: side panel on the right, or the panel below the grid. */
+  timetableLayout: "side" | "below"
 }
 
 export interface SettingsSlice {

@@ -78,6 +78,7 @@ export const ANALYTICS_EVENTS = [
   "timetable_imported",
   "timetable_index_changed",
   "timetable_mode_changed",
+  "timetable_layout_changed",
   "timetable_plan_duplicated",
   "timetable_plan_switched",
   "timetable_screenshot_clicked",

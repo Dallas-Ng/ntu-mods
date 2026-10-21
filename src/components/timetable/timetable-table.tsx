@@ -20,11 +20,13 @@ import { TimetableTableLoader } from "../timetable-table/table-loader"
 interface Props {
   timetable?: Timetable
   indexPickerEnabled?: boolean
+  onOverflowChange?: (overflow: boolean) => void
 }
 
 const TimetablePageTable = ({
   timetable: timetableProp,
-  indexPickerEnabled = false
+  indexPickerEnabled = false,
+  onOverflowChange
 }: Props) => {
   const { timetable, updateItemIndex } = useTimetable(timetableProp)
   const year = latestYear
@@ -131,6 +133,7 @@ const TimetablePageTable = ({
       <TimetableTable
         moduleIndexMap={previewModuleIndexMap}
         commonLectures={commonLectures}
+        onOverflowChange={onOverflowChange}
         indexPicker={{
           enabled: indexPickerEnabled,
           activeModuleKey,

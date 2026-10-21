@@ -270,15 +270,16 @@ interface TranscriptDiagnostics {
   unmatched_shapes: string[]
 }
 
-// Fixed phrases printed on NTU's own PDFs: results page, official-transcript
-// validation page, and the guide page.
+// Fixed phrases printed on NTU's own PDFs: the exam results printout, the
+// official transcript (with its validation and guide pages) and their footers.
 const MARKERS: [string, RegExp][] = [
   ["ntu", /nanyang technological university/i],
   ["results_title", /examination results/i],
   ["student", /name of student/i],
   ["matric", /matric no/i],
   ["au_earned", /academic units earned/i],
-  ["end", /end\s+of\s+results/i],
+  ["end", /end\s+of\s+(results|transcript)/i],
+  ["guide", /transcript guide|grading system/i],
   ["official", /official transcript/i]
 ]
 

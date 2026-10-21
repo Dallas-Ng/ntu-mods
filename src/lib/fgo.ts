@@ -271,9 +271,9 @@ export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
   }
   let stage: TranscriptStage = "load_pdf"
   try {
-    const pdfjs = await import("pdfjs-dist")
+    const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs")
     const { default: PdfWorker } =
-      await import("pdfjs-dist/build/pdf.worker.min.mjs?worker")
+      await import("pdfjs-dist/legacy/build/pdf.worker.min.mjs?worker")
     pdfjs.GlobalWorkerOptions.workerPort = new PdfWorker()
     const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() })
       .promise

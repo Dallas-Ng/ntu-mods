@@ -31,7 +31,7 @@ const SharePageContent = () => {
           <p className="flex flex-wrap items-center gap-x-1.5 text-sm font-medium whitespace-nowrap">
             <Eye className="text-muted-foreground size-4 shrink-0" />
             Shared timetable
-            <span className="text-muted-foreground font-normal">
+            <span className="text-muted-foreground w-full font-normal sm:w-auto">
               <span className="hidden sm:inline">· </span>
               {count} module{count !== 1 ? "s" : ""} · read only
             </span>
@@ -59,7 +59,7 @@ const SharePageContent = () => {
             <TimetableScreenshotButton persistQuerystring labelled />
             <TimetableDownloadCalendarButton labelled />
           </div>
-          <Button variant="ghost" asChild className="h-10 sm:hidden">
+          <Button variant="outline" asChild className="h-10 sm:hidden">
             <a
               href="/timetable"
               onClick={() => track("make_my_timetable_clicked")}>

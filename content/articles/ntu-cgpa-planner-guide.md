@@ -27,7 +27,7 @@ The planner needs three numbers.
 | AU done | The AU behind that CGPA. Count letter-graded modules only. Leave out Pass, No Record and exempted modules, because they are not part of your CGPA. |
 | AU left | The AU you still expect to take for a letter grade. Subtract any AU you plan to put under the [Flexible Grading Option](/articles/ntu-fgo-su-option-guide), since those will not count either. |
 
-If you would rather not add up AU by hand, choose **Fill from transcript PDF** and select the official transcript from the Self-Help Transcript System (linked from the [NTU student portals guide](/articles/ntu-student-portal-links)). The planner reads the PDF inside your browser and fills in your CGPA and letter-graded AU. Nothing is uploaded. You still enter **AU left** yourself, because the transcript does not know your remaining plan.
+If you would rather not add up AU by hand, choose **Choose PDF** in the upload box above the form and select the official transcript from the Self-Help Transcript System (linked from the [NTU student portals guide](/articles/ntu-student-portal-links)). The planner reads the PDF inside your browser and fills in your CGPA and letter-graded AU. Nothing is uploaded. You still enter **AU left** yourself, because the transcript does not know your remaining plan.
 
 Not ready to use your own numbers? **Try with sample data** fills in a CGPA of 3.72 with 78 AU done and 54 AU left, which is the example used in the rest of this guide.
 

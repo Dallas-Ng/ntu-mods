@@ -14,7 +14,11 @@ export const TimeSlotItem = ({ startTime }: { startTime: number }) => (
 )
 
 export const TimetableTableLoader = () => (
-  <table className="table-fixed text-[0.6rem] opacity-30 lg:text-xs">
+  // Same table, same days and rows as an empty plan renders (9:30 to 18:00), so
+  // nothing moves when the real grid replaces it; it only pulses meanwhile.
+  <table
+    aria-hidden
+    className="w-full table-fixed animate-pulse text-[0.6rem] motion-reduce:animate-none lg:text-xs">
     <TimetableTableThead
       days={5}
       maxDayColumns={{ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }}

@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react"
 import {
   ArrowRight,
+  Bell,
   ChevronDown,
-  Megaphone,
   Menu,
+  MessageSquare,
   Moon,
-  Settings,
   Sun,
   X
 } from "lucide-react"
@@ -179,11 +179,9 @@ const Navbar = () => {
             </span>
           </a>
 
-          <div className="hidden md:block">
+          {/* One row, so the three icons are evenly spaced */}
+          <div className="hidden items-center md:flex">
             <ChangelogButton />
-          </div>
-
-          <div className="hidden md:block">
             <NavActions />
           </div>
 
@@ -255,7 +253,7 @@ const Navbar = () => {
                     }
                     className="hover:bg-accent text-muted-foreground flex w-full items-center justify-between gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                     <span className="flex items-center gap-3">
-                      <Megaphone className="size-4" />
+                      <Bell className="size-4" />
                       Changelog
                     </span>
                     {changelogUnseen > 0 && (
@@ -266,12 +264,12 @@ const Navbar = () => {
                   </a>
                 </DrawerClose>
                 <DrawerClose asChild>
-                  <button
-                    onClick={() => window.location.assign("/settings")}
-                    className="hover:bg-accent text-muted-foreground flex w-full cursor-pointer items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
-                    <Settings className="size-4" />
-                    Settings
-                  </button>
+                  <a
+                    href="/feedback"
+                    className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                    <MessageSquare className="size-4" />
+                    Feedback
+                  </a>
                 </DrawerClose>
                 <button
                   onClick={() => setTheme(theme === "light" ? "dark" : "light")}

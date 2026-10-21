@@ -52,10 +52,6 @@ export const siteConfig = {
       title: "NTU Timetable Wallpaper Maker",
       desc: "Compose your NTU timetable as a clean lockscreen wallpaper or shareable image, with presets for phone screens and simple positioning controls."
     },
-    settings: {
-      title: "Settings",
-      desc: "Customize NTUMods themes, table density, timetable colors, class details, and feedback settings so your planner works the way you prefer."
-    },
     changelog: {
       title: "Changelog",
       desc: "See recent NTUMods updates, including timetable planning improvements, module browser changes, article guides, data refreshes, and export fixes."

@@ -343,10 +343,17 @@ export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
     for (let p = 1; p <= pdf.numPages; p++) {
       const page = await pdf.getPage(p)
       const { width } = page.getViewport({ scale: 1 })
-      const content = await page.getTextContent()
-      const items = content.items.flatMap((i) =>
-        "str" in i ? [{ str: i.str, x: i.transform[4], y: i.transform[5] }] : []
-      )
+      // pdfjs getTextContent does `for await` over a ReadableStream, which
+      // Safari lacks ("undefined is not a function"), so drain it by hand.
+      const reader = page.streamTextContent().getReader()
+      const items: { str: string; x: number; y: number }[] = []
+      for (let r = await reader.read(); !r.done; r = await reader.read()) {
+        for (const i of r.value.items) {
+          if ("str" in i) {
+            items.push({ str: i.str, x: i.transform[4], y: i.transform[5] })
+          }
+        }
+      }
       lines.push(...itemsToLines(items, width))
     }
     info.lines = lines.length

@@ -65,13 +65,18 @@ const RenameDialog = ({
           e.preventDefault()
           save(value)
         }}>
-        <Input
-          autoFocus
-          value={value}
-          maxLength={MAX_PLAN_NAME}
-          placeholder={`Plan ${timetableIndex + 1}`}
-          onChange={(e) => setValue(e.target.value)}
-        />
+        <div className="space-y-1.5">
+          <Input
+            autoFocus
+            value={value}
+            maxLength={MAX_PLAN_NAME}
+            placeholder={`Plan ${timetableIndex + 1}`}
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <p className="text-muted-foreground text-right text-xs tabular-nums">
+            {value.length}/{MAX_PLAN_NAME}
+          </p>
+        </div>
         <DialogFooter className="gap-2 sm:justify-between">
           <Button type="button" variant="ghost" onClick={() => save("")}>
             Use default name
@@ -115,7 +120,7 @@ const TimetablePlanSwitcher = () => {
   }
 
   const trigger = (
-    <Button variant="ghost" className="h-8 max-w-48 px-3">
+    <Button variant="ghost" className="h-8 max-w-[45vw] px-3 sm:max-w-48">
       <span className="truncate">{label(timetableIndex)}</span>
       <ChevronDown
         className={cn(

@@ -56,6 +56,7 @@ import {
   TooltipTrigger
 } from "@/components/ui/tooltip"
 
+import TimetableCalendarDialog from "./timetable-calendar-dialog"
 import TimetableImportDialog from "./timetable-import-dialog"
 import TimetableSettingsDialog from "./timetable-settings-dialog"
 import TimetableShareDialog from "./timetable-share-dialog"
@@ -83,6 +84,7 @@ const TimetableActionsDropdown = ({
   const [calendarLoading, setCalendarLoading] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [importOpen, setImportOpen] = useState(false)
+  const [calendarOpen, setCalendarOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -93,6 +95,15 @@ const TimetableActionsDropdown = ({
     window.addEventListener("pageshow", onShow)
     return () => window.removeEventListener("pageshow", onShow)
   }, [])
+
+  // The Calendar tool explains the file first; the download happens from there.
+  const openCalendar = () => {
+    if (Object.keys(timetable).length === 0 && customCourses.length === 0) {
+      toast.info("Please fill up your timetable first")
+      return
+    }
+    setCalendarOpen(true)
+  }
 
   const handleDownloadCalendar = async () => {
     if (Object.keys(timetable).length === 0 && customCourses.length === 0) {
@@ -250,10 +261,7 @@ const TimetableActionsDropdown = ({
       hint: "Download an .ics file for your calendar app.",
       icon: Calendar,
       disabled: calendarLoading,
-      onClick: () => {
-        setSheetOpen(false)
-        handleDownloadCalendar()
-      }
+      onClick: closeThen(openCalendar)
     },
     {
       title: "Export image",
@@ -278,6 +286,12 @@ const TimetableActionsDropdown = ({
         customCourses={customCourses}
       />
       <TimetableImportDialog open={importOpen} onOpenChange={setImportOpen} />
+      <TimetableCalendarDialog
+        open={calendarOpen}
+        onOpenChange={setCalendarOpen}
+        loading={calendarLoading}
+        onDownload={handleDownloadCalendar}
+      />
       <Dialog
         open={confirmTarget !== null}
         onOpenChange={(o) => !o && setConfirmTarget(null)}>
@@ -379,9 +393,9 @@ const TimetableActionsDropdown = ({
                             requestDuplicate(index)
                           }}
                           className="hover:bg-accent flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg p-3 text-left text-sm transition-colors">
-                          <span>{label(index)}</span>
+                          <span className="truncate">{label(index)}</span>
                           {named(index) && (
-                            <span className="text-muted-foreground text-xs">
+                            <span className="text-muted-foreground shrink-0 text-xs">
                               Plan {index + 1}
                             </span>
                           )}
@@ -455,9 +469,9 @@ const TimetableActionsDropdown = ({
                           key={index}
                           onClick={() => requestDuplicate(index)}
                           className="justify-between gap-4">
-                          <span>{label(index)}</span>
+                          <span className="truncate">{label(index)}</span>
                           {named(index) && (
-                            <span className="text-muted-foreground text-xs">
+                            <span className="text-muted-foreground shrink-0 text-xs">
                               Plan {index + 1}
                             </span>
                           )}
@@ -487,7 +501,7 @@ const TimetableActionsDropdown = ({
                   (icon) =>
                     iconButton("Save to calendar", {
                       children: icon,
-                      onClick: handleDownloadCalendar,
+                      onClick: openCalendar,
                       disabled: calendarLoading
                     })
                 )}

@@ -79,7 +79,7 @@ const TimetableCopyButton = () => {
                 "hover:bg-accent cursor-pointer rounded-md p-2 transition-colors",
                 overrideIndex === timetableIdx && "bg-muted"
               )}>
-              <p>{label(timetableIdx)}</p>
+              <p className="truncate">{label(timetableIdx)}</p>
 
               <div className="text-muted-foreground mt-2 text-xs">
                 <div className="flex flex-wrap gap-1">

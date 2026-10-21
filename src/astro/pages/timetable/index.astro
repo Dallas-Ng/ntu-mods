@@ -1,4 +1,17 @@
 ---
+import {
+  ArrowRight,
+  CalendarPlus,
+  Footprints,
+  GraduationCap,
+  Layers,
+  ListChecks,
+  Lock,
+  Search,
+  Share2,
+  Wand2
+} from "lucide-react"
+
 import { siteConfig } from "@/config/site"
 import { formatCount } from "@/lib/format"
 import { webApplicationJsonLd } from "@/lib/json-ld"
@@ -12,6 +25,54 @@ export const prerender = true
 
 const { year, semester } = await getLatestSemester()
 const counts = await getSemesterCounts(year, semester)
+
+const STEPS = [
+  {
+    title: "Add your modules",
+    body: "Search by code or title, or paste a list of module codes to import them in one step.",
+    Icon: Search
+  },
+  {
+    title: "Pick your indexes",
+    body: `Compare ${formatCount(counts.indexes)} class indexes across ${formatCount(counts.modules)} modules. Tap a class to try another index. Clashes are flagged as soon as they appear.`,
+    Icon: ListChecks
+  },
+  {
+    title: "Lock what you want",
+    body: "Lock the indexes you have already settled on, so generating a plan keeps them.",
+    Icon: Lock
+  },
+  {
+    title: "Generate a plan",
+    body: "Build clash-free combinations that respect free days, lunch breaks and time slots you want to keep empty.",
+    Icon: Wand2
+  },
+  {
+    title: "Add your own blocks",
+    body: "Block out CCA, gym, work or outside classes as custom blocks, and see any clash with your modules.",
+    Icon: CalendarPlus
+  },
+  {
+    title: "Check the walks",
+    body: "See your day on the campus map, and whether the gap between two classes is long enough to walk it.",
+    Icon: Footprints
+  },
+  {
+    title: "Check exam dates",
+    body: "The module table under your timetable lists each module's AU and exam date and time, with your total AUs.",
+    Icon: GraduationCap
+  },
+  {
+    title: "Keep several plans",
+    body: "Keep up to five plans, give each a name, and duplicate one to try a variation without losing it.",
+    Icon: Layers
+  },
+  {
+    title: "Share and export",
+    body: "Share a plan by link, add it to your calendar as an .ics file, or save it as a phone wallpaper.",
+    Icon: Share2
+  }
+]
 
 const GUIDES = [
   {
@@ -55,10 +116,54 @@ const GUIDES = [
   />
   <TimetablePageContent client:load />
 
-  <section class="mt-10 space-y-4 border-t pt-8">
-    <div>
-      <h2 class="text-lg font-semibold tracking-tight">Planning guides</h2>
-      <p class="text-muted-foreground mt-1 text-sm">
+  <section class="mt-12 space-y-6" aria-labelledby="timetable-how">
+    <div class="space-y-1.5">
+      <h2 id="timetable-how" class="text-lg font-semibold tracking-tight">
+        How the NTUMods timetable planner works
+      </h2>
+      <p
+        class="text-muted-foreground max-w-2xl text-sm leading-relaxed text-pretty">
+        A free timetable planner for Nanyang Technological University students.
+        Build your plan, check it for clashes, and see how it plays out on
+        campus before STARS registration opens.
+      </p>
+    </div>
+
+    <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        STEPS.map(({ title, body, Icon }) => (
+          <li class="bg-card flex gap-3 rounded-xl border p-4">
+            <span
+              class="bg-muted/50 flex size-9 shrink-0 items-center justify-center rounded-lg border"
+              aria-hidden="true">
+              <Icon className="text-primary size-4" />
+            </span>
+            <div class="min-w-0 space-y-1">
+              <h3 class="text-sm font-semibold">{title}</h3>
+              <p class="text-muted-foreground text-sm leading-relaxed text-pretty">
+                {body}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p
+      class="text-muted-foreground max-w-3xl border-t pt-5 text-xs leading-relaxed text-pretty">
+      Timetables are stored in your browser, so no account is needed and your
+      plan stays on your device. NTUMods is independent and is not affiliated
+      with NTU. It does not perform registration, so you still register through
+      STARS.
+    </p>
+  </section>
+
+  <section class="mt-12 space-y-4" aria-labelledby="timetable-guides">
+    <div class="space-y-1">
+      <h2 id="timetable-guides" class="text-lg font-semibold tracking-tight">
+        Planning guides
+      </h2>
+      <p class="text-muted-foreground text-sm">
         {LATEST_SEMESTER_LABEL} · {formatCount(counts.modules)} modules · {
           formatCount(counts.indexes)
         } class indexes
@@ -70,61 +175,18 @@ const GUIDES = [
         GUIDES.map(({ href, title, description }) => (
           <a
             href={href}
-            class="bg-card hover:bg-accent group rounded-lg border p-4 transition-colors">
-            <p class="group-hover:text-primary text-sm leading-snug font-medium">
-              {title}
-            </p>
-            <p class="text-muted-foreground mt-1.5 text-sm leading-relaxed">
+            class="bg-card hover:bg-accent group flex flex-col gap-2 rounded-xl border p-5 transition-colors">
+            <h3 class="text-sm leading-snug font-semibold">{title}</h3>
+            <p class="text-muted-foreground text-sm leading-relaxed text-pretty">
               {description}
             </p>
+            <span class="text-primary mt-auto inline-flex items-center gap-1 pt-1 text-sm font-medium">
+              Read the guide
+              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+            </span>
           </a>
         ))
       }
     </div>
-  </section>
-
-  <section class="mt-10 space-y-3 border-t pt-8" aria-labelledby="how-it-works">
-    <h2 id="how-it-works" class="text-lg font-semibold tracking-tight">
-      How the NTUMods timetable planner works
-    </h2>
-    <p class="text-muted-foreground text-sm leading-relaxed">
-      NTUMods is a free timetable planner for Nanyang Technological University
-      students. Add modules to a plan, choose an index for each one, and the
-      weekly grid shows every lecture, tutorial and lab with its venue. Clashes
-      are flagged as soon as they appear, so you can adjust your plan before
-      STARS registration opens.
-    </p>
-    <ul
-      class="text-muted-foreground list-disc space-y-1.5 pl-5 text-sm leading-relaxed">
-      <li>
-        Add modules by code or title, or paste a list of module codes to import
-        them in one step.
-      </li>
-      <li>
-        Compare the indexes of each module ({formatCount(counts.indexes)} across{
-          " "
-        }
-        {formatCount(counts.modules)} modules this semester) and lock the ones you
-        want to keep.
-      </li>
-      <li>
-        Use generate mode to produce clash-free combinations that respect
-        preferences such as free days and lunch breaks.
-      </li>
-      <li>
-        Block out personal commitments such as CCA, gym or work with custom
-        blocks, and see any clash with your modules.
-      </li>
-      <li>
-        Keep up to five plans, share a plan by link, or export it as a calendar
-        file (.ics) or a phone wallpaper.
-      </li>
-    </ul>
-    <p class="text-muted-foreground text-sm leading-relaxed">
-      Timetables are stored in your browser, so no account is needed and your
-      plan stays on your device. NTUMods is independent and is not affiliated
-      with NTU. It does not perform registration, so you still register through
-      STARS.
-    </p>
   </section>
 </BaseLayout>

@@ -87,12 +87,21 @@ const TimetableDayRoute = () => {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <button
-        type="button"
+      {/* Not a <button>: the map inside has its own buttons. */}
+      <div
+        role="button"
+        tabIndex={0}
+        aria-label="Open walking between classes"
         onClick={() => setOpen(true)}
-        className="group block w-full cursor-pointer text-left">
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault()
+            setOpen(true)
+          }
+        }}
+        className="group focus-visible:ring-ring/50 block w-full cursor-pointer rounded-lg text-left outline-none focus-visible:ring-[3px]">
         <Preview />
-      </button>
+      </div>
       <ResponsiveModal
         open={open}
         onOpenChange={setOpen}

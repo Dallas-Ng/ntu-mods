@@ -69,7 +69,9 @@ function PlanItems({
             <Check
               className={`size-3.5 transition-opacity ${inPlan ? "opacity-100" : "opacity-0"}`}
             />
-            <span className="flex-1 text-left">{label(i)}</span>
+            <span className="min-w-0 flex-1 truncate text-left">
+              {label(i)}
+            </span>
             {named(i) && (
               <span className="text-muted-foreground text-xs">
                 Plan {i + 1}

@@ -1,8 +1,8 @@
-export const MAX_PLAN_NAME = 24
+export const MAX_PLAN_NAME = 20
 
 /** What a plan is called: the student's name for it, else "Plan 1" and so on. */
 export const planLabel = (names: string[] | undefined, index: number) =>
-  names?.[index]?.trim() || `Plan ${index + 1}`
+  names?.[index]?.trim().slice(0, MAX_PLAN_NAME) || `Plan ${index + 1}`
 
 /** True when the plan has its own name, so its "Plan N" id is worth showing. */
 export const isPlanNamed = (names: string[] | undefined, index: number) =>

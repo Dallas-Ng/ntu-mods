@@ -129,7 +129,7 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
         { length: state.timetables.length },
         (_, i) => state.planNames?.[i] ?? ""
       )
-      planNames[index] = name
+      planNames[index] = name.trim().slice(0, 20)
       return { planNames }
     }),
   duplicateTimetable: (fromIndex, toIndex) =>

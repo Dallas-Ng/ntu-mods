@@ -99,7 +99,7 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
                 type="button"
                 onClick={() => setTargetPlan(i)}
                 className={cn(
-                  "h-7 cursor-pointer rounded-md border px-2.5 text-xs font-medium transition-colors",
+                  "h-7 max-w-full cursor-pointer truncate rounded-md border px-2.5 text-xs font-medium transition-colors",
                   targetPlan === i
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:border-foreground"

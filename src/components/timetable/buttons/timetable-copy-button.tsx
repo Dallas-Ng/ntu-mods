@@ -49,7 +49,7 @@ const TimetableCopyButton = () => {
     <>
       <Button
         onClick={() => setOpen(true)}
-        className="flex-1 gap-2 sm:flex-none">
+        className="h-10 w-full gap-2 sm:h-9 sm:w-auto">
         <Copy className="size-4" />
         Copy to my plans
       </Button>

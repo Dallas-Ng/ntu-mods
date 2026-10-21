@@ -18,7 +18,12 @@ import ButtonCollapsable from "@/components/button-collapsable"
 
 import TimetableCalendarDialog from "./timetable-calendar-dialog"
 
-const TimetableDownloadCalendarButton = () => {
+const TimetableDownloadCalendarButton = ({
+  labelled
+}: {
+  /** Show the label on phones too, stretching to share the row. */
+  labelled?: boolean
+}) => {
   const { timetable } = useTimetable()
   const year = latestYear
   const semester = latestSemester
@@ -105,7 +110,19 @@ const TimetableDownloadCalendarButton = () => {
       <ButtonCollapsable
         onClick={openDialog}
         icon={Calendar}
-        text="Save to Calendar"
+        text={
+          labelled ? (
+            <>
+              <span className="sm:hidden">Calendar</span>
+              <span className="hidden sm:inline">Save to Calendar</span>
+            </>
+          ) : (
+            "Save to Calendar"
+          )
+        }
+        aria-label="Save to Calendar"
+        labelled={labelled}
+        className={labelled ? "flex-1 sm:flex-none" : undefined}
       />
       <TimetableCalendarDialog
         open={open}

@@ -5,6 +5,7 @@ import { Eye } from "lucide-react"
 
 import { track } from "@/lib/analytics"
 import { useTimetable } from "@/hooks/use-timetable"
+import { Button } from "@/components/ui/button"
 import TimetableCopyButton from "@/components/timetable/buttons/timetable-copy-button"
 import TimetableDownloadCalendarButton from "@/components/timetable/buttons/timetable-download-calendar-button"
 import TimetableScreenshotButton from "@/components/timetable/buttons/timetable-screenshot-button"
@@ -25,7 +26,7 @@ const SharePageContent = () => {
       {/* Kept for SEO and screen readers, hidden from view. */}
       <h1 className="sr-only">Shared timetable</h1>
 
-      <div className="bg-card panel-border flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg p-2 pl-4">
+      <div className="bg-card panel-border flex flex-wrap items-center gap-x-3 gap-y-3 rounded-lg p-3 sm:p-2 sm:pl-4">
         <div className="min-w-0">
           <p className="flex flex-wrap items-center gap-x-1.5 text-sm font-medium whitespace-nowrap">
             <Eye className="text-muted-foreground size-4 shrink-0" />
@@ -36,21 +37,35 @@ const SharePageContent = () => {
             </span>
           </p>
           <p className="text-muted-foreground text-xs">
-            Someone shared this plan with you. Copy it to edit your own, or{" "}
-            <a
-              href="/timetable"
-              onClick={() => track("make_my_timetable_clicked")}
-              className="text-foreground underline underline-offset-2">
-              start a new one
-            </a>
-            .
+            Someone shared this plan with you. Copy it to your plans to edit it
+            as your own.
+            <span className="hidden sm:inline">
+              {" "}
+              Or{" "}
+              <a
+                href="/timetable"
+                onClick={() => track("make_my_timetable_clicked")}
+                className="text-foreground underline underline-offset-2">
+                start a new one
+              </a>
+              .
+            </span>
           </p>
         </div>
 
-        <div className="ml-auto flex w-full gap-2 sm:w-auto">
-          <TimetableScreenshotButton persistQuerystring />
-          <TimetableDownloadCalendarButton />
+        <div className="flex w-full flex-col gap-2 sm:ml-auto sm:w-auto sm:flex-row">
           <TimetableCopyButton />
+          <div className="grid grid-cols-2 gap-2 sm:order-first sm:flex">
+            <TimetableScreenshotButton persistQuerystring labelled />
+            <TimetableDownloadCalendarButton labelled />
+          </div>
+          <Button variant="ghost" asChild className="h-10 sm:hidden">
+            <a
+              href="/timetable"
+              onClick={() => track("make_my_timetable_clicked")}>
+              Start a new timetable instead
+            </a>
+          </Button>
         </div>
       </div>
 

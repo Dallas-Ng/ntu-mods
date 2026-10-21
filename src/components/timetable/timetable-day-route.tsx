@@ -3,16 +3,10 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react"
 import { Maximize2 } from "lucide-react"
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from "@/components/ui/dialog"
+import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import { Skeleton } from "@/components/ui/skeleton"
 import CampusMap from "@/components/map/campus-map"
+import InfoTip from "@/components/timetable/info-tip"
 import { useWalkDay } from "@/components/timetable/use-walk-day"
 
 // The dialog's contents load only once it is opened.
@@ -89,27 +83,36 @@ const Preview = () => {
   )
 }
 
-const TimetableDayRoute = () => (
-  <Dialog>
-    <DialogTrigger asChild>
+const TimetableDayRoute = () => {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
       <button
         type="button"
+        onClick={() => setOpen(true)}
         className="group block w-full cursor-pointer text-left">
         <Preview />
       </button>
-    </DialogTrigger>
-    <DialogContent className="max-h-[90svh] max-w-4xl gap-3 overflow-y-auto p-4 sm:p-6">
-      <DialogHeader>
-        <DialogTitle>Walking between classes</DialogTitle>
-        <DialogDescription>
-          Your day on the campus map, and whether each gap is long enough.
-        </DialogDescription>
-      </DialogHeader>
-      <Suspense fallback={<Skeleton className="h-[26.75rem] w-full" />}>
-        <Panel />
-      </Suspense>
-    </DialogContent>
-  </Dialog>
-)
+      <ResponsiveModal
+        open={open}
+        onOpenChange={setOpen}
+        title={
+          <>
+            Walking between classes
+            <InfoTip title="Walking between classes">
+              See your day on the campus map and whether each gap is long enough
+              to walk it.
+            </InfoTip>
+          </>
+        }
+        description="Your classes for the day, in order, with the walk between them."
+        className="max-h-[90svh] max-w-4xl gap-4 overflow-y-auto p-6">
+        <Suspense fallback={<Skeleton className="h-[26.75rem] w-full" />}>
+          <Panel />
+        </Suspense>
+      </ResponsiveModal>
+    </>
+  )
+}
 
 export default TimetableDayRoute

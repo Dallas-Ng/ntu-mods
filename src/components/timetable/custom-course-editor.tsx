@@ -10,14 +10,9 @@ import { CUSTOM_LUNCH_TYPE } from "@/lib/custom-course-colors"
 import { formatHhmm } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import {
   Select,
   SelectContent,
@@ -440,144 +435,141 @@ export const CourseModal = ({
   const hasMultipleIndexes = form.indexes.length > 1
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
-            {initial ? "Edit custom block" : "Add custom block"}
-          </DialogTitle>
-        </DialogHeader>
+    <ResponsiveModal
+      open={open}
+      onOpenChange={onOpenChange}
+      title={initial ? "Edit custom block" : "Add custom block"}
+      description="Name the block, then choose its days, times and venue."
+      className="max-h-[90vh] overflow-y-auto">
+      <div className="space-y-5 pt-1">
+        {/* Name */}
+        <div className="space-y-1.5">
+          <Label htmlFor="cc-name">
+            Name{" "}
+            <span className="text-muted-foreground font-normal">
+              (shown like a module code)
+            </span>
+          </Label>
+          <Input
+            id="cc-name"
+            placeholder="e.g. Gym, Badminton CCA, Part-time Job"
+            value={form.name}
+            maxLength={40}
+            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+          />
+        </div>
 
-        <div className="space-y-5 pt-1">
-          {/* Name */}
-          <div className="space-y-1.5">
-            <Label htmlFor="cc-name">
-              Name{" "}
-              <span className="text-muted-foreground font-normal">
-                (shown like a module code)
-              </span>
-            </Label>
-            <Input
-              id="cc-name"
-              placeholder="e.g. Gym, Badminton CCA, Part-time Job"
-              value={form.name}
-              maxLength={40}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-            />
+        {/* Options (indexes) */}
+        <div className="space-y-2">
+          <div className="flex items-baseline justify-between gap-2">
+            <Label>Options</Label>
+            <span className="text-muted-foreground text-xs">
+              Generation picks whichever fits best
+            </span>
           </div>
 
-          {/* Options (indexes) */}
-          <div className="space-y-2">
-            <div className="flex items-baseline justify-between gap-2">
-              <Label>Options</Label>
-              <span className="text-muted-foreground text-xs">
-                Generation picks whichever fits best
-              </span>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-1.5">
-              {form.indexes.map((index) => {
-                const isActive = index._key === activeIndex._key
-                return (
-                  <div
-                    key={index._key}
-                    className={cn(
-                      "flex h-7 items-center rounded-md border text-xs font-medium transition-colors",
-                      isActive
-                        ? "bg-foreground text-background border-transparent"
-                        : "text-muted-foreground hover:border-foreground"
-                    )}>
+          <div className="flex flex-wrap items-center gap-1.5">
+            {form.indexes.map((index) => {
+              const isActive = index._key === activeIndex._key
+              return (
+                <div
+                  key={index._key}
+                  className={cn(
+                    "flex h-7 items-center rounded-md border text-xs font-medium transition-colors",
+                    isActive
+                      ? "bg-foreground text-background border-transparent"
+                      : "text-muted-foreground hover:border-foreground"
+                  )}>
+                  <button
+                    type="button"
+                    className="h-full cursor-pointer px-2.5"
+                    onClick={() =>
+                      setForm((f) => ({ ...f, activeIndexKey: index._key }))
+                    }>
+                    {index.label.trim() || "Untitled"}
+                  </button>
+                  {hasMultipleIndexes && (
                     <button
                       type="button"
-                      className="h-full cursor-pointer px-2.5"
-                      onClick={() =>
-                        setForm((f) => ({ ...f, activeIndexKey: index._key }))
-                      }>
-                      {index.label.trim() || "Untitled"}
+                      aria-label={`Remove ${index.label}`}
+                      className="h-full cursor-pointer pr-1.5 opacity-60 hover:opacity-100"
+                      onClick={() => removeIndex(index._key)}>
+                      <X className="size-3" />
                     </button>
-                    {hasMultipleIndexes && (
-                      <button
-                        type="button"
-                        aria-label={`Remove ${index.label}`}
-                        className="h-full cursor-pointer pr-1.5 opacity-60 hover:opacity-100"
-                        onClick={() => removeIndex(index._key)}>
-                        <X className="size-3" />
-                      </button>
-                    )}
-                  </div>
-                )
-              })}
+                  )}
+                </div>
+              )
+            })}
 
-              {form.indexes.length < MAX_INDEXES && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={addIndex}
-                  className="text-muted-foreground h-7 gap-1 px-2 text-xs">
-                  <Plus className="size-3.5" />
-                  Option
-                </Button>
-              )}
-            </div>
-
-            {hasMultipleIndexes && (
-              <Input
-                className="h-8 text-sm placeholder:text-sm"
-                placeholder="Option name"
-                value={activeIndex.label}
-                maxLength={30}
-                onChange={(e) => updateActiveIndex({ label: e.target.value })}
-              />
+            {form.indexes.length < MAX_INDEXES && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={addIndex}
+                className="text-muted-foreground h-7 gap-1 px-2 text-xs">
+                <Plus className="size-3.5" />
+                Option
+              </Button>
             )}
           </div>
 
-          {/* Sessions of the active option */}
-          <div className="space-y-2">
-            <Label>Sessions</Label>
-
-            <div className="space-y-2">
-              {activeIndex.sessions.map((session) => (
-                <SessionRowEditor
-                  key={session._key}
-                  session={session}
-                  canRemove={activeIndex.sessions.length > 1}
-                  onChange={(updates) => updateSession(session._key, updates)}
-                  onRemove={() => removeSession(session._key)}
-                />
-              ))}
-            </div>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={addSession}
-              className="text-muted-foreground h-8 gap-1.5">
-              <Plus className="size-3.5" />
-              Add session
-            </Button>
-          </div>
-
-          {/* Actions */}
-          <div className="flex justify-end gap-2 pt-1">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button
-              size="sm"
-              disabled={!isValid}
-              onClick={() => {
-                onSave(formToCourse(form))
-                onOpenChange(false)
-              }}>
-              Save
-            </Button>
-          </div>
+          {hasMultipleIndexes && (
+            <Input
+              className="h-8 text-sm placeholder:text-sm"
+              placeholder="Option name"
+              value={activeIndex.label}
+              maxLength={30}
+              onChange={(e) => updateActiveIndex({ label: e.target.value })}
+            />
+          )}
         </div>
-      </DialogContent>
-    </Dialog>
+
+        {/* Sessions of the active option */}
+        <div className="space-y-2">
+          <Label>Sessions</Label>
+
+          <div className="space-y-2">
+            {activeIndex.sessions.map((session) => (
+              <SessionRowEditor
+                key={session._key}
+                session={session}
+                canRemove={activeIndex.sessions.length > 1}
+                onChange={(updates) => updateSession(session._key, updates)}
+                onRemove={() => removeSession(session._key)}
+              />
+            ))}
+          </div>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={addSession}
+            className="text-muted-foreground h-8 gap-1.5">
+            <Plus className="size-3.5" />
+            Add session
+          </Button>
+        </div>
+
+        {/* Actions */}
+        <div className="flex justify-end gap-2 pt-1">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onOpenChange(false)}>
+            Cancel
+          </Button>
+          <Button
+            size="sm"
+            disabled={!isValid}
+            onClick={() => {
+              onSave(formToCourse(form))
+              onOpenChange(false)
+            }}>
+            Save
+          </Button>
+        </div>
+      </div>
+    </ResponsiveModal>
   )
 }
 

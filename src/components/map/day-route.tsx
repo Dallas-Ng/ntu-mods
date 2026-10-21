@@ -199,6 +199,7 @@ export const StopRow = ({
 }: {
   data: VenueData
   stop: Stop
+  /** The number this stop has on the map. */
   n: number
   selected: boolean
   /** Other classes this one overlaps in time. */
@@ -206,39 +207,48 @@ export const StopRow = ({
   onClick: () => void
 }) => {
   const v = stop.venue
+  const place = [
+    stop.venueKey || "No venue",
+    v && v.z !== 0 ? levelLabel(data, v.z) : null,
+    !v && stop.venueKey && stop.venueKey !== "ONLINE" ? "not on the map" : null,
+    v?.how === "fuzzy" ? "approximate" : null
+  ]
+    .filter(Boolean)
+    .join(" · ")
   return (
     <button
       type="button"
       onClick={onClick}
       className={cn(
-        "hover:bg-accent flex w-full cursor-pointer items-start gap-3 rounded-md px-2 py-1.5 text-left transition-colors",
+        "hover:bg-accent flex w-full cursor-pointer items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors",
         clashWith && "bg-destructive/10 hover:bg-destructive/15",
         selected && "bg-accent"
       )}>
-      <span className="text-muted-foreground w-11 shrink-0 pt-0.5 text-xs tabular-nums">
-        {fmtMin(stop.start)}
-      </span>
+      {/* Same number and ring colour as the pin on the map. */}
       <span
-        className="mt-1.5 size-2 shrink-0 rounded-full"
-        style={{ background: stopColour(stop) }}
-      />
+        className={cn(
+          "bg-background flex size-6 shrink-0 items-center justify-center rounded-full border-2 text-xs font-bold tabular-nums",
+          clashWith && "bg-destructive text-white"
+        )}
+        style={{
+          borderColor: clashWith ? "hsl(var(--destructive))" : stopColour(stop)
+        }}>
+        {n}
+      </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-sm">
-          <span className="font-medium">{stop.code}</span>{" "}
-          <span className="text-muted-foreground text-xs">
-            {stop.typeLabel}
+        <span className="flex items-baseline justify-between gap-2 text-sm">
+          <span className="truncate">
+            <span className="font-medium">{stop.code}</span>{" "}
+            <span className="text-muted-foreground text-xs">
+              {stop.typeLabel}
+            </span>
+          </span>
+          <span className="text-muted-foreground shrink-0 text-xs tabular-nums">
+            {fmtMin(stop.start)} to {fmtMin(stop.end)}
           </span>
         </span>
         <span className="text-muted-foreground block truncate text-xs">
-          {stop.venueKey}
-          {v && v.z !== 0 && ` · ${levelLabel(data, v.z)}`}
-          {!v &&
-            (!stop.venueKey
-              ? " · no venue"
-              : stop.venueKey === "ONLINE"
-                ? " · online"
-                : " · not on the map yet")}
-          {v?.how === "fuzzy" && " · approximate"}
+          {place}
         </span>
         {clashWith && (
           <span className="text-destructive mt-0.5 flex items-center gap-1 text-xs font-medium">
@@ -251,17 +261,7 @@ export const StopRow = ({
   )
 }
 
-export const LegRow = ({
-  data,
-  a,
-  b,
-  leg
-}: {
-  data: VenueData
-  a: Stop
-  b: Stop
-  leg?: Leg
-}) => {
+export const LegRow = ({ a, b, leg }: { a: Stop; b: Stop; leg?: Leg }) => {
   const gap = b.start - a.end
   let text: string
   let status: LegStatus = "ok"
@@ -269,24 +269,22 @@ export const LegRow = ({
     text = `Overlaps by ${-gap} min`
     status = "tight"
   } else if (a.venueKey === b.venueKey) text = "Same venue"
-  else if (!a.venue || !b.venue || gap > MAX_GAP)
-    text = `${gap} min between classes`
+  else if (!a.venue || !b.venue || gap > MAX_GAP) text = `${gap} min break`
   else if (!leg) text = "Working out the walk..."
   else {
     status = leg.status
-    const levels = leg.walk.changes.length
-      ? ` · ${levelLabel(data, a.venue.z)} to ${levelLabel(data, b.venue.z)}`
-      : ""
-    text = `${leg.walkMin} min walk · ${leg.walk.metres} m${levels} · ${gap} min gap${leg.estimated ? " (estimated)" : ""}`
+    text = `${leg.walkMin} min walk · ${gap} min break`
     if (leg.status === "tight") text += " · too tight"
   }
   return (
-    <div className="ml-[3.75rem] flex items-center gap-2 py-1 pl-2">
-      {gap < 0 ? (
-        <AlertTriangle className="text-destructive size-3.5 shrink-0" />
-      ) : (
-        <Footprints className={cn("size-3.5 shrink-0", statusText[status])} />
-      )}
+    <div className="ml-3 flex items-center gap-3 py-1.5">
+      <span className="flex w-6 shrink-0 justify-center">
+        {gap < 0 ? (
+          <AlertTriangle className="text-destructive size-3.5" />
+        ) : (
+          <Footprints className={cn("size-3.5", statusText[status])} />
+        )}
+      </span>
       <span
         className={cn("text-xs", statusText[status], gap < 0 && "font-medium")}>
         {text}

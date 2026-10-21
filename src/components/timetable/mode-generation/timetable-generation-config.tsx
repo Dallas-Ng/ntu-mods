@@ -31,13 +31,8 @@ import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableGeneration } from "@/hooks/use-timetable-generation"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-  DialogTitle
-} from "@/components/ui/dialog"
+import { DialogOverlay, DialogPortal } from "@/components/ui/dialog"
+import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import {
   Select,
   SelectContent,
@@ -262,7 +257,13 @@ const LockedModulesSection = () => {
   )
 }
 
-const SettingsForm = () => {
+const SettingsForm = ({
+  uniqueOnly,
+  onUniqueChange
+}: {
+  uniqueOnly: boolean
+  onUniqueChange: (value: boolean) => void
+}) => {
   const [blockOpen, setBlockOpen] = useState(false)
   const config = useBoundState((s) => s.generationConfig)
   const updateConfig = useBoundState((s) => s.updateGenerationConfig)
@@ -270,7 +271,9 @@ const SettingsForm = () => {
   const lockedModules = useBoundState((s) => s.lockedModules)
 
   const isPristine =
-    isDefaultGenerationConfig(config) && lockedModules.length === 0
+    isDefaultGenerationConfig(config) &&
+    lockedModules.length === 0 &&
+    uniqueOnly
 
   const toggleSkippable = (type: IndexType) => {
     const current = config.skippableTypes
@@ -392,6 +395,8 @@ const SettingsForm = () => {
         </div>
       </div>
 
+      <UniqueOnlyToggle checked={uniqueOnly} onChange={onUniqueChange} />
+
       {/* Skippable types */}
       <div className="flex flex-col gap-2">
         <SectionLabel tip="Selected class types will ignore day/time constraints. Useful for classes like lectures that you have no control over scheduling.">
@@ -453,6 +458,7 @@ const SettingsForm = () => {
           disabled={isPristine}
           onClick={() => {
             resetConfig()
+            if (!uniqueOnly) onUniqueChange(true)
             track("timetable_generation_settings_reset", {
               locked_modules: lockedModules.length,
               blacklisted_slots: config.blacklistedTimeslots.length
@@ -464,16 +470,14 @@ const SettingsForm = () => {
         </Button>
       </div>
 
-      <Dialog open={blockOpen} onOpenChange={setBlockOpen}>
-        <ElevatedDialogContent
-          className="max-h-[calc(100dvh-2rem)] w-full overflow-y-auto sm:max-h-[85vh] sm:max-w-md"
-          aria-describedby={undefined}>
-          <DialogHeader>
-            <DialogTitle>Block time slots</DialogTitle>
-          </DialogHeader>
-          <TimetableBlacklistEditor />
-        </ElevatedDialogContent>
-      </Dialog>
+      <ResponsiveModal
+        open={blockOpen}
+        onOpenChange={setBlockOpen}
+        title="Block time slots"
+        description="Times the generator must keep free."
+        className="max-h-[85vh] gap-4 overflow-y-auto sm:max-w-md">
+        <TimetableBlacklistEditor />
+      </ResponsiveModal>
     </div>
   )
 }
@@ -558,12 +562,11 @@ const UniqueOnlyToggle = ({
   checked: boolean
   onChange: (value: boolean) => void
 }) => (
-  <div className="flex items-center justify-between gap-2 rounded-lg border px-3 py-2">
+  <div className="flex items-center justify-between gap-3">
     <SectionLabel tip="Skip options that place classes in exactly the same slots and differ only by index number, so all 60 results are layouts you haven't seen.">
       Unique layouts only
     </SectionLabel>
     <Switch
-      size="sm"
       checked={checked}
       onCheckedChange={onChange}
       aria-label="Unique layouts only"
@@ -625,24 +628,21 @@ const TimetableGenerationConfig = () => {
       {/* Settings summary chips */}
       <ConfigSummary />
 
-      {/* Settings modal — always Dialog (centered popup, not drawer) */}
-      <Dialog open={open} onOpenChange={setOpen}>
-        <ElevatedDialogContent
-          className="max-h-[calc(100dvh-2rem)] w-full overflow-y-auto sm:max-h-[85vh] sm:max-w-lg"
-          aria-describedby={undefined}>
-          <DialogHeader>
-            <DialogTitle>Generation Settings</DialogTitle>
-          </DialogHeader>
-          <SettingsForm />
-        </ElevatedDialogContent>
-      </Dialog>
+      {/* A dialog on desktop, a nested drawer on phones. */}
+      <ResponsiveModal
+        open={open}
+        onOpenChange={setOpen}
+        title="Generation Settings"
+        description="Preferences used when generating timetables."
+        className="max-h-[85vh] gap-4 overflow-y-auto sm:max-w-lg">
+        <SettingsForm
+          uniqueOnly={uniqueTimeslotsOnly}
+          onUniqueChange={handleUniqueChange}
+        />
+      </ResponsiveModal>
 
       {noModules ? null : (
         <>
-          <UniqueOnlyToggle
-            checked={uniqueTimeslotsOnly}
-            onChange={handleUniqueChange}
-          />
           <Button
             onClick={() => {
               generate()

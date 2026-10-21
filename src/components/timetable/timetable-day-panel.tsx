@@ -2,9 +2,11 @@
 
 import { Fragment, useEffect, useState } from "react"
 
+import { cn } from "@/lib/utils"
+import { type Stop } from "@/lib/venue-map"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import CampusMap from "@/components/map/campus-map"
+import CampusMap, { type Focus } from "@/components/map/campus-map"
 import { LegRow, StopRow } from "@/components/map/day-route"
 import { useWalkDay } from "@/components/timetable/use-walk-day"
 
@@ -16,6 +18,8 @@ const TimetableDayPanel = () => {
   const [level, setLevel] = useState<number | null>(null)
   const [full, setFull] = useState(false)
   const [phone, setPhone] = useState(false)
+  // Where the map was sent by clicking a class; null shows the whole day.
+  const [zoom, setZoom] = useState<Focus | null>(null)
   const {
     loading,
     data,
@@ -39,10 +43,35 @@ const TimetableDayPanel = () => {
     return () => mq.removeEventListener("change", sync)
   }, [])
 
-  // Loading, empty and loaded all share one box height, so the dialog never
-  // jumps as the map arrives.
+  // A new day starts from the whole route.
+  useEffect(() => {
+    setSelected(undefined)
+    setZoom(null)
+  }, [day])
+
+  // Clicking a class zooms the map to its venue; clicking it again goes back.
+  const pick = (s: Stop) => {
+    if (selected === s.id) {
+      setSelected(undefined)
+      setZoom(focus ? { ...focus, nonce: Date.now() } : null)
+      return
+    }
+    setSelected(s.id)
+    if (s.venue) {
+      const pad = 70
+      setZoom({
+        bounds: [
+          s.venue.x - pad,
+          s.venue.y - pad,
+          s.venue.x + pad,
+          s.venue.y + pad
+        ],
+        nonce: Date.now()
+      })
+    }
+  }
+
   const empty = !loading && busyDays.size === 0
-  const idle = loading || empty
 
   const leg = summary.metres
     ? `${stops.length} classes · ${(summary.metres / 1000).toFixed(1)} km walking`
@@ -54,107 +83,109 @@ const TimetableDayPanel = () => {
     summary.close && `${summary.close} close`
   ].filter(Boolean)
 
-  return (
-    <div className="space-y-3">
-      <div className="flex flex-col items-center gap-1.5">
-        <Tabs
-          value={String(day)}
-          onValueChange={(v) => setDay(Number(v))}
-          className={idle ? "pointer-events-none opacity-50" : undefined}>
-          <TabsList>
-            {DAYS.map((d, i) => (
-              <TabsTrigger
-                key={d}
-                value={String(i + 1)}
-                disabled={!busyDays.has(i + 1)}>
-                {d}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-        {!idle && (
-          <p className="text-muted-foreground text-xs">
-            {leg}
-            {warn.length > 0 && (
-              <span className="text-destructive"> · {warn.join(", ")}</span>
-            )}
-          </p>
-        )}
-      </div>
+  const map =
+    data && !loading ? (
+      <CampusMap
+        data={data}
+        level={level}
+        onLevel={setLevel}
+        pins={pins}
+        routes={routes}
+        onPin={(id) => {
+          const s = stops.find((x) => x.id === id)
+          if (s) pick(s)
+        }}
+        cats={NO_CATS}
+        buildingLabels
+        roomLabels={false}
+        focus={zoom ?? focus}
+        noIntro
+        fullscreen={full}
+        pinned={full}
+        preview={phone && !full}
+        onFullscreen={() => setFull((f) => !f)}
+        className="absolute inset-0"
+      />
+    ) : (
+      <Skeleton className="size-full rounded-none" />
+    )
 
-      <div
-        className={
-          empty
-            ? "grid"
-            : "grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
-        }>
+  return (
+    <div>
+      {/* Both columns share one height, so the dialog never jumps as things
+          load: the list scrolls inside it and the map fills the other side. */}
+      <div className="flex flex-col gap-6 lg:h-[26rem] lg:flex-row lg:gap-4">
         {!empty && (
-          <div className="md:h-[22rem] md:overflow-y-auto">
-            {loading || !data ? (
-              <div className="space-y-3">
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-full" />
-              </div>
-            ) : stops.length === 0 ? (
-              <p className="text-muted-foreground py-6 text-center text-sm">
-                No classes this day.
+          <div className="flex min-h-0 flex-col gap-4 lg:w-2/5 lg:gap-3">
+            <Tabs
+              value={String(day)}
+              onValueChange={(v) => setDay(Number(v))}
+              className={cn(loading && "pointer-events-none opacity-50")}>
+              <TabsList className="grid w-full grid-cols-7">
+                {DAYS.map((d, i) => (
+                  <TabsTrigger
+                    key={d}
+                    value={String(i + 1)}
+                    disabled={!busyDays.has(i + 1)}>
+                    {d}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+
+            {!loading && (
+              <p className="text-muted-foreground text-center text-xs">
+                {leg}
+                {warn.length > 0 && (
+                  <span className="text-destructive"> · {warn.join(", ")}</span>
+                )}
               </p>
-            ) : (
-              stops.map((s, i) => (
-                <Fragment key={s.id}>
-                  {i > 0 && (
-                    <LegRow
-                      data={data}
-                      a={stops[i - 1]}
-                      b={s}
-                      leg={legs[`${stops[i - 1].id}>${s.id}`]}
-                    />
-                  )}
-                  <StopRow
-                    data={data}
-                    stop={s}
-                    n={i + 1}
-                    selected={selected === s.id}
-                    clashWith={clashes.get(s.id)}
-                    onClick={() =>
-                      setSelected((cur) => (cur === s.id ? undefined : s.id))
-                    }
-                  />
-                </Fragment>
-              ))
             )}
+
+            <div className="min-h-0 flex-1 lg:overflow-y-auto">
+              {loading || !data ? (
+                <div className="space-y-3">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              ) : stops.length === 0 ? (
+                <p className="text-muted-foreground py-6 text-center text-sm">
+                  No classes this day.
+                </p>
+              ) : (
+                stops.map((s, i) => (
+                  <Fragment key={s.id}>
+                    {i > 0 && (
+                      <LegRow
+                        a={stops[i - 1]}
+                        b={s}
+                        leg={legs[`${stops[i - 1].id}>${s.id}`]}
+                      />
+                    )}
+                    <StopRow
+                      data={data}
+                      stop={s}
+                      n={i + 1}
+                      selected={selected === s.id}
+                      clashWith={clashes.get(s.id)}
+                      onClick={() => pick(s)}
+                    />
+                  </Fragment>
+                ))
+              )}
+            </div>
           </div>
         )}
 
         <div
-          className={
+          className={cn(
+            "relative overflow-hidden rounded-lg border",
             full
-              ? "bg-background fixed inset-0 z-[60]"
-              : "relative order-first h-64 overflow-hidden rounded-lg border md:order-none md:h-[22rem]"
-          }>
-          {data && !loading ? (
-            <CampusMap
-              data={data}
-              level={level}
-              onLevel={setLevel}
-              pins={pins}
-              routes={routes}
-              onPin={(id) => setSelected(id)}
-              cats={NO_CATS}
-              buildingLabels
-              roomLabels={false}
-              focus={focus}
-              noIntro
-              fullscreen={full}
-              pinned={full}
-              preview={phone && !full}
-              onFullscreen={() => setFull((f) => !f)}
-              className="absolute inset-0"
-            />
-          ) : (
-            <Skeleton className="size-full rounded-none" />
-          )}
+              ? "bg-background fixed inset-0 z-[60] rounded-none border-0"
+              : "h-80 lg:h-auto lg:flex-1"
+          )}>
+          {map}
           {empty && (
             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-1 bg-black/60 p-4 text-center text-sm text-white">
               <p className="font-medium">
@@ -175,7 +206,7 @@ const TimetableDayPanel = () => {
         </div>
       </div>
 
-      <p className="text-muted-foreground text-xs">
+      <p className="text-muted-foreground mt-6 text-center text-xs">
         Walking times are estimates. Map data from NTU Maps (MazeMap) and
         OpenStreetMap.{" "}
         <a

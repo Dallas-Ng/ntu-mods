@@ -7,3 +7,12 @@ export const planLabel = (names: string[] | undefined, index: number) =>
 /** True when the plan has its own name, so its "Plan N" id is worth showing. */
 export const isPlanNamed = (names: string[] | undefined, index: number) =>
   Boolean(names?.[index]?.trim())
+
+/** A plan counts as having data when it holds modules or custom blocks. */
+export const planHasData = (
+  timetables: Timetable[],
+  customCourses: CustomCourse[][],
+  index: number
+) =>
+  Object.keys(timetables[index] ?? {}).length > 0 ||
+  (customCourses[index] ?? []).length > 0

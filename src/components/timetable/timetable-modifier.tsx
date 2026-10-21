@@ -2,7 +2,7 @@
 
 import { lazy, Suspense, useState, type MouseEvent } from "react"
 import { useBoundState } from "@/state/bound.state"
-import { Info, Trash2 } from "lucide-react"
+import { Trash2 } from "lucide-react"
 
 import { track } from "@/lib/analytics"
 import { getRemarkScope, REMARK_SCOPE_DOT_CLASS } from "@/lib/remark-scope"
@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/tooltip"
 
 import CustomCourseEditor from "./custom-course-editor"
+import InfoTip from "./info-tip"
 import { RemarkTooltipContent } from "./remark-tooltip-content"
 import TimetableDayRoute from "./timetable-day-route"
 import TimetableIndexModifier from "./timetable-index-modifier"
@@ -132,29 +133,6 @@ interface ModifierProps {
 const ALL_SECTIONS = ["modules", "custom", "generate"]
 const triggerClass =
   "items-center px-4 py-3.5 font-semibold hover:no-underline [&>svg]:translate-y-0"
-// Small "i" after a section title: hover says what the section is for.
-const InfoTip = ({
-  title,
-  children
-}: {
-  title: string
-  children: React.ReactNode
-}) => (
-  <Tooltip>
-    <TooltipTrigger asChild>
-      <span
-        aria-label={`About ${title}`}
-        className="text-muted-foreground hover:text-foreground pointer-events-auto ml-1.5 inline-flex cursor-help transition-colors">
-        <Info className="size-3.5" />
-      </span>
-    </TooltipTrigger>
-    <TooltipContent side="top" className="max-w-56 text-center">
-      <p className="font-medium">{title}</p>
-      <p className="text-xs opacity-80">{children}</p>
-    </TooltipContent>
-  </Tooltip>
-)
-
 // A header that is only a title: no chevron, no click.
 const fixedTrigger = "pointer-events-none [&>svg]:hidden"
 

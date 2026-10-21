@@ -5,6 +5,7 @@ import { useBoundState } from "@/state/bound.state"
 import { toast } from "sonner"
 
 import { track } from "@/lib/analytics"
+import { planHasData } from "@/lib/plan-name"
 import { decodeTextBundle } from "@/lib/timetable-share"
 import { cn } from "@/lib/utils"
 import { usePlanNames } from "@/hooks/use-plan-names"
@@ -24,6 +25,7 @@ interface Props {
 
 const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
   const timetables = useBoundState((s) => s.timetables)
+  const customCourses = useBoundState((s) => s.customCourses)
   const { label } = usePlanNames()
   const timetableIndex = useBoundState((s) => s.timetableIndex)
   const updateTimetable = useBoundState((s) => s.updateTimetable)
@@ -113,9 +115,12 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
                 </button>
               ))}
             </div>
-            <p className="text-destructive text-xs">
-              {label(targetPlan)} will be overwritten.
-            </p>
+            {planHasData(timetables, customCourses, targetPlan) && (
+              <p className="text-destructive text-xs">
+                {label(targetPlan)} already has a timetable. Importing will
+                overwrite it.
+              </p>
+            )}
           </div>
 
           <div className="flex justify-end gap-2">

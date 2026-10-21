@@ -101,7 +101,10 @@ export const ANALYTICS_EVENTS = [
   "timetable_shared",
   "tool_guide_clicked",
   "tool_opened",
-  "transcript_shared"
+  "transcript_shared",
+  "walk_route_day_changed",
+  "walk_route_opened",
+  "walk_route_stop_selected"
 ] as const
 
 export type AnalyticsEvent = (typeof ANALYTICS_EVENTS)[number]

@@ -112,8 +112,8 @@ export const siteConfig = {
   navLinks: [
     { label: "Timetable", route: "/timetable" },
     { label: "Mods", route: "/mods" },
-    { label: "Exams", route: "/exams" },
     { label: "Maps", route: "/maps" },
+    { label: "Exams", route: "/exams" },
     { label: "Tools", route: "/tools" },
     { label: "Articles", route: "/articles" },
     { label: "Links", route: "/links" }

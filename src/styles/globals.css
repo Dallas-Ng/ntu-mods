@@ -532,3 +532,17 @@ table td {
 .dark .prose figure img.img-dark {
   display: block;
 }
+
+/* iOS Safari zooms the page when a field under 16px is focused. Keep pinch
+   zoom available (accessibility); just never trigger the automatic one. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+@media (pointer: coarse) {
+  input:not([type="checkbox"], [type="radio"], [type="range"]),
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}

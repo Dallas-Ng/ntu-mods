@@ -30,7 +30,7 @@ export const siteConfig = {
     },
     timetable: {
       title: "NTU Timetable Planner: Build Your STARS Schedule",
-      desc: "Plan your NTU timetable for STARS registration. Search modules and indexes, check clashes, compare class times, and export to calendar or share link. No login required."
+      desc: "Plan your NTU timetable for STARS registration. Compare indexes, check clashes, see the walk between classes on the campus map, and share or export to calendar. No login."
     },
     share: {
       title: "Shared NTU Timetable",

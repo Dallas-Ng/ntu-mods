@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import {
   Calendar,
@@ -9,6 +9,7 @@ import {
   ImageDown,
   Link as LinkIcon,
   MousePointerClick,
+  Palette,
   PanelRight,
   Settings2,
   Wrench,
@@ -49,12 +50,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger
 } from "@/components/ui/tooltip"
+import AppearanceSettings from "@/components/settings/appearance-settings"
 
 import TimetableCalendarDialog from "./timetable-calendar-dialog"
 import TimetableImportDialog from "./timetable-import-dialog"
@@ -85,16 +88,13 @@ const TimetableActionsDropdown = ({
   const [shareOpen, setShareOpen] = useState(false)
   const [importOpen, setImportOpen] = useState(false)
   const [calendarOpen, setCalendarOpen] = useState(false)
+  const [appearanceOpen, setAppearanceOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
-  const [open, setOpen] = useState(false)
-
-  // Stays open for the whole visit. A page restored from the back/forward
-  // cache keeps its state, so collapse it there too.
-  useEffect(() => {
-    const onShow = (e: PageTransitionEvent) => e.persisted && setOpen(false)
-    window.addEventListener("pageshow", onShow)
-    return () => window.removeEventListener("pageshow", onShow)
-  }, [])
+  // Open the first time; after that the student's last choice is kept.
+  // Saved settings from before this one existed have no value yet.
+  const open = settings.timetableToolbarOpen ?? true
+  const setOpen = (next: boolean) =>
+    updateSettings({ timetableToolbarOpen: next })
 
   // The Calendar tool explains the file first; the download happens from there.
   const openCalendar = () => {
@@ -270,6 +270,12 @@ const TimetableActionsDropdown = ({
       href: "/screenshot"
     },
     {
+      title: "Appearance",
+      hint: "Switch theme and change the colours of your classes.",
+      icon: Palette,
+      onClick: closeThen(() => setAppearanceOpen(true))
+    },
+    {
       title: "Table settings",
       hint: "Change how the timetable grid looks.",
       icon: Settings2,
@@ -286,6 +292,18 @@ const TimetableActionsDropdown = ({
         customCourses={customCourses}
       />
       <TimetableImportDialog open={importOpen} onOpenChange={setImportOpen} />
+      <ResponsiveModal
+        open={appearanceOpen}
+        onOpenChange={setAppearanceOpen}
+        nested={false}
+        title="Appearance"
+        showDescription
+        description="Theme, radius, density, contrast and the colours of your classes."
+        className="max-h-[90vh] overflow-y-auto sm:max-w-5xl">
+        <div className="bg-muted rounded-xl p-2 sm:rounded-2xl sm:p-5">
+          <AppearanceSettings compact />
+        </div>
+      </ResponsiveModal>
       <TimetableCalendarDialog
         open={calendarOpen}
         onOpenChange={setCalendarOpen}
@@ -564,6 +582,16 @@ const TimetableActionsDropdown = ({
                       onClick: () => setSettingsOpen(true)
                     })
                 )}
+                {tool(
+                  "Appearance",
+                  "Switch theme and change the colours of your classes.",
+                  <Palette className="size-4" />,
+                  (icon) =>
+                    iconButton("Appearance", {
+                      children: icon,
+                      onClick: () => setAppearanceOpen(true)
+                    })
+                )}
               </div>
             </div>
           </TooltipProvider>
@@ -578,7 +606,7 @@ const TimetableActionsDropdown = ({
             variant="ghost"
             size="icon"
             aria-expanded={open}
-            onClick={() => setOpen((o) => !o)}
+            onClick={() => setOpen(!open)}
             className={cn(
               "relative size-8 max-sm:ml-auto",
               open && "bg-accent"

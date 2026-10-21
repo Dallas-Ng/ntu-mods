@@ -21,7 +21,8 @@ export const INIT_SETTINGS: Settings = {
   modsViewMode: "cards",
   modsGroupBy: "none",
   standardisedScale: false,
-  timetableLayout: "side"
+  timetableLayout: "side",
+  timetableToolbarOpen: true
 }
 
 export interface Settings {
@@ -44,6 +45,8 @@ export interface Settings {
   standardisedScale: boolean
   /** Timetable page: side panel on the right, or the panel below the grid. */
   timetableLayout: "side" | "below"
+  /** The timetable toolbar starts open; this remembers if it was closed. */
+  timetableToolbarOpen: boolean
 }
 
 export interface SettingsSlice {

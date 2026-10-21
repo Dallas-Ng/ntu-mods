@@ -2,12 +2,18 @@
 
 import { lazy, Suspense, useState, type MouseEvent } from "react"
 import { useBoundState } from "@/state/bound.state"
-import { TrashIcon } from "lucide-react"
+import { Trash2 } from "lucide-react"
 
 import { track } from "@/lib/analytics"
 import { getRemarkScope, REMARK_SCOPE_DOT_CLASS } from "@/lib/remark-scope"
 import { cn } from "@/lib/utils"
 import { useTimetable } from "@/hooks/use-timetable"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from "@/components/ui/accordion"
 import {
   Tooltip,
   TooltipContent,
@@ -17,14 +23,10 @@ import {
 
 import CustomCourseEditor from "./custom-course-editor"
 import { RemarkTooltipContent } from "./remark-tooltip-content"
+import TimetableDayRoute from "./timetable-day-route"
 import TimetableIndexModifier from "./timetable-index-modifier"
-import TimetableModeSelector from "./timetable-mode-selector"
 import TimetableModulesSelect from "./timetable-modules-select"
 
-// Only rendered once the user switches mode — kept out of the initial
-// bundle since generation config + AI chat pull in ~800+ lines and their
-// own deps that the default "Calendar" mode never touches.
-const TimetableAiChat = lazy(() => import("./mode-ai/timetable-ai-chat"))
 const TimetableGenerationConfig = lazy(
   () => import("./mode-generation/timetable-generation-config")
 )
@@ -54,13 +56,15 @@ const ModuleRow = ({
   const rowDiv = (
     <div
       className={cn(
-        "hover:bg-accent cursor-pointer pr-1 pl-4 text-sm transition-colors",
-        isActive && "bg-muted rounded-b-none"
+        "hover:bg-accent cursor-pointer pr-3 pl-4 text-sm transition-colors",
+        isActive && "bg-muted"
       )}>
       <div className="flex w-full items-center justify-between">
         <div className="flex items-center gap-1">
-          <div className="w-15">{moduleKey}</div>
-          <div className="text-muted-foreground text-sm">{indexKey}</div>
+          <div className="w-16 font-medium">{moduleKey}</div>
+          <div className="text-muted-foreground text-sm tabular-nums">
+            {indexKey}
+          </div>
           {remarkScope && (
             <span
               className={cn(
@@ -77,9 +81,9 @@ const ModuleRow = ({
         </div>
 
         <div
-          className="flex size-10 cursor-pointer items-center justify-center p-1"
+          className="flex size-8 cursor-pointer items-center justify-center"
           onClick={(e) => onRemove(e, moduleKey)}>
-          <TrashIcon className="text-muted-foreground hover:text-foreground size-4 transition-colors" />
+          <Trash2 className="text-muted-foreground hover:text-foreground size-4 transition-colors" />
         </div>
       </div>
     </div>
@@ -122,7 +126,6 @@ const ModuleRow = ({
 
 const TimetableModifier = () => {
   const { timetable, removeItemFromTimetable } = useTimetable()
-  const mode = useBoundState((s) => s.timetableCreationMode)
   const [activeKey, setActiveKey] = useState<string | null>(null)
 
   const handleRemoveClick = (
@@ -137,62 +140,94 @@ const TimetableModifier = () => {
     })
   }
 
-  return (
-    <div className="flex size-full flex-col space-y-4">
-      <TimetableModeSelector />
+  const count = Object.keys(timetable).length
 
-      {/* Module search — always shown */}
-      <div className="relative z-2 h-10 w-full rounded-lg">
+  return (
+    <div className="flex size-full flex-col">
+      {/* Module search: always shown */}
+      <div className="relative z-2 mb-3 h-10 w-full rounded-lg">
         <div className="absolute top-0 left-0 w-full">
           <TimetableModulesSelect />
         </div>
       </div>
 
-      {/* Module list — always shown */}
-      <div className={cn("rounded-lg border-2", activeKey && "rounded-b-none")}>
-        <div className="text-muted-foreground p-2 text-center text-xs">
-          Registered Modules
-        </div>
+      {/* No side padding on the card: rows highlight edge to edge. Their text,
+          and everything that is not a row, is inset 16px to match the headers. */}
+      <div className="bg-card rounded-lg border">
+        <Accordion
+          type="multiple"
+          defaultValue={["modules", "custom", "generate"]}>
+          <AccordionItem value="modules">
+            <AccordionTrigger className="items-center px-4 py-3.5 font-semibold hover:no-underline [&>svg]:translate-y-0">
+              <span>
+                Registered modules
+                {count > 0 && (
+                  <span className="text-muted-foreground ml-1.5 text-xs font-normal tabular-nums">
+                    {count}
+                  </span>
+                )}
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="pb-3">
+              <TooltipProvider>
+                <div className="max-h-[40vh] overflow-y-auto">
+                  {Object.entries(timetable).map(([moduleKey, indexKey]) => (
+                    <ModuleRow
+                      key={moduleKey}
+                      moduleKey={moduleKey}
+                      indexKey={indexKey}
+                      isActive={activeKey === moduleKey}
+                      onOpenChange={setActiveKey}
+                      onRemove={handleRemoveClick}
+                    />
+                  ))}
+                </div>
+              </TooltipProvider>
 
-        <hr />
+              {count === 0 && (
+                <p className="text-muted-foreground px-4 py-2 text-center text-sm">
+                  You have not added modules
+                  <br /> Click on the search bar above to add modules
+                </p>
+              )}
+            </AccordionContent>
+          </AccordionItem>
 
-        <TooltipProvider>
-          <div className="max-h-[40vh] overflow-y-auto">
-            {Object.entries(timetable).map(([moduleKey, indexKey]) => (
-              <ModuleRow
-                key={moduleKey}
-                moduleKey={moduleKey}
-                indexKey={indexKey}
-                isActive={activeKey === moduleKey}
-                onOpenChange={setActiveKey}
-                onRemove={handleRemoveClick}
-              />
-            ))}
-          </div>
-        </TooltipProvider>
+          <AccordionItem value="custom">
+            <AccordionTrigger className="items-center px-4 py-3.5 font-semibold hover:no-underline [&>svg]:translate-y-0">
+              Custom blocks
+            </AccordionTrigger>
+            <AccordionContent className="pb-3">
+              <CustomCourseEditor />
+            </AccordionContent>
+          </AccordionItem>
 
-        {Object.entries(timetable).length === 0 && (
-          <>
-            <div className="p-2">
-              <div className="text-muted-foreground text-center text-sm">
-                You have not added modules
-                <br /> Click on the search bar above to add modules
+          <AccordionItem value="generate" className="last:border-b">
+            <AccordionTrigger className="items-center px-4 py-3.5 font-semibold hover:no-underline [&>svg]:translate-y-0">
+              Generate timetable
+            </AccordionTrigger>
+            <AccordionContent className="pb-3">
+              <div className="px-4">
+                <Suspense fallback={null}>
+                  <TimetableGenerationConfig />
+                </Suspense>
               </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
+        {/* The map stays open: same header and divider, no toggle. */}
+        <div>
+          <h2 className="px-4 py-3.5 text-sm font-semibold">
+            Walking between classes
+          </h2>
+          <div className="pb-3">
+            <div className="px-4">
+              <TimetableDayRoute />
             </div>
-          </>
-        )}
+          </div>
+        </div>
       </div>
-
-      <hr />
-
-      {/* Custom courses — always shown */}
-      <CustomCourseEditor />
-
-      {/* Mode-specific panels */}
-      <Suspense fallback={null}>
-        {mode === "generation" && <TimetableGenerationConfig />}
-        {mode === "ai" && <TimetableAiChat />}
-      </Suspense>
     </div>
   )
 }

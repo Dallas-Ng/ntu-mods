@@ -56,7 +56,8 @@ const MAX_INDEXES = 10
 
 interface SessionRow {
   _key: string
-  type: string // stored value — preset code or free text
+  type: string // stored value — preset code or free text; "" until chosen
+  custom: boolean // "Custom…" picked, so `type` is free text (may stay empty)
   days: number[] // one persisted session is created per selected day
   startTime: number
   endTime: number
@@ -79,7 +80,8 @@ const newSession = (
   defaults?: Partial<Omit<SessionRow, "_key">>
 ): SessionRow => ({
   _key: crypto.randomUUID(),
-  type: "LEC",
+  type: "",
+  custom: false,
   days: [1],
   startTime: 900,
   endTime: 1000,
@@ -113,6 +115,7 @@ const groupSessionsIntoRows = (
       rows.set(groupKey, {
         _key: crypto.randomUUID(),
         type: s.type,
+        custom: !PRESET_TYPE_VALUES.has(s.type),
         days: [s.day],
         startTime: s.startTime,
         endTime: s.endTime,
@@ -148,7 +151,7 @@ const formToCourse = (form: FormState): Omit<CustomCourse, "id"> => {
     .map((index, i) => ({
       id: index._key,
       label: index.label.trim() || `Option ${i + 1}`,
-      sessions: index.sessions.flatMap(({ _key: _k, days, ...s }) =>
+      sessions: index.sessions.flatMap(({ _key: _k, custom: _c, days, ...s }) =>
         days.map((day) => ({ ...s, type: s.type.trim(), day }))
       )
     }))
@@ -177,7 +180,7 @@ const SessionRowEditor = ({
   onChange,
   onRemove
 }: SessionRowProps) => {
-  const isCustomType = !PRESET_TYPE_VALUES.has(session.type)
+  const isCustomType = session.custom
   const selectValue = isCustomType ? CUSTOM_SENTINEL : session.type
 
   const validEndTimes = END_TIME_OPTIONS.filter(
@@ -206,9 +209,9 @@ const SessionRowEditor = ({
 
   const handleTypeSelectChange = (v: string) => {
     if (v === CUSTOM_SENTINEL) {
-      onChange({ type: "" })
+      onChange({ type: "", custom: true })
     } else {
-      onChange({ type: v })
+      onChange({ type: v, custom: false })
     }
   }
 
@@ -223,11 +226,14 @@ const SessionRowEditor = ({
           <div className="flex flex-col gap-2 sm:flex-row">
             <Select value={selectValue} onValueChange={handleTypeSelectChange}>
               <SelectTrigger size="sm" className="w-full sm:w-36 sm:shrink-0">
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder="Choose type" />
               </SelectTrigger>
               <SelectContent>
                 {PRESET_TYPES.map((o) => (
-                  <SelectItem key={o.value} value={o.value}>
+                  <SelectItem
+                    key={o.value}
+                    value={o.value}
+                    className="pr-2 data-[state=checked]:font-medium *:[span]:last:w-full *:[span]:last:justify-between [&>[data-slot=select-item-indicator]]:hidden">
                     <span>{o.label}</span>
                     <span className="text-muted-foreground ml-1.5 text-xs">
                       {o.value}
@@ -426,7 +432,9 @@ export const CourseModal = ({
     form.indexes.every(
       (index) =>
         index.sessions.length > 0 &&
-        index.sessions.every((s) => s.days.length > 0)
+        index.sessions.every(
+          (s) => s.days.length > 0 && (s.custom || s.type !== "")
+        )
     )
 
   const hasMultipleIndexes = form.indexes.length > 1
@@ -596,13 +604,7 @@ const CustomCourseEditor = () => {
   }, [timetableIndex])
 
   return (
-    <div className="rounded-lg border-2">
-      <div className="text-muted-foreground p-2 text-center text-xs">
-        Custom Blocks
-      </div>
-
-      <hr />
-
+    <div>
       <div className="max-h-[30vh] overflow-y-auto">
         {courses.length === 0 ? (
           <p className="text-muted-foreground p-3 text-center text-sm">
@@ -631,23 +633,23 @@ const CustomCourseEditor = () => {
               .join(" · ")
 
             return (
-              <div key={course.id} className="py-0.5">
+              <div key={course.id}>
                 <div
-                  className="hover:bg-accent flex cursor-pointer items-center justify-between py-1 pr-1 pl-3 text-sm transition-colors"
+                  className="hover:bg-accent flex cursor-pointer items-center justify-between pr-3 pl-4 text-sm transition-colors"
                   onClick={() => setEditingCourse(course)}>
-                  <div className="flex min-w-0 items-baseline gap-2">
-                    <span className="max-w-[110px] truncate text-sm">
+                  <div className="flex min-w-0 items-center gap-1">
+                    <span className="max-w-[110px] min-w-16 truncate font-medium">
                       {course.name}
                     </span>
-                    <span className="text-muted-foreground shrink-0 text-xs">
+                    <span className="text-muted-foreground shrink-0 text-sm">
                       {sessionLabels}
                     </span>
                   </div>
 
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-muted-foreground hover:text-destructive size-8 shrink-0"
+                  <button
+                    type="button"
+                    aria-label={`Remove ${course.name}`}
+                    className="flex size-8 shrink-0 cursor-pointer items-center justify-center"
                     onClick={(e) => {
                       e.stopPropagation()
                       removeCustomCourse(course.id)
@@ -655,12 +657,12 @@ const CustomCourseEditor = () => {
                         setEditingCourse(null)
                       track("custom_course_deleted")
                     }}>
-                    <Trash2 className="size-3.5" />
-                  </Button>
+                    <Trash2 className="text-muted-foreground hover:text-foreground size-4 transition-colors" />
+                  </button>
                 </div>
 
                 {course.indexes.length > 1 && (
-                  <div className="flex flex-wrap gap-1 px-3 pb-1">
+                  <div className="flex flex-wrap gap-1 px-4 pb-1">
                     {course.indexes.map((courseIndex) => {
                       const isActive = courseIndex.id === selected?.id
                       return (
@@ -688,10 +690,8 @@ const CustomCourseEditor = () => {
         )}
       </div>
 
-      <hr />
-
       <button
-        className="hover:bg-accent focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-center gap-1.5 p-2 text-sm transition-colors outline-none focus-visible:ring-[3px]"
+        className="hover:bg-accent focus-visible:ring-ring/50 mx-4 mt-1 flex w-[calc(100%-2rem)] cursor-pointer items-center justify-center gap-1.5 rounded-md border border-dashed p-2 text-sm transition-colors outline-none focus-visible:ring-[3px]"
         onClick={() => setAddOpen(true)}>
         <Plus className="size-3.5" />
         Add custom block

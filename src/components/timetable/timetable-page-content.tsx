@@ -3,12 +3,10 @@
 import { useState } from "react"
 
 import { track } from "@/lib/analytics"
-import Header from "@/components/header"
 import { Migration } from "@/components/migration"
 import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile-timetable-modifier-button"
 import TimetableActionsDropdown from "@/components/timetable/buttons/timetable-actions-dropdown"
 import TimetablePlanSwitcher from "@/components/timetable/buttons/timetable-plan-switcher"
-import TimetableSettingsDialog from "@/components/timetable/buttons/timetable-settings-dialog"
 import TimetableHiddenContentHelper from "@/components/timetable/timetable-hidden-content-helper"
 import TimetableLegend from "@/components/timetable/timetable-legend"
 import TimetableModifier from "@/components/timetable/timetable-modifier"
@@ -30,26 +28,16 @@ const TimetablePageContent = () => {
       <Migration />
 
       <div className="space-y-4">
-        <Header title="Timetable" />
+        {/* Kept for SEO and screen readers, hidden from view. */}
+        <h1 className="sr-only">Timetable</h1>
 
-        <div className="flex justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <TimetablePlanSwitcher />
+        <div className="bg-card relative flex items-center gap-1 rounded-lg border p-1">
+          <TimetablePlanSwitcher />
 
-            {indexPickerEnabled && (
-              <span className="text-muted-foreground hidden text-xs sm:inline">
-                Tap a block to see its other indexes
-              </span>
-            )}
-          </div>
-
-          <div className="flex gap-2">
-            <TimetableSettingsDialog />
-            <TimetableActionsDropdown
-              indexPickerEnabled={indexPickerEnabled}
-              onToggleIndexPicker={toggleIndexPicker}
-            />
-          </div>
+          <TimetableActionsDropdown
+            indexPickerEnabled={indexPickerEnabled}
+            onToggleIndexPicker={toggleIndexPicker}
+          />
         </div>
 
         <div className="flex h-full items-start justify-between gap-4">

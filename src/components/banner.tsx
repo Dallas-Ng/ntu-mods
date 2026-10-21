@@ -76,6 +76,13 @@ export const Banner = {
       </BannerWrapper>
     </a>
   ),
+  walkingBetweenClasses: () => (
+    <a href="/timetable">
+      <BannerWrapper divClass="bg-yellow-300">
+        New: see the walk between your classes on the timetable →
+      </BannerWrapper>
+    </a>
+  ),
   ay2026s2: () => (
     <a href="/articles/ntu-ay2026-semester-2-whats-new">
       <BannerWrapper divClass="bg-yellow-300">

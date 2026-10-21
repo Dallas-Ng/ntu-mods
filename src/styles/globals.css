@@ -12,6 +12,9 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --default-font-family: var(--font-sans);
 
+  /* Strong ease-out for UI entrances: fast start, long soft landing. */
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -365,6 +368,13 @@ table td {
 .prose table td,
 .data-table td {
   background: hsl(var(--background));
+}
+
+/* Totals row: tinted like the header, no trailing rule. */
+.data-table tfoot td {
+  @apply border-b-0 font-medium;
+  background: hsl(var(--muted));
+  border-top: 2px solid hsl(var(--border));
 }
 
 .prose table tbody tr:nth-child(even) td,

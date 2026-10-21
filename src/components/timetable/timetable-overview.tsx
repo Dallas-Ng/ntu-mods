@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 
 import { reportError } from "@/lib/analytics"
 import { latestSemester, latestYear } from "@/lib/semesters"
-import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useTimetable } from "@/hooks/use-timetable"
 
@@ -47,73 +46,75 @@ const TimetableOverview = () => {
 
   return (
     <div className="">
-      <table className="table w-full table-fixed text-center text-xs">
-        <thead>
-          <tr className="border-b">
-            <th className="w-fit lg:w-25">Index</th>
-            <th className="w-fit lg:w-25">Module</th>
-            <th className="hidden text-left lg:table-cell">Title</th>
-            <th className="w-fit">AU</th>
-            <th className="w-fit lg:w-55">Exam</th>
-          </tr>
-        </thead>
+      <div className="overflow-x-auto">
+        <table className="data-table w-full text-xs! [&_td]:px-2.5! [&_td]:py-1.5! [&_th]:px-2.5! [&_th]:py-1.5!">
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>Module</th>
+              <th className="hidden lg:table-cell">Title</th>
+              <th>AU</th>
+              <th>Exam</th>
+            </tr>
+          </thead>
 
-        <tbody>
-          {Object.entries(timetable).map(([moduleKey, indexKey], moduleIdx) => {
-            const meta = moduleMetaMap[moduleKey]
-            const moduleTitle = meta?.title ?? ""
-            const au = meta?.au ?? "0"
-            const exam = examMap[moduleKey]
-            const examDisplay = exam
-              ? `${exam.date}, ${exam.start_time} - ${exam.end_time}`
-              : ""
+          <tbody>
+            {Object.entries(timetable).map(([moduleKey, indexKey]) => {
+              const meta = moduleMetaMap[moduleKey]
+              const moduleTitle = meta?.title ?? ""
+              const au = meta?.au ?? "0"
+              const exam = examMap[moduleKey]
+              const examDisplay = exam
+                ? `${exam.date}, ${exam.start_time} - ${exam.end_time}`
+                : "-"
 
-            return (
-              <tr
-                key={moduleIdx}
-                className={cn(moduleIdx % 2 == 1 && "bg-muted")}>
-                <td className="w-fit lg:w-25">{indexKey}</td>
+              return (
+                <tr key={moduleKey}>
+                  <td>{indexKey}</td>
 
-                <td className="w-fit lg:w-25">
-                  <a
-                    href={`/mods/${moduleKey}`}
-                    className="hover:text-primary-alt transition-colors">
-                    {moduleKey}
-                  </a>
-                </td>
+                  <td>
+                    <a
+                      href={`/mods/${moduleKey}`}
+                      className="hover:text-primary-alt font-medium transition-colors">
+                      {moduleKey}
+                    </a>
+                  </td>
 
-                <td className="hidden text-left lg:table-cell">
-                  <a
-                    href={`/mods/${moduleKey}`}
-                    className="hover:text-primary-alt transition-colors">
-                    {moduleTitle}
-                  </a>
-                </td>
+                  <td className="hidden lg:table-cell">
+                    <a
+                      href={`/mods/${moduleKey}`}
+                      className="hover:text-primary-alt transition-colors">
+                      {moduleTitle}
+                    </a>
+                  </td>
 
-                <td>{au}</td>
-                <td className="text-left">{examDisplay}</td>
-              </tr>
-            )
-          })}
+                  <td>{au}</td>
+                  <td>{examDisplay}</td>
+                </tr>
+              )
+            })}
+          </tbody>
 
-          <tr className="border-t">
-            <td></td>
-            <td></td>
-            <td className="hidden lg:table-cell"></td>
-            <td>
-              {Object.keys(timetable)
-                .reduce((acc, moduleKey) => {
-                  const au =
-                    parseFloat(moduleMetaMap[moduleKey]?.au ?? "0") || 0
-                  return acc + au
-                }, 0)
-                .toFixed(1)}{" "}
-              AUs
-            </td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+          <tfoot>
+            <tr>
+              <td className="font-medium" colSpan={2}>
+                Total
+              </td>
+              <td className="hidden lg:table-cell"></td>
+              <td className="font-medium">
+                {Object.keys(timetable)
+                  .reduce((acc, moduleKey) => {
+                    const au =
+                      parseFloat(moduleMetaMap[moduleKey]?.au ?? "0") || 0
+                    return acc + au
+                  }, 0)
+                  .toFixed(1)}
+              </td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
       <p className="text-muted-foreground mt-3 text-xs">
         The Exam information shown may be subject to changes. Students are to
         check the finalised exam timetable with exam seat information, which

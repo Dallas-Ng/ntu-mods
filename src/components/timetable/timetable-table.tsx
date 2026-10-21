@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { useIndexHover } from "@/state/index-hover.state"
 
+import { findCommonLectures } from "@/lib/common-lectures"
 import {
   customCourseIdFromKey,
   isCustomCourseKey
@@ -57,6 +58,10 @@ const TimetablePageTable = ({
   }, [activeModuleKey, indexPickerEnabled, timetable, customCourses])
 
   const hovered = useIndexHover((s) => s.hovered)
+  const commonLectures = useMemo(
+    () => findCommonLectures(allModuleIndexes),
+    [allModuleIndexes]
+  )
 
   const previewModuleIndexMap = useMemo(() => {
     const hoveredSlots =
@@ -125,6 +130,7 @@ const TimetablePageTable = ({
       )}
       <TimetableTable
         moduleIndexMap={previewModuleIndexMap}
+        commonLectures={commonLectures}
         indexPicker={{
           enabled: indexPickerEnabled,
           activeModuleKey,

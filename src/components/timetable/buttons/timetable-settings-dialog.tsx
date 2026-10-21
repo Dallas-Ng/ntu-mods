@@ -1,28 +1,22 @@
 "use client"
 
-import { Settings2 } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from "@/components/ui/dialog"
 import TableSettings from "@/components/settings/table-settings"
 
-const TimetableSettingsDialog = () => {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Settings2 className="size-4" />
-          <span className="sr-only">Table settings</span>
-        </Button>
-      </DialogTrigger>
+interface Props {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
 
+const TimetableSettingsDialog = ({ open, onOpenChange }: Props) => {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Table Settings</DialogTitle>

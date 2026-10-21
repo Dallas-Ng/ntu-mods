@@ -22,6 +22,25 @@ const GIT_COMMIT_SHA = (() => {
 
 const BUILD_TIME = new Date().toISOString()
 
+// Vite serves pre-bundled deps with a one-year `immutable` cache header. After
+// the dep cache is wiped the `?v=` hashes change, and the browser keeps old
+// chunks next to new ones: two copies of React, "Invalid hook call". Dev only:
+// make the browser revalidate them instead.
+const revalidateDevDeps = () => ({
+  name: "revalidate-dev-deps",
+  apply: "serve",
+  configureServer(server) {
+    server.middlewares.use((req, res, next) => {
+      if (req.url?.includes("/.vite-cache/deps/")) {
+        const set = res.setHeader.bind(res)
+        res.setHeader = (name, value) =>
+          set(name, name.toLowerCase() === "cache-control" ? "no-cache" : value)
+      }
+      next()
+    })
+  }
+})
+
 // Claude Code worktrees (.claude/worktrees/*) symlink node_modules back to the
 // main checkout instead of a duplicate install — Vite's dev server otherwise
 // refuses to serve files outside its project root, which the symlink target
@@ -125,7 +144,7 @@ export default defineConfig({
       "import.meta.env.PUBLIC_BUILD_TIME": JSON.stringify(BUILD_TIME),
       "import.meta.env.PUBLIC_BUILD_ENV": JSON.stringify(BUILD_ENV)
     },
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), revalidateDevDeps()],
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url))

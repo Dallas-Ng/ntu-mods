@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import {
   Calendar,
@@ -8,8 +8,10 @@ import {
   Download,
   ImageDown,
   Link as LinkIcon,
-  MoreHorizontal,
-  MousePointerClick
+  MousePointerClick,
+  Settings2,
+  Wrench,
+  X
 } from "lucide-react"
 import { toast } from "sonner"
 
@@ -28,14 +30,17 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from "@/components/ui/tooltip"
 
 import TimetableImportDialog from "./timetable-import-dialog"
+import TimetableSettingsDialog from "./timetable-settings-dialog"
 import TimetableShareDialog from "./timetable-share-dialog"
 
 interface Props {
@@ -60,6 +65,16 @@ const TimetableActionsDropdown = ({
   const [calendarLoading, setCalendarLoading] = useState(false)
   const [shareOpen, setShareOpen] = useState(false)
   const [importOpen, setImportOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [open, setOpen] = useState(false)
+
+  // Stays open for the whole visit. A page restored from the back/forward
+  // cache keeps its state, so collapse it there too.
+  useEffect(() => {
+    const onShow = (e: PageTransitionEvent) => e.persisted && setOpen(false)
+    window.addEventListener("pageshow", onShow)
+    return () => window.removeEventListener("pageshow", onShow)
+  }, [])
 
   const handleDownloadCalendar = async () => {
     if (Object.keys(timetable).length === 0 && customCourses.length === 0) {
@@ -128,6 +143,34 @@ const TimetableActionsDropdown = ({
     toast(`Duplicated to Plan ${toIndex + 1}`)
   }
 
+  const tool = (
+    label: string,
+    hint: string,
+    icon: React.ReactNode,
+    button: (child: React.ReactNode) => React.ReactNode
+  ) => (
+    <Tooltip>
+      <TooltipTrigger asChild>{button(icon)}</TooltipTrigger>
+      <TooltipContent side="bottom" className="max-w-48 text-center">
+        <p className="font-medium">{label}</p>
+        <p className="text-xs opacity-80">{hint}</p>
+      </TooltipContent>
+    </Tooltip>
+  )
+
+  const iconButton = (
+    label: string,
+    props: React.ComponentProps<typeof Button> = {}
+  ) => (
+    <Button
+      variant="ghost"
+      size="icon"
+      aria-label={label}
+      {...props}
+      className={cn("size-8", props.className)}
+    />
+  )
+
   return (
     <>
       <TimetableShareDialog
@@ -137,79 +180,157 @@ const TimetableActionsDropdown = ({
         customCourses={customCourses}
       />
       <TimetableImportDialog open={importOpen} onOpenChange={setImportOpen} />
+      <TimetableSettingsDialog
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+      />
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="icon">
-            <MoreHorizontal className="size-4" />
-            <span className="sr-only">More actions</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="gap-2">
-              <Copy className="size-4" />
-              Duplicate to Plan
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent>
-              {timetables.map((_, index) => {
-                if (index === timetableIndex) return null
-                return (
-                  <DropdownMenuItem
-                    key={index}
-                    onClick={() => handleDuplicate(index)}>
-                    Plan {index + 1}
-                  </DropdownMenuItem>
-                )
-              })}
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-          <DropdownMenuSeparator />
-          {/* Bringing data in, grouped apart from the send-it-out actions
-              below — opposite direction, shouldn't share a group. */}
-          <DropdownMenuItem
-            onClick={() => setImportOpen(true)}
-            className="gap-2">
-            <Download className="size-4" />
-            Import from text
-          </DropdownMenuItem>
-
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => setShareOpen(true)}
-            className="gap-2">
-            <LinkIcon className="size-4" />
-            Share
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <a href="/screenshot" className="flex items-center gap-2">
-              <ImageDown className="size-4" />
-              Export as Image
-            </a>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={handleDownloadCalendar}
-            disabled={calendarLoading}
-            className="gap-2">
-            <Calendar className="size-4" />
-            Save to Calendar
-          </DropdownMenuItem>
-
-          {/* Separator marks the line between navigation/actions above and
-              a feature toggle below — same menu, different kind of item. */}
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={onToggleIndexPicker}
+      <div className="contents">
+        {/* Tools sit against the trigger, everyday ones first, rarer ones
+            after the divider. Clipped, not resized, so nothing shifts while
+            it sweeps out to the left. Under sm there is no room, so it
+            covers the row. */}
+        <TooltipProvider delayDuration={150}>
+          <div
+            inert={!open}
             className={cn(
-              "gap-2",
-              indexPickerEnabled &&
-                "bg-primary/10 text-primary focus:bg-primary/15 focus:text-primary"
+              "bg-card ml-auto flex min-w-0 items-center gap-1 transition-[clip-path,opacity] motion-reduce:transition-none max-sm:absolute max-sm:inset-y-0 max-sm:right-10 max-sm:left-0 max-sm:z-20",
+              open
+                ? "ease-out-strong opacity-100 duration-[280ms] [clip-path:inset(-8px_0_-8px_0)]"
+                : "pointer-events-none opacity-0 duration-[380ms] ease-[cubic-bezier(0.65,0,0.35,1)] [clip-path:inset(-8px_0_-8px_100%)]"
             )}>
-            <MousePointerClick className="size-4" />
-            {indexPickerEnabled ? "Stop picking indexes" : "Pick indexes"}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            <div className="flex items-center gap-0.5">
+              {tool(
+                "Pick indexes",
+                "Tap a class to try its other indexes.",
+                <MousePointerClick className="size-4" />,
+                (icon) =>
+                  iconButton(
+                    indexPickerEnabled
+                      ? "Stop picking indexes"
+                      : "Pick indexes",
+                    {
+                      children: icon,
+                      onClick: onToggleIndexPicker,
+                      className: indexPickerEnabled
+                        ? "bg-primary/10 text-primary hover:bg-primary/15 hover:text-primary"
+                        : undefined
+                    }
+                  )
+              )}
+              {tool(
+                "Share",
+                "Get a link to this timetable.",
+                <LinkIcon className="size-4" />,
+                (icon) =>
+                  iconButton("Share", {
+                    children: icon,
+                    onClick: () => setShareOpen(true)
+                  })
+              )}
+              {tool(
+                "Calendar",
+                "Download an .ics file for your calendar app.",
+                <Calendar className="size-4" />,
+                (icon) =>
+                  iconButton("Save to calendar", {
+                    children: icon,
+                    onClick: handleDownloadCalendar,
+                    disabled: calendarLoading
+                  })
+              )}
+            </div>
+            <span className="bg-border mx-1 h-4 w-px" />
+            <div className="flex items-center gap-0.5">
+              <DropdownMenu>
+                {tool(
+                  "Duplicate",
+                  "Copy this plan into another plan.",
+                  <Copy className="size-4" />,
+                  (icon) => (
+                    <DropdownMenuTrigger asChild>
+                      {iconButton("Duplicate to plan", { children: icon })}
+                    </DropdownMenuTrigger>
+                  )
+                )}
+                <DropdownMenuContent align="end">
+                  {timetables.map((_, index) =>
+                    index === timetableIndex ? null : (
+                      <DropdownMenuItem
+                        key={index}
+                        onClick={() => handleDuplicate(index)}>
+                        Plan {index + 1}
+                      </DropdownMenuItem>
+                    )
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {tool(
+                "Import",
+                "Add modules from pasted text.",
+                <Download className="size-4" />,
+                (icon) =>
+                  iconButton("Import from text", {
+                    children: icon,
+                    onClick: () => setImportOpen(true)
+                  })
+              )}
+              {tool(
+                "Export image",
+                "Save it as a wallpaper or picture.",
+                <ImageDown className="size-4" />,
+                (icon) => (
+                  <Button
+                    asChild
+                    variant="ghost"
+                    size="icon"
+                    className="size-8"
+                    aria-label="Export as image">
+                    <a href="/screenshot">{icon}</a>
+                  </Button>
+                )
+              )}
+              {tool(
+                "Table settings",
+                "Change how the timetable grid looks.",
+                <Settings2 className="size-4" />,
+                (icon) =>
+                  iconButton("Table settings", {
+                    children: icon,
+                    onClick: () => setSettingsOpen(true)
+                  })
+              )}
+            </div>
+          </div>
+        </TooltipProvider>
+
+        {indexPickerEnabled && (
+          <span className="text-muted-foreground pointer-events-none absolute inset-x-0 top-1/2 hidden -translate-y-1/2 text-center text-xs lg:block">
+            Tap a block to see its other indexes
+          </span>
+        )}
+
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-expanded={open}
+          onClick={() => setOpen((o) => !o)}
+          className={cn("relative size-8", open && "bg-accent")}>
+          <Wrench
+            className={cn(
+              "ease-out-strong absolute size-4 transition-all duration-150 motion-reduce:transition-none",
+              open ? "scale-50 rotate-90 opacity-0" : "scale-100 opacity-100"
+            )}
+          />
+          <X
+            className={cn(
+              "ease-out-strong absolute size-4 transition-all duration-150 motion-reduce:transition-none",
+              open ? "scale-100 opacity-100" : "scale-50 -rotate-90 opacity-0"
+            )}
+          />
+          <span className="sr-only">{open ? "Close tools" : "Open tools"}</span>
+        </Button>
+      </div>
     </>
   )
 }

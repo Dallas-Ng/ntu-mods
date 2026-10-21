@@ -1,12 +1,7 @@
 import type React from "react"
 
 export type ChangelogCategory =
-  | "New Feature"
-  | "Improvement"
-  | "Bug Fix"
-  | "Content"
-  | "Data"
-  | "Performance"
+  "New Feature" | "Improvement" | "Bug Fix" | "Content" | "Data" | "Performance"
 
 export interface ChangelogItem {
   category: ChangelogCategory
@@ -48,6 +43,30 @@ export const ChangelogLink = ({
 )
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
+  {
+    title: "Walking between classes",
+    date: "21 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            The <ChangelogLink href="/timetable">timetable</ChangelogLink> page
+            now has a Walking between classes button under Generate Timetable.
+            Pick a day to see your classes in order on the campus map, the
+            walking time between each pair of venues, and a warning when the gap
+            is too short. Walks are looked up only when you open it, for one day
+            at a time. The Calendar, Generate and AI tabs are gone: generate
+            options now show by default. Guide:{" "}
+            <ChangelogLink href="/articles/ntu-timetable-planner-guide">
+              NTU Timetable Planner Guide
+            </ChangelogLink>
+            .
+          </>
+        )
+      }
+    ]
+  },
   {
     title: "Campus map",
     date: "20 Oct 2026",

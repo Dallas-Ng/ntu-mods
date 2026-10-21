@@ -1,9 +1,18 @@
 "use client"
 
-import { Fragment, useMemo, useState } from "react"
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from "react"
 import { useIndexHover } from "@/state/index-hover.state"
+import { ChevronRight } from "lucide-react"
 
 import { TABLE_SETTINGS } from "@/config/table-settings"
+import { commonLectureId } from "@/lib/common-lectures"
 import { STARS_TIMESLOTS } from "@/lib/constants"
 import {
   generateTimetableMatrix,
@@ -29,6 +38,8 @@ interface Props {
   fullCell?: boolean
   showModuleKeyAsCommon?: boolean
   alwaysHighlightLectures?: boolean
+  /** Ids from `findCommonLectures`: these lectures are labelled and hover as one. */
+  commonLectures?: Set<string>
   precomputedMatrix?: PrecomputedTimetableMatrix
   indexPicker?: {
     enabled: boolean
@@ -54,6 +65,7 @@ export const TimetableTable = (props: Props) => {
     fullCell = false,
     showModuleKeyAsCommon = false,
     alwaysHighlightLectures = false,
+    commonLectures,
     precomputedMatrix,
     indexPicker
   } = props
@@ -92,6 +104,8 @@ export const TimetableTable = (props: Props) => {
 
   const hoveredPicker = useIndexHover((s) => s.hovered)
   const [currentHoverKey, setCurrentHoverKey] = useState("")
+  // Set while a common lecture is hovered: every index of that module lights up.
+  const [hoverCommonModule, setHoverCommonModule] = useState("")
 
   const handleIndexClick = (
     moduleKey: string,
@@ -109,7 +123,35 @@ export const TimetableTable = (props: Props) => {
     indexPicker?.onActiveModuleChange(moduleKey)
   }
 
-  const handleIndexMouseOver = (indexKey: string, isLecture: boolean) => {
+  // Edge fades say there is more table to scroll to, like the map's chip row.
+  const scroller = useRef<HTMLDivElement>(null)
+  const [more, setMore] = useState({ left: false, right: false })
+  const measure = useCallback(() => {
+    const el = scroller.current
+    if (!el) return
+    const left = el.scrollLeft > 2
+    const right = el.scrollLeft + el.clientWidth < el.scrollWidth - 2
+    setMore((m) => (m.left === left && m.right === right ? m : { left, right }))
+  }, [])
+  useEffect(() => {
+    const el = scroller.current
+    if (!el) return
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    if (el.firstElementChild) ro.observe(el.firstElementChild)
+    return () => ro.disconnect()
+  }, [measure, TABLE_MATRIX, TABLE_OVERFLOW_THRESHOLD])
+
+  const handleIndexMouseOver = (
+    indexKey: string,
+    isLecture: boolean,
+    commonModule?: string
+  ) => {
+    if (commonModule) {
+      setHoverCommonModule(commonModule)
+      return
+    }
     // Hovering on lectures will not highlight other indexes as they are common lectures
     if (isLecture && alwaysHighlightLectures) return
     setCurrentHoverKey(indexKey)
@@ -117,144 +159,192 @@ export const TimetableTable = (props: Props) => {
 
   return (
     <TooltipProvider delayDuration={200}>
-      <div className={cn(TABLE_OVERFLOW_THRESHOLD && "overflow-x-auto")}>
-        <table
-          className={cn(
-            "w-full text-[0.6rem] lg:text-xs",
-            TABLE_OVERFLOW_THRESHOLD ? "table-auto" : "table-fixed"
-          )}>
-          <TimetableTableThead
-            days={Object.keys(TABLE_MAX_DAY_COLUMNS).length}
-            maxDayColumns={TABLE_MAX_DAY_COLUMNS}
-          />
+      <div className="relative">
+        <div
+          ref={scroller}
+          onScroll={measure}
+          className={cn(TABLE_OVERFLOW_THRESHOLD && "overflow-x-auto")}>
+          <table
+            className={cn(
+              "w-full text-[0.6rem] lg:text-xs",
+              TABLE_OVERFLOW_THRESHOLD ? "table-auto" : "table-fixed"
+            )}>
+            <TimetableTableThead
+              days={Object.keys(TABLE_MAX_DAY_COLUMNS).length}
+              maxDayColumns={TABLE_MAX_DAY_COLUMNS}
+            />
 
-          {/* TBODY */}
-          <tbody>
-            {Object.entries(TABLE_MATRIX).map(([matrixKey, rowData]) => {
-              const tsIndex = parseInt(matrixKey)
-              // A row with nothing scheduled on any day is just spacing —
-              // forcing it to the uniform row height wastes vertical space
-              // for no reason, so let it keep its natural (small) height.
-              const rowHasContent = rowData.some(
-                (dayColumn) => dayColumn.length > 0
-              )
+            {/* TBODY */}
+            <tbody>
+              {Object.entries(TABLE_MATRIX).map(([matrixKey, rowData]) => {
+                const tsIndex = parseInt(matrixKey)
+                // A row with nothing scheduled on any day is just spacing —
+                // forcing it to the uniform row height wastes vertical space
+                // for no reason, so let it keep its natural (small) height.
+                const rowHasContent = rowData.some(
+                  (dayColumn) => dayColumn.length > 0
+                )
 
-              return (
-                <tr
-                  key={matrixKey}
-                  style={rowHasContent ? rowHeightStyle : undefined}>
-                  <TimeSlotItem startTime={STARS_TIMESLOTS[tsIndex].start} />
+                return (
+                  <tr
+                    key={matrixKey}
+                    style={rowHasContent ? rowHeightStyle : undefined}>
+                    <TimeSlotItem startTime={STARS_TIMESLOTS[tsIndex].start} />
 
-                  {rowData.map((dayColumn, dayIndex) => {
-                    const rowDayIndex = dayIndex + 1
-                    const MAX_COL_SPAN = TABLE_MAX_DAY_COLUMNS[rowDayIndex]
-                    const emptyArrayLength = MAX_COL_SPAN - dayColumn.length
+                    {rowData.map((dayColumn, dayIndex) => {
+                      const rowDayIndex = dayIndex + 1
+                      const MAX_COL_SPAN = TABLE_MAX_DAY_COLUMNS[rowDayIndex]
+                      const emptyArrayLength = MAX_COL_SPAN - dayColumn.length
 
-                    return (
-                      <Fragment key={matrixKey + dayIndex}>
-                        {dayColumn.map((index, offsetIdx) => {
-                          const firstIndex = getFirstTsIndex(index)
-                          const isLecture = getIndexType(index.type) === "LEC"
+                      return (
+                        <Fragment key={matrixKey + dayIndex}>
+                          {dayColumn.map((index, offsetIdx) => {
+                            const firstIndex = getFirstTsIndex(index)
+                            const isLecture = getIndexType(index.type) === "LEC"
 
-                          // Dim lectures if there are tutorials or labs hovered
-                          const shouldDimlecture = isLecture
-                            ? // Always highlight lectures if alwaysHighlightLectures is true
-                              alwaysHighlightLectures
-                              ? false
+                            // Dim lectures if there are tutorials or labs hovered
+                            const shouldDimlecture = isLecture
+                              ? // Always highlight lectures if alwaysHighlightLectures is true
+                                alwaysHighlightLectures
+                                ? false
+                                : true
                               : true
-                            : true
 
-                          // Only render the first cell, the cells below will be empty due to rowspan
-                          if (
-                            firstIndex === tsIndex &&
-                            rowDayIndex === index.day
-                          ) {
-                            const moduleKey = Object.keys(moduleIndexMap).find(
-                              (x) =>
+                            // Only render the first cell, the cells below will be empty due to rowspan
+                            if (
+                              firstIndex === tsIndex &&
+                              rowDayIndex === index.day
+                            ) {
+                              const moduleKey = Object.keys(
+                                moduleIndexMap
+                              ).find((x) =>
                                 moduleIndexMap[x].some(
                                   (y) => y.key === index.key
                                 )
-                            ) as string // Guaranteed to be defined
-                            const indexPickerEnabled = indexPicker?.enabled
-                            const previewActive =
-                              !!indexPickerEnabled &&
-                              indexPicker.activeModuleKey === moduleKey &&
-                              index.key === indexPicker.activeIndexKey
-                            const previewCandidate =
-                              !!indexPickerEnabled &&
-                              indexPicker.activeModuleKey === moduleKey &&
-                              index.key !== indexPicker.activeIndexKey
-                            const pickerDimmed =
-                              !!indexPickerEnabled &&
-                              !!indexPicker.activeModuleKey &&
-                              indexPicker.activeModuleKey !== moduleKey
+                              ) as string // Guaranteed to be defined
+                              const indexPickerEnabled = indexPicker?.enabled
+                              const previewActive =
+                                !!indexPickerEnabled &&
+                                indexPicker.activeModuleKey === moduleKey &&
+                                index.key === indexPicker.activeIndexKey
+                              const previewCandidate =
+                                !!indexPickerEnabled &&
+                                indexPicker.activeModuleKey === moduleKey &&
+                                index.key !== indexPicker.activeIndexKey
+                              const pickerDimmed =
+                                !!indexPickerEnabled &&
+                                !!indexPicker.activeModuleKey &&
+                                indexPicker.activeModuleKey !== moduleKey
+                              const common =
+                                isLecture &&
+                                !!commonLectures?.has(
+                                  commonLectureId(moduleKey, index)
+                                )
 
-                            return (
-                              <TimetableTableCell
-                                // Core
-                                key={`${matrixKey}-${dayIndex}-${index.key}-${offsetIdx}`}
-                                moduleKey={moduleKey}
-                                index={index}
-                                indexes={moduleIndexMap[moduleKey]}
-                                // Styling
-                                moduleKeyText={
-                                  isLecture && showModuleKeyAsCommon
-                                    ? "COMMON"
-                                    : moduleKey
-                                }
-                                hideIndex={hideIndex}
-                                fullCell={fullCell}
-                                rowHeightPx={TABLE_SETTINGS.ROW_HEIGHT_PX}
-                                clamp={standardisedScale}
-                                dimmed={
-                                  currentHoverKey !== "" &&
-                                  currentHoverKey !== index.key &&
-                                  shouldDimlecture
-                                }
-                                previewActive={previewActive}
-                                previewCandidate={previewCandidate}
-                                pickerDimmed={
-                                  pickerDimmed ||
-                                  (!!hoveredPicker &&
-                                    hoveredPicker.moduleKey !== moduleKey)
-                                }
-                                hoverState={
-                                  hoveredPicker?.moduleKey !== moduleKey
-                                    ? undefined
-                                    : index.key === hoveredPicker.indexKey &&
-                                        index.key !== hoveredPicker.currentKey
-                                      ? "preview"
-                                      : "current"
-                                }
-                                onClick={() =>
-                                  handleIndexClick(
-                                    moduleKey,
-                                    index.key,
-                                    indexPickerEnabled,
-                                    previewCandidate
-                                  )
-                                }
-                                onMouseOver={() =>
-                                  handleIndexMouseOver(index.key, isLecture)
-                                }
-                                onMouseOut={() => setCurrentHoverKey("")}
-                              />
-                            )
-                          }
-                        })}
+                              return (
+                                <TimetableTableCell
+                                  // Core
+                                  key={`${matrixKey}-${dayIndex}-${index.key}-${offsetIdx}`}
+                                  moduleKey={moduleKey}
+                                  index={index}
+                                  indexes={moduleIndexMap[moduleKey]}
+                                  // Styling
+                                  moduleKeyText={
+                                    isLecture && showModuleKeyAsCommon
+                                      ? "COMMON"
+                                      : moduleKey
+                                  }
+                                  hideIndex={hideIndex}
+                                  fullCell={fullCell}
+                                  rowHeightPx={TABLE_SETTINGS.ROW_HEIGHT_PX}
+                                  clamp={standardisedScale}
+                                  common={common}
+                                  dimmed={
+                                    hoverCommonModule !== ""
+                                      ? hoverCommonModule !== moduleKey
+                                      : currentHoverKey !== "" &&
+                                        currentHoverKey !== index.key &&
+                                        shouldDimlecture
+                                  }
+                                  previewActive={previewActive}
+                                  previewCandidate={previewCandidate}
+                                  pickerDimmed={
+                                    pickerDimmed ||
+                                    (!!hoveredPicker &&
+                                      hoveredPicker.moduleKey !== moduleKey)
+                                  }
+                                  hoverState={
+                                    hoveredPicker?.moduleKey !== moduleKey
+                                      ? undefined
+                                      : index.key === hoveredPicker.indexKey &&
+                                          index.key !== hoveredPicker.currentKey
+                                        ? "preview"
+                                        : "current"
+                                  }
+                                  onClick={() =>
+                                    handleIndexClick(
+                                      moduleKey,
+                                      index.key,
+                                      indexPickerEnabled,
+                                      previewCandidate
+                                    )
+                                  }
+                                  onMouseOver={() => {
+                                    // While picking an index for one module, the
+                                    // other modules are faded out: hovering them
+                                    // must not dim anything.
+                                    if (pickerDimmed) return
+                                    handleIndexMouseOver(
+                                      index.key,
+                                      isLecture,
+                                      common ? moduleKey : undefined
+                                    )
+                                  }}
+                                  onMouseOut={() => {
+                                    setCurrentHoverKey("")
+                                    setHoverCommonModule("")
+                                  }}
+                                />
+                              )
+                            }
+                          })}
 
-                        {/* Generate empty cell based off the offset of max col span */}
-                        {Array.from({ length: emptyArrayLength }, (_, i) => (
-                          <td key={`empty-${i}`} className="min-w-10" />
-                        ))}
-                      </Fragment>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+                          {/* Generate empty cell based off the offset of max col span */}
+                          {Array.from({ length: emptyArrayLength }, (_, i) => (
+                            <td key={`empty-${i}`} className="min-w-10" />
+                          ))}
+                        </Fragment>
+                      )
+                    })}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+        <div
+          aria-hidden
+          style={{
+            background:
+              "linear-gradient(to right, hsl(var(--background)), transparent)"
+          }}
+          className={cn(
+            "pointer-events-none absolute inset-y-0 left-0 z-10 w-12 transition-opacity duration-200 motion-reduce:transition-none",
+            more.left ? "opacity-100" : "opacity-0"
+          )}
+        />
+        <div
+          aria-hidden
+          style={{
+            background:
+              "linear-gradient(to left, hsl(var(--background)) 15%, transparent)"
+          }}
+          className={cn(
+            "pointer-events-none absolute inset-y-0 right-0 z-10 flex w-14 items-center justify-end pr-1 transition-opacity duration-200 motion-reduce:transition-none",
+            more.right ? "opacity-100" : "opacity-0"
+          )}>
+          <ChevronRight className="text-muted-foreground size-5" />
+        </div>
       </div>
     </TooltipProvider>
   )

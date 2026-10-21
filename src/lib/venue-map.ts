@@ -259,8 +259,13 @@ export const estimateWalk = (
 
 export interface Stop {
   id: string
+  /** Module code, or the name of a custom block. */
   code: string
+  /** Index type, used for colour. */
   type: string
+  /** Type as the student sees it (a custom block's own session label). */
+  typeLabel: string
+  custom: boolean
   group: string
   day: number
   start: number
@@ -288,9 +293,11 @@ export const dayStops = (
       const [a, b] = s.time.split("-")
       const key = s.venue.trim()
       stops.push({
-        id: `${code}:${s.key}:${s.type}:${s.time}`,
-        code,
+        id: `${code}:${s.key}:${s.type}:${s.time}:${stops.length}`,
+        code: s.isCustom ? s.group : code,
         type: s.type,
+        typeLabel: s.isCustom ? s.remarks : s.type,
+        custom: Boolean(s.isCustom),
         group: s.group,
         day,
         start: toMin(a),

@@ -31,7 +31,7 @@ const TimetablePlanSwitcher = () => {
   }
 
   const trigger = (
-    <Button variant="outline">
+    <Button variant="ghost" className="h-8 px-3">
       Plan {timetableIndex + 1}
       <ChevronDown
         className={cn(
@@ -77,7 +77,7 @@ const TimetablePlanSwitcher = () => {
   return (
     <DropdownMenu onOpenChange={(val) => setIsContainerOpen(val)}>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent>{items}</DropdownMenuContent>
+      <DropdownMenuContent align="start">{items}</DropdownMenuContent>
     </DropdownMenu>
   )
 }

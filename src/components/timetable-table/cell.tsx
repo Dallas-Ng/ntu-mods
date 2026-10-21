@@ -26,6 +26,8 @@ interface Props {
   fullCell?: boolean
   dimmed?: boolean
   moduleKeyText?: string
+  /** A lecture every index of the module shares: labelled "Common". */
+  common?: boolean
   hideIndex?: boolean
   /** Per-30-min-unit height baseline. Always applied as a minimum so a
    * block's coloured area reaches its full duration even when its own
@@ -56,6 +58,7 @@ export const TimetableTableCell = (props: Props) => {
     fullCell, // override for user's settings
     dimmed = false,
     moduleKeyText = undefined,
+    common = false,
     hideIndex = false,
     rowHeightPx,
     clamp = false,
@@ -156,6 +159,7 @@ export const TimetableTableCell = (props: Props) => {
             key: hideIndex ? "" : index.key
           }}
           moduleKey={moduleKeyText ? moduleKeyText : moduleKey}
+          common={common}
           tableCell={
             fullCell
               ? {

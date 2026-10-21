@@ -410,11 +410,11 @@ const TimetableIndexModifier = (props: Props) => {
         <PopoverContent
           container={containerRef.current}
           className="border-primary/50 bg-muted rounded-t-none border p-0 shadow-xl"
+          align="start"
           sideOffset={0}
           style={{
-            width: containerRef.current?.clientWidth
-              ? containerRef.current.clientWidth + 4 // border width
-              : "auto"
+            // The row's own width, which is the width of its highlight.
+            width: containerRef.current?.clientWidth || "auto"
           }}>
           {items}
         </PopoverContent>

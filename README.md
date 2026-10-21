@@ -19,6 +19,7 @@ Build your timetable easier with NTU Mods. Create, customize, and manage your cl
   - [Building for Production](#building-for-production)
 - [Deployment](#deployment)
   - [Secrets](#secrets)
+- [Analytics](#analytics)
 - [Data Pipeline](#data-pipeline)
   - [Working with the database](#working-with-the-database)
   - [The current semester](#the-current-semester)
@@ -241,6 +242,23 @@ Set as Worker secrets (not `.env`), read via `locals.runtime.env`:
 | ----------------------- | ----------------------------------------- |
 | `RESEND_KEY`            | `/api/feedback` — sends the feedback email |
 | `PUBLIC_POSTHOG_TOKEN`  | PostHog, client and server-side capture    |
+
+## Analytics
+
+Usage is tracked with PostHog (through the `/ingest` proxy). Every custom event
+goes through `track()` in [`src/lib/analytics.ts`](src/lib/analytics.ts), which
+only accepts names listed in
+[`src/lib/analytics-events.ts`](src/lib/analytics-events.ts). To add an event,
+add its name to that list, then call `track("name", { ...props })` from the
+interaction. Do not put personal data in properties. Caught errors go through
+`reportError(feature, error)` instead.
+
+Coverage spans the timetable (modes, generation config, locks, blocked slots,
+sharing, import, calendar export, AI), the map (search, places, levels,
+directions, fullscreen), module and exam browsing, tools, settings, the
+changelog and the developer API explorer. The landing page is mostly static, so
+one delegated click listener in `src/astro/pages/index.astro` sends
+`landing_link_clicked` with the link's `href`.
 
 ## Data Pipeline
 

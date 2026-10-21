@@ -68,9 +68,13 @@ On a phone the toolbar becomes a drawer with an icon, a title and a one-line des
 
 Generation options are no longer hidden behind a tab. They are shown by default in the side panel, below your modules and custom blocks.
 
+![The Tools button and drawer on a phone, listing pick indexes, import, duplicate, share and calendar, each with a one-line description](/articles/ntu-timetable-redesign/phone-tools.webp "On a phone, the Tools button opens a drawer with every tool and what it does.")
+
 ## Put the panel where it suits you
 
 The side panel holds your registered modules, custom blocks, generation settings and the walking preview. On a wide screen it sits beside the grid, which is best when the timetable is narrow. When you have many classes in a week, the layout button in the toolbar moves the panel below the grid so the timetable gets the full width. The planner offers this itself when it detects that the grid is wide.
+
+![The timetable with the toolbar and grid at full width, and the search box, registered modules, custom blocks, generation settings and walking preview laid out in a row underneath](/articles/ntu-timetable-redesign/layout-below.webp "With the panel below the grid, the timetable gets the full width and the panel sections sit side by side.")
 
 Each section of the panel can be collapsed, has a short explanation behind its info icon, and uses the same row layout, so registered modules and custom blocks line up with each other.
 
@@ -84,9 +88,13 @@ The paint-palette icon in the toolbar opens Appearance. You can change the corne
 
 By default, a long class stretches the row it sits in, so rows end up with different heights. A new table setting, Standardised scale, gives every half-hour the same height, sized from the largest block in your timetable. Classes of the same length then look the same length, which makes gaps and clashes easier to judge at a glance. It is off by default.
 
+![The weekly grid with Standardised scale switched on, where every half-hour row has the same height and classes of the same length look the same length](/articles/ntu-timetable-redesign/standardised-scale.webp "Standardised scale: every half-hour is the same height, so a two-hour lab is visibly twice a one-hour lecture.")
+
 ## Save to calendar, with a preview
 
 The calendar button no longer downloads a file at once. It first shows what will be exported, so you can check the modules and the options before you download an .ics file for Google Calendar, Apple Calendar or Outlook.
+
+![The Add to your calendar dialog explaining what the .ics file contains, with Google, Apple and Outlook tabs, a note that the file is a snapshot, and a Download .ics button](/articles/ntu-timetable-redesign/calendar-preview.webp "The calendar dialog explains what you get and how to import it, with a tab for each calendar app.")
 
 ## A cleaner shared timetable page
 

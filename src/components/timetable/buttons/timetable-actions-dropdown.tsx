@@ -168,7 +168,10 @@ const TimetableActionsDropdown = ({
           {/* Bringing data in, grouped apart from the send-it-out actions
               below — opposite direction, shouldn't share a group. */}
           <DropdownMenuItem
-            onClick={() => setImportOpen(true)}
+            onClick={() => {
+              setImportOpen(true)
+              track("timetable_dialog_opened", { dialog: "import" })
+            }}
             className="gap-2">
             <Download className="size-4" />
             Import from text
@@ -176,7 +179,10 @@ const TimetableActionsDropdown = ({
 
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onClick={() => setShareOpen(true)}
+            onClick={() => {
+              setShareOpen(true)
+              track("timetable_dialog_opened", { dialog: "share" })
+            }}
             className="gap-2">
             <LinkIcon className="size-4" />
             Share

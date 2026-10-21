@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 
-import { reportError } from "@/lib/analytics"
+import { reportError, track } from "@/lib/analytics"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
@@ -77,6 +77,7 @@ const TimetableOverview = () => {
                 <td className="w-fit lg:w-25">
                   <a
                     href={`/mods/${moduleKey}`}
+                    onClick={() => track("timetable_overview_module_clicked")}
                     className="hover:text-primary-alt transition-colors">
                     {moduleKey}
                   </a>
@@ -85,6 +86,7 @@ const TimetableOverview = () => {
                 <td className="hidden text-left lg:table-cell">
                   <a
                     href={`/mods/${moduleKey}`}
+                    onClick={() => track("timetable_overview_module_clicked")}
                     className="hover:text-primary-alt transition-colors">
                     {moduleTitle}
                   </a>

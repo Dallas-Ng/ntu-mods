@@ -119,6 +119,10 @@ const CollisionIgnoreSection = () => {
     const updated = current.includes(type)
       ? current.filter((t) => t !== type)
       : [...current, type]
+    track("timetable_generation_config_changed", {
+      setting: "collisionIgnoreTypes",
+      value: type
+    })
     updateConfig({
       collisionIgnoreTypes: {
         ...config.collisionIgnoreTypes,
@@ -241,7 +245,10 @@ const LockedModulesSection = () => {
                 {label}
               </span>
               <button
-                onClick={() => toggleModuleLock(key)}
+                onClick={() => {
+                  toggleModuleLock(key)
+                  track("timetable_module_lock_toggled", { locked: !isLocked })
+                }}
                 className={`focus-visible:ring-ring/50 flex h-6 cursor-pointer items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   isLocked
                     ? "bg-foreground text-background border-transparent"
@@ -265,7 +272,15 @@ const LockedModulesSection = () => {
 const SettingsForm = () => {
   const [blockOpen, setBlockOpen] = useState(false)
   const config = useBoundState((s) => s.generationConfig)
-  const updateConfig = useBoundState((s) => s.updateGenerationConfig)
+  const setConfig = useBoundState((s) => s.updateGenerationConfig)
+  const updateConfig = (patch: Partial<typeof config>) => {
+    setConfig(patch)
+    const [setting, value] = Object.entries(patch)[0]
+    track("timetable_generation_config_changed", {
+      setting,
+      value: Array.isArray(value) ? value.length : (value as string | number)
+    })
+  }
   const resetConfig = useBoundState((s) => s.resetGenerationConfig)
   const lockedModules = useBoundState((s) => s.lockedModules)
 
@@ -431,7 +446,10 @@ const SettingsForm = () => {
           Block time slots
         </SectionLabel>
         <button
-          onClick={() => setBlockOpen(true)}
+          onClick={() => {
+            setBlockOpen(true)
+            track("timetable_dialog_opened", { dialog: "blacklist" })
+          }}
           className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-between rounded-md border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
           <span>
             {config.blacklistedTimeslots.length > 0

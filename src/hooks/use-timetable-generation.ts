@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
+import { track } from "@/lib/analytics"
 import {
   customCourseIdFromKey,
   customCourseModuleKey,
@@ -152,6 +153,11 @@ export function useTimetableGeneration() {
         }
         setCurrentIdx(0)
         setIsGenerating(false)
+        track("timetable_generation_completed", {
+          result_count: result.combinations.length,
+          truncated: result.truncated,
+          unique_only: unique
+        })
         if (result.combinations.length === 0) {
           setIsDiagnosing(true)
           setTimeout(() => {

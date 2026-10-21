@@ -25,11 +25,16 @@ const Toaster = ({ className, style, ...props }: ToasterProps) => {
         error: <OctagonXIcon className="size-4" />,
         loading: <Loader2Icon className="size-4 animate-spin" />
       }}
+      // Clear the sticky navbar so toasts never cover the announcement banner
+      offset={{ top: 80 }}
+      mobileOffset={{ top: 80 }}
+      toastOptions={{ classNames: { toast: "shadow-xl" } }}
       style={
         {
-          "--normal-bg": "var(--color-popover)",
-          "--normal-text": "var(--color-popover-foreground)",
-          "--normal-border": "var(--color-border)",
+          // Inverted (foreground on background) so toasts stand out from the page
+          "--normal-bg": "var(--color-foreground)",
+          "--normal-text": "var(--color-background)",
+          "--normal-border": "var(--color-foreground)",
           "--border-radius": "var(--radius)",
           ...style,
           zIndex: 2147483647

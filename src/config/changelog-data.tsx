@@ -485,7 +485,7 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
           <>
             Timetable cells are more compact on mobile by default, regardless of
             your chosen density in{" "}
-            <ChangelogLink href="/settings">Settings</ChangelogLink> — which
+            <ChangelogLink href="/timetable">Settings</ChangelogLink> — which
             still applies from tablet width up.
           </>
         )
@@ -1104,9 +1104,7 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         content: (
           <>
             Updated{" "}
-            <ChangelogLink href="/settings#feedback">
-              feedback submissions
-            </ChangelogLink>{" "}
+            <ChangelogLink href="/feedback">feedback submissions</ChangelogLink>{" "}
             so reports can be sent by email.
           </>
         )

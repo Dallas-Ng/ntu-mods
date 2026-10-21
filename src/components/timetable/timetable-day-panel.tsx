@@ -1,6 +1,7 @@
 "use client"
 
 import { Fragment, useEffect, useState } from "react"
+import { createPortal } from "react-dom"
 
 import { cn } from "@/lib/utils"
 import { type Stop } from "@/lib/venue-map"
@@ -110,6 +111,35 @@ const TimetableDayPanel = () => {
       <Skeleton className="size-full rounded-none" />
     )
 
+  const mapBox = (
+    <div
+      className={cn(
+        "relative overflow-hidden rounded-lg border",
+        full
+          ? "bg-background pointer-events-auto fixed inset-0 z-[60] rounded-none border-0"
+          : "h-80 lg:h-auto lg:flex-1"
+      )}>
+      {map}
+      {empty && (
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-1 bg-black/60 p-4 text-center text-sm text-white">
+          <p className="font-medium">
+            Add modules to your plan to see the walks between classes.
+          </p>
+          <p className="text-white/80">
+            Just want to look around?{" "}
+            <a
+              href="/maps"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white underline underline-offset-2">
+              Open the campus map
+            </a>
+          </p>
+        </div>
+      )}
+    </div>
+  )
+
   return (
     <div>
       {/* Both columns share one height, so the dialog never jumps as things
@@ -178,32 +208,7 @@ const TimetableDayPanel = () => {
           </div>
         )}
 
-        <div
-          className={cn(
-            "relative overflow-hidden rounded-lg border",
-            full
-              ? "bg-background fixed inset-0 z-[60] rounded-none border-0"
-              : "h-80 lg:h-auto lg:flex-1"
-          )}>
-          {map}
-          {empty && (
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-1 bg-black/60 p-4 text-center text-sm text-white">
-              <p className="font-medium">
-                Add modules to your plan to see the walks between classes.
-              </p>
-              <p className="text-white/80">
-                Just want to look around?{" "}
-                <a
-                  href="/maps"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white underline underline-offset-2">
-                  Open the campus map
-                </a>
-              </p>
-            </div>
-          )}
-        </div>
+        {full ? createPortal(mapBox, document.body) : mapBox}
       </div>
 
       <p className="text-muted-foreground mt-6 text-center text-xs">

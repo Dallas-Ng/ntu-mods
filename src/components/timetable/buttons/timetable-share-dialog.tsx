@@ -38,7 +38,12 @@ const TimetableShareDialog = ({
   )
 
   const link = useMemo(
-    () => buildShareLink(BASE_URL, timetable, withCustom),
+    () =>
+      buildShareLink(
+        typeof window === "undefined" ? BASE_URL : window.location.origin,
+        timetable,
+        withCustom
+      ),
     [timetable, withCustom]
   )
 

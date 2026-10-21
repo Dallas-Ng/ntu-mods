@@ -86,11 +86,6 @@ const TOOL_LINKS = [
       "Free public API and open data for NTU modules, indexes and exams"
   },
   {
-    label: "Settings",
-    href: "/settings",
-    description: "Customize themes, colors, density, and display preferences"
-  },
-  {
     label: "Feedback",
     href: "/feedback",
     description: "Share feedback, report a bug, or suggest an improvement"

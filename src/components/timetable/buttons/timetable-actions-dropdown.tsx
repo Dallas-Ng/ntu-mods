@@ -355,15 +355,15 @@ const TimetableActionsDropdown = ({
       {settings.isMobile ? (
         <>
           <Button
-            variant="ghost"
-            size="icon"
-            className="ml-auto size-8"
+            variant="outline"
+            size="sm"
+            className="ml-auto h-8 gap-1.5"
             onClick={() => {
               setSheetView("tools")
               setSheetOpen(true)
             }}>
             <Wrench className="size-4" />
-            <span className="sr-only">Open tools</span>
+            Tools
           </Button>
 
           <Drawer open={sheetOpen} onOpenChange={setSheetOpen}>

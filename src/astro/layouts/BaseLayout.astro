@@ -7,8 +7,9 @@ import { siteConfig } from "@/config/site"
 import { BUILD_ENV, IS_PROD } from "@/lib/constants"
 import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
-import { Banner } from "@/components/banner"
+import { Banner, BANNER_ID } from "@/components/banner"
 import Container from "@/components/container"
+import FeedbackSection from "@/components/feedback-section"
 import Footer from "@/components/footer"
 import MobileTracker from "@/components/mobile-tracker"
 import Navbar from "@/components/navbar"
@@ -34,6 +35,8 @@ interface Props {
   noindex?: boolean
   /** Set for articles; emits og:type=article plus article:* times. */
   article?: { publishedTime: string; modifiedTime?: string }
+  /** Tool pages with many fields: stop iOS zooming in on focus. */
+  lockZoom?: boolean
 }
 
 const defaults = siteConfig.metatags.default
@@ -48,8 +51,13 @@ const {
   outerClassName,
   noTitleSuffix = false,
   noindex = false,
-  article
+  article,
+  lockZoom = false
 } = Astro.props
+
+// Every page ends with a way to report a problem, except the form itself and
+// error pages.
+const showFeedback = !noindex && Astro.url.pathname !== "/feedback"
 
 const canonicalUrl = canonical
   ? canonical === "/"
@@ -70,7 +78,10 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
 <html lang="en" data-scroll-behavior="smooth">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content={`width=device-width, initial-scale=1${lockZoom ? ", maximum-scale=1" : ""}`}
+    />
     <title>{resolvedTitle}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
@@ -149,7 +160,37 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
   </head>
   <body class="antialiased" data-build-env={BUILD_ENV}>
     <AppearanceStyleProvider client:load />
-    <Banner.walkingBetweenClasses />
+    <div id="announcement" class="relative [&_p]:px-6">
+      <Banner />
+      <button
+        type="button"
+        aria-label="Dismiss announcement"
+        class="absolute top-1/2 right-1.5 z-10 flex size-6 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md text-black/70 transition-colors hover:bg-black/10 hover:text-black">
+        <svg
+          viewBox="0 0 24 24"
+          class="size-4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg
+        >
+      </button>
+    </div>
+    <script is:inline define:vars={{ key: `dismissed-banner:${BANNER_ID}` }}>
+      // Inline so a dismissed banner is gone before first paint
+      var el = document.getElementById("announcement")
+      try {
+        if (localStorage.getItem(key)) el.remove()
+      } catch (e) {}
+      if (el)
+        el.querySelector("button").addEventListener("click", function () {
+          el.remove()
+          try {
+            localStorage.setItem(key, "1")
+          } catch (e) {}
+        })
+    </script>
     <div
       class={`bg-background flex min-h-screen flex-col ${outerClassName ?? ""}`}>
       <Navbar client:load />
@@ -160,6 +201,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
           <slot />
         </Container>
       </main>
+      {showFeedback && <FeedbackSection client:visible />}
       <Footer />
     </div>
     <MobileTracker client:idle />

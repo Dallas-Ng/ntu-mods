@@ -3,6 +3,7 @@
 import { Fragment, useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 
+import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { type Stop } from "@/lib/venue-map"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -52,6 +53,7 @@ const TimetableDayPanel = () => {
 
   // Clicking a class zooms the map to its venue; clicking it again goes back.
   const pick = (s: Stop) => {
+    track("walk_route_stop_selected", { deselected: selected === s.id })
     if (selected === s.id) {
       setSelected(undefined)
       setZoom(focus ? { ...focus, nonce: Date.now() } : null)
@@ -149,7 +151,10 @@ const TimetableDayPanel = () => {
           <div className="flex min-h-0 flex-col gap-4 lg:w-2/5 lg:gap-3">
             <Tabs
               value={String(day)}
-              onValueChange={(v) => setDay(Number(v))}
+              onValueChange={(v) => {
+                setDay(Number(v))
+                track("walk_route_day_changed", { day: Number(v) })
+              }}
               className={cn(loading && "pointer-events-none opacity-50")}>
               <TabsList className="grid w-full grid-cols-7">
                 {DAYS.map((d, i) => (

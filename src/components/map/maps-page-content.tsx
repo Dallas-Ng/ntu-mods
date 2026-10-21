@@ -678,6 +678,7 @@ const MapsPageContent = () => {
   // While the shell resizes, the drawer and controls must not slide to their new spots.
   const [snap, setSnap] = useState(false)
   const toggleFullscreen = () => {
+    track("map_fullscreen_toggled", { entering: !fullscreen })
     setSnap(true)
     setPinned(true)
     setFullscreen((f) => !f)
@@ -854,6 +855,7 @@ const MapsPageContent = () => {
                 focus={focus}
                 insets={insets}
                 onHelp={() => {
+                  track("map_help_opened")
                   setFullscreen(false)
                   setTimeout(
                     () =>
@@ -1986,13 +1988,19 @@ const DirectionsPanel = ({
           label="From"
           places={places}
           value={fromId}
-          onChange={setFromId}
+          onChange={(id) => {
+            setFromId(id)
+            track("map_route_place_picked", { end: "from" })
+          }}
         />
         <PlacePicker
           label="To"
           places={places}
           value={toId}
-          onChange={setToId}
+          onChange={(id) => {
+            setToId(id)
+            track("map_route_place_picked", { end: "to" })
+          }}
         />
       </div>
       <Button

@@ -8,6 +8,7 @@ import {
   type ChangelogCategory,
   type ChangelogRelease
 } from "@/config/changelog-data"
+import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { UNSEEN_CHANGELOG_IDS } from "@/hooks/use-changelog-unseen"
 import { useHydrated } from "@/hooks/use-hydrated"
@@ -60,7 +61,10 @@ const ChangelogFilters = ({
         key={filter}
         type="button"
         aria-pressed={activeFilter === filter}
-        onClick={() => onFilterChange(filter)}
+        onClick={() => {
+          onFilterChange(filter)
+          track("changelog_filter_changed", { filter })
+        }}
         className={cn(
           "inline-flex h-6 w-fit cursor-pointer items-center rounded-full border px-2 text-xs leading-none font-medium transition-opacity hover:opacity-80",
           activeFilter === filter && "ring-ring ring-2 ring-offset-1",

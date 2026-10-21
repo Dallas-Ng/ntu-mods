@@ -11,6 +11,9 @@ import { cn } from "@/lib/utils"
 import { usePlanNames } from "@/hooks/use-plan-names"
 import { Button } from "@/components/ui/button"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
+import { Textarea } from "@/components/ui/textarea"
+
+import { ModalFooter, ModalNote, ModalSection } from "./modal-parts"
 
 interface Props {
   open: boolean
@@ -63,43 +66,41 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
       showDescription
       description="Paste a timetable code (starts with NTUMODS1-) or a share link."
       className="max-h-[90vh] overflow-y-auto sm:max-w-md">
-      <div className="space-y-4">
-        <textarea
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          rows={5}
-          placeholder="NTUMODS1-…"
-          className={cn(
-            "border-input bg-background w-full resize-none rounded-md border p-2 font-mono text-xs break-all outline-none",
-            isInvalid && "border-destructive"
+      <div className="space-y-5">
+        <ModalSection title="Timetable code">
+          <Textarea
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            rows={4}
+            placeholder="NTUMODS1-…"
+            aria-invalid={isInvalid}
+            className="resize-none font-mono text-xs break-all"
+          />
+          {isInvalid && (
+            <ModalNote tone="danger">
+              That doesn&apos;t look like a timetable code or share link.
+            </ModalNote>
           )}
-        />
+          {decoded && (
+            <ModalNote>
+              Found {Object.keys(decoded.timetable).length} module
+              {Object.keys(decoded.timetable).length !== 1 ? "s" : ""} and{" "}
+              {decoded.customCourses.length} custom block
+              {decoded.customCourses.length !== 1 ? "s" : ""}.
+            </ModalNote>
+          )}
+        </ModalSection>
 
-        {isInvalid && (
-          <p className="text-destructive text-xs">
-            That doesn&apos;t look like a timetable code or share link.
-          </p>
-        )}
-
-        {decoded && (
-          <p className="text-muted-foreground text-xs">
-            Found {Object.keys(decoded.timetable).length} module
-            {Object.keys(decoded.timetable).length !== 1 ? "s" : ""} and{" "}
-            {decoded.customCourses.length} custom block
-            {decoded.customCourses.length !== 1 ? "s" : ""}.
-          </p>
-        )}
-
-        <div className="space-y-2">
-          <p className="text-xs font-medium">Import into</p>
+        <ModalSection title="Import into">
           <div className="flex flex-wrap gap-1.5">
             {timetables.map((_, i) => (
               <button
                 key={i}
                 type="button"
                 onClick={() => setTargetPlan(i)}
+                aria-pressed={targetPlan === i}
                 className={cn(
-                  "h-7 max-w-full cursor-pointer truncate rounded-md border px-2.5 text-xs font-medium transition-colors",
+                  "h-8 max-w-full cursor-pointer truncate rounded-md border px-3 text-sm transition-colors",
                   targetPlan === i
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:border-foreground"
@@ -109,24 +110,21 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
             ))}
           </div>
           {planHasData(timetables, customCourses, targetPlan) && (
-            <p className="text-destructive text-xs">
+            <ModalNote tone="danger">
               {label(targetPlan)} already has a timetable. Importing will
               overwrite it.
-            </p>
+            </ModalNote>
           )}
-        </div>
+        </ModalSection>
 
-        <div className="flex justify-end gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onOpenChange(false)}>
+        <ModalFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button size="sm" disabled={!decoded} onClick={handleImport}>
+          <Button disabled={!decoded} onClick={handleImport}>
             Import
           </Button>
-        </div>
+        </ModalFooter>
       </div>
     </ResponsiveModal>
   )

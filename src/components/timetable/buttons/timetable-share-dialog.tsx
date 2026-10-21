@@ -8,7 +8,11 @@ import { reportError, track } from "@/lib/analytics"
 import { BASE_URL } from "@/lib/constants"
 import { buildShareLink, encodeTextBundle } from "@/lib/timetable-share"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
+import { Switch } from "@/components/ui/switch"
+
+import { ModalNote, ModalOption, ModalSection } from "./modal-parts"
 
 // Chrome's ~2000 char practical ceiling, minus room for the origin
 const LINK_LENGTH_WARNING = 1800
@@ -107,47 +111,45 @@ const TimetableShareDialog = ({
         </>
       }
       className="max-h-[90vh] overflow-y-auto sm:max-w-md">
-      <div className="space-y-4">
+      <div className="space-y-5">
         {customCourses.length > 0 && (
-          <label className="flex cursor-pointer items-start gap-2 text-sm">
-            <input
-              type="checkbox"
+          <ModalOption
+            title="Include custom blocks"
+            hint="Your gym, CCA and other personal blocks travel with it.">
+            <Switch
               checked={includeCustomBlocks}
-              onChange={(e) => setIncludeCustomBlocks(e.target.checked)}
-              className="mt-0.5 size-3.5"
+              onCheckedChange={setIncludeCustomBlocks}
+              aria-label="Include custom blocks"
             />
-            <span>
-              Include custom blocks
-              <span className="text-muted-foreground block text-xs">
-                Your gym, CCA and other personal blocks travel with the link
-              </span>
-            </span>
-          </label>
+          </ModalOption>
         )}
 
-        <div className="space-y-2">
-          <div className="text-muted-foreground bg-muted/40 max-h-20 overflow-y-auto rounded-md border p-2 text-xs break-all">
-            {link}
-          </div>
-
+        <ModalSection
+          title="Link"
+          hint="Anyone with the link can open your plan.">
+          <Input
+            readOnly
+            value={link}
+            onFocus={(e) => e.currentTarget.select()}
+            aria-label="Share link"
+            className="text-muted-foreground font-mono text-xs"
+          />
+          {isLinkLong && (
+            <ModalNote>
+              This link is long and some apps may cut it short. The text code
+              below is safer.
+            </ModalNote>
+          )}
           <Button onClick={handleCopyLink} className="w-full gap-2">
             <LinkIcon className="size-4" />
             Copy link
           </Button>
+        </ModalSection>
 
-          {isLinkLong && (
-            <p className="text-muted-foreground text-xs">
-              This link is long and some apps may cut it short — the text code
-              below is safer.
-            </p>
-          )}
-        </div>
-
-        <div className="space-y-2 border-t pt-4">
-          <p className="text-muted-foreground text-xs">
-            Or copy a text code that the receiver pastes into Import. Handles
-            any number of custom blocks.
-          </p>
+        <ModalSection
+          title="Text code"
+          hint="Paste it into Import on another device. It works with any number of custom blocks."
+          className="border-t pt-5">
           <Button
             variant="outline"
             onClick={handleCopyText}
@@ -155,7 +157,7 @@ const TimetableShareDialog = ({
             <ClipboardCopy className="size-4" />
             Copy as text
           </Button>
-        </div>
+        </ModalSection>
       </div>
     </ResponsiveModal>
   )

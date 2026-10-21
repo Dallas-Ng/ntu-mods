@@ -5,6 +5,8 @@ import { ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 
+import { ModalFooter, ModalNote, ModalSection } from "./modal-parts"
+
 interface Props {
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -53,40 +55,42 @@ const TimetableCalendarDialog = ({
     description="Download your timetable as a calendar file, then open it in your calendar app."
     className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
     <div className="space-y-5">
-      <div className="space-y-1.5 text-sm">
-        <p className="font-medium">What you get</p>
-        <p className="text-muted-foreground">
+      <ModalSection title="What you get">
+        <p className="text-muted-foreground text-sm">
           An <code className="text-foreground">.ics</code> file with one event
           for every class, on each week it runs, with its venue. Recess week is
           skipped. It works with any calendar app.
         </p>
-      </div>
+      </ModalSection>
 
-      <div className="space-y-3">
-        <p className="text-sm font-medium">How to add it</p>
-        {APPS.map((app) => (
-          <div key={app.name} className="space-y-0.5 text-sm">
-            <p className="font-medium">{app.name}</p>
-            <p className="text-muted-foreground">{app.steps}</p>
-            <a
-              href={app.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary inline-flex items-center gap-1 text-xs underline underline-offset-2">
-              {app.link}
-              <ExternalLink className="size-3" />
-            </a>
-          </div>
-        ))}
-      </div>
+      <ModalSection title="How to add it">
+        <div className="divide-y rounded-lg border">
+          {APPS.map((app) => (
+            <div key={app.name} className="space-y-1 p-3 text-sm">
+              <p className="font-medium">{app.name}</p>
+              <p className="text-muted-foreground text-xs leading-relaxed">
+                {app.steps}
+              </p>
+              <a
+                href={app.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary inline-flex items-center gap-1 text-xs underline underline-offset-2">
+                {app.link}
+                <ExternalLink className="size-3" />
+              </a>
+            </div>
+          ))}
+        </div>
+      </ModalSection>
 
-      <p className="text-muted-foreground bg-muted rounded-lg p-3 text-xs">
+      <ModalNote>
         The file is a snapshot. If you change your plan later, the calendar does
         not update, so delete the old events and import again. Importing into a
         new calendar makes them easy to remove.
-      </p>
+      </ModalNote>
 
-      <div className="flex justify-end gap-2">
+      <ModalFooter>
         <Button variant="outline" onClick={() => onOpenChange(false)}>
           Cancel
         </Button>
@@ -98,7 +102,7 @@ const TimetableCalendarDialog = ({
           }}>
           Download .ics
         </Button>
-      </div>
+      </ModalFooter>
     </div>
   </ResponsiveModal>
 )

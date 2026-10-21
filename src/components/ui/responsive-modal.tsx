@@ -1,5 +1,6 @@
 "use client"
 
+import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 import {
   Dialog,
@@ -29,6 +30,8 @@ interface Props {
    */
   nested?: boolean
   children: React.ReactNode
+  /** Buttons pinned under the scrolling content, always in view. */
+  footer?: React.ReactNode
   /** Extra classes for the desktop dialog. */
   className?: string
 }
@@ -46,6 +49,7 @@ export const ResponsiveModal = ({
   showDescription = false,
   nested = true,
   children,
+  footer,
   className
 }: Props) => {
   const { isMobile } = useSettings()
@@ -66,16 +70,22 @@ export const ResponsiveModal = ({
             }>
             {description ?? "Details"}
           </DrawerDescription>
-          <div className="mt-4 min-h-0 flex-1 overflow-y-auto px-3 pb-8">
+          <div
+            className={cn(
+              "mt-4 min-h-0 flex-1 overflow-y-auto px-3",
+              footer ? "pb-4" : "pb-8"
+            )}>
             {children}
           </div>
+          {footer && <div className="border-t px-3 pt-3 pb-4">{footer}</div>}
         </DrawerContent>
       </Root>
     )
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className={className}>
+      <DialogContent
+        className={cn(footer && "flex flex-col overflow-hidden", className)}>
         <DialogHeader>
           <DialogTitle className="flex items-center">{title}</DialogTitle>
           <DialogDescription
@@ -83,7 +93,16 @@ export const ResponsiveModal = ({
             {description ?? "Details"}
           </DialogDescription>
         </DialogHeader>
-        {children}
+        {footer ? (
+          <>
+            <div className="-mx-1 min-h-0 flex-1 overflow-y-auto px-1">
+              {children}
+            </div>
+            <div className="border-t pt-4">{footer}</div>
+          </>
+        ) : (
+          children
+        )}
       </DialogContent>
     </Dialog>
   )

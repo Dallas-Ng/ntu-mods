@@ -10,7 +10,6 @@
     "data": "tsx scripts/build-static-data.mts",
     "dev": "pnpm data && astro dev --port ${PORT:-4321}",
     "build": "pnpm data && astro build && node scripts/upload-sourcemaps.mjs && tsx scripts/build-sitemap.mts && node scripts/indexnow.mjs ../dist/client",
-    "build:ci": "pnpm install --frozen-lockfile --prod && pnpm build",
     "preview": "astro preview --port ${PORT:-4321}",
     "db:build": "node scripts/db/sync-db.mjs --from json",
     "db:pull": "node scripts/db/sync-db.mjs --from d1",

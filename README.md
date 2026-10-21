@@ -173,31 +173,29 @@ npx wrangler deploy --config dist/server/wrangler.json
 
 ### Production build settings
 
-Production and previews skip Workers Builds' default full install and run a
-production-only one instead (no devDependencies: eslint, vitest, playwright,
-prettier and friends are not needed to build). Set the build variable
-`SKIP_DEPENDENCY_INSTALL=1` and use `pnpm build:ci`, which runs
-`pnpm install --frozen-lockfile --prod && pnpm build`. These settings live in
-the dashboard (Workers & Pages → `ntu-mods` → Settings → Builds), not in the
-repo:
+Production and previews use Workers Builds' own install (a full
+`pnpm install --frozen-lockfile`, so its dependency cache applies) and the plain
+`pnpm build`. Nothing custom: no `--prod`, no `NODE_ENV`, no
+`SKIP_DEPENDENCY_INSTALL`. The build does not need devDependencies, but Workers
+Builds installs before it runs the build command, so skipping them would only
+add a second install. These settings live in the dashboard (Workers & Pages →
+`ntu-mods` → Settings → Builds), not in the repo:
 
 | Setting         | Production                                               | Previews Base          |
 | --------------- | -------------------------------------------------------- | ---------------------- |
-| Build command   | `pnpm build:ci`                                          | `pnpm build:ci`        |
+| Build command   | `pnpm build`                                             | `pnpm build`           |
 | Deploy command  | `npx wrangler deploy --config dist/server/wrangler.json` | n/a                    |
 | Preview command | n/a                                                      | `npx wrangler preview` |
 
-Build variables on both: `CLOUDFLARE_ACCOUNT_ID`, `PUBLIC_POSTHOG_TOKEN` and
-`SKIP_DEPENDENCY_INSTALL=1`.
+Build variables on both: `CLOUDFLARE_ACCOUNT_ID` and `PUBLIC_POSTHOG_TOKEN`.
 Production also has `POSTHOG_CLI_API_KEY` (a personal API key with the error
 tracking write and organization read scopes) and `POSTHOG_CLI_PROJECT_ID`, so
 error stack traces in PostHog point at real source lines
 ([`scripts/upload-sourcemaps.mjs`](scripts/upload-sourcemaps.mjs)).
 `RESEND_KEY` is a runtime secret only (see Secrets below).
 
-Anything the build runs must live in `dependencies`, not `devDependencies`:
-`astro`, `tailwindcss`, `tsx`, `wrangler` and `@posthog/cli` (sourcemap
-upload) are there for that reason; leave them there.
+Everything the build runs (`astro`, `tailwindcss`, `tsx`, `wrangler`,
+`@posthog/cli`) is in `dependencies`; leave them there.
 
 Measured on Workers Builds (October 2026): about 1m 40s to 3m 10s per build.
 The install phase is 1 to 1m 40s and varies with whether the dependency cache

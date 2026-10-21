@@ -16,7 +16,14 @@ import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import ButtonCollapsable from "@/components/button-collapsable"
 
-const TimetableDownloadCalendarButton = () => {
+import TimetableCalendarDialog from "./timetable-calendar-dialog"
+
+const TimetableDownloadCalendarButton = ({
+  labelled
+}: {
+  /** Show the label on phones too, stretching to share the row. */
+  labelled?: boolean
+}) => {
   const { timetable } = useTimetable()
   const year = latestYear
   const semester = latestSemester
@@ -27,12 +34,22 @@ const TimetableDownloadCalendarButton = () => {
   const moduleRemarks = useBoundState((s) => s.moduleRemarks)
   const indexRemarks = useBoundState((s) => s.indexRemarks)
   const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false)
 
-  const handleClick = async () => {
-    if (Object.keys(timetable).length === 0 && customCourses.length === 0) {
+  const isEmpty =
+    Object.keys(timetable).length === 0 && customCourses.length === 0
+
+  // Explains the file first; the download happens from the dialog.
+  const openDialog = () => {
+    if (isEmpty) {
       toast.info("Please fill up your timetable first")
       return
     }
+    setOpen(true)
+  }
+
+  const handleDownload = async () => {
+    if (isEmpty) return
 
     setLoading(true)
 
@@ -89,12 +106,31 @@ const TimetableDownloadCalendarButton = () => {
   }
 
   return (
-    <ButtonCollapsable
-      onClick={handleClick}
-      disabled={loading}
-      icon={Calendar}
-      text="Save to Calendar"
-    />
+    <>
+      <ButtonCollapsable
+        onClick={openDialog}
+        icon={Calendar}
+        text={
+          labelled ? (
+            <>
+              <span className="sm:hidden">Calendar</span>
+              <span className="hidden sm:inline">Save to Calendar</span>
+            </>
+          ) : (
+            "Save to Calendar"
+          )
+        }
+        aria-label="Save to Calendar"
+        labelled={labelled}
+        className={labelled ? "flex-1 sm:flex-none" : undefined}
+      />
+      <TimetableCalendarDialog
+        open={open}
+        onOpenChange={setOpen}
+        loading={loading}
+        onDownload={handleDownload}
+      />
+    </>
   )
 }
 

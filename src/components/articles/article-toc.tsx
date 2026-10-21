@@ -164,9 +164,7 @@ export const MobileSectionDropdown = ({ headings }: Props) => {
       </DrawerTrigger>
 
       <DrawerContent>
-        <DrawerTitle className="px-4 pt-3 pb-2 text-base">
-          On this page
-        </DrawerTitle>
+        <DrawerTitle className="px-4 pb-2 text-base">On this page</DrawerTitle>
         <DrawerDescription className="sr-only">
           Jump to a section of this page
         </DrawerDescription>

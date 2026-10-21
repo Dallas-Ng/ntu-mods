@@ -133,6 +133,21 @@ const PrivacyContent = () => {
         </p>
 
         <h3 className="text-foreground mt-4 text-base font-semibold">
+          Timetable Walking Routes
+        </h3>
+
+        <p>
+          The Walking between classes feature on the timetable page works out
+          the venues of your classes for one day on your device. Only when you
+          open it, and only for the pairs of venues that follow each other, it
+          asks our server for the walking route between the two venues (see
+          Walking directions under Campus Map below). Module codes, indexes,
+          plan names and custom block names are not sent. Your plan names and
+          layout choices are saved in localStorage like the rest of your
+          timetable.
+        </p>
+
+        <h3 className="text-foreground mt-4 text-base font-semibold">
           Campus Map
         </h3>
 

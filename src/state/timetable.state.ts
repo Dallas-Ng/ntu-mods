@@ -6,6 +6,8 @@ import { DEFAULT_GENERATION_CONFIG } from "@/lib/generation-config"
 export interface TimetableSlice {
   timetables: Timetable[]
   timetableIndex: number
+  /** Names the student gave their plans; "" keeps the default "Plan N". */
+  planNames: string[]
   timetableCreationMode: TimetableCreationMode
   generationConfig: GenerationConfig
   /**
@@ -27,6 +29,7 @@ export interface TimetableSlice {
   updateItemIndex: (moduleKey: string, indexKey: string) => void
   removeItemFromTimetable: (moduleKey: string) => void
   updateTimetableIndex: (timetableIndex: number) => void
+  setPlanName: (index: number, name: string) => void
   duplicateTimetable: (fromIndex: number, toIndex: number) => void
   resetTimetables: () => void
   setTimetableCreationMode: (mode: TimetableCreationMode) => void
@@ -50,6 +53,7 @@ export interface TimetableSlice {
 export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   timetables: [{}, {}, {}, {}, {}],
   timetableIndex: 0,
+  planNames: ["", "", "", "", ""],
   timetableCreationMode: "default",
   generationConfig: DEFAULT_GENERATION_CONFIG,
   uniqueTimeslotsOnly: true,
@@ -118,6 +122,16 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   updateTimetableIndex: (timetableIndex: number) => {
     set((_state) => ({ timetableIndex }))
   },
+  setPlanName: (index, name) =>
+    set((state) => {
+      // Saved states from before plans had names have no array yet.
+      const planNames = Array.from(
+        { length: state.timetables.length },
+        (_, i) => state.planNames?.[i] ?? ""
+      )
+      planNames[index] = name.trim().slice(0, 20)
+      return { planNames }
+    }),
   duplicateTimetable: (fromIndex, toIndex) =>
     set((state) => {
       const updatedTimetables = [...state.timetables]
@@ -136,6 +150,7 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
     set((_state) => ({
       timetables: [{}, {}, {}, {}, {}],
       timetableIndex: 0,
+      planNames: ["", "", "", "", ""],
       customCourses: [[], [], [], [], []]
     }))
   },

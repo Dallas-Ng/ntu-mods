@@ -10,14 +10,9 @@ import { CUSTOM_LUNCH_TYPE } from "@/lib/custom-course-colors"
 import { formatHhmm } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import {
   Select,
   SelectContent,
@@ -56,7 +51,8 @@ const MAX_INDEXES = 10
 
 interface SessionRow {
   _key: string
-  type: string // stored value — preset code or free text
+  type: string // stored value — preset code or free text; "" until chosen
+  custom: boolean // "Custom…" picked, so `type` is free text (may stay empty)
   days: number[] // one persisted session is created per selected day
   startTime: number
   endTime: number
@@ -79,7 +75,8 @@ const newSession = (
   defaults?: Partial<Omit<SessionRow, "_key">>
 ): SessionRow => ({
   _key: crypto.randomUUID(),
-  type: "LEC",
+  type: "",
+  custom: false,
   days: [1],
   startTime: 900,
   endTime: 1000,
@@ -113,6 +110,7 @@ const groupSessionsIntoRows = (
       rows.set(groupKey, {
         _key: crypto.randomUUID(),
         type: s.type,
+        custom: !PRESET_TYPE_VALUES.has(s.type),
         days: [s.day],
         startTime: s.startTime,
         endTime: s.endTime,
@@ -148,7 +146,7 @@ const formToCourse = (form: FormState): Omit<CustomCourse, "id"> => {
     .map((index, i) => ({
       id: index._key,
       label: index.label.trim() || `Option ${i + 1}`,
-      sessions: index.sessions.flatMap(({ _key: _k, days, ...s }) =>
+      sessions: index.sessions.flatMap(({ _key: _k, custom: _c, days, ...s }) =>
         days.map((day) => ({ ...s, type: s.type.trim(), day }))
       )
     }))
@@ -177,7 +175,7 @@ const SessionRowEditor = ({
   onChange,
   onRemove
 }: SessionRowProps) => {
-  const isCustomType = !PRESET_TYPE_VALUES.has(session.type)
+  const isCustomType = session.custom
   const selectValue = isCustomType ? CUSTOM_SENTINEL : session.type
 
   const validEndTimes = END_TIME_OPTIONS.filter(
@@ -206,9 +204,9 @@ const SessionRowEditor = ({
 
   const handleTypeSelectChange = (v: string) => {
     if (v === CUSTOM_SENTINEL) {
-      onChange({ type: "" })
+      onChange({ type: "", custom: true })
     } else {
-      onChange({ type: v })
+      onChange({ type: v, custom: false })
     }
   }
 
@@ -223,11 +221,14 @@ const SessionRowEditor = ({
           <div className="flex flex-col gap-2 sm:flex-row">
             <Select value={selectValue} onValueChange={handleTypeSelectChange}>
               <SelectTrigger size="sm" className="w-full sm:w-36 sm:shrink-0">
-                <SelectValue placeholder="Type" />
+                <SelectValue placeholder="Choose type" />
               </SelectTrigger>
               <SelectContent>
                 {PRESET_TYPES.map((o) => (
-                  <SelectItem key={o.value} value={o.value}>
+                  <SelectItem
+                    key={o.value}
+                    value={o.value}
+                    className="pr-2 data-[state=checked]:font-medium *:[span]:last:w-full *:[span]:last:justify-between [&>[data-slot=select-item-indicator]]:hidden">
                     <span>{o.label}</span>
                     <span className="text-muted-foreground ml-1.5 text-xs">
                       {o.value}
@@ -426,150 +427,149 @@ export const CourseModal = ({
     form.indexes.every(
       (index) =>
         index.sessions.length > 0 &&
-        index.sessions.every((s) => s.days.length > 0)
+        index.sessions.every(
+          (s) => s.days.length > 0 && (s.custom || s.type !== "")
+        )
     )
 
   const hasMultipleIndexes = form.indexes.length > 1
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
-            {initial ? "Edit custom block" : "Add custom block"}
-          </DialogTitle>
-        </DialogHeader>
+    <ResponsiveModal
+      open={open}
+      onOpenChange={onOpenChange}
+      title={initial ? "Edit custom block" : "Add custom block"}
+      description="Name the block, then choose its days, times and venue."
+      className="max-h-[90vh] overflow-y-auto">
+      <div className="space-y-5 pt-1">
+        {/* Name */}
+        <div className="space-y-1.5">
+          <Label htmlFor="cc-name">
+            Name{" "}
+            <span className="text-muted-foreground font-normal">
+              (shown like a module code)
+            </span>
+          </Label>
+          <Input
+            id="cc-name"
+            placeholder="e.g. Gym, Badminton CCA, Part-time Job"
+            value={form.name}
+            maxLength={40}
+            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+          />
+        </div>
 
-        <div className="space-y-5 pt-1">
-          {/* Name */}
-          <div className="space-y-1.5">
-            <Label htmlFor="cc-name">
-              Name{" "}
-              <span className="text-muted-foreground font-normal">
-                (shown like a module code)
-              </span>
-            </Label>
-            <Input
-              id="cc-name"
-              placeholder="e.g. Gym, Badminton CCA, Part-time Job"
-              value={form.name}
-              maxLength={40}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-            />
+        {/* Options (indexes) */}
+        <div className="space-y-2">
+          <div className="flex items-baseline justify-between gap-2">
+            <Label>Options</Label>
+            <span className="text-muted-foreground text-xs">
+              Generation picks whichever fits best
+            </span>
           </div>
 
-          {/* Options (indexes) */}
-          <div className="space-y-2">
-            <div className="flex items-baseline justify-between gap-2">
-              <Label>Options</Label>
-              <span className="text-muted-foreground text-xs">
-                Generation picks whichever fits best
-              </span>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-1.5">
-              {form.indexes.map((index) => {
-                const isActive = index._key === activeIndex._key
-                return (
-                  <div
-                    key={index._key}
-                    className={cn(
-                      "flex h-7 items-center rounded-md border text-xs font-medium transition-colors",
-                      isActive
-                        ? "bg-foreground text-background border-transparent"
-                        : "text-muted-foreground hover:border-foreground"
-                    )}>
+          <div className="flex flex-wrap items-center gap-1.5">
+            {form.indexes.map((index) => {
+              const isActive = index._key === activeIndex._key
+              return (
+                <div
+                  key={index._key}
+                  className={cn(
+                    "flex h-7 items-center rounded-md border text-xs font-medium transition-colors",
+                    isActive
+                      ? "bg-foreground text-background border-transparent"
+                      : "text-muted-foreground hover:border-foreground"
+                  )}>
+                  <button
+                    type="button"
+                    className="h-full cursor-pointer px-2.5"
+                    onClick={() =>
+                      setForm((f) => ({ ...f, activeIndexKey: index._key }))
+                    }>
+                    {index.label.trim() || "Untitled"}
+                  </button>
+                  {hasMultipleIndexes && (
                     <button
                       type="button"
-                      className="h-full cursor-pointer px-2.5"
-                      onClick={() =>
-                        setForm((f) => ({ ...f, activeIndexKey: index._key }))
-                      }>
-                      {index.label.trim() || "Untitled"}
+                      aria-label={`Remove ${index.label}`}
+                      className="h-full cursor-pointer pr-1.5 opacity-60 hover:opacity-100"
+                      onClick={() => removeIndex(index._key)}>
+                      <X className="size-3" />
                     </button>
-                    {hasMultipleIndexes && (
-                      <button
-                        type="button"
-                        aria-label={`Remove ${index.label}`}
-                        className="h-full cursor-pointer pr-1.5 opacity-60 hover:opacity-100"
-                        onClick={() => removeIndex(index._key)}>
-                        <X className="size-3" />
-                      </button>
-                    )}
-                  </div>
-                )
-              })}
+                  )}
+                </div>
+              )
+            })}
 
-              {form.indexes.length < MAX_INDEXES && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={addIndex}
-                  className="text-muted-foreground h-7 gap-1 px-2 text-xs">
-                  <Plus className="size-3.5" />
-                  Option
-                </Button>
-              )}
-            </div>
-
-            {hasMultipleIndexes && (
-              <Input
-                className="h-8 text-sm placeholder:text-sm"
-                placeholder="Option name"
-                value={activeIndex.label}
-                maxLength={30}
-                onChange={(e) => updateActiveIndex({ label: e.target.value })}
-              />
+            {form.indexes.length < MAX_INDEXES && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={addIndex}
+                className="text-muted-foreground h-7 gap-1 px-2 text-xs">
+                <Plus className="size-3.5" />
+                Option
+              </Button>
             )}
           </div>
 
-          {/* Sessions of the active option */}
-          <div className="space-y-2">
-            <Label>Sessions</Label>
-
-            <div className="space-y-2">
-              {activeIndex.sessions.map((session) => (
-                <SessionRowEditor
-                  key={session._key}
-                  session={session}
-                  canRemove={activeIndex.sessions.length > 1}
-                  onChange={(updates) => updateSession(session._key, updates)}
-                  onRemove={() => removeSession(session._key)}
-                />
-              ))}
-            </div>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={addSession}
-              className="text-muted-foreground h-8 gap-1.5">
-              <Plus className="size-3.5" />
-              Add session
-            </Button>
-          </div>
-
-          {/* Actions */}
-          <div className="flex justify-end gap-2 pt-1">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button
-              size="sm"
-              disabled={!isValid}
-              onClick={() => {
-                onSave(formToCourse(form))
-                onOpenChange(false)
-              }}>
-              Save
-            </Button>
-          </div>
+          {hasMultipleIndexes && (
+            <Input
+              className="h-8 text-sm placeholder:text-sm"
+              placeholder="Option name"
+              value={activeIndex.label}
+              maxLength={30}
+              onChange={(e) => updateActiveIndex({ label: e.target.value })}
+            />
+          )}
         </div>
-      </DialogContent>
-    </Dialog>
+
+        {/* Sessions of the active option */}
+        <div className="space-y-2">
+          <Label>Sessions</Label>
+
+          <div className="space-y-2">
+            {activeIndex.sessions.map((session) => (
+              <SessionRowEditor
+                key={session._key}
+                session={session}
+                canRemove={activeIndex.sessions.length > 1}
+                onChange={(updates) => updateSession(session._key, updates)}
+                onRemove={() => removeSession(session._key)}
+              />
+            ))}
+          </div>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={addSession}
+            className="text-muted-foreground h-8 gap-1.5">
+            <Plus className="size-3.5" />
+            Add session
+          </Button>
+        </div>
+
+        {/* Actions */}
+        <div className="flex justify-end gap-2 pt-1">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onOpenChange(false)}>
+            Cancel
+          </Button>
+          <Button
+            size="sm"
+            disabled={!isValid}
+            onClick={() => {
+              onSave(formToCourse(form))
+              onOpenChange(false)
+            }}>
+            Save
+          </Button>
+        </div>
+      </div>
+    </ResponsiveModal>
   )
 }
 
@@ -596,102 +596,83 @@ const CustomCourseEditor = () => {
   }, [timetableIndex])
 
   return (
-    <div className="rounded-lg border-2">
-      <div className="text-muted-foreground p-2 text-center text-xs">
-        Custom Blocks
-      </div>
-
-      <hr />
-
+    <div>
       <div className="max-h-[30vh] overflow-y-auto">
-        {courses.length === 0 ? (
-          <p className="text-muted-foreground p-3 text-center text-sm">
-            No blocks yet.
-            <br />
-            <span className="text-xs">
-              Gym, CCA, custom mods, external courses&hellip;
-            </span>
-          </p>
-        ) : (
-          courses.map((course) => {
-            const selected =
-              course.indexes.find((i) => i.id === course.selectedIndexId) ??
-              course.indexes[0]
-            // Collapse repeats from multi-day sessions (e.g. 5x "LEC") into "LEC ×5"
-            const typeCounts = new Map<string, number>()
-            selected?.sessions.forEach((s) =>
-              typeCounts.set(s.type, (typeCounts.get(s.type) ?? 0) + 1)
-            )
-            const sessionLabels = [...typeCounts]
-              .map(([type, count]) => {
-                const label = type.length > 0 ? type : ""
-                if (count === 1) return label
-                return label ? `${label} (${count}d)` : `${count}d`
-              })
-              .join(" · ")
+        {courses.map((course) => {
+          const selected =
+            course.indexes.find((i) => i.id === course.selectedIndexId) ??
+            course.indexes[0]
+          // Collapse repeats from multi-day sessions (e.g. 5x "LEC") into "LEC ×5"
+          const typeCounts = new Map<string, number>()
+          selected?.sessions.forEach((s) =>
+            typeCounts.set(s.type, (typeCounts.get(s.type) ?? 0) + 1)
+          )
+          const sessionLabels = [...typeCounts]
+            .map(([type, count]) => {
+              const label = type.length > 0 ? type : ""
+              if (count === 1) return label
+              return label ? `${label} (${count}d)` : `${count}d`
+            })
+            .join(" · ")
 
-            return (
-              <div key={course.id} className="py-0.5">
-                <div
-                  className="hover:bg-accent flex cursor-pointer items-center justify-between py-1 pr-1 pl-3 text-sm transition-colors"
-                  onClick={() => setEditingCourse(course)}>
-                  <div className="flex min-w-0 items-baseline gap-2">
-                    <span className="max-w-[110px] truncate text-sm">
-                      {course.name}
-                    </span>
-                    <span className="text-muted-foreground shrink-0 text-xs">
-                      {sessionLabels}
-                    </span>
-                  </div>
-
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-muted-foreground hover:text-destructive size-8 shrink-0"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      removeCustomCourse(course.id)
-                      if (editingCourse?.id === course.id)
-                        setEditingCourse(null)
-                      track("custom_course_deleted")
-                    }}>
-                    <Trash2 className="size-3.5" />
-                  </Button>
+          return (
+            <div key={course.id}>
+              <div
+                className="hover:bg-accent flex cursor-pointer items-center justify-between pr-3 pl-4 text-sm transition-colors"
+                onClick={() => setEditingCourse(course)}>
+                <div className="flex min-w-0 items-center gap-1">
+                  <span className="max-w-[110px] min-w-16 truncate font-medium">
+                    {course.name}
+                  </span>
+                  <span className="text-muted-foreground shrink-0 text-sm">
+                    {sessionLabels}
+                  </span>
                 </div>
 
-                {course.indexes.length > 1 && (
-                  <div className="flex flex-wrap gap-1 px-3 pb-1">
-                    {course.indexes.map((courseIndex) => {
-                      const isActive = courseIndex.id === selected?.id
-                      return (
-                        <button
-                          key={courseIndex.id}
-                          type="button"
-                          onClick={() =>
-                            selectCustomCourseIndex(course.id, courseIndex.id)
-                          }
-                          className={cn(
-                            "focus-visible:ring-ring/50 h-5 cursor-pointer rounded border px-1.5 text-[0.65rem] font-medium transition-colors outline-none focus-visible:ring-[3px]",
-                            isActive
-                              ? "bg-foreground text-background border-transparent"
-                              : "text-muted-foreground hover:border-foreground"
-                          )}>
-                          {courseIndex.label}
-                        </button>
-                      )
-                    })}
-                  </div>
-                )}
+                <button
+                  type="button"
+                  aria-label={`Remove ${course.name}`}
+                  className="flex size-8 shrink-0 cursor-pointer items-center justify-center"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    removeCustomCourse(course.id)
+                    if (editingCourse?.id === course.id) setEditingCourse(null)
+                    track("custom_course_deleted")
+                  }}>
+                  <Trash2 className="text-muted-foreground hover:text-foreground size-4 transition-colors" />
+                </button>
               </div>
-            )
-          })
-        )}
+
+              {course.indexes.length > 1 && (
+                <div className="flex flex-wrap gap-1 px-4 pb-1">
+                  {course.indexes.map((courseIndex) => {
+                    const isActive = courseIndex.id === selected?.id
+                    return (
+                      <button
+                        key={courseIndex.id}
+                        type="button"
+                        onClick={() =>
+                          selectCustomCourseIndex(course.id, courseIndex.id)
+                        }
+                        className={cn(
+                          "focus-visible:ring-ring/50 h-5 cursor-pointer rounded border px-1.5 text-[0.65rem] font-medium transition-colors outline-none focus-visible:ring-[3px]",
+                          isActive
+                            ? "bg-foreground text-background border-transparent"
+                            : "text-muted-foreground hover:border-foreground"
+                        )}>
+                        {courseIndex.label}
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
 
-      <hr />
-
       <button
-        className="hover:bg-accent focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-center gap-1.5 p-2 text-sm transition-colors outline-none focus-visible:ring-[3px]"
+        className="hover:bg-accent focus-visible:ring-ring/50 mx-4 mt-1 flex w-[calc(100%-2rem)] cursor-pointer items-center justify-center gap-1.5 rounded-md border border-dashed p-2 text-sm transition-colors outline-none focus-visible:ring-[3px]"
         onClick={() => setAddOpen(true)}>
         <Plus className="size-3.5" />
         Add custom block

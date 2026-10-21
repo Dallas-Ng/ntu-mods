@@ -12,6 +12,9 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --default-font-family: var(--font-sans);
 
+  /* Strong ease-out for UI entrances: fast start, long soft landing. */
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -266,8 +269,25 @@
    between rows — fine for the timetable grid, but it left prose tables in
    articles with rows over 1500px tall. Components that do want a full-height
    table set `h-full` themselves. */
+/* Accordion sections open in the server HTML do not animate in on first
+   paint (set data-ready from the Accordion component once hydrated). */
+:root:not([data-ready]) [data-slot="accordion-content"] {
+  animation-duration: 0s !important;
+}
+
 table {
   @apply bg-card w-full border-collapse border-2 border-slate-200 dark:border-slate-900;
+}
+
+/* The timetable grid's border (2px slate), for the cards around it so the
+   page has one border style: toolbar, side panel, hint, map preview. */
+.panel-border {
+  @apply border-2 border-slate-200 dark:border-slate-900;
+}
+
+.panel-border [data-slot="accordion-item"],
+.panel-border .border-l {
+  @apply border-slate-200 dark:border-slate-900;
 }
 
 table th {
@@ -365,6 +385,13 @@ table td {
 .prose table td,
 .data-table td {
   background: hsl(var(--background));
+}
+
+/* Totals row: tinted like the header, no trailing rule. */
+.data-table tfoot td {
+  @apply border-b-0 font-medium;
+  background: hsl(var(--muted));
+  border-top: 2px solid hsl(var(--border));
 }
 
 .prose table tbody tr:nth-child(even) td,

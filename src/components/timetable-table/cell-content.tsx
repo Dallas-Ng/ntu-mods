@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils"
 interface Props {
   index: Index
   moduleKey: string
+  /** A lecture every index of the module shares. */
+  common?: boolean
   tableCell?: {
     key: boolean
     type: boolean
@@ -27,6 +29,7 @@ export const TimetableTableCellContent = (props: Props) => {
   const {
     moduleKey,
     index,
+    common = false,
     tableCell = {
       key: true,
       type: true,
@@ -50,10 +53,7 @@ export const TimetableTableCellContent = (props: Props) => {
         <p>
           <span className={cn("font-bold", style.text)}>{index.group}</span>
           {sessionLabel && (
-            <span className={cn("font-semibold", style.textAlt)}>
-              {" "}
-              {sessionLabel}
-            </span>
+            <span className={cn(style.textAlt)}> {sessionLabel}</span>
           )}
         </p>
         {tableCell.time && <p className={cn(style.textAlt)}>{index.time}</p>}
@@ -68,13 +68,17 @@ export const TimetableTableCellContent = (props: Props) => {
         <span className={cn("font-bold", indexStyle.text)}>{moduleKey}</span>
 
         {tableCell.type && (
-          <span className={cn("font-semibold", indexStyle.textAlt)}>
+          <span className={cn(indexStyle.textAlt)}>
             {" "}
             {getIndexType(index.type)}
           </span>
         )}
 
-        {tableCell.group && <> ({index.group})</>}
+        {common ? (
+          <span className={cn(indexStyle.textAlt)}> (COM)</span>
+        ) : (
+          tableCell.group && <> ({index.group})</>
+        )}
       </p>
 
       <p>

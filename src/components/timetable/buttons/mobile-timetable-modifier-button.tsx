@@ -46,7 +46,7 @@ const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
           Add, remove, and change timetable module indexes.
         </DrawerDescription>
 
-        <div className="mt-5 min-h-0 flex-1 overflow-y-auto">
+        <div className="min-h-0 flex-1 overflow-y-auto">
           <TimetableModifier />
         </div>
       </DrawerContent>

@@ -6,6 +6,7 @@ import { CalendarCheck, CalendarPlus, Check } from "lucide-react"
 import { track } from "@/lib/analytics"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
 import { cn } from "@/lib/utils"
+import { usePlanNames } from "@/hooks/use-plan-names"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -55,6 +56,7 @@ function PlanItems({
   moduleKey: string
   onSelect: (i: number) => void
 }) {
+  const { label, named } = usePlanNames()
   return (
     <>
       {timetables.map((plan, i) => {
@@ -67,7 +69,14 @@ function PlanItems({
             <Check
               className={`size-3.5 transition-opacity ${inPlan ? "opacity-100" : "opacity-0"}`}
             />
-            Plan {i + 1}
+            <span className="min-w-0 flex-1 truncate text-left">
+              {label(i)}
+            </span>
+            {named(i) && (
+              <span className="text-muted-foreground text-xs">
+                Plan {i + 1}
+              </span>
+            )}
           </button>
         )
       })}
@@ -193,7 +202,7 @@ const ModsAddToTimetableButton = ({
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>{trigger}</DrawerTrigger>
         <DrawerContent className="p-2 pb-6">
-          <DrawerTitle className="text-muted-foreground mt-2 w-full text-center text-sm font-normal">
+          <DrawerTitle className="text-muted-foreground w-full text-center text-sm font-normal">
             Select a plan
           </DrawerTitle>
           {planItems}

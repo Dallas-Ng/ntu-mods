@@ -170,8 +170,8 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
             Standardised scale
           </p>
           <span className="text-muted-foreground block text-sm text-pretty">
-            Give every 30 min timeslot the same height, so breaks and lessons
-            are visually comparable.
+            Give every 30 min timeslot the same height, sized to fit your
+            biggest block, so breaks and lessons are visually comparable.
           </span>
         </span>
 

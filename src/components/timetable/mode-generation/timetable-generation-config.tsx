@@ -637,11 +637,7 @@ const TimetableGenerationConfig = () => {
         </ElevatedDialogContent>
       </Dialog>
 
-      {noModules ? (
-        <p className="text-muted-foreground text-center text-xs">
-          Add modules above before generating
-        </p>
-      ) : (
+      {noModules ? null : (
         <>
           <UniqueOnlyToggle
             checked={uniqueTimeslotsOnly}

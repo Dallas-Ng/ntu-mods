@@ -273,6 +273,17 @@ table {
   @apply bg-card w-full border-collapse border-2 border-slate-200 dark:border-slate-900;
 }
 
+/* The timetable grid's border (2px slate), for the cards around it so the
+   page has one border style: toolbar, side panel, hint, map preview. */
+.panel-border {
+  @apply border-2 border-slate-200 dark:border-slate-900;
+}
+
+.panel-border [data-slot="accordion-item"],
+.panel-border .border-l {
+  @apply border-slate-200 dark:border-slate-900;
+}
+
 table th {
   @apply text-muted-foreground font-normal;
 }

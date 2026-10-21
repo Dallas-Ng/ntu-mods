@@ -6,6 +6,7 @@ import { CalendarCheck, CalendarPlus, Check } from "lucide-react"
 import { track } from "@/lib/analytics"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
 import { cn } from "@/lib/utils"
+import { usePlanNames } from "@/hooks/use-plan-names"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -55,6 +56,7 @@ function PlanItems({
   moduleKey: string
   onSelect: (i: number) => void
 }) {
+  const { label, named } = usePlanNames()
   return (
     <>
       {timetables.map((plan, i) => {
@@ -67,7 +69,12 @@ function PlanItems({
             <Check
               className={`size-3.5 transition-opacity ${inPlan ? "opacity-100" : "opacity-0"}`}
             />
-            Plan {i + 1}
+            <span className="flex-1 text-left">{label(i)}</span>
+            {named(i) && (
+              <span className="text-muted-foreground text-xs">
+                Plan {i + 1}
+              </span>
+            )}
           </button>
         )
       })}

@@ -72,7 +72,7 @@ const TimetablePageContent = () => {
         {/* Kept for SEO and screen readers, hidden from view. */}
         <h1 className="sr-only">Timetable</h1>
 
-        <div className="bg-card relative flex items-center gap-1 rounded-lg border p-1">
+        <div className="bg-card panel-border relative flex items-center gap-1 rounded-lg p-1">
           <TimetablePlanSwitcher />
 
           <TimetableActionsDropdown
@@ -84,7 +84,7 @@ const TimetablePageContent = () => {
         {overflow && !below && !hintDismissed && (
           <div
             role="status"
-            className="bg-muted hidden items-center gap-3 rounded-lg border px-3 py-2 text-sm md:flex">
+            className="bg-muted panel-border hidden items-center gap-3 rounded-lg px-3 py-2 text-sm md:flex">
             <PanelBottom className="text-muted-foreground size-4 shrink-0" />
             <span className="flex-1">
               This timetable is wide. Put the panel below to give it the full

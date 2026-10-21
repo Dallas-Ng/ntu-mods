@@ -23,6 +23,7 @@ import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
+import { usePlanNames } from "@/hooks/use-plan-names"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -61,6 +62,7 @@ const TimetableActionsDropdown = ({
   const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const { modules } = useAllModules()
   const { settings, updateSettings } = useSettings()
+  const { label, named } = usePlanNames()
   const moduleRemarks = useBoundState((s) => s.moduleRemarks)
   const indexRemarks = useBoundState((s) => s.indexRemarks)
   const [calendarLoading, setCalendarLoading] = useState(false)
@@ -141,7 +143,7 @@ const TimetableActionsDropdown = ({
       from_plan: timetableIndex + 1,
       to_plan: toIndex + 1
     })
-    toast(`Duplicated to Plan ${toIndex + 1}`)
+    toast(`Duplicated to ${label(toIndex)}`)
   }
 
   const tool = (
@@ -200,37 +202,7 @@ const TimetableActionsDropdown = ({
                 ? "ease-out-strong opacity-100 duration-[280ms] [clip-path:inset(-8px_0_-8px_0)]"
                 : "pointer-events-none opacity-0 duration-[380ms] ease-[cubic-bezier(0.65,0,0.35,1)] [clip-path:inset(-8px_0_-8px_100%)]"
             )}>
-            {/* One button: the icon is the panel on the right, and turns a
-                quarter to put it below. Phones always use the drawer. */}
-            <div className="flex items-center max-md:hidden">
-              {(() => {
-                const below = settings.timetableLayout === "below"
-                const next = below ? "side" : "below"
-                const label = below ? "Panel on the right" : "Panel below"
-                const hint = below
-                  ? "Put the panel beside the grid."
-                  : "Lay the panel out under the grid."
-                return tool(
-                  label,
-                  hint,
-                  <PanelRight
-                    className={cn(
-                      "ease-out-strong size-4 transition-transform duration-300 motion-reduce:transition-none",
-                      below && "rotate-90"
-                    )}
-                  />,
-                  (icon) =>
-                    iconButton(label, {
-                      children: icon,
-                      onClick: () => {
-                        updateSettings({ timetableLayout: next })
-                        track("timetable_layout_changed", { layout: next })
-                      }
-                    })
-                )
-              })()}
-            </div>
-            <span className="bg-border mx-1 h-4 w-px max-md:hidden" />
+            {/* Working on the plan, most used first. */}
             <div className="flex items-center gap-0.5">
               {tool(
                 "Pick indexes",
@@ -250,6 +222,49 @@ const TimetableActionsDropdown = ({
                     }
                   )
               )}
+              {tool(
+                "Import",
+                "Add modules from pasted text.",
+                <Download className="size-4" />,
+                (icon) =>
+                  iconButton("Import from text", {
+                    children: icon,
+                    onClick: () => setImportOpen(true)
+                  })
+              )}
+              <DropdownMenu>
+                {tool(
+                  "Duplicate",
+                  "Copy this plan into another plan.",
+                  <Copy className="size-4" />,
+                  (icon) => (
+                    <DropdownMenuTrigger asChild>
+                      {iconButton("Duplicate to plan", { children: icon })}
+                    </DropdownMenuTrigger>
+                  )
+                )}
+                <DropdownMenuContent align="end">
+                  {timetables.map((_, index) =>
+                    index === timetableIndex ? null : (
+                      <DropdownMenuItem
+                        key={index}
+                        onClick={() => handleDuplicate(index)}
+                        className="justify-between gap-4">
+                        <span>{label(index)}</span>
+                        {named(index) && (
+                          <span className="text-muted-foreground text-xs">
+                            Plan {index + 1}
+                          </span>
+                        )}
+                      </DropdownMenuItem>
+                    )
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <span className="bg-border mx-1 h-4 w-px" />
+            {/* Getting the plan out. */}
+            <div className="flex items-center gap-0.5">
               {tool(
                 "Share",
                 "Get a link to this timetable.",
@@ -271,42 +286,6 @@ const TimetableActionsDropdown = ({
                     disabled: calendarLoading
                   })
               )}
-            </div>
-            <span className="bg-border mx-1 h-4 w-px" />
-            <div className="flex items-center gap-0.5">
-              <DropdownMenu>
-                {tool(
-                  "Duplicate",
-                  "Copy this plan into another plan.",
-                  <Copy className="size-4" />,
-                  (icon) => (
-                    <DropdownMenuTrigger asChild>
-                      {iconButton("Duplicate to plan", { children: icon })}
-                    </DropdownMenuTrigger>
-                  )
-                )}
-                <DropdownMenuContent align="end">
-                  {timetables.map((_, index) =>
-                    index === timetableIndex ? null : (
-                      <DropdownMenuItem
-                        key={index}
-                        onClick={() => handleDuplicate(index)}>
-                        Plan {index + 1}
-                      </DropdownMenuItem>
-                    )
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              {tool(
-                "Import",
-                "Add modules from pasted text.",
-                <Download className="size-4" />,
-                (icon) =>
-                  iconButton("Import from text", {
-                    children: icon,
-                    onClick: () => setImportOpen(true)
-                  })
-              )}
               {tool(
                 "Export image",
                 "Save it as a wallpaper or picture.",
@@ -322,6 +301,40 @@ const TimetableActionsDropdown = ({
                   </Button>
                 )
               )}
+            </div>
+            <span className="bg-border mx-1 h-4 w-px" />
+            {/* How the page looks: changed rarely, so nearest the trigger. */}
+            <div className="flex items-center gap-0.5">
+              {/* The icon is the panel on the right, and turns a quarter to
+                  put it below. Phones always use the drawer. */}
+              <div className="flex items-center max-md:hidden">
+                {(() => {
+                  const below = settings.timetableLayout === "below"
+                  const next = below ? "side" : "below"
+                  const label = below ? "Panel on the right" : "Panel below"
+                  const hint = below
+                    ? "Put the panel beside the grid."
+                    : "Lay the panel out under the grid."
+                  return tool(
+                    label,
+                    hint,
+                    <PanelRight
+                      className={cn(
+                        "ease-out-strong size-4 transition-transform duration-300 motion-reduce:transition-none",
+                        below && "rotate-90"
+                      )}
+                    />,
+                    (icon) =>
+                      iconButton(label, {
+                        children: icon,
+                        onClick: () => {
+                          updateSettings({ timetableLayout: next })
+                          track("timetable_layout_changed", { layout: next })
+                        }
+                      })
+                  )
+                })()}
+              </div>
               {tool(
                 "Table settings",
                 "Change how the timetable grid looks.",

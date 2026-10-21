@@ -8,6 +8,7 @@ import { toast } from "sonner"
 import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
+import { usePlanNames } from "@/hooks/use-plan-names"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
@@ -33,6 +34,7 @@ const TimetableCopyButton = () => {
   const { qsCustomCourses } = useCustomCourses()
   const setCustomCourses = useBoundState((s) => s.setCustomCourses)
   const { isMobile } = useSettings()
+  const { label } = usePlanNames()
   const [open, setOpen] = useState(false)
   const [overrideIndex, setOverrideIndex] = useState<number | null>(null)
 
@@ -77,7 +79,7 @@ const TimetableCopyButton = () => {
                 "hover:bg-accent cursor-pointer rounded-md p-2 transition-colors",
                 overrideIndex === timetableIdx && "bg-muted"
               )}>
-              <p>Plan {timetableIdx + 1}</p>
+              <p>{label(timetableIdx)}</p>
 
               <div className="text-muted-foreground mt-2 text-xs">
                 <div className="flex flex-wrap gap-1">
@@ -112,7 +114,7 @@ const TimetableCopyButton = () => {
           <Button
             variant="destructive"
             onClick={() => handleOverride(overrideIndex)}>
-            Override Plan {overrideIndex + 1}
+            Override {label(overrideIndex)}
           </Button>
         )}
       </div>

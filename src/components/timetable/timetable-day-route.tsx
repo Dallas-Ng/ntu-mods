@@ -51,7 +51,7 @@ const Preview = () => {
 
   return (
     <div ref={ref}>
-      <div className="bg-muted/50 group-hover:border-foreground/30 relative h-36 overflow-hidden rounded-lg border transition-colors">
+      <div className="bg-muted/50 panel-border group-hover:border-foreground/30 relative h-36 overflow-hidden rounded-lg transition-colors">
         {data ? (
           <div className="pointer-events-none absolute inset-0 [&_button]:hidden">
             <CampusMap
@@ -77,14 +77,14 @@ const Preview = () => {
           Open
         </span>
       </div>
-      <div className="pt-2 text-left">
-        <p className="text-muted-foreground text-xs">
-          {busyDays.size === 0
-            ? "Add modules to see your day on the map."
-            : `${DAY_NAMES[day]} · ${stops.length} classes`}
-          {warn && <span className="text-destructive"> · {warn}</span>}
-        </p>
-      </div>
+      {busyDays.size > 0 && (
+        <div className="pt-2 text-left">
+          <p className="text-muted-foreground text-xs">
+            {DAY_NAMES[day]} · {stops.length} classes
+            {warn && <span className="text-destructive"> · {warn}</span>}
+          </p>
+        </div>
+      )}
     </div>
   )
 }

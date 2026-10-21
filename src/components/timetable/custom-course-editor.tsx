@@ -606,88 +606,77 @@ const CustomCourseEditor = () => {
   return (
     <div>
       <div className="max-h-[30vh] overflow-y-auto">
-        {courses.length === 0 ? (
-          <p className="text-muted-foreground p-3 text-center text-sm">
-            No blocks yet.
-            <br />
-            <span className="text-xs">
-              Gym, CCA, custom mods, external courses&hellip;
-            </span>
-          </p>
-        ) : (
-          courses.map((course) => {
-            const selected =
-              course.indexes.find((i) => i.id === course.selectedIndexId) ??
-              course.indexes[0]
-            // Collapse repeats from multi-day sessions (e.g. 5x "LEC") into "LEC ×5"
-            const typeCounts = new Map<string, number>()
-            selected?.sessions.forEach((s) =>
-              typeCounts.set(s.type, (typeCounts.get(s.type) ?? 0) + 1)
-            )
-            const sessionLabels = [...typeCounts]
-              .map(([type, count]) => {
-                const label = type.length > 0 ? type : ""
-                if (count === 1) return label
-                return label ? `${label} (${count}d)` : `${count}d`
-              })
-              .join(" · ")
+        {courses.map((course) => {
+          const selected =
+            course.indexes.find((i) => i.id === course.selectedIndexId) ??
+            course.indexes[0]
+          // Collapse repeats from multi-day sessions (e.g. 5x "LEC") into "LEC ×5"
+          const typeCounts = new Map<string, number>()
+          selected?.sessions.forEach((s) =>
+            typeCounts.set(s.type, (typeCounts.get(s.type) ?? 0) + 1)
+          )
+          const sessionLabels = [...typeCounts]
+            .map(([type, count]) => {
+              const label = type.length > 0 ? type : ""
+              if (count === 1) return label
+              return label ? `${label} (${count}d)` : `${count}d`
+            })
+            .join(" · ")
 
-            return (
-              <div key={course.id}>
-                <div
-                  className="hover:bg-accent flex cursor-pointer items-center justify-between pr-3 pl-4 text-sm transition-colors"
-                  onClick={() => setEditingCourse(course)}>
-                  <div className="flex min-w-0 items-center gap-1">
-                    <span className="max-w-[110px] min-w-16 truncate font-medium">
-                      {course.name}
-                    </span>
-                    <span className="text-muted-foreground shrink-0 text-sm">
-                      {sessionLabels}
-                    </span>
-                  </div>
-
-                  <button
-                    type="button"
-                    aria-label={`Remove ${course.name}`}
-                    className="flex size-8 shrink-0 cursor-pointer items-center justify-center"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      removeCustomCourse(course.id)
-                      if (editingCourse?.id === course.id)
-                        setEditingCourse(null)
-                      track("custom_course_deleted")
-                    }}>
-                    <Trash2 className="text-muted-foreground hover:text-foreground size-4 transition-colors" />
-                  </button>
+          return (
+            <div key={course.id}>
+              <div
+                className="hover:bg-accent flex cursor-pointer items-center justify-between pr-3 pl-4 text-sm transition-colors"
+                onClick={() => setEditingCourse(course)}>
+                <div className="flex min-w-0 items-center gap-1">
+                  <span className="max-w-[110px] min-w-16 truncate font-medium">
+                    {course.name}
+                  </span>
+                  <span className="text-muted-foreground shrink-0 text-sm">
+                    {sessionLabels}
+                  </span>
                 </div>
 
-                {course.indexes.length > 1 && (
-                  <div className="flex flex-wrap gap-1 px-4 pb-1">
-                    {course.indexes.map((courseIndex) => {
-                      const isActive = courseIndex.id === selected?.id
-                      return (
-                        <button
-                          key={courseIndex.id}
-                          type="button"
-                          onClick={() =>
-                            selectCustomCourseIndex(course.id, courseIndex.id)
-                          }
-                          className={cn(
-                            "focus-visible:ring-ring/50 h-5 cursor-pointer rounded border px-1.5 text-[0.65rem] font-medium transition-colors outline-none focus-visible:ring-[3px]",
-                            isActive
-                              ? "bg-foreground text-background border-transparent"
-                              : "text-muted-foreground hover:border-foreground"
-                          )}>
-                          {courseIndex.label}
-                        </button>
-                      )
-                    })}
-                  </div>
-                )}
+                <button
+                  type="button"
+                  aria-label={`Remove ${course.name}`}
+                  className="flex size-8 shrink-0 cursor-pointer items-center justify-center"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    removeCustomCourse(course.id)
+                    if (editingCourse?.id === course.id) setEditingCourse(null)
+                    track("custom_course_deleted")
+                  }}>
+                  <Trash2 className="text-muted-foreground hover:text-foreground size-4 transition-colors" />
+                </button>
               </div>
-            )
-          })
-        )}
+
+              {course.indexes.length > 1 && (
+                <div className="flex flex-wrap gap-1 px-4 pb-1">
+                  {course.indexes.map((courseIndex) => {
+                    const isActive = courseIndex.id === selected?.id
+                    return (
+                      <button
+                        key={courseIndex.id}
+                        type="button"
+                        onClick={() =>
+                          selectCustomCourseIndex(course.id, courseIndex.id)
+                        }
+                        className={cn(
+                          "focus-visible:ring-ring/50 h-5 cursor-pointer rounded border px-1.5 text-[0.65rem] font-medium transition-colors outline-none focus-visible:ring-[3px]",
+                          isActive
+                            ? "bg-foreground text-background border-transparent"
+                            : "text-muted-foreground hover:border-foreground"
+                        )}>
+                        {courseIndex.label}
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          )
+        })}
       </div>
 
       <button

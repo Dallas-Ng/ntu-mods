@@ -2,7 +2,7 @@
 
 import { lazy, Suspense, useState, type MouseEvent } from "react"
 import { useBoundState } from "@/state/bound.state"
-import { Trash2 } from "lucide-react"
+import { Info, Trash2 } from "lucide-react"
 
 import { track } from "@/lib/analytics"
 import { getRemarkScope, REMARK_SCOPE_DOT_CLASS } from "@/lib/remark-scope"
@@ -132,6 +132,29 @@ interface ModifierProps {
 const ALL_SECTIONS = ["modules", "custom", "generate"]
 const triggerClass =
   "items-center px-4 py-3.5 font-semibold hover:no-underline [&>svg]:translate-y-0"
+// Small "i" after a section title: hover says what the section is for.
+const InfoTip = ({
+  title,
+  children
+}: {
+  title: string
+  children: React.ReactNode
+}) => (
+  <Tooltip>
+    <TooltipTrigger asChild>
+      <span
+        aria-label={`About ${title}`}
+        className="text-muted-foreground hover:text-foreground pointer-events-auto ml-1.5 inline-flex cursor-help transition-colors">
+        <Info className="size-3.5" />
+      </span>
+    </TooltipTrigger>
+    <TooltipContent side="top" className="max-w-56 text-center">
+      <p className="font-medium">{title}</p>
+      <p className="text-xs opacity-80">{children}</p>
+    </TooltipContent>
+  </Tooltip>
+)
+
 // A header that is only a title: no chevron, no click.
 const fixedTrigger = "pointer-events-none [&>svg]:hidden"
 
@@ -155,114 +178,146 @@ const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
   const count = Object.keys(timetable).length
 
   return (
-    <div className="flex size-full flex-col">
-      {/* Module search: always shown */}
-      <div className="relative z-2 mb-3 h-10 w-full rounded-lg">
-        <div className="absolute top-0 left-0 w-full">
-          <TimetableModulesSelect />
+    <TooltipProvider delayDuration={200}>
+      <div className="flex size-full flex-col">
+        {/* Module search: always shown */}
+        <div className="relative z-2 mb-3 h-10 w-full rounded-lg">
+          <div className="absolute top-0 left-0 w-full">
+            <TimetableModulesSelect />
+          </div>
         </div>
-      </div>
 
-      {/* No side padding on the card: rows highlight edge to edge. Their text,
+        {/* No side padding on the card: rows highlight edge to edge. Their text,
           and everything that is not a row, is inset 16px to match the headers. */}
-      <div
-        className={cn(
-          "bg-card rounded-lg border",
-          horizontal && "grid grid-cols-4"
-        )}>
-        <Accordion
-          type="multiple"
-          // Side by side everything stays open and the headers are plain titles.
-          value={horizontal ? ALL_SECTIONS : open}
-          onValueChange={(v) => !horizontal && setOpen(v)}
-          className={horizontal ? "contents" : undefined}>
-          <AccordionItem
-            value="modules"
-            className={cn(horizontal && "border-b-0")}>
-            <AccordionTrigger
-              className={cn(triggerClass, horizontal && fixedTrigger)}
-              tabIndex={horizontal ? -1 : undefined}>
-              <span>
-                Registered modules
-                {count > 0 && (
-                  <span className="text-muted-foreground ml-1.5 text-xs font-normal tabular-nums">
-                    {count}
-                  </span>
+        <div
+          className={cn(
+            "bg-card panel-border rounded-lg",
+            horizontal && "grid grid-cols-4"
+          )}>
+          <Accordion
+            type="multiple"
+            // Side by side everything stays open and the headers are plain titles.
+            value={horizontal ? ALL_SECTIONS : open}
+            onValueChange={(v) => !horizontal && setOpen(v)}
+            className={horizontal ? "contents" : undefined}>
+            <AccordionItem
+              value="modules"
+              className={cn(horizontal && "border-b-0")}>
+              <AccordionTrigger
+                className={cn(triggerClass, horizontal && fixedTrigger)}
+                tabIndex={horizontal ? -1 : undefined}>
+                <span className="inline-flex items-center">
+                  Registered modules
+                  {count > 0 && (
+                    <span className="text-muted-foreground ml-1.5 text-xs font-normal tabular-nums">
+                      {count}
+                    </span>
+                  )}
+                  <InfoTip title="Registered modules">
+                    The modules in this plan. Click one to see its indexes and
+                    change it.
+                  </InfoTip>
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="pb-3">
+                <TooltipProvider>
+                  <div className="max-h-[40vh] overflow-y-auto">
+                    {Object.entries(timetable).map(([moduleKey, indexKey]) => (
+                      <ModuleRow
+                        key={moduleKey}
+                        moduleKey={moduleKey}
+                        indexKey={indexKey}
+                        isActive={activeKey === moduleKey}
+                        onOpenChange={setActiveKey}
+                        onRemove={handleRemoveClick}
+                      />
+                    ))}
+                  </div>
+                </TooltipProvider>
+
+                {count === 0 && (
+                  <p className="text-muted-foreground px-4 py-2 text-center text-sm">
+                    Add modules using the search above.
+                  </p>
                 )}
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className="pb-3">
-              <TooltipProvider>
-                <div className="max-h-[40vh] overflow-y-auto">
-                  {Object.entries(timetable).map(([moduleKey, indexKey]) => (
-                    <ModuleRow
-                      key={moduleKey}
-                      moduleKey={moduleKey}
-                      indexKey={indexKey}
-                      isActive={activeKey === moduleKey}
-                      onOpenChange={setActiveKey}
-                      onRemove={handleRemoveClick}
-                    />
-                  ))}
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem
+              value="custom"
+              className={cn(horizontal && "border-b-0 border-l")}>
+              <AccordionTrigger
+                className={cn(triggerClass, horizontal && fixedTrigger)}
+                tabIndex={horizontal ? -1 : undefined}>
+                <span className="inline-flex items-center">
+                  Custom blocks
+                  <InfoTip title="Custom blocks">
+                    Add your own blocks, like CCA, gym or an outside class. They
+                    show on the grid and count towards clashes.
+                  </InfoTip>
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="pb-3">
+                <CustomCourseEditor />
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem
+              value="generate"
+              className={cn(
+                "last:border-b",
+                horizontal && "border-b-0 border-l last:border-b-0"
+              )}>
+              <AccordionTrigger
+                className={cn(triggerClass, horizontal && fixedTrigger)}
+                tabIndex={horizontal ? -1 : undefined}>
+                <span className="inline-flex items-center">
+                  Generate timetable
+                  <InfoTip title="Generate timetable">
+                    Set your preferences, then build clash-free combinations
+                    from your modules.
+                  </InfoTip>
+                </span>
+              </AccordionTrigger>
+              <AccordionContent className="pb-3">
+                <div
+                  // Nothing to generate from: dimmed and out of reach.
+                  inert={count === 0}
+                  className={cn(
+                    "px-4 transition-opacity",
+                    count === 0 && "pointer-events-none opacity-50"
+                  )}>
+                  <Suspense fallback={null}>
+                    <TimetableGenerationConfig />
+                  </Suspense>
                 </div>
-              </TooltipProvider>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
 
-              {count === 0 && (
-                <p className="text-muted-foreground px-4 py-2 text-center text-sm">
-                  You have not added modules
-                  <br /> Click on the search bar above to add modules
-                </p>
-              )}
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem
-            value="custom"
-            className={cn(horizontal && "border-b-0 border-l")}>
-            <AccordionTrigger
-              className={cn(triggerClass, horizontal && fixedTrigger)}
-              tabIndex={horizontal ? -1 : undefined}>
-              Custom blocks
-            </AccordionTrigger>
-            <AccordionContent className="pb-3">
-              <CustomCourseEditor />
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem
-            value="generate"
-            className={cn(
-              "last:border-b",
-              horizontal && "border-b-0 border-l last:border-b-0"
-            )}>
-            <AccordionTrigger
-              className={cn(triggerClass, horizontal && fixedTrigger)}
-              tabIndex={horizontal ? -1 : undefined}>
-              Generate timetable
-            </AccordionTrigger>
-            <AccordionContent className="pb-3">
-              <div className="px-4">
-                <Suspense fallback={null}>
-                  <TimetableGenerationConfig />
-                </Suspense>
+          {/* The map stays open: same header and divider, no toggle. */}
+          <div className={cn(horizontal && "border-l")}>
+            <h2 className="px-4 py-3.5 text-sm font-semibold">
+              Walking between classes
+              <InfoTip title="Walking between classes">
+                See your day on the campus map and whether each gap is long
+                enough to walk it.
+              </InfoTip>
+            </h2>
+            <div className="pb-3">
+              <div
+                inert={count === 0}
+                className={cn(
+                  "px-4 transition-opacity",
+                  count === 0 && "pointer-events-none opacity-50"
+                )}>
+                <TimetableDayRoute />
               </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-
-        {/* The map stays open: same header and divider, no toggle. */}
-        <div className={cn(horizontal && "border-l")}>
-          <h2 className="px-4 py-3.5 text-sm font-semibold">
-            Walking between classes
-          </h2>
-          <div className="pb-3">
-            <div className="px-4">
-              <TimetableDayRoute />
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </TooltipProvider>
   )
 }
 

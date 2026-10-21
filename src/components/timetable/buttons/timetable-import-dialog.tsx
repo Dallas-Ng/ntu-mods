@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import { track } from "@/lib/analytics"
 import { decodeTextBundle } from "@/lib/timetable-share"
 import { cn } from "@/lib/utils"
+import { usePlanNames } from "@/hooks/use-plan-names"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -23,6 +24,7 @@ interface Props {
 
 const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
   const timetables = useBoundState((s) => s.timetables)
+  const { label } = usePlanNames()
   const timetableIndex = useBoundState((s) => s.timetableIndex)
   const updateTimetable = useBoundState((s) => s.updateTimetable)
   const setCustomCourses = useBoundState((s) => s.setCustomCourses)
@@ -51,7 +53,7 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
       custom_block_count: decoded.customCourses.length
     })
 
-    toast.success(`Imported into Plan ${targetPlan + 1}`)
+    toast.success(`Imported into ${label(targetPlan)}`)
     setValue("")
     onOpenChange(false)
   }
@@ -107,12 +109,12 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
                       ? "bg-foreground text-background border-transparent"
                       : "text-muted-foreground hover:border-foreground"
                   )}>
-                  Plan {i + 1}
+                  {label(i)}
                 </button>
               ))}
             </div>
             <p className="text-destructive text-xs">
-              Plan {targetPlan + 1} will be overwritten.
+              {label(targetPlan)} will be overwritten.
             </p>
           </div>
 

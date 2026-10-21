@@ -47,7 +47,9 @@ const TimetableCopyButton = () => {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} className="gap-2">
+      <Button
+        onClick={() => setOpen(true)}
+        className="flex-1 gap-2 sm:flex-none">
         <Copy className="size-4" />
         Copy to my plans
       </Button>
@@ -88,7 +90,10 @@ const TimetableCopyButton = () => {
           </ModalSection>
 
           <ModalFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>
+            <Button
+              variant="outline"
+              className="hidden sm:inline-flex"
+              onClick={() => setOpen(false)}>
               Cancel
             </Button>
             <Button

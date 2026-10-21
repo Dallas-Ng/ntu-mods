@@ -27,11 +27,12 @@ const SharePageContent = () => {
 
       <div className="bg-card panel-border flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg p-2 pl-4">
         <div className="min-w-0">
-          <p className="flex items-center gap-1.5 text-sm font-medium">
+          <p className="flex flex-wrap items-center gap-x-1.5 text-sm font-medium whitespace-nowrap">
             <Eye className="text-muted-foreground size-4 shrink-0" />
             Shared timetable
             <span className="text-muted-foreground font-normal">
-              · {count} module{count !== 1 ? "s" : ""} · read only
+              <span className="hidden sm:inline">· </span>
+              {count} module{count !== 1 ? "s" : ""} · read only
             </span>
           </p>
           <p className="text-muted-foreground text-xs">
@@ -46,7 +47,7 @@ const SharePageContent = () => {
           </p>
         </div>
 
-        <div className="ml-auto flex gap-2">
+        <div className="ml-auto flex w-full gap-2 sm:w-auto">
           <TimetableScreenshotButton persistQuerystring />
           <TimetableDownloadCalendarButton />
           <TimetableCopyButton />

@@ -118,7 +118,10 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
         </ModalSection>
 
         <ModalFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button
+            variant="outline"
+            className="hidden sm:inline-flex"
+            onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button disabled={!decoded} onClick={handleImport}>

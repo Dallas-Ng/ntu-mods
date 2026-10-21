@@ -60,7 +60,10 @@ const TimetableCalendarDialog = ({
     className="max-h-[90vh] sm:max-w-lg"
     footer={
       <ModalFooter className="pt-0">
-        <Button variant="outline" onClick={() => onOpenChange(false)}>
+        <Button
+          variant="outline"
+          className="hidden sm:inline-flex"
+          onClick={() => onOpenChange(false)}>
           Cancel
         </Button>
         <Button

@@ -270,20 +270,21 @@ interface TranscriptDiagnostics {
   unmatched_shapes: string[]
 }
 
-// Fixed phrases printed on NTU's own PDFs: the exam results printout, the
-// official transcript (with its validation and guide pages) and their footers.
+// Loose phrases any NTU transcript, results printout or NIE progress report
+// tends to carry (other programmes word these differently, so match widely).
 const MARKERS: [string, RegExp][] = [
-  ["ntu", /nanyang technological university/i],
-  ["results_title", /examination results/i],
-  ["student", /name of student/i],
-  ["matric", /matric no/i],
-  ["au_earned", /academic units earned/i],
-  ["end", /end\s+of\s+(results|transcript)/i],
-  ["guide", /transcript guide|grading system/i],
-  ["official", /official transcript/i]
+  ["ntu", /nanyang|\bNTU\b|national institute of education/i],
+  ["student", /(name\s+of\s+student|student\s+name|\bstudent\b)/i],
+  ["matric", /matric/i],
+  ["programme", /programme|program\b/i],
+  ["results", /transcript|examination\s+results|academic\s+(record|progress)/i],
+  ["au", /academic\s+units|\bAUs?\b/i],
+  ["grades", /grade\s*point|\bCGPA\b|\bGPA\b/i],
+  ["end", /end\s+of\s+(results|transcript|record)/i]
 ]
 
-const CODE_LINE_RE = /^\*?\s*[A-Z]{2,5}\d{1,4}[A-Z]?\b/
+// Code-like row start (NTU codes such as SC1003 or HW0288), kept loose.
+const CODE_LINE_RE = /^\*?\s*[A-Z]{2,6}\s?\d{3,4}[A-Z]?\b/
 
 export function transcriptDiagnostics(lines: string[]): TranscriptDiagnostics {
   const text = lines.join("\n")

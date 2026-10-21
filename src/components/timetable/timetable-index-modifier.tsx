@@ -32,6 +32,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Textarea } from "../ui/textarea"
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group"
+import InfoTip from "./info-tip"
 
 type Indexes = Record<string, Index[]>
 
@@ -129,10 +130,16 @@ const TimetableIndexNote = ({
 
   return (
     <div
-      className="space-y-1.5 border-t p-2 pb-6 sm:pb-2"
+      className="space-y-1 border-t px-3 py-2 pb-4 sm:pb-2"
       onClick={(e) => e.stopPropagation()}>
       <div className="flex items-center justify-between gap-2">
-        <label className="text-muted-foreground text-xs">Note</label>
+        <span className="flex items-center">
+          <label className="text-muted-foreground text-xs">Note</label>
+          <InfoTip>
+            Add a reminder for this class, like &quot;bring laptop&quot;. Only
+            you see it, and it is saved on this device.
+          </InfoTip>
+        </span>
 
         <ToggleGroup
           type="single"
@@ -165,7 +172,7 @@ const TimetableIndexNote = ({
         placeholder="e.g. bring laptop, seat near the door"
         // Stay at the default 16px on mobile — anything smaller triggers
         // iOS Safari's auto-zoom on focus. Only shrink on desktop.
-        className="min-h-12 sm:text-xs"
+        className="min-h-10 sm:text-xs"
       />
     </div>
   )
@@ -282,9 +289,13 @@ const TimetableIndexModifier = (props: Props) => {
         </div>
 
         {hasCommonLecture && (
-          <div className="w-full shrink-0 space-y-2 border-b px-4 pt-2 pb-2 text-sm md:pt-4 md:pb-4">
-            <p className="text-muted-foreground pb-1 text-center text-xs">
+          <div className="w-full shrink-0 space-y-1 border-b px-3 py-2 text-sm">
+            <p className="text-muted-foreground flex items-center justify-center text-xs">
               Common Lecture for Indexes
+              <InfoTip>
+                A lecture every index of this module shares. It stays the same
+                whichever index you pick.
+              </InfoTip>
             </p>
 
             {randomLecture.map((index, idx) => (
@@ -390,7 +401,7 @@ const TimetableIndexModifier = (props: Props) => {
             Search and select an index for {moduleKey}.
           </DrawerDescription>
 
-          <div className="mt-5 flex min-h-0 flex-1 flex-col overflow-hidden">
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
             {items}
           </div>
         </DrawerContent>
@@ -410,11 +421,11 @@ const TimetableIndexModifier = (props: Props) => {
         <PopoverContent
           container={containerRef.current}
           className="border-primary/50 bg-muted rounded-t-none border p-0 shadow-xl"
+          align="start"
           sideOffset={0}
           style={{
-            width: containerRef.current?.clientWidth
-              ? containerRef.current.clientWidth + 4 // border width
-              : "auto"
+            // The row's own width, which is the width of its highlight.
+            width: containerRef.current?.clientWidth || "auto"
           }}>
           {items}
         </PopoverContent>

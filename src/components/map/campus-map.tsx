@@ -53,6 +53,8 @@ export interface Pin {
   /** CSS colour of the pin's ring (class type). */
   colour: string
   approx?: boolean
+  /** Overlaps another class in time: drawn red and pulsing. */
+  clash?: boolean
   /** Building the stop is in, so it can be highlighted. */
   building?: number | null
 }
@@ -138,6 +140,8 @@ interface Props {
   lift?: number
   /** The drawer is being dragged: the controls follow it with no easing. */
   dragging?: boolean
+  /** Skip the first-visit tour of the fullscreen button (embedded maps). */
+  noIntro?: boolean
   className?: string
 }
 
@@ -198,6 +202,7 @@ const CampusMap = ({
   snap = false,
   lift = insets.bottom,
   dragging = false,
+  noIntro = false,
   className
 }: Props) => {
   // First visit: dim the app and point at the fullscreen button until it is used.
@@ -217,9 +222,10 @@ const CampusMap = ({
     h - insets.top - CONTROLS_TOP - lift - 12 >= STACK_H
   useEffect(() => {
     try {
-      if (!fullscreen && !localStorage.getItem(INTRO_KEY)) setIntro(true)
+      if (!noIntro && !fullscreen && !localStorage.getItem(INTRO_KEY))
+        setIntro(true)
     } catch {}
-  }, [fullscreen])
+  }, [fullscreen, noIntro])
   useEffect(() => {
     if (!intro) return
     const prev = document.body.style.overflow
@@ -1207,6 +1213,12 @@ const CampusMap = ({
                 handled.current = true
                 onPin(p.id)
               }}>
+              {p.clash && (
+                <circle
+                  r={w / 2 + 10}
+                  className="fill-destructive/25 animate-pulse motion-reduce:animate-none"
+                />
+              )}
               {sel && <circle r={w / 2 + 6} className="fill-primary/20" />}
               <rect
                 x={-w / 2}
@@ -1214,7 +1226,7 @@ const CampusMap = ({
                 width={w}
                 height={24}
                 rx={12}
-                className="fill-background"
+                className={p.clash ? "fill-destructive" : "fill-background"}
                 style={{ stroke: p.colour }}
                 strokeWidth={3}
                 strokeDasharray={p.approx ? "4 3" : undefined}
@@ -1222,9 +1234,27 @@ const CampusMap = ({
               <text
                 textAnchor="middle"
                 dominantBaseline="central"
-                className="fill-foreground text-[12px] font-bold">
+                className={cn(
+                  "text-[12px] font-bold",
+                  p.clash ? "fill-white" : "fill-foreground"
+                )}>
                 {text}
               </text>
+              {p.clash && (
+                <g transform={`translate(${w / 2 - 2} -14)`}>
+                  <circle
+                    r={8}
+                    className="stroke-destructive fill-white"
+                    strokeWidth={2}
+                  />
+                  <text
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    className="fill-destructive text-[11px] font-bold">
+                    !
+                  </text>
+                </g>
+              )}
             </g>
           )
         })}

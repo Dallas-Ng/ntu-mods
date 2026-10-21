@@ -3,6 +3,7 @@
 import { ChevronLeftIcon, ChevronRightIcon, SaveIcon } from "lucide-react"
 
 import { track } from "@/lib/analytics"
+import { usePlanNames } from "@/hooks/use-plan-names"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -30,6 +31,7 @@ const TimetableResultsCycler = ({
   uniqueTimeslotsOnly,
   duplicatesSkipped
 }: Props) => {
+  const { label } = usePlanNames()
   if (combinations.length === 0) return null
 
   const current = combinations[currentIndex]
@@ -64,7 +66,7 @@ const TimetableResultsCycler = ({
                     total_results: combinations.length
                   })
                 }}>
-                Save to Plan {i + 1}
+                Save to {label(i)}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>

@@ -30,7 +30,7 @@ export const siteConfig = {
     },
     timetable: {
       title: "NTU Timetable Planner: Build Your STARS Schedule",
-      desc: "Plan your NTU timetable for STARS registration. Search modules and indexes, check clashes, compare class times, and export to calendar or share link. No login required."
+      desc: "Plan your NTU timetable for STARS registration. Compare indexes, check clashes, see the walk between classes on the campus map, and share or export to calendar. No login."
     },
     share: {
       title: "Shared NTU Timetable",
@@ -51,10 +51,6 @@ export const siteConfig = {
     screenshot: {
       title: "NTU Timetable Wallpaper Maker",
       desc: "Compose your NTU timetable as a clean lockscreen wallpaper or shareable image, with presets for phone screens and simple positioning controls."
-    },
-    settings: {
-      title: "Settings",
-      desc: "Customize NTUMods themes, table density, timetable colors, class details, and feedback settings so your planner works the way you prefer."
     },
     changelog: {
       title: "Changelog",
@@ -112,8 +108,8 @@ export const siteConfig = {
   navLinks: [
     { label: "Timetable", route: "/timetable" },
     { label: "Mods", route: "/mods" },
-    { label: "Exams", route: "/exams" },
     { label: "Maps", route: "/maps" },
+    { label: "Exams", route: "/exams" },
     { label: "Tools", route: "/tools" },
     { label: "Articles", route: "/articles" },
     { label: "Links", route: "/links" }

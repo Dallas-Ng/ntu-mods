@@ -94,6 +94,12 @@ const FAQ_CONFIG: FaqConfig[] = [
       "There are two export options on the timetable page. You can download an .ics calendar file to import directly into Google Calendar, Apple Calendar, or Outlook. You can also save your timetable as an image, which is useful for sharing or setting as a wallpaper."
   },
   {
+    id: "walking-between-classes",
+    question: "Can I check if I have enough time to walk between classes?",
+    answer:
+      "Yes. On the timetable page, open Walking between classes under Generate Timetable and pick a day. It shows your classes in order on the campus map, the walking time between each pair of venues, and a warning when a gap is shorter than the walk or two classes overlap. Times are estimates, so leave extra room for lifts and stairs."
+  },
+  {
     id: "share-timetable",
     question: "How do I share my timetable?",
     answer:

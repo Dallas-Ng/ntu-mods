@@ -121,27 +121,44 @@ export const DarkThemeIcon = (props: IconProps) => {
 const GroupLabel = ({
   title,
   desc,
-  aside
+  aside,
+  small = false
 }: {
   title: string
-  desc: string
+  desc?: string
   aside?: React.ReactNode
+  /** Smaller description, for the dialog on phones. */
+  small?: boolean
 }) => (
   <div className="flex items-start justify-between gap-3">
     <div className="min-w-0 space-y-1">
       <p className="text-sm leading-none font-semibold">{title}</p>
-      <p className="text-muted-foreground text-sm text-pretty">{desc}</p>
+      {desc && (
+        <p
+          className={cn(
+            "text-muted-foreground text-pretty",
+            small ? "text-xs sm:text-sm" : "text-sm"
+          )}>
+          {desc}
+        </p>
+      )}
     </div>
 
     {aside}
   </div>
 )
 
-const TOGGLE_GROUP_CLASS = "bg-background mt-auto w-full gap-1 rounded-xl p-1"
+const TOGGLE_GROUP_CLASS =
+  "bg-background mt-auto w-full min-w-0 gap-1 rounded-xl p-1"
 const TOGGLE_ITEM_CLASS =
-  "h-9 flex-1 rounded-lg px-2 whitespace-nowrap data-[state=on]:bg-muted data-[state=on]:text-foreground"
+  "h-9 min-w-0 flex-1 rounded-lg px-1 text-xs whitespace-nowrap sm:px-2 sm:text-sm data-[state=on]:bg-muted data-[state=on]:text-foreground"
 
-const AppearanceSettings = () => {
+interface AppearanceProps {
+  /** Two columns on wide screens (settings, then palettes), for a modal. */
+  compact?: boolean
+}
+
+const AppearanceSettings = ({ compact = false }: AppearanceProps) => {
   const { settings, updateSettings } = useSettings()
   const appearance = {
     ...DEFAULT_APPEARANCE_SETTINGS,
@@ -157,140 +174,269 @@ const AppearanceSettings = () => {
     })
   }
 
-  return (
-    <div className="space-y-8">
-      <div className="bg-background space-y-3 rounded-xl p-4">
-        <div className="flex h-9 items-center justify-between gap-2">
-          <p className="text-sm font-semibold">Preview</p>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => {
-              updateSettings({ appearance: DEFAULT_APPEARANCE_SETTINGS })
-              track("settings_reset")
-            }}
-            aria-label="Reset appearance">
-            <RotateCcw className="size-4" />
-          </Button>
-        </div>
-
-        <div className="grid grid-cols-2 gap-2 text-xs sm:grid-cols-3">
-          {TIMETABLE_PREVIEW_TYPES.map((type) => (
-            <div
-              key={type.label}
-              className={cn(
-                "rounded-md p-[var(--cell-padding)]",
-                type.background
-              )}>
-              <p className={cn("font-bold", type.text)}>{type.label}</p>
-              <p className="text-muted-foreground">Index 00000</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <section className="space-y-3">
+  const densityContrast = (
+    <div className={cn("grid gap-6", !compact && "sm:grid-cols-2")}>
+      <section className="flex flex-col gap-3">
         <GroupLabel
-          title="Radius"
-          desc="Controls the roundness of buttons, cards, inputs, and cells."
-          aside={
-            <span className="bg-background rounded-md px-2 py-1 text-xs whitespace-nowrap tabular-nums">
-              {appearance.radius}px
-            </span>
-          }
+          small={compact}
+          title="Density"
+          desc={compact ? undefined : "Adjusts timetable and table spacing."}
         />
 
-        <Input
-          type="range"
-          aria-label="Corner radius"
-          min={0}
-          max={16}
-          step={1}
-          value={appearance.radius}
-          onChange={(event) =>
-            updateAppearance({ radius: Number(event.target.value) })
-          }
-          onMouseUp={(event) =>
-            track("settings_appearance_changed", {
-              setting: "radius",
-              value: Number((event.target as HTMLInputElement).value)
+        <ToggleGroup
+          type="single"
+          value={appearance.density}
+          onValueChange={(v) => {
+            if (!v) return
+            updateAppearance({
+              density: v as keyof typeof APPEARANCE_DENSITIES
             })
-          }
-          className="h-9 border-0 bg-transparent px-0 shadow-none"
-        />
+            track("settings_appearance_changed", {
+              setting: "density",
+              value: v
+            })
+          }}
+          className={TOGGLE_GROUP_CLASS}>
+          {Object.entries(APPEARANCE_DENSITIES).map(([key, value]) => (
+            <ToggleGroupItem
+              key={key}
+              value={key}
+              className={TOGGLE_ITEM_CLASS}>
+              {value.label}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
       </section>
 
-      <div className="grid gap-8 sm:grid-cols-2">
-        <section className="flex flex-col gap-3">
-          <GroupLabel
-            title="Density"
-            desc="Adjusts timetable and table spacing."
-          />
+      <section className="flex flex-col gap-3">
+        <GroupLabel
+          small={compact}
+          title="Contrast"
+          desc={
+            compact
+              ? undefined
+              : "Lifts secondary text when you want a crisper interface."
+          }
+        />
 
-          <ToggleGroup
-            type="single"
-            value={appearance.density}
-            onValueChange={(v) => {
-              if (!v) return
-              updateAppearance({
-                density: v as keyof typeof APPEARANCE_DENSITIES
-              })
-              track("settings_appearance_changed", {
-                setting: "density",
-                value: v
-              })
-            }}
-            className={TOGGLE_GROUP_CLASS}>
-            {Object.entries(APPEARANCE_DENSITIES).map(([key, value]) => (
-              <ToggleGroupItem
-                key={key}
-                value={key}
-                className={TOGGLE_ITEM_CLASS}>
-                {value.label}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        </section>
+        <ToggleGroup
+          type="single"
+          value={appearance.contrast}
+          onValueChange={(v) => {
+            if (!v) return
+            updateAppearance({
+              contrast: v as keyof typeof CONTRAST_PRESETS
+            })
+            track("settings_appearance_changed", {
+              setting: "contrast",
+              value: v
+            })
+          }}
+          className={TOGGLE_GROUP_CLASS}>
+          {Object.entries(CONTRAST_PRESETS).map(([key, value]) => (
+            <ToggleGroupItem
+              key={key}
+              value={key}
+              className={TOGGLE_ITEM_CLASS}>
+              {value.label}
+            </ToggleGroupItem>
+          ))}
+        </ToggleGroup>
+      </section>
+    </div>
+  )
 
-        <section className="flex flex-col gap-3">
-          <GroupLabel
-            title="Contrast"
-            desc="Lifts secondary text when you want a crisper interface."
-          />
-
-          <ToggleGroup
-            type="single"
-            value={appearance.contrast}
-            onValueChange={(v) => {
-              if (!v) return
-              updateAppearance({
-                contrast: v as keyof typeof CONTRAST_PRESETS
-              })
-              track("settings_appearance_changed", {
-                setting: "contrast",
-                value: v
-              })
-            }}
-            className={TOGGLE_GROUP_CLASS}>
-            {Object.entries(CONTRAST_PRESETS).map(([key, value]) => (
-              <ToggleGroupItem
-                key={key}
-                value={key}
-                className={TOGGLE_ITEM_CLASS}>
-                {value.label}
-              </ToggleGroupItem>
-            ))}
-          </ToggleGroup>
-        </section>
+  const previewBlock = (
+    <div
+      className={cn(
+        "bg-background space-y-3 rounded-xl",
+        compact ? "p-3 shadow-md" : "p-4"
+      )}>
+      <div
+        className={cn(
+          "flex items-center justify-between gap-2",
+          compact ? "h-7" : "h-9"
+        )}>
+        <p className="text-sm font-semibold">Preview</p>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => {
+            updateSettings({ appearance: DEFAULT_APPEARANCE_SETTINGS })
+            track("settings_reset")
+          }}
+          aria-label="Reset appearance">
+          <RotateCcw className="size-4" />
+        </Button>
       </div>
+
+      <div
+        className={cn(
+          "grid gap-2 text-xs",
+          compact ? "grid-cols-6" : "grid-cols-2 sm:grid-cols-3"
+        )}>
+        {TIMETABLE_PREVIEW_TYPES.map((type) => (
+          <div
+            key={type.label}
+            className={cn(
+              "rounded-md p-[var(--cell-padding)]",
+              compact &&
+                "min-w-0 p-1.5 text-center text-[10px] sm:p-2 sm:text-left sm:text-xs",
+              type.background
+            )}>
+            <p className={cn("font-bold", type.text)}>{type.label}</p>
+            <p
+              className={cn(
+                "text-muted-foreground",
+                compact && "hidden sm:block"
+              )}>
+              Index 00000
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+
+  const radiusBlock = (
+    <section className="space-y-3">
+      <GroupLabel
+        small={compact}
+        title="Radius"
+        desc="Controls the roundness of buttons, cards, inputs, and cells."
+        aside={
+          <span className="bg-background rounded-md px-2 py-1 text-xs whitespace-nowrap tabular-nums">
+            {appearance.radius}px
+          </span>
+        }
+      />
+
+      <Input
+        type="range"
+        aria-label="Corner radius"
+        min={0}
+        max={16}
+        step={1}
+        value={appearance.radius}
+        onChange={(event) =>
+          updateAppearance({ radius: Number(event.target.value) })
+        }
+        onMouseUp={(event) =>
+          track("settings_appearance_changed", {
+            setting: "radius",
+            value: Number((event.target as HTMLInputElement).value)
+          })
+        }
+        className="h-9 border-0 bg-transparent px-0 shadow-none"
+      />
+    </section>
+  )
+
+  if (compact)
+    return (
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-start">
+        {/* The preview stays put while the settings below it scroll. The 8px of
+            padding above it sticks too, so it keeps its margin from the edge. */}
+        <div className="bg-muted sticky top-0 z-10 -mt-2 pt-2 pb-3 lg:col-span-2">
+          {previewBlock}
+        </div>
+        <div className="min-w-0 space-y-6">
+          {radiusBlock}
+          {densityContrast}
+        </div>
+        <div className="space-y-6">
+          <section className="space-y-3">
+            <GroupLabel
+              small={compact}
+              title="Timetable colours"
+              desc="Pick a palette. LEC, LAB, SEM, TUT, DES, and PRJ stay mapped."
+            />
+
+            <div
+              className={cn(
+                "grid gap-2",
+                compact ? "grid-cols-2" : "sm:grid-cols-2"
+              )}>
+              {Object.entries(TIMETABLE_STYLE_PRESETS).map(([key, value]) => {
+                const selected = appearance.timetableStyle === key
+
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => {
+                      updateAppearance({
+                        timetableStyle:
+                          key as keyof typeof TIMETABLE_STYLE_PRESETS
+                      })
+                      track("settings_timetable_style_changed", {
+                        preset_name: key
+                      })
+                    }}
+                    className={cn(
+                      "bg-background hover:bg-accent relative flex min-w-0 flex-col gap-3 rounded-xl text-left ring-2 transition-colors",
+                      compact ? "p-3 sm:min-h-24 sm:p-4" : "min-h-28 p-4",
+                      selected ? "ring-foreground" : "ring-transparent"
+                    )}>
+                    <div className="flex gap-1">
+                      {INDEX_TYPE_COLOR_KEYS.map((type) => (
+                        <span
+                          key={type}
+                          className="h-2 flex-1 rounded-full"
+                          style={{
+                            backgroundColor: `hsl(${value.colors[type].bg})`
+                          }}
+                        />
+                      ))}
+                    </div>
+
+                    <div className="min-w-0 space-y-1">
+                      <p className="text-sm leading-none font-semibold">
+                        {value.label}
+                      </p>
+                      <p
+                        className={cn(
+                          "text-muted-foreground text-pretty",
+                          compact
+                            ? "text-[11px] leading-snug break-words sm:text-sm"
+                            : "text-sm"
+                        )}>
+                        {value.description}
+                      </p>
+                    </div>
+                    {selected && (
+                      <span className="bg-foreground text-background absolute -top-1.5 -right-1.5 flex size-5 items-center justify-center rounded-full">
+                        <Check className="size-3" />
+                      </span>
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          </section>
+        </div>
+      </div>
+    )
+
+  return (
+    <div className="space-y-8">
+      {previewBlock}
+      {radiusBlock}
+      {densityContrast}
 
       <section className="space-y-3">
         <GroupLabel
+          small={compact}
           title="Timetable colours"
           desc="Pick a palette. LEC, LAB, SEM, TUT, DES, and PRJ stay mapped."
         />
 
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div
+          className={cn(
+            "grid gap-2",
+            compact ? "grid-cols-2" : "sm:grid-cols-2"
+          )}>
           {Object.entries(TIMETABLE_STYLE_PRESETS).map(([key, value]) => {
             const selected = appearance.timetableStyle === key
 
@@ -308,7 +454,8 @@ const AppearanceSettings = () => {
                   })
                 }}
                 className={cn(
-                  "bg-background hover:bg-accent flex min-h-28 flex-col gap-3 rounded-xl p-4 text-left ring-2 transition-colors",
+                  "bg-background hover:bg-accent relative flex flex-col gap-3 rounded-xl p-4 text-left ring-2 transition-colors",
+                  compact ? "min-h-24" : "min-h-28",
                   selected ? "ring-foreground" : "ring-transparent"
                 )}>
                 <div className="flex gap-1">
@@ -323,18 +470,25 @@ const AppearanceSettings = () => {
                   ))}
                 </div>
 
-                <div className="flex gap-2">
-                  <div className="min-w-0 space-y-1">
-                    <p className="text-sm leading-none font-semibold">
-                      {value.label}
-                    </p>
-                    <p className="text-muted-foreground text-sm text-pretty">
-                      {value.description}
-                    </p>
-                  </div>
-
-                  {selected && <Check className="ml-auto size-4 shrink-0" />}
+                <div className="min-w-0 space-y-1">
+                  <p className="text-sm leading-none font-semibold">
+                    {value.label}
+                  </p>
+                  <p
+                    className={cn(
+                      "text-muted-foreground text-pretty",
+                      compact
+                        ? "text-[11px] leading-snug break-words sm:text-sm"
+                        : "text-sm"
+                    )}>
+                    {value.description}
+                  </p>
                 </div>
+                {selected && (
+                  <span className="bg-foreground text-background absolute -top-1.5 -right-1.5 flex size-5 items-center justify-center rounded-full">
+                    <Check className="size-3" />
+                  </span>
+                )}
               </button>
             )
           })}

@@ -8,19 +8,24 @@ import { defineConfig, fontProviders, sessionDrivers } from "astro/config"
 
 import hastFigure from "./src/lib/hast-figure.mjs"
 
-// Baked in at build time (Workers Builds checks out the real repo, so this
-// resolves there too) and shown only on /settings. Keep them off BaseLayout:
-// stamping every page changes every HTML hash, so each deploy re-uploads all
-// of them.
-const GIT_COMMIT_SHA = (() => {
-  try {
-    return execSync("git rev-parse --short=10 HEAD").toString().trim()
-  } catch {
-    return "unknown"
+// Vite serves pre-bundled deps with a one-year `immutable` cache header. After
+// the dep cache is wiped the `?v=` hashes change, and the browser keeps old
+// chunks next to new ones: two copies of React, "Invalid hook call". Dev only:
+// make the browser revalidate them instead.
+const revalidateDevDeps = () => ({
+  name: "revalidate-dev-deps",
+  apply: "serve",
+  configureServer(server) {
+    server.middlewares.use((req, res, next) => {
+      if (req.url?.includes("/.vite-cache/deps/")) {
+        const set = res.setHeader.bind(res)
+        res.setHeader = (name, value) =>
+          set(name, name.toLowerCase() === "cache-control" ? "no-cache" : value)
+      }
+      next()
+    })
   }
-})()
-
-const BUILD_TIME = new Date().toISOString()
+})
 
 // Claude Code worktrees (.claude/worktrees/*) symlink node_modules back to the
 // main checkout instead of a duplicate install — Vite's dev server otherwise
@@ -110,7 +115,8 @@ export default defineConfig({
     "/stars": { status: 301, destination: "/timetable" },
     "/mod": { status: 301, destination: "/mods" },
     "/help": { status: 301, destination: "/faq" },
-    "/fgo": { status: 301, destination: "/tools/fgo-optimiser" }
+    "/fgo": { status: 301, destination: "/tools/fgo-optimiser" },
+    "/settings": { status: 301, destination: "/feedback" }
   },
   vite: {
     // Worktrees symlink the main checkout's node_modules, so the default
@@ -121,11 +127,9 @@ export default defineConfig({
     server: { fs: { allow: [".", ...WORKTREE_ROOTS] } },
     envPrefix: ["PUBLIC_"],
     define: {
-      "import.meta.env.PUBLIC_GIT_COMMIT_SHA": JSON.stringify(GIT_COMMIT_SHA),
-      "import.meta.env.PUBLIC_BUILD_TIME": JSON.stringify(BUILD_TIME),
       "import.meta.env.PUBLIC_BUILD_ENV": JSON.stringify(BUILD_ENV)
     },
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), revalidateDevDeps()],
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url))

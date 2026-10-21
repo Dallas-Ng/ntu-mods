@@ -8,6 +8,13 @@ const FEATURES: Command[] = [
     desc: "Pick modules, set constraints like no mornings or free Fridays, and get every clash-free option."
   },
   {
+    name: "Walking between classes",
+    art: "/landing/maps.svg",
+    href: "/timetable",
+    isNew: true,
+    desc: "See your day on the campus map with the walk between each class, and a warning when the gap is too short."
+  },
+  {
     name: "Filter and search",
     art: "/landing/filter-search-manage.svg",
     href: "/timetable",
@@ -17,7 +24,7 @@ const FEATURES: Command[] = [
     name: "Multiple plans",
     art: "/landing/multiple-plans.svg",
     href: "/timetable",
-    desc: "Keep backup timetables side by side and switch between them before you commit on STARS."
+    desc: "Keep up to five named plans, such as a backup with no Friday classes, and switch between them before you commit on STARS."
   },
   {
     name: "Custom blocks",

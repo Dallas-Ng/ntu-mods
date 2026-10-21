@@ -1072,10 +1072,11 @@ const SearchPill = ({
 }) => {
   const [open, setOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const rootRef = useRef<HTMLDivElement>(null)
   const showList = open && !scope && q.trim().length > 0
 
   return (
-    <div className="relative">
+    <div ref={rootRef} className="relative scroll-mt-20">
       <Command
         shouldFilter={false}
         className={cn(FLOATING, "overflow-visible rounded-full")}>
@@ -1098,7 +1099,16 @@ const SearchPill = ({
               onQ(e.target.value)
               setOpen(true)
             }}
-            onFocus={() => setOpen(true)}
+            onFocus={() => {
+              setOpen(true)
+              // Phones: bring the map up under the navbar, where the keyboard
+              // leaves room for it, instead of leaving it below the fold.
+              if (window.matchMedia("(pointer: coarse)").matches)
+                window.setTimeout(
+                  () => rootRef.current?.scrollIntoView({ behavior: "smooth" }),
+                  250
+                )
+            }}
             onBlur={() => setTimeout(() => setOpen(false), 120)}
             onKeyDown={(e) => {
               if (e.key === "Escape") {

@@ -39,38 +39,6 @@ type LinkCategory = InternalCategory | ExternalCategory
 
 const LINK_CATEGORIES: LinkCategory[] = [
   {
-    id: "ntumods",
-    title: "NTUMods",
-    type: "internal",
-    links: [
-      {
-        name: "Timetable Planner",
-        href: "/timetable",
-        desc: "Build your STARS timetable, detect clashes, and export to calendar"
-      },
-      {
-        name: "Module Browser",
-        href: "/mods",
-        desc: "Search modules, view indexes, prerequisites, and exam dates"
-      },
-      {
-        name: "Exam Schedule",
-        href: "/exams",
-        desc: "Browse the AY 2026/2027 Sem 1 exam timetable by date or module"
-      },
-      {
-        name: "CGPA Planner",
-        href: "/tools/cgpa-planner",
-        desc: "Find the average grade you need over your remaining AU to reach Merit, Distinction or Highest Distinction"
-      },
-      {
-        name: "FGO Optimiser",
-        href: "/tools/fgo-optimiser",
-        desc: "Upload your transcript and find the modules to Flexible-Grade for the highest CGPA"
-      }
-    ]
-  },
-  {
     id: "academics",
     title: "Academics",
     type: "external",
@@ -205,6 +173,38 @@ const LINK_CATEGORIES: LinkCategory[] = [
         name: "IT Helpdesk",
         href: "https://www.ntu.edu.sg/life-at-ntu/internet-account-and-policy/contact-service-desk",
         desc: "Network account, wifi, and technical support contacts"
+      }
+    ]
+  },
+  {
+    id: "ntumods",
+    title: "NTUMods",
+    type: "internal",
+    links: [
+      {
+        name: "Timetable Planner",
+        href: "/timetable",
+        desc: "Build your STARS timetable, detect clashes, and export to calendar"
+      },
+      {
+        name: "Module Browser",
+        href: "/mods",
+        desc: "Search modules, view indexes, prerequisites, and exam dates"
+      },
+      {
+        name: "Exam Schedule",
+        href: "/exams",
+        desc: "Browse the AY 2026/2027 Sem 1 exam timetable by date or module"
+      },
+      {
+        name: "CGPA Planner",
+        href: "/tools/cgpa-planner",
+        desc: "Find the average grade you need over your remaining AU to reach Merit, Distinction or Highest Distinction"
+      },
+      {
+        name: "FGO Optimiser",
+        href: "/tools/fgo-optimiser",
+        desc: "Upload your transcript and find the modules to Flexible-Grade for the highest CGPA"
       }
     ]
   }

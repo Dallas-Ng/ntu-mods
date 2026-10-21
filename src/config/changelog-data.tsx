@@ -1,12 +1,7 @@
 import type React from "react"
 
 export type ChangelogCategory =
-  | "New Feature"
-  | "Improvement"
-  | "Bug Fix"
-  | "Content"
-  | "Data"
-  | "Performance"
+  "New Feature" | "Improvement" | "Bug Fix" | "Content" | "Data" | "Performance"
 
 export interface ChangelogItem {
   category: ChangelogCategory
@@ -48,6 +43,73 @@ export const ChangelogLink = ({
 )
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
+  {
+    title: "Timetable redesign",
+    date: "22 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            The <ChangelogLink href="/timetable">timetable</ChangelogLink> page
+            has been redesigned. A single toolbar holds every tool, plans can be
+            named, the side panel can sit beside or below the grid, and the new
+            Appearance dialog changes the radius, density, contrast and colour
+            palette. Walking between classes now opens as a map dialog, and the
+            shared timetable page uses the same layout with a clearer copy
+            dialog. Everything that changed:{" "}
+            <ChangelogLink href="/articles/ntu-timetable-planner-redesign">
+              NTU Timetable Planner Redesign
+            </ChangelogLink>
+            .
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Standardised scale is a new table setting that gives every half hour
+            the same height. Save to calendar shows a preview before the
+            download, and actions that would overwrite a plan now ask first.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Dialogs become drawers on phones with consistent spacing and
+            scrolling, and the page no longer jumps while it loads.
+          </>
+        )
+      }
+    ]
+  },
+  {
+    title: "Walking between classes",
+    date: "21 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            The <ChangelogLink href="/timetable">timetable</ChangelogLink> page
+            now has a Walking between classes button under Generate Timetable.
+            Pick a day to see your classes in order on the campus map, the
+            walking time between each pair of venues, and a warning when the gap
+            is too short. Walks are looked up only when you open it, for one day
+            at a time. The Calendar, Generate and AI tabs are gone: generate
+            options now show by default. Guide:{" "}
+            <ChangelogLink href="/articles/ntu-timetable-planner-guide">
+              NTU Timetable Planner Guide
+            </ChangelogLink>
+            .
+          </>
+        )
+      }
+    ]
+  },
   {
     title: "Campus map",
     date: "20 Oct 2026",
@@ -423,7 +485,7 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
           <>
             Timetable cells are more compact on mobile by default, regardless of
             your chosen density in{" "}
-            <ChangelogLink href="/settings">Settings</ChangelogLink> — which
+            <ChangelogLink href="/timetable">Settings</ChangelogLink> — which
             still applies from tablet width up.
           </>
         )
@@ -1042,9 +1104,7 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         content: (
           <>
             Updated{" "}
-            <ChangelogLink href="/settings#feedback">
-              feedback submissions
-            </ChangelogLink>{" "}
+            <ChangelogLink href="/feedback">feedback submissions</ChangelogLink>{" "}
             so reports can be sent by email.
           </>
         )

@@ -1,7 +1,17 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Megaphone, Menu, Moon, Settings, Sun, X } from "lucide-react"
+import {
+  ArrowRight,
+  Bell,
+  ChevronDown,
+  Menu,
+  MessageSquare,
+  Moon,
+  Sun,
+  X
+} from "lucide-react"
+import { NavigationMenu } from "radix-ui"
 
 import { siteConfig } from "@/config/site"
 import { track } from "@/lib/analytics"
@@ -22,6 +32,12 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "./ui/drawer"
+
+const NEW_DOTS: Record<string, string> = {
+  "/tools": "seen-tools",
+  "/maps": "seen-maps",
+  "/exams": "seen-exams"
+}
 
 const Navbar = () => {
   const pathname = usePathname()
@@ -60,7 +76,7 @@ const Navbar = () => {
 
             <span
               className={cn(
-                "hover:text-foreground ml-1 hidden font-bold transition-colors md:inline-block",
+                "hover:text-foreground ml-1 hidden font-bold transition-colors min-[890px]:inline-block",
                 pathname === "/" ? "text-foreground" : "text-muted-foreground"
               )}>
               {siteConfig.name}
@@ -70,49 +86,90 @@ const Navbar = () => {
           {/* One nav for all breakpoints: a single copy of the links in the
               HTML (crawlers otherwise read desktop + mobile twice). Items
               past the 2nd collapse at narrow widths; all show from md up. */}
-          <nav
+          <NavigationMenu.Root
             aria-label="Main"
-            className="ml-2 flex items-center gap-1 md:gap-0">
-            {siteConfig.navLinks.map((link, i) => (
-              <a
-                href={link.route}
-                key={link.route}
-                className={cn(
-                  "hover:bg-accent hover:text-foreground relative rounded-md px-2 py-1.5 text-sm font-semibold transition-colors md:mr-1 md:px-3 md:hover:bg-transparent",
-                  i === 2 && "hidden min-[420px]:flex",
-                  i === 3 && "hidden min-[520px]:flex",
-                  i === 4 && "hidden min-[640px]:flex",
-                  i === 5 && "hidden min-[700px]:flex",
-                  i === 6 && "hidden min-[760px]:flex",
+            delayDuration={100}
+            className="relative ml-2">
+            <NavigationMenu.List className="flex items-center gap-1 min-[890px]:gap-0">
+              {siteConfig.navLinks.map((link, i) => {
+                const itemClass = cn(
+                  "hover:bg-accent hover:text-foreground relative flex items-center gap-1 rounded-md px-2 py-1.5 text-sm font-semibold transition-colors min-[890px]:mr-1 min-[890px]:px-3 min-[890px]:hover:bg-transparent",
+                  i === 1 && "hidden min-[330px]:flex",
+                  i === 2 && "hidden min-[390px]:flex",
+                  i >= 3 && "hidden md:flex",
                   pathname.includes(link.route)
                     ? "text-foreground"
                     : "text-muted-foreground"
-                )}>
-                {link.label}
-                {link.route === "/tools" && (
+                )
+                const dot = NEW_DOTS[link.route] && (
                   <NewDot
-                    storageKey="seen-tools"
-                    triggerRoute="/tools"
+                    storageKey={NEW_DOTS[link.route]}
+                    triggerRoute={link.route}
                     className="absolute top-0 right-0 hidden h-2 w-2 md:flex"
                   />
-                )}
-                {link.route === "/maps" && (
-                  <NewDot
-                    storageKey="seen-maps"
-                    triggerRoute="/maps"
-                    className="absolute top-0 right-0 hidden h-2 w-2 md:flex"
-                  />
-                )}
-                {link.route === "/exams" && (
-                  <NewDot
-                    storageKey="seen-exams"
-                    triggerRoute="/exams"
-                    className="absolute top-0 right-0 hidden h-2 w-2 md:flex"
-                  />
-                )}
-              </a>
-            ))}
-          </nav>
+                )
+
+                if (link.route === "/tools") {
+                  return (
+                    <NavigationMenu.Item key={link.route}>
+                      <NavigationMenu.Trigger
+                        className={cn(itemClass, "group cursor-pointer")}>
+                        {link.label}
+                        <ChevronDown className="size-3 transition-transform group-data-[state=open]:rotate-180" />
+                        {dot}
+                      </NavigationMenu.Trigger>
+                      <NavigationMenu.Content className="bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 absolute top-full left-0 mt-2 w-[min(32rem,calc(100vw-1rem))] origin-top-left rounded-xl border p-2 shadow-lg duration-200">
+                        <ul className="grid gap-1 sm:grid-cols-2">
+                          {siteConfig.tools.map((tool) => (
+                            <li key={tool.href}>
+                              <NavigationMenu.Link asChild>
+                                <a
+                                  href={tool.href}
+                                  className="hover:bg-accent flex h-full flex-col gap-1 rounded-lg p-3 transition-colors">
+                                  <span className="flex items-center gap-2 text-sm font-semibold">
+                                    {tool.name}
+                                    {tool.isNew && (
+                                      <span className="rounded-full bg-yellow-400 px-1.5 py-0.5 text-[10px] leading-none font-semibold text-black">
+                                        New
+                                      </span>
+                                    )}
+                                  </span>
+                                  <span className="text-muted-foreground text-xs">
+                                    {tool.desc}
+                                  </span>
+                                </a>
+                              </NavigationMenu.Link>
+                            </li>
+                          ))}
+                          <li className="sm:col-span-2">
+                            <NavigationMenu.Link asChild>
+                              <a
+                                href="/tools"
+                                className="hover:bg-accent text-muted-foreground hover:text-foreground flex items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors">
+                                All tools
+                                <ArrowRight className="size-4" />
+                              </a>
+                            </NavigationMenu.Link>
+                          </li>
+                        </ul>
+                      </NavigationMenu.Content>
+                    </NavigationMenu.Item>
+                  )
+                }
+
+                return (
+                  <NavigationMenu.Item key={link.route}>
+                    <NavigationMenu.Link asChild>
+                      <a href={link.route} className={itemClass}>
+                        {link.label}
+                        {dot}
+                      </a>
+                    </NavigationMenu.Link>
+                  </NavigationMenu.Item>
+                )
+              })}
+            </NavigationMenu.List>
+          </NavigationMenu.Root>
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-1 sm:gap-2">
@@ -122,11 +179,9 @@ const Navbar = () => {
             </span>
           </a>
 
-          <div className="hidden md:block">
+          {/* One row, so the three icons are evenly spaced */}
+          <div className="hidden items-center md:flex">
             <ChangelogButton />
-          </div>
-
-          <div className="hidden md:block">
             <NavActions />
           </div>
 
@@ -147,7 +202,7 @@ const Navbar = () => {
               className="flex flex-col p-0">
               <DrawerTitle className="sr-only">Navigation menu</DrawerTitle>
               {/* Header */}
-              <div className="flex items-center justify-between border-b px-5 py-4">
+              <div className="flex items-center justify-between border-b px-5 pb-4">
                 <a href="/" className="flex items-center gap-2">
                   <img
                     src="/logo.webp"
@@ -166,7 +221,7 @@ const Navbar = () => {
               </div>
 
               {/* Nav links */}
-              <nav className="flex flex-col p-3">
+              <nav className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3">
                 <p className="text-muted-foreground/60 mb-1 px-4 text-[11px] font-semibold tracking-widest uppercase">
                   Menu
                 </p>
@@ -187,7 +242,7 @@ const Navbar = () => {
               </nav>
 
               {/* Footer */}
-              <div className="mt-auto border-t p-3">
+              <div className="shrink-0 border-t p-3">
                 <DrawerClose asChild>
                   <a
                     href="/changelog"
@@ -198,7 +253,7 @@ const Navbar = () => {
                     }
                     className="hover:bg-accent text-muted-foreground flex w-full items-center justify-between gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                     <span className="flex items-center gap-3">
-                      <Megaphone className="size-4" />
+                      <Bell className="size-4" />
                       Changelog
                     </span>
                     {changelogUnseen > 0 && (
@@ -209,12 +264,12 @@ const Navbar = () => {
                   </a>
                 </DrawerClose>
                 <DrawerClose asChild>
-                  <button
-                    onClick={() => window.location.assign("/settings")}
-                    className="hover:bg-accent text-muted-foreground flex w-full cursor-pointer items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
-                    <Settings className="size-4" />
-                    Settings
-                  </button>
+                  <a
+                    href="/feedback"
+                    className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                    <MessageSquare className="size-4" />
+                    Feedback
+                  </a>
                 </DrawerClose>
                 <button
                   onClick={() => setTheme(theme === "light" ? "dark" : "light")}

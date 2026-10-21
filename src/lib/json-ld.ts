@@ -42,11 +42,13 @@ export const websiteJsonLd = (): JsonLd => ({
 export const webApplicationJsonLd = ({
   path,
   description,
-  name = `${siteConfig.name} Timetable Planner`
+  name = `${siteConfig.name} Timetable Planner`,
+  featureList
 }: {
   path: string
   description: string
   name?: string
+  featureList?: string[]
 }): JsonLd => ({
   "@context": CONTEXT,
   "@type": "WebApplication",
@@ -58,6 +60,7 @@ export const webApplicationJsonLd = ({
   browserRequirements: "Requires a modern web browser",
   offers: { "@type": "Offer", price: "0", priceCurrency: "SGD" },
   isAccessibleForFree: true,
+  ...(featureList && { featureList }),
   publisher: {
     "@type": "Organization",
     name: siteConfig.name,

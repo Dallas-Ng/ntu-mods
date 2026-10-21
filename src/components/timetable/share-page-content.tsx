@@ -26,7 +26,7 @@ const SharePageContent = () => {
       <h1 className="sr-only">Shared timetable</h1>
 
       <div className="bg-card panel-border flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg p-2 pl-4">
-        <div className="mr-auto min-w-0">
+        <div className="min-w-0">
           <p className="flex items-center gap-1.5 text-sm font-medium">
             <Eye className="text-muted-foreground size-4 shrink-0" />
             Shared timetable
@@ -46,7 +46,7 @@ const SharePageContent = () => {
           </p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="ml-auto flex gap-2">
           <TimetableScreenshotButton persistQuerystring />
           <TimetableDownloadCalendarButton />
           <TimetableCopyButton />

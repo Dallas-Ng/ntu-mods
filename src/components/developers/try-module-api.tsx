@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 
+import { track } from "@/lib/analytics"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Code, Rich } from "@/components/developers/code"
@@ -23,6 +24,7 @@ const TryModuleApi = () => {
   const run = async () => {
     if (!valid || busy) return
     setBusy(true)
+    track("api_example_sent")
     try {
       const res = await fetch(`/api/modules/${code}`)
       const text = await res.text()

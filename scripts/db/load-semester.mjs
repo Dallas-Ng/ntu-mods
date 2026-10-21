@@ -304,7 +304,7 @@ function main() {
 
   if (!fs.existsSync(LOCAL_DB)) {
     throw new Error(
-      `No local database at ${LOCAL_DB}. Run \`yarn db:pull\` first — the load ` +
+      `No local database at ${LOCAL_DB}. Run \`pnpm db:pull\` first — the load ` +
         `is staged locally before being applied, so it must start from the ` +
         `current contents of D1.`
     )

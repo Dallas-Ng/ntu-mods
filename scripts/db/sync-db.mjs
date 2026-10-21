@@ -2,8 +2,8 @@
  * Get a local copy of db/ntu-mods.sqlite, either by rebuilding it from
  * src/data/api JSON or by downloading it from D1.
  *
- * `--if-missing` is what `yarn data` uses before every build, so a database
- * already on disk is reused rather than re-pulled on every `yarn dev`/build.
+ * `--if-missing` is what `pnpm data` uses before every build, so a database
+ * already on disk is reused rather than re-pulled on every `pnpm dev`/build.
  *
  * The default source is JSON, deliberately — every push to main triggers a
  * Workers Build regardless of whether the underlying data changed, and
@@ -11,7 +11,7 @@
  * time. Publishing new scraper data is a separate, explicit step: after
  * `main.py --load` writes to D1, `main.py --upsync` refreshes
  * src/data/api, then commit and push it — that commit is what a build should
- * actually react to. `--from d1` (`yarn db:pull`) stays available to pull
+ * actually react to. `--from d1` (`pnpm db:pull`) stays available to pull
  * fresh from D1 by hand, e.g. to resync src/data/api if it's drifted.
  *
  *   node scripts/db/sync-db.mjs --from json
@@ -83,13 +83,13 @@ function collectSemesters(src) {
 /**
  * Bootstrap loader: src/data/api/*.json -> a local SQLite file. Row
  * construction is shared with the pipeline loader via lib/rows.mjs, so
- * `yarn db:verify` proving this output correct also covers load-semester.mjs.
+ * `pnpm db:verify` proving this output correct also covers load-semester.mjs.
  */
 function buildFromJson() {
   const src = path.join(ROOT, "src/data/api")
   if (!fs.existsSync(path.join(src, "metadata"))) {
     console.error(
-      `No src/data/api to rebuild from.\nRun \`yarn db:pull\` to download ` +
+      `No src/data/api to rebuild from.\nRun \`pnpm db:pull\` to download ` +
         `the database from D1 instead.`
     )
     process.exit(1)

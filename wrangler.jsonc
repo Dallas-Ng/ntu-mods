@@ -13,7 +13,7 @@
   // The adapter emits its own correct, self-contained wrangler.json in
   // dist/server/ after a successful build (real main + assets paths,
   // relative to dist/server/). Deploy using THAT file, not this one:
-  //   Build command:  yarn build
+  //   Build command:  pnpm build
   //   Deploy command: npx wrangler deploy --config dist/server/wrangler.json
   "name": "ntu-mods",
   // Keep the production workers.dev route off — deploy re-generates
@@ -45,7 +45,7 @@
   // Source of truth for all module data. The on-demand snapshot route
   // (src/lib/server/edge/get-module-snapshot.ts) queries it at request time
   // through this binding; prerendered routes query the same schema at build
-  // time through node:sqlite against a local copy pulled with `yarn db:pull`.
+  // time through node:sqlite against a local copy pulled with `pnpm db:pull`.
   //
   // "remote": true makes `astro dev` query this binding over the network
   // rather than an empty local D1 — without it the on-demand route errors in

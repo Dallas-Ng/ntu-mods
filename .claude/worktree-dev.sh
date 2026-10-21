@@ -1,6 +1,6 @@
 #!/bin/bash
 # node_modules gitignore'd. fresh worktree = none. symlink main worktree's
-# instead of slow duplicate `yarn install`.
+# instead of slow duplicate `pnpm install`.
 set -e
 
 WORKTREE_ROOT=$(git rev-parse --show-toplevel)
@@ -21,7 +21,7 @@ MODE="${1:-dev}"
 PORT="${PORT:-4321}"
 
 if [ "$MODE" = "dev" ]; then
-  yarn data
+  pnpm data
   exec node_modules/.bin/astro dev --port "$PORT"
 else
   exec node_modules/.bin/astro preview --port "$PORT"

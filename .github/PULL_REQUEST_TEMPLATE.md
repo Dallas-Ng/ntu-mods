@@ -6,5 +6,5 @@
 
 ## Checklist
 
-- [ ] `yarn lint` passes
-- [ ] `yarn build` passes
+- [ ] `pnpm lint` passes
+- [ ] `pnpm build` passes

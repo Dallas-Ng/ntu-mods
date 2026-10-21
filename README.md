@@ -110,14 +110,14 @@ which queries the D1 binding.
 ### Prerequisites
 
 - Node.js 22+
-- Yarn
+- pnpm
 
 ### Installation
 
 ```bash
 git clone https://github.com/Dallas-Ng/ntu-mods.git
 cd ntu-mods
-yarn install
+pnpm install
 ```
 
 ### Running Locally
@@ -130,13 +130,13 @@ Access blocks with `Too many redirects. http://d1/query`. Seed it once, and agai
 after the data changes (about a minute, no Cloudflare login needed):
 
 ```bash
-yarn db:seed-local
+pnpm db:seed-local
 ```
 
 Without it, those pages fail in dev with `no such table: offerings`.
 
 ```bash
-yarn dev
+pnpm dev
 ```
 
 Open [http://localhost:4321](http://localhost:4321) in your browser.
@@ -144,7 +144,7 @@ Open [http://localhost:4321](http://localhost:4321) in your browser.
 ### Checks
 
 ```bash
-yarn lint
+pnpm lint
 ```
 
 Runs ESLint (including `.astro` files), `astro check`, and `tsc`.
@@ -152,14 +152,14 @@ Runs ESLint (including `.astro` files), `astro check`, and `tsc`.
 ### Building for Production
 
 ```bash
-yarn build
+pnpm build
 ```
 
 This runs the static-data build, `astro build`, the source map upload to
 PostHog (skipped unless `POSTHOG_CLI_API_KEY` and `POSTHOG_CLI_PROJECT_ID` are
 set; the maps are deleted from `dist` either way), the sitemap generator, and
 the IndexNow submission (skipped unless `WORKERS_CI`, `CF_PAGES`, or
-`INDEXNOW=1` is set). Preview the built output with `yarn preview`.
+`INDEXNOW=1` is set). Preview the built output with `pnpm preview`.
 
 ## Deployment
 
@@ -173,15 +173,17 @@ npx wrangler deploy --config dist/server/wrangler.json
 
 ### Production build settings
 
-Production and previews both use Workers Builds' own install (a full
-`yarn --frozen-lockfile`, so its dependency cache applies) and the plain
-`yarn build`. Nothing custom: no `--production`, no `NODE_ENV`, no
-`SKIP_DEPENDENCY_INSTALL`. These settings live in the dashboard (Workers &
-Pages → `ntu-mods` → Settings → Builds), not in the repo:
+Production and previews use Workers Builds' own install (a full
+`pnpm install --frozen-lockfile`, so its dependency cache applies) and the plain
+`pnpm build`. Nothing custom: no `--prod`, no `NODE_ENV`, no
+`SKIP_DEPENDENCY_INSTALL`. The build does not need devDependencies, but Workers
+Builds installs before it runs the build command, so skipping them would only
+add a second install. These settings live in the dashboard (Workers & Pages →
+`ntu-mods` → Settings → Builds), not in the repo:
 
 | Setting         | Production                                               | Previews Base          |
 | --------------- | -------------------------------------------------------- | ---------------------- |
-| Build command   | `yarn build`                                             | `yarn build`           |
+| Build command   | `pnpm build`                                             | `pnpm build`           |
 | Deploy command  | `npx wrangler deploy --config dist/server/wrangler.json` | n/a                    |
 | Preview command | n/a                                                      | `npx wrangler preview` |
 
@@ -192,10 +194,8 @@ error stack traces in PostHog point at real source lines
 ([`scripts/upload-sourcemaps.mjs`](scripts/upload-sourcemaps.mjs)).
 `RESEND_KEY` is a runtime secret only (see Secrets below).
 
-A production-only install (`yarn install --production`, with
-`SKIP_DEPENDENCY_INSTALL=1`) was used before. It bypassed the dependency cache
-and gave no measurable speed-up, so it was dropped. `tailwindcss`, `tsx` and
-`wrangler` remain in `dependencies` from that period; leave them there.
+Everything the build runs (`astro`, `tailwindcss`, `tsx`, `wrangler`,
+`@posthog/cli`) is in `dependencies`; leave them there.
 
 Measured on Workers Builds (October 2026): about 1m 40s to 3m 10s per build.
 The install phase is 1 to 1m 40s and varies with whether the dependency cache
@@ -267,7 +267,7 @@ both — see [Working with the database](#working-with-the-database).
               |                                 |
               |                                 |  git commit + push
               |                                 v
-              |                           yarn build
+              |                           pnpm build
               |                     (json-source.ts reads it)
               |                                 |
               v                                 v
@@ -295,14 +295,14 @@ cd scraper && python3 main.py --refetch --load --upsync   # latest semester -> D
 ### Working with the database
 
 ```bash
-yarn db:build     # Rebuild the local SQLite file from src/data/api
-yarn db:pull      # Download the database from D1 instead (needs wrangler auth)
-yarn db:verify    # Assert the database reproduces every JSON file exactly
-yarn db:dump      # Emit SQL for `wrangler d1 execute --file`
-yarn data         # Regenerate the static artifacts the client fetches
+pnpm db:build     # Rebuild the local SQLite file from src/data/api
+pnpm db:pull      # Download the database from D1 instead (needs wrangler auth)
+pnpm db:verify    # Assert the database reproduces every JSON file exactly
+pnpm db:dump      # Emit SQL for `wrangler d1 execute --file`
+pnpm data         # Regenerate the static artifacts the client fetches
 ```
 
-`yarn dev` and `yarn build` both run `yarn data` first, which reads
+`pnpm dev` and `pnpm build` both run `pnpm data` first, which reads
 `src/data/api` directly and regenerates `public/data/api/` — neither this nor
 prerendering touches D1 or `db/*.sqlite` at all. That file is only for the
 `db:*` scripts above: staging a load before it's applied to D1, and verifying

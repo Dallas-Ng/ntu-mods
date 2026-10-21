@@ -47,12 +47,12 @@ jobs:
       # .wrangler/state), so run them side by side.
       - name: Build site and seed local D1
         run: |
-          yarn build & build=$!
-          yarn db:seed-local & seed=$!
+          pnpm build & build=$!
+          pnpm db:seed-local & seed=$!
           wait $build && wait $seed
 
       - name: Run E2E SEO tests
-        run: yarn test:e2e
+        run: pnpm test:e2e
 
       - name: Upload report
         if: failure()

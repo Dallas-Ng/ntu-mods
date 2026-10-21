@@ -40,7 +40,7 @@ const WORKTREE_ROOTS = (() => {
 })()
 
 // Same WORKERS_CI/CF_PAGES signal used in scripts/indexnow.mjs to detect a
-// real Cloudflare deploy vs a local `yarn build` — not the commit's git
+// real Cloudflare deploy vs a local `pnpm build` — not the commit's git
 // branch or any account/zone info, just "was this built by CI".
 const BUILD_ENV =
   process.env.WORKERS_CI === "1" || process.env.CF_PAGES === "1"
@@ -61,7 +61,7 @@ export default defineConfig({
   // session. wrangler.jsonc marks the D1 binding remote:true, but that session
   // is a preview-hostname worker, which Cloudflare Access (enabled on Preview
   // URLs) bounces in a redirect loop: "Too many redirects. http://d1/query".
-  // Dev reads a local D1 instead — seed it with `yarn db:seed-local`.
+  // Dev reads a local D1 instead — seed it with `pnpm db:seed-local`.
   adapter: cloudflare({
     imageService: "passthrough",
     prerenderEnvironment: "node",

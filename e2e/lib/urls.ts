@@ -17,11 +17,11 @@ export interface PageRef {
   kind: Kind
 }
 
-/** Every sitemap URL as a pathname. Needs `yarn build` (build-sitemap.mts). */
+/** Every sitemap URL as a pathname. Needs `pnpm build` (build-sitemap.mts). */
 export function sitemapPaths(): string[] {
   const files = fs.readdirSync(DIST).filter((f) => /^sitemap-\d+\.xml$/.test(f))
   if (!files.length) {
-    throw new Error(`No sitemap-*.xml in ${DIST}; run yarn build first`)
+    throw new Error(`No sitemap-*.xml in ${DIST}; run pnpm build first`)
   }
   return files.flatMap((f) =>
     [...fs.readFileSync(path.join(DIST, f), "utf8").matchAll(/<loc>([^<]+)</g)]

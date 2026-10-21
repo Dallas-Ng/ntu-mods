@@ -181,7 +181,7 @@ function DrawerHead({
   resetLabel?: string
 }) {
   return (
-    <div className="flex min-h-12 items-center justify-between px-4 pt-1">
+    <div className="flex min-h-12 items-center justify-between px-4">
       <h2 className="text-lg font-semibold">{title}</h2>
       {onReset && (
         <button

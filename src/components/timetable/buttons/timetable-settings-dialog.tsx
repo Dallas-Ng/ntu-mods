@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog"
+import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import TableSettings from "@/components/settings/table-settings"
 
 interface Props {
@@ -16,18 +10,16 @@ interface Props {
 
 const TimetableSettingsDialog = ({ open, onOpenChange }: Props) => {
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-2xl">
-        <DialogHeader>
-          <DialogTitle>Table Settings</DialogTitle>
-          <DialogDescription>
-            Customise the appearance of the timetable table.
-          </DialogDescription>
-        </DialogHeader>
-
-        <TableSettings toggleBorder />
-      </DialogContent>
-    </Dialog>
+    <ResponsiveModal
+      open={open}
+      onOpenChange={onOpenChange}
+      nested={false}
+      title="Table Settings"
+      showDescription
+      description="Customise the appearance of the timetable table."
+      className="max-h-[85vh] overflow-y-auto sm:max-w-2xl">
+      <TableSettings toggleBorder />
+    </ResponsiveModal>
   )
 }
 

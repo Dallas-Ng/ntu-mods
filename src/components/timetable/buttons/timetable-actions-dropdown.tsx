@@ -328,7 +328,7 @@ const TimetableActionsDropdown = ({
 
           <Drawer open={sheetOpen} onOpenChange={setSheetOpen}>
             <DrawerContent className="p-2">
-              <DrawerTitle className="px-3 pt-3 text-left text-base font-semibold">
+              <DrawerTitle className="px-3 text-left text-base font-semibold">
                 {sheetView === "tools" ? "Tools" : "Duplicate to plan"}
               </DrawerTitle>
               <DrawerDescription className="text-muted-foreground px-3 pb-2 text-left text-sm">

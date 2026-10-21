@@ -11,14 +11,7 @@ import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
 import { Command, CommandItem } from "@/components/ui/command"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog"
+import { DialogFooter } from "@/components/ui/dialog"
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
 import {
   DropdownMenu,
@@ -26,6 +19,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
+import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import {
   Tooltip,
   TooltipContent,
@@ -57,37 +51,35 @@ const RenameDialog = ({
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-sm">
-        <DialogHeader>
-          <DialogTitle>Name this plan</DialogTitle>
-          <DialogDescription>
-            Plan {timetableIndex + 1} keeps its number, so you can always tell
-            which one it is.
-          </DialogDescription>
-        </DialogHeader>
-        <form
-          className="space-y-4"
-          onSubmit={(e) => {
-            e.preventDefault()
-            save(value)
-          }}>
-          <Input
-            autoFocus
-            value={value}
-            maxLength={MAX_PLAN_NAME}
-            placeholder={`Plan ${timetableIndex + 1}`}
-            onChange={(e) => setValue(e.target.value)}
-          />
-          <DialogFooter className="gap-2 sm:justify-between">
-            <Button type="button" variant="ghost" onClick={() => save("")}>
-              Use default name
-            </Button>
-            <Button type="submit">Save</Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+    <ResponsiveModal
+      open={open}
+      onOpenChange={handleOpenChange}
+      nested={false}
+      title="Name this plan"
+      showDescription
+      description={`Plan ${timetableIndex + 1} keeps its number, so you can always tell which one it is.`}
+      className="sm:max-w-sm">
+      <form
+        className="space-y-4"
+        onSubmit={(e) => {
+          e.preventDefault()
+          save(value)
+        }}>
+        <Input
+          autoFocus
+          value={value}
+          maxLength={MAX_PLAN_NAME}
+          placeholder={`Plan ${timetableIndex + 1}`}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <DialogFooter className="gap-2 sm:justify-between">
+          <Button type="button" variant="ghost" onClick={() => save("")}>
+            Use default name
+          </Button>
+          <Button type="submit">Save</Button>
+        </DialogFooter>
+      </form>
+    </ResponsiveModal>
   )
 }
 

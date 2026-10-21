@@ -157,9 +157,9 @@ const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
 
   return (
     <TooltipProvider delayDuration={200}>
-      <div className="flex size-full flex-col">
+      <div className="flex w-full flex-col">
         {/* Module search: always shown */}
-        <div className="relative z-2 mb-3 h-10 w-full rounded-lg">
+        <div className="relative z-2 mb-3 h-10 w-full shrink-0 rounded-lg">
           <div className="absolute top-0 left-0 w-full">
             <TimetableModulesSelect />
           </div>

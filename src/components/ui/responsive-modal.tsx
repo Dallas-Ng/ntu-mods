@@ -9,6 +9,7 @@ import {
   DialogTitle
 } from "@/components/ui/dialog"
 import {
+  Drawer,
   DrawerContent,
   DrawerDescription,
   DrawerNestedRoot,
@@ -19,8 +20,14 @@ interface Props {
   open: boolean
   onOpenChange: (open: boolean) => void
   title: React.ReactNode
-  /** Read by screen readers only. */
-  description?: string
+  description?: React.ReactNode
+  /** Show the description under the title; otherwise screen readers only. */
+  showDescription?: boolean
+  /**
+   * On phones: a drawer nested in the one it was opened from (the default),
+   * or a plain drawer for a modal opened from the page itself.
+   */
+  nested?: boolean
   children: React.ReactNode
   /** Extra classes for the desktop dialog. */
   className?: string
@@ -36,26 +43,34 @@ export const ResponsiveModal = ({
   onOpenChange,
   title,
   description,
+  showDescription = false,
+  nested = true,
   children,
   className
 }: Props) => {
   const { isMobile } = useSettings()
+  const Root = nested ? DrawerNestedRoot : Drawer
 
   if (isMobile)
     return (
-      <DrawerNestedRoot open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="border-primary h-[calc(100svh-6rem)] overflow-hidden p-2 !duration-150 focus:outline-none data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[calc(100svh-6rem)] data-[vaul-drawer-direction=bottom]:rounded-t-3xl data-[vaul-drawer-direction=bottom]:border-4 data-[vaul-drawer-direction=bottom]:border-b-0">
-          <DrawerTitle className="flex items-center px-3 pt-4 text-left text-base font-semibold">
+      <Root open={open} onOpenChange={onOpenChange}>
+        <DrawerContent className="border-primary overflow-hidden p-2 !duration-150 focus:outline-none data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[calc(100svh-6rem)] data-[vaul-drawer-direction=bottom]:rounded-t-3xl data-[vaul-drawer-direction=bottom]:border-4 data-[vaul-drawer-direction=bottom]:border-b-0">
+          <DrawerTitle className="flex items-center px-3 text-left text-base font-semibold">
             {title}
           </DrawerTitle>
-          <DrawerDescription className="sr-only">
+          <DrawerDescription
+            className={
+              showDescription
+                ? "text-muted-foreground px-3 pt-1 text-left text-sm"
+                : "sr-only"
+            }>
             {description ?? "Details"}
           </DrawerDescription>
-          <div className="mt-3 min-h-0 flex-1 overflow-y-auto px-3 pb-8">
+          <div className="mt-4 min-h-0 flex-1 overflow-y-auto px-3 pb-8">
             {children}
           </div>
         </DrawerContent>
-      </DrawerNestedRoot>
+      </Root>
     )
 
   return (
@@ -63,7 +78,8 @@ export const ResponsiveModal = ({
       <DialogContent className={className}>
         <DialogHeader>
           <DialogTitle className="flex items-center">{title}</DialogTitle>
-          <DialogDescription className="sr-only">
+          <DialogDescription
+            className={showDescription ? undefined : "sr-only"}>
             {description ?? "Details"}
           </DialogDescription>
         </DialogHeader>

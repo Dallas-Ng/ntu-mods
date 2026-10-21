@@ -127,7 +127,7 @@ const TimetableCopyButton = () => {
         <DrawerTrigger asChild>{trigger}</DrawerTrigger>
 
         <DrawerContent className="h-[80vh] p-2">
-          <DrawerHeader className="p-2">Copy to Timetable</DrawerHeader>
+          <DrawerHeader className="px-2 pb-2">Copy to Timetable</DrawerHeader>
           {Content}
 
           <DrawerFooter className="border-t p-0 pt-2">{Footer}</DrawerFooter>

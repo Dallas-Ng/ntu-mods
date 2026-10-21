@@ -200,7 +200,7 @@ const ModsAddToTimetableButton = ({
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerTrigger asChild>{trigger}</DrawerTrigger>
         <DrawerContent className="p-2 pb-6">
-          <DrawerTitle className="text-muted-foreground mt-2 w-full text-center text-sm font-normal">
+          <DrawerTitle className="text-muted-foreground w-full text-center text-sm font-normal">
             Select a plan
           </DrawerTitle>
           {planItems}

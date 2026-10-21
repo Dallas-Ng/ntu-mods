@@ -147,7 +147,7 @@ const Navbar = () => {
               className="flex flex-col p-0">
               <DrawerTitle className="sr-only">Navigation menu</DrawerTitle>
               {/* Header */}
-              <div className="flex items-center justify-between border-b px-5 py-4">
+              <div className="flex items-center justify-between border-b px-5 pb-4">
                 <a href="/" className="flex items-center gap-2">
                   <img
                     src="/logo.webp"
@@ -166,7 +166,7 @@ const Navbar = () => {
               </div>
 
               {/* Nav links */}
-              <nav className="flex flex-col p-3">
+              <nav className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3">
                 <p className="text-muted-foreground/60 mb-1 px-4 text-[11px] font-semibold tracking-widest uppercase">
                   Menu
                 </p>
@@ -187,7 +187,7 @@ const Navbar = () => {
               </nav>
 
               {/* Footer */}
-              <div className="mt-auto border-t p-3">
+              <div className="shrink-0 border-t p-3">
                 <DrawerClose asChild>
                   <a
                     href="/changelog"

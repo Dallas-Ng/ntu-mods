@@ -10,13 +10,7 @@ import { decodeTextBundle } from "@/lib/timetable-share"
 import { cn } from "@/lib/utils"
 import { usePlanNames } from "@/hooks/use-plan-names"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog"
+import { ResponsiveModal } from "@/components/ui/responsive-modal"
 
 interface Props {
   open: boolean
@@ -61,82 +55,80 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Import timetable</DialogTitle>
-          <DialogDescription>
-            Paste a timetable code (starts with NTUMODS1-) or a share link.
-          </DialogDescription>
-        </DialogHeader>
+    <ResponsiveModal
+      open={open}
+      onOpenChange={onOpenChange}
+      nested={false}
+      title="Import timetable"
+      showDescription
+      description="Paste a timetable code (starts with NTUMODS1-) or a share link."
+      className="max-h-[90vh] overflow-y-auto sm:max-w-md">
+      <div className="space-y-4">
+        <textarea
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          rows={5}
+          placeholder="NTUMODS1-…"
+          className={cn(
+            "border-input bg-background w-full resize-none rounded-md border p-2 font-mono text-xs break-all outline-none",
+            isInvalid && "border-destructive"
+          )}
+        />
 
-        <div className="space-y-4">
-          <textarea
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            rows={5}
-            placeholder="NTUMODS1-…"
-            className={cn(
-              "border-input bg-background w-full resize-none rounded-md border p-2 font-mono text-xs break-all outline-none",
-              isInvalid && "border-destructive"
-            )}
-          />
+        {isInvalid && (
+          <p className="text-destructive text-xs">
+            That doesn&apos;t look like a timetable code or share link.
+          </p>
+        )}
 
-          {isInvalid && (
+        {decoded && (
+          <p className="text-muted-foreground text-xs">
+            Found {Object.keys(decoded.timetable).length} module
+            {Object.keys(decoded.timetable).length !== 1 ? "s" : ""} and{" "}
+            {decoded.customCourses.length} custom block
+            {decoded.customCourses.length !== 1 ? "s" : ""}.
+          </p>
+        )}
+
+        <div className="space-y-2">
+          <p className="text-xs font-medium">Import into</p>
+          <div className="flex flex-wrap gap-1.5">
+            {timetables.map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setTargetPlan(i)}
+                className={cn(
+                  "h-7 cursor-pointer rounded-md border px-2.5 text-xs font-medium transition-colors",
+                  targetPlan === i
+                    ? "bg-foreground text-background border-transparent"
+                    : "text-muted-foreground hover:border-foreground"
+                )}>
+                {label(i)}
+              </button>
+            ))}
+          </div>
+          {planHasData(timetables, customCourses, targetPlan) && (
             <p className="text-destructive text-xs">
-              That doesn&apos;t look like a timetable code or share link.
+              {label(targetPlan)} already has a timetable. Importing will
+              overwrite it.
             </p>
           )}
-
-          {decoded && (
-            <p className="text-muted-foreground text-xs">
-              Found {Object.keys(decoded.timetable).length} module
-              {Object.keys(decoded.timetable).length !== 1 ? "s" : ""} and{" "}
-              {decoded.customCourses.length} custom block
-              {decoded.customCourses.length !== 1 ? "s" : ""}.
-            </p>
-          )}
-
-          <div className="space-y-2">
-            <p className="text-xs font-medium">Import into</p>
-            <div className="flex flex-wrap gap-1.5">
-              {timetables.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setTargetPlan(i)}
-                  className={cn(
-                    "h-7 cursor-pointer rounded-md border px-2.5 text-xs font-medium transition-colors",
-                    targetPlan === i
-                      ? "bg-foreground text-background border-transparent"
-                      : "text-muted-foreground hover:border-foreground"
-                  )}>
-                  {label(i)}
-                </button>
-              ))}
-            </div>
-            {planHasData(timetables, customCourses, targetPlan) && (
-              <p className="text-destructive text-xs">
-                {label(targetPlan)} already has a timetable. Importing will
-                overwrite it.
-              </p>
-            )}
-          </div>
-
-          <div className="flex justify-end gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
-            <Button size="sm" disabled={!decoded} onClick={handleImport}>
-              Import
-            </Button>
-          </div>
         </div>
-      </DialogContent>
-    </Dialog>
+
+        <div className="flex justify-end gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onOpenChange(false)}>
+            Cancel
+          </Button>
+          <Button size="sm" disabled={!decoded} onClick={handleImport}>
+            Import
+          </Button>
+        </div>
+      </div>
+    </ResponsiveModal>
   )
 }
 

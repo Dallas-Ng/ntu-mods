@@ -269,6 +269,12 @@
    between rows — fine for the timetable grid, but it left prose tables in
    articles with rows over 1500px tall. Components that do want a full-height
    table set `h-full` themselves. */
+/* Accordion sections open in the server HTML do not animate in on first
+   paint (set data-ready from the Accordion component once hydrated). */
+:root:not([data-ready]) [data-slot="accordion-content"] {
+  animation-duration: 0s !important;
+}
+
 table {
   @apply bg-card w-full border-collapse border-2 border-slate-200 dark:border-slate-900;
 }

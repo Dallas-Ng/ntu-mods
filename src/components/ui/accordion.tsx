@@ -9,6 +9,17 @@ import { cn } from "@/lib/utils"
 function Accordion({
   ...props
 }: React.ComponentProps<typeof AccordionPrimitive.Root>) {
+  // Sections that are open in the server HTML would otherwise play their
+  // open animation from height 0 on first paint. Until the page has
+  // hydrated (see globals.css) they skip it, so nothing grows in and shifts.
+  React.useEffect(() => {
+    const id = window.setTimeout(
+      () => document.documentElement.setAttribute("data-ready", ""),
+      100
+    )
+    return () => window.clearTimeout(id)
+  }, [])
+
   return <AccordionPrimitive.Root data-slot="accordion" {...props} />
 }
 

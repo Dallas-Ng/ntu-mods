@@ -1,7 +1,7 @@
 ---
 title: "NTU Timetable Planner Redesign: Walking Times, Named Plans and a Cleaner Layout"
 description: "The NTUMods timetable planner has been redesigned. See the walk between your classes on the campus map, name your plans, move the panel below the grid, and change how the timetable looks."
-date: "2026-10-22"
+date: "2026-10-21"
 author: "NTUMods"
 category: "Module Planning"
 tags:

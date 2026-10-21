@@ -6,147 +6,100 @@ import { Copy } from "lucide-react"
 import { toast } from "sonner"
 
 import { track } from "@/lib/analytics"
+import { planHasData } from "@/lib/plan-name"
 import { cn } from "@/lib/utils"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { usePlanNames } from "@/hooks/use-plan-names"
-import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTrigger
-} from "@/components/ui/dialog"
-import {
-  Drawer,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTrigger
-} from "@/components/ui/drawer"
-import ButtonCollapsable from "@/components/button-collapsable"
+import { ResponsiveModal } from "@/components/ui/responsive-modal"
+
+import { ModalFooter, ModalNote, ModalSection } from "./modal-parts"
 
 const TimetableCopyButton = () => {
   const { timetables, updateTimetable, qsTimetable, updateTimetableIndex } =
     useTimetable()
   const { qsCustomCourses } = useCustomCourses()
+  const customCourses = useBoundState((s) => s.customCourses)
   const setCustomCourses = useBoundState((s) => s.setCustomCourses)
-  const { isMobile } = useSettings()
   const { label } = usePlanNames()
   const [open, setOpen] = useState(false)
-  const [overrideIndex, setOverrideIndex] = useState<number | null>(null)
+  const [target, setTarget] = useState(0)
 
-  const handleOverride = (overrideIndex: number) => {
-    if (qsTimetable) {
-      updateTimetable(qsTimetable, overrideIndex)
-      // The plan is being overridden wholesale, so custom blocks follow the
-      // shared link — including when it carries none.
-      setCustomCourses(qsCustomCourses ?? [], overrideIndex)
-      updateTimetableIndex(overrideIndex)
-      track("timetable_copied", {
-        target_plan: overrideIndex + 1,
-        module_count: Object.keys(qsTimetable).length,
-        custom_block_count: qsCustomCourses?.length ?? 0
-      })
-      window.location.assign("/timetable")
-      toast.success("Successfully copied timetable")
-    }
+  const overwrites = planHasData(timetables, customCourses, target)
 
+  const handleCopy = () => {
+    if (!qsTimetable) return
+    updateTimetable(qsTimetable, target)
+    // The plan is replaced wholesale, so custom blocks follow the shared
+    // link, including when it carries none.
+    setCustomCourses(qsCustomCourses ?? [], target)
+    updateTimetableIndex(target)
+    track("timetable_copied", {
+      target_plan: target + 1,
+      module_count: Object.keys(qsTimetable).length,
+      custom_block_count: qsCustomCourses?.length ?? 0
+    })
+    window.location.assign("/timetable")
+    toast.success("Successfully copied timetable")
     setOpen(false)
   }
-
-  const handleClose = () => {
-    setOverrideIndex(null)
-    setOpen(false)
-  }
-
-  const trigger = <ButtonCollapsable icon={Copy} text="Copy Timetable" />
-
-  const Content = (
-    <>
-      <p className="text-destructive p-2 text-center text-sm">
-        You will override your existing data
-      </p>
-      <div className="overflow-y-auto">
-        <div className="space-y-1">
-          {timetables.map((timetable, timetableIdx) => (
-            <div
-              key={timetableIdx}
-              onClick={() => setOverrideIndex(timetableIdx)}
-              className={cn(
-                "hover:bg-accent cursor-pointer rounded-md p-2 transition-colors",
-                overrideIndex === timetableIdx && "bg-muted"
-              )}>
-              <p className="truncate">{label(timetableIdx)}</p>
-
-              <div className="text-muted-foreground mt-2 text-xs">
-                <div className="flex flex-wrap gap-1">
-                  {Object.keys(timetable).map((moduleKey) => (
-                    <div
-                      key={moduleKey}
-                      className="border-muted-foreground rounded-full border px-2 py-0">
-                      {moduleKey}
-                    </div>
-                  ))}
-                </div>
-
-                {Object.entries(timetable).length === 0 && (
-                  <p>No Modules Added</p>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
-  )
-
-  const Footer = (
-    <div className="h-10 w-full">
-      <div className="flex w-full justify-between">
-        <Button variant="outline" onClick={handleClose}>
-          Close
-        </Button>
-
-        {overrideIndex !== null && (
-          <Button
-            variant="destructive"
-            onClick={() => handleOverride(overrideIndex)}>
-            Override {label(overrideIndex)}
-          </Button>
-        )}
-      </div>
-    </div>
-  )
-
-  if (isMobile)
-    return (
-      <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger asChild>{trigger}</DrawerTrigger>
-
-        <DrawerContent className="h-[80vh] p-2">
-          <DrawerHeader className="px-2 pb-2">Copy to Timetable</DrawerHeader>
-          {Content}
-
-          <DrawerFooter className="border-t p-0 pt-2">{Footer}</DrawerFooter>
-        </DrawerContent>
-      </Drawer>
-    )
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <>
+      <Button onClick={() => setOpen(true)} className="gap-2">
+        <Copy className="size-4" />
+        Copy to my plans
+      </Button>
 
-      <DialogContent className="p-2" aria-describedby={undefined}>
-        <DialogHeader className="p-2 pb-0">Copy to Timetable</DialogHeader>
+      <ResponsiveModal
+        open={open}
+        onOpenChange={setOpen}
+        nested={false}
+        title="Copy to my plans"
+        showDescription
+        description="Pick the plan to put this timetable in, then edit it as your own."
+        className="max-h-[90vh] overflow-y-auto sm:max-w-md">
+        <div className="space-y-5">
+          <ModalSection title="Copy into">
+            <div className="flex flex-wrap gap-1.5">
+              {timetables.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setTarget(i)}
+                  aria-pressed={target === i}
+                  className={cn(
+                    "h-8 max-w-full cursor-pointer truncate rounded-md border px-3 text-sm transition-colors",
+                    target === i
+                      ? "bg-foreground text-background border-transparent"
+                      : "text-muted-foreground hover:border-foreground"
+                  )}>
+                  {label(i)}
+                </button>
+              ))}
+            </div>
+            {overwrites && (
+              <ModalNote tone="danger">
+                {label(target)} already has a timetable. Copying will overwrite
+                it.
+              </ModalNote>
+            )}
+          </ModalSection>
 
-        {Content}
-
-        <DialogFooter className="border-t pt-2.5">{Footer}</DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <ModalFooter>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant={overwrites ? "destructive" : "default"}
+              onClick={handleCopy}>
+              {overwrites ? "Overwrite and copy" : "Copy"}
+            </Button>
+          </ModalFooter>
+        </div>
+      </ResponsiveModal>
+    </>
   )
 }
 

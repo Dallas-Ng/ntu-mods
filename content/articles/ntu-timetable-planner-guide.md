@@ -99,7 +99,7 @@ Use the planner to prepare your shortlist and verify index choices. Then use tho
 
 ## Check the walk between classes
 
-Click the map preview under the Generate Timetable button and pick a day. It shows your classes in order on the [NTU campus map](/maps), the walking time between each pair of venues, and a warning when the gap before the next class is shorter than the walk. Times are estimates, so leave extra room for crowded lifts and stairs. Walks are looked up one day at a time, and only once the preview scrolls into view.
+Click the map preview under the Generate Timetable button and pick a day. It shows your classes in order on the [NTU campus map](/maps), the walking time between each pair of venues, and a warning when the gap before the next class is shorter than the walk. Times are estimates, so leave extra room for crowded lifts and stairs. Walks are looked up one day at a time, and only once the preview scrolls into view. The full list of changes is in [the timetable planner redesign](/articles/ntu-timetable-planner-redesign).
 
 ## Turn your timetable into a wallpaper
 

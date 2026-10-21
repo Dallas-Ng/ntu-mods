@@ -44,6 +44,49 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Timetable redesign",
+    date: "22 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            The <ChangelogLink href="/timetable">timetable</ChangelogLink> page
+            has been redesigned. A single toolbar holds every tool, plans can be
+            named, the side panel can sit beside or below the grid, and the new
+            Appearance dialog changes the radius, density, contrast and colour
+            palette. Walking between classes now opens as a map dialog, and the
+            shared timetable page uses the same layout with a clearer copy
+            dialog. Everything that changed:{" "}
+            <ChangelogLink href="/articles/ntu-timetable-planner-redesign">
+              NTU Timetable Planner Redesign
+            </ChangelogLink>
+            .
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Standardised scale is a new table setting that gives every half hour
+            the same height. Save to calendar shows a preview before the
+            download, and actions that would overwrite a plan now ask first.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Dialogs become drawers on phones with consistent spacing and
+            scrolling, and the page no longer jumps while it loads.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Walking between classes",
     date: "21 Oct 2026",
     items: [

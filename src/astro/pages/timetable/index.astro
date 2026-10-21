@@ -95,6 +95,12 @@ const GUIDES = [
       "Key dates for Semester 1 and 2 — semester start and end, recess week, exam period, and STARS round timing."
   },
   {
+    href: "/articles/ntu-timetable-planner-redesign",
+    title: "NTU Timetable Planner Redesign",
+    description:
+      "Walking times between classes, named plans, a single toolbar and a new Appearance dialog: what changed and what you can do now."
+  },
+  {
     href: "/articles/ntu-timetable-planner-guide",
     title: "NTU Timetable Planner Guide",
     description:
@@ -112,7 +118,15 @@ const GUIDES = [
   <JsonLd
     data={webApplicationJsonLd({
       path: "/timetable",
-      description: siteConfig.metatags.timetable.desc
+      description: siteConfig.metatags.timetable.desc,
+      featureList: [
+        "Compare class indexes and spot clashes",
+        "Generate clash-free timetables",
+        "Walking time between classes on the campus map",
+        "Custom blocks for CCA, gym and work",
+        "Up to five named plans",
+        "Share by link and export to calendar"
+      ]
     })}
   />
   <TimetablePageContent client:load />

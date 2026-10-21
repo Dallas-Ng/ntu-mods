@@ -25,6 +25,7 @@ import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
+import { useHydrated } from "@/hooks/use-hydrated"
 import { usePlanNames } from "@/hooks/use-plan-names"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
@@ -51,6 +52,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   Tooltip,
   TooltipContent,
@@ -81,6 +83,7 @@ const TimetableActionsDropdown = ({
   const { indexes: seasonIndexes } = useSeasonIndexes(year, semester)
   const { modules } = useAllModules()
   const { settings, updateSettings } = useSettings()
+  const hydrated = useHydrated()
   const { label, named } = usePlanNames()
   const moduleRemarks = useBoundState((s) => s.moduleRemarks)
   const indexRemarks = useBoundState((s) => s.indexRemarks)
@@ -282,6 +285,11 @@ const TimetableActionsDropdown = ({
       onClick: closeThen(() => setSettingsOpen(true))
     }
   ]
+
+  // Whether this is a phone is only known after hydration: until then hold
+  // the toolbar's place so nothing can be tapped while it changes shape.
+  if (!hydrated)
+    return <Skeleton className="ml-auto size-8 md:h-8 md:w-[22rem]" />
 
   return (
     <>

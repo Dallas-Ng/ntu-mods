@@ -1,6 +1,7 @@
 import { env, waitUntil } from "cloudflare:workers"
 
 import { reportServerError } from "@/lib/posthog-server"
+import { snapshotFingerprint } from "@/lib/sitemap-policy"
 import {
   buildModuleTitlesSql,
   LATEST_SEMESTER_SQL,
@@ -163,7 +164,7 @@ export async function isSameAsLatest(
   )
   if (!current) return false
   const key = (s: ModuleSnapshot) =>
-    JSON.stringify([s.moduleData, s.indexes, s.exam])
+    snapshotFingerprint(s.moduleData, s.indexes)
   return key(current) === key(snapshot)
 }
 

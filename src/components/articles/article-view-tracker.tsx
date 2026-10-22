@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 
 import { reportError, track } from "@/lib/analytics"
+import { consentState } from "@/lib/consent"
 
 const VISITOR_KEY = "ntumods-visitor-id"
 const POSTHOG_STORE = `ph_${import.meta.env.PUBLIC_POSTHOG_TOKEN}_posthog`
@@ -53,24 +54,32 @@ const ArticleViewTracker = ({ slug }: { slug: string }) => {
   useEffect(() => {
     track("article_viewed", { article_slug: slug })
 
-    const visitorId = getVisitorId()
-    if (!visitorId) return
     let ignore = false
-    fetch("/api/article-views", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug, visitorId })
+    // The visitor ID is stored on the device, so it needs the same consent
+    // as analytics where that is required.
+    void consentState().then((state) => {
+      if (ignore || state !== "granted") return
+      const visitorId = getVisitorId()
+      if (!visitorId) return
+      count(visitorId)
     })
-      .then((res) => {
-        if (!res.ok) throw new Error(`article-views ${res.status}`)
-        return res.json()
+
+    const count = (visitorId: string) =>
+      fetch("/api/article-views", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug, visitorId })
       })
-      .then((data) => {
-        if (!ignore && typeof data?.views === "number") setViews(data.views)
-      })
-      .catch((e) => {
-        if (!ignore) reportError("article_views_post", e, { slug })
-      })
+        .then((res) => {
+          if (!res.ok) throw new Error(`article-views ${res.status}`)
+          return res.json()
+        })
+        .then((data) => {
+          if (!ignore && typeof data?.views === "number") setViews(data.views)
+        })
+        .catch((e) => {
+          if (!ignore) reportError("article_views_post", e, { slug })
+        })
     return () => {
       ignore = true
     }

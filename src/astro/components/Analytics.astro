@@ -1,8 +1,9 @@
 ---
-// GA, shared by both layouts. Rendered only in production — the
-// layouts gate on IS_PROD at the call site, because a `<script>` written
-// inside an .astro expression has its children treated as raw text rather
-// than evaluated, so the tag has to sit at the top level of a component.
+// GA, shared by both layouts. Rendered only in production; the layouts gate
+// on IS_PROD at the call site.
+//
+// Loads only once the visitor's region allows it or they have accepted
+// (@/lib/consent), and is switched off again if they withdraw.
 //
 // The tag ran under next/script's `lazyOnload` before the migration —
 // injected after the window load event, so it never competes with hydration
@@ -11,45 +12,53 @@
 // for the first interaction or 4 s after load, whichever comes first: the
 // 176 KB script costs ~100 ms of main thread even when idle-scheduled.
 // Visitors who leave within 4 s without touching the page are not counted.
-const GA_ID = "G-70VD9Q58Y0"
 ---
 
-<script is:inline define:vars={{ GA_ID }}>
-  ;(function () {
-    function load() {
-      var s = document.createElement("script")
-      s.async = true
-      s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID
-      document.head.appendChild(s)
+<script>
+  import { onConsentChange, whenConsented } from "@/lib/consent"
 
-      window.dataLayer = window.dataLayer || []
-      function gtag() {
-        window.dataLayer.push(arguments)
-      }
-      window.gtag = gtag
-      gtag("js", new Date())
-      gtag("config", GA_ID)
+  const GA_ID = "G-70VD9Q58Y0"
+  const w = window as unknown as Record<string, unknown>
+
+  function load() {
+    w[`ga-disable-${GA_ID}`] = false
+    const s = document.createElement("script")
+    s.async = true
+    s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID
+    document.head.appendChild(s)
+
+    const dataLayer = (w.dataLayer = (w.dataLayer as unknown[]) || [])
+    function gtag(..._args: unknown[]) {
+      // gtag.js expects the arguments object itself, not an array
+      // eslint-disable-next-line prefer-rest-params
+      dataLayer.push(arguments)
     }
+    w.gtag = gtag
+    gtag("js", new Date())
+    gtag("config", GA_ID)
+  }
 
-    var events = ["pointerdown", "keydown", "scroll", "touchstart"]
-    var done = false
-    function once() {
-      if (done) return
-      done = true
-      events.forEach(function (e) {
-        window.removeEventListener(e, once)
-      })
-      load()
-    }
+  // Withdrawing stops GA's own sending; its cookies stay until cleared.
+  onConsentChange((granted) => {
+    w[`ga-disable-${GA_ID}`] = !granted
+  })
 
-    function schedule() {
-      events.forEach(function (e) {
-        window.addEventListener(e, once, { passive: true, once: true })
-      })
-      setTimeout(once, 4000)
-    }
+  const events = ["pointerdown", "keydown", "scroll", "touchstart"]
+  let done = false
+  function once() {
+    if (done) return
+    done = true
+    events.forEach((e) => window.removeEventListener(e, once))
+    void whenConsented().then(load)
+  }
 
-    if (document.readyState === "complete") schedule()
-    else window.addEventListener("load", schedule)
-  })()
+  function schedule() {
+    events.forEach((e) =>
+      window.addEventListener(e, once, { passive: true, once: true })
+    )
+    setTimeout(once, 4000)
+  }
+
+  if (document.readyState === "complete") schedule()
+  else window.addEventListener("load", schedule)
 </script>

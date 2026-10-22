@@ -12,6 +12,7 @@ import { fileURLToPath } from "url"
 import * as json from "../src/lib/server/db/json-source.ts"
 import {
   moduleYearCutoff,
+  snapshotFingerprint,
   versionedYearCutoff
 } from "../src/lib/sitemap-policy.ts"
 
@@ -102,8 +103,22 @@ function getModuleRoutes() {
     .filter((o) => Number(o.year) >= MODULE_YEAR_CUTOFF)
     .map((o) => ({ loc: `/mods/${o.code}`, lastmod: semDate(o.sem) }))
 
+  // An older snapshot matching the module's latest offering canonicalises to
+  // /mods/CODE (see isSameAsLatest in get-module-snapshot.ts), so listing it
+  // only produces GSC "Alternate page with proper canonical tag".
+  const snapshotKey = (code, year, semester) =>
+    snapshotFingerprint(json.getModuleMetadata(code, year, semester))
+  const latestKeys = new Map(
+    json
+      .latestOfferings()
+      .map((o) => [o.code, snapshotKey(o.code, o.year, o.semester)])
+  )
+
   const versionedPaths = json
     .versionedOfferings(SITEMAP_YEAR_CUTOFF)
+    .filter(
+      (o) => snapshotKey(o.code, o.year, o.semester) !== latestKeys.get(o.code)
+    )
     .map((o) => ({
       loc: `/mods/${o.code}/${o.year}/${o.semester}`,
       lastmod: semDate(`${o.year}_${o.semester}`)

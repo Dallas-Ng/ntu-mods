@@ -1,6 +1,7 @@
 import { env, waitUntil } from "cloudflare:workers"
 
 import { reportServerError } from "@/lib/posthog-server"
+import { snapshotFingerprint } from "@/lib/sitemap-policy"
 import {
   buildModuleTitlesSql,
   LATEST_SEMESTER_SQL,
@@ -140,8 +141,8 @@ export async function getModuleSnapshot(
 }
 
 /**
- * True when an older semester's page shows the same module data, indexes and
- * exam as the module's latest offering. Google folds those into /mods/CODE
+ * True when an older semester's page has the same title, description, AUs and
+ * grade type as the module's latest offering. Google folds those into /mods/CODE
  * anyway ("Google chose different canonical"), so they should declare it.
  */
 export async function isSameAsLatest(
@@ -162,9 +163,10 @@ export async function isSameAsLatest(
     latest.semester
   )
   if (!current) return false
-  const key = (s: ModuleSnapshot) =>
-    JSON.stringify([s.moduleData, s.indexes, s.exam])
-  return key(current) === key(snapshot)
+  return (
+    snapshotFingerprint(current.moduleData) ===
+    snapshotFingerprint(snapshot.moduleData)
+  )
 }
 
 export interface ModuleFullSnapshot extends ModuleSnapshot {

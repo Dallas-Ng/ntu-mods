@@ -11,3 +11,17 @@ export const versionedYearCutoff = (now = new Date()) => currentAYStart(now) - 1
 
 /** /mods/CODE pages: modules last offered in the last three AYs. Older, unrevised pages are thin and stale. */
 export const moduleYearCutoff = (now = new Date()) => currentAYStart(now) - 2
+
+/**
+ * What makes an older snapshot "the same page" as the module's latest offering:
+ * the descriptive text. Index codes are renumbered every semester and
+ * programme lists drift, but the page is still a near-duplicate, and Google
+ * folds it into /mods/CODE anyway. Shared by the page's canonical tag and the
+ * sitemap so the two cannot disagree.
+ */
+export const snapshotFingerprint = (m: {
+  title: string
+  description?: string
+  au?: string | number
+  gradeType?: string
+}) => JSON.stringify([m.title, m.description, m.au, m.gradeType])

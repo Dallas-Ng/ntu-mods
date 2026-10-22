@@ -141,8 +141,8 @@ export async function getModuleSnapshot(
 }
 
 /**
- * True when an older semester's page shows the same module data, indexes and
- * exam as the module's latest offering. Google folds those into /mods/CODE
+ * True when an older semester's page has the same title, description, AUs and
+ * grade type as the module's latest offering. Google folds those into /mods/CODE
  * anyway ("Google chose different canonical"), so they should declare it.
  */
 export async function isSameAsLatest(
@@ -163,9 +163,10 @@ export async function isSameAsLatest(
     latest.semester
   )
   if (!current) return false
-  const key = (s: ModuleSnapshot) =>
-    snapshotFingerprint(s.moduleData, s.indexes)
-  return key(current) === key(snapshot)
+  return (
+    snapshotFingerprint(current.moduleData) ===
+    snapshotFingerprint(snapshot.moduleData)
+  )
 }
 
 export interface ModuleFullSnapshot extends ModuleSnapshot {

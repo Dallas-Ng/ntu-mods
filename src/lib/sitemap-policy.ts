@@ -14,12 +14,14 @@ export const moduleYearCutoff = (now = new Date()) => currentAYStart(now) - 2
 
 /**
  * What makes an older snapshot "the same page" as the module's latest offering:
- * module record plus which indexes exist. Slot times, venues and exams change
- * every semester but leave the page a near-duplicate, so Google folds them into
- * /mods/CODE anyway. Shared by the page's canonical tag and the sitemap so the
- * two cannot disagree.
+ * the descriptive text. Index codes are renumbered every semester and
+ * programme lists drift, but the page is still a near-duplicate, and Google
+ * folds it into /mods/CODE anyway. Shared by the page's canonical tag and the
+ * sitemap so the two cannot disagree.
  */
-export const snapshotFingerprint = (
-  moduleData: unknown,
-  indexes: Record<string, unknown>
-) => JSON.stringify([moduleData, Object.keys(indexes).sort()])
+export const snapshotFingerprint = (m: {
+  title: string
+  description?: string
+  au?: string | number
+  gradeType?: string
+}) => JSON.stringify([m.title, m.description, m.au, m.gradeType])

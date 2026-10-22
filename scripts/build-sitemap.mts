@@ -107,10 +107,7 @@ function getModuleRoutes() {
   // /mods/CODE (see isSameAsLatest in get-module-snapshot.ts), so listing it
   // only produces GSC "Alternate page with proper canonical tag".
   const snapshotKey = (code, year, semester) =>
-    snapshotFingerprint(
-      json.getModuleMetadata(code, year, semester),
-      json.getModuleIndexesData(code, year, semester)
-    )
+    snapshotFingerprint(json.getModuleMetadata(code, year, semester))
   const latestKeys = new Map(
     json
       .latestOfferings()

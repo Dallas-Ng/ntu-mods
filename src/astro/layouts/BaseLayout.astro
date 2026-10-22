@@ -8,6 +8,7 @@ import { BUILD_ENV, IS_PROD } from "@/lib/constants"
 import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import { Banner, BANNER_ID } from "@/components/banner"
+import ConsentBanner from "@/components/consent-banner"
 import Container from "@/components/container"
 import FeedbackSection from "@/components/feedback-section"
 import Footer from "@/components/footer"
@@ -134,8 +135,6 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
     <StaleChunkReload />
     <link rel="icon" href="/favicon.ico" />
     <link rel="ai-catalog" href="/.well-known/ai-catalog.json" />
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
     <Font cssVariable="--font-inter" preload />
 
@@ -204,6 +203,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
       {showFeedback && <FeedbackSection client:visible />}
       <Footer />
     </div>
+    <ConsentBanner client:idle />
     <MobileTracker client:idle />
     <WebMcpProvider client:idle />
     <Toaster client:idle position="top-center" />

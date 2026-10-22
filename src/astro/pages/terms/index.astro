@@ -1,0 +1,23 @@
+---
+import { siteConfig } from "@/config/site"
+import { webPageJsonLd } from "@/lib/json-ld"
+import TermsContent from "@/components/terms/terms-content"
+import JsonLd from "@/astro/components/JsonLd.astro"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
+
+const jsonLd = webPageJsonLd({
+  name: siteConfig.metatags.terms.title,
+  description: siteConfig.metatags.terms.desc,
+  path: "/terms"
+})
+---
+
+<BaseLayout
+  title={siteConfig.metatags.terms.title}
+  description={siteConfig.metatags.terms.desc}
+  canonical="/terms">
+  <JsonLd data={jsonLd} />
+  <TermsContent />
+</BaseLayout>

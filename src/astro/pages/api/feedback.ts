@@ -113,10 +113,12 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ success: false, error: "Failed to send feedback" }, 500)
   }
 
-  if (PUBLIC_POSTHOG_TOKEN) {
+  // Only with an ID from the visitor's own PostHog, which exists only once
+  // they have consented where that is required.
+  if (PUBLIC_POSTHOG_TOKEN && posthogDistinctId) {
     const posthog = createPostHogClient(PUBLIC_POSTHOG_TOKEN)
     posthog.capture({
-      distinctId: posthogDistinctId || authorLine || "anonymous",
+      distinctId: posthogDistinctId,
       event: "feedback_submitted" satisfies AnalyticsEvent,
       properties: {
         has_email: !!authorLine && authorLine !== "anon",

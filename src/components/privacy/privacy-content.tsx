@@ -5,7 +5,10 @@ const PrivacyContent = () => {
   return (
     <Container size="sm" className="text-muted-foreground space-y-6">
       <div className="text-foreground">
-        <Header title="Privacy Policy" subtitle="Last Updated: October 2026" />
+        <Header
+          title="Privacy Policy"
+          subtitle="Last Updated: 22 October 2026"
+        />
       </div>
 
       <p className="text-sm">
@@ -41,13 +44,17 @@ const PrivacyContent = () => {
           it at any time by clearing your browser&apos;s site data.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <h3
+          id="analytics"
+          className="text-foreground mt-4 text-base font-semibold">
           Analytics
         </h3>
 
         <p>
           We use two third-party analytics services on the production site to
-          understand how the Service is used and to improve it.
+          understand how the Service is used and to improve it. Where the law
+          requires your consent (see Consent below), they stay switched off
+          until you accept.
         </p>
 
         <p>
@@ -111,8 +118,10 @@ const PrivacyContent = () => {
 
         <p>
           To show how many people have read an article, we store the
-          article&apos;s name and a random visitor ID (the same ID PostHog uses)
-          in our own database. It is used only to count unique readers.
+          article&apos;s name and a random visitor ID (the same ID PostHog uses,
+          when it has one) in our own database. It is used only to count unique
+          readers. Where consent is required, the ID is only created and view
+          counts are only recorded after you accept analytics.
         </p>
 
         <h3 className="text-foreground mt-4 text-base font-semibold">
@@ -296,15 +305,69 @@ const PrivacyContent = () => {
         </p>
       </section>
 
+      <section
+        id="consent"
+        className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+        <h2 className="text-foreground text-xl font-semibold">Consent</h2>
+
+        <p>
+          If you visit from the European Economic Area, the United Kingdom,
+          Switzerland, Brazil, South Korea or Quebec, where the law requires
+          your opt-in before analytics cookies or similar technologies are used,
+          we show a banner. Google Analytics and PostHog are not loaded, and
+          nothing is sent to them, until you press Accept. Reject and Accept are
+          given equal weight, and the Service works the same either way.
+        </p>
+
+        <p>
+          We detect your country from your IP address at the edge (Cloudflare)
+          to decide whether to show the banner. The result is not stored. If we
+          cannot tell where you are, we show the banner. In other places,
+          including Singapore, analytics run without a banner, on the basis
+          described in this policy.
+        </p>
+
+        <p>
+          Your choice is saved in your browser&apos;s localStorage. You can
+          change or withdraw it at any time through{" "}
+          <strong>Cookie settings</strong> in the footer (shown wherever consent
+          is required). Withdrawing stops further collection; cookies already
+          set stay in your browser until you clear them. Withdrawing does not
+          affect the processing done before.
+        </p>
+
+        <p>
+          Our legal bases are your consent where it is required, and otherwise
+          our legitimate interest in understanding and improving a free service.
+          Operating the Service itself, such as keeping your timetable in
+          localStorage, needs no consent.
+        </p>
+      </section>
+
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
         <h2 className="text-foreground text-xl font-semibold">Cookies</h2>
 
         <p>
           We do not set our own cookies. Google Analytics sets cookies, and
           PostHog stores a random identifier in a cookie and in your
-          browser&apos;s localStorage, to distinguish visitors and sessions. You
-          can block or clear these through your browser settings or with an
+          browser&apos;s localStorage, to distinguish visitors and sessions.
+          Both are only set after you accept where consent is required. You can
+          also block or clear them through your browser settings or with an
           extension that blocks analytics trackers.
+        </p>
+      </section>
+
+      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+        <h2 className="text-foreground text-xl font-semibold">
+          International Transfers
+        </h2>
+
+        <p>
+          Google, PostHog (United States) and Cloudflare process data in
+          countries that may differ from yours, including outside the EEA, the
+          UK and Switzerland. Where required, transfers rely on the safeguards
+          those providers offer, such as the EU-US Data Privacy Framework or
+          standard contractual clauses.
         </p>
       </section>
 
@@ -338,10 +401,27 @@ const PrivacyContent = () => {
         <h2 className="text-foreground text-xl font-semibold">Your Rights</h2>
 
         <p>
-          You may request deletion of any feedback you have submitted by
-          contacting us at the email below. Since timetable and settings data is
-          stored only in your browser, you can delete it yourself at any time
-          through your browser&apos;s site data settings.
+          You may request deletion of any feedback you have submitted through
+          the{" "}
+          <a
+            href="/feedback"
+            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+            feedback page
+          </a>
+          . Since timetable and settings data is stored only in your browser,
+          you can delete it yourself at any time through your browser&apos;s
+          site data settings.
+        </p>
+
+        <p>
+          Depending on where you live (for example under the GDPR, UK GDPR, LGPD
+          or Singapore&apos;s PDPA), you may also have the right to access,
+          correct, delete or restrict the use of personal data we hold about
+          you, to object to its processing, to withdraw consent, and to lodge a
+          complaint with your data protection authority. Because we do not
+          require accounts and analytics data is tied to a random identifier, we
+          may ask you for that identifier to find your data. To make a request,
+          contact us through the feedback page.
         </p>
       </section>
 

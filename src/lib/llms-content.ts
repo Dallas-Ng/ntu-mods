@@ -48,7 +48,8 @@ ${articleLines(facts)}
 ## Guides & Reference
 
 - [FAQ](${url}/faq): Answers to common questions about NTUMods features, NTU terminology, data storage, and timetable planning.
-- [Privacy Policy](${url}/privacy): Which analytics tools are used (Google Analytics 4, PostHog), what is collected, and confirmation that timetable data never leaves the user's device.
+- [Privacy Policy](${url}/privacy): Which analytics tools are used (Google Analytics 4, PostHog), what is collected, and confirmation that timetable data never leaves the user's device. Analytics need opt-in consent in the EEA, UK, Switzerland, Brazil, South Korea and Quebec.
+- [Terms of Use](${url}/terms): Terms for using NTUMods.
 
 ## Optional
 

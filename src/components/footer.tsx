@@ -32,6 +32,7 @@ const FOOTER_GROUPS = [
 
 const LEGAL_LINKS = [
   { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
   { label: "AI instructions", href: "/ai-instructions" },
   { label: "Developers", href: "/developers" },
   { label: "Sitemap", href: "/sitemap" }
@@ -97,6 +98,13 @@ const Footer = () => {
               </a>
             </li>
           ))}
+          <li id="cookie-settings" hidden>
+            <button
+              type="button"
+              className="hover:text-primary cursor-pointer transition-colors">
+              Cookie settings
+            </button>
+          </li>
         </ul>
       </div>
     </footer>

@@ -7,6 +7,7 @@ import { siteConfig } from "@/config/site"
 import { IS_PROD } from "@/lib/constants"
 import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
+import ConsentBanner from "@/components/consent-banner"
 import MobileTracker from "@/components/mobile-tracker"
 import WebMcpProvider from "@/components/webmcp-provider"
 import Analytics from "@/astro/components/Analytics.astro"
@@ -69,8 +70,6 @@ const resolvedTitle =
     <StaleChunkReload />
     <link rel="icon" href="/favicon.ico" />
     <link rel="ai-catalog" href="/.well-known/ai-catalog.json" />
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
     <Font cssVariable="--font-inter" preload />
 
@@ -96,6 +95,7 @@ const resolvedTitle =
   <body class="antialiased">
     <AppearanceStyleProvider client:load />
     <slot />
+    <ConsentBanner client:idle />
     <MobileTracker client:idle />
     <WebMcpProvider client:idle />
     <Toaster client:idle position="top-center" />

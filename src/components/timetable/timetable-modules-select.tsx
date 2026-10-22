@@ -3,6 +3,7 @@
 import { useMemo, useRef, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { Check } from "lucide-react"
+import { toast } from "sonner"
 
 import { reportError, track } from "@/lib/analytics"
 import { customCoursesToIndexMap } from "@/lib/custom-course-to-index"
@@ -80,7 +81,9 @@ const TimetableModulesSelect = () => {
       const indexes = seasonIndexes[moduleKey]
 
       if (!indexes || Object.keys(indexes).length === 0) {
-        throw new Error("No indexes available for this module")
+        // Expected: module not offered this semester, not an error to report
+        toast.error(`${moduleKey} has no indexes available this semester`)
+        return false
       }
 
       const selectedIndexKey = resolveBestIndex(

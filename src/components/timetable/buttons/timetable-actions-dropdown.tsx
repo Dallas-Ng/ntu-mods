@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import {
   Calendar,
@@ -71,6 +71,12 @@ interface Props {
   onToggleIndexPicker: () => void
 }
 
+const useOpenedTracker = (dialog: string, open: boolean) => {
+  useEffect(() => {
+    if (open) track("timetable_dialog_opened", { dialog })
+  }, [dialog, open])
+}
+
 const TimetableActionsDropdown = ({
   indexPickerEnabled,
   onToggleIndexPicker
@@ -93,6 +99,12 @@ const TimetableActionsDropdown = ({
   const [calendarOpen, setCalendarOpen] = useState(false)
   const [appearanceOpen, setAppearanceOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
+
+  useOpenedTracker("share", shareOpen)
+  useOpenedTracker("import", importOpen)
+  useOpenedTracker("settings", settingsOpen)
+  useOpenedTracker("appearance", appearanceOpen)
+
   // Open the first time; after that the student's last choice is kept.
   // Saved settings from before this one existed have no value yet.
   const open = settings.timetableToolbarOpen ?? true

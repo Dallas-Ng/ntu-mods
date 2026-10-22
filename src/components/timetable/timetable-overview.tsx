@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { ArrowUpRight } from "lucide-react"
 
-import { reportError } from "@/lib/analytics"
+import { reportError, track } from "@/lib/analytics"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useTimetable } from "@/hooks/use-timetable"
@@ -81,6 +81,7 @@ const TimetableOverview = () => {
                   <td className="hidden lg:table-cell">
                     <a
                       href={`/mods/${moduleKey}`}
+                      onClick={() => track("timetable_overview_module_clicked")}
                       className="hover:text-primary-alt group inline-flex items-center gap-1 transition-colors">
                       {moduleTitle}
                       <ArrowUpRight

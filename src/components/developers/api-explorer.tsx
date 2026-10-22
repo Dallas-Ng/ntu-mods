@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 
+import { track } from "@/lib/analytics"
 import {
   Accordion,
   AccordionContent,
@@ -232,7 +233,10 @@ const ApiExplorer = ({ groups }: { groups: ApiGroup[] }) => {
           <Accordion
             type="multiple"
             value={open}
-            onValueChange={setOpen}
+            onValueChange={(v) => {
+              if (v.length > open.length) track("api_operation_opened")
+              setOpen(v)
+            }}
             className="space-y-2">
             {g.ops.map((op) => (
               <AccordionItem

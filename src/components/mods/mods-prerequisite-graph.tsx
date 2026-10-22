@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 
+import { track } from "@/lib/analytics"
 import { getModuleUrl } from "@/lib/module-url"
 import type { DbPrerequisiteNode } from "@/lib/server/db/types"
 
@@ -21,6 +22,7 @@ const PillCard = ({ code, title, anchorRef }: CardProps) => (
   <a
     ref={anchorRef}
     href={getModuleUrl(code)}
+    onClick={() => track("prerequisite_clicked")}
     className="bg-muted hover:bg-accent flex w-full items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors">
     <span className="font-semibold">{code}</span>
     {title && (

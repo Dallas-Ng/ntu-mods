@@ -72,6 +72,16 @@ const stats = await getSemesterStats(year, semester)
   <JsonLd data={[websiteJsonLd(), organizationJsonLd()]} />
 </BaseLayout>
 
+<script>
+  import { track } from "@/lib/analytics"
+
+  // The landing sections are mostly static, so one listener covers every link.
+  document.addEventListener("click", (e) => {
+    const a = (e.target as Element).closest("main a[href]")
+    if (a) track("landing_link_clicked", { href: a.getAttribute("href") })
+  })
+</script>
+
 <style is:global>
   @keyframes landing-ring {
     to {

@@ -289,7 +289,10 @@ const TimetableAiChat = () => {
         isLoading={isLoading}
         loadingProgress={loadingProgress}
         error={error}
-        onInit={initModel}
+        onInit={() => {
+          track("ai_model_load_started")
+          initModel()
+        }}
       />
     )
   }

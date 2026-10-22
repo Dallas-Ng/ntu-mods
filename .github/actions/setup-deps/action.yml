@@ -8,7 +8,12 @@ runs:
   steps:
     - name: Enable pnpm (version from packageManager)
       shell: bash
-      run: corepack enable
+      # Download pnpm once, with retries, so later steps (some run pnpm in
+      # parallel) never race on a slow or flaky npm registry.
+      run: |
+        corepack enable
+        for i in 1 2 3 4 5; do pnpm --version && exit 0; sleep $((i * 10)); done
+        exit 1
 
     - name: Set up Node.js
       uses: actions/setup-node@v5

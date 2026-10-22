@@ -48,6 +48,10 @@ export const siteConfig = {
       title: "Privacy Policy",
       desc: "Learn what NTUMods stores locally, what analytics may collect, how feedback submissions are handled, and how your timetable data stays on your device."
     },
+    terms: {
+      title: "Terms of Use",
+      desc: "The terms for using NTUMods: a free, unofficial NTU planning tool, with no warranty, and not affiliated with Nanyang Technological University."
+    },
     screenshot: {
       title: "NTU Timetable Wallpaper Maker",
       desc: "Compose your NTU timetable as a clean lockscreen wallpaper or shareable image, with presets for phone screens and simple positioning controls."

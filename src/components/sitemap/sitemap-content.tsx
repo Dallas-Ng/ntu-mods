@@ -75,6 +75,11 @@ const TOOL_LINKS = [
     description: "How NTUMods handles your data and what stays on your device"
   },
   {
+    label: "Terms",
+    href: "/terms",
+    description: "The terms for using NTUMods"
+  },
+  {
     label: "AI Instructions",
     href: "/ai-instructions",
     description: "Instructions for AI assistants to understand NTUMods"

@@ -14,7 +14,7 @@ import { ChevronRight } from "lucide-react"
 
 import { TABLE_SETTINGS } from "@/config/table-settings"
 import { commonLectureId } from "@/lib/common-lectures"
-import { STARS_TIMESLOTS } from "@/lib/constants"
+import { STARS_TIMESLOTS } from "@/lib/module-constants"
 import {
   generateTimetableMatrix,
   getFirstTsIndex

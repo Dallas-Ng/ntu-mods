@@ -8,7 +8,7 @@ import {
   SlidersHorizontal
 } from "lucide-react"
 
-import { TRUN_DAY_MAP } from "@/lib/constants"
+import { TRUN_DAY_MAP } from "@/lib/module-constants"
 import { parseFilterList } from "@/lib/filter-modules"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"

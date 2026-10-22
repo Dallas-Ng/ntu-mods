@@ -1,7 +1,7 @@
 "use client"
 
 import { track } from "@/lib/analytics"
-import { MODULE_CATEGORY, MODULE_FACULTY, TRUN_DAY_MAP } from "@/lib/constants"
+import { MODULE_CATEGORY, MODULE_FACULTY, TRUN_DAY_MAP } from "@/lib/module-constants"
 import { parseFilterList } from "@/lib/filter-modules"
 import { TIME_OPTIONS } from "@/lib/generation-config"
 import { cn } from "@/lib/utils"

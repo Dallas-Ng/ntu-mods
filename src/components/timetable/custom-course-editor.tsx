@@ -5,7 +5,7 @@ import { useBoundState } from "@/state/bound.state"
 import { Plus, Trash2, X } from "lucide-react"
 
 import { track } from "@/lib/analytics"
-import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
+import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/module-constants"
 import { CUSTOM_LUNCH_TYPE } from "@/lib/custom-course-colors"
 import { formatHhmm } from "@/lib/format"
 import { cn } from "@/lib/utils"

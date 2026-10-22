@@ -1,4 +1,4 @@
-import { STARS_TIMESLOTS } from "@/lib/constants"
+import { STARS_TIMESLOTS } from "@/lib/module-constants"
 
 export const TIME_OPTIONS = STARS_TIMESLOTS.filter(
   (t) => t.start >= 700 && t.start <= 2200

@@ -1,4 +1,4 @@
-import { TRUN_DAY_MAP } from "@/lib/constants"
+import { TRUN_DAY_MAP } from "@/lib/module-constants"
 import {
   getCustomBlockStyle,
   isCustomCourseKey

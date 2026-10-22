@@ -6,7 +6,7 @@ import { useIndexHover } from "@/state/index-hover.state"
 import { Check } from "lucide-react"
 
 import { track } from "@/lib/analytics"
-import { DAY_MAP } from "@/lib/constants"
+import { DAY_MAP } from "@/lib/module-constants"
 import { getIndexType } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
 import { latestSemester, latestYear } from "@/lib/semesters"

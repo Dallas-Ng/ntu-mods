@@ -61,6 +61,12 @@ const TimetableShareDialog = ({
     includes_custom_blocks: withCustom.length > 0
   }
 
+  const copy = (text: string, message: string) =>
+    navigator.clipboard.writeText(text).then(
+      () => toast(message),
+      () => toast.error("Could not copy. Copy it manually instead")
+    )
+
   const handleCopyLink = () => {
     const isMobile = /Mobi|Android/i.test(navigator.userAgent)
 
@@ -77,9 +83,10 @@ const TimetableShareDialog = ({
         })
         .catch((e) => {
           // AbortError is the user dismissing the share sheet
-          if (e?.name !== "AbortError") reportError("timetable_share", e)
-          navigator.clipboard.writeText(link)
-          toast("Share link copied to clipboard")
+          if (e?.name === "AbortError") return
+          reportError("timetable_share", e)
+          // Share sheet consumed the user activation, so copy may be blocked
+          copy(link, "Share link copied to clipboard")
         })
       onOpenChange(false)
       return
@@ -89,15 +96,13 @@ const TimetableShareDialog = ({
       method: "clipboard",
       ...captureProps
     })
-    navigator.clipboard.writeText(link)
-    toast("Share link copied to clipboard")
+    copy(link, "Share link copied to clipboard")
     onOpenChange(false)
   }
 
   const handleCopyText = () => {
     track("timetable_shared", { method: "text", ...captureProps })
-    navigator.clipboard.writeText(textBundle)
-    toast("Timetable code copied — paste it into Import")
+    copy(textBundle, "Timetable code copied — paste it into Import")
     onOpenChange(false)
   }
 

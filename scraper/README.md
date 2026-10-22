@@ -1,5 +1,7 @@
 # NTU Course Scraper
 
+Part of [NTU Mods](../README.md). How the site consumes this data: [db/README.md](../db/README.md). Per-semester checklist: [docs/maintenance.md](../docs/maintenance.md).
+
 Scrapes the [NTU class schedule portal](https://wish.wis.ntu.edu.sg/webexe/owa/aus_schedule.main),
 the course-content portal and the exam-timetable portal, and turns them into the
 three JSON files per semester that the site consumes.

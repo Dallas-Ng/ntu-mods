@@ -5,6 +5,7 @@ import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import { getLatestSemester } from "@/lib/server/db/repo"
 import LandingActivity from "@/components/landing/landing-activity"
 import LandingArticles from "@/components/landing/landing-articles"
+import LandingAssistant from "@/components/landing/landing-assistant"
 import LandingCTA from "@/components/landing/landing-cta"
 import LandingDemo from "@/components/landing/landing-demo"
 import LandingFeatures from "@/components/landing/landing-features"
@@ -37,9 +38,12 @@ const stats = await getSemesterStats(year, semester)
   </div>
 
   <div class="mt-24 md:mt-36">
-    <LandingFeatures client:visible />
+    <LandingAssistant client:visible />
     <div class="mt-24 md:mt-36">
-      <LandingTools />
+      <LandingFeatures client:visible />
+    </div>
+    <div class="mt-24 md:mt-36">
+      <LandingTools client:visible />
     </div>
     <div class="mt-24 md:mt-36">
       <LandingArticles />

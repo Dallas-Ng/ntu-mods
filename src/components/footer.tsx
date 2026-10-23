@@ -27,6 +27,20 @@ const FOOTER_GROUPS = [
       { label: "Feedback", href: "/feedback" },
       { label: "FAQ", href: "/faq" }
     ]
+  },
+  {
+    title: "Developers",
+    links: [
+      { label: "Overview", href: "/developers" },
+      { label: "MCP Server", href: "/developers/mcp" },
+      { label: "REST API", href: "/developers/api" },
+      { label: "WebMCP", href: "/developers/webmcp" },
+      {
+        label: "Contributing",
+        href: `${siteConfig.links.repo}/blob/main/CONTRIBUTING.md`
+      },
+      { label: "GitHub", href: siteConfig.links.repo }
+    ]
   }
 ]
 
@@ -34,16 +48,15 @@ const LEGAL_LINKS = [
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
   { label: "AI instructions", href: "/ai-instructions" },
-  { label: "GitHub", href: siteConfig.links.repo },
-  { label: "Developers", href: "/developers" },
   { label: "Sitemap", href: "/sitemap" },
-  { label: "Buy me a coffee", href: siteConfig.links.coffee }
+  { label: "Buy me a coffee", href: siteConfig.links.coffee },
+  { label: "Sponsor", href: siteConfig.links.sponsor }
 ] as const
 
 const Footer = () => {
   return (
     <footer className="border-border/60 bg-muted/30 mt-16 border-t px-3 lg:px-5">
-      <div className="container grid gap-10 py-12 text-sm sm:grid-cols-2 lg:grid-cols-[1.6fr_repeat(3,1fr)]">
+      <div className="container grid gap-10 py-12 text-sm sm:grid-cols-2 lg:grid-cols-[1.6fr_repeat(4,1fr)]">
         <div className="space-y-4 sm:col-span-2 lg:col-span-1">
           <a
             href="/"
@@ -75,6 +88,10 @@ const Footer = () => {
                 <li key={link.href}>
                   <a
                     href={link.href}
+                    {...(link.href.startsWith("http") && {
+                      target: "_blank",
+                      rel: "noopener noreferrer"
+                    })}
                     className="text-foreground/80 hover:text-primary transition-colors">
                     {link.label}
                   </a>

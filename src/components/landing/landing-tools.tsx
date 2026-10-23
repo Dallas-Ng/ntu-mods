@@ -35,16 +35,16 @@ const LandingTools = () => {
               </h3>
               <p className="mt-4 max-w-md text-sm md:text-base">{tool.desc}</p>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="grid gap-3 sm:w-fit sm:auto-cols-fr sm:grid-flow-col">
               <a
                 href={tool.href}
-                className="bg-primary text-primary-foreground inline-flex h-12 items-center rounded-md px-6 text-sm font-semibold transition-transform md:px-8">
+                className="bg-primary text-primary-foreground inline-flex h-12 items-center justify-center rounded-md px-6 text-sm font-semibold whitespace-nowrap transition-transform md:px-8">
                 Open the tool
               </a>
               {tool.guide && (
                 <a
                   href={tool.guide.href}
-                  className="bg-background hover:bg-accent inline-flex h-12 items-center rounded-md px-6 text-sm font-semibold transition-colors md:px-8">
+                  className="bg-background hover:bg-accent inline-flex h-12 items-center justify-center rounded-md px-6 text-sm font-semibold whitespace-nowrap transition-colors md:px-8">
                   {tool.guide.label}
                 </a>
               )}

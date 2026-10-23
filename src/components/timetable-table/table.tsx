@@ -14,12 +14,12 @@ import { ChevronRight } from "lucide-react"
 
 import { TABLE_SETTINGS } from "@/config/table-settings"
 import { commonLectureId } from "@/lib/common-lectures"
-import { STARS_TIMESLOTS } from "@/lib/module-constants"
 import {
   generateTimetableMatrix,
   getFirstTsIndex
 } from "@/lib/generate-timetable-matrix"
 import { getIndexType } from "@/lib/get-index-type"
+import { STARS_TIMESLOTS } from "@/lib/module-constants"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 import { TooltipProvider } from "@/components/ui/tooltip"

@@ -19,8 +19,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { FLOATING } from "@/components/map/campus-map"
-import { MapMenu } from "@/components/map/map-menu"
 import { PlaceIcon } from "@/components/map/category-icons"
+import { MapMenu } from "@/components/map/map-menu"
 
 export type MapStyle = "standard" | "satellite" | "hybrid"
 
@@ -113,107 +113,106 @@ const MapOptions = ({
           <Layers className="size-4" /> Map
         </button>
       }>
-        <p className="text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase">
-          Map type
-        </p>
-        <div className="grid grid-cols-3 gap-2">
-          {STYLES.map(({ key, label, icon: Icon }) => (
-            <button
-              key={key}
-              type="button"
-              aria-pressed={mapStyle === key}
-              onClick={() => {
-                // Tapping Hybrid again flips the building colour.
-                if (key === "hybrid" && mapStyle === "hybrid")
-                  onHybridTone(
-                    HYBRID_TONES[
-                      (HYBRID_TONES.findIndex((t) => t.key === hybridTone) +
-                        1) %
-                        HYBRID_TONES.length
-                    ].key
-                  )
-                else onMapStyle(key)
-              }}
-              className={cn(
-                "flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border p-2.5 text-sm font-medium transition-[transform,background-color] duration-150 ease-out active:scale-[0.97]",
-                mapStyle === key
-                  ? "border-primary bg-primary/10 text-primary"
-                  : "hover:bg-accent"
-              )}>
-              <Icon className="size-5" />
-              {label}
-              {key === "hybrid" && mapStyle === "hybrid" && (
-                <span className="-mt-1 text-[10px] leading-none font-normal capitalize">
-                  {HYBRID_TONES.find((t) => t.key === hybridTone)?.label}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-        {mapStyle === "hybrid" && (
-          <div className="mt-3">
-            <div className="flex justify-center gap-3">
-              {HYBRID_TONES.map((t) => (
-                <button
-                  key={t.key}
-                  type="button"
-                  aria-label={t.label}
-                  aria-pressed={hybridTone === t.key}
-                  title={t.label}
-                  onClick={() => onHybridTone(t.key)}
-                  style={{ background: t.swatch }}
-                  className={cn(
-                    "size-7 cursor-pointer rounded-full border-2 transition-transform duration-150 ease-out active:scale-[0.92]",
-                    hybridTone === t.key
-                      ? "border-primary ring-primary/30 ring-2"
-                      : "border-border"
-                  )}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        <p className="text-muted-foreground mt-4 mb-1 text-xs font-medium tracking-wide uppercase">
-          Buildings
-        </p>
-        <Row
-          label="Teaching buildings"
-          hint="Spines, schools and blocks with classes"
-          checked={buildingLabels}
-          onChange={onBuildingLabels}
-        />
-        <Row
-          label="Room numbers"
-          hint="When zoomed in on a level"
-          checked={roomLabels}
-          onChange={onRoomLabels}
-        />
-        <p className="text-muted-foreground mt-3 mb-1 text-xs font-medium tracking-wide uppercase">
-          Places
-        </p>
-        {(Object.keys(CATEGORIES) as LandmarkCat[]).map((c) => (
-          <Row
-            key={c}
-            label={CATEGORIES[c].label}
-            icon={c}
-            checked={cats.has(c)}
-            onChange={(on) => toggle(c, on)}
-          />
+      <p className="text-muted-foreground mb-2 text-xs font-medium tracking-wide uppercase">
+        Map type
+      </p>
+      <div className="grid grid-cols-3 gap-2">
+        {STYLES.map(({ key, label, icon: Icon }) => (
+          <button
+            key={key}
+            type="button"
+            aria-pressed={mapStyle === key}
+            onClick={() => {
+              // Tapping Hybrid again flips the building colour.
+              if (key === "hybrid" && mapStyle === "hybrid")
+                onHybridTone(
+                  HYBRID_TONES[
+                    (HYBRID_TONES.findIndex((t) => t.key === hybridTone) + 1) %
+                      HYBRID_TONES.length
+                  ].key
+                )
+              else onMapStyle(key)
+            }}
+            className={cn(
+              "flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border p-2.5 text-sm font-medium transition-[transform,background-color] duration-150 ease-out active:scale-[0.97]",
+              mapStyle === key
+                ? "border-primary bg-primary/10 text-primary"
+                : "hover:bg-accent"
+            )}>
+            <Icon className="size-5" />
+            {label}
+            {key === "hybrid" && mapStyle === "hybrid" && (
+              <span className="-mt-1 text-[10px] leading-none font-normal capitalize">
+                {HYBRID_TONES.find((t) => t.key === hybridTone)?.label}
+              </span>
+            )}
+          </button>
         ))}
-
-        <div className="mt-3 grid grid-cols-2 gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={!anyLabels}
-            onClick={onTurnOffAll}>
-            <EyeOff /> Turn off all
-          </Button>
-          <Button variant="outline" size="sm" onClick={onReset}>
-            <RotateCcw /> Reset
-          </Button>
+      </div>
+      {mapStyle === "hybrid" && (
+        <div className="mt-3">
+          <div className="flex justify-center gap-3">
+            {HYBRID_TONES.map((t) => (
+              <button
+                key={t.key}
+                type="button"
+                aria-label={t.label}
+                aria-pressed={hybridTone === t.key}
+                title={t.label}
+                onClick={() => onHybridTone(t.key)}
+                style={{ background: t.swatch }}
+                className={cn(
+                  "size-7 cursor-pointer rounded-full border-2 transition-transform duration-150 ease-out active:scale-[0.92]",
+                  hybridTone === t.key
+                    ? "border-primary ring-primary/30 ring-2"
+                    : "border-border"
+                )}
+              />
+            ))}
+          </div>
         </div>
+      )}
+
+      <p className="text-muted-foreground mt-4 mb-1 text-xs font-medium tracking-wide uppercase">
+        Buildings
+      </p>
+      <Row
+        label="Teaching buildings"
+        hint="Spines, schools and blocks with classes"
+        checked={buildingLabels}
+        onChange={onBuildingLabels}
+      />
+      <Row
+        label="Room numbers"
+        hint="When zoomed in on a level"
+        checked={roomLabels}
+        onChange={onRoomLabels}
+      />
+      <p className="text-muted-foreground mt-3 mb-1 text-xs font-medium tracking-wide uppercase">
+        Places
+      </p>
+      {(Object.keys(CATEGORIES) as LandmarkCat[]).map((c) => (
+        <Row
+          key={c}
+          label={CATEGORIES[c].label}
+          icon={c}
+          checked={cats.has(c)}
+          onChange={(on) => toggle(c, on)}
+        />
+      ))}
+
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={!anyLabels}
+          onClick={onTurnOffAll}>
+          <EyeOff /> Turn off all
+        </Button>
+        <Button variant="outline" size="sm" onClick={onReset}>
+          <RotateCcw /> Reset
+        </Button>
+      </div>
     </MapMenu>
   )
 }

@@ -5,6 +5,7 @@ date: "2026-08-06"
 updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "CEE modules"
 tags: ["ntu cee modules", "ntu cee course content", "civil and environmental engineering ntu", "ntu cv modules", "cee ntu courses", "ntu civil engineering modules"]
 ---
 

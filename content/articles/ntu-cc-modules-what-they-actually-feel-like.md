@@ -5,6 +5,7 @@ date: "2026-04-29"
 updated: "2026-07-23"
 author: "NTUMods"
 category: "Common Core"
+thumbnailText: "CC modules"
 tags: ["NTU", "NTUMods", "Common Core", "CC Modules", "ntu cc mods", "cc mods ntu", "best cc modules ntu", "ntu common core", "easy cc modules ntu", "CC0001", "CC0002", "CC0003", "CC0004", "CC0005", "CC0006", "CC0007", "NTU CC modules", "NTU common core requirements"]
 ---
 

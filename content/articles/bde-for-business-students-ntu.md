@@ -4,6 +4,7 @@ description: "How NTU business students should approach BDE selection — which 
 date: "2026-06-08"
 author: "NTUMods"
 category: "BDE"
+thumbnailText: "Business BDEs"
 tags: ["NTU BDE", "business BDE NTU", "NTU business electives", "NTUMods", "NTU electives", "NTU module planning", "bde ntu business", "ntu business modules", "bde guide ntu", "nbs bde ntu", "accountancy bde ntu"]
 ---
 

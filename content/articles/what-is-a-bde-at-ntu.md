@@ -5,6 +5,7 @@ date: "2026-04-29"
 updated: "2026-06-14"
 author: "NTUMods"
 category: "BDE"
+thumbnailText: "What is a BDE"
 tags: ["NTU BDE", "Broadening and Deepening Elective", "NTU electives", "NTUMods", "NTU module planning", "BDE NTU guide", "NTU elective planning", "what is bde", "what bde means", "bde degree ntu", "bde ntu"]
 ---
 

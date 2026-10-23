@@ -6,8 +6,8 @@ updated: "2026-04-29"
 author: "NTUMods"
 category: "General"
 tags: ["NTU", "NTUMods"]
-thumbnail: ""
-thumbnailAlt: "NTUMods article thumbnail"
+thumbnailText: ""   # short keyword drawn on the thumbnail, about 12 characters
+thumbnail: ""       # only used as the social share image
 ---
 
 # Article title

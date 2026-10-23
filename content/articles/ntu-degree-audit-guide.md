@@ -5,6 +5,7 @@ date: "2026-08-06"
 updated: "2026-10-09"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "Degree audit"
 tags: ["ntu degree audit", "degree audit ntu", "ntu degree audit login", "ntu audit degree", "ntu graduation requirements", "ntu curriculum structure", "ntu au requirements", "ntu student portal", "ntu degree audit results", "ntu degree audit reddit", "download ntu degree audit", "ntu transcript", "ntu intranet"]
 ---
 

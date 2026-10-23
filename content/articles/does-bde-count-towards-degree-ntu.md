@@ -5,6 +5,7 @@ date: "2026-05-21"
 updated: "2026-05-21"
 author: "NTUMods"
 category: "BDE"
+thumbnailText: "BDE and degree"
 tags: ["bde degree ntu", "what is bde", "what bde means", "bde ntu", "ntu bde requirements", "NTU BDE", "NTUMods", "NTU electives", "does bde count ntu"]
 ---
 

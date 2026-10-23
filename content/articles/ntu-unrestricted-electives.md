@@ -4,6 +4,7 @@ description: "Understand what unrestricted electives are at NTU, how the term re
 date: "2026-06-08"
 author: "NTUMods"
 category: "BDE"
+thumbnailText: "Free electives"
 tags: ["NTU unrestricted electives", "UE NTU", "ntu ue modules", "unrestricted electives ntu", "bde vs ue ntu", "ntu electives", "NTU BDE", "NTUMods"]
 ---
 

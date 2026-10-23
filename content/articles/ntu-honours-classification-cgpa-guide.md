@@ -4,6 +4,7 @@ description: "How NTU calculates CGPA on the 5.0 scale, the CGPA needed for Meri
 date: "2026-10-08"
 author: "NTUMods"
 category: "General"
+thumbnailText: "Honours and CGPA"
 tags: ["ntu cgpa", "ntu gpa calculator", "ntu honours classification", "ntu grade scale", "ntu highest distinction", "ntu distinction cgpa", "ntu merit cgpa", "ntu cgpa planner"]
 ---
 

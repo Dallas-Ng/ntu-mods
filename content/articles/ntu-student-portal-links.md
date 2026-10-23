@@ -5,6 +5,7 @@ date: "2026-06-22"
 updated: "2026-10-06"
 author: "NTUMods"
 category: "General"
+thumbnailText: "Portal links"
 tags: ["NTU portals", "ntu portal", "NTU student links", "NTU websites", "STARS NTU", "NTULearn", "Degree Audit NTU", "NTU student guide", "NTU resources", "NTU online portals", "NTU student portal list"]
 ---
 

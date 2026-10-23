@@ -5,6 +5,7 @@ date: "2026-06-20"
 updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "HASS modules"
 tags: ["ntu english modules", "ntu history modules", "ntu humanities modules", "ntu arts modules", "ntu cohass modules", "ntu literature modules", "ntu philosophy modules", "ntu linguistics modules", "art history ntu", "history course offerings ntu", "ntu english literature", "ntu cohass", "ntu hss modules", "ntu ay2026 humanities"]
 ---
 

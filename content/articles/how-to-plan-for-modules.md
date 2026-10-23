@@ -5,6 +5,7 @@ date: "2026-04-29"
 updated: "2026-06-14"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "Plan modules"
 tags: ["NTU modules", "NTU timetable", "STARS", "NTUMods", "module planning", "ntu module selection", "ntu course planner", "module planning ntu", "ntu planner", "ntu timetable planner", "ntu module planner"]
 ---
 

@@ -5,6 +5,7 @@ date: "2026-09-22"
 updated: "2026-10-09"
 author: "NTUMods"
 category: "General"
+thumbnailText: "NTULearn"
 tags: ["ntulearn", "ntu learn", "ntulearn login", "ntu learn login", "ntulearn ultra", "ntu blackboard", "ntu lms", "what is ntulearn", "ntulearn self enrol", "ntulearn course catalogue", "ntulearn app", "ntu learn portal", "ntulearn blackboard", "ntulearn ithenticate", "ntulearn respondus", "ntulearn video"]
 ---
 

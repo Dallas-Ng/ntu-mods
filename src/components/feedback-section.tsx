@@ -29,7 +29,7 @@ const FeedbackSection = () => {
       data-nosnippet
       aria-labelledby="feedback-heading"
       className="mt-20 mb-4 px-4 lg:px-5">
-      <div className="bg-muted/50 mx-auto grid max-w-5xl gap-10 rounded-3xl p-6 sm:p-10 lg:grid-cols-2 lg:items-center lg:gap-16 lg:p-14">
+      <div className="bg-muted mx-auto grid max-w-5xl gap-10 rounded-3xl border p-6 sm:p-10 lg:grid-cols-2 lg:items-center lg:gap-16 lg:p-14">
         <div className="space-y-8">
           <div className="space-y-5">
             <h2
@@ -55,7 +55,7 @@ const FeedbackSection = () => {
                       id: Date.now()
                     })
                   }
-                  className="bg-background hover:bg-background/70 flex w-full cursor-pointer items-center justify-between gap-4 rounded-2xl px-4 py-3 text-left text-sm font-medium transition-[background-color,transform] duration-150 active:scale-[0.99]">
+                  className="bg-background hover:bg-background/70 flex w-full cursor-pointer items-center justify-between gap-4 rounded-2xl border px-4 py-3 text-left text-sm font-medium transition-[background-color,transform] duration-150 active:scale-[0.99]">
                   {label}
                   <ArrowDown className="text-muted-foreground size-4 shrink-0 lg:hidden" />
                   <ArrowRight className="text-muted-foreground hidden size-4 shrink-0 lg:block" />
@@ -65,7 +65,10 @@ const FeedbackSection = () => {
           </ul>
         </div>
 
-        <FeedbackCard divClassName="bg-background sm:p-6" starter={starter} />
+        <FeedbackCard
+          divClassName="bg-background border sm:p-6"
+          starter={starter}
+        />
       </div>
     </section>
   )

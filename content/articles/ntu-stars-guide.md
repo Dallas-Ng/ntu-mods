@@ -5,6 +5,7 @@ date: "2026-06-08"
 updated: "2026-10-09"
 author: "NTUMods"
 category: "STARS"
+thumbnailText: "STARS"
 tags: ["NTU STARS", "STARS NTU", "ntu stars planner", "stars planner ntu", "ntu module registration", "ntu stars system", "stars bidding ntu", "ntu stars guide", "ntu stars dates", "ntu stars registration", "ntustars", "ntu stars login", "stars ntu login", "ntu stars full form", "ntu stars waitlist", "ntu stars swap index", "ntu stars freshmen", "ntu stars add drop"]
 ---
 

@@ -5,6 +5,7 @@ date: "2026-06-08"
 updated: "2026-06-08"
 author: "NTUMods"
 category: "BDE"
+thumbnailText: "MOOC as BDE"
 tags: ["MOOC BDE NTU", "MOOC as BDE", "NTU MOOC credit", "NTU BDE alternatives", "Coursera NTU credit", "online course BDE", "NTU electives", "NTU BDE", "NTUMods", "broadening and deepening elective", "BDE replacement NTU"]
 ---
 

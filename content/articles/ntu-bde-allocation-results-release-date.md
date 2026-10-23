@@ -4,6 +4,7 @@ description: "When Nanyang Technological University releases GERPE, UE and BDE a
 date: "2026-08-19"
 author: "NTUMods"
 category: "BDE"
+thumbnailText: "BDE results"
 tags: ["ntu bde release date", "ntu bde results release", "ntu bde allocation", "ntu bde appeal", "bde allocation results ntu", "ntu bde waitlist", "ntu bde results", "ntu gerpe ue bde allocation", "ntu bde reddit"]
 ---
 

@@ -4,6 +4,7 @@ description: "The NTUMods timetable planner has been redesigned. See the walk be
 date: "2026-10-21"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "Planner redesign"
 tags:
   [
     "ntu timetable planner",

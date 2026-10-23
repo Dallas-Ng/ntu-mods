@@ -4,6 +4,7 @@ description: "Computing students at NTU: which BDEs count toward your degree, wh
 date: "2026-06-14"
 author: "NTUMods"
 category: "BDE"
+thumbnailText: "Computing BDEs"
 tags: ["bde for computing students ntu", "ntu computing bde", "scse bde ntu", "ntu computing electives", "bde guide ntu computing", "NTU BDE", "NTU electives", "NTUMods", "cs ntu bde", "ntu scse electives"]
 ---
 

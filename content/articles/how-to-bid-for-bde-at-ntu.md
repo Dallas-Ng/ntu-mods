@@ -5,6 +5,7 @@ date: "2026-05-19"
 updated: "2026-06-14"
 author: "NTUMods"
 category: "STARS"
+thumbnailText: "Bidding for BDE"
 tags: ["NTU BDE", "STARS bidding NTU", "BDE registration NTU", "NTUMods", "NTU STARS", "NTU electives", "ntu stars", "stars bidding ntu", "ntu module registration", "bde ntu registration"]
 ---
 

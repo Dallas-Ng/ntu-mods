@@ -4,6 +4,7 @@ description: "A step-by-step guide to the NTUMods FGO Optimiser. Upload your NTU
 date: "2026-10-08"
 author: "NTUMods"
 category: "General"
+thumbnailText: "FGO optimiser"
 tags: ["ntu fgo optimiser", "which modules to fgo ntu", "ntu fgo calculator", "ntu flexible grading option calculator", "ntu s/u calculator", "ntu su which mods", "ntumods fgo optimiser", "ntu fgo strategy"]
 ---
 

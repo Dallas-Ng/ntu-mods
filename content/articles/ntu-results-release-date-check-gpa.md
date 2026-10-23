@@ -4,6 +4,7 @@ description: "When Nanyang Technological University releases semester results, w
 date: "2026-09-17"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "Results day"
 tags: ["ntu results release", "ntu results release date", "ntu results release 2026", "ntu how to check cgpa", "where to check gpa ntu", "ntu check results", "ntu gpa release", "ntu cgpa requirements", "ntu review of results"]
 ---
 

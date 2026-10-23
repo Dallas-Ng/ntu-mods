@@ -5,6 +5,7 @@ date: "2026-05-21"
 updated: "2026-10-15"
 author: "NTUMods"
 category: "BDE"
+thumbnailText: "Every BDE"
 tags: ["ntu bde list", "bde list ntu", "ntu bde 2026", "all bde ntu", "bde courses ntu", "NTU BDE", "NTU electives", "NTUMods", "bde ntu", "ntu bde ay2026", "ntu bde semester 2 2026", "ntu bde ay2026 s2", "ntu bde ay2026/2027", "ntu bde list 2026"]
 ---
 

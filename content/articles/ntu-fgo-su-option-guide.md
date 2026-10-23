@@ -4,6 +4,7 @@ description: "The NTU Flexible Grading Option (FGO) lets undergraduates convert 
 date: "2026-10-08"
 author: "NTUMods"
 category: "General"
+thumbnailText: "FGO (S/U)"
 tags: ["ntu flexible grading option", "ntu fgo", "flexible grading option ntu", "ntu s/u option", "ntu su option", "satisfactory unsatisfactory ntu", "fgo portal ntu", "ntu su declaration"]
 ---
 

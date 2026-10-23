@@ -4,6 +4,7 @@ description: "A free NTU campus map with indoor floor plans on every level. Sear
 date: "2026-10-19"
 author: "NTUMods"
 category: "General"
+thumbnailText: "Campus map"
 tags: ["ntu campus map", "ntu lecture theatre map", "ntu map", "ntu classroom location", "find ntu lecture theatre", "ntu indoor map", "ntu venue finder", "ntu walking time between classes", "ntu north spine map", "ntu south spine map", "ntu halls map", "ntu car park map", "ntu toilet map", "ntu room code"]
 thumbnail: "/og/maps.png"
 thumbnailAlt: "NTUMods campus map: find any room on campus, with levels and walking times"

@@ -118,7 +118,7 @@ const Navbar = () => {
                         <ChevronDown className="size-3 transition-transform group-data-[state=open]:rotate-180" />
                         {dot}
                       </NavigationMenu.Trigger>
-                      <NavigationMenu.Content className="bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 absolute top-full left-0 mt-2 w-[min(32rem,calc(100vw-1rem))] origin-top-left rounded-xl border p-2 shadow-lg duration-200">
+                      <NavigationMenu.Content className="bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 absolute top-full left-0 mt-2 w-[min(32rem,calc(100vw-1rem))] rounded-xl border p-2 shadow-lg [animation-timing-function:var(--ease-out-strong)] data-[state=closed]:[animation-duration:100ms] data-[state=open]:[animation-duration:180ms] motion-reduce:animate-none">
                         <ul className="grid gap-1 sm:grid-cols-2">
                           {siteConfig.tools.map((tool) => (
                             <li key={tool.href}>

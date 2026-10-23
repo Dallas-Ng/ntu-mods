@@ -132,9 +132,21 @@ export const siteConfig = {
   ],
   tools: [
     {
+      name: "AI Assistant Connector",
+      href: "/developers/mcp",
+      isNew: true,
+      desc: "Add NTUMods to Claude or ChatGPT and ask about modules, class indexes and exams",
+      facts: ["No sign-in", "Read-only course data"],
+      time: "1 min",
+      guide: {
+        label: "Read about it",
+        href: "/developers/mcp"
+      }
+    },
+    {
       name: "FGO Optimiser",
       href: "/tools/fgo-optimiser",
-      isNew: true,
+      isNew: false,
       desc: "Upload your transcript and find the modules to Flexible-Grade for the highest CGPA",
       facts: ["Reads your transcript PDF", "24 or 21 AU quota"],
       time: "5 min",
@@ -146,7 +158,7 @@ export const siteConfig = {
     {
       name: "CGPA Planner",
       href: "/tools/cgpa-planner",
-      isNew: true,
+      isNew: false,
       desc: "See the average grade you need over your remaining AU to reach Merit, Distinction or Highest Distinction",
       facts: ["Type your CGPA or upload", "Grade needed per class"],
       time: "2 min",
@@ -170,6 +182,11 @@ export const siteConfig = {
     linkedIn: "https://www.linkedin.com/in/dallas-ng/",
     repo: "https://github.com/Dallas-Ng/ntu-mods",
     telegram: "https://t.me/dallas_ng",
-    coffee: "https://buymeacoffee.com/dallasng"
+    coffee: "https://buymeacoffee.com/dallasng",
+    sponsor: "https://github.com/sponsors/Dallas-Ng",
+    // Official directory listings of the MCP server. Claude's is still being
+    // published. Set openai to the listing URL once it exists.
+    claudeDirectory: "https://claude.ai/directory/ntumods",
+    openaiDirectory: null as string | null
   }
 } as const

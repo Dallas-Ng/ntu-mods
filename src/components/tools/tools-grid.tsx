@@ -5,6 +5,7 @@ import { ArrowRight, BookOpen } from "lucide-react"
 import { siteConfig } from "@/config/site"
 import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
+import AssistantPreview from "@/components/tools/assistant-preview"
 
 // Static miniatures of each tool so the cards read differently at a glance.
 // All share a fixed height so the cards line up.
@@ -106,7 +107,8 @@ const WallpaperPreview = () => (
 const PREVIEWS: Record<string, () => React.JSX.Element> = {
   "/tools/fgo-optimiser": FgoPreview,
   "/tools/cgpa-planner": CgpaPreview,
-  "/screenshot": WallpaperPreview
+  "/screenshot": WallpaperPreview,
+  "/developers/mcp": () => <AssistantPreview compact />
 }
 
 const ToolsGrid = () => (

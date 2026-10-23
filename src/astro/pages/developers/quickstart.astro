@@ -1,0 +1,121 @@
+---
+import { siteConfig } from "@/config/site"
+import { getLatestExamSemester, getLatestSemester } from "@/lib/server/db/repo"
+import { Code } from "@/components/developers/code"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const { year, semester } = await getLatestSemester()
+const exams = await getLatestExamSemester()
+const sem = `${year}_${semester}`
+const examSem = exams ? `${exams.year}_${exams.semester}` : sem
+const base = siteConfig.url
+---
+
+<DevDocsLayout
+  title="NTUMods API quickstart"
+  description="Make your first request to the NTUMods API in a minute: one module as JSON, the whole module list, class indexes and exams. No key, no sign-up."
+  path="/developers/quickstart"
+  eyebrow="Get started"
+  heading="Quickstart"
+  intro="Make your first request in a minute. There is no key and no sign-up, and everything is a plain GET.">
+  <div class="flex flex-col gap-4">
+    <h2 id="module">
+      Get one module<HeadingAnchor id="module" label="Get one module" />
+    </h2>
+    <p>
+      Ask for a module by its code. Use capital letters, with no query string.
+    </p>
+    <Code client:visible lang="bash" code={`curl ${base}/api/modules/SC1004`} />
+    <p>
+      You get one JSON object with the title, AU, description, prerequisites,
+      the semesters it was offered and its exam. Or in JavaScript:
+    </p>
+    <Code
+      client:visible
+      lang="javascript"
+      code={`const res = await fetch("${base}/api/modules/SC1004")
+const module = await res.json()
+console.log(module.title, module.au)`}
+    />
+
+    <h2 id="dataset">
+      Download all modules<HeadingAnchor
+        id="dataset"
+        label="Download all modules"
+      />
+    </h2>
+    <p>
+      For many modules, download the whole list once and search it yourself. Do
+      not call the module API in a loop.
+    </p>
+    <Code
+      client:visible
+      lang="bash"
+      code={`curl -O ${base}/data/api/modules.json
+
+# every module from one school
+jq '.modules[] | select(.faculty == "CSC") | .code' modules.json`}
+    />
+
+    <h2 id="indexes">
+      Class indexes and exams<HeadingAnchor
+        id="indexes"
+        label="Class indexes and exams"
+      />
+    </h2>
+    <p>
+      Class indexes and exams are one file per semester, named <code
+        >year_semester</code
+      >. The latest semester with classes is <code>{sem}</code>, and the latest
+      with an exam timetable is <code>{examSem}</code>.
+    </p>
+    <Code
+      client:visible
+      lang="bash"
+      code={`# every class index of SC1004 this semester
+curl -s ${base}/data/api/indexes/${sem}.json | jq '.SC1004'
+
+# its exam
+curl -s ${base}/data/api/exams/${examSem}.json | jq '.SC1004'`}
+    />
+    <p>
+      What each field means, such as <code>day</code> and <code>duration</code>,
+      is in the <a href="/developers/data">data reference</a>.
+    </p>
+
+    <h2 id="assistant">
+      Ask an AI assistant instead<HeadingAnchor
+        id="assistant"
+        label="Ask an AI assistant instead"
+      />
+    </h2>
+    <p>
+      If you would rather ask questions than write code, add the <a
+        href="/developers/mcp">MCP server</a
+      > to Claude, ChatGPT, Cursor or another assistant. It reads the same data.
+    </p>
+
+    <h2 id="before">
+      Before you ship<HeadingAnchor id="before" label="Before you ship" />
+    </h2>
+    <ul>
+      <li>
+        Read the <a href="/developers#terms">terms of use</a>. There is no opt
+        out.
+      </li>
+      <li>
+        Cache what you fetch, and back off when you get a <code>429</code>. See <a
+          href="/developers/status">status and limits</a
+        >.
+      </li>
+      <li>
+        The data is NTU public course data and can be out of date. See <a
+          href="/developers/freshness">data freshness</a
+        >.
+      </li>
+    </ul>
+  </div>
+</DevDocsLayout>

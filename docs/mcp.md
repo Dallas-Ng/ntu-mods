@@ -2,7 +2,11 @@
 
 Part of [NTUMods](../README.md). System overview: [architecture.md](architecture.md). Deployment and the kill switch: [deployment.md](deployment.md#mcp-server).
 
-A public, read-only [MCP](https://modelcontextprotocol.io) server at `https://ntumods.com/mcp`. Students add it as a custom connector in Claude or ChatGPT, and developers add it to Claude Code or Cursor. It serves the same public course data as the REST API and open data files. There is no sign-in and no key. User-facing docs live at `/developers/mcp`.
+A public, read-only [MCP](https://modelcontextprotocol.io) server at `https://ntumods.com/mcp`. Students add it as a custom connector in Claude or ChatGPT, and developers add it to Claude Code or Cursor. It serves the same public course data as the REST API and open data files. There is no sign-in and no key. User-facing docs live at `/developers/mcp` (overview), `/developers/mcp/<client>` (setup steps, one page per client), `/developers/mcp/tools` (tools), `/developers/mcp/limits` (limits and errors) and `/developers/mcp/troubleshooting`. The wider developer portal (`/developers/quickstart`, `/data`, `/freshness`, `/status`) is listed in `DEV_NAV` in `src/lib/developers/pages.ts`.
+
+**Directory listings.** The same server is submitted to the Claude connectors directory (`https://claude.ai/directory/ntumods`, still being published) and, later, OpenAI's app directory. The URLs live in `siteConfig.links` (`claudeDirectory`, `openaiDirectory`) and feed `directoryListings` in `src/lib/developers/mcp-docs.ts`. Anthropic's docs give directory listing URLs the form `claude.ai/directory/connectors/SLUG`, so check `claudeDirectory` once the listing is approved. A `null` URL renders "coming soon" on `/developers/mcp`. Set it when the listing goes live, then add the changelog entry. The MCP guide article was folded into the developer docs, and `/articles/ntu-mods-mcp-server-guide` redirects to `/developers/mcp`.
+
+**Setup pages.** Each client in `src/lib/developers/mcp-clients.ts` gets its own page at `/developers/mcp/<id>` (`src/astro/pages/developers/mcp/[client].astro`). The steps live in `src/components/developers/mcp-client-steps.tsx`; the commands and configs come from `src/lib/developers/mcp-docs.ts`. Menu names for the GUI clients were written from vendor docs and change often, so recheck them when a client updates.
 
 ## What it exposes
 
@@ -85,7 +89,7 @@ A Cloudflare WAF rule is not a better switch here. WAF rate rules count per data
 - `tests/lib/module-json.test.ts`: pins the module JSON shape shared with the REST route.
 - `tests/lib/server/mcp/handlers.test.ts`: every tool with stubbed I/O, including cache and memoisation behaviour.
 - `tests/lib/server/mcp/route.test.ts`: every request check, both protocol eras through the real SDK, the kill switch and the logging rules. `cloudflare:workers` is aliased to `tests/stubs/cloudflare-workers.ts` in `vitest.config.ts`.
-- `e2e/mcp.spec.ts`: a real `tools/list` and `tools/call` against the running worker, and `/developers/mcp` listing the same tools.
+- `e2e/mcp.spec.ts`: a real `tools/list` and `tools/call` against the running worker, and `/developers/mcp/tools` listing the same tools.
 
 ## Known risks and open items
 

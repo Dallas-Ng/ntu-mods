@@ -127,7 +127,7 @@ const Operation = ({ op }: { op: ApiOp }) => {
           ))}
         </TabsList>
         <TabsContent value="responses">
-          <ul>
+          <ul className="list-none space-y-0 pl-0">
             {op.responses.map((r) => (
               <li
                 key={r.status}

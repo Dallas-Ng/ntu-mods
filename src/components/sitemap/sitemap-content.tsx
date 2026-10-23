@@ -91,6 +91,11 @@ const TOOL_LINKS = [
       "Free public API and open data for NTU modules, indexes and exams"
   },
   {
+    label: "Quickstart",
+    href: "/developers/quickstart",
+    description: "Make your first API request in a minute"
+  },
+  {
     label: "REST API and open data",
     href: "/developers/api",
     description: "The module API and whole-dataset JSON files, with OpenAPI"
@@ -101,9 +106,60 @@ const TOOL_LINKS = [
     description: "Add NTUMods to Claude, ChatGPT, Claude Code or Cursor"
   },
   {
-    label: "WebMCP and discovery files",
+    label: "Data reference",
+    href: "/developers/data",
+    description: "File layout, semester codes and what each field means"
+  },
+  {
+    label: "Data freshness",
+    href: "/developers/freshness",
+    description: "Where the data comes from and how current it is"
+  },
+  {
+    label: "Status and limits",
+    href: "/developers/status",
+    description: "Rate limits, status codes, caching and availability"
+  },
+  {
+    label: "MCP troubleshooting",
+    href: "/developers/mcp/troubleshooting",
+    description: "Fixes for connection, missing tools and wrong answers"
+  },
+  {
+    label: "MCP tools",
+    href: "/developers/mcp/tools",
+    description: "The six MCP tools, what each returns, and how to call one"
+  },
+  {
+    label: "MCP limits and errors",
+    href: "/developers/mcp/limits",
+    description: "Caps, rate limit, status codes and tool errors"
+  },
+  {
+    label: "WebMCP",
     href: "/developers/webmcp",
-    description: "Browser tools for your plans and files for AI agents"
+    description: "Early preview: browser tools for your own saved plans"
+  },
+  {
+    label: "What you can ask through WebMCP",
+    href: "/developers/webmcp/examples",
+    description: "Example requests for a browser assistant"
+  },
+  {
+    label: "Try WebMCP",
+    href: "/developers/webmcp/try",
+    description: "Turn on the Chrome flag and test the tools"
+  },
+  {
+    label: "WebMCP tools",
+    href: "/developers/webmcp/tools",
+    description: "Every browser tool, grouped by what it does"
+  },
+  {
+    label: "AI discovery files",
+    href: "/developers/discovery",
+    description:
+      "llms.txt, ai-catalog.json and webmcp.json for crawlers and agents"
   },
   {
     label: "Feedback",

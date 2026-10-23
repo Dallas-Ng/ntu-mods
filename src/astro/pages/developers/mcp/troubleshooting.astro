@@ -1,0 +1,133 @@
+---
+import { siteConfig } from "@/config/site"
+import { mcpUrl } from "@/lib/developers/mcp-docs"
+import { Code } from "@/components/developers/code"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const problems = [
+  {
+    id: "connect",
+    title: "The client says it cannot connect",
+    body: [
+      `Check that the URL is exactly ${mcpUrl}, with https and nothing after it.`,
+      "Choose Streamable HTTP as the transport. A client set to SSE or stdio will fail.",
+      "Choose no authentication. The server has no sign-in, so a client that insists on signing in is set to the wrong mode.",
+      "Run the test below. If it works, the server is fine and the problem is in the client's setup."
+    ]
+  },
+  {
+    id: "tools",
+    title: "It connected, but the tools do not show up",
+    body: [
+      "Turn the connector on for the chat. In Claude, click + in the chat box, open Connectors and switch NTUMods on.",
+      "In Cursor, open Customize and check the toggle. In VS Code, open Configure Tools in the Chat view and tick ntumods. In Codex, type /mcp.",
+      "Restart the client, or start a new chat. Many clients read the tool list only when a chat begins."
+    ]
+  },
+  {
+    id: "ignored",
+    title: "The assistant answers without using NTUMods",
+    body: [
+      "Name the source in your question: “Use NTUMods to find the exam date for SC1004”.",
+      "Ask about something the tools cover: modules, class indexes and exams. They do not cover your timetable, grades or STARS."
+    ]
+  },
+  {
+    id: "wrong",
+    title: "The answer is wrong or out of date",
+    body: [
+      "Ask which semester the answer is for. Every answer names one, and an assistant can pick an older one if you do not say.",
+      "Class changes made by NTU after the last data refresh are missing. The freshness page explains when the data updates.",
+      "Always check STARS before you register, bid or drop a module."
+    ]
+  },
+  {
+    id: "rate",
+    title: "429 or 503",
+    body: [
+      "429 means too many requests from your network. Wait the seconds in the Retry-After header and try again.",
+      "503 means the server is switched off or temporarily unavailable. Try again in a few minutes."
+    ]
+  },
+  {
+    id: "other",
+    title: "403, 405, 413 or 415 from your own code",
+    body: [
+      "403: the request came from a browser page on another site. Call the server from a backend or a client, not page JavaScript.",
+      "405: you used GET or another method. Every call is a POST.",
+      "413: the body is over 16 KB. Send one JSON-RPC message, not a batch.",
+      "415: the body is not JSON. Send Content-Type: application/json."
+    ]
+  },
+  {
+    id: "plan",
+    title: "Your plan will not let you add it",
+    body: [
+      "Claude: a free plan can add one custom connector. On Team and Enterprise plans an Owner adds it for the organisation, then you connect it.",
+      "ChatGPT: custom apps need Developer mode, which OpenAI limits to some plans. Check your workspace settings, or ask your workspace admin.",
+      "An official listing in the Claude or ChatGPT directory avoids most of these limits once it is available for your plan."
+    ]
+  }
+]
+
+const testCommand = `curl -s ${mcpUrl} \\
+  -H 'content-type: application/json' \\
+  -H 'accept: application/json, text/event-stream' \\
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'`
+---
+
+<DevDocsLayout
+  title="NTUMods MCP troubleshooting"
+  description="Fixes for common NTUMods MCP problems: cannot connect, tools missing, wrong answers, rate limits and plan restrictions."
+  path="/developers/mcp/troubleshooting"
+  eyebrow="MCP"
+  heading="Troubleshooting"
+  intro="What to check when the connector will not add, the tools are missing or an answer looks wrong.">
+  <div class="flex flex-col gap-4">
+    <h2 id="test">
+      Test the server<HeadingAnchor id="test" label="Test the server" />
+    </h2>
+    <p>
+      This asks the server for its tool list, with no client in between. It
+      should answer with <code>event: message</code> and a list that includes <code
+        >search_modules</code
+      > and <code>get_exam</code>.
+    </p>
+    <Code client:visible lang="bash" code={testCommand} />
+    <p>
+      If that works, the server is up and the problem is in your client. If it
+      fails with a status code, see <a href="/developers/mcp/limits"
+        >MCP limits and errors</a
+      >.
+    </p>
+
+    {
+      problems.map((problem) => (
+        <>
+          <h2 id={problem.id}>
+            {problem.title}
+            <HeadingAnchor id={problem.id} label={problem.title} />
+          </h2>
+          <ul>
+            {problem.body.map((line) => (
+              <li>{line}</li>
+            ))}
+          </ul>
+        </>
+      ))
+    }
+
+    <h2 id="still">
+      Still stuck<HeadingAnchor id="still" label="Still stuck" />
+    </h2>
+    <p>
+      Tell me which client you use and what you see, through the <a
+        href="/feedback">feedback page</a
+      > or <a href={siteConfig.links.repo}>a GitHub issue</a>. The steps for
+      each client are under <a href="/developers/mcp">Adding to</a>.
+    </p>
+  </div>
+</DevDocsLayout>

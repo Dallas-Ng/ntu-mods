@@ -1,0 +1,178 @@
+---
+import { getLatestExamSemester, getLatestSemester } from "@/lib/server/db/repo"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+import { getSiteFacts } from "@/astro/lib/site-facts"
+
+export const prerender = true
+
+const facts = await getSiteFacts()
+const { year, semester } = await getLatestSemester()
+const exams = await getLatestExamSemester()
+const sem = `${year}_${semester}`
+const examSem = exams ? `${exams.year}_${exams.semester}` : null
+const n = (value: number) => value.toLocaleString("en-US")
+
+const delivery = [
+  [
+    "Data files, `/data/api/*`",
+    "Rebuilt with the site when the data is refreshed.",
+    "Browsers and the edge keep a copy for a day, and may serve an older one for up to a week while it refreshes."
+  ],
+  [
+    "Module API, `/api/modules/{code}`",
+    "Read from the database, which is updated with the files.",
+    "Browsers keep it for an hour. The edge keeps it for up to a week, and the copy is cleared after each refresh."
+  ],
+  [
+    "MCP server",
+    "Search, exams and the latest class indexes read the files. Module records and older class indexes read the database.",
+    "The two can disagree for a few minutes after a refresh. Every answer names its semester."
+  ]
+]
+---
+
+<DevDocsLayout
+  title="NTUMods data freshness"
+  description="Where the NTUMods data comes from, how often it is refreshed, how long it is cached, and what it does not cover."
+  path="/developers/freshness"
+  eyebrow="Build with the data"
+  heading="Data freshness"
+  intro="Where the data comes from, how current it is, and what it leaves out.">
+  <div class="flex flex-col gap-4">
+    <h2 id="covered">
+      What is covered<HeadingAnchor id="covered" label="What is covered" />
+    </h2>
+    <ul>
+      <li>
+        <strong>{n(facts.uniqueModuleCodes)} modules</strong>, every code
+        offered since AY2014 Semester 1.
+      </li>
+      <li>
+        <strong>Class indexes</strong> for every semester since then. The latest is
+        <strong>{facts.semesterLabel}</strong> (<code>{sem}</code>), with {
+          n(facts.modules)
+        } modules and {n(facts.indexes)} indexes.
+      </li>
+      <li>
+        <strong>Exams</strong> for each semester once NTU publishes the timetable.
+        {
+          examSem && (
+            <>
+              {" "}
+              The latest is <code>{examSem}</code>, with {n(facts.exams)} exams.
+            </>
+          )
+        }
+      </li>
+    </ul>
+
+    <h2 id="source">
+      Where it comes from<HeadingAnchor
+        id="source"
+        label="Where it comes from"
+      />
+    </h2>
+    <p>
+      Everything is taken from NTU's public course content, class schedule and
+      exam timetable pages. NTUMods is not affiliated with NTU, and the data is
+      not official. When it disagrees with STARS, STARS is right.
+    </p>
+
+    <h2 id="updates">
+      How often it changes<HeadingAnchor
+        id="updates"
+        label="How often it changes"
+      />
+    </h2>
+    <p>
+      The data is refreshed by hand, not on a timer. It usually changes a few
+      times a semester: when NTU publishes the next semester's courses and class
+      schedule, again when the exam timetable comes out, and when NTU corrects
+      something. There is no fixed schedule and no daily update.
+    </p>
+    <p>
+      Two things follow. A new semester can have classes before it has exams, so
+      an exam file can be empty. And NTU can change a class after it is
+      published, which the data only picks up at the next refresh.
+    </p>
+
+    <h2 id="delivery">
+      How it reaches you<HeadingAnchor
+        id="delivery"
+        label="How it reaches you"
+      />
+    </h2>
+    <div class="overflow-x-auto">
+      <table class="data-table text-sm!">
+        <thead>
+          <tr>
+            <th>Source</th>
+            <th>Where the data comes from</th>
+            <th>Caching</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            delivery.map(([source, from, caching]) => (
+              <tr>
+                <td>
+                  <Fragment
+                    set:html={source.replace(/`([^`]+)`/g, "<code>$1</code>")}
+                  />
+                </td>
+                <td>{from}</td>
+                <td>{caching}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="check">
+      Check how fresh your copy is<HeadingAnchor
+        id="check"
+        label="Check how fresh your copy is"
+      />
+    </h2>
+    <ul>
+      <li>
+        Every row in <code>modules.json</code> has <code>latestYear</code>, <code
+          >latestSemester</code
+        > and <code>isCurrentSemester</code>. A module record has the same facts
+        under <code>latestOffering</code>.
+      </li>
+      <li>
+        The semester is in every file name, so you know which one you hold.
+        Store it next to your copy and show it to your users.
+      </li>
+      <li>
+        Over MCP, <code>list_semesters</code> says which semester is current.
+      </li>
+    </ul>
+
+    <h2 id="missing">
+      What is not in the data<HeadingAnchor
+        id="missing"
+        label="What is not in the data"
+      />
+    </h2>
+    <ul>
+      <li>
+        Seat vacancies, bidding results and waitlists. Those live in STARS.
+      </li>
+      <li>Exam venues and seats.</li>
+      <li>Grades, past papers and student reviews.</li>
+      <li>
+        Anything personal. The API and the MCP server never see your timetable.
+      </li>
+    </ul>
+    <p>
+      Check STARS before you register, bid or drop anything. For caching, rate
+      limits and error codes, see <a href="/developers/status"
+        >status and limits</a
+      >.
+    </p>
+  </div>
+</DevDocsLayout>

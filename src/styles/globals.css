@@ -546,3 +546,36 @@ html {
     font-size: 16px !important;
   }
 }
+
+/* Developer docs typography. Every page under /developers renders inside
+   .dev-docs (DevDocsLayout), so headings, paragraphs, lists, links and inline
+   code look the same everywhere without repeating utility classes on each
+   element. They sit in the components layer, so a utility class on an element
+   still wins. */
+@layer components {
+  .dev-docs h2 {
+    @apply scroll-mt-28 text-lg font-semibold tracking-tight;
+  }
+  .dev-docs h2:not(:first-child) {
+    @apply pt-4;
+  }
+  .dev-docs h3 {
+    @apply scroll-mt-28 text-base font-semibold;
+  }
+  .dev-docs p {
+    @apply text-foreground/80 text-sm;
+  }
+  .dev-docs ul {
+    @apply text-foreground/80 list-disc space-y-1.5 pl-5 text-sm;
+  }
+  .dev-docs ol {
+    @apply text-foreground/80 list-decimal space-y-1.5 pl-5 text-sm;
+  }
+  .dev-docs :is(p, li, td) a {
+    @apply text-primary underline underline-offset-2;
+  }
+  /* taste-skill-ignore: inline code is literal code */
+  .dev-docs :not(pre) > code {
+    @apply bg-muted rounded px-1 py-0.5 font-mono text-sm;
+  }
+}

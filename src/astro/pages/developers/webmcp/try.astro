@@ -1,0 +1,118 @@
+---
+import { webmcpToolCount } from "@/lib/developers/webmcp-docs"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+---
+
+<DevDocsLayout
+  title="Try NTUMods WebMCP in Chrome"
+  description="How to test the NTUMods WebMCP tools today: turn on the Chrome flag, add a test extension, and ask for something on the timetable planner."
+  path="/developers/webmcp/try"
+  eyebrow="WebMCP"
+  heading="Try it"
+  intro="Turn on a Chrome flag, add a test extension, and ask for something on the timetable planner.">
+  <div class="flex flex-col gap-4">
+    <p>
+      WebMCP is an early preview, so setup takes a few minutes and suits people
+      comfortable installing a browser extension. If you would rather wait,
+      nothing is lost: it will get easier as browsers and assistants catch up.
+    </p>
+    <h2 id="steps">
+      Steps<HeadingAnchor id="steps" label="Steps" />
+    </h2>
+    <ol>
+      <li>
+        <strong>Use a recent Chrome.</strong> Chrome's origin trial starts from Chrome
+        149, and these steps work for local testing.
+      </li>
+      <li>
+        <strong>Turn WebMCP on.</strong> Open <code
+          >chrome://flags/#enable-webmcp-testing</code
+        > in the address bar, set the flag to Enabled, then relaunch Chrome.
+      </li>
+      <li>
+        <strong>Add an assistant that can use website tools.</strong> Chrome does
+        not include one that is documented to call WebMCP tools yet, so testers use
+        an extension. Chrome's documentation lists two:
+        <ul class="mt-2">
+          <li>
+            The <a
+              href="https://chromewebstore.google.com/detail/model-context-tool-inspec/gbpdfapgefenggkahomfgkhfehlcenpd"
+              >Model Context Tool Inspector</a
+            > from the Chrome Web Store. It shows the tools a page offers and lets
+            you try them with prompts. It needs a Gemini API key.
+          </li>
+          <li>
+            The <a href="https://github.com/GoogleChromeLabs/webmcp-extension/"
+              >Example Agentic Chrome Extension</a
+            > on GitHub. It needs a small local server and your own API key, so it
+            suits developers more than most students.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Open NTUMods and check the tools appear.</strong> Go to the <a
+          href="/timetable">timetable planner</a
+        > and open the extension. You should see about {webmcpToolCount} NTUMods tools
+        listed. If you see none, check that the flag is enabled and that you relaunched
+        Chrome.
+      </li>
+      <li>
+        <strong>Ask for something specific</strong>, such as the <a
+          href="/developers/webmcp/examples">examples</a
+        >, and check the result on the page.
+      </li>
+    </ol>
+    <p>
+      New to this? Run the <a
+        href="https://googlechromelabs.github.io/webmcp-tools/demos/explainer/#compare"
+        >comparison demo</a
+      > with the same extension first. It is a small page with two tools, so it is
+      an easy way to confirm your setup works before you try NTUMods.
+    </p>
+
+    <h2 id="cautions">
+      Before you start<HeadingAnchor id="cautions" label="Before you start" />
+    </h2>
+    <ul>
+      <li>
+        An API key is tied to your own account and usage. Only paste it into an
+        extension you trust, and keep an eye on any usage limits.
+      </li>
+      <li>
+        Gemini in Chrome is a separate feature, and Chrome's documentation does
+        not say it can call WebMCP tools.
+      </li>
+      <li>
+        You can read the full list of NTUMods tools with no setup in <a
+          href="/.well-known/webmcp.json">webmcp.json</a
+        >, or on the <a href="/developers/webmcp/tools">tools page</a>.
+      </li>
+    </ul>
+
+    <h2 id="read">
+      What to read<HeadingAnchor id="read" label="What to read" />
+    </h2>
+    <ul>
+      <li>
+        <a href="https://developer.chrome.com/docs/ai/webmcp"
+          >WebMCP on Chrome for Developers</a
+        >: the overview, with setup and testing tools. Start here.
+      </li>
+      <li>
+        <a href="https://developer.chrome.com/docs/ai/webmcp/imperative-api"
+          >Imperative API guide</a
+        >: how a site registers tools, which is the approach NTUMods uses.
+      </li>
+      <li>
+        <a href="https://github.com/webmachinelearning/webmcp"
+          >WebMCP on GitHub</a
+        > and the <a href="https://webmachinelearning.github.io/webmcp/"
+          >specification</a
+        >: the standard itself, where you can follow progress and report issues.
+      </li>
+    </ul>
+  </div>
+</DevDocsLayout>

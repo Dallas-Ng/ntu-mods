@@ -1,0 +1,196 @@
+---
+import { siteConfig } from "@/config/site"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const limits = [
+  [
+    "Module API, `/api/modules/{code}`",
+    "About 60 requests a minute from one address, counted per Cloudflare location. Cached responses do not count.",
+    "`429` with `Retry-After`"
+  ],
+  [
+    "Data files, `/data/api/*`",
+    "No fixed limit. They are static files cached for a day, so download each one once.",
+    "Heavy use may be blocked"
+  ],
+  [
+    "MCP server, `/mcp`",
+    "3,000 requests a minute from one address. A body over 16 KB is refused, and results are capped at 100 modules or 200 exams.",
+    "`429` with `Retry-After`"
+  ]
+]
+
+const codes = [
+  ["200", "Success."],
+  [
+    "308",
+    "The module URL was not canonical. Follow the `Location` header, or send an uppercase code and no query string."
+  ],
+  ["400", "The module code is not letters and digits, 2 to 12 characters."],
+  [
+    "404",
+    "No such module, or no such semester file. The error body names what was missing."
+  ],
+  [
+    "429",
+    "Too many requests. Wait the number of seconds in `Retry-After`, then try again."
+  ],
+  [
+    "503",
+    "The service is temporarily unavailable or switched off. Wait the seconds in `Retry-After`. Do not retry in a tight loop."
+  ],
+  [
+    "403, 405, 413, 415",
+    "MCP only: a browser on another site, a method other than POST, a body over 16 KB, or a body that is not JSON."
+  ]
+]
+
+const code = (text: string) => text.replace(/`([^`]+)`/g, "<code>$1</code>")
+---
+
+<DevDocsLayout
+  title="NTUMods API status and limits"
+  description="Rate limits, status codes, caching, CORS and availability for the NTUMods API, data files and MCP server."
+  path="/developers/status"
+  eyebrow="Build with the data"
+  heading="Status and limits"
+  intro="How much you can ask for, what the error codes mean, and what to expect when something is slow or down.">
+  <div class="flex flex-col gap-4">
+    <h2 id="limits">
+      Rate limits<HeadingAnchor id="limits" label="Rate limits" />
+    </h2>
+    <p>
+      There is no key, so limits are per network address. Many students share
+      one address on campus Wi-Fi, so the numbers are generous. They are there
+      to stop floods, not to ration normal use.
+    </p>
+    <div class="overflow-x-auto">
+      <table class="data-table text-sm!">
+        <thead>
+          <tr>
+            <th>Surface</th>
+            <th>Limit</th>
+            <th>When you pass it</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            limits.map(([surface, limit, result]) => (
+              <tr>
+                <td>
+                  <Fragment set:html={code(surface)} />
+                </td>
+                <td>
+                  <Fragment set:html={code(limit)} />
+                </td>
+                <td>
+                  <Fragment set:html={code(result)} />
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      The MCP server's limits, in order of checks, are on the <a
+        href="/developers/mcp/limits">MCP limits and errors</a
+      > page.
+    </p>
+
+    <h2 id="codes">
+      Status codes<HeadingAnchor id="codes" label="Status codes" />
+    </h2>
+    <div class="overflow-x-auto">
+      <table class="data-table text-sm!">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            codes.map(([status, meaning]) => (
+              <tr>
+                <td class="whitespace-nowrap">
+                  <code>{status}</code>
+                </td>
+                <td>
+                  <Fragment set:html={code(meaning)} />
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="caching">
+      Caching and CORS<HeadingAnchor id="caching" label="Caching and CORS" />
+    </h2>
+    <ul>
+      <li>
+        Module API responses are cached for an hour in the browser and up to a
+        week at the edge. Data files are cached for a day.
+      </li>
+      <li>
+        The module API and the data files send <code
+          >Access-Control-Allow-Origin: *</code
+        >, so JavaScript on any site can read them. The MCP server does not, and
+        refuses browsers on other sites.
+      </li>
+      <li>
+        Unknown module codes are cached too, so a repeated miss is cheap for you
+        and for the server.
+      </li>
+      <li>
+        How current the data itself is, is on the <a
+          href="/developers/freshness">data freshness</a
+        > page.
+      </li>
+    </ul>
+
+    <h2 id="retry">
+      When to retry<HeadingAnchor id="retry" label="When to retry" />
+    </h2>
+    <ul>
+      <li>
+        Retry only <code>429</code> and <code>503</code>, and wait the seconds
+        in <code>Retry-After</code> first.
+      </li>
+      <li>
+        If a retry fails again, wait longer each time, and stop after a few
+        tries.
+      </li>
+      <li>
+        Do not retry <code>400</code> or <code>404</code>. Fix the request.
+      </li>
+      <li>
+        Send requests one at a time or in small groups. For many modules,
+        download <code>modules.json</code> instead.
+      </li>
+    </ul>
+
+    <h2 id="availability">
+      Availability<HeadingAnchor id="availability" label="Availability" />
+    </h2>
+    <p>
+      NTUMods is built and run by one person, and it is free. There is no uptime
+      promise, no support contract and no status page. Under the <a
+        href="/developers#terms">terms of use</a
+      >, any API or dataset can change or go away without notice, so build in a
+      fallback for the day it does.
+    </p>
+    <p>
+      If something looks broken, wait a minute and try again. If it stays
+      broken, tell me through the <a href="/feedback">feedback page</a> or <a
+        href={siteConfig.links.repo}>open an issue on GitHub</a
+      >.
+    </p>
+  </div>
+</DevDocsLayout>

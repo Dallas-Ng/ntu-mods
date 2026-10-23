@@ -25,6 +25,24 @@ interface Props {
   nested?: boolean
 }
 
+// Where a section lands after a jump: just below the navbar. The same line
+// decides which section is active, so the one jumped to is highlighted.
+const SCROLL_OFFSET = 128
+
+/** Smooth-scrolls to a heading (instant with reduced motion) and sets the hash. */
+const scrollToHeading = (id: string) => {
+  const element = document.getElementById(id)
+  if (!element) return
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  window.scrollTo({
+    top:
+      element.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET + 1,
+    behavior: reduce ? "auto" : "smooth"
+  })
+  window.history.replaceState(null, "", `#${id}`)
+}
+
 // Tracks which heading is currently at the top of the viewport.
 const useActiveHeading = (visibleHeadings: TocHeading[]) => {
   const [activeId, setActiveId] = useState(visibleHeadings[0]?.id || "")
@@ -41,11 +59,10 @@ const useActiveHeading = (visibleHeadings: TocHeading[]) => {
     let animationFrame = 0
 
     const updateActiveHeading = () => {
-      const offset = 128
       const current = elements.reduce((active, element) => {
         const top = element.getBoundingClientRect().top
 
-        if (top <= offset) return element
+        if (top <= SCROLL_OFFSET) return element
         return active
       }, elements[0])
 
@@ -90,10 +107,6 @@ const getVisibleHeadings = (headings: TocHeading[], nested?: boolean) =>
     (heading) => heading.depth === 2 || (nested && heading.depth === 3)
   )
 
-// Matches the offset used to decide which section is active, so a section
-// lands just below the navbar and the sticky bar.
-const MOBILE_SCROLL_OFFSET = 128
-
 /**
  * "On this page" for screens without the side nav: a square button under the
  * navbar opens a drawer from the right listing every section. It stays out of
@@ -123,20 +136,7 @@ export const MobileSectionDropdown = ({ headings, nested }: Props) => {
     setOpen(false)
 
     // Wait for the drawer to release its scroll lock before scrolling.
-    window.setTimeout(() => {
-      const element = document.getElementById(id)
-      if (!element) return
-
-      window.scrollTo({
-        top:
-          element.getBoundingClientRect().top +
-          window.scrollY -
-          MOBILE_SCROLL_OFFSET +
-          1,
-        behavior: "smooth"
-      })
-      window.history.replaceState(null, "", `#${id}`)
-    }, 250)
+    window.setTimeout(() => scrollToHeading(id), 250)
   }
 
   return (
@@ -260,6 +260,10 @@ const ArticleToc = ({ headings, nested }: Props) => {
                 )}
                 <a
                   href={`#${heading.id}`}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    scrollToHeading(heading.id)
+                  }}
                   aria-current={isActive ? "true" : undefined}
                   className={cn(
                     sideNavItem({ active: isActive, highlight: "sliding" }),

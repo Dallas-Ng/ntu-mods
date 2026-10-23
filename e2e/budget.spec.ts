@@ -7,11 +7,14 @@ import { DIST, sample, sitemapPaths } from "./lib/urls"
 
 // No server needed: reads the built HTML and the chunks it pulls in up front
 // (entry scripts, islands, their static imports). Dynamic imports are lazy and
-// not counted. Measured today: 315-355 KB gzipped per page.
-const BUDGET_KB = 400
+// not counted, and neither are client:visible / idle islands (fetched later).
+// Measured today: 298-337 KB gzipped per page.
+const BUDGET_KB = 380
 
 // Heavy libraries that must stay behind dynamic imports.
-const FORBIDDEN = /vendor-pdfjs|pdf\.worker|vendor-webllm/
+// vendor-forms (zod, react-hook-form) belongs to the footer feedback card,
+// which hydrates on scroll; it must not creep into the initial load.
+const FORBIDDEN = /vendor-pdfjs|pdf\.worker|vendor-webllm|vendor-forms/
 const ARTICLE_ONLY = /vendor-photoswipe/
 
 const builtPage = (p: string) =>

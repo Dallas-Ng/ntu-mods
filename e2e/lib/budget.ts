@@ -6,7 +6,10 @@ import { DIST } from "./urls"
 
 const ASSET = /^\/_astro\/[^"'?#]+\.js$/
 const ENTRY_ATTR =
-  /(?:\bsrc|\bhref|component-url|renderer-url|before-hydration-url)="(\/_astro\/[^"]+\.js)"/g
+  /(?:\bsrc|\bhref|renderer-url|before-hydration-url)="(\/_astro\/[^"]+\.js)"/g
+// client:visible / idle / media islands fetch their component later, so only
+// load and only islands count as up-front JS.
+const ISLAND = /<astro-island\b[^>]*>/g
 // Static `import ... from "./x.js"` and bare `import "./x.js"`; dynamic
 // `import("./x.js")` is lazy, so it is deliberately not followed.
 const STATIC_IMPORT = /(?:\bfrom\s*|\bimport\s*)["'](\.\/[^"']+\.js)["']/g
@@ -19,9 +22,13 @@ export interface JsCost {
 /** Client JS a page loads up front: entry scripts, islands and their static imports. */
 export function initialJs(htmlFile: string): JsCost {
   const html = fs.readFileSync(htmlFile, "utf8")
-  const queue = [...html.matchAll(ENTRY_ATTR)]
-    .map((m) => m[1])
-    .filter((u) => ASSET.test(u))
+  const islands = [...html.matchAll(ISLAND)]
+    .filter((m) => /\bclient="(load|only)"/.test(m[0]))
+    .map((m) => /component-url="([^"]+)"/.exec(m[0])?.[1] ?? "")
+  const queue = [
+    ...[...html.matchAll(ENTRY_ATTR)].map((m) => m[1]),
+    ...islands
+  ].filter((u) => ASSET.test(u))
   const seen = new Set<string>()
   let gzipBytes = 0
   while (queue.length) {

@@ -195,10 +195,11 @@ export const MobileSectionDropdown = ({ headings, nested }: Props) => {
                   aria-current={heading.id === activeId ? "true" : undefined}
                   className={cn(
                     "text-muted-foreground active:bg-muted flex items-baseline justify-between gap-3 rounded-lg px-3 py-3 text-sm leading-5",
-                    heading.depth === 3 && "pl-7",
+                    heading.depth === 3 &&
+                      "before:bg-muted-foreground/25 relative pl-7 before:absolute before:inset-y-0 before:left-4 before:w-px",
                     nested &&
                       heading.depth === 2 &&
-                      "text-foreground font-medium",
+                      "pt-4 pb-1 text-xs font-semibold tracking-wide uppercase",
                     heading.id === activeId &&
                       "bg-muted text-foreground font-medium"
                   )}>
@@ -293,8 +294,12 @@ const ArticleToc = ({ headings, nested }: Props) => {
                   aria-current={isActive ? "true" : undefined}
                   className={cn(
                     "text-muted-foreground hover:text-foreground relative block rounded-lg px-3 py-1.5 leading-5 transition-colors duration-300",
-                    heading.depth === 3 && "pl-6 text-[13px]",
-                    nested && heading.depth === 2 && "font-medium",
+                    heading.depth === 3 &&
+                      "before:bg-muted-foreground/25 pl-6 text-[13px] before:absolute before:inset-y-0 before:left-3 before:w-px",
+                    nested &&
+                      heading.depth === 2 &&
+                      "pt-2 pb-1 text-xs font-semibold tracking-wide uppercase",
+                    nested && heading.depth === 2 && i > 0 && "mt-2",
                     isActive && "text-foreground"
                   )}>
                   <span className="flex items-baseline justify-between gap-2">

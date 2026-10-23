@@ -25,9 +25,7 @@ const FOOTER_GROUPS = [
       { label: "Links", href: "/links" },
       { label: "Changelog", href: "/changelog" },
       { label: "Feedback", href: "/feedback" },
-      { label: "FAQ", href: "/faq" },
-      { label: "GitHub", href: siteConfig.links.repo },
-      { label: "Contribute", href: `${siteConfig.links.repo}#contributing` }
+      { label: "FAQ", href: "/faq" }
     ]
   }
 ]
@@ -36,6 +34,7 @@ const LEGAL_LINKS = [
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
   { label: "AI instructions", href: "/ai-instructions" },
+  { label: "GitHub", href: siteConfig.links.repo },
   { label: "Developers", href: "/developers" },
   { label: "Sitemap", href: "/sitemap" }
 ] as const
@@ -75,10 +74,6 @@ const Footer = () => {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    {...(link.href.startsWith("http") && {
-                      target: "_blank",
-                      rel: "noopener noreferrer"
-                    })}
                     className="text-foreground/80 hover:text-primary transition-colors">
                     {link.label}
                   </a>
@@ -99,6 +94,10 @@ const Footer = () => {
             <li key={link.href}>
               <a
                 href={link.href}
+                {...(link.href.startsWith("http") && {
+                  target: "_blank",
+                  rel: "noopener noreferrer"
+                })}
                 className="hover:text-primary transition-colors">
                 {link.label}
               </a>

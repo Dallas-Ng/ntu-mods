@@ -19,6 +19,7 @@ interface Loaded {
   seo: SeoSnapshot
   status: number
   robotsHeader: string
+  snapshotHeader: string
 }
 const loaded = new Map<string, Promise<Loaded>>()
 
@@ -37,7 +38,8 @@ const load = (
         const out = {
           seo: await readSeo(page),
           status: res?.status() ?? 0,
-          robotsHeader: (await res?.headerValue("x-robots-tag")) ?? ""
+          robotsHeader: (await res?.headerValue("x-robots-tag")) ?? "",
+          snapshotHeader: (await res?.headerValue("x-module-snapshot")) ?? ""
         }
         await page.close()
         return out
@@ -60,11 +62,13 @@ const checks: Array<
 > = [
   [
     "Responds 200 and is indexable",
-    ({ status, robotsHeader }) => [
+    ({ status, robotsHeader, snapshotHeader }) => [
       ...(status === 200 ? [] : [`status ${status}`]),
       ...(/noindex/i.test(robotsHeader)
         ? [`x-robots-tag: ${robotsHeader}`]
-        : [])
+        : []),
+      // set by 404.astro on real module pages; must not leak into a 200
+      ...(snapshotHeader ? [`leaks x-module-snapshot: ${snapshotHeader}`] : [])
     ]
   ],
   [

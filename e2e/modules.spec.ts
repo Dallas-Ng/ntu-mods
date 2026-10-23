@@ -15,7 +15,10 @@ import { sample, SITE, sitemapPaths } from "./lib/urls"
 //   /mods/CODE/Y/S (latest) same data as /mods/CODE, so it canonicalises there.
 //   /mods/CODE/Y/S (older)  archive page, self-canonical.
 // A new semester only moves codes between "static" and "on demand"; the URL,
-// status and canonical of /mods/CODE must not change.
+// status and canonical of /mods/CODE must not change. The per-page checks for
+// /mods/CODE itself (200, indexable, self-canonical, no snapshot header) live
+// in pages.spec; this file covers what only it can: the current/past split,
+// latest-semester canonicalisation and the sitemap policy.
 const N = Number(process.env.SEO_SAMPLE || 20)
 
 const offerings = latestOfferings()
@@ -29,8 +32,6 @@ const canonicalOf = (html: string) =>
   [...html.matchAll(/<link[^>]+rel="canonical"[^>]*>/g)].map(
     (m) => /href="([^"]*)"/.exec(m[0])?.[1]
   )
-const noindex = (html: string, header: string) =>
-  /<meta[^>]+name="robots"[^>]+noindex/i.test(html) || /noindex/i.test(header)
 
 test.describe("module URL strategy", () => {
   test("test data has current and past-only modules", () => {
@@ -45,26 +46,6 @@ test.describe("module URL strategy", () => {
     ["current-semester", current],
     ["past-only", past]
   ] as const) {
-    test(`/mods/CODE for ${label} modules is 200, indexable, self-canonical`, async ({
-      request
-    }) => {
-      const bad: string[] = []
-      for (const o of sample(group, N, `mods-${label}`)) {
-        const p = `/mods/${o.code}`
-        const res = await request.get(p, { maxRedirects: 0 })
-        const html = await res.text()
-        const c = canonicalOf(html)
-        if (res.headers()["x-module-snapshot"])
-          bad.push(`${p} leaks x-module-snapshot`)
-        if (res.status() !== 200) bad.push(`${p} -> ${res.status()}`)
-        else if (noindex(html, res.headers()["x-robots-tag"] ?? ""))
-          bad.push(`${p} noindex`)
-        else if (c.length !== 1 || c[0] !== `${SITE}${p}`)
-          bad.push(`${p} canonical ${c.join(",")}`)
-      }
-      expect(bad).toEqual([])
-    })
-
     test(`${label} /mods/CODE shows the latest offered semester`, async ({
       request
     }) => {

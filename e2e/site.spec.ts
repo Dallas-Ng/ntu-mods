@@ -158,31 +158,34 @@ test.describe("machine-readable files", () => {
   }
 })
 
-// Mirrors `redirects` in astro.config.mjs.
+// Mirrors `redirects` in astro.config.mjs, plus the lowercase module-code
+// redirect from the middleware.
 const REDIRECTS: [string, string][] = [
   ["/stars", "/timetable"],
   ["/mod", "/mods"],
   ["/help", "/faq"],
-  ["/fgo", "/tools/fgo-optimiser"]
+  ["/fgo", "/tools/fgo-optimiser"],
+  ["/mods/ee3011", "/mods/EE3011"]
 ]
 
 test.describe("redirects", () => {
-  for (const [from, to] of REDIRECTS) {
-    test(`${from} -> ${to} in one 301 hop`, async ({ request }) => {
-      const res = await request.get(from, { maxRedirects: 0 })
-      expect(res.status()).toBe(301)
-      expect(local(res.headers().location)).toBe(to)
-      const next = await request.get(to, { maxRedirects: 0 })
-      expect(next.status()).toBe(200)
-    })
-  }
-
-  test("lowercase module code redirects once to the canonical case", async ({
+  test("legacy and lowercase paths redirect in one 301 hop to a 200", async ({
     request
   }) => {
-    const res = await request.get("/mods/ee3011", { maxRedirects: 0 })
-    expect(res.status()).toBe(301)
-    expect(local(res.headers().location)).toBe("/mods/EE3011")
+    const bad: string[] = []
+    await Promise.all(
+      REDIRECTS.map(async ([from, to]) => {
+        const res = await request.get(from, { maxRedirects: 0 })
+        const where = res.headers().location
+        if (res.status() !== 301 || !where || local(where) !== to) {
+          bad.push(`${from} -> ${res.status()} ${where} (want 301 ${to})`)
+          return
+        }
+        const next = await request.get(to, { maxRedirects: 0 })
+        if (next.status() !== 200) bad.push(`${to} -> ${next.status()}`)
+      })
+    )
+    expect(bad).toEqual([])
   })
 
   test("trailing slash does not create a duplicate or a chain", async ({

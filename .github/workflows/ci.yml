@@ -146,9 +146,13 @@ jobs:
           pnpm test & unit=$!
           wait $browser && wait $build && wait $seed && wait $unit
 
+      # The seed is printed up front so a failure on a rotating (main) seed
+      # can be reproduced locally with the same sample.
       - name: Run E2E SEO tests
         if: steps.changes.outputs.code == 'true'
-        run: pnpm test:e2e
+        run: |
+          echo "::notice title=E2E sample::SEO_SEED=$SEO_SEED SEO_SAMPLE=$SEO_SAMPLE PRERENDER_MODULE_LIMIT=$PRERENDER_MODULE_LIMIT"
+          pnpm test:e2e
 
       - name: Upload report
         if: failure()

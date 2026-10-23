@@ -1,9 +1,14 @@
+import fs from "node:fs"
 import { expect, test } from "@playwright/test"
 
 import {
+  latestOfferings,
+  versionedOfferings
+} from "../src/lib/server/db/json-source"
+import {
   BASE_URL,
+  distHtmlFiles,
   pagesUnderTest,
-  sample,
   SITE,
   sitemapPaths
 } from "./lib/urls"
@@ -31,6 +36,8 @@ const inBatches = async <T>(
     await Promise.all(items.slice(i, i + size).map(fn))
   }
 }
+
+const MODULE_PATH = /^\/mods\/[A-Z0-9]+(\/\d{4}\/[12ST])?$/
 
 // One crawl of every sampled page plus all articles, shared by the tests below.
 test.describe("crawl", () => {
@@ -88,25 +95,36 @@ test.describe("crawl", () => {
     }
     // Every distinct internal target answers 200 directly: a link that 3xx's
     // wastes crawl budget and one that 404s is a bug.
-    // Module pages mostly render on demand (D1), so requesting every linked
-    // one is slow; they are covered by the per-page and module specs. Check
-    // every other target and a sample of module targets.
-    const moduleTarget = /^\/mods\/[A-Z0-9]+(\/\d{4}\/[12ST])?$/
-    const entries = [...targets]
-    const toCheck = [
-      ...entries.filter(([t]) => !moduleTarget.test(t)),
-      ...sample(
-        entries.filter(([t]) => moduleTarget.test(t)),
-        40,
-        "links-modules"
-      )
-    ]
+    // Module links are checked against the data below, without requests:
+    // most module pages render on demand, so fetching them all is slow.
+    const toCheck = [...targets].filter(([t]) => !MODULE_PATH.test(t))
     await inBatches(toCheck, 50, async ([t, from]) => {
       const r = await request.get(t, { maxRedirects: 0 })
       if (r.status() !== 200) problems.push(`${from}: ${t} -> ${r.status()}`)
     })
     await request.dispose()
     expect(problems).toEqual([])
+  })
+
+  test("module links in every built page point at a real module or semester", () => {
+    const known = new Set<string>()
+    for (const o of latestOfferings()) {
+      known.add(`/mods/${o.code}`)
+      known.add(`/mods/${o.code}/${o.year}/${o.semester}`)
+    }
+    for (const o of versionedOfferings(0))
+      known.add(`/mods/${o.code}/${o.year}/${o.semester}`)
+
+    const bad: string[] = []
+    for (const file of distHtmlFiles()) {
+      const page = fs.readFileSync(file, "utf8")
+      for (const { href } of hrefsOf(page)) {
+        const target = internal(href, "/")
+        if (target && MODULE_PATH.test(target) && !known.has(target))
+          bad.push(`${file.split("dist/client")[1]}: ${href}`)
+      }
+    }
+    expect(bad).toEqual([])
   })
 
   test("no orphan articles or static pages", () => {

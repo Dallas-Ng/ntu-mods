@@ -27,6 +27,8 @@ type TocHeading = ArticleHeading & { group?: string; count?: number }
 
 interface Props {
   headings: TocHeading[]
+  /** Also list depth-3 headings, indented under the depth-2 heading above. */
+  nested?: boolean
 }
 
 // Tracks which heading is currently at the top of the viewport.
@@ -89,8 +91,10 @@ const useActiveHeading = (visibleHeadings: TocHeading[]) => {
   return activeId
 }
 
-const getVisibleHeadings = (headings: TocHeading[]) =>
-  headings.filter((heading) => heading.depth === 2)
+const getVisibleHeadings = (headings: TocHeading[], nested?: boolean) =>
+  headings.filter(
+    (heading) => heading.depth === 2 || (nested && heading.depth === 3)
+  )
 
 // Matches the offset used to decide which section is active, so a section
 // lands just below the navbar and the sticky bar.
@@ -102,10 +106,10 @@ const MOBILE_SCROLL_OFFSET = 128
  * headings get a full-width row each instead of being squeezed into chips.
  * It stays out of the way until the reader has scrolled past the top.
  */
-export const MobileSectionDropdown = ({ headings }: Props) => {
+export const MobileSectionDropdown = ({ headings, nested }: Props) => {
   const visibleHeadings = useMemo(
-    () => getVisibleHeadings(headings),
-    [headings]
+    () => getVisibleHeadings(headings, nested),
+    [headings, nested]
   )
   const activeId = useActiveHeading(visibleHeadings)
   const [open, setOpen] = useState(false)
@@ -191,6 +195,10 @@ export const MobileSectionDropdown = ({ headings }: Props) => {
                   aria-current={heading.id === activeId ? "true" : undefined}
                   className={cn(
                     "text-muted-foreground active:bg-muted flex items-baseline justify-between gap-3 rounded-lg px-3 py-3 text-sm leading-5",
+                    heading.depth === 3 && "pl-7",
+                    nested &&
+                      heading.depth === 2 &&
+                      "text-foreground font-medium",
                     heading.id === activeId &&
                       "bg-muted text-foreground font-medium"
                   )}>
@@ -210,10 +218,10 @@ export const MobileSectionDropdown = ({ headings }: Props) => {
   )
 }
 
-const ArticleToc = ({ headings }: Props) => {
+const ArticleToc = ({ headings, nested }: Props) => {
   const visibleHeadings = useMemo(
-    () => getVisibleHeadings(headings),
-    [headings]
+    () => getVisibleHeadings(headings, nested),
+    [headings, nested]
   )
   const activeId = useActiveHeading(visibleHeadings)
   const navRef = useRef<HTMLElement>(null)
@@ -285,6 +293,8 @@ const ArticleToc = ({ headings }: Props) => {
                   aria-current={isActive ? "true" : undefined}
                   className={cn(
                     "text-muted-foreground hover:text-foreground relative block rounded-lg px-3 py-1.5 leading-5 transition-colors duration-300",
+                    heading.depth === 3 && "pl-6 text-[13px]",
+                    nested && heading.depth === 2 && "font-medium",
                     isActive && "text-foreground"
                   )}>
                   <span className="flex items-baseline justify-between gap-2">

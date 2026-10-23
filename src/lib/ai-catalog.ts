@@ -55,6 +55,14 @@ export function buildAiCatalog({
         ["webmcp", "tools", "timetable", "ntu"]
       ),
       entry(
+        "mcp-server",
+        "application/json",
+        "/mcp",
+        "NTUMods MCP server",
+        "Public, read-only MCP server (Streamable HTTP, POST, no sign-in) with tools to list semesters, search modules, and read module records, class indexes and exams. Logs only the tool name, status, latency and client name per call, never the arguments. Setup: /developers/mcp.",
+        ["mcp", "tools", "modules", "ntu"]
+      ),
+      entry(
         "llms-txt",
         "text/plain",
         "/llms.txt",

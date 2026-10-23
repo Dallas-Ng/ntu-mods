@@ -1,0 +1,171 @@
+---
+import { siteConfig } from "@/config/site"
+import {
+  claudeCodeCommand,
+  cursorConfig,
+  mcpTools,
+  mcpUrl
+} from "@/lib/developers/mcp-docs"
+import { Code } from "@/components/developers/code"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const { title, desc } = siteConfig.metatags.developersMcp
+
+const headings = [
+  { id: "connect", depth: 2, text: "Connect" },
+  { id: "tools", depth: 2, text: "Tools" },
+  { id: "limits", depth: 2, text: "Limits and errors" }
+]
+const link = "text-primary underline underline-offset-2"
+---
+
+<DevDocsLayout
+  title={title}
+  description={desc}
+  path="/developers/mcp"
+  heading="MCP server"
+  intro="A public, read-only MCP server for NTU modules, class indexes and exams. No sign-in and no key."
+  headings={headings}>
+  <div class="flex flex-col gap-4">
+    <p class="text-foreground/80 text-sm">
+      NTUMods runs a read-only MCP server at <code
+        class="bg-muted rounded px-1 py-0.5 font-mono text-sm">{mcpUrl}</code
+      >. Add it to Claude, ChatGPT, Claude Code or Cursor and your assistant can
+      look up modules, class indexes and exams for you. It serves the same data
+      as the <a class={link} href="/developers/api">REST API and data files</a>,
+      and needs no sign-in or key. Use the API or the data files in your own
+      code, and the MCP server when you want an AI assistant to ask the
+      questions.
+    </p>
+
+    <h2
+      id="connect"
+      class="scroll-mt-28 pt-4 text-lg font-semibold tracking-tight">
+      Connect<HeadingAnchor id="connect" label="Connect" />
+    </h2>
+    <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
+      <li>
+        <strong>Claude</strong> (claude.ai and the desktop app): open Customize, then
+        Connectors, then Add custom connector. Enter the URL above, choose No sign-in,
+        and add it. Free plans can add one custom connector. On Team and Enterprise
+        plans an Owner adds it for the organisation.
+      </li>
+      <li>
+        <strong>ChatGPT</strong>: turn on developer mode, then create an app
+        with the URL above and choose No authentication. Which plans have
+        developer mode is up to OpenAI, so check your workspace.
+      </li>
+      <li><strong>Claude Code</strong>: run this command.</li>
+    </ul>
+    <Code client:visible code={claudeCodeCommand} lang="bash" />
+    <p class="text-foreground/80 text-sm">
+      <strong>Cursor</strong>: add this to <code
+        class="bg-muted rounded px-1 py-0.5 font-mono text-sm">mcp.json</code
+      >.
+    </p>
+    <Code client:visible code={cursorConfig} lang="json" />
+
+    <h2
+      id="tools"
+      class="scroll-mt-28 pt-4 text-lg font-semibold tracking-tight">
+      Tools<HeadingAnchor id="tools" label="Tools" />
+    </h2>
+    <div class="overflow-x-auto">
+      <table class="data-table text-sm!">
+        <thead>
+          <tr>
+            <th>Tool</th>
+            <th>What it does</th>
+            <th>Inputs</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            mcpTools.map((tool) => (
+              <tr>
+                <td class="whitespace-nowrap">
+                  <code class="bg-muted rounded px-1 py-0.5 font-mono text-sm">
+                    {tool.name}
+                  </code>
+                </td>
+                <td>{tool.description}</td>
+                <td class="space-y-1">
+                  {tool.inputs.length === 0 && "None"}
+                  {tool.inputs.map((input) => (
+                    <div>
+                      <code class="bg-muted rounded px-1 py-0.5 font-mono text-sm">
+                        {input.name}
+                      </code>{" "}
+                      <span class="text-muted-foreground">
+                        {input.type}
+                        {input.required ? ", required" : ""}.
+                      </span>{" "}
+                      {input.description}
+                    </div>
+                  ))}
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="text-foreground/80 text-sm">
+      Your timetable, plans, favourites and CGPA live in your own browser, so
+      the MCP server cannot see them. The <a
+        class={link}
+        href="/developers/webmcp">WebMCP tools</a
+      > cover those.
+    </p>
+
+    <h2
+      id="limits"
+      class="scroll-mt-28 pt-4 text-lg font-semibold tracking-tight">
+      Limits and errors<HeadingAnchor id="limits" label="Limits and errors" />
+    </h2>
+    <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
+      <li>
+        Every call is one JSON-RPC message sent with <code
+          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">POST</code
+        >. Batches are rejected.
+      </li>
+      <li>
+        Results are capped: 100 modules for <code
+          class="bg-muted rounded px-1 py-0.5 font-mono text-sm"
+          >search_modules</code
+        > and 200 exams for <code
+          class="bg-muted rounded px-1 py-0.5 font-mono text-sm"
+          >list_exams</code
+        >. For everything at once, download the data files in the <a
+          class={link}
+          href="/developers/api">REST API docs</a
+        >.
+      </li>
+      <li>
+        Many people share the same network address, so the per-address limit is
+        high. Back off on <code
+          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">429</code
+        > and wait the number of seconds in the <code
+          class="bg-muted rounded px-1 py-0.5 font-mono text-sm"
+          >Retry-After</code
+        > header.
+      </li>
+      <li>
+        A browser on another site gets <code
+          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">403</code
+        >, other methods get <code
+          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">405</code
+        >, and bodies over 16 KB get <code
+          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">413</code
+        >.
+      </li>
+      <li>
+        Text in module records comes from NTU. Treat it as data, not as
+        instructions.
+      </li>
+    </ul>
+  </div>
+</DevDocsLayout>

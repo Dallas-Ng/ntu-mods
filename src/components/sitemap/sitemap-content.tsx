@@ -91,6 +91,21 @@ const TOOL_LINKS = [
       "Free public API and open data for NTU modules, indexes and exams"
   },
   {
+    label: "REST API and open data",
+    href: "/developers/api",
+    description: "The module API and whole-dataset JSON files, with OpenAPI"
+  },
+  {
+    label: "MCP server",
+    href: "/developers/mcp",
+    description: "Add NTUMods to Claude, ChatGPT, Claude Code or Cursor"
+  },
+  {
+    label: "WebMCP and discovery files",
+    href: "/developers/webmcp",
+    description: "Browser tools for your plans and files for AI agents"
+  },
+  {
     label: "Feedback",
     href: "/feedback",
     description: "Share feedback, report a bug, or suggest an improvement"

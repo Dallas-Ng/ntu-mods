@@ -51,3 +51,23 @@ Set these as Worker secrets (not in `.env`); they are read through `locals.runti
 | ---------------------- | ----------------------------------------------- |
 | `RESEND_KEY`           | `/api/feedback`, which sends the feedback email |
 | `PUBLIC_POSTHOG_TOKEN` | PostHog, client and server-side capture         |
+
+## MCP server
+
+`/mcp` is public and needs no secret to run. It adds one rate limit binding, `MCP_LIMITER` (3000 a minute per IP, a flood ceiling rather than a per-user limit), declared in `wrangler.jsonc`. Previews do not inherit it, so previews are not limited. Design and limits: [mcp.md](mcp.md).
+
+**Kill switch.** Set the optional `MCP_DISABLED` secret to any value and `/mcp` answers 503 on the next request. It is a secret, so deploys keep it, and it works on the free plan with no build.
+
+```bash
+npx wrangler secret put MCP_DISABLED --name ntu-mods
+```
+
+Enter `1` when asked. Or use the dashboard: Workers & Pages, `ntu-mods`, Settings, Variables and Secrets, add a secret named `MCP_DISABLED`. To turn the server back on, remove it:
+
+```bash
+npx wrangler secret delete MCP_DISABLED --name ntu-mods
+```
+
+**Billing alerts.** Set up Cloudflare notifications for Workers usage and a usage-based billing threshold in the dashboard. A flood costs requests and log events rather than D1 work, and there is no spend cap.
+
+A WAF rate rule is optional and no better than `MCP_LIMITER`: it counts per IP per data center, so it is the same kind of limit, applied before the worker runs.

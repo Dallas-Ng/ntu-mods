@@ -1,4 +1,5 @@
 import { formatShortDate } from "@/lib/format"
+import { TextLink } from "@/components/ui/text-link"
 import { getAllArticles, type Article } from "@/astro/lib/articles"
 
 // Article slugs ranked by human views, most read first. Source: PostHog
@@ -42,11 +43,9 @@ const LandingArticles = async () => {
         <h2 className="landing-reveal max-w-2xl text-3xl leading-none font-bold tracking-tighter md:text-4xl">
           Guides for planning your semester
         </h2>
-        <a
-          href="/articles"
-          className="text-primary text-base font-semibold underline-offset-4 hover:underline">
+        <TextLink href="/articles" variant="action" className="text-base">
           View all articles
-        </a>
+        </TextLink>
       </div>
 
       <div className="grid gap-3 lg:grid-cols-[7fr_5fr]">

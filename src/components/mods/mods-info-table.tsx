@@ -1,5 +1,6 @@
 import { MODULE_CODE_RE } from "@/lib/module-constants"
 import type { DbExam, DbModule } from "@/lib/server/db/types"
+import { TextLink } from "@/components/ui/text-link"
 
 interface Props {
   module: DbModule
@@ -30,11 +31,7 @@ export function renderModuleValue(
     return unique.map((item, idx) => (
       <span key={item}>
         {MODULE_CODE_RE.test(item) && (!knownCodes || knownCodes.has(item)) ? (
-          <a
-            href={`/mods/${item}`}
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-            {item}
-          </a>
+          <TextLink href={`/mods/${item}`}>{item}</TextLink>
         ) : (
           item
         )}

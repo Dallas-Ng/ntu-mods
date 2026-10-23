@@ -2,6 +2,7 @@
 import { ArrowRight } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
+import { TextLink } from "@/components/ui/text-link"
 import MapsPageContent from "@/components/map/maps-page-content"
 import MapGuide from "@/astro/components/MapGuide.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -87,13 +88,13 @@ const CREDITS = [
             <dd>
               {prefix}
               {href ? (
-                <a
+                <TextLink
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="hover:text-foreground underline underline-offset-2 transition-colors">
+                  variant="muted">
                   {text}
-                </a>
+                </TextLink>
               ) : (
                 text
               )}

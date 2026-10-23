@@ -6,6 +6,7 @@ import { Eye } from "lucide-react"
 import { track } from "@/lib/analytics"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
+import { TextLink } from "@/components/ui/text-link"
 import TimetableCopyButton from "@/components/timetable/buttons/timetable-copy-button"
 import TimetableDownloadCalendarButton from "@/components/timetable/buttons/timetable-download-calendar-button"
 import TimetableScreenshotButton from "@/components/timetable/buttons/timetable-screenshot-button"
@@ -42,12 +43,13 @@ const SharePageContent = () => {
             <span className="hidden sm:inline">
               {" "}
               Or{" "}
-              <a
+              <TextLink
                 href="/timetable"
                 onClick={() => track("make_my_timetable_clicked")}
-                className="text-foreground underline underline-offset-2">
+                variant="muted"
+                className="text-foreground">
                 start a new one
-              </a>
+              </TextLink>
               .
             </span>
           </p>

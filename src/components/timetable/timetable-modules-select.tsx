@@ -22,6 +22,7 @@ import {
   CommandItem,
   CommandList
 } from "@/components/ui/command"
+import { textLinkVariants } from "@/components/ui/text-link"
 import { CourseModal } from "@/components/timetable/custom-course-editor"
 
 const TimetableModulesSelect = () => {
@@ -164,7 +165,10 @@ const TimetableModulesSelect = () => {
                         e.stopPropagation()
                         setCustomCourseOpen(true)
                       }}
-                      className="text-foreground hover:text-foreground/80 mt-2 cursor-pointer text-xs underline underline-offset-2 transition-colors">
+                      className={cn(
+                        textLinkVariants({ variant: "muted" }),
+                        "text-foreground mt-2 text-xs"
+                      )}>
                       Add &quot;{inputValue}&quot; as a custom block →
                     </button>
                   </div>

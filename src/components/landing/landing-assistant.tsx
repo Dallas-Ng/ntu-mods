@@ -1,4 +1,5 @@
 import { siteConfig } from "@/config/site"
+import { TextLink } from "@/components/ui/text-link"
 import {
   CLAUDE_COLOUR,
   ClaudeIcon,
@@ -69,11 +70,12 @@ const LandingAssistant = () => {
               </a>
             </div>
             {tool.guide && (
-              <a
+              <TextLink
                 href={tool.guide.href}
-                className="text-primary w-fit text-sm font-semibold underline-offset-4 hover:underline">
+                variant="action"
+                className="w-fit text-sm">
                 {tool.guide.label}
-              </a>
+              </TextLink>
             )}
           </div>
         </div>

@@ -1,5 +1,7 @@
 import type React from "react"
 
+import { TextLink } from "@/components/ui/text-link"
+
 export type ChangelogCategory =
   "New Feature" | "Improvement" | "Bug Fix" | "Content" | "Data" | "Performance"
 
@@ -34,13 +36,7 @@ export const ChangelogLink = ({
 }: {
   href: string
   children: React.ReactNode
-}) => (
-  <a
-    href={href}
-    className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-    {children}
-  </a>
-)
+}) => <TextLink href={href}>{children}</TextLink>
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
@@ -623,21 +619,19 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         content: (
           <>
             NTUMods is now rebuilt on{" "}
-            <a
+            <TextLink
               href="https://astro.build"
               target="_blank"
-              rel="noreferrer"
-              className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+              rel="noreferrer">
               Astro
-            </a>{" "}
+            </TextLink>{" "}
             and now hosted on{" "}
-            <a
+            <TextLink
               href="https://www.cloudflare.com/"
               target="_blank"
-              rel="noreferrer"
-              className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+              rel="noreferrer">
               Cloudflare
-            </a>
+            </TextLink>
             &apos;s global network — pages should feel snappier no matter where
             in the world you&apos;re loading from.
           </>

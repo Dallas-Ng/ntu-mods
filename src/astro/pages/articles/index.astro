@@ -1,6 +1,7 @@
 ---
 import { siteConfig } from "@/config/site"
 import { collectionPageJsonLd } from "@/lib/json-ld"
+import { TextLink } from "@/components/ui/text-link"
 import ArticlesList from "@/components/articles/articles-list"
 import Header from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
@@ -73,11 +74,11 @@ const articlesJsonLd = collectionPageJsonLd({
       categories.map((category, i) => (
         <>
           {i > 0 && ", "}
-          <a
+          <TextLink
             href={`/articles/${slugifyCategory(category)}`}
-            class="text-primary underline-offset-4 hover:underline">
+            variant="action">
             {category}
-          </a>
+          </TextLink>
         </>
       ))
     }

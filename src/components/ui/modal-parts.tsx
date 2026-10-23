@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils"
 
-// The few pieces every toolbar modal and drawer is built from, so Share,
-// Import, Calendar and the rest read as one family.
+// The few pieces every ResponsiveModal is built from, so Share, Import,
+// Calendar, confirmations and the rest read as one family.
 
 /** A labelled block: a title, a muted hint, then the control. */
 export const ModalSection = ({

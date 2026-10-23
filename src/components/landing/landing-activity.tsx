@@ -1,4 +1,5 @@
 import { CHANGELOG } from "@/config/changelog-data"
+import { TextLink } from "@/components/ui/text-link"
 
 const CHANGES = CHANGELOG.reduce((sum, r) => sum + r.items.length, 0)
 
@@ -72,11 +73,12 @@ const LandingActivity = () => (
             )
           })}
         </ol>
-        <a
+        <TextLink
           href="/changelog"
-          className="text-primary mt-1 mb-1 ml-6 inline-block text-base font-semibold underline-offset-4 hover:underline">
+          variant="action"
+          className="mt-1 mb-1 ml-6 inline-block text-base">
           See everything we have added
-        </a>
+        </TextLink>
       </div>
     </div>
   </section>

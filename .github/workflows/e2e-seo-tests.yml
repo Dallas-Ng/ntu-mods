@@ -46,23 +46,23 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
 
-      - name: Install Chromium
+      # Browser install (network/apt), build (writes dist/) and seed (writes
+      # .wrangler/state) are independent, so run them side by side. Installing
+      # Chromium on a cache hit is install-deps only: system libs are not
+      # cacheable.
+      - name: Install Chromium, build site and seed local D1
         if: steps.changes.outputs.code == 'true'
+        env:
+          BROWSERS_CACHED: ${{ steps.browsers.outputs.cache-hit }}
         run: |
-          if [ "${{ steps.browsers.outputs.cache-hit }}" = "true" ]; then
-            npx playwright install-deps chromium
+          if [ "$BROWSERS_CACHED" = "true" ]; then
+            npx playwright install-deps chromium & browser=$!
           else
-            npx playwright install --with-deps --only-shell chromium
+            npx playwright install --with-deps --only-shell chromium & browser=$!
           fi
-
-      # Independent of each other (build writes dist/, seed writes
-      # .wrangler/state), so run them side by side.
-      - name: Build site and seed local D1
-        if: steps.changes.outputs.code == 'true'
-        run: |
           pnpm build & build=$!
           pnpm db:seed-local & seed=$!
-          wait $build && wait $seed
+          wait $browser && wait $build && wait $seed
 
       - name: Run E2E SEO tests
         if: steps.changes.outputs.code == 'true'

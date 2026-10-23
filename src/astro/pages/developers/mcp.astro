@@ -29,7 +29,7 @@ const link = "text-primary underline underline-offset-2"
   heading="MCP server"
   intro="A public, read-only MCP server for NTU modules, class indexes and exams. No sign-in and no key."
   headings={headings}>
-  <div class="space-y-4">
+  <div class="flex flex-col gap-4">
     <p class="text-foreground/80 text-sm">
       NTUMods runs a read-only MCP server at <code
         class="bg-muted rounded px-1 py-0.5 font-mono text-sm">{mcpUrl}</code
@@ -41,7 +41,9 @@ const link = "text-primary underline underline-offset-2"
       questions.
     </p>
 
-    <h2 id="connect" class="scroll-mt-28 text-lg font-semibold tracking-tight">
+    <h2
+      id="connect"
+      class="scroll-mt-28 pt-4 text-lg font-semibold tracking-tight">
       Connect<HeadingAnchor id="connect" label="Connect" />
     </h2>
     <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
@@ -66,7 +68,9 @@ const link = "text-primary underline underline-offset-2"
     </p>
     <Code client:visible code={cursorConfig} lang="json" />
 
-    <h2 id="tools" class="scroll-mt-28 text-lg font-semibold tracking-tight">
+    <h2
+      id="tools"
+      class="scroll-mt-28 pt-4 text-lg font-semibold tracking-tight">
       Tools<HeadingAnchor id="tools" label="Tools" />
     </h2>
     <div class="overflow-x-auto">
@@ -117,7 +121,9 @@ const link = "text-primary underline underline-offset-2"
       > cover those.
     </p>
 
-    <h2 id="limits" class="scroll-mt-28 text-lg font-semibold tracking-tight">
+    <h2
+      id="limits"
+      class="scroll-mt-28 pt-4 text-lg font-semibold tracking-tight">
       Limits and errors<HeadingAnchor id="limits" label="Limits and errors" />
     </h2>
     <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">

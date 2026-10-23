@@ -1,6 +1,5 @@
-const BANNER_TEXT =
-  "New: ask Claude or ChatGPT about NTU modules with our MCP server"
-const BANNER_HREF = "/articles/ntu-mods-mcp-server-guide"
+const BANNER_TEXT = "New: see the walk between your classes on the timetable"
+const BANNER_HREF = "/timetable"
 
 /** Derived from the text, so editing the banner re-shows it to people who
  * closed the previous one. */

@@ -44,40 +44,6 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
-    title: "MCP server",
-    date: "23 Oct 2026",
-    items: [
-      {
-        category: "New Feature",
-        content: (
-          <>
-            NTUMods now runs a public MCP server, so Claude, ChatGPT, Claude
-            Code and Cursor can look up modules, class indexes and exams from
-            the real data. It is free, read-only and needs no sign-in. Setup
-            steps:{" "}
-            <ChangelogLink href="/articles/ntu-mods-mcp-server-guide">
-              Use NTUMods in Claude and ChatGPT With the MCP Server
-            </ChangelogLink>
-            .
-          </>
-        )
-      },
-      {
-        category: "Improvement",
-        content: (
-          <>
-            The{" "}
-            <ChangelogLink href="/developers/mcp">
-              developers page
-            </ChangelogLink>{" "}
-            lists every MCP tool with its inputs, the limits and the error
-            codes.
-          </>
-        )
-      }
-    ]
-  },
-  {
     title: "Timetable redesign",
     date: "22 Oct 2026",
     items: [

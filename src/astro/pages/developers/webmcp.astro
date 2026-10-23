@@ -1,57 +1,168 @@
 ---
 import { siteConfig } from "@/config/site"
-import { getApiGroups } from "@/lib/developers/api-groups"
-import ApiExplorer from "@/components/developers/api-explorer"
+import { webmcpToolCount } from "@/lib/developers/webmcp-docs"
 import HeadingAnchor from "@/components/heading-anchor"
 import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
 
 export const prerender = true
 
 const { title, desc } = siteConfig.metatags.developersWebmcp
-
-const groups = (await getApiGroups()).filter((g) => g.name === "Discovery")
-
-const headings = [
-  { id: "webmcp", depth: 2, text: "WebMCP in the browser" },
-  ...groups.map((g) => ({
-    id: g.name.toLowerCase().replace(/\s+/g, "-"),
-    depth: 2,
-    text: g.name,
-    count: g.ops.length
-  }))
-]
-const link = "text-primary underline underline-offset-2"
 ---
 
 <DevDocsLayout
   title={title}
   description={desc}
   path="/developers/webmcp"
-  heading="WebMCP and discovery files"
-  intro="Browser tools that work on your own plans, and plain files that tell crawlers and agents what NTUMods offers."
-  headings={headings}>
-  <section class="space-y-3" aria-labelledby="webmcp">
-    <h2 id="webmcp" class="scroll-mt-28 text-lg font-semibold tracking-tight">
-      WebMCP in the browser<HeadingAnchor
-        id="webmcp"
-        label="WebMCP in the browser"
+  eyebrow="WebMCP"
+  heading="What is WebMCP"
+  intro="Browser tools that let an AI assistant work on your own saved plans, in your own browser. Early preview.">
+  <div class="flex flex-col gap-4">
+    <div class="bg-primary/10 space-y-2 rounded-2xl p-5 text-sm">
+      <p class="font-semibold">Early developer preview</p>
+      <p>
+        WebMCP is a new browser standard that is still being drafted, and
+        browsers and assistants are only starting to support it. Today it is for
+        testers and developers. Most students will not see any change, and
+        NTUMods works exactly as before.
+      </p>
+    </div>
+
+    <h2 id="what">
+      What is WebMCP?<HeadingAnchor id="what" label="What is WebMCP?" />
+    </h2>
+    <p>
+      WebMCP lets a website tell a browser assistant what it can do. Today an
+      assistant that wants to use a site has to look at the page and guess which
+      buttons to press, which is slow and often wrong. With WebMCP the site
+      offers a list of actions with clear descriptions, such as "search modules"
+      or "add a module to the plan". The assistant picks the right action and
+      the site carries it out.
+    </p>
+    <p>
+      To see the difference, try Google's <a
+        href="https://googlechromelabs.github.io/webmcp-tools/demos/explainer/#compare"
+        >WebMCP comparison demo</a
+      >. An assistant books the same appointment twice, once by guessing at the
+      page and once by calling the actions the page offers.
+    </p>
+    <p>
+      The standard is being drafted by a W3C community group, with Google and
+      Microsoft involved, and Chrome has an early preview. NTUMods offers {
+        webmcpToolCount
+      } of these actions. They are the same things you can already do on the site,
+      so an assistant can never do more than you could do yourself.
+    </p>
+
+    <h2 id="versus">
+      WebMCP and the MCP server<HeadingAnchor
+        id="versus"
+        label="WebMCP and the MCP server"
       />
     </h2>
-    <p class="text-foreground/80 text-sm">
-      NTUMods also offers its tools to browser AI assistants through WebMCP.
-      They work on your own saved plans, which the <a
-        class={link}
+    <div class="overflow-x-auto">
+      <table class="data-table text-sm!">
+        <thead>
+          <tr>
+            <th></th>
+            <th>MCP server</th>
+            <th>WebMCP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Runs</td>
+            <td>On the NTUMods server</td>
+            <td>In your browser tab on ntumods.com</td>
+          </tr>
+          <tr>
+            <td>Works in</td>
+            <td>Claude, ChatGPT, Claude Code, Cursor and more</td>
+            <td>Browser assistants that support WebMCP</td>
+          </tr>
+          <tr>
+            <td>Sees</td>
+            <td>Public module, index and exam data</td>
+            <td>The same data, plus your own saved plans</td>
+          </tr>
+          <tr>
+            <td>Can change</td>
+            <td>Nothing, it is read-only</td>
+            <td>Your plans in your browser, like using the site</td>
+          </tr>
+          <tr>
+            <td>Status</td>
+            <td>Ready to use</td>
+            <td>Early preview</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      For asking about modules and exams from your own assistant, use the <a
         href="/developers/mcp">MCP server</a
-      > cannot see. This is an early developer preview. The standard is still a draft
-      and support is limited, so treat it as something to test, not to build on. The
-      discovery files below list what is available. For setup steps, read the <a
-        class={link}
-        href="/articles/ntu-ai-agents-webmcp-guide">WebMCP guide</a
-      >.
+      >. WebMCP is for working on your timetable.
     </p>
-  </section>
 
-  <div>
-    <ApiExplorer client:load groups={groups} />
+    <h2 id="control">
+      What stays in your control<HeadingAnchor
+        id="control"
+        label="What stays in your control"
+      />
+    </h2>
+    <ul>
+      <li>
+        <strong>Your plans stay in your browser.</strong> The assistant works on the
+        plans saved in your own browser, the same ones you see on the site. NTUMods
+        does not receive them, and nothing is uploaded to make this work.
+      </li>
+      <li>
+        <strong>Hard-to-undo actions ask first.</strong> Clearing a plan, or replacing
+        a plan with a shared timetable, shows a confirmation that you answer, not
+        the assistant.
+      </li>
+      <li>
+        <strong>Everything else is easy to reverse.</strong> Adding, removing and
+        swapping modules works the same as doing it by hand, and you can switch between
+        your five plans as usual.
+      </li>
+      <li>
+        <strong>It is optional.</strong> If your browser or assistant does not support
+        it, nothing changes and nothing extra is loaded.
+      </li>
+    </ul>
+
+    <h2 id="limits">
+      What it does not do<HeadingAnchor
+        id="limits"
+        label="What it does not do"
+      />
+    </h2>
+    <p>
+      NTUMods does not register you for modules. STARS does that. The data also
+      has no live index vacancies and no exam venues, so an assistant cannot
+      know either. Treat any plan an assistant builds as a draft, and check it
+      against STARS before registration opens. Assistants can misread a request,
+      so look at the plan on screen before you rely on it.
+    </p>
+
+    <h2 id="why">
+      Why NTUMods offers it<HeadingAnchor
+        id="why"
+        label="Why NTUMods offers it"
+      />
+    </h2>
+    <p>
+      More students now ask an AI assistant for help with planning, and
+      assistants are getting better at doing tasks, not only answering
+      questions. When an assistant guesses at a web page, it can pick the wrong
+      index, miss a clash or quote last semester's data. When it uses actions
+      the site provides, it uses the same data and the same clash checks you see
+      on screen.
+    </p>
+    <p>
+      Next: see <a href="/developers/webmcp/examples">what you can ask</a>, <a
+        href="/developers/webmcp/try">try it yourself</a
+      >, or read the <a href="/developers/webmcp/tools">list of tools</a>.
+    </p>
   </div>
 </DevDocsLayout>

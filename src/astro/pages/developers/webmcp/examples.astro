@@ -1,0 +1,88 @@
+---
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const rows = [
+  [
+    "Find modules",
+    "Which Year 2 CSC modules are offered this semester, and which are 3 AU?",
+    "Searches the full module list and reads prerequisites, exclusions and programme restrictions."
+  ],
+  [
+    "Fit a module around your plan",
+    "I want to add SC1001. Which of its indexes clash with what I already have?",
+    "Lists every index, marks the ones that fit your plan and names the module each clash is with."
+  ],
+  [
+    "Build a plan from preferences",
+    "Add these six modules, keep Fridays free, and no classes before 10am.",
+    "Adds the modules, then uses the same generator as the site to find clash-free combinations. It reports the options, and you can ask it to apply a different one."
+  ],
+  [
+    "Check your exams",
+    "Do any of my exams fall on the same day or overlap?",
+    "Compares your plan with the exam timetable and flags overlaps early."
+  ],
+  [
+    "Protect your own commitments",
+    "Add gym on Monday and Wednesday from 6pm to 7pm and plan around it.",
+    "Adds personal blocks that are clash-checked like modules."
+  ],
+  [
+    "Work out your grades",
+    "My CGPA is 4.1 with 80 AU done and 60 left. What do I need for Distinction?",
+    "Gives the average grade needed for each honours class and the lowest letter grade that gets you there. It uses the same maths as the CGPA Planner and is unofficial, because some programmes set their own bands."
+  ],
+  [
+    "Share and export",
+    "Give me a share link for plan 2 and export it to my calendar.",
+    "Creates a link your friends can open, and can produce your plan as calendar (.ics) text to import into Google Calendar, Apple Calendar or Outlook. Whether it can hand you a file depends on the assistant."
+  ]
+]
+---
+
+<DevDocsLayout
+  title="What you can ask NTUMods through WebMCP"
+  description="Example requests for a browser AI assistant using NTUMods WebMCP tools: find modules, fit indexes, build timetables, check exams and plan your CGPA."
+  path="/developers/webmcp/examples"
+  eyebrow="WebMCP"
+  heading="What you can ask"
+  intro="Example requests for a browser assistant, with the NTUMods page open in the same browser.">
+  <div class="flex flex-col gap-4">
+    <p>
+      These work in a test setup. The wording does not need to match exactly.
+    </p>
+    <div class="overflow-x-auto">
+      <table class="data-table text-sm!">
+        <thead>
+          <tr>
+            <th>You want to</th>
+            <th>You could ask</th>
+            <th>What the assistant does</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            rows.map(([goal, ask, does]) => (
+              <tr>
+                <td>{goal}</td>
+                <td>“{ask}”</td>
+                <td>{does}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Check the result on the page, since assistants can misread a request. The <a
+        href="/articles/ntu-timetable-planner-guide">timetable planner guide</a
+      > explains the features the assistant is using, and the <a
+        href="/developers/webmcp/tools">tools page</a
+      > lists every action behind these requests. To set it up, see <a
+        href="/developers/webmcp/try">try it</a
+      >.
+    </p>
+  </div>
+</DevDocsLayout>

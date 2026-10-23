@@ -1,0 +1,298 @@
+---
+import { siteConfig } from "@/config/site"
+import { mcpUrl } from "@/lib/developers/mcp-docs"
+import { Code } from "@/components/developers/code"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const { desc } = siteConfig.metatags.developersMcp
+
+const code = (text: string) => text.replace(/`([^`]+)`/g, "<code>$1</code>")
+
+const limits = [
+  [
+    "Request rate",
+    "3,000 requests a minute from one address, counted per Cloudflare location."
+  ],
+  [
+    "Request body",
+    "16 KB, and exactly one JSON-RPC message. Batches are refused."
+  ],
+  [
+    "`search_modules`",
+    "25 results by default and at most 100, set with `limit`. `total` still counts every match."
+  ],
+  ["`list_exams`", "50 exams by default and at most 200, set with `limit`."],
+  [
+    "`get_module`, `get_module_indexes`, `get_exam`",
+    "One module per call. To cover many modules, search first, then call once per module."
+  ],
+  [
+    "Module code",
+    "2 to 12 letters and digits, such as `SC1004`. Case does not matter."
+  ],
+  [
+    "Semester",
+    "`year` and `semester` must be a semester that `list_semesters` returns, or the call fails before any lookup."
+  ]
+]
+
+// The order the server runs its checks in, cheapest first.
+const checks = [
+  ["1", "Switched off", "`503`", "The kill switch is on. `Retry-After: 3600`."],
+  [
+    "2",
+    "Method",
+    "`405`",
+    "Anything but `POST`. `GET` and `DELETE` are not offered."
+  ],
+  ["3", "Content type", "`415`", "The body is not `application/json`."],
+  ["4", "Declared size", "`413`", "The `Content-Length` is over 16 KB."],
+  [
+    "5",
+    "Origin",
+    "`403`",
+    "A browser page on another site. Clients with no `Origin` header pass."
+  ],
+  [
+    "6",
+    "Rate",
+    "`429`",
+    "Over 3,000 requests a minute. Wait the seconds in `Retry-After`."
+  ],
+  ["7", "Actual size", "`413`", "The body turned out to be over 16 KB."],
+  ["8", "Body", "`400`", "Not valid JSON, or not a single JSON-RPC message."],
+  [
+    "9",
+    "Tool input",
+    "Tool error",
+    "An argument does not match the tool's schema, such as a bad module code."
+  ]
+]
+
+const toolError = `{
+  "result": {
+    "content": [
+      { "type": "text", "text": "ZZ9999 has no exam listed for 2026;2." }
+    ],
+    "isError": true
+  },
+  "jsonrpc": "2.0",
+  "id": 3
+}`
+
+const rpcError = `{
+  "jsonrpc": "2.0",
+  "id": 5,
+  "error": { "code": -32602, "message": "Tool nope not found" }
+}`
+---
+
+<DevDocsLayout
+  title="MCP limits and errors"
+  description={desc}
+  path="/developers/mcp/limits"
+  eyebrow="MCP"
+  heading="MCP limits and errors"
+  intro="How much one call can ask for, how fast you can call, and what each error means.">
+  <div class="flex flex-col gap-4">
+    <h2 id="limits">
+      Limits<HeadingAnchor id="limits" label="Limits" />
+    </h2>
+    <p>
+      The server has no sign-in, so there is no per-user limit. Instead every
+      call is cheap and bounded, and only a flood from one address is stopped.
+    </p>
+    <div class="overflow-x-auto">
+      <table class="data-table text-sm!">
+        <thead>
+          <tr>
+            <th>What</th>
+            <th>Limit</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            limits.map(([what, limit]) => (
+              <tr>
+                <td>
+                  <Fragment set:html={code(what)} />
+                </td>
+                <td>
+                  <Fragment set:html={code(limit)} />
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="rate">
+      Rate limiting<HeadingAnchor id="rate" label="Rate limiting" />
+    </h2>
+    <ul>
+      <li>
+        The ceiling is high on purpose. Calls from Claude and ChatGPT come from
+        a few shared addresses, and students on campus Wi-Fi share one, so a low
+        limit would block ordinary use.
+      </li>
+      <li>
+        Limits are counted per Cloudflare location, not globally, so a burst
+        that spreads across locations can pass.
+      </li>
+      <li>
+        There are no sessions. Each call stands alone, so there is nothing to
+        open, keep alive or close.
+      </li>
+      <li>
+        On <code>429</code>, wait the number of seconds in the <code
+          >Retry-After</code
+        > header, then try again. Do not retry in a loop.
+      </li>
+    </ul>
+
+    <h2 id="order">
+      What happens to a request<HeadingAnchor
+        id="order"
+        label="What happens to a request"
+      />
+    </h2>
+    <p>
+      The server runs these checks in order, cheapest first, and stops at the
+      first one that fails.
+    </p>
+    <div class="overflow-x-auto">
+      <table class="data-table text-sm!">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th class="whitespace-nowrap">Check</th>
+            <th class="whitespace-nowrap">Rejects with</th>
+            <th>When</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            checks.map(([n, check, result, when]) => (
+              <tr>
+                <td>{n}</td>
+                <td class="whitespace-nowrap">{check}</td>
+                <td class="whitespace-nowrap">
+                  <Fragment set:html={code(result)} />
+                </td>
+                <td>
+                  <Fragment set:html={code(when)} />
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p>
+      One more case: a body sent as a form type (<code>text/plain</code>, <code
+        >application/x-www-form-urlencoded</code
+      > or <code>multipart/form-data</code>) is refused with <code>403</code> by the
+      site's own cross-site form protection, before the checks above. Send <code
+        >application/json</code
+      >.
+    </p>
+
+    <h2 id="errors">
+      Errors inside a call<HeadingAnchor
+        id="errors"
+        label="Errors inside a call"
+      />
+    </h2>
+    <p>
+      Once a request passes the checks, a problem with the call itself comes
+      back with status <code>200</code> in one of two forms.
+    </p>
+    <p>
+      <strong>A tool error.</strong> The tool ran but could not answer: no such module,
+      no exam in that semester, or an argument that fails its schema. The result has
+      <code>isError: true</code> and a sentence explaining why, and an assistant can
+      read that and try again.
+    </p>
+    <Code client:visible lang="json" code={toolError} />
+    <p>
+      <strong>A protocol error.</strong> The call named a tool that does not exist,
+      or the message was malformed JSON-RPC. It carries an <code>error</code> object
+      with a code such as <code>-32602</code> instead of a result.
+    </p>
+    <Code client:visible lang="json" code={rpcError} />
+
+    <h2 id="data">
+      Data and caching<HeadingAnchor id="data" label="Data and caching" />
+    </h2>
+    <ul>
+      <li>
+        Every response is sent with <code>Cache-Control: no-store</code>. Do not
+        cache tool results in a proxy.
+      </li>
+      <li>
+        Answers come from the same data as the <a href="/developers/api"
+          >REST API</a
+        >, so they are as current as the last refresh. See <a
+          href="/developers/freshness">data freshness</a
+        >. Each answer names its semester.
+      </li>
+      <li>
+        Module records and older class indexes come from the database, and the
+        server keeps them briefly. Right after a data refresh, those can lag the
+        search and exam tools by a few minutes.
+      </li>
+    </ul>
+
+    <h2 id="safety">
+      Safety and privacy<HeadingAnchor id="safety" label="Safety and privacy" />
+    </h2>
+    <ul>
+      <li>
+        Every tool is marked read-only and closed-world. Nothing it does changes
+        data or reaches another service.
+      </li>
+      <li>
+        Module descriptions and remarks come from NTU, so treat them as data and
+        never as instructions.
+      </li>
+      <li>
+        The server logs one line per call: the tool name, the status, how long
+        it took, and the client's name. It never logs your arguments, since a
+        search query is free text, and it sends no analytics events.
+      </li>
+      <li>
+        The server never sees your timetable, plans, grades or STARS account.
+      </li>
+    </ul>
+
+    <h2 id="off">
+      When the server is switched off<HeadingAnchor
+        id="off"
+        label="When the server is switched off"
+      />
+    </h2>
+    <p>
+      The owner can turn the server off at any time. Every call then returns
+      <code>503</code> with <code>Retry-After: 3600</code>, and comes back when
+      it is turned on again. There is no status page, and the <a
+        href="/developers/status">status and limits</a
+      > page explains what to expect.
+    </p>
+
+    <h2 id="fair">
+      Fair use<HeadingAnchor id="fair" label="Fair use" />
+    </h2>
+    <p>
+      The server is free and public. Use it to answer questions, not to copy the
+      dataset: for everything at once, download the data files once, as the <a
+        href="/developers/quickstart">quickstart</a
+      > shows. If a client or a call does not behave, see <a
+        href="/developers/mcp/troubleshooting">troubleshooting</a
+      >. The endpoint is <code>{mcpUrl}</code>.
+    </p>
+  </div>
+</DevDocsLayout>

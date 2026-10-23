@@ -1,0 +1,196 @@
+---
+import { siteConfig } from "@/config/site"
+import { mcpToolNotes, mcpTools, mcpUrl } from "@/lib/developers/mcp-docs"
+import { Code } from "@/components/developers/code"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const { desc } = siteConfig.metatags.developersMcp
+
+const callExample = `curl -s ${mcpUrl} \\
+  -H 'content-type: application/json' \\
+  -H 'accept: application/json, text/event-stream' \\
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"get_exam","arguments":{"code":"SC1004","year":"2026","semester":"1"}}}'`
+
+const callResult = `{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\\"code\\":\\"SC1004\\",\\"semester\\":\\"2026;1\\",\\"date\\":\\"23 November 2026\\",\\"day\\":1,\\"start_time\\":\\"5.00 pm\\",\\"end_time\\":\\"7.00 pm\\",\\"duration\\":4,\\"venue\\":\\"not published in this data\\"}"
+      }
+    ]
+  },
+  "jsonrpc": "2.0",
+  "id": 1
+}`
+
+const chooser = [
+  ["Which semester is current?", "list_semesters"],
+  ["Find modules by name, school, level, AU or category", "search_modules"],
+  [
+    "Prerequisites, description, restrictions or which semesters a module ran",
+    "get_module"
+  ],
+  ["Class times, venues and groups", "get_module_indexes"],
+  ["One module's exam", "get_exam"],
+  ["Every exam on a date, or matching a name", "list_exams"]
+]
+---
+
+<DevDocsLayout
+  title="NTUMods MCP tools"
+  description={desc}
+  path="/developers/mcp/tools"
+  eyebrow="MCP"
+  heading="MCP tools"
+  intro="The six tools the NTUMods MCP server offers: what each one returns, what it takes, and how to call one yourself.">
+  <div class="flex flex-col gap-4">
+    <h2 id="how">
+      How the tools work<HeadingAnchor id="how" label="How the tools work" />
+    </h2>
+    <ul>
+      <li>
+        Your assistant lists the tools with <code>tools/list</code>
+        and calls one with <code>tools/call</code>. You do not write either.
+        Both are JSON-RPC messages sent with <code>POST</code> to <code
+          >{mcpUrl}</code
+        >.
+      </li>
+      <li>
+        All six tools are read-only. Each one is marked <code>readOnlyHint</code
+        >, so a client can run them without asking, and none of them can change
+        any data.
+      </li>
+      <li>
+        A result comes back as one block of JSON text. Semesters are written
+        <code>2026;2</code> here, with a semicolon, where the data files use <code
+          >2026_2</code
+        >. Days are names such as <code>Mon</code>, and module links are full
+        URLs.
+      </li>
+      <li>
+        Text in module records comes from NTU. The tools mark it as data, and an
+        assistant should treat it that way, not as instructions.
+      </li>
+    </ul>
+
+    <h2 id="choose">
+      Which tool answers what<HeadingAnchor
+        id="choose"
+        label="Which tool answers what"
+      />
+    </h2>
+    <div class="overflow-x-auto">
+      <table class="data-table text-sm!">
+        <thead>
+          <tr>
+            <th>You want</th>
+            <th>Tool</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            chooser.map(([want, tool]) => (
+              <tr>
+                <td>{want}</td>
+                <td>
+                  <a href={`#${tool}`}>
+                    <code>{tool}</code>
+                  </a>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Your timetable, plans, favourites and CGPA live in your own browser, so
+      this server cannot see them. The <a href="/developers/webmcp"
+        >WebMCP tools</a
+      > cover those.
+    </p>
+
+    <h2 id="reference">
+      Tool reference<HeadingAnchor id="reference" label="Tool reference" />
+    </h2>
+    {
+      mcpTools.map((tool) => {
+        const note = mcpToolNotes[tool.name]
+        return (
+          <section class="space-y-3 rounded-2xl border p-5">
+            <h3 id={tool.name}>
+              <code>{tool.name}</code>
+              <HeadingAnchor id={tool.name} label={tool.name} />
+            </h3>
+            <p>{tool.description}</p>
+            <p>
+              <strong>Returns.</strong> {note.returns}
+            </p>
+            {note.tip && (
+              <p>
+                <strong>Tip.</strong> {note.tip}
+              </p>
+            )}
+            <p>
+              <strong>You could ask.</strong> “{note.ask}”
+            </p>
+            <div class="overflow-x-auto">
+              <table class="data-table text-sm!">
+                <thead>
+                  <tr>
+                    <th>Input</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tool.inputs.length === 0 && (
+                    <tr>
+                      <td colspan="4">None</td>
+                    </tr>
+                  )}
+                  {tool.inputs.map((input) => (
+                    <tr>
+                      <td>
+                        <code>{input.name}</code>
+                      </td>
+                      <td>{input.type}</td>
+                      <td>{input.required ? "Yes" : "No"}</td>
+                      <td>{input.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )
+      })
+    }
+
+    <h2 id="call">
+      Call a tool yourself<HeadingAnchor
+        id="call"
+        label="Call a tool yourself"
+      />
+    </h2>
+    <p>Any HTTP client works, with no key. This asks for one exam.</p>
+    <Code client:visible lang="bash" code={callExample} />
+    <p>
+      The reply is a single event. Its <code>text</code> field is itself JSON, so
+      parse it a second time:
+    </p>
+    <Code client:visible lang="json" code={callResult} />
+    <p>
+      A tool that cannot answer, such as an exam that does not exist, sets <code
+        >isError</code
+      > and explains in plain text. The error codes, caps and rate limit are on the
+      <a href="/developers/mcp/limits">limits and errors</a> page. For the same data
+      as plain files, see the <a href="/developers/api">REST API</a>.
+    </p>
+  </div>
+</DevDocsLayout>

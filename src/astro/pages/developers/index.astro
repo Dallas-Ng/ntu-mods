@@ -38,15 +38,6 @@ const practices: [string, string][] = [
     "Show how fresh your copy is and point them to STARS for anything that affects registration."
   ]
 ]
-
-const headings = [
-  { id: "start", depth: 2, text: "Where to start" },
-  { id: "terms", depth: 2, text: "Terms of use" },
-  { id: "basics", depth: 2, text: "Basics" },
-  { id: "practices", depth: 2, text: "Best practices" }
-]
-
-const link = "text-primary underline underline-offset-2"
 ---
 
 <DevDocsLayout
@@ -54,10 +45,9 @@ const link = "text-primary underline underline-offset-2"
   description={desc}
   path="/developers"
   heading="Developers"
-  intro="A free, read-only API, open data and MCP server for NTU modules, class indexes and exams. Built for student projects and AI tools."
-  headings={headings}>
+  intro="A free, read-only API, open data and MCP server for NTU modules, class indexes and exams.">
   <section class="space-y-3" aria-labelledby="start">
-    <h2 id="start" class="scroll-mt-28 text-lg font-semibold tracking-tight">
+    <h2 id="start">
       Where to start<HeadingAnchor id="start" label="Where to start" />
     </h2>
     <div class="grid gap-3">
@@ -77,7 +67,7 @@ const link = "text-primary underline underline-offset-2"
   </section>
 
   <section class="space-y-3" aria-labelledby="terms">
-    <h2 id="terms" class="scroll-mt-28 text-lg font-semibold tracking-tight">
+    <h2 id="terms">
       Terms of use (no opt out)<HeadingAnchor
         id="terms"
         label="Terms of use (no opt out)"
@@ -88,7 +78,7 @@ const link = "text-primary underline underline-offset-2"
         By using any API, file or the MCP server on this page, you accept these
         terms. There is no opt out. If you do not accept them, do not use them.
       </p>
-      <ul class="list-disc space-y-1.5 pl-5">
+      <ul>
         <li>
           You use these APIs entirely at your own risk. The owner of NTUMods is
           not responsible for, and is not implicated in, anything you build or
@@ -103,23 +93,21 @@ const link = "text-primary underline underline-offset-2"
   </section>
 
   <section class="space-y-3" aria-labelledby="basics">
-    <h2 id="basics" class="scroll-mt-28 text-lg font-semibold tracking-tight">
+    <h2 id="basics">
       Basics<HeadingAnchor id="basics" label="Basics" />
     </h2>
-    <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
+    <ul>
       <li>
         Free to use. No API key and no sign-up. Every endpoint is a plain <code
-          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">GET</code
-        >, except the MCP server, which takes <code
-          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">POST</code
-        >.
+          >GET</code
+        >, except the MCP server, which takes <code>POST</code>.
       </li>
       <li>
         The data is NTU public course data. It can be out of date or wrong, so
         always check STARS before you rely on it.
       </li>
       <li>
-        A machine-readable <a class={link} href="/developers/openapi.json"
+        A machine-readable <a href="/developers/openapi.json"
           >OpenAPI 3.1 file</a
         > is available.
       </li>
@@ -127,19 +115,17 @@ const link = "text-primary underline underline-offset-2"
   </section>
 
   <section class="space-y-3" aria-labelledby="practices">
-    <h2
-      id="practices"
-      class="scroll-mt-28 text-lg font-semibold tracking-tight">
+    <h2 id="practices">
       Best practices<HeadingAnchor id="practices" label="Best practices" />
     </h2>
-    <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
+    <ul>
       {
         practices.map(([lead, body]) => (
           <li>
             <Fragment
               set:html={`${lead} ${body}`.replace(
                 /`([^`]+)`/g,
-                '<code class="bg-muted text-foreground rounded px-1 py-0.5 font-mono text-sm">$1</code>'
+                "<code>$1</code>"
               )}
             />
           </li>

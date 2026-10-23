@@ -1,0 +1,227 @@
+---
+import { siteConfig } from "@/config/site"
+import { Code } from "@/components/developers/code"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const files = [
+  ["/api/modules/{code}", "One module, in full.", "A single object."],
+  [
+    "/data/api/modules.json",
+    "Every module since AY2014, one summary row each, with its latest offering.",
+    "An object with a list called modules."
+  ],
+  [
+    "/data/api/indexes/{year_semester}.json",
+    "Every class index in one semester.",
+    "Module code, then index number, then a list of class slots."
+  ],
+  [
+    "/data/api/exams/{year_semester}.json",
+    "The exam timetable for one semester.",
+    "Module code, then one exam."
+  ]
+]
+
+const sample = {
+  slot: `{
+  "key": "10052",
+  "type": "LEC",
+  "group": "SCL1",
+  "day": 3,
+  "time": "0930-1120",
+  "venue": "LT3",
+  "remarks": "Teaching Wk1-9,11-13",
+  "duration": 4
+}`,
+  exam: `{
+  "key": "SC1004",
+  "name": "LINEAR ALGEBRA FOR COMPUTING",
+  "date": "23 November 2026",
+  "day": 1,
+  "start_time": "5.00 pm",
+  "end_time": "7.00 pm",
+  "duration": 4
+}`,
+  prereq: `"prerequisites": [["MH1812", "SC1007"], ["SC1007", "SC1124"]]`
+}
+---
+
+<DevDocsLayout
+  title="NTUMods data reference"
+  description="What the NTUMods data files contain: file layout, semester codes, how modules, class indexes and exams join, and what each field means."
+  path="/developers/data"
+  eyebrow="Build with the data"
+  heading="Data reference"
+  intro="How the files fit together and what the fields mean. The field tables themselves are in the REST API page.">
+  <div class="flex flex-col gap-4">
+    <h2 id="files">
+      The files<HeadingAnchor id="files" label="The files" />
+    </h2>
+    <div class="overflow-x-auto">
+      <table class="data-table text-sm!">
+        <thead>
+          <tr>
+            <th>Path</th>
+            <th>What it holds</th>
+            <th>Shape</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            files.map(([path, what, shape]) => (
+              <tr>
+                <td class="whitespace-nowrap">
+                  <code>{path}</code>
+                </td>
+                <td>{what}</td>
+                <td>{shape}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Every field of each file is listed in the <a href="/developers/api"
+        >REST API reference</a
+      >. All files are served from <code>{siteConfig.url}</code>.
+    </p>
+
+    <h2 id="semesters">
+      Semester codes<HeadingAnchor id="semesters" label="Semester codes" />
+    </h2>
+    <ul>
+      <li>
+        A semester is written <code>year_semester</code>, such as <code
+          >2026_2</code
+        >. The year is the academic year, so <code>2026</code> is AY2026/27.
+      </li>
+      <li>
+        The semester is <code>1</code>, <code>2</code>
+        or <code>S</code> (special term). Older files, up to 2021, also have <code
+          >T</code
+        > for the second special term.
+      </li>
+      <li>
+        The newest semester with classes and the newest with an exam timetable
+        are often different. Exams are published later, so an exam file can be
+        empty (<code>{"{}"}</code>) for a new semester.
+      </li>
+    </ul>
+
+    <h2 id="joins">
+      How the files join<HeadingAnchor id="joins" label="How the files join" />
+    </h2>
+    <ul>
+      <li>
+        The <strong>module code</strong> is the key in every file. Use it to go from
+        a row in <code>modules.json</code> to its class indexes and exam.
+      </li>
+      <li>
+        A <strong>class index</strong> is one group of classes a student picks, such
+        as a lecture with one tutorial. It has a number, such as <code
+          >10052</code
+        >, and a list of class slots. A student picks one index per module.
+      </li>
+      <li>
+        Index numbers are text and are unique within a semester, not across
+        semesters.
+      </li>
+    </ul>
+
+    <h2 id="slots">
+      Class slots<HeadingAnchor id="slots" label="Class slots" />
+    </h2>
+    <Code
+      client:visible
+      lang="json"
+      code={sample.slot}
+      title="One class slot"
+    />
+    <ul>
+      <li>
+        <code>type</code> is <code>LEC</code>, <code>TUT</code>, <code>LAB</code
+        >, <code>SEM</code> and a few rarer ones such as <code>PRJ</code> and <code
+          >DES</code
+        >.
+      </li>
+      <li>
+        <code>day</code> counts from <code>1</code> for Monday to <code>6</code> for
+        Saturday. A few slots have <code>0</code>, which means online or to be
+        announced, with no fixed time.
+      </li>
+      <li>
+        <code>time</code> is <code>HHMM-HHMM</code> on a 24 hour clock, with no colon
+        and no time zone. It is Singapore time.
+      </li>
+      <li>
+        <code>duration</code> is in half hours, so <code>4</code> is two hours.
+      </li>
+      <li>
+        <code>remarks</code> is NTU's own note and is empty when there is none. It
+        often gives the weeks the class runs, such as <code
+          >Teaching Wk2-13</code
+        >, or alternate weeks such as <code>Teaching Wk2,4,6,8,10,12</code>. It
+        is free text, so do not rely on parsing it.
+      </li>
+    </ul>
+
+    <h2 id="exams">
+      Exams<HeadingAnchor id="exams" label="Exams" />
+    </h2>
+    <Code client:visible lang="json" code={sample.exam} title="One exam" />
+    <ul>
+      <li>
+        <code>date</code>, <code>start_time</code> and
+        <code>end_time</code> are text as NTU writes them. Times use a dot, as in
+        <code>9.00 am</code>, not a colon.
+      </li>
+      <li>
+        <code>day</code> counts from <code>1</code> for Monday to <code>7</code> for
+        Sunday, and <code>duration</code> is in half hours.
+      </li>
+      <li>Venues and seats are not published in this data.</li>
+    </ul>
+
+    <h2 id="modules">
+      Module records<HeadingAnchor id="modules" label="Module records" />
+    </h2>
+    <ul>
+      <li>
+        <code>au</code> is a number in <code>/api/modules/{"{code}"}</code> and text,
+        such as <code>"3.0"</code>, in <code>modules.json</code>.
+      </li>
+      <li>
+        <code>prerequisites</code> is a list of groups. Every group must be met, and
+        any one module in a group meets it. In the example below you need (MH1812
+        or SC1007) and (SC1007 or SC1124). A code with a suffix, such as <code
+          >SC1003(Corequisite)</code
+        >, may be taken at the same time.
+      </li>
+      <li>
+        <code>requires</code> flattens the groups, and <code>requiredBy</code> lists
+        the modules that need this one.
+      </li>
+      <li>
+        <code>categories</code> uses <code>CORE</code>
+        for programme core, <code>GLOAD</code> for BDE, <code>MLOAD</code> for a minor,
+        <code>GERP</code> for general education, and a few others.
+      </li>
+      <li>
+        The <code>restrictions</code> fields are free text exactly as NTU publishes
+        them, or <code>null</code>. <code>description</code>, <code
+          >gradeType</code
+        > and <code>school</code> can also be <code>null</code>. Lists are
+        empty, not null.
+      </li>
+      <li>
+        <code>exam</code> is <code>null</code> when no exam timetable is published
+        for the latest offering.
+      </li>
+    </ul>
+    <Code client:visible lang="json" code={sample.prereq} title="From SC2001" />
+  </div>
+</DevDocsLayout>

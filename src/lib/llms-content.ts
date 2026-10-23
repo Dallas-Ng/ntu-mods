@@ -44,7 +44,7 @@ ${articleLines(facts)}
 - [Campus Map](${url}/maps): Interactive NTU campus map. Search any lecture theatre, tutorial room, hall or canteen, see which level it is on with indoor floor plans, and get walking directions with times. Standard, hybrid and satellite views, and links that share an exact view.
 - [WebMCP tools](${url}/.well-known/webmcp.json): Early preview, depends on browser support. The tools NTUMods registers through WebMCP (document.modelContext) in supporting browsers: search modules, read indexes and exams, add modules to a plan, find indexes that fit around it, generate clash-free timetables, export to calendar and plan CGPA. They run in the visitor's own tab on that visitor's own saved plans.
 - [MCP server](${url}/developers/mcp): A public, read-only MCP server at ${url}/mcp (POST, no sign-in). Tools: list_semesters, search_modules, get_module, get_module_indexes, get_exam and list_exams. Add it to Claude, ChatGPT, Claude Code or Cursor; steps are on the developers page.
-- [Module API](${url}/api/modules/SC1003): GET /api/modules/{code} returns one module as JSON (example shown). Open data files: [modules](${url}/data/api/modules.json), plus class indexes and exams per semester under /data/api/indexes/ and /data/api/exams/. Guide: [Plan your NTU timetable with an AI assistant](${url}/articles/ntu-ai-agents-webmcp-guide).
+- [Module API](${url}/api/modules/SC1003): GET /api/modules/{code} returns one module as JSON (example shown). Open data files: [modules](${url}/data/api/modules.json), plus class indexes and exams per semester under /data/api/indexes/ and /data/api/exams/. Docs: [WebMCP](${url}/developers/webmcp).
 
 ## Guides & Reference
 

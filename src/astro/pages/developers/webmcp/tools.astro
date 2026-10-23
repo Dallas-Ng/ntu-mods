@@ -1,0 +1,69 @@
+---
+import { webmcpGroups, webmcpToolCount } from "@/lib/developers/webmcp-docs"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const slug = (name: string) => name.toLowerCase().replace(/[^a-z]+/g, "-")
+---
+
+<DevDocsLayout
+  title="NTUMods WebMCP tools"
+  description="Every WebMCP tool NTUMods registers in the browser, grouped by what it does, with which ones change your plan and which ask first."
+  path="/developers/webmcp/tools"
+  eyebrow="WebMCP"
+  heading="WebMCP tools"
+  intro={`The ${webmcpToolCount} actions NTUMods offers to a browser assistant, grouped by purpose.`}>
+  <div class="flex flex-col gap-4">
+    <p>
+      These tools exist only inside a browser tab on ntumods.com that supports
+      WebMCP, and they act on your own saved plans. Read-only tools never change
+      anything. The rest edit your plans like using the site, and a few ask you
+      to confirm first. The same list, with each input schema, is in <a
+        href="/.well-known/webmcp.json">webmcp.json</a
+      >. For the server-side tools that need no browser, see <a
+        href="/developers/mcp/tools">MCP tools and limits</a
+      >.
+    </p>
+
+    {
+      webmcpGroups.map((group, i) => (
+        <>
+          <h2 id={slug(group.name)}>
+            {group.name}
+            <HeadingAnchor id={slug(group.name)} label={group.name} />
+          </h2>
+          <div class="overflow-x-auto">
+            <table class="data-table text-sm!">
+              <thead>
+                <tr>
+                  <th>Tool</th>
+                  <th>What it does</th>
+                  <th>Effect</th>
+                </tr>
+              </thead>
+              <tbody>
+                {group.tools.map((tool) => (
+                  <tr>
+                    <td class="whitespace-nowrap">
+                      <code>{tool.name}</code>
+                    </td>
+                    <td>{tool.description}</td>
+                    <td class="whitespace-nowrap">
+                      {tool.readOnly
+                        ? "Read-only"
+                        : tool.asksFirst
+                          ? "Changes your plan, asks first"
+                          : "Changes your plan"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      ))
+    }
+  </div>
+</DevDocsLayout>

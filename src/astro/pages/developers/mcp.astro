@@ -1,171 +1,125 @@
 ---
 import { siteConfig } from "@/config/site"
-import {
-  claudeCodeCommand,
-  cursorConfig,
-  mcpTools,
-  mcpUrl
-} from "@/lib/developers/mcp-docs"
-import { Code } from "@/components/developers/code"
+import { MCP_CLIENTS } from "@/lib/developers/mcp-clients"
+import { directoryListings, mcpUrl } from "@/lib/developers/mcp-docs"
+import { CLAUDE_COLOUR, ClaudeIcon, OpenAIIcon } from "@/components/brand-icons"
 import HeadingAnchor from "@/components/heading-anchor"
 import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
 
 export const prerender = true
 
 const { title, desc } = siteConfig.metatags.developersMcp
-
-const headings = [
-  { id: "connect", depth: 2, text: "Connect" },
-  { id: "tools", depth: 2, text: "Tools" },
-  { id: "limits", depth: 2, text: "Limits and errors" }
-]
-const link = "text-primary underline underline-offset-2"
 ---
 
 <DevDocsLayout
   title={title}
   description={desc}
   path="/developers/mcp"
+  eyebrow="MCP"
   heading="MCP server"
-  intro="A public, read-only MCP server for NTU modules, class indexes and exams. No sign-in and no key."
-  headings={headings}>
+  intro="A public, read-only MCP server for NTU modules, class indexes and exams. No sign-in and no key.">
   <div class="flex flex-col gap-4">
-    <p class="text-foreground/80 text-sm">
-      NTUMods runs a read-only MCP server at <code
-        class="bg-muted rounded px-1 py-0.5 font-mono text-sm">{mcpUrl}</code
-      >. Add it to Claude, ChatGPT, Claude Code or Cursor and your assistant can
-      look up modules, class indexes and exams for you. It serves the same data
-      as the <a class={link} href="/developers/api">REST API and data files</a>,
-      and needs no sign-in or key. Use the API or the data files in your own
+    <h2 id="what-is-mcp">
+      What is MCP?<HeadingAnchor id="what-is-mcp" label="What is MCP?" />
+    </h2>
+    <p>
+      MCP, the Model Context Protocol, is an open standard that lets an AI
+      assistant call tools on a server it does not own. Instead of guessing from
+      what it learned in training, the assistant sends a request, the server
+      answers with data, and the assistant uses that answer in its reply.
+    </p>
+
+    <h2 id="what-for">
+      What it is used for<HeadingAnchor
+        id="what-for"
+        label="What it is used for"
+      />
+    </h2>
+    <p>
+      NTUMods runs a read-only MCP server at <code>{mcpUrl}</code>. Once you add
+      it, your assistant can look up modules, class indexes and exams in the
+      real NTU data instead of guessing: what a module needs as a prerequisite,
+      which indexes it has and when they run, and when the exam is. It serves
+      the same data as the <a href="/developers/api">REST API and data files</a
+      >, and needs no sign-in or key. Use the API or the data files in your own
       code, and the MCP server when you want an AI assistant to ask the
       questions.
     </p>
+    <p>
+      Ready to use it? Go to <a href="#connect">Connect</a>, or pick your
+      assistant under <strong>Adding to</strong> in the side menu.
+    </p>
 
-    <h2
-      id="connect"
-      class="scroll-mt-28 pt-4 text-lg font-semibold tracking-tight">
+    <h2 id="connect">
       Connect<HeadingAnchor id="connect" label="Connect" />
     </h2>
-    <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
-      <li>
-        <strong>Claude</strong> (claude.ai and the desktop app): open Customize, then
-        Connectors, then Add custom connector. Enter the URL above, choose No sign-in,
-        and add it. Free plans can add one custom connector. On Team and Enterprise
-        plans an Owner adds it for the organisation.
-      </li>
-      <li>
-        <strong>ChatGPT</strong>: turn on developer mode, then create an app
-        with the URL above and choose No authentication. Which plans have
-        developer mode is up to OpenAI, so check your workspace.
-      </li>
-      <li><strong>Claude Code</strong>: run this command.</li>
-    </ul>
-    <Code client:visible code={claudeCodeCommand} lang="bash" />
-    <p class="text-foreground/80 text-sm">
-      <strong>Cursor</strong>: add this to <code
-        class="bg-muted rounded px-1 py-0.5 font-mono text-sm">mcp.json</code
-      >.
+    <p>
+      Use Claude or ChatGPT? Install the official NTUMods connector in one
+      click:
     </p>
-    <Code client:visible code={cursorConfig} lang="json" />
-
-    <h2
-      id="tools"
-      class="scroll-mt-28 pt-4 text-lg font-semibold tracking-tight">
-      Tools<HeadingAnchor id="tools" label="Tools" />
-    </h2>
-    <div class="overflow-x-auto">
-      <table class="data-table text-sm!">
-        <thead>
-          <tr>
-            <th>Tool</th>
-            <th>What it does</th>
-            <th>Inputs</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            mcpTools.map((tool) => (
-              <tr>
-                <td class="whitespace-nowrap">
-                  <code class="bg-muted rounded px-1 py-0.5 font-mono text-sm">
-                    {tool.name}
-                  </code>
-                </td>
-                <td>{tool.description}</td>
-                <td class="space-y-1">
-                  {tool.inputs.length === 0 && "None"}
-                  {tool.inputs.map((input) => (
-                    <div>
-                      <code class="bg-muted rounded px-1 py-0.5 font-mono text-sm">
-                        {input.name}
-                      </code>{" "}
-                      <span class="text-muted-foreground">
-                        {input.type}
-                        {input.required ? ", required" : ""}.
-                      </span>{" "}
-                      {input.description}
-                    </div>
-                  ))}
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
+    <div class="grid gap-3 sm:grid-cols-2">
+      {
+        directoryListings.map((l) => {
+          const card = "flex flex-col gap-3 rounded-2xl border p-5 text-left"
+          const body = (
+            <>
+              <div class="flex items-start justify-between">
+                {l.name === "Claude" ? (
+                  <ClaudeIcon
+                    className="size-7"
+                    style={{ color: CLAUDE_COLOUR }}
+                  />
+                ) : (
+                  <OpenAIIcon className="size-7" />
+                )}
+                {l.url && <span class="text-muted-foreground">↗</span>}
+              </div>
+              <div class="space-y-1">
+                <p class="text-base font-semibold">Add to {l.name}</p>
+                <p class="text-muted-foreground text-sm">
+                  {l.url
+                    ? `Install the official NTUMods connector in ${l.name}.`
+                    : `The ${l.name} connector is coming soon. Use the steps below until then.`}
+                </p>
+              </div>
+              <p class="text-muted-foreground text-sm">
+                {l.url ? `Open in ${l.name} ›` : "Coming soon"}
+              </p>
+            </>
+          )
+          return l.url ? (
+            <a
+              class={`${card} hover:bg-accent transition-colors`}
+              href={l.url}
+              target="_blank"
+              rel="noopener">
+              {body}
+            </a>
+          ) : (
+            <div class={card} aria-disabled="true">
+              {body}
+            </div>
+          )
+        })
+      }
     </div>
-    <p class="text-foreground/80 text-sm">
-      Your timetable, plans, favourites and CGPA live in your own browser, so
-      the MCP server cannot see them. The <a
-        class={link}
-        href="/developers/webmcp">WebMCP tools</a
-      > cover those.
+    <p>Use another assistant, or add it by hand? Each one has its own steps:</p>
+    <div class="grid gap-3 sm:grid-cols-2">
+      {
+        MCP_CLIENTS.map((c) => (
+          <a
+            class="hover:bg-accent flex items-center justify-between rounded-2xl border p-4 transition-colors"
+            href={`/developers/mcp/${c.id}`}>
+            <span class="text-sm font-semibold">{c.label}</span>
+            <span class="text-muted-foreground">›</span>
+          </a>
+        ))
+      }
+    </div>
+    <p>
+      Want to know what your assistant can ask? See the <a
+        href="/developers/mcp/tools">MCP tools</a
+      > and the <a href="/developers/mcp/limits">limits and errors</a>.
     </p>
-
-    <h2
-      id="limits"
-      class="scroll-mt-28 pt-4 text-lg font-semibold tracking-tight">
-      Limits and errors<HeadingAnchor id="limits" label="Limits and errors" />
-    </h2>
-    <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
-      <li>
-        Every call is one JSON-RPC message sent with <code
-          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">POST</code
-        >. Batches are rejected.
-      </li>
-      <li>
-        Results are capped: 100 modules for <code
-          class="bg-muted rounded px-1 py-0.5 font-mono text-sm"
-          >search_modules</code
-        > and 200 exams for <code
-          class="bg-muted rounded px-1 py-0.5 font-mono text-sm"
-          >list_exams</code
-        >. For everything at once, download the data files in the <a
-          class={link}
-          href="/developers/api">REST API docs</a
-        >.
-      </li>
-      <li>
-        Many people share the same network address, so the per-address limit is
-        high. Back off on <code
-          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">429</code
-        > and wait the number of seconds in the <code
-          class="bg-muted rounded px-1 py-0.5 font-mono text-sm"
-          >Retry-After</code
-        > header.
-      </li>
-      <li>
-        A browser on another site gets <code
-          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">403</code
-        >, other methods get <code
-          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">405</code
-        >, and bodies over 16 KB get <code
-          class="bg-muted rounded px-1 py-0.5 font-mono text-sm">413</code
-        >.
-      </li>
-      <li>
-        Text in module records comes from NTU. Treat it as data, not as
-        instructions.
-      </li>
-    </ul>
   </div>
 </DevDocsLayout>

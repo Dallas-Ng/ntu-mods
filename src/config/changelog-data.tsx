@@ -100,7 +100,7 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
             walking time between each pair of venues, and a warning when the gap
             is too short. Walks are looked up only when you open it, for one day
             at a time. The Calendar, Generate and AI tabs are gone: generate
-            options now show by default. Guide:{" "}
+            options now show by default. Docs:{" "}
             <ChangelogLink href="/articles/ntu-timetable-planner-guide">
               NTU Timetable Planner Guide
             </ChangelogLink>
@@ -124,7 +124,7 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
             walking directions with times between classes. Switch between
             standard, hybrid and satellite views, browse halls, food, bus stops,
             car parks and toilets, and share a link that opens the exact view.
-            Guide:{" "}
+            Docs:{" "}
             <ChangelogLink href="/articles/ntu-campus-map-guide">
               NTU Campus Map: Find Any Lecture Theatre, Room and Walking Route
             </ChangelogLink>
@@ -184,9 +184,9 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
             assistant can search modules, check which indexes fit your plan,
             generate timetables and plan your CGPA, all on your own saved plans.
             Nothing is sent to our servers. Most students will not see a change
-            yet. Guide:{" "}
-            <ChangelogLink href="/articles/ntu-ai-agents-webmcp-guide">
-              Plan your NTU timetable with an AI assistant
+            yet. Docs:{" "}
+            <ChangelogLink href="/developers/webmcp">
+              Read the WebMCP docs
             </ChangelogLink>
             .
           </>
@@ -312,7 +312,7 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
             : enter your CGPA and remaining AU, or upload your transcript, to
             see the average grade you need for Merit, Distinction or Highest
             Distinction. Your transcript is read in your browser and never
-            uploaded. Guide:{" "}
+            uploaded. Docs:{" "}
             <ChangelogLink href="/articles/ntu-honours-classification-cgpa-guide">
               NTU honours and CGPA guide
             </ChangelogLink>
@@ -363,7 +363,7 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
             : upload your transcript PDF and see which modules to Flexible-Grade
             for the highest CGPA within your quota and the 12 AU Core, ICC and
             MPE cap. Your transcript is read in your browser and never uploaded.
-            Guide:{" "}
+            Docs:{" "}
             <ChangelogLink href="/articles/ntu-fgo-su-option-guide">
               NTU FGO guide
             </ChangelogLink>

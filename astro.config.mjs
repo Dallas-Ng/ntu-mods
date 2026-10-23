@@ -128,7 +128,16 @@ export default defineConfig({
     "/mod": { status: 301, destination: "/mods" },
     "/help": { status: 301, destination: "/faq" },
     "/fgo": { status: 301, destination: "/tools/fgo-optimiser" },
-    "/settings": { status: 301, destination: "/feedback" }
+    "/settings": { status: 301, destination: "/feedback" },
+    // The MCP and WebMCP guides became the developer docs.
+    "/articles/ntu-mods-mcp-server-guide": {
+      status: 301,
+      destination: "/developers/mcp"
+    },
+    "/articles/ntu-ai-agents-webmcp-guide": {
+      status: 301,
+      destination: "/developers/webmcp"
+    }
   },
   vite: {
     // Worktrees symlink the main checkout's node_modules, so the default
@@ -176,8 +185,10 @@ export default defineConfig({
         "shiki/themes/github-light.mjs",
         "shiki/themes/github-dark.mjs",
         "shiki/langs/shellscript.mjs",
+        "shiki/langs/javascript.mjs",
         "shiki/langs/json.mjs",
         "shiki/langs/markdown.mjs",
+        "shiki/langs/toml.mjs",
         "sonner",
         "tailwind-merge",
         "vaul",

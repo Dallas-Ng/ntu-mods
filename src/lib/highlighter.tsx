@@ -9,11 +9,14 @@ import { createJavaScriptRegexEngine } from "shiki/engine/javascript"
 // Add the languages you need. Each one loads the first time it is used.
 const languages = {
   bash: () => import("shiki/langs/shellscript.mjs"),
+  javascript: () => import("shiki/langs/javascript.mjs"),
   json: () => import("shiki/langs/json.mjs"),
-  markdown: () => import("shiki/langs/markdown.mjs")
+  markdown: () => import("shiki/langs/markdown.mjs"),
+  toml: () => import("shiki/langs/toml.mjs")
 }
 
 const aliases: Record<string, keyof typeof languages> = {
+  js: "javascript",
   md: "markdown",
   sh: "bash",
   shell: "bash",

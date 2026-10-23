@@ -1,0 +1,34 @@
+---
+import { siteConfig } from "@/config/site"
+import { getApiGroups } from "@/lib/developers/api-groups"
+import ApiExplorer from "@/components/developers/api-explorer"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const { desc } = siteConfig.metatags.developersWebmcp
+
+const groups = (await getApiGroups()).filter((g) => g.name === "Discovery")
+---
+
+<DevDocsLayout
+  title="NTUMods AI discovery files"
+  description={desc}
+  path="/developers/discovery"
+  eyebrow="Build with the data"
+  heading="AI discovery files"
+  intro="Plain files that tell crawlers and agents what NTUMods offers, without running the site.">
+  <p>
+    <a href="/llms.txt">llms.txt</a> summarises the site, and <a
+      href="/.well-known/ai-catalog.json">ai-catalog.json</a
+    > lists what is available, including the open module, index and exam data. <a
+      href="/.well-known/webmcp.json">webmcp.json</a
+    > lists the browser tools described in <a href="/developers/webmcp"
+      >WebMCP</a
+    >. Everything in them describes data that is already public on the site.
+  </p>
+
+  <div>
+    <ApiExplorer client:load groups={groups} />
+  </div>
+</DevDocsLayout>

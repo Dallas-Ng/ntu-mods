@@ -7,7 +7,7 @@ const PrivacyContent = () => {
       <div className="text-foreground">
         <Header
           title="Privacy Policy"
-          subtitle="Last Updated: 22 October 2026"
+          subtitle="Last Updated: 23 October 2026"
         />
       </div>
 
@@ -247,6 +247,35 @@ const PrivacyContent = () => {
           limiting. We do not store those addresses or counts in our own
           database. The &quot;Try it&quot; box on that page only sends a request
           to our own API, with the module code you type.
+        </p>
+
+        <h3 className="text-foreground mt-4 text-base font-semibold">
+          MCP Server
+        </h3>
+
+        <p>
+          Our public MCP server at ntumods.com/mcp gives AI assistants read-only
+          access to the same public module, class index and exam data. It needs
+          no account or key and does not read or change anything stored in your
+          browser. For each call we log the tool name, the result status, how
+          long it took, and the name of the client (the MCP client name, or the
+          start of its User-Agent). We do not log what you or the assistant
+          searched for or asked about, and we do not store calls in our own
+          database. We do not share these logs, and we do not use them for
+          advertising. As with the API, we count requests per IP address using
+          Cloudflare&apos;s rate limiting, and Cloudflare may keep standard
+          server logs, including IP addresses. The assistant you connect is a
+          separate service, and what you tell it is handled by its provider
+          under that provider&apos;s own privacy policy. We keep no account or
+          profile for MCP users, so we have nothing of ours to look up or
+          delete. Server logs held by Cloudflare follow its retention settings.
+          For questions or requests, use our{" "}
+          <a
+            href="/feedback"
+            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+            feedback page
+          </a>
+          .
         </p>
 
         <h3 className="text-foreground mt-4 text-base font-semibold">

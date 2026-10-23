@@ -44,6 +44,34 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "MCP server",
+    date: "23 Oct 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            A public, read-only{" "}
+            <ChangelogLink href="/developers/mcp">MCP server</ChangelogLink>{" "}
+            lets AI assistants such as Claude and ChatGPT search modules and
+            read class indexes and exams. No account or key is needed.
+          </>
+        )
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            The <ChangelogLink href="/privacy">privacy policy</ChangelogLink>{" "}
+            now covers what the MCP server logs, and the{" "}
+            <ChangelogLink href="/terms">terms of use</ChangelogLink> name it
+            alongside the public API.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Timetable redesign",
     date: "22 Oct 2026",
     items: [

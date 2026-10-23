@@ -77,7 +77,7 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
             rows={4}
             placeholder="NTUMODS1-…"
             aria-invalid={isInvalid}
-            className="resize-none font-mono text-xs break-all"
+            className="resize-none font-mono text-xs break-all md:text-xs"
           />
           {isInvalid && (
             <ModalNote tone="danger">

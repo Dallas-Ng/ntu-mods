@@ -172,7 +172,7 @@ const TimetableIndexNote = ({
         placeholder="e.g. bring laptop, seat near the door"
         // Stay at the default 16px on mobile — anything smaller triggers
         // iOS Safari's auto-zoom on focus. Only shrink on desktop.
-        className="min-h-10 sm:text-xs"
+        className="min-h-10 sm:text-xs md:text-xs"
       />
     </div>
   )

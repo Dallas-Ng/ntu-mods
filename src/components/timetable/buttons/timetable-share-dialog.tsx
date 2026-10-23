@@ -145,7 +145,7 @@ const TimetableShareDialog = ({
             value={link}
             onFocus={(e) => e.currentTarget.select()}
             aria-label="Share link"
-            className="text-muted-foreground font-mono text-xs"
+            className="text-muted-foreground font-mono text-xs md:text-xs"
           />
           {isLinkLong && (
             <ModalNote>

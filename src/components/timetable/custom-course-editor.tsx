@@ -243,7 +243,7 @@ const SessionRowEditor = ({
 
             {isCustomType && (
               <Input
-                className="h-8 w-full text-sm placeholder:text-sm"
+                className="h-8 w-full text-sm"
                 placeholder="Optional — e.g. Practice, Shift, Meeting"
                 value={session.type}
                 maxLength={20}
@@ -292,7 +292,7 @@ const SessionRowEditor = ({
       <div className="space-y-1">
         <Label className="text-xs">Venue</Label>
         <Input
-          className="h-8 text-sm placeholder:text-sm"
+          className="h-8 text-sm"
           placeholder="Optional"
           value={session.venue}
           onChange={(e) => onChange({ venue: e.target.value })}
@@ -515,7 +515,7 @@ export const CourseModal = ({
 
           {hasMultipleIndexes && (
             <Input
-              className="h-8 text-sm placeholder:text-sm"
+              className="h-8 text-sm"
               placeholder="Option name"
               value={activeIndex.label}
               maxLength={30}

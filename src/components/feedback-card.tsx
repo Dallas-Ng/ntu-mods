@@ -133,7 +133,7 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
                   <Input
                     autoComplete="off"
                     placeholder="your@email.com"
-                    className="bg-background placeholder:text-sm"
+                    className="bg-background"
                     {...field}
                   />
                 </FormControl>
@@ -156,7 +156,7 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
                   <Textarea
                     placeholder="Share your thoughts, report an issue, or suggest an improvement..."
                     {...field}
-                    className="bg-background min-h-[160px] placeholder:text-sm"
+                    className="bg-background min-h-[160px]"
                   />
                 </FormControl>
 

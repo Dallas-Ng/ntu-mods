@@ -7,6 +7,7 @@
     "node": ">=22.5"
   },
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks",
     "data": "tsx scripts/build-static-data.mts",
     "dev": "pnpm data && astro dev --port ${PORT:-4321}",
     "build": "pnpm data && astro build && node scripts/upload-sourcemaps.mjs && tsx scripts/build-sitemap.mts && node scripts/indexnow.mjs ../dist/client",
@@ -21,6 +22,7 @@
     "lint": "eslint . && astro check && tsc",
     "lint:fix": "eslint . --fix",
     "format:write": "prettier --write \"**/*.{ts,tsx,mdx,astro}\" --cache",
+    "format:staged": "git diff --cached --name-only --diff-filter=ACMR -z -- '*.ts' '*.tsx' '*.mdx' '*.astro' | xargs -0 -r prettier --write --ignore-unknown",
     "format:check": "prettier --check \"**/*.{ts,tsx,mdx,astro}\" --cache",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",

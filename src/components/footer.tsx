@@ -36,7 +36,8 @@ const LEGAL_LINKS = [
   { label: "AI instructions", href: "/ai-instructions" },
   { label: "GitHub", href: siteConfig.links.repo },
   { label: "Developers", href: "/developers" },
-  { label: "Sitemap", href: "/sitemap" }
+  { label: "Sitemap", href: "/sitemap" },
+  { label: "Buy me a coffee", href: siteConfig.links.coffee }
 ] as const
 
 const Footer = () => {

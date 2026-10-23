@@ -129,6 +129,10 @@ Setup steps and the full checklist are in [CONTRIBUTING.md](CONTRIBUTING.md). Re
 
 Maintainers: see [docs/maintenance.md](docs/maintenance.md) for the per-semester checklist and [docs/deployment.md](docs/deployment.md) for releases.
 
+## Support
+
+NTUMods is free and maintained by one person. If it saved you time, you can [buy me a coffee](https://buymeacoffee.com/dallasng) or sponsor on [GitHub](https://github.com/sponsors/Dallas-Ng).
+
 ## License
 
 Released under the [MIT License](LICENSE.txt).

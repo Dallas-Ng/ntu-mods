@@ -1,6 +1,12 @@
 import { expect, test } from "@playwright/test"
 
-import { BASE_URL, pagesUnderTest, SITE, sitemapPaths } from "./lib/urls"
+import {
+  BASE_URL,
+  pagesUnderTest,
+  sample,
+  SITE,
+  sitemapPaths
+} from "./lib/urls"
 
 const hrefsOf = (html: string) =>
   [...html.matchAll(/<a\b[^>]*?\bhref="([^"]*)"[^>]*>/g)].map((m) => ({
@@ -82,7 +88,20 @@ test.describe("crawl", () => {
     }
     // Every distinct internal target answers 200 directly: a link that 3xx's
     // wastes crawl budget and one that 404s is a bug.
-    await inBatches([...targets], 50, async ([t, from]) => {
+    // Module pages mostly render on demand (D1), so requesting every linked
+    // one is slow; they are covered by the per-page and module specs. Check
+    // every other target and a sample of module targets.
+    const moduleTarget = /^\/mods\/[A-Z0-9]+(\/\d{4}\/[12ST])?$/
+    const entries = [...targets]
+    const toCheck = [
+      ...entries.filter(([t]) => !moduleTarget.test(t)),
+      ...sample(
+        entries.filter(([t]) => moduleTarget.test(t)),
+        40,
+        "links-modules"
+      )
+    ]
+    await inBatches(toCheck, 50, async ([t, from]) => {
       const r = await request.get(t, { maxRedirects: 0 })
       if (r.status() !== 200) problems.push(`${from}: ${t} -> ${r.status()}`)
     })

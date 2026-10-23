@@ -156,7 +156,7 @@ export const siteConfig = {
   links: {
     github: "https://github.com/Dallas-Ng",
     linkedIn: "https://www.linkedin.com/in/dallas-ng/",
-    repo: "https://github.com/Dallas-Ng/ntu-dabao",
+    repo: "https://github.com/Dallas-Ng/ntu-mods",
     telegram: "https://t.me/dallas_ng"
   }
 } as const

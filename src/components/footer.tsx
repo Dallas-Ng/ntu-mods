@@ -25,7 +25,9 @@ const FOOTER_GROUPS = [
       { label: "Links", href: "/links" },
       { label: "Changelog", href: "/changelog" },
       { label: "Feedback", href: "/feedback" },
-      { label: "FAQ", href: "/faq" }
+      { label: "FAQ", href: "/faq" },
+      { label: "GitHub", href: siteConfig.links.repo },
+      { label: "Contribute", href: `${siteConfig.links.repo}#contributing` }
     ]
   }
 ]
@@ -73,6 +75,10 @@ const Footer = () => {
                 <li key={link.href}>
                   <a
                     href={link.href}
+                    {...(link.href.startsWith("http") && {
+                      target: "_blank",
+                      rel: "noopener noreferrer"
+                    })}
                     className="text-foreground/80 hover:text-primary transition-colors">
                     {link.label}
                   </a>

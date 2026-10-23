@@ -6,7 +6,7 @@ const TermsContent = () => {
   return (
     <Container size="sm" className="text-muted-foreground space-y-6">
       <div className="text-foreground">
-        <Header title="Terms of Use" subtitle="Last Updated: 22 October 2026" />
+        <Header title="Terms of Use" subtitle="Last Updated: 23 October 2026" />
       </div>
 
       <p className="text-sm">
@@ -24,8 +24,10 @@ const TermsContent = () => {
           NTUMods is a free, open-source tool for planning NTU timetables and
           browsing module, index and exam data. You may use it for personal,
           non-commercial planning. Do not misuse it: do not attempt to disrupt
-          it, overload it, scrape it beyond the documented public API and open
-          data files, or bypass its rate limits.
+          it, overload it, scrape it beyond the documented public API, open data
+          files and MCP server, or bypass its rate limits. The MCP server is
+          read-only and free to use from AI assistants, but it is provided as is
+          and its answers may be late, incomplete or wrong.
         </p>
       </section>
 

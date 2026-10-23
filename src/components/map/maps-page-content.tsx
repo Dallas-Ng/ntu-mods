@@ -832,7 +832,7 @@ const MapsPageContent = () => {
             "bg-card overflow-hidden",
             pinned
               ? "fixed inset-0 z-[80]"
-              : "absolute inset-0 rounded-2xl border"
+              : "absolute inset-0 isolate rounded-2xl border"
           )}>
           {data ? (
             <>

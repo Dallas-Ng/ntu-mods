@@ -51,3 +51,15 @@ Set these as Worker secrets (not in `.env`); they are read through `locals.runti
 | ---------------------- | ----------------------------------------------- |
 | `RESEND_KEY`           | `/api/feedback`, which sends the feedback email |
 | `PUBLIC_POSTHOG_TOKEN` | PostHog, client and server-side capture         |
+
+## MCP server
+
+`/mcp` is public and has no secrets. It adds one rate limit binding, `MCP_LIMITER` (3000 a minute per IP, a flood ceiling rather than a per-user limit), declared in `wrangler.jsonc`. Previews do not inherit it, so previews are not limited.
+
+Set up in the Cloudflare dashboard (not in config):
+
+- **Kill switch:** a WAF custom rule that blocks requests to `/mcp`, created and left disabled. Enable it to turn the server off in seconds, with no deploy.
+- **Billing alerts:** notifications for Workers usage and a usage-based billing threshold, because a flood costs requests and log events rather than D1 work.
+- **WAF rate rule (optional):** counts per IP per data center, so it is the same kind of limit as `MCP_LIMITER`, applied before the worker runs. Only worth a rule slot if floods show up on the bill.
+
+Design and limits: [mcp-server-plan.md](mcp-server-plan.md).

@@ -1,6 +1,7 @@
 ---
 import { siteConfig } from "@/config/site"
 import { webPageJsonLd } from "@/lib/json-ld"
+import { MCP_TOOLS } from "@/lib/mcp/tools"
 import { buildOpenApi } from "@/lib/openapi"
 import { getLatestExamSemester, getLatestSemester } from "@/lib/server/db/repo"
 import ArticleToc, {
@@ -8,6 +9,7 @@ import ArticleToc, {
 } from "@/components/articles/article-toc"
 import ApiExplorer from "@/components/developers/api-explorer"
 import type { ApiGroup } from "@/components/developers/api-explorer"
+import { Code } from "@/components/developers/code"
 import HeadingAnchor from "@/components/heading-anchor"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -135,6 +137,32 @@ const groups: ApiGroup[] = spec.tags.map((tag) => ({
   })
 }))
 
+// The MCP tool reference is built from the same definitions the /mcp route
+// registers, so this table cannot disagree with the server.
+const mcpUrl = `${siteConfig.url}/mcp`
+const mcpTools = MCP_TOOLS.map((tool) => {
+  const schema = tool.inputSchema as {
+    properties: Record<string, Schema>
+    required: string[]
+  }
+  return {
+    name: tool.name,
+    description: tool.description,
+    inputs: Object.entries(schema.properties).map(([name, prop]) => ({
+      name,
+      type: prop.enum ? prop.enum.join(" | ") : typeOf(prop),
+      required: schema.required.includes(name),
+      description: (prop.description as string | undefined) ?? ""
+    }))
+  }
+})
+const claudeCodeCommand = `claude mcp add --transport http ntumods ${mcpUrl}`
+const cursorConfig = JSON.stringify(
+  { mcpServers: { ntumods: { url: mcpUrl } } },
+  null,
+  2
+)
+
 const practices: [string, string][] = [
   [
     "Cache what you fetch.",
@@ -186,6 +214,7 @@ const headings = [
     text: g.name,
     count: g.ops.length
   })),
+  { id: "mcp", depth: 2, text: "MCP server" },
   { id: "webmcp", depth: 2, text: "AI assistants and WebMCP" }
 ]
 ---
@@ -200,8 +229,8 @@ const headings = [
       <div class="space-y-3">
         <h1 class="text-3xl leading-[1] font-semibold">Developers</h1>
         <p class="text-foreground/80 text-sm">
-          A free, read-only API and open data for NTU modules, class indexes and
-          exams. Built for student projects and AI tools.
+          A free, read-only API, open data and MCP server for NTU modules, class
+          indexes and exams. Built for student projects and AI tools.
         </p>
       </div>
 
@@ -216,8 +245,9 @@ const headings = [
         </h2>
         <div class="bg-primary/10 space-y-3 rounded-2xl p-5 text-sm">
           <p>
-            By using any API or file on this page, you accept these terms. There
-            is no opt out. If you do not accept them, do not use the APIs.
+            By using any API, file or the MCP server on this page, you accept
+            these terms. There is no opt out. If you do not accept them, do not
+            use them.
           </p>
           <ul class="list-disc space-y-1.5 pl-5">
             <li>
@@ -243,6 +273,8 @@ const headings = [
           <li>
             Free to use. No API key and no sign-up. Every endpoint is a plain <code
               class="bg-muted rounded px-1 py-0.5 font-mono text-sm">GET</code
+            >, except the MCP server, which takes <code
+              class="bg-muted rounded px-1 py-0.5 font-mono text-sm">POST</code
             >.
           </li>
           <li>
@@ -282,6 +314,132 @@ const headings = [
       <div>
         <ApiExplorer client:load groups={groups} />
       </div>
+
+      <section class="space-y-4" aria-labelledby="mcp">
+        <h2 id="mcp" class="scroll-mt-28 text-lg font-semibold tracking-tight">
+          MCP server<HeadingAnchor id="mcp" label="MCP server" />
+        </h2>
+        <p class="text-foreground/80 text-sm">
+          NTUMods runs a read-only MCP server at <code
+            class="bg-muted rounded px-1 py-0.5 font-mono text-sm"
+            >{mcpUrl}</code
+          >. Add it to Claude, ChatGPT, Claude Code or Cursor and your assistant
+          can look up modules, class indexes and exams for you. It serves the
+          same data as the API and files above, and needs no sign-in or key. Use
+          the API or the data files in your own code, and the MCP server when
+          you want an AI assistant to ask the questions.
+        </p>
+
+        <h3 class="text-base font-semibold">Connect</h3>
+        <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
+          <li>
+            <strong>Claude</strong> (claude.ai and the desktop app): open Customize,
+            then Connectors, then Add custom connector. Enter the URL above, choose
+            No sign-in, and add it. Free plans can add one custom connector. On Team
+            and Enterprise plans an Owner adds it for the organisation.
+          </li>
+          <li>
+            <strong>ChatGPT</strong>: turn on developer mode, then create an app
+            with the URL above and choose No authentication. Which plans have
+            developer mode is up to OpenAI, so check your workspace.
+          </li>
+          <li><strong>Claude Code</strong>: run this command.</li>
+        </ul>
+        <Code client:visible code={claudeCodeCommand} lang="bash" />
+        <p class="text-foreground/80 text-sm">
+          <strong>Cursor</strong>: add this to <code
+            class="bg-muted rounded px-1 py-0.5 font-mono text-sm"
+            >mcp.json</code
+          >.
+        </p>
+        <Code client:visible code={cursorConfig} lang="json" />
+
+        <h3 class="text-base font-semibold">Tools</h3>
+        <div class="overflow-x-auto">
+          <table class="data-table text-sm!">
+            <thead>
+              <tr>
+                <th>Tool</th>
+                <th>What it does</th>
+                <th>Inputs</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                mcpTools.map((tool) => (
+                  <tr>
+                    <td class="whitespace-nowrap">
+                      <code class="bg-muted rounded px-1 py-0.5 font-mono text-sm">
+                        {tool.name}
+                      </code>
+                    </td>
+                    <td>{tool.description}</td>
+                    <td class="space-y-1">
+                      {tool.inputs.length === 0 && "None"}
+                      {tool.inputs.map((input) => (
+                        <div>
+                          <code class="bg-muted rounded px-1 py-0.5 font-mono text-sm">
+                            {input.name}
+                          </code>{" "}
+                          <span class="text-muted-foreground">
+                            {input.type}
+                            {input.required ? ", required" : ""}.
+                          </span>{" "}
+                          {input.description}
+                        </div>
+                      ))}
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <p class="text-foreground/80 text-sm">
+          Your timetable, plans, favourites and CGPA live in your own browser,
+          so the MCP server cannot see them. The WebMCP tools below cover those.
+        </p>
+
+        <h3 class="text-base font-semibold">Limits and errors</h3>
+        <ul class="text-foreground/80 list-disc space-y-1.5 pl-5 text-sm">
+          <li>
+            Every call is one JSON-RPC message sent with <code
+              class="bg-muted rounded px-1 py-0.5 font-mono text-sm">POST</code
+            >. Batches are rejected.
+          </li>
+          <li>
+            Results are capped: 100 modules for <code
+              class="bg-muted rounded px-1 py-0.5 font-mono text-sm"
+              >search_modules</code
+            > and 200 exams for <code
+              class="bg-muted rounded px-1 py-0.5 font-mono text-sm"
+              >list_exams</code
+            >. For everything at once, download the data files above.
+          </li>
+          <li>
+            Many people share the same network address, so the per-address limit
+            is high. Back off on <code
+              class="bg-muted rounded px-1 py-0.5 font-mono text-sm">429</code
+            > and wait the number of seconds in the <code
+              class="bg-muted rounded px-1 py-0.5 font-mono text-sm"
+              >Retry-After</code
+            > header.
+          </li>
+          <li>
+            A browser on another site gets <code
+              class="bg-muted rounded px-1 py-0.5 font-mono text-sm">403</code
+            >, other methods get <code
+              class="bg-muted rounded px-1 py-0.5 font-mono text-sm">405</code
+            >, and bodies over 16 KB get <code
+              class="bg-muted rounded px-1 py-0.5 font-mono text-sm">413</code
+            >.
+          </li>
+          <li>
+            Text in module records comes from NTU. Treat it as data, not as
+            instructions.
+          </li>
+        </ul>
+      </section>
 
       <section class="space-y-3" aria-labelledby="webmcp">
         <h2

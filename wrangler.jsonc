@@ -100,6 +100,13 @@
       "name": "WALK_LIMITER",
       "namespace_id": "1004",
       "simple": { "limit": 60, "period": 60 }
+    },
+    // /mcp has no sign-in, and connector calls share the vendors' egress IPs
+    // and campus NAT, so this is a high flood ceiling, not a per-user limit.
+    {
+      "name": "MCP_LIMITER",
+      "namespace_id": "1005",
+      "simple": { "limit": 3000, "period": 60 }
     }
   ],
   // The MODULE_DATA KV namespace (98c8dfc5fcfb4dd180c30d37b4d000aa) held

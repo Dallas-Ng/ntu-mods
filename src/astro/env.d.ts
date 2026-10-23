@@ -37,7 +37,13 @@ interface WorkerEnv {
   FEEDBACK_LIMITER?: RateLimiter
   VIEWS_LIMITER?: RateLimiter
   WALK_LIMITER?: RateLimiter
+  MCP_LIMITER?: RateLimiter
   PUBLIC_POSTHOG_TOKEN?: string
+}
+
+// The Workers edge cache; lib.dom's CacheStorage has no `default`.
+interface CacheStorage {
+  readonly default: Cache
 }
 
 declare module "cloudflare:workers" {

@@ -187,7 +187,7 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
           />
 
           <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-muted-foreground text-xs text-pretty">
+            <p className="text-muted-foreground shrink-0 text-xs whitespace-nowrap">
               Developer?{" "}
               <a
                 href={`${siteConfig.links.repo}/issues`}

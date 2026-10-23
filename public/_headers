@@ -36,6 +36,12 @@
   Content-Type: text/plain; charset=utf-8
   Access-Control-Allow-Origin: *
 
+# OpenAI Apps domain verification token. No extension, so set the type.
+/.well-known/openai-apps-challenge
+  ! Cache-Control
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
 /.well-known/webmcp.json
   ! Cache-Control
   Cache-Control: public, max-age=3600, s-maxage=86400

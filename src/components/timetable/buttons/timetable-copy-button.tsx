@@ -12,9 +12,12 @@ import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { usePlanNames } from "@/hooks/use-plan-names"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
+import {
+  ModalFooter,
+  ModalNote,
+  ModalSection
+} from "@/components/ui/modal-parts"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
-
-import { ModalFooter, ModalNote, ModalSection } from "./modal-parts"
 
 const TimetableCopyButton = () => {
   const { timetables, updateTimetable, qsTimetable, updateTimetableIndex } =

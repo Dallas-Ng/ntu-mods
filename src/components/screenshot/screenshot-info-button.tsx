@@ -3,16 +3,10 @@
 import { useState } from "react"
 import { BadgeInfo } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
+import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-import { Button } from "../ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTrigger
-} from "../ui/dialog"
+import { TextLink } from "@/components/ui/text-link"
 
 type PhoneType = "android" | "ios" | "web"
 
@@ -30,28 +24,33 @@ const ScreenshotInfoButton = () => {
   const [tabValue, setTabValue] = useState<PhoneType>(detectPhone)
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={(val) => setDialogOpen(val)}>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="icon" className="text-primary">
-          <BadgeInfo className="size-5" />
-        </Button>
-      </DialogTrigger>
+    <>
+      <Button
+        variant="outline"
+        size="icon"
+        className="text-primary"
+        aria-label="How to take a screenshot"
+        onClick={() => setDialogOpen(true)}>
+        <BadgeInfo className="size-5" />
+      </Button>
 
-      <DialogContent className="max-h-[90svh]" aria-describedby={undefined}>
+      <ResponsiveModal
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        nested={false}
+        title="How to take a screenshot"
+        className="max-h-[90svh] overflow-y-auto">
         <Tabs
-          defaultValue="ios"
           value={tabValue}
           onValueChange={(val) => setTabValue(val as PhoneType)}>
-          <DialogHeader>
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="ios">IOS</TabsTrigger>
-              <TabsTrigger value="android">Android</TabsTrigger>
-              <TabsTrigger value="web">Web</TabsTrigger>
-            </TabsList>
-          </DialogHeader>
+          <TabsList className="mb-2 grid w-full grid-cols-3">
+            <TabsTrigger value="ios">iOS</TabsTrigger>
+            <TabsTrigger value="android">Android</TabsTrigger>
+            <TabsTrigger value="web">Web</TabsTrigger>
+          </TabsList>
 
           <TabsContent value="ios" className="space-y-2">
-            <h2 className="font-semibold">Take a full-page screenshot</h2>
+            <h3 className="font-semibold">Take a full-page screenshot</h3>
 
             <p className="text-muted-foreground">
               You can take a screenshot of content that exceeds the length of
@@ -72,17 +71,17 @@ const ScreenshotInfoButton = () => {
 
             <p>
               For more info visit{" "}
-              <a
+              <TextLink
                 rel="noopener noreferrer"
                 href="https://support.apple.com/en-ie/guide/iphone/iphc872c0115/ios"
-                className="text-primary hover:text-primary/80 font-semibold underline underline-offset-2 transition-colors">
+                className="font-semibold">
                 here
-              </a>
+              </TextLink>
             </p>
           </TabsContent>
 
           <TabsContent value="android" className="space-y-2">
-            <h2 className="font-semibold">Take a scrolling screenshot</h2>
+            <h3 className="font-semibold">Take a scrolling screenshot</h3>
 
             <p className="text-muted-foreground">
               These steps work on devices running Android 12 and up, on most
@@ -101,18 +100,18 @@ const ScreenshotInfoButton = () => {
 
             <p>
               For more info visit{" "}
-              <a
+              <TextLink
                 rel="noopener noreferrer"
                 href="https://support.google.com/android/answer/9075928?hl=en"
-                className="text-primary hover:text-primary/80 font-semibold underline underline-offset-2 transition-colors">
+                className="font-semibold">
                 here
-              </a>
+              </TextLink>
             </p>
           </TabsContent>
 
           <TabsContent value="web" className="space-y-4">
             <div className="space-y-2">
-              <h2 className="font-semibold">Mac OS</h2>
+              <h3 className="font-semibold">Mac OS</h3>
 
               <p className="text-muted-foreground">Use Screenshot</p>
 
@@ -128,17 +127,17 @@ const ScreenshotInfoButton = () => {
 
               <p>
                 For more info visit{" "}
-                <a
+                <TextLink
                   rel="noopener noreferrer"
                   href="https://support.apple.com/en-sg/102646"
-                  className="text-primary hover:text-primary/80 font-semibold underline underline-offset-2 transition-colors">
+                  className="font-semibold">
                   here
-                </a>
+                </TextLink>
               </p>
             </div>
 
             <div className="space-y-2">
-              <h2 className="font-semibold">Windows</h2>
+              <h3 className="font-semibold">Windows</h3>
 
               <p className="text-muted-foreground">Use Snipping Tool</p>
 
@@ -159,24 +158,18 @@ const ScreenshotInfoButton = () => {
 
               <p>
                 For more info visit{" "}
-                <a
+                <TextLink
                   rel="noopener noreferrer"
                   href="https://support.microsoft.com/en-us/windows/use-snipping-tool-to-capture-screenshots-00246869-1843-655f-f220-97299b865f6b"
-                  className="text-primary hover:text-primary/80 font-semibold underline underline-offset-2 transition-colors">
+                  className="font-semibold">
                   here
-                </a>
+                </TextLink>
               </p>
             </div>
           </TabsContent>
         </Tabs>
-
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setDialogOpen(false)}>
-            Close
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveModal>
+    </>
   )
 }
 export default ScreenshotInfoButton

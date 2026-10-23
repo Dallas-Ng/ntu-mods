@@ -7,10 +7,8 @@ import {
   LockOpenIcon,
   RotateCcwIcon,
   Settings2Icon,
-  WandIcon,
-  XIcon
+  WandIcon
 } from "lucide-react"
-import { Dialog as DialogPrimitive } from "radix-ui"
 
 import { track } from "@/lib/analytics"
 import { customCourseModuleKey } from "@/lib/custom-course-colors"
@@ -24,13 +22,11 @@ import {
 } from "@/lib/generation-config"
 import { COURSE_TYPE } from "@/lib/module-constants"
 import { latestSemester, latestYear } from "@/lib/semesters"
-import { cn } from "@/lib/utils"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableGeneration } from "@/hooks/use-timetable-generation"
 import { Button } from "@/components/ui/button"
-import { DialogOverlay, DialogPortal } from "@/components/ui/dialog"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import {
   Select,
@@ -44,28 +40,6 @@ import { Switch } from "@/components/ui/switch"
 import InfoTip from "../info-tip"
 import TimetableBlacklistEditor from "./timetable-blacklist-editor"
 import TimetableResultsCycler from "./timetable-results-cycler"
-
-const ElevatedDialogContent = ({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Content>) => (
-  <DialogPortal>
-    <DialogOverlay className="z-50" />
-    <DialogPrimitive.Content
-      className={cn(
-        "bg-background data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 shadow-lg duration-200 outline-none sm:rounded-lg",
-        className
-      )}
-      {...props}>
-      {children}
-      <DialogPrimitive.Close className="ring-offset-background focus:ring-ring absolute top-2 right-2 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
-        <XIcon />
-        <span className="sr-only">Close</span>
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
-  </DialogPortal>
-)
 
 const SectionLabel = ({
   children,

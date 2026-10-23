@@ -3,10 +3,14 @@
 import { ExternalLink } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import {
+  ModalFooter,
+  ModalNote,
+  ModalSection
+} from "@/components/ui/modal-parts"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-import { ModalFooter, ModalNote, ModalSection } from "./modal-parts"
+import { TextLink } from "@/components/ui/text-link"
 
 interface Props {
   open: boolean
@@ -103,14 +107,14 @@ const TimetableCalendarDialog = ({
               <p className="text-muted-foreground text-xs leading-relaxed">
                 {app.steps}
               </p>
-              <a
+              <TextLink
                 href={app.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary inline-flex items-center gap-1 text-xs underline underline-offset-2">
+                className="inline-flex items-center gap-1 text-xs">
                 {app.link}
                 <ExternalLink className="size-3" />
-              </a>
+              </TextLink>
             </TabsContent>
           ))}
         </Tabs>

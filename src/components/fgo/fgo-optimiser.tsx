@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useRef, useState } from "react"
-import { Check, Copy, Sparkles } from "lucide-react"
+import { Sparkles } from "lucide-react"
 
 import { reportError, track as trackEvent } from "@/lib/analytics"
 import type { EventSuffix } from "@/lib/analytics-events"
@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import { CopyButton } from "@/components/ui/copy-button"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -35,6 +36,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
+import { TextLink } from "@/components/ui/text-link"
 import { Toggle } from "@/components/ui/toggle"
 import { ToolSteps } from "@/components/tools/tool-steps"
 import {
@@ -82,7 +84,6 @@ export default function FgoOptimiser() {
   const [extraBde, setExtraBde] = useState("0")
   const [error, setError] = useState("")
   const [busy, setBusy] = useState(false)
-  const [copied, setCopied] = useState(false)
   const input = useRef<HTMLInputElement>(null)
 
   const quotaAu = Number(quota)
@@ -191,19 +192,10 @@ export default function FgoOptimiser() {
     })
   }
 
-  async function copyList() {
-    const text = pickedMods
+  const copyText = () =>
+    pickedMods
       .map((m) => `${m.code} ${m.name} (${m.grade}, ${m.au} AU)`)
       .join("\n")
-    try {
-      await navigator.clipboard.writeText(text)
-      track("list_copied", { picks: pickedMods.length })
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
-    } catch {
-      setCopied(false)
-    }
-  }
 
   const fileInput = (
     <input
@@ -241,14 +233,13 @@ export default function FgoOptimiser() {
               body: (
                 <>
                   Download the official PDF from the{" "}
-                  <a
+                  <TextLink
                     href={TRANSCRIPT_URL}
                     onClick={() => track("transcript_link_clicked")}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 underline">
+                    rel="noopener noreferrer">
                     Self-Help Transcript System
-                  </a>
+                  </TextLink>
                   .
                 </>
               )
@@ -437,14 +428,14 @@ export default function FgoOptimiser() {
             <div className="bg-muted overflow-hidden rounded-2xl">
               <div className="bg-background/50 text-muted-foreground flex items-center justify-between border-b px-3 py-1.5 text-xs font-medium tracking-wide uppercase">
                 Declare in the FGO portal
-                <Button
-                  variant="ghost"
-                  size="xs"
-                  onClick={() => void copyList()}
-                  className="normal-case">
-                  {copied ? <Check /> : <Copy />}
-                  {copied ? "Copied" : "Copy"}
-                </Button>
+                <CopyButton
+                  value={copyText}
+                  label
+                  onCopied={() =>
+                    track("list_copied", { picks: pickedMods.length })
+                  }
+                  className="normal-case"
+                />
               </div>
               <ul className="divide-y text-sm">
                 {pickedMods.map((m) => (

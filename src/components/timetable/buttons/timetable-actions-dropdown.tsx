@@ -31,14 +31,7 @@ import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog"
+import { ConfirmDialog } from "@/components/ui/confirm-dialog"
 import {
   Drawer,
   DrawerContent,
@@ -330,35 +323,17 @@ const TimetableActionsDropdown = ({
         loading={calendarLoading}
         onDownload={handleDownloadCalendar}
       />
-      <Dialog
+      <ConfirmDialog
         open={confirmTarget !== null}
-        onOpenChange={(o) => !o && setConfirmTarget(null)}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>
-              Overwrite {confirmTarget !== null && label(confirmTarget)}?
-            </DialogTitle>
-            <DialogDescription>
-              {confirmTarget !== null && label(confirmTarget)} already has a
-              timetable. Duplicating {label(timetableIndex)} into it replaces
-              what is there.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setConfirmTarget(null)}>
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={() => {
-                if (confirmTarget !== null) handleDuplicate(confirmTarget)
-                setConfirmTarget(null)
-              }}>
-              Overwrite
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        onOpenChange={(o) => !o && setConfirmTarget(null)}
+        title={`Overwrite ${confirmTarget !== null ? label(confirmTarget) : ""}?`}
+        description={`${confirmTarget !== null ? label(confirmTarget) : ""} already has a timetable. Duplicating ${label(timetableIndex)} into it replaces what is there.`}
+        confirmLabel="Overwrite"
+        destructive
+        onConfirm={() => {
+          if (confirmTarget !== null) handleDuplicate(confirmTarget)
+        }}
+      />
       <TimetableSettingsDialog
         open={settingsOpen}
         onOpenChange={setSettingsOpen}
@@ -426,10 +401,7 @@ const TimetableActionsDropdown = ({
                         <button
                           key={index}
                           type="button"
-                          onClick={() => {
-                            setSheetOpen(false)
-                            requestDuplicate(index)
-                          }}
+                          onClick={closeThen(() => requestDuplicate(index))}
                           className="hover:bg-accent flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg p-3 text-left text-sm transition-colors">
                           <span className="truncate">{label(index)}</span>
                           {named(index) && (

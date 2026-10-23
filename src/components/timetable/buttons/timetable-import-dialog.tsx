@@ -10,10 +10,13 @@ import { decodeTextBundle } from "@/lib/timetable-share"
 import { cn } from "@/lib/utils"
 import { usePlanNames } from "@/hooks/use-plan-names"
 import { Button } from "@/components/ui/button"
+import {
+  ModalFooter,
+  ModalNote,
+  ModalSection
+} from "@/components/ui/modal-parts"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import { Textarea } from "@/components/ui/textarea"
-
-import { ModalFooter, ModalNote, ModalSection } from "./modal-parts"
 
 interface Props {
   open: boolean

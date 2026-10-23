@@ -12,7 +12,6 @@ import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
 import { Command, CommandItem } from "@/components/ui/command"
-import { DialogFooter } from "@/components/ui/dialog"
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
 import {
   DropdownMenu,
@@ -20,6 +19,7 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
+import { ModalFooter } from "@/components/ui/modal-parts"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
@@ -79,12 +79,12 @@ const RenameDialog = ({
             {value.length}/{MAX_PLAN_NAME}
           </p>
         </div>
-        <DialogFooter className="gap-2 sm:justify-between">
+        <ModalFooter className="sm:justify-between">
           <Button type="button" variant="ghost" onClick={() => save("")}>
             Use default name
           </Button>
           <Button type="submit">Save</Button>
-        </DialogFooter>
+        </ModalFooter>
       </form>
     </ResponsiveModal>
   )

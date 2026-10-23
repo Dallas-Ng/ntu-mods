@@ -9,10 +9,13 @@ import { BASE_URL } from "@/lib/constants"
 import { buildShareLink, encodeTextBundle } from "@/lib/timetable-share"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import {
+  ModalNote,
+  ModalOption,
+  ModalSection
+} from "@/components/ui/modal-parts"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import { Switch } from "@/components/ui/switch"
-
-import { ModalNote, ModalOption, ModalSection } from "./modal-parts"
 
 // Chrome's ~2000 char practical ceiling, minus room for the origin
 const LINK_LENGTH_WARNING = 1800

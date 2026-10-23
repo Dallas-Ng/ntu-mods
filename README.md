@@ -1,4 +1,4 @@
-<h1 align="center">NTU Mods</h1>
+<h1 align="center">NTUMods</h1>
 
 <p align="center">
   A free, open source timetable planner for Nanyang Technological University students.<br />
@@ -11,7 +11,7 @@
   <a href="https://github.com/Dallas-Ng/ntu-mods/issues/new/choose">Request a feature</a>
 </p>
 
-![NTU Mods banner](/public/og-image.png)
+![NTUMods banner](/public/og-image.png)
 
 **Quick links**
 

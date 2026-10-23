@@ -1,6 +1,6 @@
 # Maintenance
 
-Part of [NTU Mods](../README.md). Data publishing is in [scraper/README.md](../scraper/README.md); deployment is in [deployment.md](deployment.md).
+Part of [NTUMods](../README.md). Data publishing is in [scraper/README.md](../scraper/README.md); deployment is in [deployment.md](deployment.md).
 
 Manual tasks at the start of each semester.
 

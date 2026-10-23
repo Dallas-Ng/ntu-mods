@@ -1,6 +1,6 @@
 # src
 
-Part of [NTU Mods](../README.md). System overview: [docs/architecture.md](../docs/architecture.md). Course data and database: [db/README.md](../db/README.md). Deployment: [docs/deployment.md](../docs/deployment.md).
+Part of [NTUMods](../README.md). System overview: [docs/architecture.md](../docs/architecture.md). Course data and database: [db/README.md](../db/README.md). Deployment: [docs/deployment.md](../docs/deployment.md).
 
 Site code. Astro's special directories live under `src/astro/` (via `srcDir` in [`astro.config.mjs`](../astro.config.mjs)). Everything shared (`components/`, `hooks/`, `lib/`, `state/`) stays here and is imported through the `@/*` alias.
 

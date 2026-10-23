@@ -97,7 +97,7 @@ export const POST: APIRoute = async ({ request }) => {
     body: JSON.stringify({
       from: "feedback@ntumods.com",
       to: "ngdallas1@gmail.com",
-      subject: "New Feedback on NTU Mods",
+      subject: "New Feedback on NTUMods",
       text: emailLines.join("\n")
     })
   })

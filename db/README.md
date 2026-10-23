@@ -1,6 +1,6 @@
 # Data and database
 
-Part of [NTU Mods](../README.md). System overview: [docs/architecture.md](../docs/architecture.md). Site code that reads this data: [src/README.md](../src/README.md).
+Part of [NTUMods](../README.md). System overview: [docs/architecture.md](../docs/architecture.md). Site code that reads this data: [src/README.md](../src/README.md).
 
 Course data is produced by [`scraper/`](../scraper/README.md), which also documents publishing (`--load`, `--upsync`), semester codes and data invariants. This page covers how the site consumes that data.
 

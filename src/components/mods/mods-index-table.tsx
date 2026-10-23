@@ -1,3 +1,6 @@
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
+
 import type { PrecomputedTimetableMatrix } from "../timetable-table/table"
 import { TimetableTable } from "../timetable-table/table"
 
@@ -9,7 +12,8 @@ interface Props {
 const ModsIndexTable = ({ indexes, precomputedMatrix }: Props) => {
   if (Object.values(indexes).length === 0) {
     return (
-      <div className="bg-muted rounded-2xl p-5 text-center text-sm">
+      <div
+        className={cn(cardVariants(), "rounded-2xl p-5 text-center text-sm")}>
         <p className="text-muted-foreground">
           No indexes available for this semester
         </p>

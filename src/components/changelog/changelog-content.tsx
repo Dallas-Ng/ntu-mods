@@ -12,6 +12,7 @@ import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { UNSEEN_CHANGELOG_IDS } from "@/hooks/use-changelog-unseen"
 import { useHydrated } from "@/hooks/use-hydrated"
+import { cardVariants } from "@/components/ui/card"
 import ArticleToc, {
   MobileSectionDropdown
 } from "@/components/articles/article-toc"
@@ -21,18 +22,14 @@ import { NewBadge } from "@/components/new-dot"
 
 type ChangelogFilter = ChangelogCategory | "All"
 
+// Status colours where a category has one; the rest stay neutral.
 const CATEGORY_STYLES: Record<ChangelogCategory, string> = {
-  "New Feature":
-    "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-300",
-  Improvement:
-    "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-300",
-  "Bug Fix":
-    "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-300",
-  Content:
-    "border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-900 dark:bg-violet-950 dark:text-violet-300",
-  Data: "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300",
-  Performance:
-    "border-cyan-200 bg-cyan-50 text-cyan-700 dark:border-cyan-900 dark:bg-cyan-950 dark:text-cyan-300"
+  "New Feature": "bg-success-subtle text-success",
+  Improvement: "bg-primary-subtle text-primary",
+  "Bug Fix": "bg-destructive-subtle text-destructive",
+  Content: "bg-muted text-foreground",
+  Data: "bg-warning-subtle text-warning",
+  Performance: "bg-muted text-foreground"
 }
 
 const CATEGORIES = Object.keys(CATEGORY_STYLES) as ChangelogCategory[]
@@ -121,7 +118,10 @@ const ChangelogReleaseSection = ({
   return (
     <section
       id={slug}
-      className="bg-muted relative scroll-mt-32 rounded-2xl p-5 md:p-6 lg:scroll-mt-20">
+      className={cn(
+        cardVariants(),
+        "relative scroll-mt-32 rounded-2xl p-5 md:p-6 lg:scroll-mt-20"
+      )}>
       {isUnseen && (
         <NewBadge className="absolute top-4 right-4 md:top-6 md:right-6" />
       )}

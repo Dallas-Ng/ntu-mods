@@ -53,7 +53,7 @@ export function TranscriptDropzone({
       }}
       className={cn(
         "flex flex-col items-center gap-5 rounded-2xl border-2 border-dashed px-5 py-10 text-center transition-colors sm:py-14",
-        dragging && "border-primary bg-primary/5"
+        dragging && "border-primary bg-primary-subtle"
       )}>
       <span className="bg-background flex size-14 items-center justify-center rounded-full">
         <FileUp className="text-muted-foreground size-6" />

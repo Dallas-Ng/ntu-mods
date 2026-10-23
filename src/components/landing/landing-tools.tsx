@@ -1,4 +1,6 @@
 import { siteConfig } from "@/config/site"
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
 import { TextLink } from "@/components/ui/text-link"
 import { NewBadge } from "@/components/new-dot"
 
@@ -23,7 +25,10 @@ const LandingTools = () => {
         {tools.map((tool) => (
           <div
             key={tool.href}
-            className="bg-muted landing-reveal flex min-h-[320px] flex-col justify-between gap-10 rounded-2xl p-5 md:p-6">
+            className={cn(
+              cardVariants(),
+              "landing-reveal flex min-h-[320px] flex-col justify-between gap-10 rounded-2xl p-5 md:p-6"
+            )}>
             <div>
               <h3 className="text-2xl leading-tight font-bold tracking-tight md:text-3xl">
                 {tool.name}

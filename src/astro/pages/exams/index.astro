@@ -7,6 +7,7 @@ import {
   getLatestExamSemester,
   getSemesterExamsData
 } from "@/lib/server/db/repo"
+import { cardVariants } from "@/components/ui/card"
 import ExamsList from "@/components/exams/exams-list"
 import Header from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
@@ -89,7 +90,10 @@ const facts = [
   />
 
   <div
-    class="bg-muted flex flex-col gap-4 rounded-2xl p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+    class:list={[
+      cardVariants(),
+      "flex flex-col gap-4 rounded-2xl p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6"
+    ]}>
     <div class="min-w-0 space-y-1">
       <p class="text-xl font-bold tracking-tight">Find your exam dates</p>
       <p class="text-muted-foreground text-sm text-pretty">

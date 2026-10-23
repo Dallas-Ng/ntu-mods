@@ -10,6 +10,7 @@ import {
   CodeBlockLine,
   CodeBlockTitle
 } from "@/components/ui/code-block"
+import { InlineCode } from "@/components/ui/inline-code"
 
 /** Syntax-highlighted block with a copy button. */
 export const Code = ({
@@ -53,11 +54,9 @@ export const Rich = ({ text }: { text: string }) => (
   <>
     {text.split("`").map((part, i) =>
       i % 2 ? (
-        <code
-          key={i}
-          className="bg-muted text-foreground rounded px-1 py-0.5 font-mono text-sm break-all">
+        <InlineCode key={i} className="break-all">
           {part}
-        </code>
+        </InlineCode>
       ) : (
         part
       )

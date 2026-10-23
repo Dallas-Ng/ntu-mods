@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
 import { TextLink } from "@/components/ui/text-link"
 import Container from "@/components/container"
 import Header, { SectionHeading } from "@/components/header"
@@ -26,7 +28,8 @@ const PrivacyContent = () => {
         require an account to use the Service.
       </p>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>What We Collect</SectionHeading>
 
         <SectionHeading as="h3" className="mt-4">
@@ -289,7 +292,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>How We Use Your Information</SectionHeading>
 
         <ul className="list-outside list-disc pl-10">
@@ -317,7 +321,7 @@ const PrivacyContent = () => {
 
       <section
         id="consent"
-        className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Consent</SectionHeading>
 
         <p>
@@ -354,7 +358,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Cookies</SectionHeading>
 
         <p>
@@ -367,7 +372,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>International Transfers</SectionHeading>
 
         <p>
@@ -379,7 +385,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Data Retention</SectionHeading>
 
         <ul className="list-outside list-disc pl-10">
@@ -403,7 +410,8 @@ const PrivacyContent = () => {
         </ul>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Your Rights</SectionHeading>
 
         <p>
@@ -426,7 +434,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Children&apos;s Privacy</SectionHeading>
 
         <p>
@@ -436,7 +445,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Links to Other Websites</SectionHeading>
 
         <p>
@@ -446,7 +456,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Changes to This Policy</SectionHeading>
 
         <p>

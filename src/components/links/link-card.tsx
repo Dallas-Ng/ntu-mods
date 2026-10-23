@@ -13,7 +13,7 @@ interface LinkCardProps {
 
 const LinkCard = ({ name, href, desc, external, category }: LinkCardProps) => {
   const className =
-    "bg-muted hover:bg-accent flex h-28 items-start justify-between gap-2 rounded-2xl p-4 transition-colors"
+    "bg-muted hover:bg-accent flex h-28 items-start justify-between gap-2 rounded-2xl p-4 transition-colors border"
   const inner = (
     <>
       <div className="min-w-0 space-y-1">

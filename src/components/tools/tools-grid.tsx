@@ -187,7 +187,7 @@ const ToolsGrid = () => (
                       source: "tools_page"
                     })
                   }
-                  className="bg-background hover:bg-background/60 relative z-10 inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-semibold whitespace-nowrap transition-colors sm:px-4">
+                  className="bg-background hover:bg-accent relative z-10 inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-semibold whitespace-nowrap transition-colors sm:px-4">
                   <BookOpen className="text-primary size-4" />
                   {tool.guide.label}
                 </a>

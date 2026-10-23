@@ -86,7 +86,7 @@ const ScreenshotPageInner = () => {
 
   return (
     <div
-      className="bg-muted/40 relative z-[1] flex h-[100svh] w-screen items-center justify-center overflow-hidden p-3 sm:p-6"
+      className="bg-muted relative z-[1] flex h-[100svh] w-screen items-center justify-center overflow-hidden p-3 sm:p-6"
       onClick={() => !showControls && setShowControls(true)}>
       {!hasTimetable ? (
         <a href="/timetable" className="w-full max-w-xl">

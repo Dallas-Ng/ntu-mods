@@ -48,10 +48,10 @@ export interface ApiGroup {
 }
 
 const STATUS_STYLE: Record<string, string> = {
-  "2": "bg-emerald-500/15 text-emerald-800 dark:text-emerald-300",
-  "3": "bg-sky-500/15 text-sky-800 dark:text-sky-300",
-  "4": "bg-amber-500/20 text-amber-900 dark:text-amber-300",
-  "5": "bg-rose-500/15 text-rose-800 dark:text-rose-300"
+  "2": "bg-success-subtle text-success",
+  "3": "bg-primary-subtle text-primary",
+  "4": "bg-warning-subtle text-warning",
+  "5": "bg-destructive-subtle text-destructive"
 }
 
 const TAB_LABEL: Record<string, string> = {

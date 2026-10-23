@@ -1,4 +1,6 @@
 ---
+import { cardVariants } from "@/components/ui/card"
+
 interface Props {
   href: string
   title: string
@@ -12,7 +14,10 @@ const { href, title, description } = Astro.props
      itself, not found in a related-guides list further down the page. -->
 <a
   href={href}
-  class="bg-muted hover:bg-accent group flex items-center gap-4 rounded-2xl p-5 transition-colors">
+  class:list={[
+    cardVariants({ interactive: true }),
+    "group flex items-center gap-4 rounded-2xl p-5"
+  ]}>
   <span
     class="bg-background text-foreground flex size-10 shrink-0 items-center justify-center rounded-xl">
     <svg

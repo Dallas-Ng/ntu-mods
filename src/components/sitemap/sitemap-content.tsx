@@ -1,5 +1,7 @@
 import { siteConfig } from "@/config/site"
 import { getModuleTitles } from "@/lib/server/db/repo"
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
 import Container from "@/components/container"
 import Header, { SectionHeading } from "@/components/header"
 import { getAllArticles } from "@/astro/lib/articles"
@@ -209,7 +211,10 @@ const SitemapContent = async () => {
             <a
               key={link.href}
               href={link.href}
-              className="group bg-muted hover:bg-accent rounded-2xl p-4 transition-colors">
+              className={cn(
+                cardVariants({ interactive: true }),
+                "group rounded-2xl p-4"
+              )}>
               <p className="text-foreground group-hover:text-primary font-semibold transition-colors">
                 {link.label}
               </p>
@@ -228,7 +233,10 @@ const SitemapContent = async () => {
             <a
               key={link.href}
               href={link.href}
-              className="group bg-muted hover:bg-accent rounded-2xl p-4 transition-colors">
+              className={cn(
+                cardVariants({ interactive: true }),
+                "group rounded-2xl p-4"
+              )}>
               <p className="text-foreground group-hover:text-primary font-semibold transition-colors">
                 {link.label}
               </p>
@@ -248,7 +256,10 @@ const SitemapContent = async () => {
               <a
                 key={article.slug}
                 href={`/articles/${article.slug}`}
-                className="group bg-muted hover:bg-accent rounded-2xl p-4 transition-colors">
+                className={cn(
+                  cardVariants({ interactive: true }),
+                  "group rounded-2xl p-4"
+                )}>
                 <p className="text-muted-foreground mb-1 text-xs">
                   {article.category}
                 </p>
@@ -277,7 +288,7 @@ const SitemapContent = async () => {
             <a
               key={group.prefix}
               href={`#modules-${group.prefix.toLowerCase()}`}
-              className="bg-muted text-muted-foreground hover:bg-accent hover:text-foreground rounded-md px-2 py-1 text-sm transition-colors">
+              className="bg-muted text-foreground hover:bg-accent rounded-md border px-2 py-1 text-sm transition-colors">
               {group.prefix}
             </a>
           ))}

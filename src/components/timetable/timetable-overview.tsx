@@ -51,7 +51,7 @@ const TimetableOverview = () => {
   return (
     <div className="">
       <div className="overflow-x-auto">
-        <table className="data-table w-full rounded-lg! border-2! border-slate-200! text-xs! dark:border-slate-900! [&_td]:px-2.5! [&_td]:py-1.5! [&_th]:px-2.5! [&_th]:py-1.5!">
+        <table className="data-table border-border! w-full rounded-lg! border-2! text-xs! [&_td]:px-2.5! [&_td]:py-1.5! [&_th]:px-2.5! [&_th]:py-1.5!">
           <thead>
             <tr>
               <th>Index</th>

@@ -280,7 +280,7 @@ const TimetableIndexModifier = (props: Props) => {
       }>
       <Command
         shouldFilter={false}
-        className="bg-muted/60 min-h-0 flex-1 border md:rounded-t-none">
+        className="bg-muted min-h-0 flex-1 border md:rounded-t-none">
         <div className="h-fit w-full border-b">
           <CommandInput
             placeholder="Search for code, timing or tutorial group"

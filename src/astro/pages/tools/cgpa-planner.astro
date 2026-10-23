@@ -5,6 +5,7 @@ import {
   faqPageJsonLd,
   webApplicationJsonLd
 } from "@/lib/json-ld"
+import { cardVariants } from "@/components/ui/card"
 import { TextLink } from "@/components/ui/text-link"
 import Breadcrumbs from "@/components/breadcrumbs"
 import CgpaPlanner from "@/components/cgpa/cgpa-planner"
@@ -133,7 +134,10 @@ const FAQ = [
     <div class="space-y-3 pt-2">
       <a
         href={MAIN_GUIDE.href}
-        class="bg-muted hover:bg-accent group block space-y-2 rounded-2xl p-5 transition-colors">
+        class:list={[
+          cardVariants({ interactive: true }),
+          "group block space-y-2 rounded-2xl p-5"
+        ]}>
         <p
           class="text-muted-foreground text-xs font-medium tracking-wide uppercase">
           Main guide

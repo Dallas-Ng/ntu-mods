@@ -16,6 +16,7 @@ import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
+import { cardVariants } from "@/components/ui/card"
 import Header, { SectionHeading } from "@/components/header"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
@@ -316,7 +317,7 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
       )}
 
       {!isLoading && (
-        <p className="text-muted-foreground hover:text-primary-alt text-center text-sm transition-colors">
+        <p className="text-muted-foreground text-center text-sm">
           <a
             href="https://wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"
             target="_blank"
@@ -362,7 +363,7 @@ function ModuleResults({
         year={year}
         semester={semester}
         showText={false}
-        triggerClassName="bg-background hover:bg-background/60 size-8 rounded-full p-0 active:scale-95"
+        triggerClassName="bg-background hover:bg-accent size-8 rounded-full p-0 active:scale-95"
         triggerVariant="ghost"
       />
     )
@@ -372,7 +373,7 @@ function ModuleResults({
     return (
       <ModsFavouriteButton
         moduleKey={m.code}
-        className="bg-background hover:bg-background/60 size-8 rounded-full active:scale-95"
+        className="bg-background hover:bg-accent size-8 rounded-full active:scale-95"
       />
     )
   }
@@ -395,7 +396,7 @@ function ModuleResults({
         {footer}
       </div>
     ) : (
-      <div className="bg-muted overflow-hidden rounded-2xl">
+      <div className={cn(cardVariants(), "overflow-hidden rounded-2xl")}>
         {modules.map((m, i) => (
           <div key={i} className="border-background border-b-2 last:border-b-0">
             <ModuleListRow
@@ -422,7 +423,7 @@ function ModuleResults({
         ))}
       </div>
     ) : (
-      <div className="bg-muted overflow-hidden rounded-2xl">
+      <div className={cn(cardVariants(), "overflow-hidden rounded-2xl")}>
         {Array.from({ length: LOADING_LIST_COUNT }).map((_, i) => (
           <div
             key={i}

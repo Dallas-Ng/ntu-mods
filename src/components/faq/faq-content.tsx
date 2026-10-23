@@ -1,7 +1,9 @@
 import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import type { ArticleHeading } from "@/lib/server/articles"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { cardVariants } from "@/components/ui/card"
 import { TextLink } from "@/components/ui/text-link"
 import Container from "@/components/container"
 import Header, { SectionHeading } from "@/components/header"
@@ -277,7 +279,10 @@ const FaqContent = ({ children, mobileNav }: Props) => {
                   <section
                     id={id}
                     key={id}
-                    className="bg-muted scroll-mt-20 space-y-3 rounded-2xl p-5">
+                    className={cn(
+                      cardVariants(),
+                      "scroll-mt-20 space-y-3 rounded-2xl p-5"
+                    )}>
                     <SectionHeading as="h3">
                       {question}
                       <HeadingAnchor id={id} label={question} />
@@ -292,7 +297,10 @@ const FaqContent = ({ children, mobileNav }: Props) => {
 
           <div
             id="feedback"
-            className="bg-muted flex scroll-mt-20 flex-col justify-between gap-4 rounded-2xl p-5 sm:flex-row sm:items-center">
+            className={cn(
+              cardVariants(),
+              "flex scroll-mt-20 flex-col justify-between gap-4 rounded-2xl p-5 sm:flex-row sm:items-center"
+            )}>
             <div>
               <SectionHeading>
                 Feedback

@@ -1,5 +1,7 @@
 import { MODULE_CODE_RE } from "@/lib/module-constants"
 import type { DbExam, DbModule } from "@/lib/server/db/types"
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
 import { TextLink } from "@/components/ui/text-link"
 
 interface Props {
@@ -49,7 +51,7 @@ export const ROW_CLASS =
 
 const ModsInfoTable = ({ module, exam, knownCodes }: Props) => (
   <div className="space-y-3">
-    <dl className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+    <dl className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
       <div className={ROW_CLASS}>
         <dt className="text-muted-foreground">AUs</dt>
         <dd>{module.au} AUs</dd>

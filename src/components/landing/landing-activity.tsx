@@ -1,4 +1,6 @@
 import { CHANGELOG } from "@/config/changelog-data"
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
 import { TextLink } from "@/components/ui/text-link"
 
 const CHANGES = CHANGELOG.reduce((sum, r) => sum + r.items.length, 0)
@@ -31,7 +33,10 @@ const LandingActivity = () => (
         ].map((s) => (
           <div
             key={s.label}
-            className="bg-muted landing-reveal flex flex-col justify-between gap-4 rounded-2xl p-5 md:p-6 xl:flex-1">
+            className={cn(
+              cardVariants(),
+              "landing-reveal flex flex-col justify-between gap-4 rounded-2xl p-5 md:p-6 xl:flex-1"
+            )}>
             <p className="text-4xl leading-none font-bold tracking-tighter md:text-5xl">
               {s.value}
             </p>
@@ -40,7 +45,7 @@ const LandingActivity = () => (
         ))}
       </div>
 
-      <div className="bg-muted rounded-2xl p-3 md:p-4">
+      <div className={cn(cardVariants(), "rounded-2xl p-3 md:p-4")}>
         <ol>
           {RECENT.map((release, i) => {
             const kinds = [...new Set(release.items.map((it) => it.category))]

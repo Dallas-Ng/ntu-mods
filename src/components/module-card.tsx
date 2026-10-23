@@ -2,6 +2,7 @@ import type { AllModule } from "@/types/mods"
 import { MODULE_CATEGORY } from "@/lib/module-constants"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
 
 import { Skeleton } from "./ui/skeleton"
 
@@ -126,7 +127,7 @@ export const ModuleCardDetail = ({
 }
 
 export const ModuleCardDetailLoading = () => (
-  <div className="bg-muted flex h-32 flex-col rounded-2xl p-4">
+  <div className={cn(cardVariants(), "flex h-32 flex-col rounded-2xl p-4")}>
     <Skeleton className="bg-foreground/10 dark:bg-background mb-2 h-4 w-16" />
     <Skeleton className="bg-foreground/10 dark:bg-background mb-1 h-5 w-full" />
     <Skeleton className="bg-foreground/10 dark:bg-background h-5 w-3/4" />

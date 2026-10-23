@@ -211,7 +211,7 @@ const SessionRowEditor = ({
   }
 
   return (
-    <div className="bg-muted/40 space-y-3 rounded-lg border p-3">
+    <div className="bg-muted space-y-3 rounded-lg border p-3">
       {/* Type selector + remove */}
       <div className="flex items-start gap-2">
         <div className="flex-1 space-y-1.5">

@@ -20,7 +20,7 @@ const textLinkVariants = cva("cursor-pointer transition-colors", {
         "text-primary hover:text-primary/80 underline underline-offset-2",
       muted: "hover:text-foreground underline underline-offset-2",
       action: "text-primary font-semibold underline-offset-4 hover:underline",
-      subtle: "hover:text-primary-alt"
+      subtle: "hover:text-primary"
     }
   },
   defaultVariants: {

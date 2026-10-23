@@ -522,7 +522,7 @@ const ConfigSummary = () => {
       {chips.map((chip) => (
         <span
           key={chip}
-          className="bg-muted text-muted-foreground rounded-md px-2 py-0.5 text-xs">
+          className="bg-muted text-foreground rounded-md border px-2 py-0.5 text-xs">
           {chip}
         </span>
       ))}

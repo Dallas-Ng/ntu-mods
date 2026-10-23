@@ -23,7 +23,7 @@
   --color-popover-foreground: hsl(var(--popover-foreground));
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-primary-alt: hsl(var(--primary-alt));
+  --color-primary-subtle: hsl(var(--primary-subtle));
   --color-secondary: hsl(var(--secondary));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
   --color-muted: hsl(var(--muted));
@@ -32,6 +32,11 @@
   --color-accent-foreground: hsl(var(--accent-foreground));
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-subtle: hsl(var(--destructive-subtle));
+  --color-success: hsl(var(--success));
+  --color-success-subtle: hsl(var(--success-subtle));
+  --color-warning: hsl(var(--warning));
+  --color-warning-subtle: hsl(var(--warning-subtle));
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
@@ -93,6 +98,9 @@
 }
 
 @layer base {
+  /* Colour rules (see src/README.md): every text pair below is at least
+     4.5:1, and a tint that must be noticed also gets a border, because no
+     pale fill stands out from a near-white page on its own. */
   :root {
     --background: 240 97% 99.2%;
     --foreground: 222.2 84% 4.9%;
@@ -100,20 +108,25 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
+    --primary: 221.2 83.2% 50%;
     --primary-foreground: 210 40% 98%;
-    --primary-alt: 222.2 5% 50%;
-    --secondary: 210 40% 96.1%;
+    --primary-subtle: 221 83% 94%;
+    --secondary: 235 22% 93%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 235 22% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 235 22% 93%;
+    --muted: 235 22% 95%;
+    --muted-foreground: 215.4 16.3% 41%;
+    --accent: 235 22% 92%;
     --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 74% 46%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --destructive-subtle: 0 86% 96%;
+    --success: 152 69% 26%;
+    --success-subtle: 149 60% 93%;
+    --warning: 32 90% 28%;
+    --warning-subtle: 48 96% 90%;
+    --border: 214.3 31.8% 84%;
+    --input: 214.3 31.8% 84%;
+    --ring: 221.2 83.2% 50%;
     --radius: 0.5rem;
     --cell-padding: 0.5rem;
     --table-padding: 0.25rem;
@@ -188,23 +201,28 @@
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 222.2 47% 8.5%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 222.2 47% 8.5%;
     --popover-foreground: 210 40% 98%;
     --primary: 217.2 91.2% 59.8%;
     --primary-foreground: 222.2 47.4% 11.2%;
-    --primary-alt: 210 0% 60%;
+    --primary-subtle: 217 60% 13%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 10.5%;
+    --muted: 217.2 32.6% 12%;
     --muted-foreground: 215 20.2% 65.1%;
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 72% 62%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
+    --destructive-foreground: 222.2 47.4% 11.2%;
+    --destructive-subtle: 0 50% 13%;
+    --success: 152 60% 58%;
+    --success-subtle: 152 45% 11%;
+    --warning: 43 90% 62%;
+    --warning-subtle: 38 60% 11%;
+    --border: 217.2 32.6% 22%;
+    --input: 217.2 32.6% 22%;
     --ring: 224.3 76.3% 48%;
   }
 
@@ -276,18 +294,18 @@
 }
 
 table {
-  @apply bg-card w-full border-collapse border-2 border-slate-200 dark:border-slate-900;
+  @apply bg-card border-border w-full border-collapse border-2;
 }
 
 /* The timetable grid's border (2px slate), for the cards around it so the
    page has one border style: toolbar, side panel, hint, map preview. */
 .panel-border {
-  @apply border-2 border-slate-200 dark:border-slate-900;
+  @apply border-border border-2;
 }
 
 .panel-border [data-slot="accordion-item"],
 .panel-border .border-l {
-  @apply border-slate-200 dark:border-slate-900;
+  @apply border-border;
 }
 
 table th {
@@ -296,12 +314,12 @@ table th {
 
 table th,
 table td {
-  @apply border border-slate-200 dark:border-slate-900;
+  @apply border-border border;
   padding: var(--table-padding);
 }
 
 /* Standard content table: a bordered, rounded grid with a tinted header,
-   cell dividers and striped rows. Used for article prose and `.data-table`
+   cell dividers. Used for article prose and `.data-table`
    (module info). The timetable grid keeps the dense global style above.
    Article tables sit in a .table-wrap (src/lib/hast-figure.mjs), which draws
    the rounded outline and scrolls sideways when the table is too wide. */
@@ -394,11 +412,6 @@ table td {
   border-top: 2px solid hsl(var(--border));
 }
 
-.prose table tbody tr:nth-child(even) td,
-.data-table tbody tr:nth-child(even) td {
-  background: color-mix(in srgb, hsl(var(--muted)) 40%, hsl(var(--background)));
-}
-
 /* Inside a scrolling article table (.table-scroll): keep number columns from
    collapsing into one-character-wide strips, and keep the first column in view
    while the table scrolls sideways so the row label is never lost. Cell
@@ -468,7 +481,7 @@ table td {
    marks and side rule. (CTA cards are blockquotes too, but they are replaced
    with .article-cta before they get here.) */
 .prose blockquote {
-  @apply bg-primary/10 text-foreground my-8 rounded-2xl border-0 p-6 text-base leading-relaxed not-italic;
+  @apply bg-primary-subtle text-foreground my-8 rounded-2xl border p-6 text-base leading-relaxed not-italic;
 }
 
 .prose blockquote p {
@@ -574,8 +587,18 @@ html {
   .dev-docs :is(p, li, td) a {
     @apply text-primary underline underline-offset-2;
   }
-  /* taste-skill-ignore: inline code is literal code */
-  .dev-docs :not(pre) > code {
-    @apply bg-muted rounded px-1 py-0.5 font-mono text-sm;
+  /* One inline code style for the developer docs, articles and InlineCode.
+     taste-skill-ignore: inline code is literal code */
+  .dev-docs :not(pre) > code,
+  .prose :not(pre) > code,
+  [data-slot="inline-code"] {
+    @apply bg-muted text-foreground rounded border px-1 py-0.5 font-mono font-normal;
   }
+}
+
+/* Outside any layer so it beats the typography plugin, which wraps inline
+   code in backticks. */
+.prose :not(pre) > code::before,
+.prose :not(pre) > code::after {
+  content: none;
 }

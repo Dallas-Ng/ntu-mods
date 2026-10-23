@@ -9,6 +9,7 @@ import type { DbExam } from "@/lib/server/db/types"
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
 import { Button } from "@/components/ui/button"
+import { cardVariants } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import {
@@ -125,7 +126,7 @@ function weekday(dateStr: string) {
 
 function ExamTable({ items }: { items: DbExam[] }) {
   return (
-    <div className="bg-muted overflow-hidden rounded-2xl">
+    <div className={cn(cardVariants(), "overflow-hidden rounded-2xl")}>
       {/* Header, desktop only */}
       <div className="text-muted-foreground hidden items-center gap-4 px-5 py-3 text-xs font-medium md:flex">
         <span className="w-24 shrink-0">Module</span>

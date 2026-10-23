@@ -8,6 +8,7 @@ import type {
   DbPrerequisiteNode
 } from "@/lib/server/db/types"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { cardVariants } from "@/components/ui/card"
 import { TextLink } from "@/components/ui/text-link"
 import { SectionHeading } from "@/components/header"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
@@ -279,7 +280,10 @@ const jsonLd = [
           {guides.map((g) => (
             <a
               href={g.url}
-              class="group bg-muted hover:bg-accent overflow-hidden rounded-2xl transition-colors">
+              class:list={[
+                cardVariants({ interactive: true }),
+                "group overflow-hidden rounded-2xl"
+              ]}>
               {g.thumbnail && (
                 <img
                   src={g.thumbnail}

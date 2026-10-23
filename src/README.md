@@ -38,9 +38,22 @@ Two text colours:
 - `text-foreground` (black, white in dark mode): what people read. Headings, body text, FAQ answers, legal text, values, labels, the active nav item.
 - `text-muted-foreground` (grey): what supports it. The line under a title, card descriptions, hints, captions, dates and counts, inactive nav items, icons.
 
-No in-between shades such as `text-foreground/70`.
+No in-between shades such as `text-foreground/70`. Text on a tint is black or the tint's own colour; every text pair in `globals.css` is at least 4.5:1.
 
-Shared pieces for the rest: `TextLink` and `ExternalLinkIcon` (links), `CopyButton`, `ResponsiveModal` with `modal-parts` and `ConfirmDialog` (dialogs, never `confirm()`), `Alert`, `NewBadge`, and `ArticleToc` / `SideNavDrawer` / `side-nav` styles (side navs).
+Surfaces, all fixed tokens (no `bg-muted/50`-style opacity, except see-through glass: navbar, docs bar, "On this page" button, dialog backdrop):
+
+| Token                                                            | Use                                         |
+| ---------------------------------------------------------------- | ------------------------------------------- |
+| `background`                                                     | The page                                    |
+| `muted`                                                          | Cards (`cardVariants`), inline code, chips  |
+| `accent`                                                         | Hover and pressed                           |
+| `card` / `popover`                                               | Things that float: dialogs, menus, popovers |
+| `primary-subtle`                                                 | Blue callouts, active and selected items    |
+| `success`, `warning`, `destructive` (each with a `-subtle` fill) | Status: alerts, changelog tags, API status  |
+
+A pale fill barely shows against the page, so anything that must be noticed (card, chip, inline code, callout) also has a 1px border. No raw Tailwind palette colours (`emerald-500`, `slate-200`) outside the timetable grid, the map and the landing illustrations.
+
+Shared pieces for the rest: `TextLink` and `ExternalLinkIcon` (links), `cardVariants` (cards), `InlineCode`, `CopyButton`, `ResponsiveModal` with `modal-parts` and `ConfirmDialog` (dialogs, never `confirm()`), `Alert`, `NewBadge`, and `ArticleToc` / `SideNavDrawer` / `side-nav` styles (side navs).
 
 ## Rendering model
 

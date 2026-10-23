@@ -1,4 +1,6 @@
 import { siteConfig } from "@/config/site"
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
 import { TextLink } from "@/components/ui/text-link"
 import Container from "@/components/container"
 import Header, { SectionHeading } from "@/components/header"
@@ -16,7 +18,8 @@ const TermsContent = () => {
         please do not use the Service.
       </p>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Using the Service</SectionHeading>
 
         <p>
@@ -30,7 +33,8 @@ const TermsContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Not Affiliated with NTU</SectionHeading>
 
         <p>
@@ -43,7 +47,8 @@ const TermsContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>No Warranty</SectionHeading>
 
         <p>
@@ -54,7 +59,8 @@ const TermsContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Limitation of Liability</SectionHeading>
 
         <p>
@@ -66,7 +72,8 @@ const TermsContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Your Data and Privacy</SectionHeading>
 
         <p>
@@ -78,7 +85,8 @@ const TermsContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Open Source and Content</SectionHeading>
 
         <p>
@@ -95,7 +103,8 @@ const TermsContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+      <section
+        className={cn(cardVariants(), "space-y-3 rounded-2xl p-5 text-sm")}>
         <SectionHeading>Changes and Governing Law</SectionHeading>
 
         <p>

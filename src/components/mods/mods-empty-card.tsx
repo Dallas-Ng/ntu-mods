@@ -1,10 +1,17 @@
 "use client"
 
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
+
 import { Button } from "../ui/button"
 
 const ModsEmptyCard = () => {
   return (
-    <div className="bg-muted w-full space-y-4 rounded-2xl p-8 text-center">
+    <div
+      className={cn(
+        cardVariants(),
+        "w-full space-y-4 rounded-2xl p-8 text-center"
+      )}>
       <div className="flex justify-center">
         <img
           src="/not-found.svg"

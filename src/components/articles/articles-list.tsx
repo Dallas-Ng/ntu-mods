@@ -10,6 +10,8 @@ import { useDebounce } from "@/hooks/use-debounce"
 import { usePathname } from "@/hooks/use-pathname"
 import { replaceSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { Button } from "@/components/ui/button"
+import { cardVariants } from "@/components/ui/card"
+import { InlineCode } from "@/components/ui/inline-code"
 import { Input } from "@/components/ui/input"
 import {
   Popover,
@@ -87,7 +89,10 @@ function ArticleCard({
   return (
     <a
       href={`/articles/${article.slug}`}
-      className="group bg-muted hover:bg-accent flex flex-col overflow-hidden rounded-2xl transition-colors">
+      className={cn(
+        cardVariants({ interactive: true }),
+        "group flex flex-col overflow-hidden rounded-2xl"
+      )}>
       <div className="relative">
         <ArticleThumb text={article.thumbnailText || article.title} />
         {/* Absolutely positioned, so the views arriving later cannot reflow the card. */}
@@ -114,7 +119,7 @@ function ArticleCard({
           {showCategory && (
             <>
               <span aria-hidden="true">·</span>
-              <span className="bg-primary/10 text-primary dark:bg-background dark:text-muted-foreground rounded px-1.5 py-0.5">
+              <span className="bg-primary-subtle text-primary rounded border px-1.5 py-0.5">
                 {article.category}
               </span>
             </>
@@ -275,12 +280,14 @@ export default function ArticlesList({
 
   if (articles.length === 0) {
     return (
-      <div className="bg-muted text-foreground rounded-2xl p-4 text-sm wrap-break-word sm:p-6">
+      <div
+        className={cn(
+          cardVariants(),
+          "text-foreground rounded-2xl p-4 text-sm wrap-break-word sm:p-6"
+        )}>
         No articles published yet. Copy{" "}
-        <code className="bg-muted rounded px-1 py-0.5">
-          content/articles/_template.md
-        </code>{" "}
-        into the same folder without the leading underscore to publish one.
+        <InlineCode>content/articles/_template.md</InlineCode> into the same
+        folder without the leading underscore to publish one.
       </div>
     )
   }
@@ -509,7 +516,11 @@ export default function ArticlesList({
           </div>
         )
       ) : (
-        <div className="bg-muted text-foreground rounded-2xl p-4 text-sm wrap-break-word sm:p-6">
+        <div
+          className={cn(
+            cardVariants(),
+            "text-foreground rounded-2xl p-4 text-sm wrap-break-word sm:p-6"
+          )}>
           No articles match those filters.
         </div>
       )}

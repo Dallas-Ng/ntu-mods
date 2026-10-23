@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
+import { InlineCode } from "@/components/ui/inline-code"
 import {
   ModalFooter,
   ModalNote,
@@ -81,9 +82,9 @@ const TimetableCalendarDialog = ({
     <div className="space-y-5">
       <ModalSection title="What you get">
         <p className="text-muted-foreground text-sm">
-          An <code className="text-foreground">.ics</code> file with one event
-          for every class, on each week it runs, with its venue. Recess week is
-          skipped. It works with any calendar app.
+          An <InlineCode>.ics</InlineCode> file with one event for every class,
+          on each week it runs, with its venue. Recess week is skipped. It works
+          with any calendar app.
         </p>
       </ModalSection>
 

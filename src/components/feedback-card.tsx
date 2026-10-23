@@ -120,7 +120,7 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
   }
 
   return (
-    <div className={cn("bg-muted rounded-2xl p-5", divClassName)}>
+    <div className={cn("bg-muted rounded-2xl border p-5", divClassName)}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField

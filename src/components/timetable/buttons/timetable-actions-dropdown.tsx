@@ -31,6 +31,7 @@ import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
+import { cardVariants } from "@/components/ui/card"
 import { ConfirmDialog } from "@/components/ui/confirm-dialog"
 import {
   Drawer,
@@ -313,7 +314,11 @@ const TimetableActionsDropdown = ({
         showDescription
         description="Theme, radius, density, contrast and the colours of your classes."
         className="max-h-[90vh] overflow-y-auto sm:max-w-5xl">
-        <div className="bg-muted rounded-xl p-2 sm:rounded-2xl sm:p-5">
+        <div
+          className={cn(
+            cardVariants(),
+            "rounded-xl p-2 sm:rounded-2xl sm:p-5"
+          )}>
           <AppearanceSettings compact />
         </div>
       </ResponsiveModal>
@@ -376,12 +381,12 @@ const TimetableActionsDropdown = ({
                           onClick={t.onClick}
                           className={cn(
                             "hover:bg-accent flex w-full cursor-pointer items-start gap-3 rounded-lg p-3 text-left transition-colors disabled:opacity-50",
-                            t.active && "bg-primary/10"
+                            t.active && "bg-primary-subtle"
                           )}>
                           <span
                             className={cn(
-                              "bg-muted flex size-9 shrink-0 items-center justify-center rounded-lg",
-                              t.active && "bg-primary/15 text-primary"
+                              "bg-muted flex size-9 shrink-0 items-center justify-center rounded-lg border",
+                              t.active && "bg-primary-subtle text-primary"
                             )}>
                             <t.icon className="size-4" />
                           </span>
@@ -446,7 +451,7 @@ const TimetableActionsDropdown = ({
                         children: icon,
                         onClick: onToggleIndexPicker,
                         className: indexPickerEnabled
-                          ? "bg-primary/10 text-primary hover:bg-primary/15 hover:text-primary"
+                          ? "bg-primary-subtle text-primary hover:bg-accent hover:text-primary"
                           : undefined
                       }
                     )

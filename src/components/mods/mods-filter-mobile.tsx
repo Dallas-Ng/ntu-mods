@@ -186,7 +186,7 @@ function DrawerHead({
       {onReset && (
         <button
           type="button"
-          className="text-primary-alt cursor-pointer py-1.5 text-sm"
+          className="text-primary cursor-pointer py-1.5 text-sm"
           onClick={onReset}>
           {resetLabel}
         </button>

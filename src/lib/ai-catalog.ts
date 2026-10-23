@@ -56,10 +56,10 @@ export function buildAiCatalog({
       ),
       entry(
         "mcp-server",
-        "application/json",
-        "/mcp",
+        "text/html",
+        "/developers/mcp",
         "NTUMods MCP server",
-        "Public, read-only MCP server (Streamable HTTP, POST, no sign-in) with tools to list semesters, search modules, and read module records, class indexes and exams. Logs only the tool name, status, latency and client name per call, never the arguments. Setup: /developers/mcp.",
+        "Setup guide for the public, read-only MCP server at https://ntumods.com/mcp (Streamable HTTP, POST, no sign-in), with tools to list semesters, search modules, and read module records, class indexes and exams. Logs only the tool name, status, latency and client name per call, never the arguments.",
         ["mcp", "tools", "modules", "ntu"]
       ),
       entry(

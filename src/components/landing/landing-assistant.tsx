@@ -1,6 +1,6 @@
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { cardVariants } from "@/components/ui/card"
+import { cardVariants, controlOnCard } from "@/components/ui/card"
 import { ExternalLinkIcon, TextLink } from "@/components/ui/text-link"
 import {
   CLAUDE_COLOUR,
@@ -34,7 +34,10 @@ const LandingAssistant = () => {
             <div className="grid gap-3 sm:w-fit sm:auto-cols-fr sm:grid-flow-col">
               <a
                 href={siteConfig.links.claudeDirectory}
-                className="bg-background text-foreground hover:bg-accent inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold whitespace-nowrap transition-colors sm:px-6">
+                className={cn(
+                  controlOnCard,
+                  "text-foreground inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold whitespace-nowrap sm:px-6"
+                )}>
                 <ClaudeIcon
                   className="size-5 shrink-0"
                   style={{ color: CLAUDE_COLOUR }}
@@ -44,7 +47,10 @@ const LandingAssistant = () => {
               </a>
               <a
                 href={`${tool.href}#connect`}
-                className="bg-background text-foreground hover:bg-accent inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold whitespace-nowrap transition-colors sm:px-6">
+                className={cn(
+                  controlOnCard,
+                  "text-foreground inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold whitespace-nowrap sm:px-6"
+                )}>
                 <span className="flex -space-x-2">
                   {[
                     [CursorIcon, CURSOR_COLOUR],

@@ -1,6 +1,6 @@
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { cardVariants } from "@/components/ui/card"
+import { cardVariants, controlOnCard } from "@/components/ui/card"
 import { TextLink } from "@/components/ui/text-link"
 import { NewBadge } from "@/components/new-dot"
 
@@ -47,7 +47,10 @@ const LandingTools = () => {
               {tool.guide && (
                 <a
                   href={tool.guide.href}
-                  className="bg-background hover:bg-accent inline-flex h-12 items-center justify-center rounded-md px-6 text-sm font-semibold whitespace-nowrap transition-colors md:px-8">
+                  className={cn(
+                    controlOnCard,
+                    "inline-flex h-12 items-center justify-center rounded-md px-6 text-sm font-semibold whitespace-nowrap md:px-8"
+                  )}>
                   {tool.guide.label}
                 </a>
               )}

@@ -5,6 +5,7 @@ import { BookOpen } from "lucide-react"
 import { siteConfig } from "@/config/site"
 import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
+import { controlOnCard } from "@/components/ui/card"
 import { CardCta } from "@/components/ui/text-link"
 import { NewBadge } from "@/components/new-dot"
 import AssistantPreview from "@/components/tools/assistant-preview"
@@ -185,7 +186,10 @@ const ToolsGrid = () => (
                       source: "tools_page"
                     })
                   }
-                  className="bg-background hover:bg-accent relative z-10 inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-semibold whitespace-nowrap transition-colors sm:px-4">
+                  className={cn(
+                    controlOnCard,
+                    "relative z-10 inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-semibold whitespace-nowrap sm:px-4"
+                  )}>
                   <BookOpen className="text-primary size-4" />
                   {tool.guide.label}
                 </a>

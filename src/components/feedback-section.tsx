@@ -4,7 +4,7 @@ import { useState } from "react"
 import { ArrowDown, ArrowRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { cardVariants } from "@/components/ui/card"
+import { cardVariants, controlOnCard } from "@/components/ui/card"
 import FeedbackCard from "@/components/feedback-card"
 
 // Each row starts the message for you, so there is less to write.
@@ -61,7 +61,10 @@ const FeedbackSection = () => {
                       id: Date.now()
                     })
                   }
-                  className="bg-background hover:bg-accent flex w-full cursor-pointer items-center justify-between gap-4 rounded-2xl px-4 py-3 text-left text-sm font-medium transition-[background-color,transform] duration-150 active:scale-[0.99]">
+                  className={cn(
+                    controlOnCard,
+                    "flex w-full cursor-pointer items-center justify-between gap-4 rounded-2xl px-4 py-3 text-left text-sm font-medium transition-[color,box-shadow,transform] duration-150 active:scale-[0.99]"
+                  )}>
                   {label}
                   <ArrowDown className="text-muted-foreground size-4 shrink-0 lg:hidden" />
                   <ArrowRight className="text-muted-foreground hidden size-4 shrink-0 lg:block" />

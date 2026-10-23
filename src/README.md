@@ -69,6 +69,7 @@ Arrows by meaning: `LinkArrow` (or `TextLink arrow`, or `CardCta` at the foot of
 Hover, one signal per element:
 
 - Surfaces (cards, rows, menu items, chips, option tiles, icon buttons): background to `accent` (`cardVariants({ interactive: true })` for cards). The text inside does not change colour.
+- White controls on a card or other grey surface (`controlOnCard`): stay white, content turns black, a shadow appears. The accent fill is the card's own hover colour, so it would make them vanish.
 - Text-only links: `TextLink`. Grey text goes black, black text goes blue, inline links dim.
 - Solid buttons (primary, destructive): a slightly darker fill.
 - No lift, scale, opacity or border-colour hovers. An arrow in a call to action may nudge (`group-hover:translate-x-0.5`).

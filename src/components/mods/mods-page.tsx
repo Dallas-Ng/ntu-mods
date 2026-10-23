@@ -16,7 +16,7 @@ import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
-import { cardVariants } from "@/components/ui/card"
+import { cardVariants, controlOnCard } from "@/components/ui/card"
 import Header, { SectionHeading } from "@/components/header"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
@@ -363,7 +363,10 @@ function ModuleResults({
         year={year}
         semester={semester}
         showText={false}
-        triggerClassName="bg-background text-muted-foreground hover:bg-accent hover:text-foreground size-8 rounded-full p-0 active:scale-95"
+        triggerClassName={cn(
+          controlOnCard,
+          "text-muted-foreground size-8 rounded-full p-0 active:scale-95"
+        )}
         triggerVariant="ghost"
       />
     )
@@ -373,7 +376,7 @@ function ModuleResults({
     return (
       <ModsFavouriteButton
         moduleKey={m.code}
-        className="bg-background hover:bg-accent size-8 rounded-full active:scale-95"
+        className={cn(controlOnCard, "size-8 rounded-full active:scale-95")}
       />
     )
   }

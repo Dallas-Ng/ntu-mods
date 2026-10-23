@@ -8,18 +8,11 @@ import {
   useRef,
   useState
 } from "react"
-import { List } from "lucide-react"
 
 import type { ArticleHeading } from "@/lib/server/articles"
 import { cn } from "@/lib/utils"
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerTitle,
-  DrawerTrigger
-} from "@/components/ui/drawer"
 import { sideNavItem, sideNavLabel } from "@/components/ui/side-nav"
+import { SideNavDrawer } from "@/components/ui/side-nav-drawer"
 
 // `group` is an optional label (e.g. a year) shown above the first heading in
 // each run of headings that share it. `count` is an optional number shown
@@ -102,10 +95,9 @@ const getVisibleHeadings = (headings: TocHeading[], nested?: boolean) =>
 const MOBILE_SCROLL_OFFSET = 128
 
 /**
- * Floating button for screens without the side nav. It shows the section being
- * read; tapping it opens a bottom drawer listing every section, so long
- * headings get a full-width row each instead of being squeezed into chips.
- * It stays out of the way until the reader has scrolled past the top.
+ * "On this page" for screens without the side nav: a square button under the
+ * navbar opens a drawer from the right listing every section. It stays out of
+ * the way until the reader has scrolled past the page title.
  */
 export const MobileSectionDropdown = ({ headings, nested }: Props) => {
   const visibleHeadings = useMemo(
@@ -125,10 +117,6 @@ export const MobileSectionDropdown = ({ headings, nested }: Props) => {
   }, [])
 
   if (!visibleHeadings.length) return null
-
-  const active =
-    visibleHeadings.find((heading) => heading.id === activeId) ??
-    visibleHeadings[0]
 
   const jumpTo = (event: React.MouseEvent, id: string) => {
     event.preventDefault()
@@ -152,71 +140,53 @@ export const MobileSectionDropdown = ({ headings, nested }: Props) => {
   }
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <button
-          type="button"
-          aria-label="On this page"
-          aria-hidden={!scrolled}
-          tabIndex={scrolled ? 0 : -1}
-          className={cn(
-            "bg-primary text-primary-foreground not-prose fixed right-4 bottom-4 z-20 flex max-w-[calc(100vw-2rem)] cursor-pointer items-center gap-2 rounded-full px-4 py-3 text-sm font-medium shadow-lg transition-[opacity,transform] duration-200 lg:hidden",
-            !scrolled && "pointer-events-none translate-y-2 opacity-0"
-          )}>
-          <List aria-hidden="true" className="size-4 shrink-0" />
-          <span className="max-w-[12rem] truncate">{active.text}</span>
-        </button>
-      </DrawerTrigger>
+    <SideNavDrawer
+      side="right"
+      title="On this page"
+      hidden={!scrolled}
+      open={open}
+      onOpenChange={setOpen}>
+      <nav className="space-y-0.5">
+        {visibleHeadings.map((heading, i) => {
+          const showGroup =
+            heading.group && heading.group !== visibleHeadings[i - 1]?.group
 
-      <DrawerContent>
-        <DrawerTitle className="px-4 pb-2 text-base">On this page</DrawerTitle>
-        <DrawerDescription className="sr-only">
-          Jump to a section of this page
-        </DrawerDescription>
-
-        <nav className="overflow-y-auto px-2 pb-6">
-          {visibleHeadings.map((heading, i) => {
-            const showGroup =
-              heading.group && heading.group !== visibleHeadings[i - 1]?.group
-
-            return (
-              <Fragment key={heading.id}>
-                {showGroup && (
-                  <p
-                    className={cn(
-                      "text-muted-foreground/70 px-3 pb-1 text-xs font-semibold",
-                      i > 0 ? "pt-3" : "pt-1"
-                    )}>
-                    {heading.group}
-                  </p>
-                )}
-                <a
-                  href={`#${heading.id}`}
-                  onClick={(event) => jumpTo(event, heading.id)}
-                  aria-current={heading.id === activeId ? "true" : undefined}
+          return (
+            <Fragment key={heading.id}>
+              {showGroup && (
+                <p
                   className={cn(
-                    "text-muted-foreground active:bg-muted flex items-baseline justify-between gap-3 rounded-lg px-3 py-3 text-sm leading-5",
-                    heading.depth === 3 &&
-                      "before:bg-muted-foreground/25 relative pl-7 before:absolute before:inset-y-0 before:left-4 before:w-px",
-                    nested &&
-                      heading.depth === 2 &&
-                      "pt-4 pb-1 text-xs font-semibold tracking-wide uppercase",
-                    heading.id === activeId &&
-                      "bg-muted text-foreground font-medium"
+                    "text-muted-foreground/70 px-3 pb-1 text-xs font-semibold",
+                    i > 0 && "pt-3"
                   )}>
-                  <span>{heading.text}</span>
-                  {heading.count !== undefined && (
-                    <span className="text-muted-foreground/70 text-xs tabular-nums">
-                      {heading.count}
-                    </span>
-                  )}
-                </a>
-              </Fragment>
-            )
-          })}
-        </nav>
-      </DrawerContent>
-    </Drawer>
+                  {heading.group}
+                </p>
+              )}
+              <a
+                href={`#${heading.id}`}
+                onClick={(event) => jumpTo(event, heading.id)}
+                aria-current={heading.id === activeId ? "true" : undefined}
+                className={cn(
+                  sideNavItem({ active: heading.id === activeId }),
+                  "flex items-baseline justify-between gap-3 py-2.5",
+                  heading.depth === 3 &&
+                    "after:bg-muted-foreground/25 pl-7 after:absolute after:inset-y-0 after:left-4 after:w-px",
+                  nested &&
+                    heading.depth === 2 &&
+                    "pt-4 pb-1 text-xs font-semibold tracking-wide uppercase"
+                )}>
+                <span>{heading.text}</span>
+                {heading.count !== undefined && (
+                  <span className="text-muted-foreground/70 text-xs tabular-nums">
+                    {heading.count}
+                  </span>
+                )}
+              </a>
+            </Fragment>
+          )
+        })}
+      </nav>
+    </SideNavDrawer>
   )
 }
 

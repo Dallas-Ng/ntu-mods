@@ -87,7 +87,7 @@ const Footer = () => {
 
       <div className="border-border/60 container flex flex-col gap-2 border-t pt-6 pb-24 text-xs sm:flex-row sm:items-center sm:justify-between">
         <p className="text-muted-foreground">
-          &copy; {new Date().getFullYear()} NTUmods.com. Not affiliated with
+          &copy; {new Date().getFullYear()} NTUMods.com. Not affiliated with
           Nanyang Technological University.
         </p>
         <ul className="text-muted-foreground flex flex-wrap gap-x-4 gap-y-2">

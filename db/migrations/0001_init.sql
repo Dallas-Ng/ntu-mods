@@ -1,4 +1,4 @@
--- NTU Mods D1 schema — initial migration.
+-- NTUMods D1 schema — initial migration.
 --
 -- Design rule (see D1_MIGRATION_PLAN.md §4):
 --   Derive at LOAD when every input is inside one semester

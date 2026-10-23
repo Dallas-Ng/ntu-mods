@@ -19,7 +19,7 @@ const LINK_CLASS =
   "text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
 
 const FAQ_GROUPS = [
-  { id: "about", title: "About NTU Mods" },
+  { id: "about", title: "About NTUMods" },
   { id: "planning", title: "Planning your timetable" },
   { id: "your-data", title: "Your data and privacy" },
   { id: "open-source-and-contributing", title: "Open source and contributing" }
@@ -29,16 +29,16 @@ const FAQ_CONFIG: FaqConfig[] = [
   {
     id: "what-is-ntu-mods",
     group: "about",
-    question: "What is NTU Mods?",
+    question: "What is NTUMods?",
     answer:
-      "NTU Mods is a timetable planner and module browser for Nanyang Technological University (NTU) students. It lets you browse modules, compare indexes, and plan your schedule, without needing to log into STARS."
+      "NTUMods is a timetable planner and module browser for Nanyang Technological University (NTU) students. It lets you browse modules, compare indexes, and plan your schedule, without needing to log into STARS."
   },
   {
     id: "ntu-affiliation",
     group: "about",
-    question: "Is NTU Mods affiliated with NTU?",
+    question: "Is NTUMods affiliated with NTU?",
     answer:
-      "No. NTU Mods is an independent project and is not affiliated with, endorsed by, or connected to Nanyang Technological University. Module and timetable data is sourced from NTU's publicly accessible systems."
+      "No. NTUMods is an independent project and is not affiliated with, endorsed by, or connected to Nanyang Technological University. Module and timetable data is sourced from NTU's publicly accessible systems."
   },
   {
     id: "current-semester",
@@ -64,7 +64,7 @@ const FAQ_CONFIG: FaqConfig[] = [
     group: "about",
     question: "Can you show live vacancies for indexes?",
     answer:
-      "No. Vacancy data is not publicly available from NTU's systems. Use NTU Mods to figure out which indexes fit your schedule, then check STARS for real-time availability when registration opens."
+      "No. Vacancy data is not publicly available from NTU's systems. Use NTUMods to figure out which indexes fit your schedule, then check STARS for real-time availability when registration opens."
   },
   {
     id: "plan-timetable",
@@ -169,7 +169,7 @@ const FAQ_CONFIG: FaqConfig[] = [
   {
     id: "open-source",
     group: "open-source-and-contributing",
-    question: "Is NTU Mods open source?",
+    question: "Is NTUMods open source?",
     answer: (
       <>
         Yes. The code is released under the MIT licence and lives on{" "}

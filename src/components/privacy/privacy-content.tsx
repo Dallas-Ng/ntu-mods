@@ -12,7 +12,7 @@ const PrivacyContent = () => {
       </div>
 
       <p className="text-sm">
-        This Privacy Policy describes how NTU Mods (&quot;we&quot;,
+        This Privacy Policy describes how NTUMods (&quot;we&quot;,
         &quot;us&quot;, or &quot;our&quot;) handles information when you use{" "}
         <a
           href="https://ntumods.com"
@@ -21,7 +21,7 @@ const PrivacyContent = () => {
           target="_blank">
           ntumods.com
         </a>{" "}
-        (the &quot;Service&quot;). NTU Mods is a free, open-source timetable
+        (the &quot;Service&quot;). NTUMods is a free, open-source timetable
         planning tool for NTU students. We do not sell your data, and we do not
         require an account to use the Service.
       </p>
@@ -221,7 +221,7 @@ const PrivacyContent = () => {
 
         <p>
           We do not keep feedback in a database. It is sent as an email to the
-          NTU Mods maintainer through Resend, an email delivery service, and
+          NTUMods maintainer through Resend, an email delivery service, and
           stays in that inbox. It is used solely to read and act on your
           feedback. We do not use it for marketing or share it with third
           parties. We also record, via PostHog, that a submission happened,

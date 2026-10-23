@@ -228,7 +228,7 @@ const ChangelogContent = () => {
           <div className="space-y-5">
             <Header
               title="Changelog"
-              subtitle="A simple record of recent NTU Mods updates, fixes, and new features."
+              subtitle="A simple record of recent NTUMods updates, fixes, and new features."
             />
 
             <ChangelogFilters

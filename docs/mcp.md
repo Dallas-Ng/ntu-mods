@@ -1,6 +1,6 @@
 # MCP server
 
-Part of [NTU Mods](../README.md). System overview: [architecture.md](architecture.md). Deployment and the kill switch: [deployment.md](deployment.md#mcp-server).
+Part of [NTUMods](../README.md). System overview: [architecture.md](architecture.md). Deployment and the kill switch: [deployment.md](deployment.md#mcp-server).
 
 A public, read-only [MCP](https://modelcontextprotocol.io) server at `https://ntumods.com/mcp`. Students add it as a custom connector in Claude or ChatGPT, and developers add it to Claude Code or Cursor. It serves the same public course data as the REST API and open data files. There is no sign-in and no key. User-facing docs live at `/developers/mcp`.
 

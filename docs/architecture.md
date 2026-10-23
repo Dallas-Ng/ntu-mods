@@ -1,8 +1,8 @@
 # Architecture
 
-Part of [NTU Mods](../README.md). This page is the big picture; each part links to its detailed doc.
+Part of [NTUMods](../README.md). This page is the big picture; each part links to its detailed doc.
 
-NTU Mods is a mostly static Astro site on Cloudflare Workers. Course data is scraped offline, committed as JSON, and baked into prerendered pages at build time. A small number of routes run on demand and read Cloudflare D1.
+NTUMods is a mostly static Astro site on Cloudflare Workers. Course data is scraped offline, committed as JSON, and baked into prerendered pages at build time. A small number of routes run on demand and read Cloudflare D1.
 
 ```mermaid
 flowchart TB

@@ -77,7 +77,7 @@ const TimetableShareDialog = ({
       })
       navigator
         .share({
-          title: "Look at my timetable from NTU Mods",
+          title: "Look at my timetable from NTUMods",
           text: "You can use this to plan your mods too!",
           url: link
         })

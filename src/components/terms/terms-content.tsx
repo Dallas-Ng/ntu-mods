@@ -10,7 +10,7 @@ const TermsContent = () => {
       </div>
 
       <p className="text-sm">
-        By using NTU Mods (&quot;we&quot;, &quot;us&quot;) at ntumods.com (the
+        By using NTUMods (&quot;we&quot;, &quot;us&quot;) at ntumods.com (the
         &quot;Service&quot;), you agree to these terms. If you do not agree,
         please do not use the Service.
       </p>
@@ -21,7 +21,7 @@ const TermsContent = () => {
         </h2>
 
         <p>
-          NTU Mods is a free, open-source tool for planning NTU timetables and
+          NTUMods is a free, open-source tool for planning NTU timetables and
           browsing module, index and exam data. You may use it for personal,
           non-commercial planning. Do not misuse it: do not attempt to disrupt
           it, overload it, scrape it beyond the documented public API and open
@@ -35,12 +35,12 @@ const TermsContent = () => {
         </h2>
 
         <p>
-          NTU Mods is an independent project. It is not affiliated with,
-          endorsed by or operated by Nanyang Technological University. Course
-          data comes from public NTU sources and may be late, incomplete or
-          wrong. Always confirm class indexes, timings, venues, exam details and
-          graduation requirements with official NTU systems before you register
-          or rely on them.
+          NTUMods is an independent project. It is not affiliated with, endorsed
+          by or operated by Nanyang Technological University. Course data comes
+          from public NTU sources and may be late, incomplete or wrong. Always
+          confirm class indexes, timings, venues, exam details and graduation
+          requirements with official NTU systems before you register or rely on
+          them.
         </p>
       </section>
 

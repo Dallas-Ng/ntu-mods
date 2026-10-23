@@ -1,6 +1,6 @@
 # Deployment
 
-Part of [NTU Mods](../README.md). System overview: [architecture.md](architecture.md). The routes that need D1 at runtime are described in [src/README.md](../src/README.md#rendering-model); seeding and verifying data is in [db/README.md](../db/README.md).
+Part of [NTUMods](../README.md). System overview: [architecture.md](architecture.md). The routes that need D1 at runtime are described in [src/README.md](../src/README.md#rendering-model); seeding and verifying data is in [db/README.md](../db/README.md).
 
 The site runs on Cloudflare Workers. The root [`wrangler.jsonc`](../wrangler.jsonc) is deliberately assets-only: `@astrojs/cloudflare` emits the real, self-contained worker config after a successful build, so deploy with that one.
 

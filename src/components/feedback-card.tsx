@@ -200,7 +200,7 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
             </p>
             <Button
               type="submit"
-              className="w-full sm:w-[200px]"
+              className="w-full sm:w-auto sm:max-w-[200px] sm:flex-1"
               disabled={loading}>
               Submit
             </Button>

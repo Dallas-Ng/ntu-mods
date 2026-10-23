@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro"
 
 import { ON_DEMAND_CACHE_CONTROL } from "@/lib/edge-cache"
+import { toModuleJson } from "@/lib/module-json"
 import { getLatestModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
 import { getKnownCodes } from "@/lib/server/edge/known-codes"
 import { rateLimit } from "@/lib/server/guard"
@@ -94,40 +95,7 @@ export const GET: APIRoute = async ({ params, url, request }) => {
     })
   }
 
-  const { moduleData, indexes, exam, year, semester, prereqNode } = snapshot
-
-  return new Response(
-    JSON.stringify({
-      code: moduleData.code,
-      title: moduleData.title,
-      au: Number(moduleData.au),
-      description: moduleData.description ?? null,
-      gradeType: moduleData.gradeType ?? null,
-      school: moduleData.faculty || null,
-      categories: moduleData.categories ?? [],
-      // Groups: every group must be met, and any module in a group meets it.
-      prerequisites: moduleData.prerequisite ?? [],
-      requires: prereqNode?.requires ?? [],
-      requiredBy: prereqNode?.requiredBy ?? [],
-      mutuallyExclusiveWith: moduleData.mutuallyExclusiveWith ?? [],
-      restrictions: {
-        notAvailableToProgramme: moduleData.notAvailableToProgramme ?? null,
-        notAvailableToAllProgrammeWith:
-          moduleData.notAvailableToAllProgrammeWith ?? null,
-        notAvailableAsCore: moduleData.notAvailableAsCoreToProgramme ?? null,
-        notAvailableAsPe: moduleData.notAvailableAsPeToProgramme ?? null,
-        notAvailableAsBdeUe: moduleData.notAvailableAsBdeueToProgramme ?? null
-      },
-      latestOffering: {
-        year,
-        semester,
-        isCurrentSemester: snapshot.isCurrentOffering,
-        indexCount: Object.keys(indexes).length
-      },
-      otherSemesters: snapshot.otherSemesters,
-      exam,
-      url: `https://ntumods.com/mods/${moduleData.code}`
-    }),
-    { headers: { ...headers, "Cache-Control": ON_DEMAND_CACHE_CONTROL } }
-  )
+  return new Response(JSON.stringify(toModuleJson(snapshot)), {
+    headers: { ...headers, "Cache-Control": ON_DEMAND_CACHE_CONTROL }
+  })
 }

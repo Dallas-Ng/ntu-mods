@@ -20,6 +20,7 @@ import {
 } from "@/lib/generate-timetable-combinations"
 import { DEFAULT_GENERATION_CONFIG } from "@/lib/generation-config"
 import { getIcs } from "@/lib/get-ics"
+import { DAYS, describeSlot, normaliseDate } from "@/lib/mcp/shared"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
 import {
   LATEST_SEMESTER_LABEL,
@@ -42,7 +43,6 @@ import type { WebMcpToolName } from "./definitions"
 
 type Args = Record<string, unknown>
 
-const DAYS = ["Online/TBA", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 const MODULE_CODE = /^[A-Z0-9]{2,12}$/
 const PLAN_COUNT = 5
 
@@ -89,15 +89,6 @@ const semesterOf = (args: Args) => {
     isLatest: year === latestYear && semester === latestSemester
   }
 }
-
-const describeSlot = (slot: Index) => ({
-  type: slot.isCustom ? slot.remarks : slot.type,
-  group: slot.group,
-  day: DAYS[slot.day] ?? "Online/TBA",
-  time: slot.day ? slot.time : "no fixed time",
-  venue: slot.venue,
-  remarks: slot.isCustom ? "" : slot.remarks
-})
 
 const hasFixedTime = (slot: Index) =>
   slot.day > 0 && /^\d{4}-\d{4}$/.test(slot.time)
@@ -1047,23 +1038,6 @@ function cgpaInputs(args: Args) {
     )
   }
   return { cgpa, done, remaining }
-}
-
-/** "2026-11-23" or "23 Nov 2026" -> "23 november 2026", the casing list_exams compares in. */
-function normaliseDate(value: string): string {
-  const v = value.trim()
-  if (!v) return ""
-  const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v)
-  if (iso) {
-    const month = new Date(
-      Date.UTC(2000, Number(iso[2]) - 1, 1)
-    ).toLocaleString("en-GB", {
-      month: "long",
-      timeZone: "UTC"
-    })
-    return `${Number(iso[3])} ${month} ${iso[1]}`.toLowerCase()
-  }
-  return v.toLowerCase()
 }
 
 export { handlers as webMcpHandlers }

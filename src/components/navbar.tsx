@@ -23,7 +23,7 @@ import { useTheme } from "@/hooks/use-theme"
 
 import ChangelogButton from "./changelog-button"
 import NavActions from "./nav-actions"
-import { NewDot } from "./new-dot"
+import { NewBadge, NewDot } from "./new-dot"
 import { Button } from "./ui/button"
 import {
   Drawer,
@@ -128,11 +128,7 @@ const Navbar = () => {
                                   className="hover:bg-accent flex h-full flex-col gap-1 rounded-lg p-3 transition-colors">
                                   <span className="flex items-center gap-2 text-sm font-semibold">
                                     {tool.name}
-                                    {tool.isNew && (
-                                      <span className="rounded-full bg-yellow-400 px-1.5 py-0.5 text-[10px] leading-none font-semibold text-black">
-                                        New
-                                      </span>
-                                    )}
+                                    {tool.isNew && <NewBadge />}
                                   </span>
                                   <span className="text-muted-foreground text-xs">
                                     {tool.desc}
@@ -260,9 +256,9 @@ const Navbar = () => {
                       Changelog
                     </span>
                     {changelogUnseen > 0 && (
-                      <span className="rounded-full bg-yellow-400 px-1.5 py-0.5 text-[10px] font-semibold text-black">
+                      <NewBadge>
                         {changelogUnseen > 9 ? "9+" : changelogUnseen}
-                      </span>
+                      </NewBadge>
                     )}
                   </a>
                 </DrawerClose>

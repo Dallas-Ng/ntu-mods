@@ -5,6 +5,7 @@ import { ArrowRight, BookOpen } from "lucide-react"
 import { siteConfig } from "@/config/site"
 import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
+import { NewBadge } from "@/components/new-dot"
 import AssistantPreview from "@/components/tools/assistant-preview"
 
 // Static miniatures of each tool so the cards read differently at a glance.
@@ -147,11 +148,7 @@ const ToolsGrid = () => (
                     {tool.name}
                   </a>
                 </h2>
-                {tool.isNew && (
-                  <span className="rounded-full bg-yellow-400 px-2.5 py-0.5 text-xs font-semibold text-black">
-                    New
-                  </span>
-                )}
+                {tool.isNew && <NewBadge size="md" />}
               </div>
               <p
                 className={cn(

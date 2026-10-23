@@ -8,7 +8,10 @@ import {
   getModuleSnapshot,
   isSameAsLatest
 } from "@/lib/server/edge/get-module-snapshot"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { TextLink } from "@/components/ui/text-link"
 import Breadcrumbs from "@/components/breadcrumbs"
+import { SectionHeading } from "@/components/header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -76,14 +79,14 @@ const crumbs = [
   <JsonLd data={breadcrumbListJsonLd(crumbs)} />
   {
     !isCurrentOffering && (
-      <div class="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
-        Historical snapshot — {semLabel} ·{" "}
-        <a
-          href={getModuleUrl(code)}
-          class="underline transition-colors hover:text-amber-600 dark:hover:text-amber-200">
-          View current offering →
-        </a>
-      </div>
+      <Alert variant="warning" role="note">
+        <AlertDescription className="block">
+          Historical snapshot: {semLabel} ·{" "}
+          <TextLink href={getModuleUrl(code)} variant="muted">
+            View current offering →
+          </TextLink>
+        </AlertDescription>
+      </Alert>
     )
   }
 
@@ -215,7 +218,7 @@ const crumbs = [
   </div>
 
   <div class="mt-10 space-y-2">
-    <h2 class="text-lg">Available Indexes</h2>
+    <SectionHeading>Available Indexes</SectionHeading>
     <ModsIndexTable indexes={indexes} />
   </div>
 </BaseLayout>

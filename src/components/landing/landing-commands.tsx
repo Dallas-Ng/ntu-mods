@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react"
 import { ChevronDown } from "lucide-react"
 
+import { NewBadge } from "@/components/new-dot"
+
 // Phones show this many rows until "Show all" is pressed; desktop shows every row
 const PHONE_ROWS = 4
 
@@ -132,9 +134,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                     <span className="block text-2xl leading-[1.1] font-bold tracking-tight md:text-3xl">
                       {c.name}
                       {c.isNew && (
-                        <span className="ml-3 inline-block rounded-full bg-yellow-400 px-3 py-1 align-middle text-sm font-semibold tracking-normal text-black">
-                          New
-                        </span>
+                        <NewBadge size="lg" className="ml-3 align-middle" />
                       )}
                     </span>
                     <span className="mt-1 block max-w-xl text-sm md:text-base lg:hidden">

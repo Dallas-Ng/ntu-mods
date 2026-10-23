@@ -1,4 +1,6 @@
 import { siteConfig } from "@/config/site"
+import { TextLink } from "@/components/ui/text-link"
+import { NewBadge } from "@/components/new-dot"
 
 // The two tools students ask about most, as large tiles with their guide.
 const FEATURED: string[] = ["/tools/fgo-optimiser", "/tools/cgpa-planner"]
@@ -12,11 +14,9 @@ const LandingTools = () => {
         <h2 className="landing-reveal max-w-2xl text-3xl leading-none font-bold tracking-tighter md:text-4xl">
           Tools for your grades
         </h2>
-        <a
-          href="/tools"
-          className="text-primary text-base font-semibold underline-offset-4 hover:underline">
+        <TextLink href="/tools" variant="action" className="text-base">
           All student tools
-        </a>
+        </TextLink>
       </div>
 
       <div className="grid gap-3 md:grid-cols-2">
@@ -28,9 +28,7 @@ const LandingTools = () => {
               <h3 className="text-2xl leading-tight font-bold tracking-tight md:text-3xl">
                 {tool.name}
                 {tool.isNew && (
-                  <span className="ml-3 inline-block rounded-full bg-yellow-400 px-3 py-1 align-middle text-sm font-semibold tracking-normal text-black">
-                    New
-                  </span>
+                  <NewBadge size="lg" className="ml-3 align-middle" />
                 )}
               </h3>
               <p className="mt-4 max-w-md text-sm md:text-base">{tool.desc}</p>

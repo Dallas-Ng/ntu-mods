@@ -24,7 +24,7 @@ jobs:
     # Drafts wait for ready_for_review. A skipped job satisfies required checks.
     if: github.event.pull_request.draft != true
     runs-on: ubuntu-24.04 # pinned: ubuntu-latest is migrating to 26, move deliberately
-    timeout-minutes: 10
+    timeout-minutes: 20
     env:
       # Prerender an evenly spread subset of /mods/CODE pages; the rest render
       # on demand from the seeded D1, as in production. The tests sample anyway.
@@ -125,7 +125,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: .wrangler/state
-          key: d1-${{ runner.os }}-${{ hashFiles('src/data/api/**', 'db/migrations/**', 'scripts/db/**', 'wrangler.jsonc', 'package.json') }}
+          key: d1-${{ runner.os }}-${{ hashFiles('src/data/api/**', 'db/migrations/**', 'scripts/db/**', 'wrangler.jsonc', 'pnpm-lock.yaml') }}
 
       # main: warm the caches only. Chromium is downloaded without the system
       # libs (a PR installs those); each step is skipped when its cache hit.

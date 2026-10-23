@@ -200,7 +200,7 @@ const slug = (name: string) => name.toLowerCase().replace(/\s+/g, "-")
 const ApiExplorer = ({ groups }: { groups: ApiGroup[] }) => {
   const [open, setOpen] = useState<string[]>([])
 
-  // A link like /developers#getModule opens that endpoint and scrolls to it.
+  // A link like /developers/api#getModule opens that endpoint and scrolls to it.
   useEffect(() => {
     const openFromHash = () => {
       const id = window.location.hash.slice(1)

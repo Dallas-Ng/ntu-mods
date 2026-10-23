@@ -23,11 +23,12 @@ types/          Global types
 
 Cloudflare Workers has no filesystem, so every route is prerendered at build time (plain Node, via the adapter's `prerenderEnvironment`) except:
 
-| Route                         | Why on-demand                                        |
-| ----------------------------- | ---------------------------------------------------- |
-| `/mods/:code/:year/:semester` | ~28k combinations; prerendering dominated build time |
-| `/api/feedback`               | Sends mail through Resend at request time            |
-| `/ingest/*`                   | PostHog reverse proxy                                |
+| Route                         | Why on-demand                                             |
+| ----------------------------- | --------------------------------------------------------- |
+| `/mods/:code/:year/:semester` | ~28k combinations; prerendering dominated build time      |
+| `/api/feedback`               | Sends mail through Resend at request time                 |
+| `/mcp`                        | MCP server (POST only); see [docs/mcp.md](../docs/mcp.md) |
+| `/ingest/*`                   | PostHog reverse proxy                                     |
 
 On-demand routes must not import `lib/server/db/repo.ts` (or `json-source.ts` beneath it): both use `node:fs`, unavailable in Workers. Use `lib/server/edge/*`, which queries the D1 binding.
 

@@ -181,6 +181,9 @@ importers:
       '@mlc-ai/web-llm':
         specifier: ^0.2.83
         version: 0.2.83
+      '@modelcontextprotocol/server':
+        specifier: 2.3.1
+        version: 2.3.1
       '@posthog/cli':
         specifier: ^0.18.10
         version: 0.18.10
@@ -1406,6 +1409,14 @@ packages:
 
   '@mlc-ai/web-llm@0.2.83':
     resolution: {integrity: sha512-Ynuses0TM9CcSIs9PfX5+xwGOVFssQTXQaAwKFggfEw++shBbEr8fOjI7yJlY96wv0dwVFE+C2KGcO287+FuHw==}
+
+  '@modelcontextprotocol/core@2.3.1':
+    resolution: {integrity: sha512-laVmIhPGpWi7rG9q+0UigblRN0Hws/Yjlb6qLFtVqryXVLkc4h+yN8z731POD2LnAGQlFe7/tXhUm7Bi0YB91g==}
+    engines: {node: '>=20'}
+
+  '@modelcontextprotocol/server@2.3.1':
+    resolution: {integrity: sha512-e59MfWuSssj6DoQ96JCTqdW1AXT5/XtnTl0WWd6MU1Ka434fFUGGosCLJbGNySDhHGvxQWoRWK137FXYFkYNWw==}
+    engines: {node: '>=20'}
 
   '@napi-rs/canvas-android-arm64@1.0.10':
     resolution: {integrity: sha512-0sDMvme+7fj6bHERUaBs5SvEyWaORc91VUkaB4RrtG7p6dBrBNGy1of8cyEKDxygd1FlHtW+Thunj8lSixzY7A==}
@@ -6460,6 +6471,15 @@ snapshots:
   '@mlc-ai/web-llm@0.2.83':
     dependencies:
       loglevel: 1.9.2
+
+  '@modelcontextprotocol/core@2.3.1':
+    dependencies:
+      zod: 4.4.3
+
+  '@modelcontextprotocol/server@2.3.1':
+    dependencies:
+      '@modelcontextprotocol/core': 2.3.1
+      zod: 4.4.3
 
   '@napi-rs/canvas-android-arm64@1.0.10':
     optional: true

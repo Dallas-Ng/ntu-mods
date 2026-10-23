@@ -1,4 +1,4 @@
-// The public API of ntumods.com as one OpenAPI 3.1 document. /developers renders
+// The public API of ntumods.com as one OpenAPI 3.1 document. /developers/api renders
 // from this and /developers/openapi.json serves it, so the docs cannot drift.
 // Only public, read-only routes belong here. Keep infrastructure details and
 // exact limits out: the abuse notes stay deliberately vague.

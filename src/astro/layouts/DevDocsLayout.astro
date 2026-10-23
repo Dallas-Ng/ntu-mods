@@ -1,0 +1,101 @@
+---
+import { DEV_GROUPS, DEV_PAGES } from "@/lib/developers/pages"
+import { webPageJsonLd } from "@/lib/json-ld"
+import type { ArticleHeading } from "@/lib/server/articles"
+import ArticleToc, {
+  MobileSectionDropdown
+} from "@/components/articles/article-toc"
+import JsonLd from "@/astro/components/JsonLd.astro"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+interface Props {
+  /** Page title and description for the head and structured data. */
+  title: string
+  description: string
+  /** Path of this page, one of DEV_PAGES. */
+  path: string
+  /** Visible h1 and the line under it. */
+  heading: string
+  intro: string
+  /** Sections for the side nav. */
+  headings: ArticleHeading[]
+}
+
+const { title, description, path, heading, intro, headings } = Astro.props
+const jsonLd = webPageJsonLd({ name: title, description, path })
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonical={path}
+  size="full">
+  <JsonLd data={jsonLd} />
+
+  <MobileSectionDropdown client:idle headings={headings} />
+
+  <div
+    class="grid gap-6 lg:grid-cols-[12rem_minmax(0,1fr)_13rem] xl:gap-10 [&>*]:min-w-0">
+    <aside class="hidden lg:block">
+      <nav aria-label="Developer docs" class="sticky top-24 space-y-5">
+        {
+          DEV_GROUPS.map((group) => (
+            <div class="space-y-1">
+              <p class="text-muted-foreground px-3 text-xs font-semibold tracking-wide uppercase">
+                {group.name}
+              </p>
+              <ul class="space-y-0.5">
+                {group.pages.map((page) => (
+                  <li>
+                    <a
+                      href={page.href}
+                      aria-current={page.href === path ? "page" : undefined}
+                      class:list={[
+                        "block rounded-md px-3 py-1.5 text-sm transition-colors",
+                        page.href === path
+                          ? "bg-primary/10 text-primary font-medium"
+                          : "text-foreground/80 hover:bg-muted hover:text-foreground"
+                      ]}>
+                      {page.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </nav>
+    </aside>
+
+    <div class="max-w-3xl min-w-0 space-y-8">
+      <div class="space-y-3">
+        <h1 class="text-3xl leading-[1] font-semibold">{heading}</h1>
+        <p class="text-foreground/80 text-sm">{intro}</p>
+      </div>
+
+      <nav
+        aria-label="Developer docs pages"
+        class="flex flex-wrap gap-2 lg:hidden">
+        {
+          DEV_PAGES.map((page) => (
+            <a
+              href={page.href}
+              aria-current={page.href === path ? "page" : undefined}
+              class:list={[
+                "rounded-full border px-3 py-1 text-sm transition-colors",
+                page.href === path
+                  ? "bg-primary text-primary-foreground border-primary font-medium"
+                  : "hover:bg-muted"
+              ]}>
+              {page.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <slot />
+    </div>
+
+    <ArticleToc client:idle headings={headings} />
+  </div>
+</BaseLayout>

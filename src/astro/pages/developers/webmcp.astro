@@ -1,0 +1,57 @@
+---
+import { siteConfig } from "@/config/site"
+import { getApiGroups } from "@/lib/developers/api-groups"
+import ApiExplorer from "@/components/developers/api-explorer"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const { title, desc } = siteConfig.metatags.developersWebmcp
+
+const groups = (await getApiGroups()).filter((g) => g.name === "Discovery")
+
+const headings = [
+  { id: "webmcp", depth: 2, text: "WebMCP in the browser" },
+  ...groups.map((g) => ({
+    id: g.name.toLowerCase().replace(/\s+/g, "-"),
+    depth: 2,
+    text: g.name,
+    count: g.ops.length
+  }))
+]
+const link = "text-primary underline underline-offset-2"
+---
+
+<DevDocsLayout
+  title={title}
+  description={desc}
+  path="/developers/webmcp"
+  heading="WebMCP and discovery files"
+  intro="Browser tools that work on your own plans, and plain files that tell crawlers and agents what NTUMods offers."
+  headings={headings}>
+  <section class="space-y-3" aria-labelledby="webmcp">
+    <h2 id="webmcp" class="scroll-mt-28 text-lg font-semibold tracking-tight">
+      WebMCP in the browser<HeadingAnchor
+        id="webmcp"
+        label="WebMCP in the browser"
+      />
+    </h2>
+    <p class="text-foreground/80 text-sm">
+      NTUMods also offers its tools to browser AI assistants through WebMCP.
+      They work on your own saved plans, which the <a
+        class={link}
+        href="/developers/mcp">MCP server</a
+      > cannot see. This is an early developer preview. The standard is still a draft
+      and support is limited, so treat it as something to test, not to build on. The
+      discovery files below list what is available. For setup steps, read the <a
+        class={link}
+        href="/articles/ntu-ai-agents-webmcp-guide">WebMCP guide</a
+      >.
+    </p>
+  </section>
+
+  <div>
+    <ApiExplorer client:load groups={groups} />
+  </div>
+</DevDocsLayout>

@@ -37,7 +37,15 @@ interface WorkerEnv {
   FEEDBACK_LIMITER?: RateLimiter
   VIEWS_LIMITER?: RateLimiter
   WALK_LIMITER?: RateLimiter
+  MCP_LIMITER?: RateLimiter
+  // Any value turns /mcp off (503). A secret, so deploys keep it.
+  MCP_DISABLED?: string
   PUBLIC_POSTHOG_TOKEN?: string
+}
+
+// The Workers edge cache; lib.dom's CacheStorage has no `default`.
+interface CacheStorage {
+  readonly default: Cache
 }
 
 declare module "cloudflare:workers" {

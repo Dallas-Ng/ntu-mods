@@ -1,12 +1,27 @@
+/**
+ * Runtime errors (runtime.spec.ts)
+ *
+ * Tests:  no console errors or warnings, page errors, failed requests or
+ *         HTTP 4xx/5xx from our own origin while a page loads and hydrates.
+ * Why:    hydration and island errors only show with JavaScript on, and users
+ *         hit them while the static checks still pass.
+ * How:    opens each page in a real browser context, waits for load (network
+ *         idle on heavy pages) plus two frames, and collects the events. Third
+ *         party hosts are stubbed in fixtures.ts.
+ * Needs:  `pnpm build`, a running server and a seeded local D1.
+ * Sample: every static page in dark, 5 articles and modules, 3 semesters; light
+ *         theme on three pages only, since theme is a client-side class toggle.
+ */
+
 import { expect, test } from "./fixtures"
 import { BASE_URL, pagesUnderTest } from "./lib/urls"
 
 // Known third-party noise; keep this list short and justified.
 const IGNORED: RegExp[] = []
 
-// Theme is a client-side class toggle: light only needs a pass on static pages.
-const themesFor = (kind: string) =>
-  kind === "static" ? (["dark", "light"] as const) : (["dark"] as const)
+// Theme is a client-side class toggle, so light only needs a few
+// representative pages (home, a list page, a heavy island).
+const LIGHT = new Set(["/", "/mods", "/timetable"])
 
 // Pages with heavy client islands get a full network-idle wait; for the rest
 // `load` plus two frames catches hydration errors without the idle timer.
@@ -22,7 +37,7 @@ const HEAVY = new Set([
 const origin = new URL(BASE_URL).origin
 // Console/network errors come from the template and its islands, not from
 // per-page data, so a handful of each dynamic kind is enough.
-const pages = pagesUnderTest(5)
+const pages = pagesUnderTest(5, { semester: 3 })
 const kinds = [...new Set(pages.map((p) => p.kind))]
 
 // Grouped theme -> kind -> path, so a failure reads
@@ -30,11 +45,15 @@ const kinds = [...new Set(pages.map((p) => p.kind))]
 test.describe("Console and network errors", () => {
   for (const theme of ["dark", "light"] as const) {
     test.describe(theme, () => {
-      for (const kind of kinds.filter((k) =>
-        themesFor(k).includes(theme as never)
+      for (const kind of kinds.filter(
+        (k) =>
+          theme === "dark" ||
+          pages.some((p) => p.kind === k && LIGHT.has(p.path))
       )) {
         test.describe(kind, () => {
-          for (const ref of pages.filter((p) => p.kind === kind)) {
+          for (const ref of pages.filter(
+            (p) => p.kind === kind && (theme === "dark" || LIGHT.has(p.path))
+          )) {
             test(ref.path, async ({ dark, light }) => {
               const problems: string[] = []
               const page = await (theme === "dark" ? dark : light).newPage()

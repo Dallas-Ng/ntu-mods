@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { RefreshCcw } from "lucide-react"
 
 import { reportError, track } from "@/lib/analytics"
-import { TRUN_DAY_MAP } from "@/lib/constants"
+import { TRUN_DAY_MAP } from "@/lib/module-constants"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 

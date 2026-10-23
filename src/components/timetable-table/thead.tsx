@@ -1,5 +1,5 @@
 import { TABLE_SETTINGS } from "@/config/table-settings"
-import { TRUN_DAY_MAP } from "@/lib/constants"
+import { TRUN_DAY_MAP } from "@/lib/module-constants"
 
 interface Props {
   days: number

@@ -1,5 +1,5 @@
 import { TABLE_SETTINGS } from "@/config/table-settings"
-import { STARS_TIMESLOTS } from "@/lib/constants"
+import { STARS_TIMESLOTS } from "@/lib/module-constants"
 
 import { TimetableTableThead } from "./thead"
 

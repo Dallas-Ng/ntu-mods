@@ -88,7 +88,7 @@ const Navbar = () => {
               past the 2nd collapse at narrow widths; all show from md up. */}
           <NavigationMenu.Root
             aria-label="Main"
-            delayDuration={100}
+            delayDuration={0}
             className="relative ml-2">
             <NavigationMenu.List className="flex items-center gap-1 min-[890px]:gap-0">
               {siteConfig.navLinks.map((link, i) => {
@@ -118,7 +118,7 @@ const Navbar = () => {
                         <ChevronDown className="size-3 transition-transform group-data-[state=open]:rotate-180" />
                         {dot}
                       </NavigationMenu.Trigger>
-                      <NavigationMenu.Content className="bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 absolute top-full left-0 mt-2 w-[min(32rem,calc(100vw-1rem))] origin-top-left rounded-xl border p-2 shadow-lg duration-200">
+                      <NavigationMenu.Content className="data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out w-[min(32rem,calc(100vw-1rem))] p-2">
                         <ul className="grid gap-1 sm:grid-cols-2">
                           {siteConfig.tools.map((tool) => (
                             <li key={tool.href}>
@@ -169,6 +169,9 @@ const Navbar = () => {
                 )
               })}
             </NavigationMenu.List>
+            <div className="absolute top-full left-0 isolate z-50 flex justify-center">
+              <NavigationMenu.Viewport className="origin-top-center bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 relative mt-1.5 h-(--radix-navigation-menu-viewport-height) w-(--radix-navigation-menu-viewport-width) overflow-hidden rounded-xl border shadow-lg [animation-timing-function:var(--ease-out-strong)] data-[state=closed]:[animation-duration:100ms] data-[state=open]:[animation-duration:150ms] motion-reduce:animate-none" />
+            </div>
           </NavigationMenu.Root>
         </div>
 

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 
 import { track } from "@/lib/analytics"
-import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/constants"
+import { STARS_TIMESLOTS, TRUN_DAY_MAP } from "@/lib/module-constants"
 import { formatHhmm } from "@/lib/format"
 
 const WEEKDAYS = [1, 2, 3, 4, 5] as const

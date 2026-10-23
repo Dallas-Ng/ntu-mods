@@ -1,5 +1,5 @@
 import type { AllModule, ModsGroupBy } from "@/types/mods"
-import { MODULE_CATEGORY, MODULE_FACULTY } from "@/lib/constants"
+import { MODULE_CATEGORY, MODULE_FACULTY } from "@/lib/module-constants"
 import type { SeasonIndexes } from "@/hooks/use-season-indexes"
 
 export const CODE_QUERY_RE = /^[a-z]{2,4}\d*/i

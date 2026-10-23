@@ -1,3 +1,13 @@
+/**
+ * Browser contexts (fixtures.ts)
+ *
+ * Provides: worker-scoped contexts for the specs that drive a browser: `noJs`
+ *           (documents only, what crawlers see), `dark` and `light`.
+ * Why:      one context per worker instead of one per test, and third-party
+ *           hosts are stubbed so analytics and consent calls cannot flake CI.
+ * Used by:  pages.spec.ts and runtime.spec.ts.
+ */
+
 import { test as base, type BrowserContext } from "@playwright/test"
 
 import { BASE_URL } from "./lib/urls"

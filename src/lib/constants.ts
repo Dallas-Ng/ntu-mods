@@ -10,4 +10,3 @@ export const BASE_URL = IS_DEV ? "http://localhost:4321" : "https://ntumods.com"
 
 export const BUILD_ENV = import.meta.env.PUBLIC_BUILD_ENV ?? "unknown"
 
-export * from "./module-constants"

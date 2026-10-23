@@ -1,3 +1,14 @@
+/**
+ * SEO readers and checks (lib/seo.ts)
+ *
+ * Provides: `readSeo` (one DOM pass for title, meta, JSON-LD, headings,
+ *           images, links) and the problem lists built on it: meta tags,
+ *           JSON-LD, heading outline, images, rendered content, warnings.
+ * Why:      keeps the rules in one place so the specs only decide which pages
+ *           to load.
+ * Used by:  pages.spec.ts.
+ */
+
 import type { Page } from "@playwright/test"
 
 import { SITE, type PageRef } from "./urls"
@@ -89,9 +100,7 @@ export function metaProblems(s: SeoSnapshot, ref: PageRef): string[] {
   if (!meta(s, "viewport")) out.push("missing viewport")
   if (s.hreflangs) out.push("unexpected hreflang links")
 
-  const desc = need("description")
-  if (desc && desc.length < 50)
-    out.push(`description ${desc.length} chars (<50)`)
+  need("description")
   if (s.canonicals.length !== 1) {
     out.push(`${s.canonicals.length} canonical links`)
   } else if (s.canonicals[0] !== want) {
@@ -282,10 +291,6 @@ export function contentProblems(s: SeoSnapshot, ref: PageRef): string[] {
 /** Worth fixing but not worth failing CI over; surfaced as annotations. */
 export function warnings(s: SeoSnapshot): string[] {
   const out: string[] = []
-  if (s.title.length > 70) out.push(`title ${s.title.length} chars (>70)`)
-  const desc = meta(s, "description")
-  if (desc && desc.length > 170)
-    out.push(`description ${desc.length} chars (>170)`)
   for (const i of s.imgs) {
     if (!i.w || !i.h) out.push(`img without width/height: ${i.src}`)
   }

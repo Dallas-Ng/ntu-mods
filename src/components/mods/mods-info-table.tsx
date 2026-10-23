@@ -1,4 +1,4 @@
-import { MODULE_CODE_RE } from "@/lib/constants"
+import { MODULE_CODE_RE } from "@/lib/module-constants"
 import type { DbExam, DbModule } from "@/lib/server/db/types"
 
 interface Props {

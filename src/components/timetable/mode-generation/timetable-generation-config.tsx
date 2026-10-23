@@ -13,7 +13,7 @@ import {
 import { Dialog as DialogPrimitive } from "radix-ui"
 
 import { track } from "@/lib/analytics"
-import { COURSE_TYPE } from "@/lib/constants"
+import { COURSE_TYPE } from "@/lib/module-constants"
 import { customCourseModuleKey } from "@/lib/custom-course-colors"
 import { formatHhmm } from "@/lib/format"
 import {

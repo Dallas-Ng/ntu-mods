@@ -1,8 +1,7 @@
 /**
- * Pure data, no `import.meta.env` — unlike constants.ts (which re-exports all
- * of this), this file is safe to import from plain Node/tsx scripts that
- * aren't run through Vite, e.g. server/db/json-source.ts and the build
- * scripts that use it. Importing constants.ts directly from one of those
+ * Pure data, no `import.meta.env` — unlike constants.ts, this file is safe to
+ * import from plain Node/tsx scripts that aren't run through Vite, e.g.
+ * server/db/json-source.ts and the build scripts that use it. Importing constants.ts directly from one of those
  * crashes on `import.meta.env.DEV` being undefined outside a Vite context.
  */
 

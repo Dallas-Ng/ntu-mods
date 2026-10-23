@@ -1,8 +1,27 @@
-import fs from "node:fs"
-import path from "node:path"
+/**
+ * Module URL strategy (modules.spec.ts)
+ *
+ * Tests:  the current-versus-past module split, that /mods/CODE shows the
+ *         latest offered semester, latest-semester and older-semester
+ *         canonicals, the h1, Course JSON-LD only on current modules, and the
+ *         sitemap policy for module URLs.
+ * Why:    modules move between prerendered and on-demand every semester, and
+ *         the URL, status and canonical of /mods/CODE must not change when
+ *         they do.
+ * How:    derives the expected result from the module data, then requests a
+ *         sample of URLs without following redirects. The per-page checks for
+ *         /mods/CODE itself (200, indexable, self-canonical) live in pages.spec.
+ * Needs:  `pnpm build`, a running server and a seeded local D1.
+ * Sample: SEO_SAMPLE modules per group for the canonical checks, 5 to 15 for
+ *         the rest.
+ */
+
 import { expect, test } from "@playwright/test"
 
-import { latestOfferings } from "../src/lib/server/db/json-source"
+import {
+  activeOfferingCodes,
+  latestOfferings
+} from "../src/lib/server/db/json-source"
 import { moduleYearCutoff } from "../src/lib/sitemap-policy"
 import { sample, SITE, sitemapPaths } from "./lib/urls"
 
@@ -14,32 +33,29 @@ import { sample, SITE, sitemapPaths } from "./lib/urls"
 //   /mods/CODE/Y/S (latest) same data as /mods/CODE, so it canonicalises there.
 //   /mods/CODE/Y/S (older)  archive page, self-canonical.
 // A new semester only moves codes between "static" and "on demand"; the URL,
-// status and canonical of /mods/CODE must not change.
-const DIST = process.env.E2E_DIST || path.resolve("dist/client")
+// status and canonical of /mods/CODE must not change. The per-page checks for
+// /mods/CODE itself (200, indexable, self-canonical, no snapshot header) live
+// in pages.spec; this file covers what only it can: the current/past split,
+// latest-semester canonicalisation and the sitemap policy.
 const N = Number(process.env.SEO_SAMPLE || 20)
 
 const offerings = latestOfferings()
-const staticCodes = new Set(
-  fs
-    .readdirSync(path.join(DIST, "mods"))
-    .filter((f) => f.endsWith(".html"))
-    .map((f) => f.slice(0, -5))
-)
-const current = offerings.filter((o) => staticCodes.has(o.code))
-const past = offerings.filter((o) => !staticCodes.has(o.code))
+// "Current" is by semester, not by what the build prerendered: CI caps the
+// prerendered set (PRERENDER_MODULE_LIMIT) and the rest render on demand.
+const activeCodes = new Set(activeOfferingCodes())
+const current = offerings.filter((o) => activeCodes.has(o.code))
+const past = offerings.filter((o) => !activeCodes.has(o.code))
 
 const canonicalOf = (html: string) =>
   [...html.matchAll(/<link[^>]+rel="canonical"[^>]*>/g)].map(
     (m) => /href="([^"]*)"/.exec(m[0])?.[1]
   )
-const noindex = (html: string, header: string) =>
-  /<meta[^>]+name="robots"[^>]+noindex/i.test(html) || /noindex/i.test(header)
 
 test.describe("module URL strategy", () => {
   test("test data has current and past-only modules", () => {
     expect(current.length).toBeGreaterThan(100)
     expect(past.length).toBeGreaterThan(100)
-    // Every statically built module shares one (the current) semester.
+    // Every current module shares one semester.
     expect(new Set(current.map((o) => o.sem)).size).toBe(1)
     expect(past.some((o) => o.sem === current[0].sem)).toBe(false)
   })
@@ -48,26 +64,6 @@ test.describe("module URL strategy", () => {
     ["current-semester", current],
     ["past-only", past]
   ] as const) {
-    test(`/mods/CODE for ${label} modules is 200, indexable, self-canonical`, async ({
-      request
-    }) => {
-      const bad: string[] = []
-      for (const o of sample(group, N, `mods-${label}`)) {
-        const p = `/mods/${o.code}`
-        const res = await request.get(p, { maxRedirects: 0 })
-        const html = await res.text()
-        const c = canonicalOf(html)
-        if (res.headers()["x-module-snapshot"])
-          bad.push(`${p} leaks x-module-snapshot`)
-        if (res.status() !== 200) bad.push(`${p} -> ${res.status()}`)
-        else if (noindex(html, res.headers()["x-robots-tag"] ?? ""))
-          bad.push(`${p} noindex`)
-        else if (c.length !== 1 || c[0] !== `${SITE}${p}`)
-          bad.push(`${p} canonical ${c.join(",")}`)
-      }
-      expect(bad).toEqual([])
-    })
-
     test(`${label} /mods/CODE shows the latest offered semester`, async ({
       request
     }) => {
@@ -113,7 +109,10 @@ test.describe("module URL strategy", () => {
         .replace(/&amp;/g, "&")
         .replace(/\s+/g, " ")
         .trim()
-      if (!h1?.startsWith(o.code) || !h1.includes(o.raw.title.trim()))
+      if (
+        !h1?.startsWith(o.code) ||
+        !h1.includes(o.raw.title.replace(/\s+/g, " ").trim())
+      )
         bad.push(`${o.code}: h1 "${h1}" vs title "${o.raw.title}"`)
     }
     expect(bad).toEqual([])

@@ -1,5 +1,5 @@
 import type { AllModule } from "@/types/mods"
-import { MODULE_CATEGORY } from "@/lib/constants"
+import { MODULE_CATEGORY } from "@/lib/module-constants"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import { cn } from "@/lib/utils"
 

@@ -29,9 +29,15 @@ export const prerender = true
 // definition offered in the latest semester, isCurrentOffering below is
 // always true for statically built pages.
 export async function getStaticPaths() {
-  return (await getActiveModuleCodes()).map((code) => ({
-    params: { module: code }
-  }))
+  const codes = await getActiveModuleCodes()
+  // CI sets PRERENDER_MODULE_LIMIT to build an evenly spread subset (codes
+  // are sorted, so every nth covers every school); the rest render on demand
+  // like any code outside this set, which the e2e suite exercises too.
+  const limit = Number(process.env.PRERENDER_MODULE_LIMIT) || codes.length
+  const step = Math.max(1, Math.ceil(codes.length / limit))
+  return codes
+    .filter((_, i) => i % step === 0)
+    .map((code) => ({ params: { module: code } }))
 }
 
 const moduleKey = Astro.params.module ?? ""

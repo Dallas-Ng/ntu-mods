@@ -1,6 +1,32 @@
+/**
+ * Links and uniqueness (links.spec.ts)
+ *
+ * Tests:  titles and descriptions are unique across pages, internal links are
+ *         well formed and answer 200, module links point at a real module or
+ *         semester, and no article or static page is an orphan.
+ * Why:    duplicate metadata, broken or redirecting links and unreachable pages
+ *         waste crawl budget and read as low quality to search engines.
+ * How:    fetches the sampled pages and all articles once (JS off, documents
+ *         only) and shares the HTML between tests. Module links are checked
+ *         against the data and every built HTML file instead of by request.
+ * Needs:  `pnpm build`, a running server and a seeded local D1.
+ * Sample: SEO_SAMPLE pages per kind (semester capped at 5), all articles.
+ */
+
+import fs from "node:fs"
 import { expect, test } from "@playwright/test"
 
-import { BASE_URL, pagesUnderTest, SITE, sitemapPaths } from "./lib/urls"
+import {
+  latestOfferings,
+  versionedOfferings
+} from "../src/lib/server/db/json-source"
+import {
+  BASE_URL,
+  distHtmlFiles,
+  pagesUnderTest,
+  SITE,
+  sitemapPaths
+} from "./lib/urls"
 
 const hrefsOf = (html: string) =>
   [...html.matchAll(/<a\b[^>]*?\bhref="([^"]*)"[^>]*>/g)].map((m) => ({
@@ -25,6 +51,8 @@ const inBatches = async <T>(
     await Promise.all(items.slice(i, i + size).map(fn))
   }
 }
+
+const MODULE_PATH = /^\/mods\/[A-Z0-9]+(\/\d{4}\/[12ST])?$/
 
 // One crawl of every sampled page plus all articles, shared by the tests below.
 test.describe("crawl", () => {
@@ -82,12 +110,36 @@ test.describe("crawl", () => {
     }
     // Every distinct internal target answers 200 directly: a link that 3xx's
     // wastes crawl budget and one that 404s is a bug.
-    await inBatches([...targets], 50, async ([t, from]) => {
+    // Module links are checked against the data below, without requests:
+    // most module pages render on demand, so fetching them all is slow.
+    const toCheck = [...targets].filter(([t]) => !MODULE_PATH.test(t))
+    await inBatches(toCheck, 50, async ([t, from]) => {
       const r = await request.get(t, { maxRedirects: 0 })
       if (r.status() !== 200) problems.push(`${from}: ${t} -> ${r.status()}`)
     })
     await request.dispose()
     expect(problems).toEqual([])
+  })
+
+  test("module links in every built page point at a real module or semester", () => {
+    const known = new Set<string>()
+    for (const o of latestOfferings()) {
+      known.add(`/mods/${o.code}`)
+      known.add(`/mods/${o.code}/${o.year}/${o.semester}`)
+    }
+    for (const o of versionedOfferings(0))
+      known.add(`/mods/${o.code}/${o.year}/${o.semester}`)
+
+    const bad: string[] = []
+    for (const file of distHtmlFiles()) {
+      const page = fs.readFileSync(file, "utf8")
+      for (const { href } of hrefsOf(page)) {
+        const target = internal(href, "/")
+        if (target && MODULE_PATH.test(target) && !known.has(target))
+          bad.push(`${file.split("dist/client")[1]}: ${href}`)
+      }
+    }
+    expect(bad).toEqual([])
   })
 
   test("no orphan articles or static pages", () => {

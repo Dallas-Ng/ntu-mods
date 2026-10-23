@@ -1,0 +1,166 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches: [main] # seeds the caches so PRs hit them
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # A newer commit supersedes the older run. On main that is safe for the
+  # caches too: their keys hash content, so the last merge seeds the same keys.
+  cancel-in-progress: true
+
+# One job on purpose: GitHub bills each job rounded up to a whole minute, and
+# the unit tests alone take ~30s. Everything slow runs in parallel inside it.
+jobs:
+  ci:
+    name: E2E SEO tests (Playwright) # required status check; keep the name
+    # Drafts wait for ready_for_review. A skipped job satisfies required checks.
+    if: github.event.pull_request.draft != true
+    runs-on: ubuntu-24.04 # pinned: ubuntu-latest is migrating to 26, move deliberately
+    timeout-minutes: 10
+    env:
+      # Prerender an evenly spread subset of /mods/CODE pages; the rest render
+      # on demand from the seeded D1, as in production. The tests sample anyway.
+      PRERENDER_MODULE_LIMIT: 60
+      # PRs: small fixed sample (reproducible). main: bigger sample with a seed
+      # that changes every run, so coverage accumulates without flaking PRs.
+      SEO_SAMPLE: ${{ github.event_name == 'pull_request' && 10 || 20 }}
+      SEO_SEED: ${{ github.event_name == 'pull_request' && '1' || github.run_id }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      # Docs-only changes skip everything below. The job still runs and
+      # reports success, which keeps the required check satisfied (workflow
+      # `paths-ignore` would leave it pending). content/ counts as code:
+      # articles are built into the SEO-tested pages. Defaults to code when
+      # the diff cannot be read.
+      - name: Detect code changes
+        id: changes
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          code=true
+          if [ -n "$BASE" ] && [ "${BASE//0/}" != "" ] && git fetch --no-tags --depth=1 origin "$BASE" 2>/dev/null; then
+            files=$(git diff --name-only "$BASE" HEAD || true)
+            if [ -n "$files" ]; then
+              code=false
+              while read -r f; do
+                case "$f" in
+                  content/*) code=true ;;
+                  docs/* | .claude/* | .github/FUNDING.yml | .github/ISSUE_TEMPLATE/* | *.md) ;;
+                  *) code=true ;;
+                esac
+              done <<< "$files"
+            fi
+          fi
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          echo "code changes: $code"
+
+      # Everything from here on only runs for code changes.
+      - name: Cache corepack (pnpm)
+        if: steps.changes.outputs.code == 'true'
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/node/corepack
+          key: corepack-${{ runner.os }}-${{ hashFiles('package.json') }}
+
+      # Download pnpm once, with retries, so later steps (some run pnpm in
+      # parallel) never race on a slow or flaky npm registry.
+      - name: Enable pnpm (version from packageManager)
+        if: steps.changes.outputs.code == 'true'
+        run: |
+          corepack enable
+          for i in 1 2 3 4 5; do pnpm --version && exit 0; sleep $((i * 10)); done
+          exit 1
+
+      - name: Set up Node.js
+        if: steps.changes.outputs.code == 'true'
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false # we cache node_modules instead
+
+      # Installs dominate the fast steps, so cache node_modules itself: a
+      # lockfile-unchanged run skips install entirely.
+      - name: Cache node_modules
+        if: steps.changes.outputs.code == 'true'
+        id: deps
+        uses: actions/cache@v5
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('.node-version', 'pnpm-lock.yaml') }}
+
+      - name: Install dependencies
+        if: steps.changes.outputs.code == 'true' && steps.deps.outputs.cache-hit != 'true'
+        run: pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
+
+      # Browser binaries are keyed on the Playwright version; system libs are
+      # not cacheable, so install-deps still runs on a hit. Headless shell only:
+      # the tests never run headed, and it is a much smaller download.
+      - name: Get Playwright version
+        if: steps.changes.outputs.code == 'true'
+        id: playwright
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        if: steps.changes.outputs.code == 'true'
+        id: browsers
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+
+      # The seeded local D1 is a pure function of the data, migrations and
+      # seed scripts, so reuse it until one of them changes.
+      - name: Cache seeded local D1
+        if: steps.changes.outputs.code == 'true'
+        id: d1
+        uses: actions/cache@v5
+        with:
+          path: .wrangler/state
+          key: d1-${{ runner.os }}-${{ hashFiles('src/data/api/**', 'db/migrations/**', 'scripts/db/**', 'wrangler.jsonc', 'package.json') }}
+
+      # Independent of each other (Chromium install, build writes dist/, seed
+      # writes .wrangler/state, vitest writes nothing), so run them side by
+      # side.
+      - name: Install Chromium, build, seed D1 and run unit tests
+        if: steps.changes.outputs.code == 'true'
+        env:
+          BROWSERS_CACHED: ${{ steps.browsers.outputs.cache-hit }}
+          D1_CACHED: ${{ steps.d1.outputs.cache-hit }}
+        run: |
+          if [ "$BROWSERS_CACHED" = "true" ]; then
+            npx playwright install-deps chromium & browser=$!
+          else
+            npx playwright install --with-deps --only-shell chromium & browser=$!
+          fi
+          pnpm build & build=$!
+          if [ "$D1_CACHED" = "true" ]; then
+            true & seed=$!
+          else
+            pnpm db:seed-local & seed=$!
+          fi
+          pnpm test & unit=$!
+          wait $browser && wait $build && wait $seed && wait $unit
+
+      # The seed is printed up front so a failure on a rotating (main) seed
+      # can be reproduced locally with the same sample.
+      - name: Run E2E SEO tests
+        if: steps.changes.outputs.code == 'true'
+        run: |
+          echo "::notice title=E2E sample::SEO_SEED=$SEO_SEED SEO_SAMPLE=$SEO_SAMPLE PRERENDER_MODULE_LIMIT=$PRERENDER_MODULE_LIMIT"
+          pnpm test:e2e
+
+      - name: Upload report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

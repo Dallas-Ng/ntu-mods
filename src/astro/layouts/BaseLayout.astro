@@ -57,8 +57,10 @@ const {
 } = Astro.props
 
 // Every page ends with a way to report a problem, except the form itself and
-// error pages.
-const showFeedback = !noindex && Astro.url.pathname !== "/feedback"
+// error pages. Keyed on `canonical`, not the pathname: prerendered pages with
+// build.format "file" see "/feedback.html" there, so the form's own page kept
+// showing a second card.
+const showFeedback = !noindex && canonical !== "/feedback"
 
 const canonicalUrl = canonical
   ? canonical === "/"

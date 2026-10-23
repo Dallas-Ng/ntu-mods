@@ -90,7 +90,7 @@ const Footer = () => {
           &copy; {new Date().getFullYear()} NTUmods.com. Not affiliated with
           Nanyang Technological University.
         </p>
-        <ul className="text-muted-foreground flex gap-4">
+        <ul className="text-muted-foreground flex flex-wrap gap-x-4 gap-y-2">
           {LEGAL_LINKS.map((link) => (
             <li key={link.href}>
               <a

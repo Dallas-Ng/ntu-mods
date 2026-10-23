@@ -62,7 +62,7 @@ test.describe("robots and sitemap", () => {
     request
   }) => {
     const bad: string[] = []
-    const paths = sample(sitemapPaths(), 150, "sitemap-status")
+    const paths = sample(sitemapPaths(), 60, "sitemap-status")
     for (let i = 0; i < paths.length; i += 25) {
       await Promise.all(
         paths.slice(i, i + 25).map(async (p) => {

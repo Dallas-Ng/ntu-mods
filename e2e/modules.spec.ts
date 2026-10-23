@@ -1,8 +1,9 @@
-import fs from "node:fs"
-import path from "node:path"
 import { expect, test } from "@playwright/test"
 
-import { latestOfferings } from "../src/lib/server/db/json-source"
+import {
+  activeOfferingCodes,
+  latestOfferings
+} from "../src/lib/server/db/json-source"
 import { moduleYearCutoff } from "../src/lib/sitemap-policy"
 import { sample, SITE, sitemapPaths } from "./lib/urls"
 
@@ -15,18 +16,14 @@ import { sample, SITE, sitemapPaths } from "./lib/urls"
 //   /mods/CODE/Y/S (older)  archive page, self-canonical.
 // A new semester only moves codes between "static" and "on demand"; the URL,
 // status and canonical of /mods/CODE must not change.
-const DIST = process.env.E2E_DIST || path.resolve("dist/client")
 const N = Number(process.env.SEO_SAMPLE || 20)
 
 const offerings = latestOfferings()
-const staticCodes = new Set(
-  fs
-    .readdirSync(path.join(DIST, "mods"))
-    .filter((f) => f.endsWith(".html"))
-    .map((f) => f.slice(0, -5))
-)
-const current = offerings.filter((o) => staticCodes.has(o.code))
-const past = offerings.filter((o) => !staticCodes.has(o.code))
+// "Current" is by semester, not by what the build prerendered: CI caps the
+// prerendered set (PRERENDER_MODULE_LIMIT) and the rest render on demand.
+const activeCodes = new Set(activeOfferingCodes())
+const current = offerings.filter((o) => activeCodes.has(o.code))
+const past = offerings.filter((o) => !activeCodes.has(o.code))
 
 const canonicalOf = (html: string) =>
   [...html.matchAll(/<link[^>]+rel="canonical"[^>]*>/g)].map(
@@ -39,7 +36,7 @@ test.describe("module URL strategy", () => {
   test("test data has current and past-only modules", () => {
     expect(current.length).toBeGreaterThan(100)
     expect(past.length).toBeGreaterThan(100)
-    // Every statically built module shares one (the current) semester.
+    // Every current module shares one semester.
     expect(new Set(current.map((o) => o.sem)).size).toBe(1)
     expect(past.some((o) => o.sem === current[0].sem)).toBe(false)
   })
@@ -113,7 +110,10 @@ test.describe("module URL strategy", () => {
         .replace(/&amp;/g, "&")
         .replace(/\s+/g, " ")
         .trim()
-      if (!h1?.startsWith(o.code) || !h1.includes(o.raw.title.trim()))
+      if (
+        !h1?.startsWith(o.code) ||
+        !h1.includes(o.raw.title.replace(/\s+/g, " ").trim())
+      )
         bad.push(`${o.code}: h1 "${h1}" vs title "${o.raw.title}"`)
     }
     expect(bad).toEqual([])

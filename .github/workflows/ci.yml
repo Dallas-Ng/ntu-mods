@@ -8,8 +8,9 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  # Supersede stale PR pushes; never cancel main, its runs seed the caches.
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  # A newer commit supersedes the older run. On main that is safe for the
+  # caches too: their keys hash content, so the last merge seeds the same keys.
+  cancel-in-progress: true
 
 # One job on purpose: GitHub bills each job rounded up to a whole minute, and
 # the unit tests alone take ~30s. Everything slow runs in parallel inside it.

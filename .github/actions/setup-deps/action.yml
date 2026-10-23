@@ -25,7 +25,7 @@ runs:
     # lockfile-unchanged run skips install entirely.
     - name: Cache node_modules
       id: deps
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: node_modules
         key: node-modules-${{ runner.os }}-${{ hashFiles('.node-version', 'pnpm-lock.yaml') }}

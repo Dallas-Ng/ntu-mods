@@ -30,6 +30,12 @@
   Access-Control-Allow-Origin: *
   X-Robots-Tag: noindex
 
+/.well-known/security.txt
+  ! Cache-Control
+  Cache-Control: public, max-age=3600, s-maxage=86400
+  Content-Type: text/plain; charset=utf-8
+  Access-Control-Allow-Origin: *
+
 /.well-known/webmcp.json
   ! Cache-Control
   Cache-Control: public, max-age=3600, s-maxage=86400

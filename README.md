@@ -125,9 +125,13 @@ Contributions of every size are welcome, whether that is a typo fix, a bug repor
 3. Make your change, then run `pnpm lint` and `pnpm test`.
 4. Open a pull request and fill in the template.
 
-Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). If you get stuck, open an issue or ask in your pull request; questions are welcome.
+Setup steps and the full checklist are in [CONTRIBUTING.md](CONTRIBUTING.md). Report security issues privately, see [SECURITY.md](SECURITY.md). Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). If you get stuck, open an issue or ask in your pull request; questions are welcome.
 
 Maintainers: see [docs/maintenance.md](docs/maintenance.md) for the per-semester checklist and [docs/deployment.md](docs/deployment.md) for releases.
+
+## Support
+
+NTUMods is free and maintained by one person. If it saved you time, you can [buy me a coffee](https://buymeacoffee.com/dallasng) or sponsor on [GitHub](https://github.com/sponsors/Dallas-Ng).
 
 ## License
 

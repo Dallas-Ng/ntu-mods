@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import * as z from "zod"
 
+import { siteConfig } from "@/config/site"
 import { reportError, track, whenAnalyticsReady } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -185,10 +186,21 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
             )}
           />
 
-          <div className="flex justify-end">
+          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-muted-foreground text-xs text-pretty">
+              Developer?{" "}
+              <a
+                href={`${siteConfig.links.repo}/issues`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+                Open an issue or PR
+              </a>
+              .
+            </p>
             <Button
               type="submit"
-              className="w-full lg:w-[200px]"
+              className="w-full sm:w-[200px]"
               disabled={loading}>
               Submit
             </Button>

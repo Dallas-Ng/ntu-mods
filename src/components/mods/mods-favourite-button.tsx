@@ -30,13 +30,13 @@ const ModsFavouriteButton = ({ moduleKey, className }: Props) => {
       aria-label={favourited ? "Remove from favourites" : "Add to favourites"}
       title={favourited ? "Remove from favourites" : "Add to favourites"}
       className={cn(
-        "hover:bg-accent flex h-full w-full cursor-pointer items-center justify-center transition-colors",
+        "text-muted-foreground hover:bg-accent hover:text-foreground flex h-full w-full items-center justify-center transition-colors",
         className
       )}>
       <Heart
         className={cn(
-          "size-3.5 transition-colors",
-          favourited ? "fill-rose-500 text-rose-500" : "text-muted-foreground"
+          "size-4 transition-colors",
+          favourited && "fill-rose-500 text-rose-500"
         )}
       />
     </button>

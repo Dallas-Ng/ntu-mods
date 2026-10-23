@@ -236,7 +236,7 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
             }
             aria-label="Favourites only">
             <Heart
-              className={`size-3.5 ${favouritesOnly === "true" ? "fill-rose-500 text-rose-500" : ""}`}
+              className={`size-4 ${favouritesOnly === "true" ? "fill-rose-500 text-rose-500" : ""}`}
             />
             <span className="hidden sm:inline">Favourites</span>
           </Button>
@@ -363,7 +363,7 @@ function ModuleResults({
         year={year}
         semester={semester}
         showText={false}
-        triggerClassName="bg-background hover:bg-accent size-8 rounded-full p-0 active:scale-95"
+        triggerClassName="bg-background text-muted-foreground hover:bg-accent hover:text-foreground size-8 rounded-full p-0 active:scale-95"
         triggerVariant="ghost"
       />
     )

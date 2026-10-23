@@ -67,7 +67,7 @@ function PlanItems({
             onClick={() => onSelect(i)}
             className="hover:bg-accent flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors">
             <Check
-              className={`size-3.5 transition-opacity ${inPlan ? "opacity-100" : "opacity-0"}`}
+              className={`size-4 transition-opacity ${inPlan ? "opacity-100" : "opacity-0"}`}
             />
             <span className="min-w-0 flex-1 truncate text-left">
               {label(i)}

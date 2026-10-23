@@ -62,6 +62,8 @@ Icons are lucide (stroke 2), sized by context:
 | `size-5` | Leading icon of a card, panel or empty state                 |
 | `size-6` | Drop zones and landing display only                          |
 
+Icon-only buttons show a grey icon that turns black on hover (navbar, module cards); a state colour (blue for in your timetable, red for a favourite) replaces the grey.
+
 Arrows by meaning: `LinkArrow` (or `TextLink arrow`, or `CardCta` at the foot of a link card) for "go to", `ChevronRight` for opening a row in a list, `ExternalLinkIcon` for leaving the site. Never a typed `→`, `›` or `↗`. Brand logos (`brand-icons.tsx`) keep their own shapes.
 
 Hover, one signal per element:

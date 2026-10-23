@@ -54,10 +54,30 @@ const toolText = async (res: Response) =>
 
 afterEach(() => {
   delete env.MCP_LIMITER
+  delete env.MCP_DISABLED
   vi.restoreAllMocks()
 })
 
 const handle = () => createMcpEndpoint(setup().handlers)
+
+describe("kill switch", () => {
+  it("answers 503 before any other work when MCP_DISABLED is set", async () => {
+    env.MCP_DISABLED = "1"
+    const limit = vi.fn(async () => ({ success: true }))
+    env.MCP_LIMITER = { limit }
+    const res = await handle()(modern("tools/list"))
+    expect(res.status).toBe(503)
+    expect(res.headers.get("retry-after")).toBe("3600")
+    expect(res.headers.get("cache-control")).toBe("no-store")
+    expect(limit).not.toHaveBeenCalled()
+  })
+
+  it("serves again once the secret is removed", async () => {
+    env.MCP_DISABLED = "1"
+    delete env.MCP_DISABLED
+    expect((await handle()(modern("tools/list"))).status).toBe(200)
+  })
+})
 
 describe("request checks", () => {
   it.each(["GET", "DELETE", "PUT"])("answers %s with 405", async (method) => {

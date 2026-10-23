@@ -38,6 +38,8 @@ interface WorkerEnv {
   VIEWS_LIMITER?: RateLimiter
   WALK_LIMITER?: RateLimiter
   MCP_LIMITER?: RateLimiter
+  // Any value turns /mcp off (503). A secret, so deploys keep it.
+  MCP_DISABLED?: string
   PUBLIC_POSTHOG_TOKEN?: string
 }
 

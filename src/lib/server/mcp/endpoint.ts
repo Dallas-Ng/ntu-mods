@@ -1,4 +1,5 @@
 import { createMcpHandler } from "@modelcontextprotocol/server"
+import { env } from "cloudflare:workers"
 
 import { bodyTooLarge, isCrossSite, rateLimit } from "@/lib/server/guard"
 
@@ -46,7 +47,7 @@ async function readLimited(request: Request, max: number) {
  * POST /mcp. Checks run cheapest first and each rejects before any later work,
  * so a caller without a valid-looking request costs the worker almost nothing.
  * There is no sign-in: the only limiter is a high per-IP flood ceiling, and
- * every tool is cheap by construction (see docs/mcp-server-plan.md).
+ * every tool is cheap by construction (see docs/mcp.md).
  */
 export function createMcpEndpoint(handlers: McpHandlers) {
   const mcp = createMcpHandler(() => createMcpServer(handlers), {
@@ -56,6 +57,13 @@ export function createMcpEndpoint(handlers: McpHandlers) {
   })
 
   return async function handle(request: Request): Promise<Response> {
+    // Kill switch: a Worker secret, so it survives deploys and flips in
+    // seconds from the dashboard, with no build and no paid plan.
+    if (env.MCP_DISABLED) {
+      return reply(503, "The MCP server is switched off.", {
+        "Retry-After": "3600"
+      })
+    }
     // GET and DELETE are SSE and session calls; this server offers neither.
     if (request.method !== "POST") {
       return reply(405, "Method not allowed.", { Allow: "POST" })

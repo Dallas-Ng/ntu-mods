@@ -190,18 +190,6 @@ const FAQ_CONFIG: FaqConfig[] = [
       "Everyone is welcome, and you do not need to be an NTU student. For anything beyond a small fix, open an issue first so we can agree on the approach. Then fork the repository, make your change, run the checks and open a pull request. The steps are in CONTRIBUTING.md in the repository. Typo fixes, bug reports, accessibility and performance improvements and new articles are all useful."
   },
   {
-    id: "run-locally",
-    question: "Can I run NTU Mods on my own machine?",
-    answer:
-      "Yes. Install the dependencies with pnpm, run pnpm db:seed-local once to build a local database, then start the dev server with pnpm dev. You do not need a Cloudflare account or any secrets for that."
-  },
-  {
-    id: "contribution-previews",
-    question: "Will my pull request get a live preview?",
-    answer:
-      "Not necessarily. Previews are deployed by Cloudflare behind an access wall, and they may not be built for pull requests from forks. Run the site locally to check your change, and add a screenshot to the pull request for anything visual. Automated tests run on every pull request."
-  },
-  {
     id: "report-bug-or-wrong-data",
     question: "How do I report a bug or wrong data?",
     answer: (
@@ -247,23 +235,6 @@ const FAQ_CONFIG: FaqConfig[] = [
     ),
     answerText:
       "Please do not open a public issue. Use GitHub's private vulnerability reporting, described in SECURITY.md in the repository and in the site's security.txt at /.well-known/security.txt."
-  },
-  {
-    id: "use-the-data",
-    question: "Can I use the module data or API in my own project?",
-    answer: (
-      <>
-        Yes. The{" "}
-        <a href="/developers" className={LINK_CLASS}>
-          developers page
-        </a>{" "}
-        documents the module API and the open data files. The data comes from
-        NTU, so keep it accurate, credit NTU Mods and check STARS for anything
-        that matters.
-      </>
-    ),
-    answerText:
-      "Yes. The developers page documents the module API and the open data files. The data comes from NTU, so keep it accurate, credit NTU Mods and check STARS for anything that matters."
   }
 ]
 

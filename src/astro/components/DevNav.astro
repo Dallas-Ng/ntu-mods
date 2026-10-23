@@ -1,0 +1,99 @@
+---
+import { MCP_CLIENTS } from "@/lib/developers/mcp-clients"
+import { DEV_NAV } from "@/lib/developers/pages"
+import {
+  CLAUDE_COLOUR,
+  ClaudeIcon,
+  CursorIcon,
+  OpenAIIcon,
+  VSCodeIcon
+} from "@/components/brand-icons"
+
+interface Props {
+  /** Path of the page being viewed, to highlight it. */
+  path: string
+  class?: string
+}
+
+// The grouped developer docs links. The desktop sidebar and the phone menu
+// both render this, so they cannot drift apart.
+const { path, class: className } = Astro.props
+const CLIENT_ICONS: Record<
+  string,
+  { component: typeof ClaudeIcon; colour?: string }
+> = {
+  "claude-desktop": { component: ClaudeIcon, colour: CLAUDE_COLOUR },
+  "claude-code": { component: ClaudeIcon, colour: CLAUDE_COLOUR },
+  "chatgpt-codex": { component: OpenAIIcon },
+  cursor: { component: CursorIcon },
+  vscode: { component: VSCodeIcon, colour: "#007ACC" }
+}
+---
+
+<nav aria-label="Developer docs" class={className}>
+  {
+    DEV_NAV.map((section) => (
+      <div class="space-y-1">
+        <p class="text-muted-foreground px-3 text-xs font-semibold">
+          {section.title}
+        </p>
+        <ul class="space-y-0.5">
+          {section.items.map((item) =>
+            "subheading" in item ? (
+              <li>
+                <p class="text-muted-foreground px-3 pt-2 text-xs">
+                  {item.subheading}
+                </p>
+              </li>
+            ) : "clients" in item ? (
+              <li class="space-y-0.5">
+                <p class="text-muted-foreground px-3 pt-1 text-xs">Adding to</p>
+                <ul class="space-y-0.5">
+                  {MCP_CLIENTS.map((c) => {
+                    const Icon = CLIENT_ICONS[c.id]
+                    const href = `/developers/mcp/${c.id}`
+                    return (
+                      <li>
+                        <a
+                          href={href}
+                          aria-current={path === href ? "page" : undefined}
+                          class:list={[
+                            "flex items-center gap-2 rounded-md px-3 py-1.5 text-sm transition-colors",
+                            path === href
+                              ? "bg-primary/10 text-primary font-medium"
+                              : "text-foreground/80 hover:bg-muted hover:text-foreground"
+                          ]}>
+                          {Icon && (
+                            <Icon.component
+                              className="size-4 shrink-0"
+                              style={{ color: Icon.colour }}
+                            />
+                          )}
+                          {c.label}
+                        </a>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </li>
+            ) : (
+              <li>
+                <a
+                  href={item.href}
+                  aria-current={item.href === path ? "page" : undefined}
+                  class:list={[
+                    "block rounded-md px-3 py-1.5 text-sm transition-colors",
+                    item.href === path
+                      ? "bg-primary/10 text-primary font-medium"
+                      : "text-foreground/80 hover:bg-muted hover:text-foreground"
+                  ]}>
+                  {item.label}
+                </a>
+              </li>
+            )
+          )}
+        </ul>
+      </div>
+    ))
+  }
+</nav>

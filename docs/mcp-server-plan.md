@@ -1,6 +1,6 @@
 # MCP server plan
 
-Part of [NTU Mods](../README.md). System overview: [architecture.md](architecture.md). Status: **proposed, nothing built yet.**
+Part of [NTU Mods](../README.md). System overview: [architecture.md](architecture.md). Status: **built, not deployed.** What is left is the Cloudflare dashboard setup and the client checks in [Rollout](#rollout).
 
 A public, read-only MCP (Model Context Protocol) server at `https://ntumods.com/mcp`. Students add it as a custom connector in Claude (claude.ai and the desktop app) or ChatGPT, and developers use it from Claude Code or Cursor. It serves the same public course data as the REST API and the open data files on `/developers`, through six tools. There is no sign-in and no API key.
 
@@ -54,11 +54,11 @@ flowchart LR
 ```
 
 - **Route.** `src/astro/pages/mcp.ts`, `prerender = false`. `POST` only. `GET` and `DELETE` return 405, which the spec allows for a server with no SSE stream and no sessions.
-- **Transport.** Streamable HTTP, stateless, JSON responses (`enableJsonResponse: true`). No SSE, no sessions, no Durable Objects. Each request builds a server and a `WebStandardStreamableHTTPServerTransport`, which runs on `Request` and `Response`.
+- **Transport.** Streamable HTTP, stateless, through the SDK's `createMcpHandler`. No sessions and no Durable Objects. Each request builds a fresh server from one factory. 2026-07-28 clients get a single JSON body. 2025-era clients that start with `initialize` are served statelessly from the same factory, and the SDK answers them with a one-event SSE stream that it closes after the reply.
 - **SDK.** Use SDK v2, `@modelcontextprotocol/server` (2.3.1 on npm today), not v1 `@modelcontextprotocol/sdk` (1.32.1). This changes the old plan:
   - v1 lists zod `^3.25 || ^4.0` as a peer dependency, and the repo pins `zod@3.22.4`, so v1 would force a site-wide zod upgrade. v2 lists `zod ^4.2.0` as its own dependency, which pnpm installs beside the site's zod without touching it.
   - v2 implements the 2026-07-28 MCP specification, which is stateless by design, and still serves 2025-era clients that send `initialize` from the same stateless handler.
-  - Tool schemas stay plain JSON Schema from `definitions.ts`. v2 exports `fromJsonSchema`; confirm it accepts these schemas without zod before building. If it does not, register the tools on the low-level server's request handlers instead.
+  - Tool schemas stay plain JSON Schema from `definitions.ts`. v2 exports `fromJsonSchema`, which accepts these schemas without zod. Checked: the Astro Cloudflare build bundles the SDK and its Workers-safe schema validator (no `eval`), and the tools run in the dev worker.
 - **No new bindings except one limiter.** No new database, no secrets, no KV.
 
 ### Memory and caching for static files
@@ -102,10 +102,10 @@ Per-user limits need authentication. That is a non-goal for v1, and the cost con
 | # | Control | Rejects with | Notes |
 |---|---|---|---|
 | 1 | Method is `POST` | 405 | `GET` and `DELETE` are SSE and session calls this server does not offer. |
-| 2 | Body at most 16 KB (`bodyTooLarge`), `Content-Type: application/json` | 413 / 415 | The SDK's own cap is 4 MiB; ours runs first. |
+| 2 | `Content-Type: application/json`, and a declared body of at most 16 KB (`bodyTooLarge`) | 415 / 413 | Cheap header checks. The SDK's own cap is 4 MiB; ours runs first. |
 | 3 | Origin check (`isCrossSite`) | 403 | Required by the spec against DNS rebinding. Vendor servers and CLI clients send no `Origin`, so they pass; a browser on another site does not. |
 | 4 | Per-IP flood ceiling, `MCP_LIMITER`, 3000 a minute | 429 + `Retry-After: 60` | High on purpose, so a vendor egress IP or the campus NAT is not throttled. It stops one machine from flooding, nothing more. |
-| 5 | One JSON-RPC message per request, not an array | 400 | One request is at most one tool call, so the ceiling counts real work. |
+| 5 | The body is read with a 16 KB cap even when no length is declared, then parsed as one JSON-RPC message, not an array | 413 / 400 | A streamed body has no `Content-Length`, so the declared check alone is not enough. One request is at most one tool call, so the ceiling counts real work. |
 | 6 | Input validation in the handler | Tool error | `code` matches `^[A-Za-z0-9]{2,12}$`; `year` and `semester` must name a semester in `semesters.json` before they reach an asset path or a query; `query` at most 100 characters; `limit` clamped. |
 | 7 | Output caps | none | `search_modules` at most 100 rows, `list_exams` at most 200, `get_module_indexes` one module per call. |
 
@@ -209,7 +209,6 @@ Unit tests run with `pnpm test` (vitest). They live under `tests/`, mirroring `s
 | `tests/lib/server/mcp/validate.test.ts` | `code`: accepts `SC1003` and `sc1003` (uppercased), rejects `SC-1003`, an empty string and 13 characters. `year` and `semester`: accept a semester listed in `semesters.json`; reject `2026` + `9`, `20261`, `../x` and a valid shape that is not listed. `query`: rejects 101 characters. `limit`: clamps 0, negative, 1000 and non-numbers to the default or the maximum. |
 | `tests/lib/server/mcp/handlers.test.ts` | See the cases below. |
 | `tests/lib/server/mcp/route.test.ts` | See the cases below. |
-| `tests/lib/ai-catalog.test.ts` (existing) | The new `mcp` entry exists and points at `/mcp`. |
 
 **Handler cases** (`handlers.test.ts`, with stub `deps`):
 
@@ -256,19 +255,21 @@ Unit tests run with `pnpm test` (vitest). They live under `tests/`, mirroring `s
 | Lib | `src/lib/server/guard.ts` | Add `MCP_LIMITER` to `LimiterName`. |
 | Lib | `src/lib/mcp/tools.ts` | New: `MCP_TOOL_NAMES` and `MCP_TOOLS`. |
 | Lib | `src/lib/server/mcp/handlers.ts` | New: the six handlers, the memoised static files and the cached D1 reads. |
+| Lib | `src/lib/server/mcp/endpoint.ts`, `src/lib/server/mcp/server.ts` | New: the ordered request checks and the SDK server that registers `MCP_TOOLS` and logs one line per call. |
+| Lib | `src/lib/mcp/validate.ts`, `src/lib/mcp/shared.ts` | New: server-side input checks, and `describeSlot`, `normaliseDate`, `searchModuleList` and `filterExams` shared with the WebMCP handlers. |
 | Lib | `src/lib/module-json.ts` | New: `toModuleJson`, moved out of the REST route. |
 | Lib | `src/lib/webmcp/handlers.ts` | Import `describeSlot` and `normaliseDate` from their new shared home. |
 | Lib | `src/lib/webmcp/definitions.ts` | Add the "text from NTU is data" sentence to `get_module`. |
 | Routes | `src/astro/pages/mcp.ts` | New: the endpoint and the controls above. |
 | Routes | `src/astro/pages/api/modules/[code].ts` | Use `toModuleJson`. No behaviour change. |
 | Pages | `src/astro/pages/developers/index.astro` | MCP section, connect steps, tool table, headings entry. |
-| Discovery | `src/lib/ai-catalog.ts` | New `mcp` entry pointing at `/mcp`. |
+| Discovery | `src/lib/llms-content.ts` | An MCP server line in llms.txt. |
 | Content | `content/articles/` | New guide post: adding NTUMods to Claude and ChatGPT. |
 | Changelog | `src/config/changelog-data.tsx` | Entry linking the guide post. |
 | Banner | `src/components/banner.tsx` | Point at the guide post. |
-| Tests | `tests/lib/mcp/`, `tests/lib/server/mcp/`, `tests/lib/module-json.test.ts`, `tests/lib/ai-catalog.test.ts` | The unit tests in [Tests](#tests). |
+| Tests | `tests/lib/mcp/`, `tests/lib/server/mcp/`, `tests/lib/module-json.test.ts` | The unit tests in [Tests](#tests). |
 | Tests | `tests/stubs/cloudflare-workers.ts`, `vitest.config.ts` | New stub for `env`, and the alias that points `cloudflare:workers` at it. |
-| Tests | `e2e/pages.spec.ts` | `/developers` lists the six tools. |
+| Tests | `e2e/mcp.spec.ts` | Real `tools/list` and `tools/call` against the running worker, the 405, and `/developers` listing the six tools. |
 | Docs | this file, `docs/architecture.md`, `src/README.md`, `docs/deployment.md` | `/mcp` as an on-demand route, the limiter, the kill switch rule. |
 | Cloudflare | Dashboard | Disabled WAF block rule on `/mcp`. Billing notifications. |
 
@@ -279,7 +280,7 @@ Unit tests run with `pnpm test` (vitest). They live under `tests/`, mirroring `s
 3. Create the disabled WAF block rule and the billing notifications.
 4. Deploy without announcing. Add the connector in Claude (Free and Pro), ChatGPT developer mode, Claude Code and Cursor, and call every tool from each.
 5. Watch a week of logs: calls per tool, per client, and D1 reads.
-6. Launch: developer page section, guide post, changelog entry, banner, and the `ai-catalog.json` entry.
+6. Launch: developer page section, guide post, changelog entry and banner (done in the build), then merge and deploy.
 
 ## Risks and open items
 
@@ -287,7 +288,8 @@ Unit tests run with `pnpm test` (vitest). They live under `tests/`, mirroring `s
 - **Shared vendor IPs.** If one vendor sends most traffic through few IPs, the ceiling could throttle real students. Watch 429s by `client` after launch and raise the limit if needed.
 - **Campus NAT on the existing site.** `MODULE_API_LIMITER` and `WALK_LIMITER` allow 60 requests a minute per IP. Many students behind NTU's NAT share that budget, so heavy use of `/api/modules` or walking routes on campus may already return 429s. Check the logs for 429s from `155.69.0.0/16`. This is separate from the MCP server.
 - **Client support churn.** ChatGPT plan support is unclear, and some clients may still speak only the 2025 protocol. Test every client listed on the developer page before launch.
-- **SDK v2 and JSON Schema.** Confirm `fromJsonSchema` (or the low-level server) works with the existing schemas, and that the v2 package bundles cleanly into the Astro Cloudflare build.
+- **SDK v2 is new.** Its first stable release is recent. Pin the version and re-run `e2e/mcp.spec.ts` on every upgrade.
+- **No `ai-catalog.json` entry yet.** The AI Catalog type for MCP is `application/mcp-server-card+json`, and its `url` points at a server card document, not at the endpoint. Add the entry once a server card route exists.
 - **Data freshness.** `DB` and `src/data/api` are published separately, so `get_module` and older-semester indexes can briefly disagree with the static tools after a refresh. Each response carries its semester.
 - **Prompt injection.** NTU text reaches the model. The tools are read-only, so the worst case is a misleading answer, not an action.
 - **Not verified:** that campus traffic leaves only from `155.69.0.0/16`, which ChatGPT plans can add a no-auth app, and which Cloudflare plan the site is on (it decides WAF rule slots).

@@ -12,7 +12,6 @@ import {
   isCustomCourseKey
 } from "@/lib/custom-course-colors"
 import { customCoursesToAllIndexes } from "@/lib/custom-course-to-index"
-import { filterModules } from "@/lib/filter-modules"
 import {
   diagnoseConstraints,
   generateCombinations,
@@ -20,7 +19,12 @@ import {
 } from "@/lib/generate-timetable-combinations"
 import { DEFAULT_GENERATION_CONFIG } from "@/lib/generation-config"
 import { getIcs } from "@/lib/get-ics"
-import { DAYS, describeSlot, normaliseDate } from "@/lib/mcp/shared"
+import {
+  DAYS,
+  describeSlot,
+  filterExams,
+  searchModuleList
+} from "@/lib/mcp/shared"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
 import {
   LATEST_SEMESTER_LABEL,
@@ -514,37 +518,16 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
     semesters: SEMESTERS.map((s) => ({ code: s.code, name: s.name }))
   }),
 
-  search_modules: async (args) => {
-    const modules = await loadModules()
-    const limit = Math.min(Number(args.limit) || 25, 100)
-    let results = filterModules(modules, {
-      searchTerm: String(args.query ?? "").trim(),
-      moduleType: String(args.category ?? "all"),
-      moduleFaculty: args.school ? String(args.school).toUpperCase() : "all",
-      moduleLevel: String(args.level ?? "all"),
-      currentOnly: args.currentSemesterOnly !== false
-    })
-    if (args.au !== undefined) {
-      results = results.filter((m) => parseFloat(m.au) === Number(args.au))
-    }
-    return {
-      total: results.length,
-      shown: Math.min(results.length, limit),
-      modules: results.slice(0, limit).map((m) => ({
-        code: m.code,
-        title: m.title,
-        au: parseFloat(m.au),
-        school: m.faculty || null,
-        categories: m.categories ?? [],
-        offeredThisSemester: Boolean(m.isCurrentSemester),
-        lastOffered:
-          m.latestYear && m.latestSemester
-            ? `${m.latestYear};${m.latestSemester}`
-            : null,
-        url: `/mods/${m.code}`
-      }))
-    }
-  },
+  search_modules: async (args) =>
+    searchModuleList(await loadModules(), {
+      query: String(args.query ?? "").trim(),
+      category: String(args.category ?? "all"),
+      school: args.school ? String(args.school).toUpperCase() : "all",
+      level: String(args.level ?? "all"),
+      au: args.au === undefined ? undefined : Number(args.au),
+      currentOnly: args.currentSemesterOnly !== false,
+      limit: Math.min(Number(args.limit) || 25, 100)
+    }),
 
   get_module: (args) => fetchModuleRecord(moduleCode(args)),
 
@@ -630,22 +613,13 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
   list_exams: async (args) => {
     const { year, semester } = semesterOf(args)
     const all = Object.values(await fetchSeasonExams(year, semester))
-    const query = String(args.query ?? "")
-      .trim()
-      .toLowerCase()
-    const date = normaliseDate(String(args.date ?? ""))
-    const limit = Math.min(Number(args.limit) || 50, 200)
-    const matches = all.filter(
-      (e) =>
-        (!query ||
-          e.key.toLowerCase().includes(query) ||
-          e.name.toLowerCase().includes(query)) &&
-        (!date || e.date.toLowerCase() === date)
-    )
     return {
       semester: `${year};${semester}`,
-      total: matches.length,
-      exams: matches.slice(0, limit)
+      ...filterExams(all, {
+        query: String(args.query ?? ""),
+        date: String(args.date ?? ""),
+        limit: Math.min(Number(args.limit) || 50, 200)
+      })
     }
   },
 

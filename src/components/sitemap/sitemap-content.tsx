@@ -1,7 +1,7 @@
 import { siteConfig } from "@/config/site"
 import { getModuleTitles } from "@/lib/server/db/repo"
 import Container from "@/components/container"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 import { getAllArticles } from "@/astro/lib/articles"
 
 const CORE_LINKS = [
@@ -203,7 +203,7 @@ const SitemapContent = async () => {
       />
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Core Pages</h2>
+        <SectionHeading>Core Pages</SectionHeading>
         <div className="grid gap-3 sm:grid-cols-2">
           {CORE_LINKS.map((link) => (
             <a
@@ -222,7 +222,7 @@ const SitemapContent = async () => {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Tools and Support</h2>
+        <SectionHeading>Tools and Support</SectionHeading>
         <div className="grid gap-3 sm:grid-cols-2">
           {TOOL_LINKS.map((link) => (
             <a
@@ -242,7 +242,7 @@ const SitemapContent = async () => {
 
       {articles.length > 0 && (
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Articles</h2>
+          <SectionHeading>Articles</SectionHeading>
           <div className="grid gap-3 sm:grid-cols-2">
             {articles.map((article) => (
               <a
@@ -266,7 +266,7 @@ const SitemapContent = async () => {
 
       <section className="space-y-4">
         <div>
-          <h2 className="text-xl font-semibold">Modules</h2>
+          <SectionHeading>Modules</SectionHeading>
           <p className="text-muted-foreground mt-1 text-sm">
             Module pages are grouped by course code prefix.
           </p>

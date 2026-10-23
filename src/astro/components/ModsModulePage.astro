@@ -7,6 +7,9 @@ import type {
   DbModule,
   DbPrerequisiteNode
 } from "@/lib/server/db/types"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { TextLink } from "@/components/ui/text-link"
+import { SectionHeading } from "@/components/header"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import ModsDescription from "@/components/mods/mods-description"
 import ModsExpandableFields from "@/components/mods/mods-expandable-fields"
@@ -138,10 +141,12 @@ const jsonLd = [
 />
 {
   !isCurrentOffering && (
-    <div class="mb-4 rounded-2xl border border-amber-300 bg-amber-50 px-5 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
-      Not offered in the current semester. Last offered{" "}
-      {semesterLabelForCurrent}
-    </div>
+    <Alert variant="warning" role="note" className="mb-4">
+      <AlertDescription>
+        Not offered in the current semester. Last offered{" "}
+        {semesterLabelForCurrent}
+      </AlertDescription>
+    </Alert>
   )
 }
 
@@ -202,7 +207,7 @@ const jsonLd = [
   }
 
   <section class="space-y-4">
-    <h2 class="text-lg font-semibold tracking-tight">Available indexes</h2>
+    <SectionHeading>Available indexes</SectionHeading>
     <ModsIndexTable
       indexes={indexes}
       precomputedMatrix={{ TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS }}
@@ -212,7 +217,7 @@ const jsonLd = [
   {
     otherSemesters.length > 0 && (
       <section class="space-y-4">
-        <h2 class="text-lg font-semibold tracking-tight">Other offerings</h2>
+        <SectionHeading>Other offerings</SectionHeading>
         <div class="rounded-2xl border p-2 text-sm">
           <div class="text-muted-foreground grid grid-cols-[4.5rem_repeat(3,minmax(0,1fr))] items-center gap-1 px-1 pb-1 text-xs font-medium sm:grid-cols-[6rem_repeat(3,minmax(0,1fr))]">
             <span class="px-2">Year</span>
@@ -250,7 +255,7 @@ const jsonLd = [
   }
 
   <section class="space-y-4">
-    <h2 class="text-lg font-semibold tracking-tight">Other relevant mods</h2>
+    <SectionHeading>Other relevant mods</SectionHeading>
     <RelatedModules
       related={related}
       emptyHref="/mods"
@@ -262,12 +267,13 @@ const jsonLd = [
     guides.length > 0 && (
       <section class="space-y-4">
         <div class="flex items-baseline justify-between gap-4">
-          <h2 class="text-lg font-semibold tracking-tight">Planning guides</h2>
-          <a
+          <SectionHeading>Planning guides</SectionHeading>
+          <TextLink
             href="/articles"
-            class="text-primary text-sm font-medium whitespace-nowrap hover:underline">
+            variant="action"
+            className="text-sm whitespace-nowrap">
             View all articles
-          </a>
+          </TextLink>
         </div>
         <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           {guides.map((g) => (

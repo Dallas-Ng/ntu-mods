@@ -5,9 +5,10 @@ import {
   faqPageJsonLd,
   webApplicationJsonLd
 } from "@/lib/json-ld"
+import { TextLink } from "@/components/ui/text-link"
 import Breadcrumbs from "@/components/breadcrumbs"
 import FgoOptimiser from "@/components/fgo/fgo-optimiser"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import ToolGuideCallout from "@/astro/components/ToolGuideCallout.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -126,9 +127,9 @@ const FAQ = [
   </div>
 
   <section class="space-y-3 pt-4" aria-labelledby="about-fgo">
-    <h2 id="about-fgo" class="text-lg font-semibold tracking-tight">
+    <SectionHeading id="about-fgo">
       About the Flexible Grading Option
-    </h2>
+    </SectionHeading>
     <p class="text-muted-foreground text-sm leading-relaxed">
       The Flexible Grading Option (FGO) lets NTU undergraduates convert eligible
       course grades into Pass (P) or No Record (NR) so they do not affect CGPA.
@@ -175,9 +176,7 @@ const FAQ = [
   </section>
 
   <section class="space-y-4 pt-4" aria-labelledby="fgo-faq">
-    <h2 id="fgo-faq" class="text-lg font-semibold tracking-tight">
-      Frequently asked questions
-    </h2>
+    <SectionHeading id="fgo-faq"> Frequently asked questions </SectionHeading>
     {
       FAQ.map(({ question, answer }) => (
         <div class="space-y-1">
@@ -186,8 +185,8 @@ const FAQ = [
         </div>
       ))
     }
-    <a href="/tools" class="inline-block text-sm text-blue-500 hover:underline">
+    <TextLink href="/tools" variant="action" className="inline-block text-sm">
       Browse all NTUMods tools →
-    </a>
+    </TextLink>
   </section>
 </BaseLayout>

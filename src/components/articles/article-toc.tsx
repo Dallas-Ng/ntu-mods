@@ -19,6 +19,7 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "@/components/ui/drawer"
+import { sideNavItem, sideNavLabel } from "@/components/ui/side-nav"
 
 // `group` is an optional label (e.g. a year) shown above the first heading in
 // each run of headings that share it. `count` is an optional number shown
@@ -259,9 +260,7 @@ const ArticleToc = ({ headings, nested }: Props) => {
   return (
     <aside className="hidden lg:block">
       <div className="sticky top-24 space-y-2">
-        <p className="text-muted-foreground px-3 text-xs font-semibold tracking-wide uppercase">
-          On this page
-        </p>
+        <p className={sideNavLabel}>On this page</p>
         <nav
           ref={navRef}
           className="relative max-h-[calc(100vh-8rem)] space-y-0.5 overflow-y-auto text-sm">
@@ -293,14 +292,13 @@ const ArticleToc = ({ headings, nested }: Props) => {
                   href={`#${heading.id}`}
                   aria-current={isActive ? "true" : undefined}
                   className={cn(
-                    "text-muted-foreground hover:text-foreground relative block rounded-lg px-3 py-1.5 leading-5 transition-colors duration-300",
+                    sideNavItem({ active: isActive, highlight: "sliding" }),
                     heading.depth === 3 &&
                       "before:bg-muted-foreground/25 pl-6 text-[13px] before:absolute before:inset-y-0 before:left-3 before:w-px",
                     nested &&
                       heading.depth === 2 &&
                       "pt-2 pb-1 text-xs font-semibold tracking-wide uppercase",
-                    nested && heading.depth === 2 && i > 0 && "mt-2",
-                    isActive && "text-foreground"
+                    nested && heading.depth === 2 && i > 0 && "mt-2"
                   )}>
                   <span className="flex items-baseline justify-between gap-2">
                     <span className="line-clamp-2">{heading.text}</span>

@@ -1,5 +1,6 @@
+import { TextLink } from "@/components/ui/text-link"
 import Container from "@/components/container"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 
 const PrivacyContent = () => {
   return (
@@ -14,22 +15,19 @@ const PrivacyContent = () => {
       <p className="text-sm">
         This Privacy Policy describes how NTUMods (&quot;we&quot;,
         &quot;us&quot;, or &quot;our&quot;) handles information when you use{" "}
-        <a
+        <TextLink
           href="https://ntumods.com"
-          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
           rel="external nofollow noopener"
           target="_blank">
           ntumods.com
-        </a>{" "}
+        </TextLink>{" "}
         (the &quot;Service&quot;). NTUMods is a free, open-source timetable
         planning tool for NTU students. We do not sell your data, and we do not
         require an account to use the Service.
       </p>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          What We Collect
-        </h2>
+        <SectionHeading>What We Collect</SectionHeading>
 
         <h3 className="text-foreground mt-4 text-base font-semibold">
           Data Stored Locally on Your Device
@@ -61,13 +59,12 @@ const PrivacyContent = () => {
           <strong>Google Analytics 4</strong> collects page views, general usage
           patterns, browser and device type, and approximate location derived
           from your IP address. Data is processed by Google. See{" "}
-          <a
+          <TextLink
             href="https://policies.google.com/privacy"
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
             rel="external nofollow noopener"
             target="_blank">
             Google&apos;s Privacy Policy
-          </a>
+          </TextLink>
           .
         </p>
 
@@ -97,13 +94,12 @@ const PrivacyContent = () => {
           PostHog requests are routed through our own domain (ntumods.com)
           rather than sent straight from your browser. Data is processed by
           PostHog, Inc. in the United States. See{" "}
-          <a
+          <TextLink
             href="https://posthog.com/privacy"
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
             rel="external nofollow noopener"
             target="_blank">
             PostHog&apos;s Privacy Policy
-          </a>
+          </TextLink>
           .
         </p>
 
@@ -172,13 +168,12 @@ const PrivacyContent = () => {
             <strong>Satellite and Hybrid views</strong> load imagery directly
             from Esri&apos;s servers, so Esri receives your IP address and the
             part of the campus you are viewing. See{" "}
-            <a
+            <TextLink
               href="https://www.esri.com/en-us/privacy/overview"
-              className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
               rel="external nofollow noopener"
               target="_blank">
               Esri&apos;s Privacy Statement
-            </a>
+            </TextLink>
             .
           </li>
           <li>
@@ -234,15 +229,10 @@ const PrivacyContent = () => {
         </h3>
 
         <p>
-          The{" "}
-          <a
-            href="/developers"
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-            developers page
-          </a>{" "}
-          documents a free, read-only API and open data files with NTU module,
-          class index and exam data. They contain no personal data, and we do
-          not ask callers for an account or an API key. To limit abuse, we count
+          The <TextLink href="/developers">developers page</TextLink> documents
+          a free, read-only API and open data files with NTU module, class index
+          and exam data. They contain no personal data, and we do not ask
+          callers for an account or an API key. To limit abuse, we count
           requests to the API per IP address using Cloudflare&apos;s rate
           limiting. We do not store those addresses or counts in our own
           database. The &quot;Try it&quot; box on that page only sends a request
@@ -270,12 +260,7 @@ const PrivacyContent = () => {
           profile for MCP users, so we have nothing of ours to look up or
           delete. Server logs held by Cloudflare follow its retention settings.
           For questions or requests, use our{" "}
-          <a
-            href="/feedback"
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-            feedback page
-          </a>
-          .
+          <TextLink href="/feedback">feedback page</TextLink>.
         </p>
 
         <h3 className="text-foreground mt-4 text-base font-semibold">
@@ -307,9 +292,7 @@ const PrivacyContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          How We Use Your Information
-        </h2>
+        <SectionHeading>How We Use Your Information</SectionHeading>
 
         <ul className="list-outside list-disc pl-10">
           <li>
@@ -337,7 +320,7 @@ const PrivacyContent = () => {
       <section
         id="consent"
         className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">Consent</h2>
+        <SectionHeading>Consent</SectionHeading>
 
         <p>
           If you visit from the European Economic Area, the United Kingdom,
@@ -374,7 +357,7 @@ const PrivacyContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">Cookies</h2>
+        <SectionHeading>Cookies</SectionHeading>
 
         <p>
           We do not set our own cookies. Google Analytics sets cookies, and
@@ -387,9 +370,7 @@ const PrivacyContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          International Transfers
-        </h2>
+        <SectionHeading>International Transfers</SectionHeading>
 
         <p>
           Google, PostHog (United States) and Cloudflare process data in
@@ -401,9 +382,7 @@ const PrivacyContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Data Retention
-        </h2>
+        <SectionHeading>Data Retention</SectionHeading>
 
         <ul className="list-outside list-disc pl-10">
           <li>
@@ -427,19 +406,14 @@ const PrivacyContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">Your Rights</h2>
+        <SectionHeading>Your Rights</SectionHeading>
 
         <p>
           You may request deletion of any feedback you have submitted through
-          the{" "}
-          <a
-            href="/feedback"
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-            feedback page
-          </a>
-          . Since timetable and settings data is stored only in your browser,
-          you can delete it yourself at any time through your browser&apos;s
-          site data settings.
+          the <TextLink href="/feedback">feedback page</TextLink>. Since
+          timetable and settings data is stored only in your browser, you can
+          delete it yourself at any time through your browser&apos;s site data
+          settings.
         </p>
 
         <p>
@@ -455,9 +429,7 @@ const PrivacyContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Children&apos;s Privacy
-        </h2>
+        <SectionHeading>Children&apos;s Privacy</SectionHeading>
 
         <p>
           The Service is intended for university students and is not directed at
@@ -467,9 +439,7 @@ const PrivacyContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Links to Other Websites
-        </h2>
+        <SectionHeading>Links to Other Websites</SectionHeading>
 
         <p>
           The Service may contain links to external websites (e.g. NTU course
@@ -479,9 +449,7 @@ const PrivacyContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Changes to This Policy
-        </h2>
+        <SectionHeading>Changes to This Policy</SectionHeading>
 
         <p>
           We may update this Privacy Policy from time to time. Changes will be

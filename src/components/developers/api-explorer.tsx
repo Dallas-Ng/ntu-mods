@@ -12,6 +12,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Code, Rich } from "@/components/developers/code"
 import TryModuleApi from "@/components/developers/try-module-api"
+import { SectionHeading } from "@/components/header"
 import HeadingAnchor from "@/components/heading-anchor"
 
 export interface ApiOp {
@@ -220,12 +221,10 @@ const ApiExplorer = ({ groups }: { groups: ApiGroup[] }) => {
       {groups.map((g) => (
         <section key={g.name} className="space-y-3">
           <div className="space-y-1">
-            <h2
-              id={slug(g.name)}
-              className="scroll-mt-28 text-lg font-semibold tracking-tight">
+            <SectionHeading id={slug(g.name)}>
               {g.name}
               <HeadingAnchor id={slug(g.name)} label={g.name} />
-            </h2>
+            </SectionHeading>
             {g.description && (
               <p className="text-foreground/80 text-sm">{g.description}</p>
             )}

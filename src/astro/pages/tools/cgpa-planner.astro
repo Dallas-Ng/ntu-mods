@@ -5,9 +5,10 @@ import {
   faqPageJsonLd,
   webApplicationJsonLd
 } from "@/lib/json-ld"
+import { TextLink } from "@/components/ui/text-link"
 import Breadcrumbs from "@/components/breadcrumbs"
 import CgpaPlanner from "@/components/cgpa/cgpa-planner"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import ToolGuideCallout from "@/astro/components/ToolGuideCallout.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -118,9 +119,9 @@ const FAQ = [
   </div>
 
   <section class="space-y-3 pt-4" aria-labelledby="about-cgpa">
-    <h2 id="about-cgpa" class="text-lg font-semibold tracking-tight">
+    <SectionHeading id="about-cgpa">
       About NTU honours classification
-    </h2>
+    </SectionHeading>
     <p class="text-muted-foreground text-sm leading-relaxed">
       Your NTU honours class depends on your final CGPA, the AU-weighted average
       of grade points across every letter-graded module. For most honours
@@ -167,9 +168,7 @@ const FAQ = [
   </section>
 
   <section class="space-y-4 pt-4" aria-labelledby="cgpa-faq">
-    <h2 id="cgpa-faq" class="text-lg font-semibold tracking-tight">
-      Frequently asked questions
-    </h2>
+    <SectionHeading id="cgpa-faq"> Frequently asked questions </SectionHeading>
     {
       FAQ.map(({ question, answer }) => (
         <div class="space-y-1">
@@ -178,8 +177,8 @@ const FAQ = [
         </div>
       ))
     }
-    <a href="/tools" class="inline-block text-sm text-blue-500 hover:underline">
+    <TextLink href="/tools" variant="action" className="inline-block text-sm">
       Browse all NTUMods tools →
-    </a>
+    </TextLink>
   </section>
 </BaseLayout>

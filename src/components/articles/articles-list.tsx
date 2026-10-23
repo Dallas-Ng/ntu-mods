@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/popover"
 import { Skeleton } from "@/components/ui/skeleton"
 import { ArticleThumb } from "@/components/articles/article-thumb"
+import { SectionHeading } from "@/components/header"
 
 export interface ArticleListItem {
   slug: string
@@ -479,7 +480,7 @@ export default function ArticlesList({
           <div className="space-y-8">
             {groupedArticles.map(({ category, articles: groupArticles }) => (
               <section key={category}>
-                <h2 className="mb-3 text-xl font-semibold">{category}</h2>
+                <SectionHeading className="mb-3">{category}</SectionHeading>
                 <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                   {groupArticles.map((article) => (
                     <ArticleCard

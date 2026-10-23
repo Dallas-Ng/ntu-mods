@@ -1,6 +1,7 @@
 import { siteConfig } from "@/config/site"
+import { TextLink } from "@/components/ui/text-link"
 import Container from "@/components/container"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 
 const TermsContent = () => {
   return (
@@ -16,9 +17,7 @@ const TermsContent = () => {
       </p>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Using the Service
-        </h2>
+        <SectionHeading>Using the Service</SectionHeading>
 
         <p>
           NTUMods is a free, open-source tool for planning NTU timetables and
@@ -32,9 +31,7 @@ const TermsContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Not Affiliated with NTU
-        </h2>
+        <SectionHeading>Not Affiliated with NTU</SectionHeading>
 
         <p>
           NTUMods is an independent project. It is not affiliated with, endorsed
@@ -47,7 +44,7 @@ const TermsContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">No Warranty</h2>
+        <SectionHeading>No Warranty</SectionHeading>
 
         <p>
           The Service is provided &quot;as is&quot; and &quot;as
@@ -58,9 +55,7 @@ const TermsContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Limitation of Liability
-        </h2>
+        <SectionHeading>Limitation of Liability</SectionHeading>
 
         <p>
           To the extent permitted by law, we are not liable for any loss arising
@@ -72,37 +67,28 @@ const TermsContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Your Data and Privacy
-        </h2>
+        <SectionHeading>Your Data and Privacy</SectionHeading>
 
         <p>
           Your timetable and settings are stored in your browser. How we handle
           analytics, cookies and consent, including the opt-in banner shown in
           regions that require it, is described in the{" "}
-          <a
-            href="/privacy"
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-            Privacy Policy
-          </a>
-          , which forms part of these terms.
+          <TextLink href="/privacy">Privacy Policy</TextLink>, which forms part
+          of these terms.
         </p>
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Open Source and Content
-        </h2>
+        <SectionHeading>Open Source and Content</SectionHeading>
 
         <p>
           The source code is published on{" "}
-          <a
+          <TextLink
             href={siteConfig.links.repo}
             target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary underline underline-offset-2">
+            rel="noopener noreferrer">
             GitHub
-          </a>{" "}
+          </TextLink>{" "}
           under the licence in its repository. Module and exam data is
           NTU&apos;s; we present it for convenience. Articles and site design
           remain with their authors unless stated otherwise.
@@ -110,9 +96,7 @@ const TermsContent = () => {
       </section>
 
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Changes and Governing Law
-        </h2>
+        <SectionHeading>Changes and Governing Law</SectionHeading>
 
         <p>
           We may change these terms or the Service at any time, and will update

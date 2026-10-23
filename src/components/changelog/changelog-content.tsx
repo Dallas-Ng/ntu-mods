@@ -16,7 +16,8 @@ import ArticleToc, {
   MobileSectionDropdown
 } from "@/components/articles/article-toc"
 import Container from "@/components/container"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
+import { NewBadge } from "@/components/new-dot"
 
 type ChangelogFilter = ChangelogCategory | "All"
 
@@ -122,9 +123,7 @@ const ChangelogReleaseSection = ({
       id={slug}
       className="bg-muted relative scroll-mt-32 rounded-2xl p-5 md:p-6 lg:scroll-mt-20">
       {isUnseen && (
-        <span className="absolute top-4 right-4 rounded-full bg-yellow-400 px-2 py-0.5 text-[10px] font-semibold text-black md:top-6 md:right-6">
-          New
-        </span>
+        <NewBadge className="absolute top-4 right-4 md:top-6 md:right-6" />
       )}
       <p className="text-foreground/75 text-sm">{release.date}</p>
       <h2 className="mt-1 text-xl font-semibold">
@@ -242,13 +241,13 @@ const ChangelogContent = () => {
           <div className="space-y-8">
             {sortedQuarters.map(({ id, label, releases }) => (
               <section key={id} id={id} className="scroll-mt-20 space-y-3">
-                <h2 className="text-xl font-semibold">
+                <SectionHeading>
                   {label}{" "}
                   <span className="text-muted-foreground text-sm font-normal">
                     {releases.length}{" "}
                     {releases.length === 1 ? "update" : "updates"}
                   </span>
-                </h2>
+                </SectionHeading>
 
                 {releases.map((release) => (
                   <ChangelogReleaseSection

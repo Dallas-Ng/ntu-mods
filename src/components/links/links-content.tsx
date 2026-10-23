@@ -3,9 +3,10 @@ import { Search } from "lucide-react"
 
 import type { ArticleHeading } from "@/lib/server/articles"
 import { Input } from "@/components/ui/input"
+import { TextLink } from "@/components/ui/text-link"
 import { MobileSectionDropdown } from "@/components/articles/article-toc"
 import Container from "@/components/container"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 import HeadingAnchor from "@/components/heading-anchor"
 import LinkCard from "@/components/links/link-card"
 
@@ -248,11 +249,9 @@ const LinksContent = ({ children }: Props) => {
 
           <p className="text-muted-foreground text-sm">
             Not sure what each portal does?{" "}
-            <a
-              href="/articles/ntu-student-portal-links"
-              className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+            <TextLink href="/articles/ntu-student-portal-links">
               Read the full guide
-            </a>{" "}
+            </TextLink>{" "}
             for a breakdown of every portal and when to use it.
           </p>
 
@@ -277,10 +276,10 @@ const LinksContent = ({ children }: Props) => {
             {visible.map(({ id, title, type, links }) => (
               <section id={id} key={id} className="scroll-mt-20 space-y-4">
                 <div className="space-y-0.5">
-                  <h2 className="text-xl font-semibold">
+                  <SectionHeading>
                     {title}
                     <HeadingAnchor id={id} label={title} />
-                  </h2>
+                  </SectionHeading>
                   <p className="text-muted-foreground text-xs">
                     {type === "internal"
                       ? "NTUMods (unofficial)"

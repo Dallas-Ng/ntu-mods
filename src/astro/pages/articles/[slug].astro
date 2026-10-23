@@ -11,6 +11,7 @@ import {
   type JsonLd as JsonLdData
 } from "@/lib/json-ld"
 import { extractFaqItems } from "@/lib/server/articles"
+import { TextLink } from "@/components/ui/text-link"
 import { ArticleThumb } from "@/components/articles/article-thumb"
 import ArticleToc, {
   MobileSectionDropdown
@@ -18,6 +19,7 @@ import ArticleToc, {
 import ArticleViewTracker from "@/components/articles/article-view-tracker"
 import ArticlesList from "@/components/articles/articles-list"
 import Breadcrumbs from "@/components/breadcrumbs"
+import Header, { SectionHeading } from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 import {
@@ -223,10 +225,11 @@ const pageDescription =
   {
     kind === "category" ? (
       <>
-        <div class="mb-6 sm:mb-8">
-          <h1 class="text-3xl leading-[1] font-semibold">{categoryHeading}</h1>
-          <p class="text-muted-foreground mt-3">{categorySubheading}</p>
-        </div>
+        <Header
+          title={categoryHeading}
+          subtitle={categorySubheading}
+          className="mb-6 sm:mb-8"
+        />
 
         <ArticlesList
           client:load
@@ -292,14 +295,10 @@ const pageDescription =
           {moreArticles.length > 0 && (
             <section class="mx-auto mt-10 max-w-3xl border-t pt-6 sm:mt-12 sm:pt-8">
               <div class="flex items-baseline justify-between gap-3">
-                <h2 class="text-xl font-semibold tracking-normal">
-                  More articles
-                </h2>
-                <a
-                  href="/articles"
-                  class="text-primary text-sm underline-offset-4 hover:underline">
+                <SectionHeading>More articles</SectionHeading>
+                <TextLink href="/articles" variant="action" className="text-sm">
                   View all articles
-                </a>
+                </TextLink>
               </div>
               <div class="mt-4 grid gap-3 sm:grid-cols-3">
                 {moreArticles.map((item) => (

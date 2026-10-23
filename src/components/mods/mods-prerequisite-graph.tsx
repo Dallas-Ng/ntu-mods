@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react"
 import { track } from "@/lib/analytics"
 import { getModuleUrl } from "@/lib/module-url"
 import type { DbPrerequisiteNode } from "@/lib/server/db/types"
+import { SectionHeading } from "@/components/header"
 
 interface Props {
   moduleCode: string
@@ -153,9 +154,7 @@ export default function ModsPrerequisiteGraph({
 
   return (
     <div className="rounded-2xl border p-5">
-      <h2 className="mb-6 text-lg font-semibold tracking-tight">
-        Prerequisite graph
-      </h2>
+      <SectionHeading className="mb-6">Prerequisite graph</SectionHeading>
 
       <div ref={containerRef} className="relative">
         {svgSize.w > 0 && (

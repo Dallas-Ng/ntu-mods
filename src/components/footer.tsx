@@ -34,8 +34,10 @@ const LEGAL_LINKS = [
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
   { label: "AI instructions", href: "/ai-instructions" },
+  { label: "GitHub", href: siteConfig.links.repo },
   { label: "Developers", href: "/developers" },
-  { label: "Sitemap", href: "/sitemap" }
+  { label: "Sitemap", href: "/sitemap" },
+  { label: "Buy me a coffee", href: siteConfig.links.coffee }
 ] as const
 
 const Footer = () => {
@@ -88,11 +90,15 @@ const Footer = () => {
           &copy; {new Date().getFullYear()} NTUmods.com. Not affiliated with
           Nanyang Technological University.
         </p>
-        <ul className="text-muted-foreground flex gap-4">
+        <ul className="text-muted-foreground flex flex-wrap gap-x-4 gap-y-2">
           {LEGAL_LINKS.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
+                {...(link.href.startsWith("http") && {
+                  target: "_blank",
+                  rel: "noopener noreferrer"
+                })}
                 className="hover:text-primary transition-colors">
                 {link.label}
               </a>

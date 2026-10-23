@@ -20,8 +20,9 @@ export const prerender = true
       client:idle
       slot="mobileNav"
       headings={faqHeadings}
+      nested
     />
-    <ArticleToc client:idle headings={faqHeadings} />
+    <ArticleToc client:idle headings={faqHeadings} nested />
   </FaqContent>
   <JsonLd data={faqPageJsonLd(faqItems)} />
 </BaseLayout>

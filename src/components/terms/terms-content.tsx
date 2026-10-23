@@ -1,3 +1,4 @@
+import { siteConfig } from "@/config/site"
 import Container from "@/components/container"
 import Header from "@/components/header"
 
@@ -92,10 +93,17 @@ const TermsContent = () => {
         </h2>
 
         <p>
-          The source code is published under the licence in its repository.
-          Module and exam data is NTU&apos;s; we present it for convenience.
-          Articles and site design remain with their authors unless stated
-          otherwise.
+          The source code is published on{" "}
+          <a
+            href={siteConfig.links.repo}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary underline underline-offset-2">
+            GitHub
+          </a>{" "}
+          under the licence in its repository. Module and exam data is
+          NTU&apos;s; we present it for convenience. Articles and site design
+          remain with their authors unless stated otherwise.
         </p>
       </section>
 

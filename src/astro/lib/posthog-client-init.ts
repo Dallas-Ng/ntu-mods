@@ -3,6 +3,23 @@ import { consentState, onConsentChange, whenConsented } from "@/lib/consent"
 
 const token = import.meta.env.PUBLIC_POSTHOG_TOKEN
 
+// Crypto-wallet browser extensions inject scripts that assign to
+// window.ethereum and throw on pages that never touch it. The error isn't
+// from our code, so it only adds noise to error tracking.
+const EXTENSION_NOISE = /window\.ethereum|\bselectedAddress\b/
+
+function isExtensionNoise(event: {
+  event: string
+  properties?: Record<string, unknown>
+}) {
+  if (event.event !== "$exception") return false
+  const list = event.properties?.$exception_list
+  if (!Array.isArray(list)) return false
+  return list.some(
+    (e) => typeof e?.value === "string" && EXTENSION_NOISE.test(e.value)
+  )
+}
+
 async function initPosthog() {
   // Imported here rather than at the top so the SDK is only downloaded once
   // the page has loaded. track() calls made before then are queued.
@@ -14,6 +31,7 @@ async function initPosthog() {
     capture_exceptions: true,
     debug: import.meta.env.DEV,
     disable_session_recording: true,
+    before_send: (event) => (event && isExtensionNoise(event) ? null : event),
     loaded: (ph) => {
       // Init only runs once consent is granted, but an earlier withdrawal
       // may have left PostHog's own opt-out flag set.

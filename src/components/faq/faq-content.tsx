@@ -8,6 +8,7 @@ import HeadingAnchor from "@/components/heading-anchor"
 
 interface FaqConfig {
   id: string
+  group: string
   question: string
   answer: React.ReactNode
   answerText?: string
@@ -17,21 +18,31 @@ const REPO_URL = siteConfig.links.repo
 const LINK_CLASS =
   "text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
 
+const FAQ_GROUPS = [
+  { id: "about", title: "About NTU Mods" },
+  { id: "planning", title: "Planning your timetable" },
+  { id: "your-data", title: "Your data and privacy" },
+  { id: "open-source-and-contributing", title: "Open source and contributing" }
+] as const
+
 const FAQ_CONFIG: FaqConfig[] = [
   {
     id: "what-is-ntu-mods",
+    group: "about",
     question: "What is NTU Mods?",
     answer:
       "NTU Mods is a timetable planner and module browser for Nanyang Technological University (NTU) students. It lets you browse modules, compare indexes, and plan your schedule, without needing to log into STARS."
   },
   {
     id: "ntu-affiliation",
+    group: "about",
     question: "Is NTU Mods affiliated with NTU?",
     answer:
       "No. NTU Mods is an independent project and is not affiliated with, endorsed by, or connected to Nanyang Technological University. Module and timetable data is sourced from NTU's publicly accessible systems."
   },
   {
     id: "current-semester",
+    group: "about",
     question: "What semester is currently available?",
     answer: (
       <>
@@ -49,7 +60,15 @@ const FAQ_CONFIG: FaqConfig[] = [
     answerText: `The latest semester available is ${LATEST_SEMESTER_LABEL}. If this is outdated and you need data for a newer semester, feel free to request it via the feedback form.`
   },
   {
+    id: "live-vacancies",
+    group: "about",
+    question: "Can you show live vacancies for indexes?",
+    answer:
+      "No. Vacancy data is not publicly available from NTU's systems. Use NTU Mods to figure out which indexes fit your schedule, then check STARS for real-time availability when registration opens."
+  },
+  {
     id: "plan-timetable",
+    group: "planning",
     question: "How do I plan my timetable?",
     answer: (
       <>
@@ -69,12 +88,14 @@ const FAQ_CONFIG: FaqConfig[] = [
   },
   {
     id: "what-is-an-index",
+    group: "planning",
     question: "What is an index?",
     answer:
       "An index is a specific class group for a module. It has a fixed set of timeslots and venues for lectures, tutorials, and labs. Different indexes cover the same course content but meet at different times. You pick one index per module when registering in STARS."
   },
   {
     id: "browse-modules",
+    group: "planning",
     question: "How do I browse modules?",
     answer: (
       <>
@@ -93,37 +114,36 @@ const FAQ_CONFIG: FaqConfig[] = [
       "Use the mods page at /mods to search and filter all NTU modules. Click on any module to see its full details: description, academic units, prerequisites, exam schedule, and all available indexes with their timeslots and venues."
   },
   {
-    id: "export-timetable",
-    question: "How do I export my timetable?",
-    answer:
-      "There are two export options on the timetable page. You can download an .ics calendar file to import directly into Google Calendar, Apple Calendar, or Outlook. You can also save your timetable as an image, which is useful for sharing or setting as a wallpaper."
-  },
-  {
     id: "walking-between-classes",
+    group: "planning",
     question: "Can I check if I have enough time to walk between classes?",
     answer:
       "Yes. On the timetable page, open Walking between classes under Generate Timetable and pick a day. It shows your classes in order on the campus map, the walking time between each pair of venues, and a warning when a gap is shorter than the walk or two classes overlap. Times are estimates, so leave extra room for lifts and stairs."
   },
   {
+    id: "export-timetable",
+    group: "planning",
+    question: "How do I export my timetable?",
+    answer:
+      "There are two export options on the timetable page. You can download an .ics calendar file to import directly into Google Calendar, Apple Calendar, or Outlook. You can also save your timetable as an image, which is useful for sharing or setting as a wallpaper."
+  },
+  {
     id: "share-timetable",
+    group: "planning",
     question: "How do I share my timetable?",
     answer:
       "Use the share button on the timetable page to generate a shareable URL. Anyone with the link can view your timetable, and they can copy it to their own planner to modify it."
   },
   {
     id: "timetable-disappeared",
+    group: "your-data",
     question: "Why did my timetable disappear?",
     answer:
       "Your timetable is saved in your browser's localStorage. It stays between visits on the same device and browser, but clears if you wipe your browser data, close an incognito window, or switch to a different device or browser. There is no account system, so nothing is synced to the cloud."
   },
   {
-    id: "live-vacancies",
-    question: "Can you show live vacancies for indexes?",
-    answer:
-      "No. Vacancy data is not publicly available from NTU's systems. Use NTU Mods to figure out which indexes fit your schedule, then check STARS for real-time availability when registration opens."
-  },
-  {
     id: "data-tracking",
+    group: "your-data",
     question: "Do you track my data?",
     answer: (
       <>
@@ -148,6 +168,7 @@ const FAQ_CONFIG: FaqConfig[] = [
   },
   {
     id: "open-source",
+    group: "open-source-and-contributing",
     question: "Is NTU Mods open source?",
     answer: (
       <>
@@ -168,6 +189,7 @@ const FAQ_CONFIG: FaqConfig[] = [
   },
   {
     id: "contribute",
+    group: "open-source-and-contributing",
     question: "How can I contribute?",
     answer: (
       <>
@@ -191,6 +213,7 @@ const FAQ_CONFIG: FaqConfig[] = [
   },
   {
     id: "report-bug-or-wrong-data",
+    group: "open-source-and-contributing",
     question: "How do I report a bug or wrong data?",
     answer: (
       <>
@@ -214,6 +237,7 @@ const FAQ_CONFIG: FaqConfig[] = [
   },
   {
     id: "report-security-issue",
+    group: "open-source-and-contributing",
     question: "How do I report a security issue?",
     answer: (
       <>
@@ -238,13 +262,12 @@ const FAQ_CONFIG: FaqConfig[] = [
   }
 ]
 
-export const faqHeadings: ArticleHeading[] = FAQ_CONFIG.map(
-  ({ id, question }) => ({
-    id,
-    depth: 2,
-    text: question
-  })
-)
+export const faqHeadings: ArticleHeading[] = FAQ_GROUPS.flatMap((group) => [
+  { id: group.id, depth: 2, text: group.title },
+  ...FAQ_CONFIG.filter((item) => item.group === group.id).map(
+    ({ id, question }) => ({ id, depth: 3, text: question })
+  )
+])
 
 /** Question/answer pairs for the FAQPage JSON-LD built in the faq page. */
 export const faqItems = FAQ_CONFIG.map(({ question, answer, answerText }) => ({
@@ -274,21 +297,32 @@ const FaqContent = ({ children, mobileNav }: Props) => {
             subtitle="Answers for planning timetables, browsing modules, exporting schedules, understanding how your data is stored, and contributing to the open-source project."
           />
 
-          <div className="space-y-3">
-            {FAQ_CONFIG.map(({ id, question, answer }) => (
-              <section
-                id={id}
-                key={id}
-                className="bg-muted scroll-mt-20 space-y-3 rounded-2xl p-5">
-                <h2 className="text-xl font-semibold">
-                  {question}
-                  <HeadingAnchor id={id} label={question} />
-                </h2>
+          {FAQ_GROUPS.map((group) => (
+            <div key={group.id} className="space-y-3">
+              <h2
+                id={group.id}
+                className="scroll-mt-20 pt-2 text-2xl font-semibold tracking-tight">
+                {group.title}
+                <HeadingAnchor id={group.id} label={group.title} />
+              </h2>
 
-                <p className="text-muted-foreground text-sm">{answer}</p>
-              </section>
-            ))}
-          </div>
+              {FAQ_CONFIG.filter((item) => item.group === group.id).map(
+                ({ id, question, answer }) => (
+                  <section
+                    id={id}
+                    key={id}
+                    className="bg-muted scroll-mt-20 space-y-3 rounded-2xl p-5">
+                    <h3 className="text-xl font-semibold">
+                      {question}
+                      <HeadingAnchor id={id} label={question} />
+                    </h3>
+
+                    <p className="text-muted-foreground text-sm">{answer}</p>
+                  </section>
+                )
+              )}
+            </div>
+          ))}
 
           <div
             id="feedback"

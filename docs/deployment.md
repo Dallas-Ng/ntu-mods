@@ -54,12 +54,20 @@ Set these as Worker secrets (not in `.env`); they are read through `locals.runti
 
 ## MCP server
 
-`/mcp` is public and has no secrets. It adds one rate limit binding, `MCP_LIMITER` (3000 a minute per IP, a flood ceiling rather than a per-user limit), declared in `wrangler.jsonc`. Previews do not inherit it, so previews are not limited.
+`/mcp` is public and needs no secret to run. It adds one rate limit binding, `MCP_LIMITER` (3000 a minute per IP, a flood ceiling rather than a per-user limit), declared in `wrangler.jsonc`. Previews do not inherit it, so previews are not limited. Design and limits: [mcp.md](mcp.md).
 
-Set up in the Cloudflare dashboard (not in config):
+**Kill switch.** Set the optional `MCP_DISABLED` secret to any value and `/mcp` answers 503 on the next request. It is a secret, so deploys keep it, and it works on the free plan with no build.
 
-- **Kill switch:** a WAF custom rule that blocks requests to `/mcp`, created and left disabled. Enable it to turn the server off in seconds, with no deploy.
-- **Billing alerts:** notifications for Workers usage and a usage-based billing threshold, because a flood costs requests and log events rather than D1 work.
-- **WAF rate rule (optional):** counts per IP per data center, so it is the same kind of limit as `MCP_LIMITER`, applied before the worker runs. Only worth a rule slot if floods show up on the bill.
+```bash
+npx wrangler secret put MCP_DISABLED --name ntu-mods
+```
 
-Design and limits: [mcp-server-plan.md](mcp-server-plan.md).
+Enter `1` when asked. Or use the dashboard: Workers & Pages, `ntu-mods`, Settings, Variables and Secrets, add a secret named `MCP_DISABLED`. To turn the server back on, remove it:
+
+```bash
+npx wrangler secret delete MCP_DISABLED --name ntu-mods
+```
+
+**Billing alerts.** Set up Cloudflare notifications for Workers usage and a usage-based billing threshold in the dashboard. A flood costs requests and log events rather than D1 work, and there is no spend cap.
+
+A WAF rate rule is optional and no better than `MCP_LIMITER`: it counts per IP per data center, so it is the same kind of limit, applied before the worker runs.

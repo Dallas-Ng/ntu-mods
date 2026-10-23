@@ -85,11 +85,11 @@ The data is NTU's public course data. It can be out of date or wrong, and the as
 
 ## Fair use
 
-The server is free and public, so it is built to stay cheap. Results are capped, and the server asks clients that call it too fast to wait. Many students share the same network, so the limit is high, but please do not run bulk scrapes through it. If you need everything, download the [open data files](/developers) once instead.
+The server is free and public, so it is built to stay cheap. Results are capped, and the server asks clients that call it too fast to wait. Many students share the same network, so the limit is high, but please do not run bulk scrapes through it. If you need everything, download the [open data files](/developers/api) once instead.
 
 ## For developers
 
-The [developers page](/developers#mcp) has the full tool list with inputs, the limits and the error codes. The server uses the standard MCP transport, so any client that supports remote servers should work. If one does not, please tell me through the [feedback page](/feedback).
+The [developer docs](/developers/mcp) has the full tool list with inputs, the limits and the error codes. The server uses the standard MCP transport, so any client that supports remote servers should work. If one does not, please tell me through the [feedback page](/feedback).
 
 ## Final thoughts
 

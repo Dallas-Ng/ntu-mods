@@ -1,4 +1,4 @@
-// The tools /mcp serves and /developers documents. They are WebMCP tools picked
+// The tools /mcp serves and /developers/mcp documents. They are WebMCP tools picked
 // by name, so descriptions and input schemas have one source
 // (webmcp/definitions.ts) and the three surfaces cannot drift. Everything left
 // out reads or changes the user's browser state, which the server never has.

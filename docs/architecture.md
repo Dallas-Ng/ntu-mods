@@ -41,7 +41,7 @@ flowchart TB
 - **Prerender everything it can.** Workers has no filesystem, so the build runs in plain Node and reads the JSON there. Only `/mods/:code/:year/:semester` (about 28k combinations), `/api/feedback`, `/api/walk`, `/mcp` and `/ingest/*` run on demand.
 - **Two read paths, kept apart.** Build-time code uses `lib/server/db/json-source.ts`; on-demand code uses `lib/server/edge/*` and the `DB` binding. On-demand code must never import the build-time path. See [src/README.md](../src/README.md#rendering-model).
 - **The client is mostly local.** The timetable builder fetches the bulk JSON once and works in the browser, with Zustand holding state. Sharing encodes the timetable in the URL.
-- **A public MCP server, kept cheap.** `/mcp` has no sign-in, so it cannot tell users apart. Instead every tool reads static files or one cached D1 lookup per module. Design, limits and tests: [mcp-server-plan.md](mcp-server-plan.md).
+- **A public MCP server, kept cheap.** `/mcp` has no sign-in, so it cannot tell users apart. Instead every tool reads static files or one cached D1 lookup per module. Design, limits and tests: [mcp.md](mcp.md).
 - **Analytics are proxied.** Events go to PostHog through a same-origin `/ingest` proxy; see [src/README.md](../src/README.md#analytics).
 
 ## Where to read next

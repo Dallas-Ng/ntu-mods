@@ -58,7 +58,8 @@
 
 **For developers and AI assistants**
 
-- Free public module API and open JSON data for modules, indexes and exams, documented on the [developers page](https://ntumods.com/developers) with an OpenAPI file
+- Free public module API and open JSON data for modules, indexes and exams, documented in the [developer docs](https://ntumods.com/developers) with an OpenAPI file
+- A public, read-only [MCP server](https://ntumods.com/developers/mcp) for Claude, ChatGPT, Claude Code and Cursor; see [docs/mcp.md](docs/mcp.md)
 - [WebMCP](https://github.com/webmachinelearning/webmcp) support (developer preview), so a supporting browser can let an assistant search modules and generate timetables from your saved plans
 - `llms.txt` for AI crawlers
 

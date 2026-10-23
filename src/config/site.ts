@@ -68,6 +68,18 @@ export const siteConfig = {
       title: "NTUMods API for Developers",
       desc: "Free public API and open data for NTU modules, class indexes and exam timetables. No key needed. Built for student projects and AI tools."
     },
+    developersApi: {
+      title: "NTUMods REST API and Open Data",
+      desc: "Free public module API and open JSON files for NTU modules, class indexes and exam timetables. No key needed, with an OpenAPI file."
+    },
+    developersMcp: {
+      title: "NTUMods MCP Server for Claude and ChatGPT",
+      desc: "Add the NTUMods MCP server to Claude, ChatGPT, Claude Code or Cursor to look up NTU modules, class indexes and exams. Free, read-only, no sign-in."
+    },
+    developersWebmcp: {
+      title: "NTUMods WebMCP and AI Discovery Files",
+      desc: "WebMCP browser tools for your own NTU timetable plans, plus llms.txt, the AI catalog and the tool list for crawlers and agents."
+    },
     sitemap: {
       title: "Sitemap",
       desc: "Browse every major NTUMods page, planning guide, and NTU module detail page from one organized sitemap."

@@ -1,0 +1,44 @@
+---
+import { siteConfig } from "@/config/site"
+import { getApiGroups } from "@/lib/developers/api-groups"
+import ApiExplorer from "@/components/developers/api-explorer"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const { title, desc } = siteConfig.metatags.developersApi
+
+const groups = (await getApiGroups()).filter((g) => g.name !== "Discovery")
+
+const slug = (name: string) => name.toLowerCase().replace(/\s+/g, "-")
+const headings = groups.map((g) => ({
+  id: slug(g.name),
+  depth: 2,
+  text: g.name,
+  count: g.ops.length
+}))
+const link = "text-primary underline underline-offset-2"
+---
+
+<DevDocsLayout
+  title={title}
+  description={desc}
+  path="/developers/api"
+  heading="REST API and open data"
+  intro="One module as JSON, and whole-dataset JSON files for modules, class indexes and exams. Free, read-only and no key."
+  headings={headings}>
+  <p class="text-foreground/80 text-sm">
+    Every endpoint is a plain <code
+      class="bg-muted rounded px-1 py-0.5 font-mono text-sm">GET</code
+    >. A machine-readable <a class={link} href="/developers/openapi.json"
+      >OpenAPI 3.1 file</a
+    > is available. For an AI assistant, see the <a
+      class={link}
+      href="/developers/mcp">MCP server</a
+    >.
+  </p>
+
+  <div>
+    <ApiExplorer client:load groups={groups} />
+  </div>
+</DevDocsLayout>

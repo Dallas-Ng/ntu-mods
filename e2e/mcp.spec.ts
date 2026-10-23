@@ -2,7 +2,7 @@
  * MCP server (mcp.spec.ts)
  *
  * Tests:  /mcp answers a real tools/list and tools/call, turns away other
- *         methods, and /developers documents exactly the tools it serves.
+ *         methods, and /developers/mcp documents exactly the tools it serves.
  * Why:    the route runs in workerd with the real MCP SDK, which unit tests
  *         cannot cover, and the docs must not name tools the server lacks.
  * How:    plain HTTP requests (no browser) against the running server.
@@ -58,7 +58,7 @@ test("answers GET with 405 and never caches", async ({ request }) => {
   expect(res.headers()["cache-control"]).toBe("no-store")
 })
 
-test("/developers documents every MCP tool", async ({ request }) => {
-  const html = await (await request.get("/developers")).text()
+test("/developers/mcp documents every MCP tool", async ({ request }) => {
+  const html = await (await request.get("/developers/mcp")).text()
   for (const name of MCP_TOOL_NAMES) expect(html).toContain(name)
 })

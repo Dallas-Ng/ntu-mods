@@ -67,7 +67,7 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         content: (
           <>
             The{" "}
-            <ChangelogLink href="/developers#mcp">
+            <ChangelogLink href="/developers/mcp">
               developers page
             </ChangelogLink>{" "}
             lists every MCP tool with its inputs, the limits and the error

@@ -398,4 +398,33 @@ const pageDescription =
         }).init()
       })
     })
+
+  // Fenced code in the Markdown arrives as a plain <pre>. Swap each one for the
+  // shared CodeBlock (copy button, light and dark themes). The <pre> stays,
+  // hidden, as the fallback if this fails to load.
+  const fences = document.querySelectorAll<HTMLPreElement>(
+    "article.prose pre[data-language]"
+  )
+  if (fences.length) {
+    Promise.all([
+      import("react"),
+      import("react-dom/client"),
+      import("@/components/developers/code")
+    ])
+      .then(([React, { createRoot }, { Code }]) => {
+        fences.forEach((pre) => {
+          const host = document.createElement("div")
+          host.className = "not-prose my-6"
+          pre.before(host)
+          pre.hidden = true
+          createRoot(host).render(
+            React.createElement(Code, {
+              code: pre.textContent ?? "",
+              lang: pre.dataset.language ?? "text"
+            })
+          )
+        })
+      })
+      .catch(() => {})
+  }
 </script>

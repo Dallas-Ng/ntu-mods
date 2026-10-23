@@ -4,6 +4,7 @@ import { useBoundState } from "@/state/bound.state"
 import { ArrowLeft } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { Code } from "@/components/developers/code"
 
 const DebugContent = () => {
   const state = useBoundState()
@@ -45,9 +46,7 @@ const DebugContent = () => {
         </Button>
       </div>
 
-      <div className="rounded-lg border p-2 text-sm">
-        <pre>{JSON.stringify({ ...state }, null, 2)}</pre>
-      </div>
+      <Code code={JSON.stringify({ ...state }, null, 2)} lang="json" />
     </>
   )
 }

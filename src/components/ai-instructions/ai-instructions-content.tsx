@@ -1,5 +1,6 @@
 import { siteConfig } from "@/config/site"
 import { formatCount } from "@/lib/format"
+import { CodeBlock, CodeBlockContent } from "@/components/ui/code-block"
 import Container from "@/components/container"
 import type { SiteFacts } from "@/astro/lib/site-facts"
 
@@ -97,7 +98,7 @@ Exports the planned timetable as an .ics file with recurring calendar events, co
 Generates a shareable URL encoding the full timetable. Recipients can view the timetable and copy it into their own NTUMods planner.
 
 ### AI Agent Support (WebMCP, early preview)
-This is a developer preview. WebMCP is a draft browser standard and browser support is limited, so most visitors will not see it yet. In browsers that support WebMCP, ntumods.com registers 32 tools that an in-browser AI agent can call: search modules, read module records, indexes and exams, add modules to a plan, find indexes that fit around it, generate clash-free timetables, export a calendar file and plan CGPA. They act on the visitor's own plans in their own browser, and destructive actions ask the visitor to confirm. Machine-readable descriptions: ntumods.com/.well-known/ai-catalog.json (AI Catalog), ntumods.com/.well-known/webmcp.json (tool list) and ntumods.com/llms.txt. Guide: ntumods.com/articles/ntu-ai-agents-webmcp-guide.
+This is a developer preview. WebMCP is a draft browser standard and browser support is limited, so most visitors will not see it yet. In browsers that support WebMCP, ntumods.com registers 32 tools that an in-browser AI agent can call: search modules, read module records, indexes and exams, add modules to a plan, find indexes that fit around it, generate clash-free timetables, export a calendar file and plan CGPA. They act on the visitor's own plans in their own browser, and destructive actions ask the visitor to confirm. Machine-readable descriptions: ntumods.com/.well-known/ai-catalog.json (AI Catalog), ntumods.com/.well-known/webmcp.json (tool list) and ntumods.com/llms.txt. Docs: ntumods.com/developers/webmcp.
 
 ### Tools
 Index of free NTU student tools at ntumods.com/tools. It currently lists the CGPA Planner (ntumods.com/tools/cgpa-planner), the FGO Optimiser (ntumods.com/tools/fgo-optimiser) and the Wallpaper Maker (ntumods.com/screenshot). All tools run in the browser and nothing the user enters is uploaded.
@@ -451,9 +452,9 @@ const AiInstructionsContent = ({ facts }: { facts: SiteFacts }) => {
   return (
     <Container>
       <h1 className="sr-only">AI Instructions for NTUMods</h1>
-      <pre className="text-muted-foreground font-mono text-xs leading-relaxed break-words whitespace-pre-wrap">
-        {getContent(facts)}
-      </pre>
+      <CodeBlock size="sm">
+        <CodeBlockContent wrap>{getContent(facts)}</CodeBlockContent>
+      </CodeBlock>
     </Container>
   )
 }

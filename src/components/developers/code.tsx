@@ -26,6 +26,11 @@ export const Code = ({
   const lines = useHighlightedCode(code, lang)
   return (
     <CodeBlock className={className}>
+      {!title && (
+        <CodeBlockActions className="absolute top-2 right-2 z-10">
+          <CodeBlockCopyButton value={code} />
+        </CodeBlockActions>
+      )}
       {title && (
         <CodeBlockHeader>
           <CodeBlockTitle>{title}</CodeBlockTitle>

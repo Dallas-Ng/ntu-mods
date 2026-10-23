@@ -1,3 +1,17 @@
+/**
+ * Site-wide files and routing (site.spec.ts)
+ *
+ * Tests:  robots.txt and the sitemap (well formed, real lastmod, sampled URLs
+ *         return 200 and are indexable), llms and AI catalog files, the module
+ *         API, the IndexNow key and static assets, redirects, and 404s.
+ * Why:    these are the files and status codes crawlers and agents depend on,
+ *         and they do not belong to any single page.
+ * How:    plain HTTP requests without following redirects, so a chain or a
+ *         wrong status shows up. No browser is used.
+ * Needs:  `pnpm build`, a running server and a seeded local D1.
+ * Sample: 60 random sitemap URLs for the status check, everything else in full.
+ */
+
 import fs from "node:fs"
 import path from "node:path"
 import { expect, test } from "@playwright/test"

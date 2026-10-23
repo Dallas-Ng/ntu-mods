@@ -1,3 +1,12 @@
+/**
+ * Up-front JS measurement (lib/budget.ts)
+ *
+ * Provides: `initialJs`, the gzipped size and file list of the JavaScript a
+ *           built page loads before any user action.
+ * Why:      reads dist/ directly, so the budget check needs no server.
+ * Used by:  budget.spec.ts.
+ */
+
 import fs from "node:fs"
 import path from "node:path"
 import zlib from "node:zlib"

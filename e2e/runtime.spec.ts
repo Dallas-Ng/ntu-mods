@@ -1,3 +1,18 @@
+/**
+ * Runtime errors (runtime.spec.ts)
+ *
+ * Tests:  no console errors or warnings, page errors, failed requests or
+ *         HTTP 4xx/5xx from our own origin while a page loads and hydrates.
+ * Why:    hydration and island errors only show with JavaScript on, and users
+ *         hit them while the static checks still pass.
+ * How:    opens each page in a real browser context, waits for load (network
+ *         idle on heavy pages) plus two frames, and collects the events. Third
+ *         party hosts are stubbed in fixtures.ts.
+ * Needs:  `pnpm build`, a running server and a seeded local D1.
+ * Sample: every static page in dark, 5 articles and modules, 3 semesters; light
+ *         theme on three pages only, since theme is a client-side class toggle.
+ */
+
 import { expect, test } from "./fixtures"
 import { BASE_URL, pagesUnderTest } from "./lib/urls"
 

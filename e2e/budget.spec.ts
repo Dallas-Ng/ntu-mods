@@ -1,3 +1,17 @@
+/**
+ * Client JS budget (budget.spec.ts)
+ *
+ * Tests:  how much JavaScript each page loads up front, and which heavy
+ *         chunks it pulls in.
+ * Why:    a stray static import of pdfjs, web-llm or the forms bundle, or a
+ *         creeping dependency, makes every page slower and nothing else fails.
+ * How:    reads the built HTML in dist/ and follows its entry scripts,
+ *         client:load islands and their static imports (lazy dynamic imports
+ *         and client:visible/idle islands are not counted), then sums gzip.
+ * Needs:  `pnpm build` only. No server is used.
+ * Sample: every built static page, plus 3 modules and 3 articles.
+ */
+
 import fs from "node:fs"
 import path from "node:path"
 import { expect, test } from "@playwright/test"

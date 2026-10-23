@@ -1,3 +1,14 @@
+/**
+ * URLs and sampling (lib/urls.ts)
+ *
+ * Provides: the server and site origins, the sitemap as paths, a seeded
+ *           random `sample`, `pagesUnderTest` (all static pages plus a sample
+ *           of each dynamic kind) and a list of the built HTML files.
+ * Why:      one deterministic sample for every spec; SEO_SAMPLE and SEO_SEED
+ *           change it, so a failing run can be reproduced.
+ * Used by:  every spec.
+ */
+
 import fs from "node:fs"
 import path from "node:path"
 

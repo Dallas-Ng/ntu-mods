@@ -1,3 +1,18 @@
+/**
+ * Links and uniqueness (links.spec.ts)
+ *
+ * Tests:  titles and descriptions are unique across pages, internal links are
+ *         well formed and answer 200, module links point at a real module or
+ *         semester, and no article or static page is an orphan.
+ * Why:    duplicate metadata, broken or redirecting links and unreachable pages
+ *         waste crawl budget and read as low quality to search engines.
+ * How:    fetches the sampled pages and all articles once (JS off, documents
+ *         only) and shares the HTML between tests. Module links are checked
+ *         against the data and every built HTML file instead of by request.
+ * Needs:  `pnpm build`, a running server and a seeded local D1.
+ * Sample: SEO_SAMPLE pages per kind (semester capped at 5), all articles.
+ */
+
 import fs from "node:fs"
 import { expect, test } from "@playwright/test"
 

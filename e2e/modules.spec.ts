@@ -1,3 +1,21 @@
+/**
+ * Module URL strategy (modules.spec.ts)
+ *
+ * Tests:  the current-versus-past module split, that /mods/CODE shows the
+ *         latest offered semester, latest-semester and older-semester
+ *         canonicals, the h1, Course JSON-LD only on current modules, and the
+ *         sitemap policy for module URLs.
+ * Why:    modules move between prerendered and on-demand every semester, and
+ *         the URL, status and canonical of /mods/CODE must not change when
+ *         they do.
+ * How:    derives the expected result from the module data, then requests a
+ *         sample of URLs without following redirects. The per-page checks for
+ *         /mods/CODE itself (200, indexable, self-canonical) live in pages.spec.
+ * Needs:  `pnpm build`, a running server and a seeded local D1.
+ * Sample: SEO_SAMPLE modules per group for the canonical checks, 5 to 15 for
+ *         the rest.
+ */
+
 import { expect, test } from "@playwright/test"
 
 import {

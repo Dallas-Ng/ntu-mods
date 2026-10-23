@@ -1,9 +1,9 @@
 "use client"
 
-import { TRUN_DAY_MAP } from "@/lib/module-constants"
 import { formatRemarks } from "@/lib/format"
 import { getIndexType } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
+import { TRUN_DAY_MAP } from "@/lib/module-constants"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 

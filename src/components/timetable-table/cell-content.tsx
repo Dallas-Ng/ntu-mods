@@ -1,4 +1,3 @@
-import { TRUN_DAY_MAP } from "@/lib/module-constants"
 import {
   getCustomBlockStyle,
   isCustomCourseKey
@@ -6,6 +5,7 @@ import {
 import { formatRemarks } from "@/lib/format"
 import { getIndexType } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
+import { TRUN_DAY_MAP } from "@/lib/module-constants"
 import { cn } from "@/lib/utils"
 
 interface Props {

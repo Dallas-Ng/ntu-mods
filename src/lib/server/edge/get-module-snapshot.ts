@@ -1,7 +1,6 @@
 import { env, waitUntil } from "cloudflare:workers"
 
 import { reportServerError } from "@/lib/posthog-server"
-import { snapshotFingerprint } from "@/lib/sitemap-policy"
 import {
   buildModuleTitlesSql,
   LATEST_SEMESTER_SQL,
@@ -29,6 +28,7 @@ import type {
   DbModule,
   DbPrerequisiteNode
 } from "@/lib/server/db/types"
+import { snapshotFingerprint } from "@/lib/sitemap-policy"
 
 /**
  * Request-time counterpart to src/lib/server/db/repo.ts, for the one route

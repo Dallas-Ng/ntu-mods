@@ -13,7 +13,6 @@ import {
 import { Dialog as DialogPrimitive } from "radix-ui"
 
 import { track } from "@/lib/analytics"
-import { COURSE_TYPE } from "@/lib/module-constants"
 import { customCourseModuleKey } from "@/lib/custom-course-colors"
 import { formatHhmm } from "@/lib/format"
 import {
@@ -23,6 +22,7 @@ import {
   isDefaultGenerationConfig,
   TIME_OPTIONS
 } from "@/lib/generation-config"
+import { COURSE_TYPE } from "@/lib/module-constants"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useCustomCourses } from "@/hooks/use-custom-courses"

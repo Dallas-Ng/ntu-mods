@@ -1,0 +1,5 @@
+#!/bin/sh
+# Format staged files, then re-stage them.
+files=$(git diff --cached --name-only --diff-filter=ACMR -z -- '*.ts' '*.tsx' '*.mdx' '*.astro' | tr '\0' '\n')
+[ -z "$files" ] && exit 0
+pnpm run format:staged && echo "$files" | xargs git add

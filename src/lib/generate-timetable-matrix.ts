@@ -1,6 +1,6 @@
-import { STARS_TIMESLOTS } from "./module-constants"
 import { getIndexType } from "./get-index-type"
 import { getUniqueLectures } from "./get-unique-lectures"
+import { STARS_TIMESLOTS } from "./module-constants"
 import { parseTimeNumber } from "./parse-time"
 
 /**

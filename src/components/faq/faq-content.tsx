@@ -1,3 +1,4 @@
+import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import type { ArticleHeading } from "@/lib/server/articles"
 import { Button } from "@/components/ui/button"
@@ -11,6 +12,10 @@ interface FaqConfig {
   answer: React.ReactNode
   answerText?: string
 }
+
+const REPO_URL = siteConfig.links.repo
+const LINK_CLASS =
+  "text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
 
 const FAQ_CONFIG: FaqConfig[] = [
   {
@@ -140,6 +145,125 @@ const FAQ_CONFIG: FaqConfig[] = [
     ),
     answerText:
       "We use two analytics tools, Google Analytics and PostHog, to collect page views, usage patterns and error reports. We don't record your screen or sessions. We don't collect your name or contact details. Everything you add to your timetable is stored only in your browser and never sent to our servers. The CGPA and FGO tools read your transcript PDF in your browser and never upload the file. By default, module codes, terms and grades (never your name or matric number) are also sent for analytics. Untick the share box before uploading to opt out."
+  },
+  {
+    id: "open-source",
+    question: "Is NTU Mods open source?",
+    answer: (
+      <>
+        Yes. The code is released under the MIT licence and lives on{" "}
+        <a
+          href={REPO_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={LINK_CLASS}>
+          GitHub
+        </a>
+        . Module and exam data belongs to NTU and is presented here for
+        convenience.
+      </>
+    ),
+    answerText:
+      "Yes. The code is released under the MIT licence and lives on GitHub at github.com/Dallas-Ng/ntu-mods. Module and exam data belongs to NTU and is presented here for convenience."
+  },
+  {
+    id: "contribute",
+    question: "How can I contribute?",
+    answer: (
+      <>
+        Everyone is welcome, and you do not need to be an NTU student. For
+        anything beyond a small fix, open an issue first so we can agree on the
+        approach. Then fork the repository, make your change, run the checks and
+        open a pull request. The steps are in{" "}
+        <a
+          href={`${REPO_URL}/blob/main/CONTRIBUTING.md`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={LINK_CLASS}>
+          CONTRIBUTING.md
+        </a>
+        . Typo fixes, bug reports, accessibility and performance improvements
+        and new articles are all useful.
+      </>
+    ),
+    answerText:
+      "Everyone is welcome, and you do not need to be an NTU student. For anything beyond a small fix, open an issue first so we can agree on the approach. Then fork the repository, make your change, run the checks and open a pull request. The steps are in CONTRIBUTING.md in the repository. Typo fixes, bug reports, accessibility and performance improvements and new articles are all useful."
+  },
+  {
+    id: "run-locally",
+    question: "Can I run NTU Mods on my own machine?",
+    answer:
+      "Yes. Install the dependencies with pnpm, run pnpm db:seed-local once to build a local database, then start the dev server with pnpm dev. You do not need a Cloudflare account or any secrets for that."
+  },
+  {
+    id: "contribution-previews",
+    question: "Will my pull request get a live preview?",
+    answer:
+      "Not necessarily. Previews are deployed by Cloudflare behind an access wall, and they may not be built for pull requests from forks. Run the site locally to check your change, and add a screenshot to the pull request for anything visual. Automated tests run on every pull request."
+  },
+  {
+    id: "report-bug-or-wrong-data",
+    question: "How do I report a bug or wrong data?",
+    answer: (
+      <>
+        Use the{" "}
+        <a href="/feedback" className={LINK_CLASS}>
+          feedback form
+        </a>{" "}
+        or open a{" "}
+        <a
+          href={`${REPO_URL}/issues/new/choose`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={LINK_CLASS}>
+          GitHub issue
+        </a>
+        . For wrong module data, include the module code and semester.
+      </>
+    ),
+    answerText:
+      "Use the feedback form or open a GitHub issue. For wrong module data, include the module code and semester."
+  },
+  {
+    id: "report-security-issue",
+    question: "How do I report a security issue?",
+    answer: (
+      <>
+        Please do not open a public issue. Use GitHub&apos;s private
+        vulnerability reporting, described in{" "}
+        <a
+          href={`${REPO_URL}/blob/main/SECURITY.md`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={LINK_CLASS}>
+          SECURITY.md
+        </a>{" "}
+        and in the site&apos;s{" "}
+        <a href="/.well-known/security.txt" className={LINK_CLASS}>
+          security.txt
+        </a>
+        .
+      </>
+    ),
+    answerText:
+      "Please do not open a public issue. Use GitHub's private vulnerability reporting, described in SECURITY.md in the repository and in the site's security.txt at /.well-known/security.txt."
+  },
+  {
+    id: "use-the-data",
+    question: "Can I use the module data or API in my own project?",
+    answer: (
+      <>
+        Yes. The{" "}
+        <a href="/developers" className={LINK_CLASS}>
+          developers page
+        </a>{" "}
+        documents the module API and the open data files. The data comes from
+        NTU, so keep it accurate, credit NTU Mods and check STARS for anything
+        that matters.
+      </>
+    ),
+    answerText:
+      "Yes. The developers page documents the module API and the open data files. The data comes from NTU, so keep it accurate, credit NTU Mods and check STARS for anything that matters."
   }
 ]
 
@@ -176,7 +300,7 @@ const FaqContent = ({ children, mobileNav }: Props) => {
 
           <Header
             title="Frequently Asked Questions"
-            subtitle="Answers for planning timetables, browsing modules, exporting schedules, and understanding how your data is stored."
+            subtitle="Answers for planning timetables, browsing modules, exporting schedules, understanding how your data is stored, and contributing to the open-source project."
           />
 
           <div className="space-y-3">

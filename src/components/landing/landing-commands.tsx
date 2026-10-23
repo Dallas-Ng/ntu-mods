@@ -9,6 +9,8 @@ export type Command = {
   href: string
   desc: string
   art?: string
+  /** Intrinsic [width, height] of `art`, so the image reserves its aspect ratio. */
+  artSize?: [number, number]
   isNew?: boolean
 }
 
@@ -117,6 +119,8 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                     <span className="bg-muted flex h-40 items-center justify-center rounded-lg p-4 sm:h-48 lg:hidden">
                       <img
                         src={c.art}
+                        width={c.artSize?.[0]}
+                        height={c.artSize?.[1]}
                         alt=""
                         loading="lazy"
                         decoding="async"
@@ -178,6 +182,8 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
               {c.art ? (
                 <img
                   src={c.art}
+                  width={c.artSize?.[0]}
+                  height={c.artSize?.[1]}
                   alt=""
                   loading="lazy"
                   decoding="async"

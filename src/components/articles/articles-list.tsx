@@ -87,6 +87,8 @@ function ArticleCard({
         <img
           src={article.thumbnail}
           alt={article.thumbnailAlt}
+          width={640}
+          height={360}
           className="aspect-video w-full object-cover"
         />
       ) : (

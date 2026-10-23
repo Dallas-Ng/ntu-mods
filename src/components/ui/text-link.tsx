@@ -1,5 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import { ArrowUpRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -41,4 +42,18 @@ function TextLink({
   )
 }
 
-export { TextLink, textLinkVariants }
+/** The one icon marking a link that leaves the site (or opens elsewhere). */
+function ExternalLinkIcon({
+  className,
+  ...props
+}: React.ComponentProps<typeof ArrowUpRight>) {
+  return (
+    <ArrowUpRight
+      aria-hidden
+      className={cn("text-muted-foreground size-4 shrink-0", className)}
+      {...props}
+    />
+  )
+}
+
+export { ExternalLinkIcon, TextLink, textLinkVariants }

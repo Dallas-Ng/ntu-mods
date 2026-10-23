@@ -1,7 +1,5 @@
 "use client"
 
-import { ExternalLink } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
 import {
   ModalFooter,
@@ -10,7 +8,7 @@ import {
 } from "@/components/ui/modal-parts"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { TextLink } from "@/components/ui/text-link"
+import { ExternalLinkIcon, TextLink } from "@/components/ui/text-link"
 
 interface Props {
   open: boolean
@@ -113,7 +111,7 @@ const TimetableCalendarDialog = ({
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-xs">
                 {app.link}
-                <ExternalLink className="size-3" />
+                <ExternalLinkIcon className="size-3 text-current" />
               </TextLink>
             </TabsContent>
           ))}

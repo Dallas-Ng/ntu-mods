@@ -1,8 +1,7 @@
 "use client"
 
-import { ExternalLink } from "lucide-react"
-
 import { track } from "@/lib/analytics"
+import { ExternalLinkIcon } from "@/components/ui/text-link"
 
 interface LinkCardProps {
   name: string
@@ -21,9 +20,7 @@ const LinkCard = ({ name, href, desc, external, category }: LinkCardProps) => {
         <p className="leading-none font-semibold">{name}</p>
         <p className="text-muted-foreground line-clamp-3 text-sm">{desc}</p>
       </div>
-      {external && (
-        <ExternalLink className="text-muted-foreground mt-0.5 size-4 shrink-0" />
-      )}
+      {external && <ExternalLinkIcon className="mt-0.5" />}
     </>
   )
 

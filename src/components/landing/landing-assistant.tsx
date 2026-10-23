@@ -1,5 +1,5 @@
 import { siteConfig } from "@/config/site"
-import { TextLink } from "@/components/ui/text-link"
+import { ExternalLinkIcon, TextLink } from "@/components/ui/text-link"
 import {
   CLAUDE_COLOUR,
   ClaudeIcon,
@@ -34,9 +34,7 @@ const LandingAssistant = () => {
                   style={{ color: CLAUDE_COLOUR }}
                 />
                 Add to Claude
-                <span aria-hidden className="text-muted-foreground">
-                  ↗
-                </span>
+                <ExternalLinkIcon />
               </a>
               <a
                 href={`${tool.href}#connect`}
@@ -64,9 +62,7 @@ const LandingAssistant = () => {
                   </span>
                 </span>
                 Add to others
-                <span aria-hidden className="text-muted-foreground">
-                  ↗
-                </span>
+                <ExternalLinkIcon />
               </a>
             </div>
             {tool.guide && (

@@ -1,13 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ArrowUpRight } from "lucide-react"
 
 import { reportError, track } from "@/lib/analytics"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { useAllModules } from "@/hooks/use-all-modules"
 import { useTimetable } from "@/hooks/use-timetable"
-import { TextLink } from "@/components/ui/text-link"
+import { ExternalLinkIcon, TextLink } from "@/components/ui/text-link"
 
 const TimetableOverview = () => {
   const { timetable } = useTimetable()
@@ -86,10 +85,7 @@ const TimetableOverview = () => {
                       variant="subtle"
                       className="group inline-flex items-center gap-1">
                       {moduleTitle}
-                      <ArrowUpRight
-                        aria-hidden
-                        className="text-muted-foreground size-3.5 shrink-0 transition-colors group-hover:text-current"
-                      />
+                      <ExternalLinkIcon className="size-3.5 transition-colors group-hover:text-current" />
                     </TextLink>
                   </td>
 

@@ -2,6 +2,7 @@
 import { siteConfig } from "@/config/site"
 import { MCP_CLIENTS } from "@/lib/developers/mcp-clients"
 import { directoryListings, mcpUrl } from "@/lib/developers/mcp-docs"
+import { ExternalLinkIcon } from "@/components/ui/text-link"
 import { CLAUDE_COLOUR, ClaudeIcon, OpenAIIcon } from "@/components/brand-icons"
 import HeadingAnchor from "@/components/heading-anchor"
 import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
@@ -72,7 +73,7 @@ const { title, desc } = siteConfig.metatags.developersMcp
                 ) : (
                   <OpenAIIcon className="size-7" />
                 )}
-                {l.url && <span class="text-muted-foreground">↗</span>}
+                {l.url && <ExternalLinkIcon className="size-5" />}
               </div>
               <div class="space-y-1">
                 <p class="text-base font-semibold">Add to {l.name}</p>

@@ -3,20 +3,33 @@ import { consentState, onConsentChange, whenConsented } from "@/lib/consent"
 
 const token = import.meta.env.PUBLIC_POSTHOG_TOKEN
 
-// Crypto-wallet browser extensions inject scripts that assign to
-// window.ethereum and throw on pages that never touch it. The error isn't
-// from our code, so it only adds noise to error tracking.
-const EXTENSION_NOISE = /window\.ethereum|\bselectedAddress\b/
+// Errors thrown by scripts that browser extensions and in-app browsers inject
+// into the page. They aren't from our code, so they only add noise to error
+// tracking. Crypto-wallet extensions, for one, assign to window.ethereum and
+// throw on pages that never touch it.
+const INJECTED_MESSAGE =
+  /window\.ethereum|\bselectedAddress\b|_AutofillCallbackHandler|window\.webkit\.messageHandlers|__gCrWeb|Java object is gone/
+const EXTENSION_FRAME = /^(chrome|moz|safari-web)-extension:\/\//
 
-function isExtensionNoise(event: {
+type ExceptionEntry = {
+  value?: unknown
+  stacktrace?: { frames?: { filename?: unknown }[] }
+}
+
+function isInjectedError(event: {
   event: string
   properties?: Record<string, unknown>
 }) {
   if (event.event !== "$exception") return false
   const list = event.properties?.$exception_list
   if (!Array.isArray(list)) return false
-  return list.some(
-    (e) => typeof e?.value === "string" && EXTENSION_NOISE.test(e.value)
+  return (list as ExceptionEntry[]).some(
+    (e) =>
+      (typeof e?.value === "string" && INJECTED_MESSAGE.test(e.value)) ||
+      e?.stacktrace?.frames?.some(
+        (f) =>
+          typeof f?.filename === "string" && EXTENSION_FRAME.test(f.filename)
+      )
   )
 }
 
@@ -31,7 +44,7 @@ async function initPosthog() {
     capture_exceptions: true,
     debug: import.meta.env.DEV,
     disable_session_recording: true,
-    before_send: (event) => (event && isExtensionNoise(event) ? null : event),
+    before_send: (event) => (event && isInjectedError(event) ? null : event),
     loaded: (ph) => {
       // Init only runs once consent is granted, but an earlier withdrawal
       // may have left PostHog's own opt-out flag set.

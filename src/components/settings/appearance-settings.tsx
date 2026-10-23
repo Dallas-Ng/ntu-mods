@@ -280,6 +280,7 @@ const AppearanceSettings = ({ compact = false }: AppearanceProps) => {
             key={type.label}
             className={cn(
               "rounded-md p-[var(--cell-padding)]",
+              // Miniature timetable cells: grid exception to the type scale.
               compact &&
                 "min-w-0 p-1.5 text-center text-[10px] sm:p-2 sm:text-left sm:text-xs",
               type.background
@@ -399,7 +400,7 @@ const AppearanceSettings = ({ compact = false }: AppearanceProps) => {
                         className={cn(
                           "text-muted-foreground text-pretty",
                           compact
-                            ? "text-[11px] leading-snug break-words sm:text-sm"
+                            ? "text-xs leading-snug break-words sm:text-sm"
                             : "text-sm"
                         )}>
                         {value.description}
@@ -478,7 +479,7 @@ const AppearanceSettings = ({ compact = false }: AppearanceProps) => {
                     className={cn(
                       "text-muted-foreground text-pretty",
                       compact
-                        ? "text-[11px] leading-snug break-words sm:text-sm"
+                        ? "text-xs leading-snug break-words sm:text-sm"
                         : "text-sm"
                     )}>
                     {value.description}

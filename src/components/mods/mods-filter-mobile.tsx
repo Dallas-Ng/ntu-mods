@@ -84,7 +84,7 @@ export const ModsFilterButton = ({
       onClick={() => drawer.openView("all")}>
       <SlidersHorizontal className="size-4" />
       {activeCount > 0 && (
-        <span className="bg-primary text-primary-foreground border-background absolute -top-1.5 -right-1.5 flex min-w-4.5 items-center justify-center rounded-full border-2 px-1 text-[10px] leading-4 font-semibold">
+        <span className="bg-primary text-primary-foreground border-background absolute -top-1.5 -right-1.5 flex min-w-4.5 items-center justify-center rounded-full border-2 px-1 text-xs leading-4 font-semibold">
           {activeCount}
         </span>
       )}

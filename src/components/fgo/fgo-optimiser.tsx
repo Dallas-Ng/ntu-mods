@@ -372,7 +372,7 @@ export default function FgoOptimiser() {
                     ` (${extra.core + extra.bde} AU)`}
                 </AccordionTrigger>
                 <AccordionContent className="space-y-3">
-                  <p className="text-muted-foreground text-xs">
+                  <p className="text-muted-foreground text-sm">
                     A module you declared FGO on and then failed becomes No
                     Record and leaves your transcript, but still uses quota. Add
                     those AU here, with any S/U from before the FGO rules.

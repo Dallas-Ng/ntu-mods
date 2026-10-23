@@ -107,7 +107,7 @@ function ArticleCard({
         )}
       </div>
       <div className="flex-1 p-4">
-        <div className="text-foreground/70 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
+        <div className="text-muted-foreground flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
           <span>{formatShortDate(article.date)}</span>
           <span aria-hidden="true">·</span>
           <span>{article.readingTime}</span>
@@ -123,7 +123,7 @@ function ArticleCard({
         <h2 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold wrap-break-word transition-colors">
           {article.title}
         </h2>
-        <p className="text-foreground/80 mt-2 line-clamp-3 text-sm leading-6 wrap-break-word">
+        <p className="text-foreground mt-2 line-clamp-3 text-sm leading-6 wrap-break-word">
           {article.description}
         </p>
       </div>
@@ -275,7 +275,7 @@ export default function ArticlesList({
 
   if (articles.length === 0) {
     return (
-      <div className="bg-muted text-foreground/80 rounded-2xl p-4 text-sm wrap-break-word sm:p-6">
+      <div className="bg-muted text-foreground rounded-2xl p-4 text-sm wrap-break-word sm:p-6">
         No articles published yet. Copy{" "}
         <code className="bg-muted rounded px-1 py-0.5">
           content/articles/_template.md
@@ -509,7 +509,7 @@ export default function ArticlesList({
           </div>
         )
       ) : (
-        <div className="bg-muted text-foreground/80 rounded-2xl p-4 text-sm wrap-break-word sm:p-6">
+        <div className="bg-muted text-foreground rounded-2xl p-4 text-sm wrap-break-word sm:p-6">
           No articles match those filters.
         </div>
       )}

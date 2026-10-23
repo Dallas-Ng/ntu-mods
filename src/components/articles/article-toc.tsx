@@ -156,7 +156,7 @@ export const MobileSectionDropdown = ({ headings, nested }: Props) => {
               {showGroup && (
                 <p
                   className={cn(
-                    "text-muted-foreground/70 px-3 pb-1 text-xs font-semibold",
+                    "text-muted-foreground px-3 pb-1 text-xs font-semibold",
                     i > 0 && "pt-3"
                   )}>
                   {heading.group}
@@ -177,7 +177,7 @@ export const MobileSectionDropdown = ({ headings, nested }: Props) => {
                 )}>
                 <span>{heading.text}</span>
                 {heading.count !== undefined && (
-                  <span className="text-muted-foreground/70 text-xs tabular-nums">
+                  <span className="text-muted-foreground text-xs tabular-nums">
                     {heading.count}
                   </span>
                 )}
@@ -252,7 +252,7 @@ const ArticleToc = ({ headings, nested }: Props) => {
                 {showGroup && (
                   <p
                     className={cn(
-                      "text-muted-foreground/70 px-3 pb-1 text-xs font-semibold",
+                      "text-muted-foreground px-3 pb-1 text-xs font-semibold",
                       i > 0 && "pt-3"
                     )}>
                     {heading.group}
@@ -268,7 +268,7 @@ const ArticleToc = ({ headings, nested }: Props) => {
                   className={cn(
                     sideNavItem({ active: isActive, highlight: "sliding" }),
                     heading.depth === 3 &&
-                      "before:bg-muted-foreground/25 pl-6 text-[13px] before:absolute before:inset-y-0 before:left-3 before:w-px",
+                      "before:bg-muted-foreground/25 pl-6 text-xs before:absolute before:inset-y-0 before:left-3 before:w-px",
                     nested &&
                       heading.depth === 2 &&
                       "pt-2 pb-1 text-xs font-semibold tracking-wide uppercase",
@@ -277,7 +277,7 @@ const ArticleToc = ({ headings, nested }: Props) => {
                   <span className="flex items-baseline justify-between gap-2">
                     <span className="line-clamp-2">{heading.text}</span>
                     {heading.count !== undefined && (
-                      <span className="text-muted-foreground/70 text-xs tabular-nums">
+                      <span className="text-muted-foreground text-xs tabular-nums">
                         {heading.count}
                       </span>
                     )}

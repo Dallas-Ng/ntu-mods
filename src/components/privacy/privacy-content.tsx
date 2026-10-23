@@ -4,8 +4,8 @@ import Header, { SectionHeading } from "@/components/header"
 
 const PrivacyContent = () => {
   return (
-    <Container size="sm" className="text-muted-foreground space-y-6">
-      <div className="text-foreground">
+    <Container size="sm" className="space-y-6">
+      <div>
         <Header
           title="Privacy Policy"
           subtitle="Last Updated: 23 October 2026"
@@ -29,9 +29,9 @@ const PrivacyContent = () => {
       <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
         <SectionHeading>What We Collect</SectionHeading>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           Data Stored Locally on Your Device
-        </h3>
+        </SectionHeading>
 
         <p>
           Your timetable selections, academic year/semester preferences, and
@@ -42,11 +42,9 @@ const PrivacyContent = () => {
           it at any time by clearing your browser&apos;s site data.
         </p>
 
-        <h3
-          id="analytics"
-          className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" id="analytics" className="mt-4">
           Analytics
-        </h3>
+        </SectionHeading>
 
         <p>
           We use two third-party analytics services on the production site to
@@ -108,9 +106,9 @@ const PrivacyContent = () => {
           collected during local development.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           Article View Counts
-        </h3>
+        </SectionHeading>
 
         <p>
           To show how many people have read an article, we store the
@@ -120,9 +118,9 @@ const PrivacyContent = () => {
           counts are only recorded after you accept analytics.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           Transcript Tools (CGPA Planner, FGO Optimiser)
-        </h3>
+        </SectionHeading>
 
         <p>
           Transcript PDFs are read entirely in your browser, and the file itself
@@ -137,9 +135,9 @@ const PrivacyContent = () => {
           flags, such as how many modules were found.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           Timetable Walking Routes
-        </h3>
+        </SectionHeading>
 
         <p>
           The Walking between classes feature on the timetable page works out
@@ -152,9 +150,9 @@ const PrivacyContent = () => {
           timetable.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           Campus Map
-        </h3>
+        </SectionHeading>
 
         <p>
           The campus map does not use your device&apos;s location. Buildings,
@@ -192,9 +190,9 @@ const PrivacyContent = () => {
           </li>
         </ul>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           Feedback Submissions
-        </h3>
+        </SectionHeading>
 
         <p>
           The Feedback page includes an optional feedback form. If you submit
@@ -224,9 +222,9 @@ const PrivacyContent = () => {
           address was included, but not the message itself.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           Public API and Open Data
-        </h3>
+        </SectionHeading>
 
         <p>
           The <TextLink href="/developers">developers page</TextLink> documents
@@ -239,9 +237,9 @@ const PrivacyContent = () => {
           to our own API, with the module code you type.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           MCP Server
-        </h3>
+        </SectionHeading>
 
         <p>
           Our public MCP server at ntumods.com/mcp gives AI assistants read-only
@@ -263,9 +261,9 @@ const PrivacyContent = () => {
           <TextLink href="/feedback">feedback page</TextLink>.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           AI Assistants (WebMCP, Developer Preview)
-        </h3>
+        </SectionHeading>
 
         <p>
           In a browser that supports WebMCP, an AI assistant you use can call
@@ -279,9 +277,9 @@ const PrivacyContent = () => {
           will not see any change.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           Usage Data
-        </h3>
+        </SectionHeading>
 
         <p>
           Like most web services, our hosting provider (Cloudflare) may

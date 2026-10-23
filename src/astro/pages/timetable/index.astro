@@ -138,8 +138,7 @@ const GUIDES = [
       <SectionHeading id="timetable-how">
         How the NTUMods timetable planner works
       </SectionHeading>
-      <p
-        class="text-muted-foreground max-w-2xl text-sm leading-relaxed text-pretty">
+      <p class="max-w-2xl text-sm leading-relaxed text-pretty">
         A free timetable planner for Nanyang Technological University students.
         Build your plan, check it for clashes, and see how it plays out on
         campus before STARS registration opens.
@@ -158,7 +157,7 @@ const GUIDES = [
               <Icon className="text-primary size-4" />
             </span>
             <div class="min-w-0 space-y-1">
-              <h3 class="text-sm font-semibold">{title}</h3>
+              <SectionHeading as="h3">{title}</SectionHeading>
               <p class="text-muted-foreground text-sm leading-relaxed text-pretty">
                 {body}
               </p>
@@ -203,7 +202,9 @@ const GUIDES = [
           <a
             href={href}
             class="bg-card hover:bg-accent group flex flex-col gap-2 rounded-xl border p-5 transition-colors">
-            <h3 class="text-sm leading-snug font-semibold">{title}</h3>
+            <SectionHeading as="h3" className="leading-snug">
+              {title}
+            </SectionHeading>
             <p class="text-muted-foreground text-sm leading-relaxed text-pretty">
               {description}
             </p>

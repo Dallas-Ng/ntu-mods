@@ -221,7 +221,7 @@ const Navbar = () => {
 
               {/* Nav links */}
               <nav className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3">
-                <p className="text-muted-foreground/60 mb-1 px-4 text-[11px] font-semibold tracking-widest uppercase">
+                <p className="text-muted-foreground mb-1 px-4 text-xs font-semibold tracking-widest uppercase">
                   Menu
                 </p>
                 {siteConfig.navLinks.map((link) => (

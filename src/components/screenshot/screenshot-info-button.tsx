@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { TextLink } from "@/components/ui/text-link"
+import { SectionHeading } from "@/components/header"
 
 type PhoneType = "android" | "ios" | "web"
 
@@ -50,7 +51,7 @@ const ScreenshotInfoButton = () => {
           </TabsList>
 
           <TabsContent value="ios" className="space-y-2">
-            <h3 className="font-semibold">Take a full-page screenshot</h3>
+            <SectionHeading as="h3">Take a full-page screenshot</SectionHeading>
 
             <p className="text-muted-foreground">
               You can take a screenshot of content that exceeds the length of
@@ -81,7 +82,7 @@ const ScreenshotInfoButton = () => {
           </TabsContent>
 
           <TabsContent value="android" className="space-y-2">
-            <h3 className="font-semibold">Take a scrolling screenshot</h3>
+            <SectionHeading as="h3">Take a scrolling screenshot</SectionHeading>
 
             <p className="text-muted-foreground">
               These steps work on devices running Android 12 and up, on most
@@ -111,7 +112,7 @@ const ScreenshotInfoButton = () => {
 
           <TabsContent value="web" className="space-y-4">
             <div className="space-y-2">
-              <h3 className="font-semibold">Mac OS</h3>
+              <SectionHeading as="h3">Mac OS</SectionHeading>
 
               <p className="text-muted-foreground">Use Screenshot</p>
 
@@ -137,7 +138,7 @@ const ScreenshotInfoButton = () => {
             </div>
 
             <div className="space-y-2">
-              <h3 className="font-semibold">Windows</h3>
+              <SectionHeading as="h3">Windows</SectionHeading>
 
               <p className="text-muted-foreground">Use Snipping Tool</p>
 

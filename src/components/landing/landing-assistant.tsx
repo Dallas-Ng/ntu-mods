@@ -20,7 +20,7 @@ const LandingAssistant = () => {
           <h2 className="max-w-xl text-3xl leading-[1.15] font-bold tracking-tight text-balance md:text-5xl md:leading-[1.1]">
             Ask Claude or ChatGPT about NTU
           </h2>
-          <p className="text-foreground/80 max-w-md text-base leading-relaxed md:text-lg">
+          <p className="text-foreground max-w-md text-base leading-relaxed md:text-lg">
             Add NTUMods once and your assistant looks up modules, class indexes
             and exam dates for you. No sign-in, and nothing about you is shared.
           </p>

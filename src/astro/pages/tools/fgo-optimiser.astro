@@ -130,7 +130,7 @@ const FAQ = [
     <SectionHeading id="about-fgo">
       About the Flexible Grading Option
     </SectionHeading>
-    <p class="text-muted-foreground text-sm leading-relaxed">
+    <p class="text-sm leading-relaxed">
       The Flexible Grading Option (FGO) lets NTU undergraduates convert eligible
       course grades into Pass (P) or No Record (NR) so they do not affect CGPA.
       Most programmes allow 21 or 24 AU across the degree, with at most 12 AU of
@@ -165,7 +165,7 @@ const FAQ = [
               <p class="group-hover:text-primary text-sm leading-snug font-medium">
                 {title}
               </p>
-              <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
+              <p class="text-muted-foreground mt-1 text-sm leading-relaxed">
                 {description}
               </p>
             </a>
@@ -180,8 +180,8 @@ const FAQ = [
     {
       FAQ.map(({ question, answer }) => (
         <div class="space-y-1">
-          <h3 class="text-sm font-medium">{question}</h3>
-          <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+          <SectionHeading as="h3">{question}</SectionHeading>
+          <p class="text-sm leading-relaxed">{answer}</p>
         </div>
       ))
     }

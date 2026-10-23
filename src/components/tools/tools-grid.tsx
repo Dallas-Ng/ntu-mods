@@ -93,6 +93,7 @@ const WallpaperPreview = () => (
     aria-hidden>
     <div className="bg-muted w-44 space-y-1.5 rounded-t-[2rem] border-[3px] border-b-0 px-3 pt-3 pb-0">
       <div className="bg-foreground/20 mx-auto h-1.5 w-12 rounded-full" />
+      {/* Miniature timetable: grid exception to the type scale. */}
       <div className="text-muted-foreground pt-0.5 text-center text-[10px] font-medium">
         Mon
       </div>

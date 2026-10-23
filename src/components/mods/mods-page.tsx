@@ -16,7 +16,7 @@ import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
@@ -459,12 +459,12 @@ function ModuleResults({
 
           return (
             <div key={key} className="space-y-2">
-              <h3 className="text-sm font-semibold">
+              <SectionHeading as="h3">
                 {label}{" "}
                 <span className="text-muted-foreground">
                   ({modules.length})
                 </span>
-              </h3>
+              </SectionHeading>
               {renderModules(visible, footer)}
             </div>
           )

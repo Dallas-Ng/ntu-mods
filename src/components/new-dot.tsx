@@ -44,6 +44,8 @@ export function NewDot({
   )
 }
 
+// sm (10px) is below the type scale on purpose: a pill that sits beside a nav
+// label or on an icon has no room for more.
 const NEW_BADGE_SIZES = {
   sm: "px-1.5 py-0.5 text-[10px] leading-none",
   md: "px-2.5 py-0.5 text-xs",

@@ -113,7 +113,7 @@ const AssistantPreview = ({ compact = false }: { compact?: boolean }) => {
               </div>
             </Reveal>
             <Reveal open={tool}>
-              <p className="text-muted-foreground flex w-fit items-center gap-1.5 pt-2.5 text-[13px]">
+              <p className="text-muted-foreground flex w-fit items-center gap-1.5 pt-2.5 text-xs">
                 <ClaudeIcon
                   className="size-3.5"
                   style={{ color: CLAUDE_COLOUR }}

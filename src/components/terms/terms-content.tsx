@@ -5,8 +5,8 @@ import Header, { SectionHeading } from "@/components/header"
 
 const TermsContent = () => {
   return (
-    <Container size="sm" className="text-muted-foreground space-y-6">
-      <div className="text-foreground">
+    <Container size="sm" className="space-y-6">
+      <div>
         <Header title="Terms of Use" subtitle="Last Updated: 23 October 2026" />
       </div>
 

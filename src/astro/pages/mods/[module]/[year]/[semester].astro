@@ -11,7 +11,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { TextLink } from "@/components/ui/text-link"
 import Breadcrumbs from "@/components/breadcrumbs"
-import { SectionHeading } from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -93,13 +93,14 @@ const crumbs = [
   <div class="mt-4 flex flex-col gap-6 xl:flex-row">
     <div class="w-full xl:w-3/6">
       <Breadcrumbs breadcrumbs={crumbs} />
-      <h1 class="mt-2 text-3xl">{formatTitle(moduleData.title)}</h1>
-      <p class="text-muted-foreground mt-1 text-sm">{semLabel}</p>
+      <Header
+        title={formatTitle(moduleData.title)}
+        subtitle={semLabel}
+        className="mt-2"
+      />
       {
         moduleData.description && (
-          <p class="text-muted-foreground mt-4 text-sm leading-relaxed">
-            {moduleData.description}
-          </p>
+          <p class="mt-4 text-sm leading-relaxed">{moduleData.description}</p>
         )
       }
     </div>

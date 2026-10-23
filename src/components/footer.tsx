@@ -92,7 +92,7 @@ const Footer = () => {
                       target: "_blank",
                       rel: "noopener noreferrer"
                     })}
-                    className="text-foreground/80 hover:text-primary transition-colors">
+                    className="text-foreground hover:text-primary transition-colors">
                     {link.label}
                   </a>
                 </li>

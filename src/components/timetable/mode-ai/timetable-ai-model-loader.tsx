@@ -24,7 +24,7 @@ const TimetableAiModelLoader = ({
           <BotIcon className="text-muted-foreground size-5" />
           <span className="text-sm font-medium">AI Assistant</span>
         </div>
-        <p className="text-muted-foreground text-xs">
+        <p className="text-muted-foreground text-sm">
           Your browser doesn&apos;t support WebGPU, which is needed to run the
           AI locally.
         </p>
@@ -87,7 +87,7 @@ const TimetableAiModelLoader = ({
         <BotIcon className="text-muted-foreground size-5" />
         <span className="text-sm font-medium">AI Assistant</span>
       </div>
-      <p className="text-muted-foreground text-xs">
+      <p className="text-muted-foreground text-sm">
         Chat with a local AI to plan your timetable preferences. The model runs
         entirely in your browser — no data is sent anywhere.
       </p>

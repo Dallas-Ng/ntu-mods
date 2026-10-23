@@ -418,7 +418,7 @@ const SettingsForm = ({
               ? `${config.blacklistedTimeslots.length} slot${config.blacklistedTimeslots.length !== 1 ? "s" : ""} blocked`
               : "No slots blocked"}
           </span>
-          <span className="text-muted-foreground/60">Edit</span>
+          <span className="text-muted-foreground">Edit</span>
         </button>
       </div>
 
@@ -597,7 +597,7 @@ const TimetableGenerationConfig = () => {
           <Settings2Icon className="size-3.5" />
           <span>Generation Settings</span>
         </div>
-        <span className="text-muted-foreground/60 text-xs">Edit</span>
+        <span className="text-muted-foreground text-xs">Edit</span>
       </button>
 
       {/* Settings summary chips */}

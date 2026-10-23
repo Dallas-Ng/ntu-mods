@@ -278,12 +278,12 @@ const FaqContent = ({ children, mobileNav }: Props) => {
                     id={id}
                     key={id}
                     className="bg-muted scroll-mt-20 space-y-3 rounded-2xl p-5">
-                    <h3 className="text-xl font-semibold">
+                    <SectionHeading as="h3">
                       {question}
                       <HeadingAnchor id={id} label={question} />
-                    </h3>
+                    </SectionHeading>
 
-                    <p className="text-muted-foreground text-sm">{answer}</p>
+                    <p className="text-sm leading-relaxed">{answer}</p>
                   </section>
                 )
               )}

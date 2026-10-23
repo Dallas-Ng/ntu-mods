@@ -122,7 +122,7 @@ const FAQ = [
     <SectionHeading id="about-cgpa">
       About NTU honours classification
     </SectionHeading>
-    <p class="text-muted-foreground text-sm leading-relaxed">
+    <p class="text-sm leading-relaxed">
       Your NTU honours class depends on your final CGPA, the AU-weighted average
       of grade points across every letter-graded module. For most honours
       degrees, Highest Distinction needs 4.50, Distinction 4.00, Merit 3.50 and
@@ -157,7 +157,7 @@ const FAQ = [
               <p class="group-hover:text-primary text-sm leading-snug font-medium">
                 {title}
               </p>
-              <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
+              <p class="text-muted-foreground mt-1 text-sm leading-relaxed">
                 {description}
               </p>
             </a>
@@ -172,8 +172,8 @@ const FAQ = [
     {
       FAQ.map(({ question, answer }) => (
         <div class="space-y-1">
-          <h3 class="text-sm font-medium">{question}</h3>
-          <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+          <SectionHeading as="h3">{question}</SectionHeading>
+          <p class="text-sm leading-relaxed">{answer}</p>
         </div>
       ))
     }

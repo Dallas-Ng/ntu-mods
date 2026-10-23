@@ -491,7 +491,7 @@ table td {
 /* "#" link beside a heading (articles, FAQ, links, developers): hidden until
    the heading is hovered or the link is focused. */
 .heading-anchor {
-  @apply text-foreground/50 hover:text-foreground ml-2 font-normal no-underline opacity-0 transition-opacity focus-visible:opacity-100;
+  @apply text-muted-foreground hover:text-foreground ml-2 font-normal no-underline opacity-0 transition-opacity focus-visible:opacity-100;
 }
 
 :is(h1, h2, h3, h4):hover > .heading-anchor {
@@ -563,13 +563,13 @@ html {
     @apply scroll-mt-28 text-base font-semibold;
   }
   .dev-docs p {
-    @apply text-foreground/80 text-sm;
+    @apply text-foreground text-sm;
   }
   .dev-docs ul {
-    @apply text-foreground/80 list-disc space-y-1.5 pl-5 text-sm;
+    @apply text-foreground list-disc space-y-1.5 pl-5 text-sm;
   }
   .dev-docs ol {
-    @apply text-foreground/80 list-decimal space-y-1.5 pl-5 text-sm;
+    @apply text-foreground list-decimal space-y-1.5 pl-5 text-sm;
   }
   .dev-docs :is(p, li, td) a {
     @apply text-primary underline underline-offset-2;

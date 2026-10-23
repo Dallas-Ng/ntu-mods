@@ -19,6 +19,29 @@ state/          Zustand stores
 types/          Global types
 ```
 
+## Type and colour
+
+Five text sizes, each with one job:
+
+| Size             | Use                                                                                                                |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------ |
+| 30px `text-3xl`  | Page title, through `Header` only                                                                                  |
+| 20px `text-xl`   | Section heading: `SectionHeading`                                                                                  |
+| 16px `text-base` | Sub-heading and card title (`SectionHeading as="h3"`), the line under a page title, article text, inputs on phones |
+| 14px `text-sm`   | Default: body text, descriptions, buttons, navigation, table cells, form labels                                    |
+| 12px `text-xs`   | Secondary details only: hints under a field, captions, dates, counts, uppercase labels                             |
+
+No other sizes, except the timetable grid (and its miniature previews), the campus map and `NewBadge`, whose space is fixed. The landing page's display headings are also exempt.
+
+Two text colours:
+
+- `text-foreground` (black, white in dark mode): what people read. Headings, body text, FAQ answers, legal text, values, labels, the active nav item.
+- `text-muted-foreground` (grey): what supports it. The line under a title, card descriptions, hints, captions, dates and counts, inactive nav items, icons.
+
+No in-between shades such as `text-foreground/70`.
+
+Shared pieces for the rest: `TextLink` and `ExternalLinkIcon` (links), `CopyButton`, `ResponsiveModal` with `modal-parts` and `ConfirmDialog` (dialogs, never `confirm()`), `Alert`, `NewBadge`, and `ArticleToc` / `SideNavDrawer` / `side-nav` styles (side navs).
+
 ## Rendering model
 
 Cloudflare Workers has no filesystem, so every route is prerendered at build time (plain Node, via the adapter's `prerenderEnvironment`) except:

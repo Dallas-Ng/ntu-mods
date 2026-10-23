@@ -125,7 +125,7 @@ const ChangelogReleaseSection = ({
       {isUnseen && (
         <NewBadge className="absolute top-4 right-4 md:top-6 md:right-6" />
       )}
-      <p className="text-foreground/75 text-sm">{release.date}</p>
+      <p className="text-foreground text-sm">{release.date}</p>
       <h2 className="mt-1 text-xl font-semibold">
         <a
           href={`#${slug}`}

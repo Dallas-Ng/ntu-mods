@@ -83,7 +83,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
         onKeyDown={onKeyDown}
         placeholder="Find a feature or tool"
         aria-label="Find a feature or tool"
-        className="bg-muted placeholder:text-foreground/60 focus-visible:ring-primary h-14 w-full rounded-xl px-5 text-lg font-semibold tracking-tight outline-none focus-visible:ring-2 md:h-16 md:px-8 md:text-2xl"
+        className="bg-muted placeholder:text-muted-foreground focus-visible:ring-primary h-14 w-full rounded-xl px-5 text-lg font-semibold tracking-tight outline-none focus-visible:ring-2 md:h-16 md:px-8 md:text-2xl"
       />
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[7fr_5fr]">

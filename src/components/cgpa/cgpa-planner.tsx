@@ -426,7 +426,7 @@ const CgpaPlanner = () => {
                       <div className="relative mx-2 h-5">
                         <span
                           className={cn(
-                            "text-primary absolute bottom-0 flex flex-col text-[11px] font-medium whitespace-nowrap",
+                            "text-primary absolute bottom-0 flex flex-col text-xs font-medium whitespace-nowrap",
                             active.required > 4
                               ? "-translate-x-full items-end"
                               : active.required < 2

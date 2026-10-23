@@ -280,7 +280,7 @@ const pageDescription =
                 <ArticleThumb text={article.thumbnailText || article.title} />
               </div>
 
-              <div class="text-foreground/70 not-prose mb-6 border-b pb-4 text-sm sm:mb-8 sm:pb-5">
+              <div class="text-muted-foreground not-prose mb-6 border-b pb-4 text-sm sm:mb-8 sm:pb-5">
                 {formatLongDate(article.date)} · {article.readingTime} ·{" "}
                 {article.author}
                 <ArticleViewTracker client:idle slug={slug} />
@@ -307,7 +307,7 @@ const pageDescription =
                     class="group bg-muted hover:bg-accent flex flex-col overflow-hidden rounded-2xl transition-colors">
                     <ArticleThumb text={item.thumbnailText || item.title} />
                     <div class="flex-1 p-3">
-                      <div class="text-foreground/70 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
+                      <div class="text-muted-foreground flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
                         <span class="bg-primary/10 text-primary dark:bg-background dark:text-muted-foreground rounded px-1.5 py-0.5">
                           {item.category}
                         </span>
@@ -316,7 +316,7 @@ const pageDescription =
                       <p class="group-hover:text-primary mt-2 line-clamp-2 text-sm font-medium break-words transition-colors">
                         {item.title}
                       </p>
-                      <p class="text-foreground/80 mt-1.5 line-clamp-2 text-xs leading-5 break-words">
+                      <p class="text-foreground mt-1.5 line-clamp-2 text-xs leading-5 break-words">
                         {item.description}
                       </p>
                     </div>

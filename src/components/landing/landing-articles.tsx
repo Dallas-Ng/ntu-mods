@@ -18,7 +18,7 @@ const POPULAR_ARTICLE_SLUGS: string[] = [
 ]
 
 const Meta = ({ a }: { a: Article }) => (
-  <p className="text-foreground/75 text-sm">
+  <p className="text-foreground text-sm">
     {a.category} · {formatShortDate(a.date)} · {a.readingTime}
   </p>
 )
@@ -57,7 +57,7 @@ const LandingArticles = async () => {
             <h3 className="line-clamp-2 text-xl leading-tight font-bold tracking-tight md:text-2xl">
               {lead.title}
             </h3>
-            <p className="text-foreground/80 line-clamp-3 text-base">
+            <p className="text-foreground line-clamp-3 text-base">
               {lead.description}
             </p>
           </div>

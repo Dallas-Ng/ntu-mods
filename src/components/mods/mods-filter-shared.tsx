@@ -349,7 +349,7 @@ export function DaysPicker({
           value: String(d),
           label: TRUN_DAY_MAP[d as keyof typeof TRUN_DAY_MAP]
         }))}
-        className="[&_[data-slot=toggle-group-item]]:h-9 [&_[data-slot=toggle-group-item]]:text-[13px]"
+        className="[&_[data-slot=toggle-group-item]]:h-9 [&_[data-slot=toggle-group-item]]:text-sm"
       />
     </div>
   )

@@ -289,7 +289,7 @@ const SitemapContent = async () => {
               id={`modules-${group.prefix.toLowerCase()}`}
               key={group.prefix}
               className="scroll-mt-20 border-t pt-6">
-              <h3 className="text-lg font-semibold">{group.prefix}</h3>
+              <SectionHeading as="h3">{group.prefix}</SectionHeading>
 
               <div className="mt-3 grid gap-x-4 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
                 {group.modules.map((moduleItem) => (

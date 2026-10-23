@@ -67,13 +67,13 @@ const modsJsonLd = collectionPageJsonLd({
     <SectionHeading id="mods-about">
       About the NTU module browser
     </SectionHeading>
-    <p class="text-muted-foreground text-sm leading-relaxed text-pretty">
+    <p class="text-sm leading-relaxed text-pretty">
       Search every module offered at NTU by code or title, and narrow the
       results by module type, school, level, day and time. Each module page
       lists its academic units, prerequisites, mutually exclusive modules, exam
       date, and every class index with its timeslots and venues.
     </p>
-    <p class="text-muted-foreground text-sm leading-relaxed text-pretty">
+    <p class="text-sm leading-relaxed text-pretty">
       The browser currently covers {coverage}, and earlier semesters are
       available back to AY2014. Module data comes from NTU's public course and
       exam timetables and is refreshed each semester. Add any module straight to
@@ -92,7 +92,7 @@ const modsJsonLd = collectionPageJsonLd({
           <details class="text-sm">
             <summary class="text-muted-foreground hover:text-foreground cursor-pointer py-1">
               {prefix}
-              <span class="text-muted-foreground/70 ml-1">({list.length})</span>
+              <span class="text-muted-foreground ml-1">({list.length})</span>
             </summary>
             <ul class="mb-2 space-y-1 pl-4 text-xs">
               {list.map(({ code, title }) => (

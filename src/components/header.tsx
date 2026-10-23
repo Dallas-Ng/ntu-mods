@@ -29,7 +29,10 @@ const Header = (props: Props) => {
   )
 }
 
-/** A section title under the page Header: h2 by default. */
+/**
+ * A heading inside the page: h2 for sections (20px), h3 for sub-sections and
+ * card titles (16px). The page title (30px) is Header.
+ */
 export const SectionHeading = ({
   as: Tag = "h2",
   className,
@@ -37,7 +40,8 @@ export const SectionHeading = ({
 }: React.ComponentProps<"h2"> & { as?: "h2" | "h3" }) => (
   <Tag
     className={cn(
-      "scroll-mt-28 text-xl font-semibold tracking-tight",
+      "scroll-mt-28 font-semibold",
+      Tag === "h2" ? "text-xl tracking-tight" : "text-base",
       className
     )}
     {...props}

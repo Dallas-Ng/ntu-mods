@@ -155,9 +155,9 @@ const ModsAddToTimetableButton = ({
       title={inAnyPlan ? "In timetable" : "Add to timetable"}
       className={cn("gap-1.5", triggerClassName)}>
       {inAnyPlan ? (
-        <CalendarCheck className="text-primary size-3.5 shrink-0" />
+        <CalendarCheck className="text-primary size-4 shrink-0" />
       ) : (
-        <CalendarPlus className="size-3.5 shrink-0" />
+        <CalendarPlus className="size-4 shrink-0" />
       )}
       {textEl}
     </Button>

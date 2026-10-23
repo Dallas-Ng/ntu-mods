@@ -103,7 +103,7 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
                 onClick={() => setTargetPlan(i)}
                 aria-pressed={targetPlan === i}
                 className={cn(
-                  "h-8 max-w-full cursor-pointer truncate rounded-md border px-3 text-sm transition-colors",
+                  "bg-muted h-8 max-w-full cursor-pointer truncate rounded-md px-3 text-sm transition-colors",
                   targetPlan === i
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"

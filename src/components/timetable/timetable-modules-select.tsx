@@ -22,7 +22,7 @@ import {
   CommandItem,
   CommandList
 } from "@/components/ui/command"
-import { textLinkVariants } from "@/components/ui/text-link"
+import { LinkArrow, textLinkVariants } from "@/components/ui/text-link"
 import { CourseModal } from "@/components/timetable/custom-course-editor"
 
 const TimetableModulesSelect = () => {
@@ -169,7 +169,8 @@ const TimetableModulesSelect = () => {
                         textLinkVariants({ variant: "muted" }),
                         "text-foreground mt-2 text-xs"
                       )}>
-                      Add &quot;{inputValue}&quot; as a custom block →
+                      Add &quot;{inputValue}&quot; as a custom block
+                      <LinkArrow className="ml-1 inline size-3 align-[-1px]" />
                     </button>
                   </div>
                 </CommandItem>

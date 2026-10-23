@@ -85,7 +85,7 @@ const TimetableOverview = () => {
                       variant="subtle"
                       className="group inline-flex items-center gap-1">
                       {moduleTitle}
-                      <ExternalLinkIcon className="size-3.5 transition-colors group-hover:text-current" />
+                      <ExternalLinkIcon className="size-3 transition-colors group-hover:text-current" />
                     </TextLink>
                   </td>
 

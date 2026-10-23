@@ -75,7 +75,7 @@ const TimetableCopyButton = () => {
                   onClick={() => setTarget(i)}
                   aria-pressed={target === i}
                   className={cn(
-                    "h-8 max-w-full cursor-pointer truncate rounded-md border px-3 text-sm transition-colors",
+                    "bg-muted h-8 max-w-full cursor-pointer truncate rounded-md px-3 text-sm transition-colors",
                     target === i
                       ? "bg-foreground text-background border-transparent"
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"

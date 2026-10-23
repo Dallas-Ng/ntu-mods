@@ -61,7 +61,7 @@ const FeedbackSection = () => {
                       id: Date.now()
                     })
                   }
-                  className="bg-background hover:bg-accent flex w-full cursor-pointer items-center justify-between gap-4 rounded-2xl border px-4 py-3 text-left text-sm font-medium transition-[background-color,transform] duration-150 active:scale-[0.99]">
+                  className="bg-background hover:bg-accent flex w-full cursor-pointer items-center justify-between gap-4 rounded-2xl px-4 py-3 text-left text-sm font-medium transition-[background-color,transform] duration-150 active:scale-[0.99]">
                   {label}
                   <ArrowDown className="text-muted-foreground size-4 shrink-0 lg:hidden" />
                   <ArrowRight className="text-muted-foreground hidden size-4 shrink-0 lg:block" />
@@ -71,10 +71,7 @@ const FeedbackSection = () => {
           </ul>
         </div>
 
-        <FeedbackCard
-          divClassName="bg-background border sm:p-6"
-          starter={starter}
-        />
+        <FeedbackCard divClassName="bg-background sm:p-6" starter={starter} />
       </div>
     </section>
   )

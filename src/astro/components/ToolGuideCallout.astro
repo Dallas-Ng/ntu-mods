@@ -1,5 +1,8 @@
 ---
+import { BookOpen } from "lucide-react"
+
 import { cardVariants } from "@/components/ui/card"
+import { CardCta } from "@/components/ui/text-link"
 
 interface Props {
   href: string
@@ -20,22 +23,7 @@ const { href, title, description } = Astro.props
   ]}>
   <span
     class="bg-background text-foreground flex size-10 shrink-0 items-center justify-center rounded-xl">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true">
-      <path d="M12 7v14"></path>
-      <path
-        d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
-      ></path>
-    </svg>
+    <BookOpen className="size-5" aria-hidden="true" />
   </span>
   <span class="min-w-0 flex-1 space-y-0.5">
     <span
@@ -49,7 +37,5 @@ const { href, title, description } = Astro.props
       {description}
     </span>
   </span>
-  <span class="text-foreground hidden shrink-0 text-sm font-medium sm:inline">
-    Read the guide →
-  </span>
+  <CardCta className="hidden shrink-0 sm:inline-flex">Read the guide</CardCta>
 </a>

@@ -155,7 +155,7 @@ export default function ModsPrerequisiteGraph({
   if (!hasRequires && !hasRequiredBy) return null
 
   return (
-    <div className="rounded-2xl border p-5">
+    <div className="bg-muted rounded-2xl p-5">
       <SectionHeading className="mb-6">Prerequisite graph</SectionHeading>
 
       <div ref={containerRef} className="relative">

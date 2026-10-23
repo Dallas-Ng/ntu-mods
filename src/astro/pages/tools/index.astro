@@ -1,4 +1,6 @@
 ---
+import { ChevronRight } from "lucide-react"
+
 import { siteConfig } from "@/config/site"
 import { collectionPageJsonLd } from "@/lib/json-ld"
 import Header, { SectionHeading } from "@/components/header"
@@ -69,12 +71,12 @@ const MORE = [
         MORE.map(({ href, title, desc }) => (
           <a
             href={href}
-            class="hover:bg-accent group flex items-start justify-between gap-3 rounded-2xl border p-4 transition-colors">
+            class="bg-muted hover:bg-accent group flex items-start justify-between gap-3 rounded-2xl p-4 transition-colors">
             <span class="min-w-0 space-y-1">
               <span class="block text-sm font-semibold">{title}</span>
               <span class="text-muted-foreground block text-sm">{desc}</span>
             </span>
-            <span class="text-muted-foreground mt-0.5 shrink-0">→</span>
+            <ChevronRight className="text-muted-foreground mt-0.5 size-4 shrink-0" />
           </a>
         ))
       }

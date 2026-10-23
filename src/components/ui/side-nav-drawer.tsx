@@ -65,7 +65,7 @@ export const SideNavDrawer = ({
           <span className="text-muted-foreground shrink-0 text-sm">
             {title}
           </span>
-          <ChevronRight className="text-muted-foreground size-3.5 shrink-0" />
+          <ChevronRight className="text-muted-foreground size-4 shrink-0" />
           <span className="truncate text-sm font-medium">{label}</span>
         </button>
       )}

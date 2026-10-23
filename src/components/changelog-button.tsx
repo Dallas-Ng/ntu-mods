@@ -31,7 +31,7 @@ const ChangelogButton = () => {
       <a
         href="/changelog"
         onClick={() => track("changelog_opened", { source: "navbar_icon" })}>
-        <Bell className="size-5" />
+        <Bell className="size-4" />
         {unseen > 0 && (
           <NewBadge className="absolute -top-1 -right-1 h-4 min-w-4 px-1">
             {unseen > 9 ? "9+" : unseen}

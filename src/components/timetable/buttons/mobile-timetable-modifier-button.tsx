@@ -32,7 +32,7 @@ const MobileTimetableModifierButton = ({ hidden = false }: Props) => {
             the only rounded-full control in an app that's rounded-md
             everywhere else (Plan switcher, Pick indexes, ...). */}
         <Button className="ring-primary/30 fixed inset-x-4 bottom-4 z-30 h-14 gap-2 text-base font-semibold shadow-xl ring-4">
-          <ListPlus className="size-5" />
+          <ListPlus className="size-4" />
           Add mods
         </Button>
       </DrawerTrigger>

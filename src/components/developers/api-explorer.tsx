@@ -242,7 +242,7 @@ const ApiExplorer = ({ groups }: { groups: ApiGroup[] }) => {
                 key={op.id}
                 value={op.id}
                 id={op.id}
-                className="scroll-mt-28 rounded-xl border px-4 last:border-b">
+                className="bg-muted scroll-mt-28 rounded-xl px-4">
                 <AccordionTrigger className="items-center py-3 hover:no-underline">
                   <span className="flex min-w-0 flex-1 flex-col gap-1">
                     <span className="flex flex-wrap items-center gap-x-3 gap-y-1">

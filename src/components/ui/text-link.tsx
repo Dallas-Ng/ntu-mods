@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -31,14 +31,66 @@ const textLinkVariants = cva("cursor-pointer transition-colors", {
 function TextLink({
   className,
   variant,
+  arrow = false,
+  children,
   ...props
-}: React.ComponentProps<"a"> & VariantProps<typeof textLinkVariants>) {
+}: React.ComponentProps<"a"> &
+  VariantProps<typeof textLinkVariants> & {
+    /** Ends the link with LinkArrow, for "go to" links like "See all". */
+    arrow?: boolean
+  }) {
   return (
     <a
       data-slot="text-link"
-      className={cn(textLinkVariants({ variant }), className)}
+      className={cn(
+        textLinkVariants({ variant }),
+        arrow && "group inline-flex items-center gap-1",
+        className
+      )}
+      {...props}>
+      {children}
+      {arrow && <LinkArrow />}
+    </a>
+  )
+}
+
+/**
+ * The one "go to" arrow. It nudges right while its link (the nearest `group`)
+ * is hovered. Use ChevronRight for rows in a list and ExternalLinkIcon for
+ * links that leave the site; never a typed → or ›.
+ */
+function LinkArrow({
+  className,
+  ...props
+}: React.ComponentProps<typeof ArrowRight>) {
+  return (
+    <ArrowRight
+      aria-hidden
+      className={cn(
+        "size-4 shrink-0 transition-transform group-hover:translate-x-0.5 motion-reduce:transition-none",
+        className
+      )}
       {...props}
     />
+  )
+}
+
+/** The call to action at the foot of a link card: "Read the guide" and an arrow. */
+function CardCta({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"span">) {
+  return (
+    <span
+      className={cn(
+        "text-primary inline-flex items-center gap-1 text-sm font-medium",
+        className
+      )}
+      {...props}>
+      {children}
+      <LinkArrow />
+    </span>
   )
 }
 
@@ -56,4 +108,4 @@ function ExternalLinkIcon({
   )
 }
 
-export { ExternalLinkIcon, TextLink, textLinkVariants }
+export { CardCta, ExternalLinkIcon, LinkArrow, TextLink, textLinkVariants }

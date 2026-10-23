@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { ArrowUp } from "lucide-react"
 
 import { CLAUDE_COLOUR, ClaudeIcon, OpenAIIcon } from "@/components/brand-icons"
 
@@ -140,7 +141,7 @@ const AssistantPreview = ({ compact = false }: { compact?: boolean }) => {
           )}
         </span>
         <span className="bg-primary text-primary-foreground grid size-7 shrink-0 place-items-center rounded-lg">
-          ↑
+          <ArrowUp aria-hidden className="size-4" />
         </span>
       </div>
     </div>

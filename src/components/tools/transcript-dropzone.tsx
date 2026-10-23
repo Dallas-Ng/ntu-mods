@@ -75,7 +75,7 @@ export function TranscriptDropzone({
         </Button>
       </div>
       <p className="text-muted-foreground max-w-md text-xs text-pretty">
-        <Lock className="mr-1.5 inline size-3.5 align-[-2px]" />
+        <Lock className="mr-1.5 inline size-3 align-[-2px]" />
         Your PDF is read in your browser and never uploaded.{" "}
         <TextLink
           href={TRANSCRIPT_URL}

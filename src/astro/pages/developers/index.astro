@@ -55,7 +55,7 @@ const practices: [string, string][] = [
         DEV_PAGES.filter((page) => page.href !== "/developers").map((page) => (
           <a
             href={page.href}
-            class="hover:bg-accent space-y-1 rounded-2xl border p-4 transition-colors">
+            class="bg-muted hover:bg-accent space-y-1 rounded-2xl p-4 transition-colors">
             <span class="block font-semibold">{page.label}</span>
             <span class="text-foreground block text-sm">
               {page.description}
@@ -73,7 +73,7 @@ const practices: [string, string][] = [
         label="Terms of use (no opt out)"
       />
     </h2>
-    <div class="bg-primary-subtle space-y-3 rounded-2xl border p-5 text-sm">
+    <div class="bg-primary-subtle space-y-3 rounded-2xl p-5 text-sm">
       <p>
         By using any API, file or the MCP server on this page, you accept these
         terms. There is no opt out. If you do not accept them, do not use them.

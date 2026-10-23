@@ -211,7 +211,7 @@ const SessionRowEditor = ({
   }
 
   return (
-    <div className="bg-muted space-y-3 rounded-lg border p-3">
+    <div className="bg-muted space-y-3 rounded-lg p-3">
       {/* Type selector + remove */}
       <div className="flex items-start gap-2">
         <div className="flex-1 space-y-1.5">
@@ -259,7 +259,7 @@ const SessionRowEditor = ({
           disabled={!canRemove}
           onClick={onRemove}
           className="text-muted-foreground hover:text-destructive mt-0.5 size-8 shrink-0">
-          <Trash2 className="size-3.5" />
+          <Trash2 className="size-4" />
         </Button>
       </div>
 
@@ -276,7 +276,7 @@ const SessionRowEditor = ({
                 onClick={() => toggleDay(day)}
                 aria-pressed={active}
                 className={cn(
-                  "focus-visible:ring-ring/50 h-6 cursor-pointer rounded border px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px]",
+                  "bg-muted focus-visible:ring-ring/50 h-6 cursor-pointer rounded px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px]",
                   active
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -475,7 +475,7 @@ export const CourseModal = ({
                 <div
                   key={index._key}
                   className={cn(
-                    "flex h-7 items-center rounded-md border text-xs font-medium transition-colors",
+                    "bg-muted flex h-7 items-center rounded-md text-xs font-medium transition-colors",
                     isActive
                       ? "bg-foreground text-background border-transparent"
                       : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -507,7 +507,7 @@ export const CourseModal = ({
                 size="sm"
                 onClick={addIndex}
                 className="text-muted-foreground h-7 gap-1 px-2 text-xs">
-                <Plus className="size-3.5" />
+                <Plus className="size-3" />
                 Option
               </Button>
             )}
@@ -545,7 +545,7 @@ export const CourseModal = ({
             size="sm"
             onClick={addSession}
             className="text-muted-foreground h-8 gap-1.5">
-            <Plus className="size-3.5" />
+            <Plus className="size-4" />
             Add session
           </Button>
         </div>
@@ -666,7 +666,7 @@ const CustomCourseEditor = () => {
                           selectCustomCourseIndex(course.id, courseIndex.id)
                         }
                         className={cn(
-                          "focus-visible:ring-ring/50 h-5 cursor-pointer rounded border px-1.5 text-[0.65rem] font-medium transition-colors outline-none focus-visible:ring-[3px]",
+                          "bg-muted focus-visible:ring-ring/50 h-5 cursor-pointer rounded px-1.5 text-[0.65rem] font-medium transition-colors outline-none focus-visible:ring-[3px]",
                           isActive
                             ? "bg-foreground text-background border-transparent"
                             : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -685,7 +685,7 @@ const CustomCourseEditor = () => {
       <button
         className="hover:bg-accent focus-visible:ring-ring/50 mx-4 mt-1 flex w-[calc(100%-2rem)] cursor-pointer items-center justify-center gap-1.5 rounded-md border border-dashed p-2 text-sm transition-colors outline-none focus-visible:ring-[3px]"
         onClick={() => setAddOpen(true)}>
-        <Plus className="size-3.5" />
+        <Plus className="size-4" />
         Add custom block
       </button>
 

@@ -192,7 +192,7 @@ const Navbar = () => {
                 size="icon"
                 variant="ghost"
                 className="md:hidden">
-                <Menu className="size-5" />
+                <Menu className="size-4" />
               </Button>
             </DrawerTrigger>
 

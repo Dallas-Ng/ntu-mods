@@ -45,7 +45,7 @@ const ModsExpandableFields = ({ module }: Props) => {
   if (!hasContent) return null
 
   return (
-    <div className="overflow-hidden rounded-2xl border">
+    <div className="bg-muted overflow-hidden rounded-2xl">
       <button
         onClick={() => setExpanded((v) => !v)}
         aria-expanded={expanded}

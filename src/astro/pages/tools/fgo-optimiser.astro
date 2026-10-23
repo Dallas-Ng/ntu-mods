@@ -6,7 +6,7 @@ import {
   webApplicationJsonLd
 } from "@/lib/json-ld"
 import { cardVariants } from "@/components/ui/card"
-import { TextLink } from "@/components/ui/text-link"
+import { CardCta, TextLink } from "@/components/ui/text-link"
 import Breadcrumbs from "@/components/breadcrumbs"
 import FgoOptimiser from "@/components/fgo/fgo-optimiser"
 import Header, { SectionHeading } from "@/components/header"
@@ -156,7 +156,7 @@ const FAQ = [
         <p class="text-muted-foreground text-sm leading-relaxed">
           {MAIN_GUIDE.description}
         </p>
-        <p class="text-primary pt-1 text-sm font-medium">Read the guide →</p>
+        <CardCta className="pt-1">Read the guide</CardCta>
       </a>
 
       <div class="grid gap-3 sm:grid-cols-3">
@@ -164,7 +164,7 @@ const FAQ = [
           RELATED_GUIDES.map(({ href, title, description }) => (
             <a
               href={href}
-              class="hover:bg-accent group rounded-2xl border p-4 transition-colors">
+              class="bg-muted hover:bg-accent group rounded-2xl p-4 transition-colors">
               <p class="text-sm leading-snug font-medium">{title}</p>
               <p class="text-muted-foreground mt-1 text-sm leading-relaxed">
                 {description}
@@ -186,8 +186,8 @@ const FAQ = [
         </div>
       ))
     }
-    <TextLink href="/tools" variant="action" className="inline-block text-sm">
-      Browse all NTUMods tools →
+    <TextLink href="/tools" variant="action" arrow className="text-sm">
+      Browse all NTUMods tools
     </TextLink>
   </section>
 </BaseLayout>

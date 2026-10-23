@@ -82,8 +82,8 @@ const crumbs = [
       <Alert variant="warning" role="note">
         <AlertDescription className="block">
           Historical snapshot: {semLabel} ·{" "}
-          <TextLink href={getModuleUrl(code)} variant="muted">
-            View current offering →
+          <TextLink href={getModuleUrl(code)} variant="muted" arrow>
+            View current offering
           </TextLink>
         </AlertDescription>
       </Alert>
@@ -120,7 +120,7 @@ const crumbs = [
                 <td>
                   <div class="flex flex-wrap gap-1">
                     {categories.map((cat) => (
-                      <span class="rounded-full border px-2 py-0 text-xs">
+                      <span class="bg-muted rounded-full px-2 py-0 text-xs">
                         {MODULE_CATEGORY[cat]}
                       </span>
                     ))}

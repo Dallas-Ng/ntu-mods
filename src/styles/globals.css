@@ -99,8 +99,8 @@
 
 @layer base {
   /* Colour rules (see src/README.md): every text pair below is at least
-     4.5:1, and a tint that must be noticed also gets a border, because no
-     pale fill stands out from a near-white page on its own. */
+     4.5:1. Surfaces are told apart by fill, not borders, so muted, accent
+     and primary-subtle are set dark enough to show against the page. */
   :root {
     --background: 240 97% 99.2%;
     --foreground: 222.2 84% 4.9%;
@@ -110,12 +110,12 @@
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 221.2 83.2% 50%;
     --primary-foreground: 210 40% 98%;
-    --primary-subtle: 221 83% 94%;
-    --secondary: 235 22% 93%;
+    --primary-subtle: 221 83% 93%;
+    --secondary: 235 22% 91%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 235 22% 95%;
+    --muted: 235 22% 94%;
     --muted-foreground: 215.4 16.3% 41%;
-    --accent: 235 22% 92%;
+    --accent: 235 22% 90.5%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 74% 46%;
     --destructive-foreground: 210 40% 98%;
@@ -489,7 +489,7 @@ table td {
    marks and side rule. (CTA cards are blockquotes too, but they are replaced
    with .article-cta before they get here.) */
 .prose blockquote {
-  @apply bg-primary-subtle text-foreground my-8 rounded-2xl border p-6 text-base leading-relaxed not-italic;
+  @apply bg-primary-subtle text-foreground my-8 rounded-2xl border-0 p-6 text-base leading-relaxed not-italic;
 }
 
 .prose blockquote p {
@@ -600,7 +600,7 @@ html {
   .dev-docs :not(pre) > code,
   .prose :not(pre) > code,
   [data-slot="inline-code"] {
-    @apply bg-muted text-foreground rounded border px-1 py-0.5 font-mono font-normal;
+    @apply bg-accent text-foreground rounded px-1 py-0.5 font-mono font-normal;
   }
 }
 

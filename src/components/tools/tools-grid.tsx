@@ -1,10 +1,11 @@
 "use client"
 
-import { ArrowRight, BookOpen } from "lucide-react"
+import { BookOpen } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
+import { CardCta } from "@/components/ui/text-link"
 import { NewBadge } from "@/components/new-dot"
 import AssistantPreview from "@/components/tools/assistant-preview"
 
@@ -174,10 +175,7 @@ const ToolsGrid = () => (
             </div>
 
             <div className="flex items-center justify-between gap-3">
-              <span className="text-primary inline-flex items-center gap-1.5 text-sm font-semibold whitespace-nowrap">
-                Open the tool{" "}
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-              </span>
+              <CardCta className="whitespace-nowrap">Open the tool</CardCta>
               {tool.guide && (
                 <a
                   href={tool.guide.href}

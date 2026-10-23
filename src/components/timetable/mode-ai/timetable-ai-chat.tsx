@@ -300,14 +300,14 @@ const TimetableAiChat = () => {
   return (
     <div className="flex flex-col gap-3">
       {/* Chat area */}
-      <div className="flex flex-col rounded-lg border">
+      <div className="bg-muted flex flex-col rounded-lg">
         <div className="flex items-center justify-between border-b px-3 py-1.5">
           <span className="text-xs font-medium">AI Assistant</span>
           <button
             onClick={handleReset}
             className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors"
             aria-label="New chat">
-            <RefreshCwIcon className="size-3.5" />
+            <RefreshCwIcon className="size-3" />
           </button>
         </div>
 
@@ -360,7 +360,7 @@ const TimetableAiChat = () => {
             disabled={isChatting || !input.trim()}
             className="text-muted-foreground hover:text-foreground cursor-pointer transition-colors disabled:pointer-events-none disabled:opacity-40"
             aria-label="Send">
-            <SendIcon className="size-3.5" />
+            <SendIcon className="size-3" />
           </button>
         </div>
       </div>

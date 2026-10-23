@@ -160,7 +160,7 @@ const TimetablePlanSwitcher = () => {
           window.setTimeout(() => setRenameOpen(true), 150)
         }}
         className="text-muted-foreground hover:text-foreground mt-1 cursor-pointer gap-2 rounded-none border-t py-3 lg:py-1.5">
-        <Pencil className="size-3.5" />
+        <Pencil className="size-4" />
         Rename this plan
       </CommandItem>
     </Command>

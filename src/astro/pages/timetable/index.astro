@@ -1,6 +1,5 @@
 ---
 import {
-  ArrowRight,
   CalendarPlus,
   ChevronDown,
   Footprints,
@@ -18,6 +17,7 @@ import { formatCount } from "@/lib/format"
 import { webApplicationJsonLd } from "@/lib/json-ld"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import { getLatestSemester, getSemesterCounts } from "@/lib/server/db/repo"
+import { CardCta } from "@/components/ui/text-link"
 import { SectionHeading } from "@/components/header"
 import TimetablePageContent from "@/components/timetable/timetable-page-content"
 import JsonLd from "@/astro/components/JsonLd.astro"
@@ -150,9 +150,9 @@ const GUIDES = [
       class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 max-sm:[&:not([data-open])>li:nth-child(n+4)]:hidden">
       {
         STEPS.map(({ title, body, Icon }) => (
-          <li class="bg-card flex gap-3 rounded-xl border p-4">
+          <li class="bg-muted flex gap-3 rounded-xl p-4">
             <span
-              class="bg-muted flex size-9 shrink-0 items-center justify-center rounded-lg border"
+              class="bg-muted flex size-9 shrink-0 items-center justify-center rounded-lg"
               aria-hidden="true">
               <Icon className="text-primary size-4" />
             </span>
@@ -172,7 +172,7 @@ const GUIDES = [
       type="button"
       aria-expanded="false"
       aria-controls="timetable-steps"
-      class="hover:bg-accent text-foreground -mt-3 flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg border text-sm font-medium transition-colors sm:hidden">
+      class="bg-muted hover:bg-accent text-foreground -mt-3 flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg text-sm font-medium transition-colors sm:hidden">
       <span data-label>Read more</span>
       <ChevronDown className="size-4 transition-transform" data-chevron />
     </button>
@@ -201,17 +201,14 @@ const GUIDES = [
         GUIDES.map(({ href, title, description }) => (
           <a
             href={href}
-            class="bg-card hover:bg-accent group flex flex-col gap-2 rounded-xl border p-5 transition-colors">
+            class="bg-muted hover:bg-accent group flex flex-col gap-2 rounded-xl p-5 transition-colors">
             <SectionHeading as="h3" className="leading-snug">
               {title}
             </SectionHeading>
             <p class="text-muted-foreground text-sm leading-relaxed text-pretty">
               {description}
             </p>
-            <span class="text-primary mt-auto inline-flex items-center gap-1 pt-1 text-sm font-medium">
-              Read the guide
-              <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-            </span>
+            <CardCta className="mt-auto pt-1">Read the guide</CardCta>
           </a>
         ))
       }

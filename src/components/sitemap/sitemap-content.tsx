@@ -282,7 +282,7 @@ const SitemapContent = async () => {
             <a
               key={group.prefix}
               href={`#modules-${group.prefix.toLowerCase()}`}
-              className="bg-muted text-foreground hover:bg-accent rounded-md border px-2 py-1 text-sm transition-colors">
+              className="bg-muted text-foreground hover:bg-accent rounded-md px-2 py-1 text-sm transition-colors">
               {group.prefix}
             </a>
           ))}

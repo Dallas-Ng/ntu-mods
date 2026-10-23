@@ -30,9 +30,9 @@ const NavActions = () => {
           track("settings_theme_changed", { theme: next })
         }}>
         {theme === "light" ? (
-          <Moon className="size-5" />
+          <Moon className="size-4" />
         ) : (
-          <Sun className="size-5" />
+          <Sun className="size-4" />
         )}
       </Button>
       <Button
@@ -43,7 +43,7 @@ const NavActions = () => {
         size="icon"
         className={cn(NAV_ICON, pathname === "/feedback" && "text-foreground")}>
         <a href="/feedback">
-          <MessageSquare className="size-5" />
+          <MessageSquare className="size-4" />
         </a>
       </Button>
     </div>

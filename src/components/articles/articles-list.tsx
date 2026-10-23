@@ -119,7 +119,7 @@ function ArticleCard({
           {showCategory && (
             <>
               <span aria-hidden="true">·</span>
-              <span className="bg-primary-subtle text-primary rounded border px-1.5 py-0.5">
+              <span className="bg-primary-subtle text-primary rounded px-1.5 py-0.5">
                 {article.category}
               </span>
             </>

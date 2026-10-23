@@ -101,7 +101,7 @@ const TimetableCalendarDialog = ({
             <TabsContent
               key={app.name}
               value={app.name}
-              className="space-y-1.5 rounded-lg border p-3 text-sm">
+              className="bg-muted space-y-1.5 rounded-lg p-3 text-sm">
               <p className="font-medium">{app.name}</p>
               <p className="text-muted-foreground text-xs leading-relaxed">
                 {app.steps}

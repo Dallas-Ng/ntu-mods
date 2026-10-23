@@ -129,7 +129,7 @@ export const ModsFilterPills = ({
         }>
         {f.semesterOnly ? (
           <>
-            <Check className="size-3.5" />
+            <Check className="size-4" />
             This semester
           </>
         ) : (

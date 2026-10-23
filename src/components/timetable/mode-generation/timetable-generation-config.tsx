@@ -412,7 +412,7 @@ const SettingsForm = ({
             setBlockOpen(true)
             track("timetable_dialog_opened", { dialog: "blacklist" })
           }}
-          className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-between rounded-md border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
+          className="bg-muted text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-between rounded-md px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
           <span>
             {config.blacklistedTimeslots.length > 0
               ? `${config.blacklistedTimeslots.length} slot${config.blacklistedTimeslots.length !== 1 ? "s" : ""} blocked`
@@ -522,7 +522,7 @@ const ConfigSummary = () => {
       {chips.map((chip) => (
         <span
           key={chip}
-          className="bg-muted text-foreground rounded-md border px-2 py-0.5 text-xs">
+          className="bg-muted text-foreground rounded-md px-2 py-0.5 text-xs">
           {chip}
         </span>
       ))}
@@ -594,7 +594,7 @@ const TimetableGenerationConfig = () => {
         onClick={() => setOpen(true)}
         className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-between rounded-lg border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
         <div className="flex items-center gap-1.5">
-          <Settings2Icon className="size-3.5" />
+          <Settings2Icon className="size-3" />
           <span>Generation Settings</span>
         </div>
         <span className="text-muted-foreground text-xs">Edit</span>

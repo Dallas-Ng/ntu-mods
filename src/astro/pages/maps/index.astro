@@ -1,8 +1,6 @@
 ---
-import { ArrowRight } from "lucide-react"
-
 import { siteConfig } from "@/config/site"
-import { TextLink } from "@/components/ui/text-link"
+import { CardCta, TextLink } from "@/components/ui/text-link"
 import MapsPageContent from "@/components/map/maps-page-content"
 import MapGuide from "@/astro/components/MapGuide.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -38,7 +36,7 @@ const CREDITS = [
 
   <a
     href="/articles/ntu-campus-map-guide"
-    class="bg-card hover:bg-accent group mx-auto mt-12 flex max-w-3xl flex-col overflow-hidden rounded-xl border transition-colors sm:flex-row">
+    class="bg-muted hover:bg-accent group mx-auto mt-12 flex max-w-3xl flex-col overflow-hidden rounded-xl transition-colors sm:flex-row">
     <div class="bg-muted sm:w-80 sm:shrink-0">
       <img
         src="/articles/ntu-campus-map-guide/overview.webp"
@@ -69,13 +67,7 @@ const CREDITS = [
         or tutorial room, read NTU room codes, pick the right level and time the
         walk between back-to-back classes, with screenshots of every step.
       </p>
-      <span
-        class="text-primary mt-1 inline-flex items-center gap-1 text-sm font-medium">
-        Read the guide
-        <ArrowRight
-          className="size-4 transition-transform duration-150 group-hover:translate-x-0.5"
-        />
-      </span>
+      <CardCta className="mt-1">Read the guide</CardCta>
     </div>
   </a>
 

@@ -19,7 +19,7 @@ const TimetableAiModelLoader = ({
 }: Props) => {
   if (error === "webgpu_unsupported") {
     return (
-      <div className="flex flex-col gap-3 rounded-lg border p-4">
+      <div className="bg-muted flex flex-col gap-3 rounded-lg p-4">
         <div className="flex items-center gap-2">
           <BotIcon className="text-muted-foreground size-5" />
           <span className="text-sm font-medium">AI Assistant</span>
@@ -46,7 +46,7 @@ const TimetableAiModelLoader = ({
 
   if (error) {
     return (
-      <div className="flex flex-col gap-3 rounded-lg border p-4">
+      <div className="bg-muted flex flex-col gap-3 rounded-lg p-4">
         <div className="flex items-center gap-2">
           <BotIcon className="text-muted-foreground size-5" />
           <span className="text-sm font-medium">AI Assistant</span>
@@ -63,7 +63,7 @@ const TimetableAiModelLoader = ({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-3 rounded-lg border p-4">
+      <div className="bg-muted flex flex-col gap-3 rounded-lg p-4">
         <div className="flex items-center gap-2">
           <BotIcon className="text-muted-foreground size-5 animate-pulse" />
           <span className="text-sm font-medium">Loading AI model…</span>
@@ -82,7 +82,7 @@ const TimetableAiModelLoader = ({
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border p-4">
+    <div className="bg-muted flex flex-col gap-3 rounded-lg p-4">
       <div className="flex items-center gap-2">
         <BotIcon className="text-muted-foreground size-5" />
         <span className="text-sm font-medium">AI Assistant</span>

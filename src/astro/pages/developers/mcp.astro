@@ -1,4 +1,6 @@
 ---
+import { ChevronRight } from "lucide-react"
+
 import { siteConfig } from "@/config/site"
 import { MCP_CLIENTS } from "@/lib/developers/mcp-clients"
 import { directoryListings, mcpUrl } from "@/lib/developers/mcp-docs"
@@ -61,7 +63,7 @@ const { title, desc } = siteConfig.metatags.developersMcp
     <div class="grid gap-3 sm:grid-cols-2">
       {
         directoryListings.map((l) => {
-          const card = "flex flex-col gap-3 rounded-2xl border p-5 text-left"
+          const card = "bg-muted flex flex-col gap-3 rounded-2xl p-5 text-left"
           const body = (
             <>
               <div class="flex items-start justify-between">
@@ -84,7 +86,7 @@ const { title, desc } = siteConfig.metatags.developersMcp
                 </p>
               </div>
               <p class="text-muted-foreground text-sm">
-                {l.url ? `Open in ${l.name} ›` : "Coming soon"}
+                {l.url ? `Open in ${l.name}` : "Coming soon"}
               </p>
             </>
           )
@@ -109,10 +111,10 @@ const { title, desc } = siteConfig.metatags.developersMcp
       {
         MCP_CLIENTS.map((c) => (
           <a
-            class="hover:bg-accent flex items-center justify-between rounded-2xl border p-4 transition-colors"
+            class="bg-muted hover:bg-accent flex items-center justify-between rounded-2xl p-4 transition-colors"
             href={`/developers/mcp/${c.id}`}>
             <span class="text-sm font-semibold">{c.label}</span>
-            <span class="text-muted-foreground">›</span>
+            <ChevronRight className="text-muted-foreground size-4 shrink-0" />
           </a>
         ))
       }

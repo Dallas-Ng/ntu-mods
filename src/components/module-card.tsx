@@ -15,7 +15,7 @@ export const ModuleCard = ({ module, cardClassName }: ModuleCardProps) => (
   <a key={module.code} href={`/mods/${module.code}`}>
     <div
       className={cn(
-        "hover:bg-accent text-muted-foreground rounded-2xl border p-4 text-sm transition-colors",
+        "bg-muted hover:bg-accent text-muted-foreground rounded-2xl p-4 text-sm transition-colors",
         cardClassName
       )}>
       <p className="font-mono text-xs">{module.code}</p>
@@ -84,7 +84,7 @@ export const ModuleCardDetail = ({
   return (
     <div
       className={cn(
-        "hover:bg-accent group relative flex h-32 flex-col rounded-2xl border p-4 transition-colors",
+        "bg-muted hover:bg-accent group relative flex h-32 flex-col rounded-2xl p-4 transition-colors",
         isCurrentSemester ? "bg-muted border-transparent" : "border-border"
       )}>
       <a
@@ -100,7 +100,7 @@ export const ModuleCardDetail = ({
         </p>
         <div className="mt-auto flex gap-1 overflow-hidden text-xs">
           {!isCurrentSemester && (
-            <span className="text-foreground shrink-0 rounded-full border px-2 py-0.5">
+            <span className="bg-muted text-foreground shrink-0 rounded-full px-2 py-0.5">
               {lastOffered(moduleData)}
             </span>
           )}
@@ -162,7 +162,7 @@ export const ModuleListRow = ({
 
         <div className="text-muted-foreground hidden shrink-0 items-center gap-1 text-xs sm:flex">
           {!isCurrentSemester && (
-            <span className="text-foreground rounded-full border px-2 py-0.5">
+            <span className="bg-muted text-foreground rounded-full px-2 py-0.5">
               {lastOffered(moduleData)}
             </span>
           )}

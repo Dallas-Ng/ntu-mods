@@ -385,7 +385,7 @@ const TimetableActionsDropdown = ({
                           )}>
                           <span
                             className={cn(
-                              "bg-muted flex size-9 shrink-0 items-center justify-center rounded-lg border",
+                              "bg-muted flex size-9 shrink-0 items-center justify-center rounded-lg",
                               t.active && "bg-primary-subtle text-primary"
                             )}>
                             <t.icon className="size-4" />

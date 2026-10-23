@@ -32,7 +32,7 @@ const ScreenshotInfoButton = () => {
         className="text-primary"
         aria-label="How to take a screenshot"
         onClick={() => setDialogOpen(true)}>
-        <BadgeInfo className="size-5" />
+        <BadgeInfo className="size-4" />
       </Button>
 
       <ResponsiveModal

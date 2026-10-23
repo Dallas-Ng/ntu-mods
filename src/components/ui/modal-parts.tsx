@@ -36,7 +36,7 @@ export const ModalOption = ({
   hint?: string
   children: React.ReactNode
 }) => (
-  <div className="flex items-center justify-between gap-4 rounded-lg border p-3">
+  <div className="bg-muted flex items-center justify-between gap-4 rounded-lg p-3">
     <div className="space-y-0.5">
       <p className="text-sm font-medium">{title}</p>
       {hint && <p className="text-muted-foreground text-xs">{hint}</p>}

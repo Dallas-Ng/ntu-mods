@@ -21,7 +21,7 @@ export function TranscriptSource({
   onUpload
 }: Props) {
   return (
-    <div className="bg-primary-subtle flex h-[4.5rem] items-center justify-between gap-3 rounded-2xl border px-4">
+    <div className="bg-primary-subtle flex h-[4.5rem] items-center justify-between gap-3 rounded-2xl px-4">
       <div className="flex min-w-0 items-center gap-3">
         {sample ? (
           <FlaskConical className="text-primary size-5 shrink-0" />

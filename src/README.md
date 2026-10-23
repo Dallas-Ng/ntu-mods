@@ -51,7 +51,18 @@ Surfaces, all fixed tokens (no `bg-muted/50`-style opacity, except see-through g
 | `primary-subtle`                                                 | Blue callouts, active and selected items    |
 | `success`, `warning`, `destructive` (each with a `-subtle` fill) | Status: alerts, changelog tags, API status  |
 
-A pale fill barely shows against the page, so anything that must be noticed (card, chip, inline code, callout) also has a 1px border. No raw Tailwind palette colours (`emerald-500`, `slate-200`) outside the timetable grid, the map and the landing illustrations.
+Borders are for tables (always), form controls, the outline button, floating layers (dialogs, menus, popovers, sticky bars) and dashed drop zones. Everything else (cards, chips, inline code, callouts, alerts, tags, option tiles) has no border and is told apart by its fill. Dividers between rows and sections are fine. No raw Tailwind palette colours (`emerald-500`, `slate-200`) outside the timetable grid, the map and the landing illustrations.
+
+Icons are lucide (stroke 2), sized by context:
+
+| Size     | Use                                                          |
+| -------- | ------------------------------------------------------------ |
+| `size-3` | Beside 12px text                                             |
+| `size-4` | Default: beside 14px text, buttons, menus, icon-only buttons |
+| `size-5` | Leading icon of a card, panel or empty state                 |
+| `size-6` | Drop zones and landing display only                          |
+
+Arrows by meaning: `LinkArrow` (or `TextLink arrow`, or `CardCta` at the foot of a link card) for "go to", `ChevronRight` for opening a row in a list, `ExternalLinkIcon` for leaving the site. Never a typed `→`, `›` or `↗`. Brand logos (`brand-icons.tsx`) keep their own shapes.
 
 Hover, one signal per element:
 

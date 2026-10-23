@@ -28,7 +28,7 @@ const DebugContent = () => {
           variant="outline"
           size="sm"
           className="flex w-fit cursor-pointer items-center gap-1 text-sm">
-          <ArrowLeft className="size-5" />
+          <ArrowLeft className="size-4" />
           Go Back to Timetable
         </Button>
       </a>

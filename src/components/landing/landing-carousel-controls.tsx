@@ -36,7 +36,7 @@ const CircleButton = ({
     aria-label={label}
     onClick={onClick}
     className="bg-background hover:bg-accent relative flex size-9 items-center justify-center rounded-full transition-colors duration-150 motion-reduce:transition-none md:size-10">
-    <Icon aria-hidden="true" className="size-5" />
+    <Icon aria-hidden="true" className="size-4" />
     {ring && (
       <svg
         key={ring.turnKey}

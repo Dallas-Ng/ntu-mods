@@ -5,6 +5,7 @@ date: "2026-08-06"
 updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "MAE modules"
 tags: ["ntu mae modules", "ntu mechanical engineering modules", "mechanical and aerospace engineering ntu", "ntu mae curriculum", "ntu me modules", "mae ntu courses"]
 ---
 

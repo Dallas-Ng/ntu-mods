@@ -5,6 +5,7 @@ date: "2026-06-20"
 updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "Business mods"
 tags: ["ntu business modules", "ntu nanyang business school modules", "ntu nbs modules", "ntu business courses", "ntu finance modules", "ntu accounting modules", "ntu business school courses", "ntumods business", "ntu ab modules", "ntu bf modules", "ntu business ay2026"]
 ---
 

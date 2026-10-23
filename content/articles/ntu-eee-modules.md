@@ -5,6 +5,7 @@ date: "2026-08-06"
 updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "EEE modules"
 tags: ["ntu eee modules", "ntu eee curriculum", "ntu electrical and electronic engineering modules", "ntu ee modules", "ntu ie modules", "eee ntu courses", "ntu eee electives"]
 ---
 

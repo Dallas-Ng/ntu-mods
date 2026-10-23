@@ -5,6 +5,7 @@ date: "2026-04-29"
 updated: "2026-10-15"
 author: "NTUMods"
 category: "BDE"
+thumbnailText: "Popular BDEs"
 tags: ["NTU BDE", "popular BDE NTU", "NTU electives", "NTUMods", "NTU electives guide", "ntu bde list", "bde list ntu", "bde courses ntu", "bde ntu"]
 ---
 

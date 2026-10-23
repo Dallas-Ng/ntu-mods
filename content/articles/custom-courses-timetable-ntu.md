@@ -4,6 +4,7 @@ description: "Use NTUMods custom courses to block out personal time — gym, lun
 date: "2026-06-22"
 author: "NTUMods"
 category: "Timetable Planning"
+thumbnailText: "Custom blocks"
 tags: ["NTU timetable", "NTUMods", "timetable planning", "custom course", "ntu planner", "block time", "ntu schedule", "personal schedule ntu"]
 ---
 

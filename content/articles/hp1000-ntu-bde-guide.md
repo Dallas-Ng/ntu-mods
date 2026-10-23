@@ -4,6 +4,7 @@ description: "HP1000 Introduction to Psychology is one of the most-searched NTU 
 date: "2026-06-14"
 author: "NTUMods"
 category: "BDE"
+thumbnailText: "HP1000"
 tags: ["hp1000 ntu", "hp1000 bde", "hp1000 introduction to psychology ntu", "ntu psychology bde", "hp1000 ntu review", "easy bde ntu", "ntu bde psychology", "introduction to psychology ntu"]
 ---
 

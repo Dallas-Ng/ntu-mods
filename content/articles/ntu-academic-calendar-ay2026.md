@@ -5,6 +5,7 @@ date: "2026-06-20"
 updated: "2026-10-09"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "Academic calendar"
 tags: ["ntu academic calendar", "ntu academic calendar 2026", "ntu calendar 26/27", "ntu calendar 2026/2027", "ntu term dates", "ntu semester calendar", "ntu semester dates", "ntu exam period 2026", "ntu stars dates", "ntu recess week", "ntu semester 1 2026", "ntu ay2026 dates", "ntu timetable dates", "ntu academic year 2026", "ntu academic calendar 2027", "ntu 2027 academic calendar", "ntu academic calendar pdf", "ntu school holidays 2026", "ntu school holidays 2027", "ntu calendar 25/26", "ntu academic calendar 2027/28", "ntu public holidays 2026", "ntu recess week 2026"]
 ---
 

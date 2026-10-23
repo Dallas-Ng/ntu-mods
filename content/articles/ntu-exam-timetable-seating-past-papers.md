@@ -4,6 +4,7 @@ description: "When NTU releases the exam timetable and seating arrangements, whe
 date: "2026-09-02"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "Exam papers"
 tags: ["ntu exam timetable", "ntu exam seating", "ntu past year papers", "ntu exam papers", "ntu exam hall", "ntu exam venue", "ntu exam dates", "ntu exam schedule", "ntu exam calculator registration"]
 ---
 

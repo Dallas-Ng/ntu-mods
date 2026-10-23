@@ -4,6 +4,7 @@ description: "How NTU's add/drop period works after STARS closes — when it hap
 date: "2026-08-06"
 author: "NTUMods"
 category: "STARS"
+thumbnailText: "Add / Drop"
 tags: ["ntu add drop period 2026 dates", "ntu add drop reddit", "ntu add drop results", "ntu add drop week", "ntu add drop period", "ntu add/drop period 2026", "add drop period ntu", "add drop ntu 2026", "ntu add drop", "add/drop ntu"]
 ---
 

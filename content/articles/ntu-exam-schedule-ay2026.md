@@ -4,6 +4,7 @@ description: "NTU exam dates for AY2026/2027 Semester 1 are now available on NTU
 date: "2026-07-27"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "Exam schedule"
 tags: ["ntu exam schedule", "ntu exams ay2026", "ntu exam timetable", "ntu exam dates 2026", "ntumods exams", "ntu final exam schedule", "ntu exam ay2026 s1", "ntu exam period 2026"]
 ---
 

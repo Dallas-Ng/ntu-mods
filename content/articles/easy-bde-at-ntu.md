@@ -5,6 +5,7 @@ date: "2026-05-19"
 updated: "2026-05-19"
 author: "NTUMods"
 category: "BDE"
+thumbnailText: "Easy BDEs"
 tags: ["easy BDE NTU", "NTU BDE", "NTU electives", "NTUMods", "NTU module planning", "bde ntu", "ntu bde guide", "easy elective ntu"]
 ---
 

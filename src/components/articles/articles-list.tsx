@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Check, ChevronDown, FileText, Search, X } from "lucide-react"
+import { Check, ChevronDown, Search, X } from "lucide-react"
 
 import { reportError, track } from "@/lib/analytics"
 import { formatShortDate } from "@/lib/format"
@@ -17,6 +17,8 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
+import { Skeleton } from "@/components/ui/skeleton"
+import { ArticleThumb } from "@/components/articles/article-thumb"
 
 export interface ArticleListItem {
   slug: string
@@ -27,6 +29,7 @@ export interface ArticleListItem {
   tags: string[]
   thumbnail: string
   thumbnailAlt: string
+  thumbnailText: string
   readingTime: string
 }
 
@@ -72,49 +75,45 @@ const getSearchText = (article: ArticleListItem) =>
 function ArticleCard({
   article,
   showCategory,
-  views
+  views,
+  loading
 }: {
   article: ArticleListItem
   showCategory: boolean
   views?: number
+  loading: boolean
 }) {
   return (
     <a
       href={`/articles/${article.slug}`}
       className="group bg-muted hover:bg-accent flex flex-col overflow-hidden rounded-2xl transition-colors">
-      {/* Every card has the same picture area, so a missing thumbnail leaves a placeholder. */}
-      {article.thumbnail ? (
-        <img
-          src={article.thumbnail}
-          alt={article.thumbnailAlt}
-          width={640}
-          height={360}
-          className="aspect-video w-full object-cover"
-        />
-      ) : (
-        <div
-          aria-hidden="true"
-          className="bg-background/50 text-muted-foreground/40 flex aspect-video w-full items-center justify-center">
-          <FileText className="size-10" />
-        </div>
-      )}
+      <div className="relative">
+        <ArticleThumb text={article.thumbnailText || article.title} />
+        {/* Absolutely positioned, so the views arriving later cannot reflow the card. */}
+        {views !== undefined ? (
+          <span className="bg-foreground text-background absolute right-2 bottom-2 rounded px-1.5 py-0.5 text-xs">
+            {views.toLocaleString("en-SG")} {views === 1 ? "view" : "views"}
+          </span>
+        ) : (
+          loading && (
+            // Same box as the pill, sized by its text, so nothing shifts when views arrive.
+            <Skeleton
+              aria-hidden="true"
+              className="bg-foreground/15 absolute right-2 bottom-2 rounded px-1.5 py-0.5 text-xs text-transparent select-none">
+              XX views
+            </Skeleton>
+          )
+        )}
+      </div>
       <div className="flex-1 p-4">
         <div className="text-foreground/70 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
           <span>{formatShortDate(article.date)}</span>
           <span aria-hidden="true">·</span>
           <span>{article.readingTime}</span>
-          {views !== undefined && (
-            <>
-              <span aria-hidden="true">·</span>
-              <span>
-                {views.toLocaleString("en-SG")} {views === 1 ? "view" : "views"}
-              </span>
-            </>
-          )}
           {showCategory && (
             <>
               <span aria-hidden="true">·</span>
-              <span className="bg-background text-muted-foreground rounded px-1.5 py-0.5">
+              <span className="bg-primary/10 text-primary dark:bg-background dark:text-muted-foreground rounded px-1.5 py-0.5">
                 {article.category}
               </span>
             </>
@@ -180,8 +179,11 @@ export default function ArticlesList({
         if (!res.ok) throw new Error(`article-views ${res.status}`)
         return res.json()
       })
-      .then((data) => data?.views && setViews(data.views))
-      .catch((e) => reportError("article_views_fetch", e))
+      .then((data) => setViews(data?.views ?? {}))
+      .catch((e) => {
+        reportError("article_views_fetch", e)
+        setViews({}) // stop the skeletons
+      })
   }, [])
 
   useEffect(() => {
@@ -485,6 +487,7 @@ export default function ArticlesList({
                       article={article}
                       showCategory={false}
                       views={views?.[article.slug]}
+                      loading={views === undefined}
                     />
                   ))}
                 </div>
@@ -499,6 +502,7 @@ export default function ArticlesList({
                 article={article}
                 showCategory={!hasCategory}
                 views={views?.[article.slug]}
+                loading={views === undefined}
               />
             ))}
           </div>

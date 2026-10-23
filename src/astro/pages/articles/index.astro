@@ -25,6 +25,7 @@ const articleList = articles.map(
     tags,
     thumbnail,
     thumbnailAlt,
+    thumbnailText,
     readingTime
   }) => ({
     slug,
@@ -35,6 +36,7 @@ const articleList = articles.map(
     tags,
     thumbnail,
     thumbnailAlt,
+    thumbnailText,
     readingTime
   })
 )
@@ -51,6 +53,7 @@ const articlesJsonLd = collectionPageJsonLd({
 ---
 
 <BaseLayout
+  handFont
   title={siteConfig.metatags.articles.title}
   description={siteConfig.metatags.articles.desc}
   canonical="/articles"

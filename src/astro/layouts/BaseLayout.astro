@@ -38,6 +38,8 @@ interface Props {
   article?: { publishedTime: string; modifiedTime?: string }
   /** Tool pages with many fields: stop iOS zooming in on focus. */
   lockZoom?: boolean
+  /** Pages that draw ArticleThumb: preload the handwriting font so it does not swap in late. */
+  handFont?: boolean
 }
 
 const defaults = siteConfig.metatags.default
@@ -53,7 +55,8 @@ const {
   noTitleSuffix = false,
   noindex = false,
   article,
-  lockZoom = false
+  lockZoom = false,
+  handFont = false
 } = Astro.props
 
 // Every page ends with a way to report a problem, except the form itself and
@@ -137,6 +140,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
     <link rel="ai-catalog" href="/.well-known/ai-catalog.json" />
 
     <Font cssVariable="--font-inter" preload />
+    {handFont && <Font cssVariable="--font-hand" preload />}
 
     <script is:inline>
       // Runs before paint to avoid a light/dark flash — theme state lives in

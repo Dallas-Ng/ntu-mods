@@ -5,6 +5,7 @@ date: "2026-08-06"
 updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "Course catalogue"
 tags: ["ntu course catalogue", "ntu courses", "ntu course list", "ntu course index", "ntu course search", "ntu all courses", "ntu modules list", "ntu course codes"]
 ---
 

@@ -5,6 +5,7 @@ date: "2026-06-14"
 updated: "2026-09-22"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "Timetable planner"
 tags: ["ntu timetable planner", "ntu planner", "ntu timetable", "ntumods timetable", "ntu module planner", "plan ntu timetable", "ntu course planner", "ntu semester planner", "ntu class schedule", "ntu class timetable", "ntu time table"]
 ---
 

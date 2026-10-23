@@ -5,6 +5,7 @@ date: "2026-10-18"
 updated: "2026-10-19"
 author: "NTUMods"
 category: "General"
+thumbnailText: "AI assistant"
 tags: ["ntumods ai", "ai timetable planner ntu", "ntu timetable ai", "webmcp", "ai assistant ntu modules", "ntu clash free timetable", "ntu cgpa ai", "ai-catalog.json", "llms.txt"]
 ---
 

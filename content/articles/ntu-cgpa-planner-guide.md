@@ -4,6 +4,7 @@ description: "A step-by-step guide to the NTUMods CGPA Planner. Enter your CGPA 
 date: "2026-10-08"
 author: "NTUMods"
 category: "General"
+thumbnailText: "CGPA planner"
 tags: ["ntu cgpa planner", "ntu cgpa calculator", "ntu gpa calculator", "ntu honours calculator", "what grades do i need ntu", "ntu distinction cgpa", "ntu target cgpa", "ntumods cgpa planner"]
 ---
 

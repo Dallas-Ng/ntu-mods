@@ -92,6 +92,18 @@ export default defineConfig({
       weights: [400, 500, 600, 700],
       styles: ["normal"],
       fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"]
+    },
+    // Handwriting for the article thumbnails (src/components/articles/article-thumb.tsx).
+    {
+      provider: fontProviders.google(),
+      name: "Patrick Hand",
+      cssVariable: "--font-hand",
+      subsets: ["latin"],
+      weights: [400],
+      styles: ["normal"],
+      // Preloaded on article pages; hide text for the instant it takes rather than swap and shift.
+      display: "block",
+      fallbacks: ["cursive"]
     }
   ],
   // Article images get a <figure>/<figcaption> and a dark-mode twin

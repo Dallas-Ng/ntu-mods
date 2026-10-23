@@ -4,6 +4,7 @@ description: "How to change or reset your NTU network account and email password
 date: "2026-09-11"
 author: "NTUMods"
 category: "General"
+thumbnailText: "Password reset"
 tags: ["ntu password reset", "ntulearn change password", "ntu network account", "ntu network account login", "ntu email login", "ntu student intranet", "ntu intranet", "ntu sharepoint", "ntu ldap", "ntu account locked"]
 ---
 

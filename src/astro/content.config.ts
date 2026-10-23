@@ -26,7 +26,8 @@ const articles = defineCollection({
           .filter(Boolean)
       }),
     thumbnail: z.string().optional().default(""),
-    thumbnailAlt: z.string().optional()
+    thumbnailAlt: z.string().optional(),
+    thumbnailText: z.string().optional().default("")
   })
 })
 

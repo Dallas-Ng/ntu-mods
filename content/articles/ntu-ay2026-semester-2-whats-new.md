@@ -5,6 +5,7 @@ date: "2026-10-15"
 updated: "2026-10-15"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "What's new"
 tags:
   [
     "ntu semester 2 modules",

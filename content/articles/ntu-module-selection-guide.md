@@ -5,6 +5,7 @@ date: "2026-05-21"
 updated: "2026-05-21"
 author: "NTUMods"
 category: "Module Planning"
+thumbnailText: "Pick modules"
 tags: ["ntu module selection", "ntu course planner", "ntu module planning", "NTU modules", "NTUMods", "module planning ntu", "ntu module guide", "ntu elective planning"]
 ---
 

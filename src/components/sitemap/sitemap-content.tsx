@@ -215,9 +215,7 @@ const SitemapContent = async () => {
                 cardVariants({ interactive: true }),
                 "group rounded-2xl p-4"
               )}>
-              <p className="text-foreground group-hover:text-primary font-semibold transition-colors">
-                {link.label}
-              </p>
+              <p className="text-foreground font-semibold">{link.label}</p>
               <p className="text-muted-foreground mt-0.5 text-sm">
                 {link.description}
               </p>
@@ -237,9 +235,7 @@ const SitemapContent = async () => {
                 cardVariants({ interactive: true }),
                 "group rounded-2xl p-4"
               )}>
-              <p className="text-foreground group-hover:text-primary font-semibold transition-colors">
-                {link.label}
-              </p>
+              <p className="text-foreground font-semibold">{link.label}</p>
               <p className="text-muted-foreground mt-0.5 text-sm">
                 {link.description}
               </p>
@@ -263,9 +259,7 @@ const SitemapContent = async () => {
                 <p className="text-muted-foreground mb-1 text-xs">
                   {article.category}
                 </p>
-                <p className="text-foreground group-hover:text-primary font-semibold transition-colors">
-                  {article.title}
-                </p>
+                <p className="text-foreground font-semibold">{article.title}</p>
                 <p className="text-muted-foreground mt-0.5 line-clamp-2 text-sm">
                   {article.description}
                 </p>
@@ -307,7 +301,7 @@ const SitemapContent = async () => {
                   <a
                     key={moduleItem.code}
                     href={`/mods/${moduleItem.code}`}
-                    className="text-muted-foreground hover:text-primary text-sm leading-6 transition-colors">
+                    className="text-muted-foreground hover:text-foreground text-sm leading-6 transition-colors">
                     <span className="text-foreground font-medium">
                       {moduleItem.code}
                     </span>{" "}

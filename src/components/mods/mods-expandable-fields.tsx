@@ -49,7 +49,7 @@ const ModsExpandableFields = ({ module }: Props) => {
       <button
         onClick={() => setExpanded((v) => !v)}
         aria-expanded={expanded}
-        className="hover:bg-muted flex w-full cursor-pointer items-center justify-between px-5 py-3.5 transition-colors">
+        className="hover:bg-accent flex w-full cursor-pointer items-center justify-between px-5 py-3.5 transition-colors">
         <span className="flex items-center gap-2 text-sm font-semibold">
           Additional information
           <span className="bg-muted text-muted-foreground flex size-5 items-center justify-center rounded-full text-xs font-medium">

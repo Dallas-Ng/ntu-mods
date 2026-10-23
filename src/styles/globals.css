@@ -280,6 +280,14 @@
   .dark {
     color-scheme: dark;
   }
+
+  /* Tailwind v4 dropped the pointer on buttons. Anything clickable shows it;
+     nothing else should carry cursor-pointer. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary {
+    cursor: pointer;
+  }
 }
 
 /* Width-only on purpose. `size-full` also sets height:100%, which makes a
@@ -473,7 +481,7 @@ table td {
 }
 
 .article-cta .article-cta-button {
-  @apply bg-primary text-primary-foreground inline-flex items-center rounded-md px-5 py-2.5 text-sm font-semibold no-underline transition-opacity hover:opacity-90;
+  @apply bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center rounded-md px-5 py-2.5 text-sm font-semibold no-underline transition-colors;
 }
 
 /* Quotes and "Quick summary" callouts in articles: the same rounded grey card

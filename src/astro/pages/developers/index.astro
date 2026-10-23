@@ -55,7 +55,7 @@ const practices: [string, string][] = [
         DEV_PAGES.filter((page) => page.href !== "/developers").map((page) => (
           <a
             href={page.href}
-            class="hover:bg-muted space-y-1 rounded-2xl border p-4 transition-colors">
+            class="hover:bg-accent space-y-1 rounded-2xl border p-4 transition-colors">
             <span class="block font-semibold">{page.label}</span>
             <span class="text-foreground block text-sm">
               {page.description}

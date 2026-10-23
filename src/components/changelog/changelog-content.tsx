@@ -64,11 +64,12 @@ const ChangelogFilters = ({
           track("changelog_filter_changed", { filter })
         }}
         className={cn(
-          "inline-flex h-6 w-fit cursor-pointer items-center rounded-full border px-2 text-xs leading-none font-medium transition-opacity hover:opacity-80",
-          activeFilter === filter && "ring-ring ring-2 ring-offset-1",
-          filter === "All"
-            ? "border-border bg-muted text-foreground"
-            : CATEGORY_STYLES[filter]
+          "inline-flex h-6 w-fit items-center rounded-full border px-2 text-xs leading-none font-medium transition-colors",
+          activeFilter !== filter
+            ? "bg-muted text-foreground hover:bg-accent"
+            : filter === "All"
+              ? "bg-primary-subtle text-primary"
+              : CATEGORY_STYLES[filter]
         )}>
         {filter}
       </button>

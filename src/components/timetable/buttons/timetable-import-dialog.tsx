@@ -106,7 +106,7 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
                   "h-8 max-w-full cursor-pointer truncate rounded-md border px-3 text-sm transition-colors",
                   targetPlan === i
                     ? "bg-foreground text-background border-transparent"
-                    : "text-muted-foreground hover:border-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 )}>
                 {label(i)}
               </button>

@@ -120,7 +120,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                   className={`flex flex-col gap-4 rounded-xl p-4 transition-colors duration-150 md:px-6 md:py-5 lg:flex-row lg:items-center ${
                     on
                       ? "lg:bg-primary lg:text-primary-foreground"
-                      : "lg:hover:bg-muted"
+                      : "lg:hover:bg-accent"
                   } max-lg:active:bg-muted`}>
                   {c.art && (
                     <span

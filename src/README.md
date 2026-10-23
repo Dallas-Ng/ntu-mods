@@ -53,6 +53,16 @@ Surfaces, all fixed tokens (no `bg-muted/50`-style opacity, except see-through g
 
 A pale fill barely shows against the page, so anything that must be noticed (card, chip, inline code, callout) also has a 1px border. No raw Tailwind palette colours (`emerald-500`, `slate-200`) outside the timetable grid, the map and the landing illustrations.
 
+Hover, one signal per element:
+
+- Surfaces (cards, rows, menu items, chips, option tiles, icon buttons): background to `accent` (`cardVariants({ interactive: true })` for cards). The text inside does not change colour.
+- Text-only links: `TextLink`. Grey text goes black, black text goes blue, inline links dim.
+- Solid buttons (primary, destructive): a slightly darker fill.
+- No lift, scale, opacity or border-colour hovers. An arrow in a call to action may nudge (`group-hover:translate-x-0.5`).
+- Pointer cursor: every enabled `button`, `[role="button"]` and link gets it from `globals.css`. Do not put `cursor-pointer` on anything that is not clickable. A clickable element that cannot be a `<button>` (it holds another button) gets `role="button"`, `tabIndex={0}` and Enter/Space handling.
+
+The timetable grid and the map keep their own interactions.
+
 Shared pieces for the rest: `TextLink` and `ExternalLinkIcon` (links), `cardVariants` (cards), `InlineCode`, `CopyButton`, `ResponsiveModal` with `modal-parts` and `ConfirmDialog` (dialogs, never `confirm()`), `Alert`, `NewBadge`, and `ArticleToc` / `SideNavDrawer` / `side-nav` styles (side navs).
 
 ## Rendering model

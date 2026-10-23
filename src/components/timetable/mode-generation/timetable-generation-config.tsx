@@ -134,7 +134,7 @@ const CollisionIgnoreSection = () => {
                           ? "cursor-not-allowed opacity-50"
                           : active
                             ? "bg-foreground text-background cursor-pointer border-transparent"
-                            : "text-muted-foreground hover:border-foreground cursor-pointer"
+                            : "text-muted-foreground hover:bg-accent hover:text-foreground"
                       }`}>
                       {COURSE_TYPE[type as keyof typeof COURSE_TYPE]}
                     </button>
@@ -204,7 +204,7 @@ const LockedModulesSection = () => {
                 className={`focus-visible:ring-ring/50 flex h-6 cursor-pointer items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   isLocked
                     ? "bg-foreground text-background border-transparent"
-                    : "text-muted-foreground hover:border-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 }`}>
                 {isLocked ? (
                   <LockIcon className="size-3" />
@@ -311,7 +311,7 @@ const SettingsForm = ({
                 className={`focus-visible:ring-ring/50 flex h-8 flex-1 cursor-pointer items-center justify-center rounded-md border text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   config.loadPreference === pref
                     ? "bg-foreground text-background border-transparent"
-                    : "text-muted-foreground hover:border-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 }`}>
                 {pref === "spread" ? "Spread" : "Compact"}
               </button>
@@ -384,7 +384,7 @@ const SettingsForm = ({
                 className={`focus-visible:ring-ring/50 h-7 cursor-pointer rounded-md border px-2.5 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   active
                     ? "bg-foreground text-background border-transparent"
-                    : "text-muted-foreground hover:border-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 }`}>
                 {COURSE_TYPE[type as keyof typeof COURSE_TYPE]}
               </button>

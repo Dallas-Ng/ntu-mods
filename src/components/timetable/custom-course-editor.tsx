@@ -279,7 +279,7 @@ const SessionRowEditor = ({
                   "focus-visible:ring-ring/50 h-6 cursor-pointer rounded border px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px]",
                   active
                     ? "bg-foreground text-background border-transparent"
-                    : "text-muted-foreground hover:border-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 )}>
                 {TRUN_DAY_MAP[day as keyof typeof TRUN_DAY_MAP]}
               </button>
@@ -478,7 +478,7 @@ export const CourseModal = ({
                     "flex h-7 items-center rounded-md border text-xs font-medium transition-colors",
                     isActive
                       ? "bg-foreground text-background border-transparent"
-                      : "text-muted-foreground hover:border-foreground"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground"
                   )}>
                   <button
                     type="button"
@@ -492,7 +492,7 @@ export const CourseModal = ({
                     <button
                       type="button"
                       aria-label={`Remove ${index.label}`}
-                      className="h-full cursor-pointer pr-1.5 opacity-60 hover:opacity-100"
+                      className="text-muted-foreground hover:text-foreground h-full pr-1.5 transition-colors"
                       onClick={() => removeIndex(index._key)}>
                       <X className="size-3" />
                     </button>
@@ -617,9 +617,20 @@ const CustomCourseEditor = () => {
 
           return (
             <div key={course.id}>
+              {/* Not a <button>: it holds the remove button. */}
               <div
-                className="hover:bg-accent flex cursor-pointer items-center justify-between pr-3 pl-4 text-sm transition-colors"
-                onClick={() => setEditingCourse(course)}>
+                role="button"
+                tabIndex={0}
+                aria-label={`Edit ${course.name}`}
+                className="hover:bg-accent focus-visible:ring-ring/50 flex items-center justify-between pr-3 pl-4 text-sm transition-colors outline-none focus-visible:ring-[3px]"
+                onClick={() => setEditingCourse(course)}
+                onKeyDown={(e) => {
+                  if (e.target !== e.currentTarget) return
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault()
+                    setEditingCourse(course)
+                  }
+                }}>
                 <div className="flex min-w-0 items-center gap-1">
                   <span className="max-w-[110px] min-w-16 truncate font-medium">
                     {course.name}
@@ -658,7 +669,7 @@ const CustomCourseEditor = () => {
                           "focus-visible:ring-ring/50 h-5 cursor-pointer rounded border px-1.5 text-[0.65rem] font-medium transition-colors outline-none focus-visible:ring-[3px]",
                           isActive
                             ? "bg-foreground text-background border-transparent"
-                            : "text-muted-foreground hover:border-foreground"
+                            : "text-muted-foreground hover:bg-accent hover:text-foreground"
                         )}>
                         {courseIndex.label}
                       </button>

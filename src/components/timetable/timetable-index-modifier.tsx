@@ -154,12 +154,12 @@ const TimetableIndexNote = ({
              lighter colour so which one is actually active stays clear. */}
           <ToggleGroupItem
             value="index"
-            className="hover:bg-muted hover:text-foreground data-[state=on]:hover:bg-accent data-[state=on]:hover:text-accent-foreground h-6 px-2 text-xs">
+            className="hover:bg-accent hover:text-foreground data-[state=on]:hover:bg-accent data-[state=on]:hover:text-accent-foreground h-6 px-2 text-xs">
             This index
           </ToggleGroupItem>
           <ToggleGroupItem
             value="module"
-            className="hover:bg-muted hover:text-foreground data-[state=on]:hover:bg-accent data-[state=on]:hover:text-accent-foreground h-6 px-2 text-xs">
+            className="hover:bg-accent hover:text-foreground data-[state=on]:hover:bg-accent data-[state=on]:hover:text-accent-foreground h-6 px-2 text-xs">
             All indexes
           </ToggleGroupItem>
         </ToggleGroup>

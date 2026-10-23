@@ -125,7 +125,7 @@ function ArticleCard({
             </>
           )}
         </div>
-        <h2 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold wrap-break-word transition-colors">
+        <h2 className="mt-2 line-clamp-2 font-semibold wrap-break-word transition-colors">
           {article.title}
         </h2>
         <p className="text-foreground mt-2 line-clamp-3 text-sm leading-6 wrap-break-word">

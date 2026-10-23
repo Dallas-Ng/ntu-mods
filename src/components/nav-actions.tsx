@@ -9,9 +9,8 @@ import { useTheme } from "@/hooks/use-theme"
 
 import { Button } from "./ui/button"
 
-// Same grey as the nav text links: solid only on hover or on its own page.
-export const NAV_ICON =
-  "text-muted-foreground hover:bg-transparent hover:text-foreground dark:hover:bg-transparent"
+// Grey like the nav text links, with the same background on hover.
+export const NAV_ICON = "text-muted-foreground hover:text-foreground"
 
 const NavActions = () => {
   const { theme, setTheme } = useTheme()

@@ -54,7 +54,7 @@ const LandingArticles = async () => {
         <a
           href={`/articles/${lead.slug}`}
           className={cn(
-            cardVariants(),
+            cardVariants({ interactive: true }),
             "landing-reveal group flex flex-col overflow-hidden rounded-2xl"
           )}>
           <div className="relative flex flex-1 flex-col justify-center gap-3 p-5 md:p-6 lg:min-h-[300px]">
@@ -73,7 +73,7 @@ const LandingArticles = async () => {
             <li key={a.slug} className="landing-reveal flex-1">
               <a
                 href={`/articles/${a.slug}`}
-                className="hover:bg-muted group flex h-full gap-4 rounded-2xl p-4 transition-colors duration-150">
+                className="hover:bg-accent group flex h-full gap-4 rounded-2xl p-4 transition-colors duration-150">
                 <div className="flex min-w-0 flex-col justify-center gap-1">
                   <Meta a={a} />
                   <h3 className="line-clamp-3 text-base leading-snug font-semibold">

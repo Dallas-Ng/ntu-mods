@@ -54,6 +54,8 @@ const INJECTED_MESSAGE = new RegExp(
     // (issue #311), and other in-app browser bridges
     "window\\.ethereum",
     "\\bselectedAddress\\b",
+    // Chrome's cross-origin frame error (issue #318); we never touch frames
+    "Blocked\\sa\\sframe\\swith\\sorigin\\s.*\\sfrom\\saccessing\\sa\\scross-origin\\sframe",
     "_AutofillCallbackHandler",
     "window\\.webkit\\.messageHandlers",
     "Java\\sobject\\sis\\sgone"

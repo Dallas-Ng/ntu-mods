@@ -26,6 +26,8 @@ interface Props {
   nested?: boolean
   /** From which width the desktop nav shows; xl where a left nav takes room. */
   desktopFrom?: "lg" | "xl"
+  /** See SideNavDrawer: false keeps the phone button in the page flow. */
+  floating?: boolean
 }
 
 // Where a section lands after a jump: just below the navbar. The same line
@@ -118,7 +120,8 @@ const getVisibleHeadings = (headings: TocHeading[], nested?: boolean) =>
 export const MobileSectionDropdown = ({
   headings,
   nested,
-  desktopFrom
+  desktopFrom,
+  floating = true
 }: Props) => {
   const visibleHeadings = useMemo(
     () => getVisibleHeadings(headings, nested),
@@ -150,8 +153,9 @@ export const MobileSectionDropdown = ({
     <SideNavDrawer
       side="right"
       title="On this page"
-      hidden={!scrolled}
+      hidden={floating && !scrolled}
       desktopFrom={desktopFrom}
+      floating={floating}
       open={open}
       onOpenChange={setOpen}>
       <nav className="space-y-0.5">

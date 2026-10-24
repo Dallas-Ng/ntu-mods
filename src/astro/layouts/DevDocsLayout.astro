@@ -63,8 +63,6 @@ const headings = [
   size="full">
   <JsonLd data={jsonLd} />
 
-  <MobileSectionDropdown client:idle headings={headings} desktopFrom="xl" />
-
   <div
     class="grid gap-6 lg:grid-cols-[12rem_minmax(0,48rem)] lg:justify-center xl:grid-cols-[12rem_minmax(0,48rem)_14rem] xl:gap-10 [&>*]:min-w-0">
     <aside class="hidden lg:block">
@@ -72,13 +70,24 @@ const headings = [
     </aside>
 
     <div class="flex max-w-3xl min-w-0 flex-col gap-8">
-      <SideNavDrawer
-        client:load
-        side="left"
-        title="Developer docs"
-        label={currentLabel}>
-        <DevNav path={path} class="space-y-5" />
-      </SideNavDrawer>
+      {
+        /* One row under the navbar on phones: the docs menu, then On this page. */
+      }
+      <div class="sticky top-[4.5rem] z-[5] flex justify-end gap-2 xl:hidden">
+        <SideNavDrawer
+          client:load
+          side="left"
+          title="Developer docs"
+          label={currentLabel}>
+          <DevNav path={path} class="space-y-5" />
+        </SideNavDrawer>
+        <MobileSectionDropdown
+          client:idle
+          headings={headings}
+          desktopFrom="xl"
+          floating={false}
+        />
+      </div>
 
       <Header eyebrow={eyebrow} title={heading} subtitle={intro} />
 

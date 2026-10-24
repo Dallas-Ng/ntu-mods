@@ -27,6 +27,9 @@ interface Props {
   hidden?: boolean
   /** Width at which the desktop side nav takes over and this trigger goes. */
   desktopFrom?: "lg" | "xl"
+  /** Right button pinned under the navbar; false puts it in the page flow,
+   * e.g. beside the docs bar so the two never overlap. */
+  floating?: boolean
   open?: boolean
   onOpenChange?: (open: boolean) => void
   children: React.ReactNode
@@ -39,6 +42,7 @@ export const SideNavDrawer = ({
   label,
   hidden = false,
   desktopFrom = "lg",
+  floating = true,
   open,
   onOpenChange,
   children
@@ -53,7 +57,10 @@ export const SideNavDrawer = ({
           aria-hidden={hidden}
           tabIndex={hidden ? -1 : 0}
           className={cn(
-            "bg-background/80 not-prose fixed top-20 right-4 z-20 shadow-md backdrop-blur-xl transition-[opacity,transform] duration-200",
+            "bg-background/80 not-prose backdrop-blur-xl transition-[opacity,transform] duration-200",
+            floating
+              ? "fixed top-20 right-4 z-20 shadow-md"
+              : "aspect-square h-auto shrink-0 self-stretch shadow-sm",
             desktopFrom === "xl" ? "xl:hidden" : "lg:hidden",
             hidden && "pointer-events-none -translate-y-2 opacity-0"
           )}>
@@ -64,13 +71,17 @@ export const SideNavDrawer = ({
           type="button"
           // Below the navbar (z-10): at the end of the page the bar scrolls
           // up with its column and must slide under the navbar, not over it.
-          className="bg-background/80 sticky top-[4.5rem] z-[5] flex w-full cursor-pointer items-center gap-3 rounded-xl border px-4 py-2 text-left shadow-sm backdrop-blur-xl lg:hidden">
+          className="bg-background/80 sticky top-[4.5rem] z-[5] flex w-full min-w-0 flex-1 cursor-pointer items-center gap-3 rounded-xl border px-4 py-2 text-left shadow-sm backdrop-blur-xl lg:hidden">
           <PanelLeft className="text-muted-foreground size-4 shrink-0" />
-          <span className="text-muted-foreground shrink-0 text-sm">
+          {/* The section name gives way first; the page name never shrinks and
+              only truncates past 70% of the bar. */}
+          <span className="text-muted-foreground min-w-0 truncate text-sm">
             {title}
           </span>
           <ChevronRight className="text-muted-foreground size-4 shrink-0" />
-          <span className="truncate text-sm font-medium">{label}</span>
+          <span className="max-w-[70%] shrink-0 truncate text-sm font-medium">
+            {label}
+          </span>
         </button>
       )}
     </DrawerTrigger>

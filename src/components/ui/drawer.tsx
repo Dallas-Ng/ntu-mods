@@ -94,12 +94,18 @@ function DrawerContent({
   className,
   children,
   style,
+  onOpenAutoFocus,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Content>) {
   const kb = useKeyboard()
   return (
     <DrawerPortal data-slot="drawer-portal">
-      <DrawerOverlay />
+      {/* A close control, not just a backdrop: on touch, Radix waits for the
+          click after a tap, and iOS Safari sends none from an element with
+          no click handler, so tapping the mask did nothing. */}
+      <DrawerPrimitive.Close asChild>
+        <DrawerOverlay />
+      </DrawerPrimitive.Close>
       <DrawerPrimitive.Content
         data-slot="drawer-content"
         className={cn(
@@ -115,6 +121,22 @@ function DrawerContent({
         style={
           kb ? { ...style, bottom: kb.inset, maxHeight: kb.height - 16 } : style
         }
+        // vaul skips Radix's open focus, which left focus on the trigger
+        // inside the now aria-hidden page (a console warning, and screen
+        // readers stay behind). Focus the panel itself, not its first field,
+        // so phones do not open the keyboard.
+        onOpenAutoFocus={(event) => {
+          onOpenAutoFocus?.(event)
+          if (event.defaultPrevented) return
+          event.preventDefault()
+          const panel = event.target
+          // An autoFocus field inside (e.g. rename plan) keeps its focus.
+          if (
+            panel instanceof HTMLElement &&
+            !panel.contains(document.activeElement)
+          )
+            panel.focus({ preventScroll: true })
+        }}
         {...props}>
         <div className="bg-muted mx-auto mt-4 mb-4 hidden h-2 w-[100px] shrink-0 rounded-full group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
         {children}

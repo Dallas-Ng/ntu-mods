@@ -56,6 +56,11 @@ const INJECTED_MESSAGE = new RegExp(
     "\\bselectedAddress\\b",
     // Chrome's cross-origin frame error (issue #318); we never touch frames
     "Blocked\\sa\\sframe\\swith\\sorigin\\s.*\\sfrom\\saccessing\\sa\\scross-origin\\sframe",
+    // Stale chunk after a deploy (issue #322); StaleChunkReload.astro reloads
+    // onto the new build, so the rejection itself carries no signal
+    "Failed\\sto\\sfetch\\sdynamically\\simported\\smodule",
+    "error\\sloading\\sdynamically\\simported\\smodule",
+    "Importing\\sa\\smodule\\sscript\\sfailed",
     "_AutofillCallbackHandler",
     "window\\.webkit\\.messageHandlers",
     "Java\\sobject\\sis\\sgone"

@@ -139,7 +139,7 @@ const shareLink = async (title: string, view: string) => {
     track("map_shared", { method: "copy", view })
     return true
   } catch {
-    toast.error("Could not copy the link")
+    toast.error("Could not copy the link. Copy it by hand instead.")
     track("map_shared", { method: "failed", view })
     return false
   }

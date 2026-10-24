@@ -128,7 +128,7 @@ const TimetableAiChat = () => {
         id: crypto.randomUUID(),
         role: "assistant",
         content:
-          "No valid combinations were found with those settings — the constraints may be too strict for your modules. Which would you like to relax? (e.g. remove the gap requirement, allow more hours per day, or fewer free day preferences)"
+          "No valid combinations were found with those settings. The constraints may be too strict for your modules. Which would you like to relax? (e.g. remove the gap requirement, allow more hours per day, or fewer free day preferences)"
       }
       setMessages((prev) => [...prev, msg])
       scrollToBottom()

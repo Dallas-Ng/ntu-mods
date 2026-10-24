@@ -94,7 +94,7 @@ export const siteConfig = {
     },
     studentLinks: {
       title: "NTU Student Links",
-      desc: "Quick links to the most-used NTU student portals — STARS, NTULearn, Degree Audit, CareerAxis, GEM, library booking, and more."
+      desc: "Quick links to the most-used NTU student portals: STARS, NTULearn, Degree Audit, CareerAxis, GEM, library booking, and more."
     },
     tools: {
       title: "NTU Student Tools",

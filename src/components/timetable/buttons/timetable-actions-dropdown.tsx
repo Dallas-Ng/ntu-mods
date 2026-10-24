@@ -108,7 +108,7 @@ const TimetableActionsDropdown = ({
   // The Calendar tool explains the file first; the download happens from there.
   const openCalendar = () => {
     if (Object.keys(timetable).length === 0 && customCourses.length === 0) {
-      toast.info("Please fill up your timetable first")
+      toast.info("Add modules to your timetable first")
       return
     }
     setCalendarOpen(true)
@@ -116,7 +116,7 @@ const TimetableActionsDropdown = ({
 
   const handleDownloadCalendar = async () => {
     if (Object.keys(timetable).length === 0 && customCourses.length === 0) {
-      toast.info("Please fill up your timetable first")
+      toast.info("Add modules to your timetable first")
       return
     }
 
@@ -166,7 +166,7 @@ const TimetableActionsDropdown = ({
       })
     } catch (e) {
       reportError("calendar_download", e)
-      toast.error("Something went wrong, please try again later")
+      toast.error("Something went wrong. Try again later.")
     }
 
     setCalendarLoading(false)
@@ -191,7 +191,7 @@ const TimetableActionsDropdown = ({
       from_plan: timetableIndex + 1,
       to_plan: toIndex + 1
     })
-    toast(`Duplicated to ${label(toIndex)}`)
+    toast.success(`Duplicated to ${label(toIndex)}`)
   }
 
   const tool = (

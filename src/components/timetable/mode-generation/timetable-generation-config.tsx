@@ -595,7 +595,7 @@ const TimetableGenerationConfig = () => {
         className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full items-center justify-between rounded-lg border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
         <div className="flex items-center gap-1.5">
           <Settings2Icon className="size-3" />
-          <span>Generation Settings</span>
+          <span>Generation settings</span>
         </div>
         <span className="text-muted-foreground text-xs">Edit</span>
       </button>
@@ -607,7 +607,7 @@ const TimetableGenerationConfig = () => {
       <ResponsiveModal
         open={open}
         onOpenChange={setOpen}
-        title="Generation Settings"
+        title="Generation settings"
         description="Preferences used when generating timetables."
         className="max-h-[85vh] gap-4 overflow-y-auto sm:max-w-lg">
         <SettingsForm
@@ -663,7 +663,7 @@ const TimetableGenerationConfig = () => {
           )}
           {!isDiagnosing && suggestions.length === 0 && (
             <p className="text-muted-foreground text-xs">
-              No single constraint change would help — try relaxing multiple
+              No single constraint change would help. Try relaxing multiple
               settings.
             </p>
           )}

@@ -244,7 +244,7 @@ const SessionRowEditor = ({
             {isCustomType && (
               <Input
                 className="h-8 w-full text-sm"
-                placeholder="Optional — e.g. Practice, Shift, Meeting"
+                placeholder="Optional, e.g. Practice, Shift, Meeting"
                 value={session.type}
                 maxLength={20}
                 onChange={(e) => onChange({ type: e.target.value })}

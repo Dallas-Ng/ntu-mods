@@ -75,7 +75,7 @@ const TimetableAiModelLoader = ({
           />
         </div>
         <p className="text-muted-foreground text-xs">
-          {loadingProgress}% — cached after first load (~2GB)
+          {loadingProgress}%. Cached after the first load (about 2GB)
         </p>
       </div>
     )
@@ -89,7 +89,7 @@ const TimetableAiModelLoader = ({
       </div>
       <p className="text-muted-foreground text-sm">
         Chat with a local AI to plan your timetable preferences. The model runs
-        entirely in your browser — no data is sent anywhere.
+        entirely in your browser, so no data is sent anywhere.
       </p>
       <p className="text-muted-foreground text-xs">
         First load downloads ~2GB and is cached. Takes 30–60 seconds depending

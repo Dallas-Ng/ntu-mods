@@ -7,9 +7,9 @@ import Header, { SectionHeading } from "@/components/header"
 
 const TermsContent = () => {
   return (
-    <Container size="sm" className="space-y-6">
+    <Container size="sm" className="space-y-8">
       <div>
-        <Header title="Terms of Use" subtitle="Last Updated: 23 October 2026" />
+        <Header title="Terms of Use" subtitle="Last updated: 23 October 2026" />
       </div>
 
       <p className="text-sm">
@@ -19,7 +19,7 @@ const TermsContent = () => {
       </p>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>Using the Service</SectionHeading>
+        <SectionHeading>Using the service</SectionHeading>
 
         <p>
           NTUMods is a free, open-source tool for planning NTU timetables and
@@ -33,7 +33,7 @@ const TermsContent = () => {
       </section>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>Not Affiliated with NTU</SectionHeading>
+        <SectionHeading>Not affiliated with NTU</SectionHeading>
 
         <p>
           NTUMods is an independent project. It is not affiliated with, endorsed
@@ -46,7 +46,7 @@ const TermsContent = () => {
       </section>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>No Warranty</SectionHeading>
+        <SectionHeading>No warranty</SectionHeading>
 
         <p>
           The Service is provided &quot;as is&quot; and &quot;as
@@ -57,7 +57,7 @@ const TermsContent = () => {
       </section>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>Limitation of Liability</SectionHeading>
+        <SectionHeading>Limitation of liability</SectionHeading>
 
         <p>
           To the extent permitted by law, we are not liable for any loss arising
@@ -69,7 +69,7 @@ const TermsContent = () => {
       </section>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>Your Data and Privacy</SectionHeading>
+        <SectionHeading>Your data and privacy</SectionHeading>
 
         <p>
           Your timetable and settings are stored in your browser. How we handle
@@ -81,7 +81,7 @@ const TermsContent = () => {
       </section>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>Open Source and Content</SectionHeading>
+        <SectionHeading>Open source and content</SectionHeading>
 
         <p>
           The source code is published on{" "}
@@ -98,7 +98,7 @@ const TermsContent = () => {
       </section>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>Changes and Governing Law</SectionHeading>
+        <SectionHeading>Changes and governing law</SectionHeading>
 
         <p>
           We may change these terms or the Service at any time, and will update

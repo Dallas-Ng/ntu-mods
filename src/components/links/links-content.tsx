@@ -93,7 +93,7 @@ const LINK_CATEGORIES: LinkCategory[] = [
   },
   {
     id: "library-campus",
-    title: "Library & Campus",
+    title: "Library & campus",
     type: "external",
     links: [
       {
@@ -135,7 +135,7 @@ const LINK_CATEGORIES: LinkCategory[] = [
   },
   {
     id: "student-life",
-    title: "Student Life",
+    title: "Student life",
     type: "external",
     links: [
       {
@@ -157,7 +157,7 @@ const LINK_CATEGORIES: LinkCategory[] = [
   },
   {
     id: "career-exchange",
-    title: "Career & Exchange",
+    title: "Career & exchange",
     type: "external",
     links: [
       {
@@ -184,7 +184,7 @@ const LINK_CATEGORIES: LinkCategory[] = [
   },
   {
     id: "finance-admin",
-    title: "Finance & Admin",
+    title: "Finance & admin",
     type: "external",
     links: [
       {
@@ -315,7 +315,7 @@ const LinksContent = ({ children }: Props) => {
           <MobileSectionDropdown headings={linkHeadings} />
 
           <Header
-            title="Student Links"
+            title="Student links"
             subtitle="Quick links to the most-used NTU student portals, from course registration and grades to career, exchange, and campus facilities."
           />
 

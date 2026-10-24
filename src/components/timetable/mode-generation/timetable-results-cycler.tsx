@@ -43,7 +43,7 @@ const TimetableResultsCycler = ({
           {combinations.length}{" "}
           {uniqueTimeslotsOnly ? "unique layout" : "option"}
           {combinations.length !== 1 ? "s" : ""} found
-          {truncated && " (more exist — try relaxing constraints)"}
+          {truncated && " (there are more: try relaxing constraints)"}
         </span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

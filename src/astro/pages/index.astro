@@ -3,6 +3,7 @@ import { siteConfig } from "@/config/site"
 import { organizationJsonLd, websiteJsonLd } from "@/lib/json-ld"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import { getLatestSemester } from "@/lib/server/db/repo"
+import { buttonVariants } from "@/components/ui/button"
 import LandingActivity from "@/components/landing/landing-activity"
 import LandingArticles from "@/components/landing/landing-articles"
 import LandingAssistant from "@/components/landing/landing-assistant"
@@ -60,14 +61,12 @@ const stats = await getSemesterStats(year, semester)
     </h2>
     <LandingDemo client:visible={{ rootMargin: "1200px" }} />
     <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-      <a
-        href="/timetable"
-        class="bg-primary text-primary-foreground inline-flex h-12 items-center justify-center rounded-md px-6 text-sm font-semibold transition-transform md:px-8">
+      <a href="/timetable" class={buttonVariants({ size: "xl" })}>
         Build my timetable
       </a>
       <a
         href="/mods"
-        class="bg-secondary text-secondary-foreground hover:bg-accent inline-flex h-12 items-center justify-center rounded-md px-6 text-sm font-semibold transition-colors md:px-8">
+        class={buttonVariants({ variant: "secondary", size: "xl" })}>
         Browse modules
       </a>
     </div>

@@ -217,7 +217,7 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
   return (
     <div className="relative space-y-3">
       <Header
-        title="NTU Modules"
+        title="NTU modules"
         subtitle={`AY${year}/${nextYear} Semester ${semester}`}
       />
 

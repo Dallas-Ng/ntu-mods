@@ -198,14 +198,14 @@ const SitemapContent = async () => {
   const moduleGroups = await getModuleGroups()
 
   return (
-    <Container size="sm" className="space-y-10">
+    <Container size="md" className="space-y-8">
       <Header
         title="Sitemap"
         subtitle="Everything on NTUMods, organized in one place. Explore the tools, guides, and module pages below."
       />
 
       <section className="space-y-4">
-        <SectionHeading>Core Pages</SectionHeading>
+        <SectionHeading>Core pages</SectionHeading>
         <div className="grid gap-3 sm:grid-cols-2">
           {CORE_LINKS.map((link) => (
             <a
@@ -222,7 +222,7 @@ const SitemapContent = async () => {
       </section>
 
       <section className="space-y-4">
-        <SectionHeading>Tools and Support</SectionHeading>
+        <SectionHeading>Tools and support</SectionHeading>
         <div className="grid gap-3 sm:grid-cols-2">
           {TOOL_LINKS.map((link) => (
             <a

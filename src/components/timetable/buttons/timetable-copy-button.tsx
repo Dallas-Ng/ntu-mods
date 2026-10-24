@@ -44,7 +44,7 @@ const TimetableCopyButton = () => {
       custom_block_count: qsCustomCourses?.length ?? 0
     })
     window.location.assign("/timetable")
-    toast.success("Successfully copied timetable")
+    toast.success("Timetable copied")
     setOpen(false)
   }
 

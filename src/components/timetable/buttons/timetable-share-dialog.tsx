@@ -66,8 +66,8 @@ const TimetableShareDialog = ({
 
   const copy = (text: string, message: string) =>
     navigator.clipboard.writeText(text).then(
-      () => toast(message),
-      () => toast.error("Could not copy. Copy it manually instead")
+      () => toast.success(message),
+      () => toast.error("Could not copy the link. Copy it by hand instead.")
     )
 
   const handleCopyLink = () => {
@@ -89,7 +89,7 @@ const TimetableShareDialog = ({
           if (e?.name === "AbortError") return
           reportError("timetable_share", e)
           // Share sheet consumed the user activation, so copy may be blocked
-          copy(link, "Share link copied to clipboard")
+          copy(link, "Link copied")
         })
       onOpenChange(false)
       return
@@ -99,13 +99,13 @@ const TimetableShareDialog = ({
       method: "clipboard",
       ...captureProps
     })
-    copy(link, "Share link copied to clipboard")
+    copy(link, "Link copied")
     onOpenChange(false)
   }
 
   const handleCopyText = () => {
     track("timetable_shared", { method: "text", ...captureProps })
-    copy(textBundle, "Timetable code copied — paste it into Import")
+    copy(textBundle, "Timetable code copied. Paste it into Import.")
     onOpenChange(false)
   }
 

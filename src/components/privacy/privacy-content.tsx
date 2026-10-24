@@ -6,11 +6,11 @@ import Header, { SectionHeading } from "@/components/header"
 
 const PrivacyContent = () => {
   return (
-    <Container size="sm" className="space-y-6">
+    <Container size="sm" className="space-y-8">
       <div>
         <Header
           title="Privacy Policy"
-          subtitle="Last Updated: 23 October 2026"
+          subtitle="Last updated: 23 October 2026"
         />
       </div>
 
@@ -29,10 +29,10 @@ const PrivacyContent = () => {
       </p>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>What We Collect</SectionHeading>
+        <SectionHeading>What we collect</SectionHeading>
 
         <SectionHeading as="h3" className="mt-4">
-          Data Stored Locally on Your Device
+          Data stored locally on your device
         </SectionHeading>
 
         <p>
@@ -109,7 +109,7 @@ const PrivacyContent = () => {
         </p>
 
         <SectionHeading as="h3" className="mt-4">
-          Article View Counts
+          Article view counts
         </SectionHeading>
 
         <p>
@@ -138,7 +138,7 @@ const PrivacyContent = () => {
         </p>
 
         <SectionHeading as="h3" className="mt-4">
-          Timetable Walking Routes
+          Timetable walking routes
         </SectionHeading>
 
         <p>
@@ -193,7 +193,7 @@ const PrivacyContent = () => {
         </ul>
 
         <SectionHeading as="h3" className="mt-4">
-          Feedback Submissions
+          Feedback submissions
         </SectionHeading>
 
         <p>
@@ -225,7 +225,7 @@ const PrivacyContent = () => {
         </p>
 
         <SectionHeading as="h3" className="mt-4">
-          Public API and Open Data
+          Public API and open data
         </SectionHeading>
 
         <p>
@@ -280,7 +280,7 @@ const PrivacyContent = () => {
         </p>
 
         <SectionHeading as="h3" className="mt-4">
-          Usage Data
+          Usage data
         </SectionHeading>
 
         <p>
@@ -292,7 +292,7 @@ const PrivacyContent = () => {
       </section>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>How We Use Your Information</SectionHeading>
+        <SectionHeading>How we use your information</SectionHeading>
 
         <ul className="list-outside list-disc pl-10">
           <li>
@@ -370,7 +370,7 @@ const PrivacyContent = () => {
       </section>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>International Transfers</SectionHeading>
+        <SectionHeading>International transfers</SectionHeading>
 
         <p>
           Google, PostHog (United States) and Cloudflare process data in
@@ -382,7 +382,7 @@ const PrivacyContent = () => {
       </section>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>Data Retention</SectionHeading>
+        <SectionHeading>Data retention</SectionHeading>
 
         <ul className="list-outside list-disc pl-10">
           <li>
@@ -406,7 +406,7 @@ const PrivacyContent = () => {
       </section>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>Your Rights</SectionHeading>
+        <SectionHeading>Your rights</SectionHeading>
 
         <p>
           You may request deletion of any feedback you have submitted through
@@ -439,7 +439,7 @@ const PrivacyContent = () => {
       </section>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>Links to Other Websites</SectionHeading>
+        <SectionHeading>Links to other websites</SectionHeading>
 
         <p>
           The Service may contain links to external websites (e.g. NTU course
@@ -449,11 +449,11 @@ const PrivacyContent = () => {
       </section>
 
       <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
-        <SectionHeading>Changes to This Policy</SectionHeading>
+        <SectionHeading>Changes to this policy</SectionHeading>
 
         <p>
           We may update this Privacy Policy from time to time. Changes will be
-          reflected by the &quot;Last Updated&quot; date at the top of this
+          reflected by the &quot;Last updated&quot; date at the top of this
           page. Continued use of the Service after changes are posted
           constitutes your acceptance of the updated policy.
         </p>

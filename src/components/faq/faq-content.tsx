@@ -261,7 +261,7 @@ const FaqContent = ({ children, mobileNav }: Props) => {
           {mobileNav}
 
           <Header
-            title="Frequently Asked Questions"
+            title="Frequently asked questions"
             subtitle="Answers for planning timetables, browsing modules, exporting schedules, understanding how your data is stored, and contributing to the open-source project."
           />
 
@@ -313,7 +313,7 @@ const FaqContent = ({ children, mobileNav }: Props) => {
             </div>
 
             <a href="/feedback">
-              <Button>Share Feedback</Button>
+              <Button>Share feedback</Button>
             </a>
           </div>
         </div>

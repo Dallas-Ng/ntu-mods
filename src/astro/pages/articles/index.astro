@@ -61,14 +61,14 @@ const articlesJsonLd = collectionPageJsonLd({
   ogImage={`${siteConfig.url}/og/articles.png`}
   ogImageAlt="NTUMods guides for NTU students, including NTULearn, FGO and degree audit"
   size="md"
-  containerClassName="space-y-3">
+  containerClassName="space-y-8">
   <JsonLd data={articlesJsonLd} />
   <Header
     title="Articles"
     subtitle="Guides, updates, and notes from NTUMods."
   />
   <ArticlesList articles={articleList} categories={categories} client:load />
-  <nav aria-label="Browse by topic" class="pt-4 text-sm">
+  <nav aria-label="Browse by topic" class="text-sm">
     <span class="text-muted-foreground">Browse by topic: </span>
     {
       categories.map((category, i) => (

@@ -1,5 +1,6 @@
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
 import { cardVariants, controlOnCard } from "@/components/ui/card"
 import { TextLink } from "@/components/ui/text-link"
 import { NewBadge } from "@/components/new-dot"
@@ -39,9 +40,7 @@ const LandingTools = () => {
               <p className="mt-4 max-w-md text-sm md:text-base">{tool.desc}</p>
             </div>
             <div className="grid gap-3 sm:w-fit sm:auto-cols-fr sm:grid-flow-col">
-              <a
-                href={tool.href}
-                className="bg-primary text-primary-foreground inline-flex h-12 items-center justify-center rounded-md px-6 text-sm font-semibold whitespace-nowrap transition-transform md:px-8">
+              <a href={tool.href} className={buttonVariants({ size: "xl" })}>
                 Open the tool
               </a>
               {tool.guide && (

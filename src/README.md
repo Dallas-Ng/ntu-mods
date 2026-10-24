@@ -40,7 +40,7 @@ Two text colours:
 
 No in-between shades such as `text-foreground/70`. Text on a tint is black or the tint's own colour; every text pair in `globals.css` is at least 4.5:1.
 
-Surfaces, all fixed tokens (no `bg-muted/50`-style opacity, except see-through glass: navbar, docs bar, "On this page" button, dialog backdrop):
+Surfaces, all fixed tokens (no `bg-muted/50`-style opacity, except see-through glass: navbar, docs bar, "On this page" button, dialog backdrop; and `Skeleton`, whose translucent `bg-foreground/10` works on any surface):
 
 | Token                                                            | Use                                         |
 | ---------------------------------------------------------------- | ------------------------------------------- |
@@ -76,6 +76,14 @@ Hover, one signal per element:
 - Pointer cursor: every enabled `button`, `[role="button"]` and link gets it from `globals.css`. Do not put `cursor-pointer` on anything that is not clickable. A clickable element that cannot be a `<button>` (it holds another button) gets `role="button"`, `tabIndex={0}` and Enter/Space handling.
 
 The timetable grid and the map keep their own interactions.
+
+Layout and copy:
+
+- Page widths: full for the apps (timetable, mods, map), `md` for browse pages (articles, exams, tools, FAQ, links, changelog, sitemap), `sm` for reading pages (feedback, privacy, terms). Top-level page sections are `space-y-8` apart.
+- Sentence case for every heading, label and button. Title Case only for names: articles, tools ("CGPA Planner"), documents ("Privacy Policy").
+- No em dashes in site copy.
+- Toasts: `toast.success("Link copied")` for a done action, `toast.error("Could not copy the link. Copy it by hand instead.")` or `toast.error("Something went wrong. Try again later.")` for failures, `toast.info` for hints. One sentence has no full stop; two sentences do.
+- Links styled as buttons use `buttonVariants`, never copied button classes (`xl` is the landing page's large size).
 
 Shared pieces for the rest: `TextLink` and `ExternalLinkIcon` (links), `cardVariants` (cards), `InlineCode`, `CopyButton`, `ResponsiveModal` with `modal-parts` and `ConfirmDialog` (dialogs, never `confirm()`), `Alert`, `NewBadge`, and `ArticleToc` / `SideNavDrawer` / `side-nav` styles (side navs).
 

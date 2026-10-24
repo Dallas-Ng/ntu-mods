@@ -72,7 +72,7 @@ const LandingStats = ({ semesterLabel, stats }: Props) => {
               </div>
               <ChevronRight
                 aria-hidden="true"
-                className="size-6 shrink-0 transition-transform duration-150 group-hover:translate-x-1 motion-reduce:transition-none"
+                className="size-6 shrink-0 transition-transform duration-150 group-hover:translate-x-0.5 motion-reduce:transition-none"
               />
             </div>
           </a>

@@ -19,12 +19,12 @@ const TimetableAiModelLoader = ({
 }: Props) => {
   if (error === "webgpu_unsupported") {
     return (
-      <div className="flex flex-col gap-3 rounded-lg border p-4">
+      <div className="bg-muted flex flex-col gap-3 rounded-lg p-4">
         <div className="flex items-center gap-2">
           <BotIcon className="text-muted-foreground size-5" />
           <span className="text-sm font-medium">AI Assistant</span>
         </div>
-        <p className="text-muted-foreground text-xs">
+        <p className="text-muted-foreground text-sm">
           Your browser doesn&apos;t support WebGPU, which is needed to run the
           AI locally.
         </p>
@@ -46,7 +46,7 @@ const TimetableAiModelLoader = ({
 
   if (error) {
     return (
-      <div className="flex flex-col gap-3 rounded-lg border p-4">
+      <div className="bg-muted flex flex-col gap-3 rounded-lg p-4">
         <div className="flex items-center gap-2">
           <BotIcon className="text-muted-foreground size-5" />
           <span className="text-sm font-medium">AI Assistant</span>
@@ -63,7 +63,7 @@ const TimetableAiModelLoader = ({
 
   if (isLoading) {
     return (
-      <div className="flex flex-col gap-3 rounded-lg border p-4">
+      <div className="bg-muted flex flex-col gap-3 rounded-lg p-4">
         <div className="flex items-center gap-2">
           <BotIcon className="text-muted-foreground size-5 animate-pulse" />
           <span className="text-sm font-medium">Loading AI model…</span>
@@ -75,21 +75,21 @@ const TimetableAiModelLoader = ({
           />
         </div>
         <p className="text-muted-foreground text-xs">
-          {loadingProgress}% — cached after first load (~2GB)
+          {loadingProgress}%. Cached after the first load (about 2GB)
         </p>
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border p-4">
+    <div className="bg-muted flex flex-col gap-3 rounded-lg p-4">
       <div className="flex items-center gap-2">
         <BotIcon className="text-muted-foreground size-5" />
         <span className="text-sm font-medium">AI Assistant</span>
       </div>
-      <p className="text-muted-foreground text-xs">
+      <p className="text-muted-foreground text-sm">
         Chat with a local AI to plan your timetable preferences. The model runs
-        entirely in your browser — no data is sent anywhere.
+        entirely in your browser, so no data is sent anywhere.
       </p>
       <p className="text-muted-foreground text-xs">
         First load downloads ~2GB and is cached. Takes 30–60 seconds depending

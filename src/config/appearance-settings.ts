@@ -460,7 +460,7 @@ export const APPEARANCE_DENSITIES = {
 export const CONTRAST_PRESETS = {
   normal: {
     label: "Normal",
-    mutedForeground: "215.4 16.3% 46.9%",
+    mutedForeground: "215.4 16.3% 41%",
     mutedForegroundDark: "215 20.2% 65.1%"
   },
   high: {

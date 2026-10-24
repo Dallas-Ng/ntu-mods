@@ -211,7 +211,7 @@ const SessionRowEditor = ({
   }
 
   return (
-    <div className="bg-muted/40 space-y-3 rounded-lg border p-3">
+    <div className="bg-muted space-y-3 rounded-lg p-3">
       {/* Type selector + remove */}
       <div className="flex items-start gap-2">
         <div className="flex-1 space-y-1.5">
@@ -243,8 +243,8 @@ const SessionRowEditor = ({
 
             {isCustomType && (
               <Input
-                className="h-8 w-full text-sm placeholder:text-sm"
-                placeholder="Optional — e.g. Practice, Shift, Meeting"
+                className="h-8 w-full text-sm"
+                placeholder="Optional, e.g. Practice, Shift, Meeting"
                 value={session.type}
                 maxLength={20}
                 onChange={(e) => onChange({ type: e.target.value })}
@@ -259,7 +259,7 @@ const SessionRowEditor = ({
           disabled={!canRemove}
           onClick={onRemove}
           className="text-muted-foreground hover:text-destructive mt-0.5 size-8 shrink-0">
-          <Trash2 className="size-3.5" />
+          <Trash2 className="size-4" />
         </Button>
       </div>
 
@@ -276,10 +276,10 @@ const SessionRowEditor = ({
                 onClick={() => toggleDay(day)}
                 aria-pressed={active}
                 className={cn(
-                  "focus-visible:ring-ring/50 h-6 cursor-pointer rounded border px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px]",
+                  "bg-muted focus-visible:ring-ring/50 h-6 rounded px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px]",
                   active
                     ? "bg-foreground text-background border-transparent"
-                    : "text-muted-foreground hover:border-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 )}>
                 {TRUN_DAY_MAP[day as keyof typeof TRUN_DAY_MAP]}
               </button>
@@ -292,7 +292,7 @@ const SessionRowEditor = ({
       <div className="space-y-1">
         <Label className="text-xs">Venue</Label>
         <Input
-          className="h-8 text-sm placeholder:text-sm"
+          className="h-8 text-sm"
           placeholder="Optional"
           value={session.venue}
           onChange={(e) => onChange({ venue: e.target.value })}
@@ -475,14 +475,14 @@ export const CourseModal = ({
                 <div
                   key={index._key}
                   className={cn(
-                    "flex h-7 items-center rounded-md border text-xs font-medium transition-colors",
+                    "bg-muted flex h-7 items-center rounded-md text-xs font-medium transition-colors",
                     isActive
                       ? "bg-foreground text-background border-transparent"
-                      : "text-muted-foreground hover:border-foreground"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground"
                   )}>
                   <button
                     type="button"
-                    className="h-full cursor-pointer px-2.5"
+                    className="h-full px-2.5"
                     onClick={() =>
                       setForm((f) => ({ ...f, activeIndexKey: index._key }))
                     }>
@@ -492,7 +492,7 @@ export const CourseModal = ({
                     <button
                       type="button"
                       aria-label={`Remove ${index.label}`}
-                      className="h-full cursor-pointer pr-1.5 opacity-60 hover:opacity-100"
+                      className="text-muted-foreground hover:text-foreground h-full pr-1.5 transition-colors"
                       onClick={() => removeIndex(index._key)}>
                       <X className="size-3" />
                     </button>
@@ -507,7 +507,7 @@ export const CourseModal = ({
                 size="sm"
                 onClick={addIndex}
                 className="text-muted-foreground h-7 gap-1 px-2 text-xs">
-                <Plus className="size-3.5" />
+                <Plus className="size-3" />
                 Option
               </Button>
             )}
@@ -515,7 +515,7 @@ export const CourseModal = ({
 
           {hasMultipleIndexes && (
             <Input
-              className="h-8 text-sm placeholder:text-sm"
+              className="h-8 text-sm"
               placeholder="Option name"
               value={activeIndex.label}
               maxLength={30}
@@ -545,7 +545,7 @@ export const CourseModal = ({
             size="sm"
             onClick={addSession}
             className="text-muted-foreground h-8 gap-1.5">
-            <Plus className="size-3.5" />
+            <Plus className="size-4" />
             Add session
           </Button>
         </div>
@@ -617,9 +617,20 @@ const CustomCourseEditor = () => {
 
           return (
             <div key={course.id}>
+              {/* Not a <button>: it holds the remove button. */}
               <div
-                className="hover:bg-accent flex cursor-pointer items-center justify-between pr-3 pl-4 text-sm transition-colors"
-                onClick={() => setEditingCourse(course)}>
+                role="button"
+                tabIndex={0}
+                aria-label={`Edit ${course.name}`}
+                className="hover:bg-accent focus-visible:ring-ring/50 flex items-center justify-between pr-3 pl-4 text-sm transition-colors outline-none focus-visible:ring-[3px]"
+                onClick={() => setEditingCourse(course)}
+                onKeyDown={(e) => {
+                  if (e.target !== e.currentTarget) return
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault()
+                    setEditingCourse(course)
+                  }
+                }}>
                 <div className="flex min-w-0 items-center gap-1">
                   <span className="max-w-[110px] min-w-16 truncate font-medium">
                     {course.name}
@@ -632,7 +643,7 @@ const CustomCourseEditor = () => {
                 <button
                   type="button"
                   aria-label={`Remove ${course.name}`}
-                  className="flex size-8 shrink-0 cursor-pointer items-center justify-center"
+                  className="flex size-8 shrink-0 items-center justify-center"
                   onClick={(e) => {
                     e.stopPropagation()
                     removeCustomCourse(course.id)
@@ -655,10 +666,10 @@ const CustomCourseEditor = () => {
                           selectCustomCourseIndex(course.id, courseIndex.id)
                         }
                         className={cn(
-                          "focus-visible:ring-ring/50 h-5 cursor-pointer rounded border px-1.5 text-[0.65rem] font-medium transition-colors outline-none focus-visible:ring-[3px]",
+                          "bg-muted focus-visible:ring-ring/50 h-5 rounded px-1.5 text-[0.65rem] font-medium transition-colors outline-none focus-visible:ring-[3px]",
                           isActive
                             ? "bg-foreground text-background border-transparent"
-                            : "text-muted-foreground hover:border-foreground"
+                            : "text-muted-foreground hover:bg-accent hover:text-foreground"
                         )}>
                         {courseIndex.label}
                       </button>
@@ -672,9 +683,9 @@ const CustomCourseEditor = () => {
       </div>
 
       <button
-        className="hover:bg-accent focus-visible:ring-ring/50 mx-4 mt-1 flex w-[calc(100%-2rem)] cursor-pointer items-center justify-center gap-1.5 rounded-md border border-dashed p-2 text-sm transition-colors outline-none focus-visible:ring-[3px]"
+        className="hover:bg-accent focus-visible:ring-ring/50 mx-4 mt-1 flex w-[calc(100%-2rem)] items-center justify-center gap-1.5 rounded-md border border-dashed p-2 text-sm transition-colors outline-none focus-visible:ring-[3px]"
         onClick={() => setAddOpen(true)}>
-        <Plus className="size-3.5" />
+        <Plus className="size-4" />
         Add custom block
       </button>
 

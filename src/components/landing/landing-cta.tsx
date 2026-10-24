@@ -11,11 +11,8 @@ const LandingCTA = ({ semesterLabel }: Props) => {
     <div className="relative w-full text-center xl:text-left">
       <a
         href="/articles/ntu-ay2026-semester-2-whats-new"
-        className="bg-primary/15 text-foreground hover:bg-primary/25 mb-6 inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors sm:text-sm">
-        <span
-          className="size-2.5 rounded-full bg-green-500"
-          aria-hidden="true"
-        />
+        className="bg-primary-subtle text-foreground hover:bg-accent mb-6 inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors sm:text-sm">
+        <span className="bg-success size-2.5 rounded-full" aria-hidden="true" />
         Now live: {semesterLabel}
         <span className="hidden sm:inline"> data</span>
         <ChevronRight aria-hidden="true" className="-ml-1 size-4" />

@@ -1,5 +1,8 @@
 import { MODULE_CODE_RE } from "@/lib/module-constants"
 import type { DbExam, DbModule } from "@/lib/server/db/types"
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
+import { TextLink } from "@/components/ui/text-link"
 
 interface Props {
   module: DbModule
@@ -30,11 +33,7 @@ export function renderModuleValue(
     return unique.map((item, idx) => (
       <span key={item}>
         {MODULE_CODE_RE.test(item) && (!knownCodes || knownCodes.has(item)) ? (
-          <a
-            href={`/mods/${item}`}
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-            {item}
-          </a>
+          <TextLink href={`/mods/${item}`}>{item}</TextLink>
         ) : (
           item
         )}
@@ -52,7 +51,7 @@ export const ROW_CLASS =
 
 const ModsInfoTable = ({ module, exam, knownCodes }: Props) => (
   <div className="space-y-3">
-    <dl className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
+    <dl className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
       <div className={ROW_CLASS}>
         <dt className="text-muted-foreground">AUs</dt>
         <dd>{module.au} AUs</dd>

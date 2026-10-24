@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
+import { TextLink } from "@/components/ui/text-link"
 import { Textarea } from "@/components/ui/textarea"
 
 const FormSchema = z.object({
@@ -132,7 +133,7 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
                   <Input
                     autoComplete="off"
                     placeholder="your@email.com"
-                    className="bg-background placeholder:text-sm"
+                    className="bg-background"
                     {...field}
                   />
                 </FormControl>
@@ -155,7 +156,7 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
                   <Textarea
                     placeholder="Share your thoughts, report an issue, or suggest an improvement..."
                     {...field}
-                    className="bg-background min-h-[160px] placeholder:text-sm"
+                    className="bg-background min-h-[160px]"
                   />
                 </FormControl>
 
@@ -189,13 +190,12 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
           <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-muted-foreground shrink-0 text-xs whitespace-nowrap">
               Developer?{" "}
-              <a
+              <TextLink
                 href={`${siteConfig.links.repo}/issues`}
                 target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+                rel="noopener noreferrer">
                 Open an issue or PR
-              </a>
+              </TextLink>
               .
             </p>
             <Button

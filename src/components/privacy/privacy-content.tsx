@@ -1,39 +1,39 @@
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
+import { TextLink } from "@/components/ui/text-link"
 import Container from "@/components/container"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 
 const PrivacyContent = () => {
   return (
-    <Container size="sm" className="text-muted-foreground space-y-6">
-      <div className="text-foreground">
+    <Container size="sm" className="space-y-8">
+      <div>
         <Header
           title="Privacy Policy"
-          subtitle="Last Updated: 23 October 2026"
+          subtitle="Last updated: 23 October 2026"
         />
       </div>
 
       <p className="text-sm">
         This Privacy Policy describes how NTUMods (&quot;we&quot;,
         &quot;us&quot;, or &quot;our&quot;) handles information when you use{" "}
-        <a
+        <TextLink
           href="https://ntumods.com"
-          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
           rel="external nofollow noopener"
           target="_blank">
           ntumods.com
-        </a>{" "}
+        </TextLink>{" "}
         (the &quot;Service&quot;). NTUMods is a free, open-source timetable
         planning tool for NTU students. We do not sell your data, and we do not
         require an account to use the Service.
       </p>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          What We Collect
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>What we collect</SectionHeading>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
-          Data Stored Locally on Your Device
-        </h3>
+        <SectionHeading as="h3" className="mt-4">
+          Data stored locally on your device
+        </SectionHeading>
 
         <p>
           Your timetable selections, academic year/semester preferences, and
@@ -44,11 +44,9 @@ const PrivacyContent = () => {
           it at any time by clearing your browser&apos;s site data.
         </p>
 
-        <h3
-          id="analytics"
-          className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" id="analytics" className="mt-4">
           Analytics
-        </h3>
+        </SectionHeading>
 
         <p>
           We use two third-party analytics services on the production site to
@@ -61,13 +59,12 @@ const PrivacyContent = () => {
           <strong>Google Analytics 4</strong> collects page views, general usage
           patterns, browser and device type, and approximate location derived
           from your IP address. Data is processed by Google. See{" "}
-          <a
+          <TextLink
             href="https://policies.google.com/privacy"
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
             rel="external nofollow noopener"
             target="_blank">
             Google&apos;s Privacy Policy
-          </a>
+          </TextLink>
           .
         </p>
 
@@ -97,13 +94,12 @@ const PrivacyContent = () => {
           PostHog requests are routed through our own domain (ntumods.com)
           rather than sent straight from your browser. Data is processed by
           PostHog, Inc. in the United States. See{" "}
-          <a
+          <TextLink
             href="https://posthog.com/privacy"
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
             rel="external nofollow noopener"
             target="_blank">
             PostHog&apos;s Privacy Policy
-          </a>
+          </TextLink>
           .
         </p>
 
@@ -112,9 +108,9 @@ const PrivacyContent = () => {
           collected during local development.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
-          Article View Counts
-        </h3>
+        <SectionHeading as="h3" className="mt-4">
+          Article view counts
+        </SectionHeading>
 
         <p>
           To show how many people have read an article, we store the
@@ -124,9 +120,9 @@ const PrivacyContent = () => {
           counts are only recorded after you accept analytics.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           Transcript Tools (CGPA Planner, FGO Optimiser)
-        </h3>
+        </SectionHeading>
 
         <p>
           Transcript PDFs are read entirely in your browser, and the file itself
@@ -141,9 +137,9 @@ const PrivacyContent = () => {
           flags, such as how many modules were found.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
-          Timetable Walking Routes
-        </h3>
+        <SectionHeading as="h3" className="mt-4">
+          Timetable walking routes
+        </SectionHeading>
 
         <p>
           The Walking between classes feature on the timetable page works out
@@ -156,9 +152,9 @@ const PrivacyContent = () => {
           timetable.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           Campus Map
-        </h3>
+        </SectionHeading>
 
         <p>
           The campus map does not use your device&apos;s location. Buildings,
@@ -172,13 +168,12 @@ const PrivacyContent = () => {
             <strong>Satellite and Hybrid views</strong> load imagery directly
             from Esri&apos;s servers, so Esri receives your IP address and the
             part of the campus you are viewing. See{" "}
-            <a
+            <TextLink
               href="https://www.esri.com/en-us/privacy/overview"
-              className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
               rel="external nofollow noopener"
               target="_blank">
               Esri&apos;s Privacy Statement
-            </a>
+            </TextLink>
             .
           </li>
           <li>
@@ -197,9 +192,9 @@ const PrivacyContent = () => {
           </li>
         </ul>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
-          Feedback Submissions
-        </h3>
+        <SectionHeading as="h3" className="mt-4">
+          Feedback submissions
+        </SectionHeading>
 
         <p>
           The Feedback page includes an optional feedback form. If you submit
@@ -229,29 +224,24 @@ const PrivacyContent = () => {
           address was included, but not the message itself.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
-          Public API and Open Data
-        </h3>
+        <SectionHeading as="h3" className="mt-4">
+          Public API and open data
+        </SectionHeading>
 
         <p>
-          The{" "}
-          <a
-            href="/developers"
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-            developers page
-          </a>{" "}
-          documents a free, read-only API and open data files with NTU module,
-          class index and exam data. They contain no personal data, and we do
-          not ask callers for an account or an API key. To limit abuse, we count
+          The <TextLink href="/developers">developers page</TextLink> documents
+          a free, read-only API and open data files with NTU module, class index
+          and exam data. They contain no personal data, and we do not ask
+          callers for an account or an API key. To limit abuse, we count
           requests to the API per IP address using Cloudflare&apos;s rate
           limiting. We do not store those addresses or counts in our own
           database. The &quot;Try it&quot; box on that page only sends a request
           to our own API, with the module code you type.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           MCP Server
-        </h3>
+        </SectionHeading>
 
         <p>
           Our public MCP server at ntumods.com/mcp gives AI assistants read-only
@@ -270,17 +260,12 @@ const PrivacyContent = () => {
           profile for MCP users, so we have nothing of ours to look up or
           delete. Server logs held by Cloudflare follow its retention settings.
           For questions or requests, use our{" "}
-          <a
-            href="/feedback"
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-            feedback page
-          </a>
-          .
+          <TextLink href="/feedback">feedback page</TextLink>.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
+        <SectionHeading as="h3" className="mt-4">
           AI Assistants (WebMCP, Developer Preview)
-        </h3>
+        </SectionHeading>
 
         <p>
           In a browser that supports WebMCP, an AI assistant you use can call
@@ -294,9 +279,9 @@ const PrivacyContent = () => {
           will not see any change.
         </p>
 
-        <h3 className="text-foreground mt-4 text-base font-semibold">
-          Usage Data
-        </h3>
+        <SectionHeading as="h3" className="mt-4">
+          Usage data
+        </SectionHeading>
 
         <p>
           Like most web services, our hosting provider (Cloudflare) may
@@ -306,10 +291,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          How We Use Your Information
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>How we use your information</SectionHeading>
 
         <ul className="list-outside list-disc pl-10">
           <li>
@@ -336,8 +319,8 @@ const PrivacyContent = () => {
 
       <section
         id="consent"
-        className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">Consent</h2>
+        className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Consent</SectionHeading>
 
         <p>
           If you visit from the European Economic Area, the United Kingdom,
@@ -373,8 +356,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">Cookies</h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Cookies</SectionHeading>
 
         <p>
           We do not set our own cookies. Google Analytics sets cookies, and
@@ -386,10 +369,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          International Transfers
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>International transfers</SectionHeading>
 
         <p>
           Google, PostHog (United States) and Cloudflare process data in
@@ -400,10 +381,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Data Retention
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Data retention</SectionHeading>
 
         <ul className="list-outside list-disc pl-10">
           <li>
@@ -426,20 +405,15 @@ const PrivacyContent = () => {
         </ul>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">Your Rights</h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Your rights</SectionHeading>
 
         <p>
           You may request deletion of any feedback you have submitted through
-          the{" "}
-          <a
-            href="/feedback"
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-            feedback page
-          </a>
-          . Since timetable and settings data is stored only in your browser,
-          you can delete it yourself at any time through your browser&apos;s
-          site data settings.
+          the <TextLink href="/feedback">feedback page</TextLink>. Since
+          timetable and settings data is stored only in your browser, you can
+          delete it yourself at any time through your browser&apos;s site data
+          settings.
         </p>
 
         <p>
@@ -454,10 +428,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Children&apos;s Privacy
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Children&apos;s Privacy</SectionHeading>
 
         <p>
           The Service is intended for university students and is not directed at
@@ -466,10 +438,8 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Links to Other Websites
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Links to other websites</SectionHeading>
 
         <p>
           The Service may contain links to external websites (e.g. NTU course
@@ -478,14 +448,12 @@ const PrivacyContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Changes to This Policy
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Changes to this policy</SectionHeading>
 
         <p>
           We may update this Privacy Policy from time to time. Changes will be
-          reflected by the &quot;Last Updated&quot; date at the top of this
+          reflected by the &quot;Last updated&quot; date at the top of this
           page. Continued use of the Service after changes are posted
           constitutes your acceptance of the updated policy.
         </p>

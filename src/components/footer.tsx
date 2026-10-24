@@ -55,7 +55,7 @@ const LEGAL_LINKS = [
 
 const Footer = () => {
   return (
-    <footer className="border-border/60 bg-muted/30 mt-16 border-t px-3 lg:px-5">
+    <footer className="border-border/60 bg-muted mt-16 border-t px-3 lg:px-5">
       <div className="container grid gap-10 py-12 text-sm sm:grid-cols-2 lg:grid-cols-[1.6fr_repeat(4,1fr)]">
         <div className="space-y-4 sm:col-span-2 lg:col-span-1">
           <a
@@ -71,7 +71,7 @@ const Footer = () => {
 
           <a
             href="/faq#current-semester"
-            className="bg-primary/10 ring-primary/20 text-primary hover:bg-primary/15 inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium ring-1 transition-colors">
+            className="bg-primary-subtle ring-primary/20 text-primary hover:bg-accent inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium ring-1 transition-colors">
             <span className="bg-primary size-1.5 rounded-full" />
             {LATEST_SEMESTER_LABEL}
           </a>
@@ -92,7 +92,7 @@ const Footer = () => {
                       target: "_blank",
                       rel: "noopener noreferrer"
                     })}
-                    className="text-foreground/80 hover:text-primary transition-colors">
+                    className="text-foreground hover:text-primary transition-colors">
                     {link.label}
                   </a>
                 </li>
@@ -124,7 +124,7 @@ const Footer = () => {
           <li id="cookie-settings" hidden>
             <button
               type="button"
-              className="hover:text-primary cursor-pointer transition-colors">
+              className="hover:text-primary transition-colors">
               Cookie settings
             </button>
           </li>

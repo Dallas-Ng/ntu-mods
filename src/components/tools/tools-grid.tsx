@@ -1,10 +1,13 @@
 "use client"
 
-import { ArrowRight, BookOpen } from "lucide-react"
+import { BookOpen } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
+import { cardVariants, controlOnCard } from "@/components/ui/card"
+import { CardCta } from "@/components/ui/text-link"
+import { NewBadge } from "@/components/new-dot"
 import AssistantPreview from "@/components/tools/assistant-preview"
 
 // Static miniatures of each tool so the cards read differently at a glance.
@@ -92,6 +95,7 @@ const WallpaperPreview = () => (
     aria-hidden>
     <div className="bg-muted w-44 space-y-1.5 rounded-t-[2rem] border-[3px] border-b-0 px-3 pt-3 pb-0">
       <div className="bg-foreground/20 mx-auto h-1.5 w-12 rounded-full" />
+      {/* Miniature timetable: grid exception to the type scale. */}
       <div className="text-muted-foreground pt-0.5 text-center text-[10px] font-medium">
         Mon
       </div>
@@ -121,7 +125,8 @@ const ToolsGrid = () => (
         <div
           key={tool.href}
           className={cn(
-            "bg-muted hover:bg-accent group relative flex flex-col gap-6 rounded-2xl p-5 transition-colors md:p-6",
+            cardVariants({ interactive: true }),
+            "group relative flex flex-col gap-6 p-5 md:p-6",
             wide && "md:col-span-2 md:flex-row-reverse"
           )}>
           <div
@@ -147,11 +152,7 @@ const ToolsGrid = () => (
                     {tool.name}
                   </a>
                 </h2>
-                {tool.isNew && (
-                  <span className="rounded-full bg-yellow-400 px-2.5 py-0.5 text-xs font-semibold text-black">
-                    New
-                  </span>
-                )}
+                {tool.isNew && <NewBadge size="md" />}
               </div>
               <p
                 className={cn(
@@ -176,10 +177,7 @@ const ToolsGrid = () => (
             </div>
 
             <div className="flex items-center justify-between gap-3">
-              <span className="text-primary inline-flex items-center gap-1.5 text-sm font-semibold whitespace-nowrap">
-                Open the tool{" "}
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-              </span>
+              <CardCta className="whitespace-nowrap">Open the tool</CardCta>
               {tool.guide && (
                 <a
                   href={tool.guide.href}
@@ -189,7 +187,10 @@ const ToolsGrid = () => (
                       source: "tools_page"
                     })
                   }
-                  className="bg-background hover:bg-background/60 relative z-10 inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-semibold whitespace-nowrap transition-colors sm:px-4">
+                  className={cn(
+                    controlOnCard,
+                    "relative z-10 inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-semibold whitespace-nowrap sm:px-4"
+                  )}>
                   <BookOpen className="text-primary size-4" />
                   {tool.guide.label}
                 </a>

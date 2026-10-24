@@ -1,7 +1,7 @@
 ---
-import { ArrowRight } from "lucide-react"
-
 import { siteConfig } from "@/config/site"
+import { cardVariants } from "@/components/ui/card"
+import { CardCta, TextLink } from "@/components/ui/text-link"
 import MapsPageContent from "@/components/map/maps-page-content"
 import MapGuide from "@/astro/components/MapGuide.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -37,8 +37,11 @@ const CREDITS = [
 
   <a
     href="/articles/ntu-campus-map-guide"
-    class="bg-card hover:bg-accent group mx-auto mt-12 flex max-w-3xl flex-col overflow-hidden rounded-xl border transition-colors sm:flex-row">
-    <div class="bg-muted/50 sm:w-80 sm:shrink-0">
+    class:list={[
+      cardVariants({ interactive: true }),
+      "group mx-auto mt-12 flex max-w-3xl flex-col overflow-hidden sm:flex-row"
+    ]}>
+    <div class="bg-muted sm:w-80 sm:shrink-0">
       <img
         src="/articles/ntu-campus-map-guide/overview.webp"
         alt="The NTUMods campus map with search, category chips and a side panel"
@@ -60,7 +63,7 @@ const CREDITS = [
     </div>
     <div class="flex flex-col justify-center gap-2 p-5">
       <p class="text-muted-foreground text-xs font-medium">Guide</p>
-      <h2 class="text-lg leading-snug font-semibold tracking-tight">
+      <h2 class="text-base leading-snug font-semibold">
         NTU Campus Map: Find Any Lecture Theatre, Room and Walking Route
       </h2>
       <p class="text-muted-foreground text-sm leading-relaxed">
@@ -68,13 +71,7 @@ const CREDITS = [
         or tutorial room, read NTU room codes, pick the right level and time the
         walk between back-to-back classes, with screenshots of every step.
       </p>
-      <span
-        class="text-primary mt-1 inline-flex items-center gap-1 text-sm font-medium">
-        Read the guide
-        <ArrowRight
-          className="size-4 transition-transform duration-150 group-hover:translate-x-0.5"
-        />
-      </span>
+      <CardCta className="mt-1">Read the guide</CardCta>
     </div>
   </a>
 
@@ -83,17 +80,17 @@ const CREDITS = [
       {
         CREDITS.map(({ label, text, href, note, prefix }) => (
           <>
-            <dt class="text-foreground/80 font-medium">{label}</dt>
+            <dt class="text-foreground font-medium">{label}</dt>
             <dd>
               {prefix}
               {href ? (
-                <a
+                <TextLink
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="hover:text-foreground underline underline-offset-2 transition-colors">
+                  variant="muted">
                   {text}
-                </a>
+                </TextLink>
               ) : (
                 text
               )}

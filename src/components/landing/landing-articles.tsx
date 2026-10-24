@@ -1,4 +1,7 @@
 import { formatShortDate } from "@/lib/format"
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
+import { TextLink } from "@/components/ui/text-link"
 import { getAllArticles, type Article } from "@/astro/lib/articles"
 
 // Article slugs ranked by human views, most read first. Source: PostHog
@@ -17,7 +20,7 @@ const POPULAR_ARTICLE_SLUGS: string[] = [
 ]
 
 const Meta = ({ a }: { a: Article }) => (
-  <p className="text-foreground/75 text-sm">
+  <p className="text-foreground text-sm">
     {a.category} · {formatShortDate(a.date)} · {a.readingTime}
   </p>
 )
@@ -42,23 +45,24 @@ const LandingArticles = async () => {
         <h2 className="landing-reveal max-w-2xl text-3xl leading-none font-bold tracking-tighter md:text-4xl">
           Guides for planning your semester
         </h2>
-        <a
-          href="/articles"
-          className="text-primary text-base font-semibold underline-offset-4 hover:underline">
+        <TextLink href="/articles" variant="action" className="text-base">
           View all articles
-        </a>
+        </TextLink>
       </div>
 
       <div className="grid gap-3 lg:grid-cols-[7fr_5fr]">
         <a
           href={`/articles/${lead.slug}`}
-          className="landing-reveal group bg-muted flex flex-col overflow-hidden rounded-2xl">
+          className={cn(
+            cardVariants({ interactive: true }),
+            "landing-reveal group flex flex-col overflow-hidden"
+          )}>
           <div className="relative flex flex-1 flex-col justify-center gap-3 p-5 md:p-6 lg:min-h-[300px]">
             <Meta a={lead} />
             <h3 className="line-clamp-2 text-xl leading-tight font-bold tracking-tight md:text-2xl">
               {lead.title}
             </h3>
-            <p className="text-foreground/80 line-clamp-3 text-base">
+            <p className="text-foreground line-clamp-3 text-base">
               {lead.description}
             </p>
           </div>
@@ -69,7 +73,7 @@ const LandingArticles = async () => {
             <li key={a.slug} className="landing-reveal flex-1">
               <a
                 href={`/articles/${a.slug}`}
-                className="hover:bg-muted group flex h-full gap-4 rounded-2xl p-4 transition-colors duration-150">
+                className="hover:bg-accent group flex h-full gap-4 rounded-2xl p-4 transition-colors duration-150">
                 <div className="flex min-w-0 flex-col justify-center gap-1">
                   <Meta a={a} />
                   <h3 className="line-clamp-3 text-base leading-snug font-semibold">

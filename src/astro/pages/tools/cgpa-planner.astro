@@ -5,9 +5,11 @@ import {
   faqPageJsonLd,
   webApplicationJsonLd
 } from "@/lib/json-ld"
+import { cardVariants } from "@/components/ui/card"
+import { CardCta, TextLink } from "@/components/ui/text-link"
 import Breadcrumbs from "@/components/breadcrumbs"
 import CgpaPlanner from "@/components/cgpa/cgpa-planner"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import ToolGuideCallout from "@/astro/components/ToolGuideCallout.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -118,10 +120,10 @@ const FAQ = [
   </div>
 
   <section class="space-y-3 pt-4" aria-labelledby="about-cgpa">
-    <h2 id="about-cgpa" class="text-lg font-semibold tracking-tight">
+    <SectionHeading id="about-cgpa">
       About NTU honours classification
-    </h2>
-    <p class="text-muted-foreground text-sm leading-relaxed">
+    </SectionHeading>
+    <p class="text-sm leading-relaxed">
       Your NTU honours class depends on your final CGPA, the AU-weighted average
       of grade points across every letter-graded module. For most honours
       degrees, Highest Distinction needs 4.50, Distinction 4.00, Merit 3.50 and
@@ -132,19 +134,21 @@ const FAQ = [
     <div class="space-y-3 pt-2">
       <a
         href={MAIN_GUIDE.href}
-        class="bg-muted hover:bg-accent group block space-y-2 rounded-2xl p-5 transition-colors">
+        class:list={[
+          cardVariants({ interactive: true }),
+          "group block space-y-2 p-5"
+        ]}>
         <p
           class="text-muted-foreground text-xs font-medium tracking-wide uppercase">
           Main guide
         </p>
-        <p
-          class="group-hover:text-primary text-xl leading-snug font-semibold tracking-tight">
+        <p class="text-xl leading-snug font-semibold tracking-tight">
           {MAIN_GUIDE.title}
         </p>
         <p class="text-muted-foreground text-sm leading-relaxed">
           {MAIN_GUIDE.description}
         </p>
-        <p class="text-primary pt-1 text-sm font-medium">Read the guide →</p>
+        <CardCta className="pt-1">Read the guide</CardCta>
       </a>
 
       <div class="grid gap-3 sm:grid-cols-3">
@@ -152,11 +156,9 @@ const FAQ = [
           RELATED_GUIDES.map(({ href, title, description }) => (
             <a
               href={href}
-              class="hover:bg-accent group rounded-2xl border p-4 transition-colors">
-              <p class="group-hover:text-primary text-sm leading-snug font-medium">
-                {title}
-              </p>
-              <p class="text-muted-foreground mt-1 text-xs leading-relaxed">
+              class:list={[cardVariants({ interactive: true }), "group p-4"]}>
+              <p class="text-sm leading-snug font-medium">{title}</p>
+              <p class="text-muted-foreground mt-1 text-sm leading-relaxed">
                 {description}
               </p>
             </a>
@@ -167,19 +169,17 @@ const FAQ = [
   </section>
 
   <section class="space-y-4 pt-4" aria-labelledby="cgpa-faq">
-    <h2 id="cgpa-faq" class="text-lg font-semibold tracking-tight">
-      Frequently asked questions
-    </h2>
+    <SectionHeading id="cgpa-faq"> Frequently asked questions </SectionHeading>
     {
       FAQ.map(({ question, answer }) => (
         <div class="space-y-1">
-          <h3 class="text-sm font-medium">{question}</h3>
-          <p class="text-muted-foreground text-sm leading-relaxed">{answer}</p>
+          <SectionHeading as="h3">{question}</SectionHeading>
+          <p class="text-sm leading-relaxed">{answer}</p>
         </div>
       ))
     }
-    <a href="/tools" class="inline-block text-sm text-blue-500 hover:underline">
-      Browse all NTUMods tools →
-    </a>
+    <TextLink href="/tools" variant="action" arrow className="text-sm">
+      Browse all NTUMods tools
+    </TextLink>
   </section>
 </BaseLayout>

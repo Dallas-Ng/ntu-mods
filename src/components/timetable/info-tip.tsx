@@ -23,7 +23,7 @@ const InfoTip = ({
         <span
           aria-label={title ? `About ${title}` : "More information"}
           className="text-muted-foreground hover:text-foreground pointer-events-auto ml-1.5 inline-flex cursor-help transition-colors">
-          <Info className="size-3.5" />
+          <Info className="size-3" />
         </span>
       </TooltipTrigger>
       <TooltipContent side="top" className="max-w-56 text-center">

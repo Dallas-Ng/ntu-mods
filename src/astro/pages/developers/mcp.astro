@@ -1,7 +1,11 @@
 ---
+import { ChevronRight } from "lucide-react"
+
 import { siteConfig } from "@/config/site"
 import { MCP_CLIENTS } from "@/lib/developers/mcp-clients"
 import { directoryListings, mcpUrl } from "@/lib/developers/mcp-docs"
+import { cardVariants } from "@/components/ui/card"
+import { ExternalLinkIcon } from "@/components/ui/text-link"
 import { CLAUDE_COLOUR, ClaudeIcon, OpenAIIcon } from "@/components/brand-icons"
 import HeadingAnchor from "@/components/heading-anchor"
 import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
@@ -60,7 +64,7 @@ const { title, desc } = siteConfig.metatags.developersMcp
     <div class="grid gap-3 sm:grid-cols-2">
       {
         directoryListings.map((l) => {
-          const card = "flex flex-col gap-3 rounded-2xl border p-5 text-left"
+          const card = "bg-muted flex flex-col gap-3 rounded-2xl p-5 text-left"
           const body = (
             <>
               <div class="flex items-start justify-between">
@@ -72,7 +76,7 @@ const { title, desc } = siteConfig.metatags.developersMcp
                 ) : (
                   <OpenAIIcon className="size-7" />
                 )}
-                {l.url && <span class="text-muted-foreground">↗</span>}
+                {l.url && <ExternalLinkIcon className="size-5" />}
               </div>
               <div class="space-y-1">
                 <p class="text-base font-semibold">Add to {l.name}</p>
@@ -83,7 +87,7 @@ const { title, desc } = siteConfig.metatags.developersMcp
                 </p>
               </div>
               <p class="text-muted-foreground text-sm">
-                {l.url ? `Open in ${l.name} ›` : "Coming soon"}
+                {l.url ? `Open in ${l.name}` : "Coming soon"}
               </p>
             </>
           )
@@ -108,10 +112,13 @@ const { title, desc } = siteConfig.metatags.developersMcp
       {
         MCP_CLIENTS.map((c) => (
           <a
-            class="hover:bg-accent flex items-center justify-between rounded-2xl border p-4 transition-colors"
+            class:list={[
+              cardVariants({ interactive: true }),
+              "flex items-center justify-between p-4"
+            ]}
             href={`/developers/mcp/${c.id}`}>
             <span class="text-sm font-semibold">{c.label}</span>
-            <span class="text-muted-foreground">›</span>
+            <ChevronRight className="text-muted-foreground size-4 shrink-0" />
           </a>
         ))
       }

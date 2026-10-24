@@ -73,7 +73,7 @@ function CommandInput({
         className={cn(
           // text-base (16px) rather than text-sm — iOS Safari auto-zooms
           // the viewport on focusing any input under 16px.
-          "placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-base outline-hidden placeholder:text-sm disabled:cursor-not-allowed disabled:opacity-50",
+          "placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-base outline-hidden disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
           className
         )}
         {...props}

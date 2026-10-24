@@ -86,7 +86,7 @@ const ScreenshotPageInner = () => {
 
   return (
     <div
-      className="bg-muted/40 relative z-[1] flex h-[100svh] w-screen items-center justify-center overflow-hidden p-3 sm:p-6"
+      className="bg-muted relative z-[1] flex h-[100svh] w-screen items-center justify-center overflow-hidden p-3 sm:p-6"
       onClick={() => !showControls && setShowControls(true)}>
       {!hasTimetable ? (
         <a href="/timetable" className="w-full max-w-xl">
@@ -213,7 +213,7 @@ const ScreenshotPageInner = () => {
 
             <div className="flex items-center justify-between gap-2">
               <p className="text-muted-foreground flex items-center gap-1 text-xs">
-                <Hand className="size-3.5" /> Drag timetable to move
+                <Hand className="size-3" /> Drag timetable to move
               </p>
               <div className="flex gap-1">
                 <Button

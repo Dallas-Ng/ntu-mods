@@ -1,7 +1,10 @@
 ---
+import { ChevronRight } from "lucide-react"
+
 import { siteConfig } from "@/config/site"
 import { collectionPageJsonLd } from "@/lib/json-ld"
-import Header from "@/components/header"
+import { cardVariants } from "@/components/ui/card"
+import Header, { SectionHeading } from "@/components/header"
 import ToolsGrid from "@/components/tools/tools-grid"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -41,7 +44,7 @@ const MORE = [
   ogImage={`${siteConfig.url}/og/links.png`}
   ogImageAlt="NTUMods student tools: FGO Optimiser and timetable wallpaper maker"
   size="md"
-  containerClassName="space-y-6">
+  containerClassName="space-y-8">
   <JsonLd
     data={collectionPageJsonLd({
       name: title,
@@ -54,7 +57,7 @@ const MORE = [
     })}
   />
   <Header
-    title="NTU Student Tools"
+    title="NTU student tools"
     subtitle="Free tools for grades, CGPA and timetables. Everything runs in your browser, nothing you enter is uploaded, and there is no login."
   />
 
@@ -63,20 +66,21 @@ const MORE = [
   </div>
 
   <section class="space-y-3" aria-labelledby="more-tools">
-    <h2 id="more-tools" class="text-lg font-semibold tracking-tight">
-      More for NTU students
-    </h2>
+    <SectionHeading id="more-tools"> More for NTU students </SectionHeading>
     <div class="grid gap-3 sm:grid-cols-2">
       {
         MORE.map(({ href, title, desc }) => (
           <a
             href={href}
-            class="hover:bg-accent group flex items-start justify-between gap-3 rounded-2xl border p-4 transition-colors">
+            class:list={[
+              cardVariants({ interactive: true }),
+              "group flex items-start justify-between gap-3 p-4"
+            ]}>
             <span class="min-w-0 space-y-1">
               <span class="block text-sm font-semibold">{title}</span>
               <span class="text-muted-foreground block text-sm">{desc}</span>
             </span>
-            <span class="text-muted-foreground mt-0.5 shrink-0">→</span>
+            <ChevronRight className="text-muted-foreground mt-0.5 size-4 shrink-0" />
           </a>
         ))
       }

@@ -2,6 +2,7 @@ import type { AllModule } from "@/types/mods"
 import { MODULE_CATEGORY } from "@/lib/module-constants"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
 
 import { Skeleton } from "./ui/skeleton"
 
@@ -14,7 +15,8 @@ export const ModuleCard = ({ module, cardClassName }: ModuleCardProps) => (
   <a key={module.code} href={`/mods/${module.code}`}>
     <div
       className={cn(
-        "hover:bg-accent text-muted-foreground rounded-2xl border p-4 text-sm transition-colors",
+        cardVariants({ interactive: true }),
+        "text-muted-foreground p-4 text-sm",
         cardClassName
       )}>
       <p className="font-mono text-xs">{module.code}</p>
@@ -83,7 +85,8 @@ export const ModuleCardDetail = ({
   return (
     <div
       className={cn(
-        "hover:bg-accent group relative flex h-32 flex-col rounded-2xl border p-4 transition-colors",
+        cardVariants({ interactive: true }),
+        "group relative flex h-32 flex-col p-4",
         isCurrentSemester ? "bg-muted border-transparent" : "border-border"
       )}>
       <a
@@ -99,7 +102,7 @@ export const ModuleCardDetail = ({
         </p>
         <div className="mt-auto flex gap-1 overflow-hidden text-xs">
           {!isCurrentSemester && (
-            <span className="text-foreground shrink-0 rounded-full border px-2 py-0.5">
+            <span className="bg-muted text-foreground shrink-0 rounded-full px-2 py-0.5">
               {lastOffered(moduleData)}
             </span>
           )}
@@ -126,11 +129,11 @@ export const ModuleCardDetail = ({
 }
 
 export const ModuleCardDetailLoading = () => (
-  <div className="bg-muted flex h-32 flex-col rounded-2xl p-4">
-    <Skeleton className="bg-foreground/10 dark:bg-background mb-2 h-4 w-16" />
-    <Skeleton className="bg-foreground/10 dark:bg-background mb-1 h-5 w-full" />
-    <Skeleton className="bg-foreground/10 dark:bg-background h-5 w-3/4" />
-    <Skeleton className="bg-foreground/10 dark:bg-background mt-auto h-5 w-24" />
+  <div className={cn(cardVariants(), "flex h-32 flex-col p-4")}>
+    <Skeleton className="mb-2 h-4 w-16" />
+    <Skeleton className="mb-1 h-5 w-full" />
+    <Skeleton className="h-5 w-3/4" />
+    <Skeleton className="mt-auto h-5 w-24" />
   </div>
 )
 
@@ -161,7 +164,7 @@ export const ModuleListRow = ({
 
         <div className="text-muted-foreground hidden shrink-0 items-center gap-1 text-xs sm:flex">
           {!isCurrentSemester && (
-            <span className="text-foreground rounded-full border px-2 py-0.5">
+            <span className="bg-muted text-foreground rounded-full px-2 py-0.5">
               {lastOffered(moduleData)}
             </span>
           )}
@@ -194,10 +197,10 @@ export const ModuleListRow = ({
 
 export const ModuleListRowLoading = () => (
   <div className="flex h-11 items-center gap-3 px-4">
-    <Skeleton className="bg-foreground/10 dark:bg-background h-4 w-20 shrink-0" />
-    <Skeleton className="bg-foreground/10 dark:bg-background h-4 flex-1" />
-    <Skeleton className="bg-foreground/10 dark:bg-background hidden h-4 w-16 sm:block" />
-    <Skeleton className="bg-foreground/10 dark:bg-background h-4 w-10 shrink-0" />
+    <Skeleton className="h-4 w-20 shrink-0" />
+    <Skeleton className="h-4 flex-1" />
+    <Skeleton className="hidden h-4 w-16 sm:block" />
+    <Skeleton className="h-4 w-10 shrink-0" />
   </div>
 )
 

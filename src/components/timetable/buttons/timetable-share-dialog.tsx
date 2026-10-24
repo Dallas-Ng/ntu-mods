@@ -9,10 +9,13 @@ import { BASE_URL } from "@/lib/constants"
 import { buildShareLink, encodeTextBundle } from "@/lib/timetable-share"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import {
+  ModalNote,
+  ModalOption,
+  ModalSection
+} from "@/components/ui/modal-parts"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import { Switch } from "@/components/ui/switch"
-
-import { ModalNote, ModalOption, ModalSection } from "./modal-parts"
 
 // Chrome's ~2000 char practical ceiling, minus room for the origin
 const LINK_LENGTH_WARNING = 1800
@@ -62,10 +65,13 @@ const TimetableShareDialog = ({
   }
 
   const copy = (text: string, message: string) =>
-    navigator.clipboard.writeText(text).then(
-      () => toast(message),
-      () => toast.error("Could not copy. Copy it manually instead")
-    )
+    // Inside a promise so a missing clipboard API reaches the error toast.
+    Promise.resolve()
+      .then(() => navigator.clipboard.writeText(text))
+      .then(
+        () => toast.success(message),
+        () => toast.error("Could not copy. Copy it by hand instead.")
+      )
 
   const handleCopyLink = () => {
     const isMobile = /Mobi|Android/i.test(navigator.userAgent)
@@ -86,7 +92,7 @@ const TimetableShareDialog = ({
           if (e?.name === "AbortError") return
           reportError("timetable_share", e)
           // Share sheet consumed the user activation, so copy may be blocked
-          copy(link, "Share link copied to clipboard")
+          copy(link, "Link copied")
         })
       onOpenChange(false)
       return
@@ -96,13 +102,13 @@ const TimetableShareDialog = ({
       method: "clipboard",
       ...captureProps
     })
-    copy(link, "Share link copied to clipboard")
+    copy(link, "Link copied")
     onOpenChange(false)
   }
 
   const handleCopyText = () => {
     track("timetable_shared", { method: "text", ...captureProps })
-    copy(textBundle, "Timetable code copied — paste it into Import")
+    copy(textBundle, "Timetable code copied. Paste it into Import.")
     onOpenChange(false)
   }
 
@@ -142,7 +148,7 @@ const TimetableShareDialog = ({
             value={link}
             onFocus={(e) => e.currentTarget.select()}
             aria-label="Share link"
-            className="text-muted-foreground font-mono text-xs"
+            className="text-muted-foreground font-mono text-xs md:text-xs"
           />
           {isLinkLong && (
             <ModalNote>

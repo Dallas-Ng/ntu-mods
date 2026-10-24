@@ -8,7 +8,10 @@ import {
   getModuleSnapshot,
   isSameAsLatest
 } from "@/lib/server/edge/get-module-snapshot"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { TextLink } from "@/components/ui/text-link"
 import Breadcrumbs from "@/components/breadcrumbs"
+import Header, { SectionHeading } from "@/components/header"
 import ModsIndexTable from "@/components/mods/mods-index-table"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -76,27 +79,28 @@ const crumbs = [
   <JsonLd data={breadcrumbListJsonLd(crumbs)} />
   {
     !isCurrentOffering && (
-      <div class="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
-        Historical snapshot — {semLabel} ·{" "}
-        <a
-          href={getModuleUrl(code)}
-          class="underline transition-colors hover:text-amber-600 dark:hover:text-amber-200">
-          View current offering →
-        </a>
-      </div>
+      <Alert variant="warning" role="note">
+        <AlertDescription className="block">
+          Historical snapshot: {semLabel} ·{" "}
+          <TextLink href={getModuleUrl(code)} variant="muted" arrow>
+            View current offering
+          </TextLink>
+        </AlertDescription>
+      </Alert>
     )
   }
 
   <div class="mt-4 flex flex-col gap-6 xl:flex-row">
     <div class="w-full xl:w-3/6">
       <Breadcrumbs breadcrumbs={crumbs} />
-      <h1 class="mt-2 text-3xl">{formatTitle(moduleData.title)}</h1>
-      <p class="text-muted-foreground mt-1 text-sm">{semLabel}</p>
+      <Header
+        title={formatTitle(moduleData.title)}
+        subtitle={semLabel}
+        className="mt-2"
+      />
       {
         moduleData.description && (
-          <p class="text-muted-foreground mt-4 text-sm leading-relaxed">
-            {moduleData.description}
-          </p>
+          <p class="mt-4 text-sm leading-relaxed">{moduleData.description}</p>
         )
       }
     </div>
@@ -116,7 +120,7 @@ const crumbs = [
                 <td>
                   <div class="flex flex-wrap gap-1">
                     {categories.map((cat) => (
-                      <span class="rounded-full border px-2 py-0 text-xs">
+                      <span class="bg-muted rounded-full px-2 py-0 text-xs">
                         {MODULE_CATEGORY[cat]}
                       </span>
                     ))}
@@ -215,7 +219,7 @@ const crumbs = [
   </div>
 
   <div class="mt-10 space-y-2">
-    <h2 class="text-lg">Available Indexes</h2>
+    <SectionHeading>Available indexes</SectionHeading>
     <ModsIndexTable indexes={indexes} />
   </div>
 </BaseLayout>

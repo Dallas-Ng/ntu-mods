@@ -7,10 +7,8 @@ import {
   LockOpenIcon,
   RotateCcwIcon,
   Settings2Icon,
-  WandIcon,
-  XIcon
+  WandIcon
 } from "lucide-react"
-import { Dialog as DialogPrimitive } from "radix-ui"
 
 import { track } from "@/lib/analytics"
 import { customCourseModuleKey } from "@/lib/custom-course-colors"
@@ -24,13 +22,11 @@ import {
 } from "@/lib/generation-config"
 import { COURSE_TYPE } from "@/lib/module-constants"
 import { latestSemester, latestYear } from "@/lib/semesters"
-import { cn } from "@/lib/utils"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableGeneration } from "@/hooks/use-timetable-generation"
 import { Button } from "@/components/ui/button"
-import { DialogOverlay, DialogPortal } from "@/components/ui/dialog"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import {
   Select,
@@ -44,28 +40,6 @@ import { Switch } from "@/components/ui/switch"
 import InfoTip from "../info-tip"
 import TimetableBlacklistEditor from "./timetable-blacklist-editor"
 import TimetableResultsCycler from "./timetable-results-cycler"
-
-const ElevatedDialogContent = ({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof DialogPrimitive.Content>) => (
-  <DialogPortal>
-    <DialogOverlay className="z-50" />
-    <DialogPrimitive.Content
-      className={cn(
-        "bg-background data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border p-6 shadow-lg duration-200 outline-none sm:rounded-lg",
-        className
-      )}
-      {...props}>
-      {children}
-      <DialogPrimitive.Close className="ring-offset-background focus:ring-ring absolute top-2 right-2 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
-        <XIcon />
-        <span className="sr-only">Close</span>
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
-  </DialogPortal>
-)
 
 const SectionLabel = ({
   children,
@@ -159,8 +133,8 @@ const CollisionIgnoreSection = () => {
                         globallyRelaxed
                           ? "cursor-not-allowed opacity-50"
                           : active
-                            ? "bg-foreground text-background cursor-pointer border-transparent"
-                            : "text-muted-foreground hover:border-foreground cursor-pointer"
+                            ? "bg-foreground text-background border-transparent"
+                            : "text-muted-foreground hover:bg-accent hover:text-foreground"
                       }`}>
                       {COURSE_TYPE[type as keyof typeof COURSE_TYPE]}
                     </button>
@@ -227,10 +201,10 @@ const LockedModulesSection = () => {
                   toggleModuleLock(key)
                   track("timetable_module_lock_toggled", { locked: !isLocked })
                 }}
-                className={`focus-visible:ring-ring/50 flex h-6 cursor-pointer items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
+                className={`focus-visible:ring-ring/50 flex h-6 items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   isLocked
                     ? "bg-foreground text-background border-transparent"
-                    : "text-muted-foreground hover:border-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 }`}>
                 {isLocked ? (
                   <LockIcon className="size-3" />
@@ -334,10 +308,10 @@ const SettingsForm = ({
               <button
                 key={pref}
                 onClick={() => updateConfig({ loadPreference: pref })}
-                className={`focus-visible:ring-ring/50 flex h-8 flex-1 cursor-pointer items-center justify-center rounded-md border text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
+                className={`focus-visible:ring-ring/50 flex h-8 flex-1 items-center justify-center rounded-md border text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   config.loadPreference === pref
                     ? "bg-foreground text-background border-transparent"
-                    : "text-muted-foreground hover:border-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 }`}>
                 {pref === "spread" ? "Spread" : "Compact"}
               </button>
@@ -407,10 +381,10 @@ const SettingsForm = ({
               <button
                 key={type}
                 onClick={() => toggleSkippable(type)}
-                className={`focus-visible:ring-ring/50 h-7 cursor-pointer rounded-md border px-2.5 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
+                className={`focus-visible:ring-ring/50 h-7 rounded-md border px-2.5 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   active
                     ? "bg-foreground text-background border-transparent"
-                    : "text-muted-foreground hover:border-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 }`}>
                 {COURSE_TYPE[type as keyof typeof COURSE_TYPE]}
               </button>
@@ -438,13 +412,13 @@ const SettingsForm = ({
             setBlockOpen(true)
             track("timetable_dialog_opened", { dialog: "blacklist" })
           }}
-          className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-between rounded-md border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
+          className="bg-muted text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full items-center justify-between rounded-md px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
           <span>
             {config.blacklistedTimeslots.length > 0
               ? `${config.blacklistedTimeslots.length} slot${config.blacklistedTimeslots.length !== 1 ? "s" : ""} blocked`
               : "No slots blocked"}
           </span>
-          <span className="text-muted-foreground/60">Edit</span>
+          <span className="text-muted-foreground">Edit</span>
         </button>
       </div>
 
@@ -548,7 +522,7 @@ const ConfigSummary = () => {
       {chips.map((chip) => (
         <span
           key={chip}
-          className="bg-muted text-muted-foreground rounded-md px-2 py-0.5 text-xs">
+          className="bg-muted text-foreground rounded-md px-2 py-0.5 text-xs">
           {chip}
         </span>
       ))}
@@ -618,12 +592,12 @@ const TimetableGenerationConfig = () => {
       {/* Settings trigger */}
       <button
         onClick={() => setOpen(true)}
-        className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-between rounded-lg border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
+        className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full items-center justify-between rounded-lg border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
         <div className="flex items-center gap-1.5">
-          <Settings2Icon className="size-3.5" />
-          <span>Generation Settings</span>
+          <Settings2Icon className="size-3" />
+          <span>Generation settings</span>
         </div>
-        <span className="text-muted-foreground/60 text-xs">Edit</span>
+        <span className="text-muted-foreground text-xs">Edit</span>
       </button>
 
       {/* Settings summary chips */}
@@ -633,7 +607,7 @@ const TimetableGenerationConfig = () => {
       <ResponsiveModal
         open={open}
         onOpenChange={setOpen}
-        title="Generation Settings"
+        title="Generation settings"
         description="Preferences used when generating timetables."
         className="max-h-[85vh] gap-4 overflow-y-auto sm:max-w-lg">
         <SettingsForm
@@ -689,7 +663,7 @@ const TimetableGenerationConfig = () => {
           )}
           {!isDiagnosing && suggestions.length === 0 && (
             <p className="text-muted-foreground text-xs">
-              No single constraint change would help — try relaxing multiple
+              No single constraint change would help. Try relaxing multiple
               settings.
             </p>
           )}

@@ -1,8 +1,9 @@
 "use client"
 
-import { ExternalLink } from "lucide-react"
-
 import { track } from "@/lib/analytics"
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
+import { ExternalLinkIcon } from "@/components/ui/text-link"
 
 interface LinkCardProps {
   name: string
@@ -13,17 +14,17 @@ interface LinkCardProps {
 }
 
 const LinkCard = ({ name, href, desc, external, category }: LinkCardProps) => {
-  const className =
-    "bg-muted hover:bg-accent flex h-28 items-start justify-between gap-2 rounded-2xl p-4 transition-colors"
+  const className = cn(
+    cardVariants({ interactive: true }),
+    "flex h-28 items-start justify-between gap-2 p-4"
+  )
   const inner = (
     <>
       <div className="min-w-0 space-y-1">
         <p className="leading-none font-semibold">{name}</p>
         <p className="text-muted-foreground line-clamp-3 text-sm">{desc}</p>
       </div>
-      {external && (
-        <ExternalLink className="text-muted-foreground mt-0.5 size-4 shrink-0" />
-      )}
+      {external && <ExternalLinkIcon className="mt-0.5" />}
     </>
   )
 

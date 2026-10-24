@@ -1,7 +1,9 @@
 import { siteConfig } from "@/config/site"
 import { getModuleTitles } from "@/lib/server/db/repo"
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
 import Container from "@/components/container"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 import { getAllArticles } from "@/astro/lib/articles"
 
 const CORE_LINKS = [
@@ -196,23 +198,21 @@ const SitemapContent = async () => {
   const moduleGroups = await getModuleGroups()
 
   return (
-    <Container size="sm" className="space-y-10">
+    <Container size="md" className="space-y-8">
       <Header
         title="Sitemap"
         subtitle="Everything on NTUMods, organized in one place. Explore the tools, guides, and module pages below."
       />
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Core Pages</h2>
+        <SectionHeading>Core pages</SectionHeading>
         <div className="grid gap-3 sm:grid-cols-2">
           {CORE_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="group bg-muted hover:bg-accent rounded-2xl p-4 transition-colors">
-              <p className="text-foreground group-hover:text-primary font-semibold transition-colors">
-                {link.label}
-              </p>
+              className={cn(cardVariants({ interactive: true }), "group p-4")}>
+              <p className="text-foreground font-semibold">{link.label}</p>
               <p className="text-muted-foreground mt-0.5 text-sm">
                 {link.description}
               </p>
@@ -222,16 +222,14 @@ const SitemapContent = async () => {
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-xl font-semibold">Tools and Support</h2>
+        <SectionHeading>Tools and support</SectionHeading>
         <div className="grid gap-3 sm:grid-cols-2">
           {TOOL_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="group bg-muted hover:bg-accent rounded-2xl p-4 transition-colors">
-              <p className="text-foreground group-hover:text-primary font-semibold transition-colors">
-                {link.label}
-              </p>
+              className={cn(cardVariants({ interactive: true }), "group p-4")}>
+              <p className="text-foreground font-semibold">{link.label}</p>
               <p className="text-muted-foreground mt-0.5 text-sm">
                 {link.description}
               </p>
@@ -242,19 +240,20 @@ const SitemapContent = async () => {
 
       {articles.length > 0 && (
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold">Articles</h2>
+          <SectionHeading>Articles</SectionHeading>
           <div className="grid gap-3 sm:grid-cols-2">
             {articles.map((article) => (
               <a
                 key={article.slug}
                 href={`/articles/${article.slug}`}
-                className="group bg-muted hover:bg-accent rounded-2xl p-4 transition-colors">
+                className={cn(
+                  cardVariants({ interactive: true }),
+                  "group p-4"
+                )}>
                 <p className="text-muted-foreground mb-1 text-xs">
                   {article.category}
                 </p>
-                <p className="text-foreground group-hover:text-primary font-semibold transition-colors">
-                  {article.title}
-                </p>
+                <p className="text-foreground font-semibold">{article.title}</p>
                 <p className="text-muted-foreground mt-0.5 line-clamp-2 text-sm">
                   {article.description}
                 </p>
@@ -266,7 +265,7 @@ const SitemapContent = async () => {
 
       <section className="space-y-4">
         <div>
-          <h2 className="text-xl font-semibold">Modules</h2>
+          <SectionHeading>Modules</SectionHeading>
           <p className="text-muted-foreground mt-1 text-sm">
             Module pages are grouped by course code prefix.
           </p>
@@ -277,7 +276,7 @@ const SitemapContent = async () => {
             <a
               key={group.prefix}
               href={`#modules-${group.prefix.toLowerCase()}`}
-              className="bg-muted text-muted-foreground hover:bg-accent hover:text-foreground rounded-md px-2 py-1 text-sm transition-colors">
+              className="bg-muted text-foreground hover:bg-accent rounded-md px-2 py-1 text-sm transition-colors">
               {group.prefix}
             </a>
           ))}
@@ -289,14 +288,14 @@ const SitemapContent = async () => {
               id={`modules-${group.prefix.toLowerCase()}`}
               key={group.prefix}
               className="scroll-mt-20 border-t pt-6">
-              <h3 className="text-lg font-semibold">{group.prefix}</h3>
+              <SectionHeading as="h3">{group.prefix}</SectionHeading>
 
               <div className="mt-3 grid gap-x-4 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
                 {group.modules.map((moduleItem) => (
                   <a
                     key={moduleItem.code}
                     href={`/mods/${moduleItem.code}`}
-                    className="text-muted-foreground hover:text-primary text-sm leading-6 transition-colors">
+                    className="text-muted-foreground hover:text-foreground text-sm leading-6 transition-colors">
                     <span className="text-foreground font-medium">
                       {moduleItem.code}
                     </span>{" "}

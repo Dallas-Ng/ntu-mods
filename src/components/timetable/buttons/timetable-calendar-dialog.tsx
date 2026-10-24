@@ -1,12 +1,15 @@
 "use client"
 
-import { ExternalLink } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
+import { InlineCode } from "@/components/ui/inline-code"
+import {
+  ModalFooter,
+  ModalNote,
+  ModalSection
+} from "@/components/ui/modal-parts"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-import { ModalFooter, ModalNote, ModalSection } from "./modal-parts"
+import { ExternalLinkIcon, TextLink } from "@/components/ui/text-link"
 
 interface Props {
   open: boolean
@@ -79,9 +82,9 @@ const TimetableCalendarDialog = ({
     <div className="space-y-5">
       <ModalSection title="What you get">
         <p className="text-muted-foreground text-sm">
-          An <code className="text-foreground">.ics</code> file with one event
-          for every class, on each week it runs, with its venue. Recess week is
-          skipped. It works with any calendar app.
+          An <InlineCode>.ics</InlineCode> file with one event for every class,
+          on each week it runs, with its venue. Recess week is skipped. It works
+          with any calendar app.
         </p>
       </ModalSection>
 
@@ -98,19 +101,19 @@ const TimetableCalendarDialog = ({
             <TabsContent
               key={app.name}
               value={app.name}
-              className="space-y-1.5 rounded-lg border p-3 text-sm">
+              className="bg-muted space-y-1.5 rounded-lg p-3 text-sm">
               <p className="font-medium">{app.name}</p>
               <p className="text-muted-foreground text-xs leading-relaxed">
                 {app.steps}
               </p>
-              <a
+              <TextLink
                 href={app.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-primary inline-flex items-center gap-1 text-xs underline underline-offset-2">
+                className="inline-flex items-center gap-1 text-xs">
                 {app.link}
-                <ExternalLink className="size-3" />
-              </a>
+                <ExternalLinkIcon className="size-3 text-current" />
+              </TextLink>
             </TabsContent>
           ))}
         </Tabs>

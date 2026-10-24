@@ -1,6 +1,7 @@
 ---
 import { siteConfig } from "@/config/site"
 import { DEV_PAGES } from "@/lib/developers/pages"
+import { cardVariants } from "@/components/ui/card"
 import HeadingAnchor from "@/components/heading-anchor"
 import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
 
@@ -55,9 +56,9 @@ const practices: [string, string][] = [
         DEV_PAGES.filter((page) => page.href !== "/developers").map((page) => (
           <a
             href={page.href}
-            class="hover:bg-muted space-y-1 rounded-2xl border p-4 transition-colors">
+            class:list={[cardVariants({ interactive: true }), "space-y-1 p-4"]}>
             <span class="block font-semibold">{page.label}</span>
-            <span class="text-foreground/80 block text-sm">
+            <span class="text-foreground block text-sm">
               {page.description}
             </span>
           </a>
@@ -73,7 +74,7 @@ const practices: [string, string][] = [
         label="Terms of use (no opt out)"
       />
     </h2>
-    <div class="bg-primary/10 space-y-3 rounded-2xl p-5 text-sm">
+    <div class="bg-primary-subtle space-y-3 rounded-2xl p-5 text-sm">
       <p>
         By using any API, file or the MCP server on this page, you accept these
         terms. There is no opt out. If you do not accept them, do not use them.

@@ -84,7 +84,7 @@ export const ModsFilterButton = ({
       onClick={() => drawer.openView("all")}>
       <SlidersHorizontal className="size-4" />
       {activeCount > 0 && (
-        <span className="bg-primary text-primary-foreground border-background absolute -top-1.5 -right-1.5 flex min-w-4.5 items-center justify-center rounded-full border-2 px-1 text-[10px] leading-4 font-semibold">
+        <span className="bg-primary text-primary-foreground border-background absolute -top-1.5 -right-1.5 flex min-w-4.5 items-center justify-center rounded-full border-2 px-1 text-xs leading-4 font-semibold">
           {activeCount}
         </span>
       )}
@@ -129,7 +129,7 @@ export const ModsFilterPills = ({
         }>
         {f.semesterOnly ? (
           <>
-            <Check className="size-3.5" />
+            <Check className="size-4" />
             This semester
           </>
         ) : (
@@ -186,7 +186,7 @@ function DrawerHead({
       {onReset && (
         <button
           type="button"
-          className="text-primary-alt cursor-pointer py-1.5 text-sm"
+          className="text-primary py-1.5 text-sm"
           onClick={onReset}>
           {resetLabel}
         </button>
@@ -397,7 +397,7 @@ export const ModsFilterDrawer = ({
 
                 <button
                   type="button"
-                  className="flex w-full cursor-pointer items-center justify-between border-t pt-4 text-left text-base"
+                  className="flex w-full items-center justify-between border-t pt-4 text-left text-base"
                   onClick={() => drawer.setSchoolOpen(true)}>
                   School
                   <span className="text-muted-foreground flex min-w-0 items-center gap-1.5 text-sm">

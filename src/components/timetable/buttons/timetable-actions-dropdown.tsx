@@ -31,14 +31,8 @@ import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog"
+import { cardVariants } from "@/components/ui/card"
+import { ConfirmDialog } from "@/components/ui/confirm-dialog"
 import {
   Drawer,
   DrawerContent,
@@ -114,7 +108,7 @@ const TimetableActionsDropdown = ({
   // The Calendar tool explains the file first; the download happens from there.
   const openCalendar = () => {
     if (Object.keys(timetable).length === 0 && customCourses.length === 0) {
-      toast.info("Please fill up your timetable first")
+      toast.info("Add modules to your timetable first")
       return
     }
     setCalendarOpen(true)
@@ -122,7 +116,7 @@ const TimetableActionsDropdown = ({
 
   const handleDownloadCalendar = async () => {
     if (Object.keys(timetable).length === 0 && customCourses.length === 0) {
-      toast.info("Please fill up your timetable first")
+      toast.info("Add modules to your timetable first")
       return
     }
 
@@ -172,7 +166,7 @@ const TimetableActionsDropdown = ({
       })
     } catch (e) {
       reportError("calendar_download", e)
-      toast.error("Something went wrong, please try again later")
+      toast.error("Something went wrong. Try again later.")
     }
 
     setCalendarLoading(false)
@@ -197,7 +191,7 @@ const TimetableActionsDropdown = ({
       from_plan: timetableIndex + 1,
       to_plan: toIndex + 1
     })
-    toast(`Duplicated to ${label(toIndex)}`)
+    toast.success(`Duplicated to ${label(toIndex)}`)
   }
 
   const tool = (
@@ -320,7 +314,11 @@ const TimetableActionsDropdown = ({
         showDescription
         description="Theme, radius, density, contrast and the colours of your classes."
         className="max-h-[90vh] overflow-y-auto sm:max-w-5xl">
-        <div className="bg-muted rounded-xl p-2 sm:rounded-2xl sm:p-5">
+        <div
+          className={cn(
+            cardVariants(),
+            "rounded-xl p-2 sm:rounded-2xl sm:p-5"
+          )}>
           <AppearanceSettings compact />
         </div>
       </ResponsiveModal>
@@ -330,35 +328,17 @@ const TimetableActionsDropdown = ({
         loading={calendarLoading}
         onDownload={handleDownloadCalendar}
       />
-      <Dialog
+      <ConfirmDialog
         open={confirmTarget !== null}
-        onOpenChange={(o) => !o && setConfirmTarget(null)}>
-        <DialogContent className="sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle>
-              Overwrite {confirmTarget !== null && label(confirmTarget)}?
-            </DialogTitle>
-            <DialogDescription>
-              {confirmTarget !== null && label(confirmTarget)} already has a
-              timetable. Duplicating {label(timetableIndex)} into it replaces
-              what is there.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => setConfirmTarget(null)}>
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={() => {
-                if (confirmTarget !== null) handleDuplicate(confirmTarget)
-                setConfirmTarget(null)
-              }}>
-              Overwrite
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        onOpenChange={(o) => !o && setConfirmTarget(null)}
+        title={`Overwrite ${confirmTarget !== null ? label(confirmTarget) : ""}?`}
+        description={`${confirmTarget !== null ? label(confirmTarget) : ""} already has a timetable. Duplicating ${label(timetableIndex)} into it replaces what is there.`}
+        confirmLabel="Overwrite"
+        destructive
+        onConfirm={() => {
+          if (confirmTarget !== null) handleDuplicate(confirmTarget)
+        }}
+      />
       <TimetableSettingsDialog
         open={settingsOpen}
         onOpenChange={setSettingsOpen}
@@ -401,12 +381,12 @@ const TimetableActionsDropdown = ({
                           onClick={t.onClick}
                           className={cn(
                             "hover:bg-accent flex w-full cursor-pointer items-start gap-3 rounded-lg p-3 text-left transition-colors disabled:opacity-50",
-                            t.active && "bg-primary/10"
+                            t.active && "bg-primary-subtle"
                           )}>
                           <span
                             className={cn(
                               "bg-muted flex size-9 shrink-0 items-center justify-center rounded-lg",
-                              t.active && "bg-primary/15 text-primary"
+                              t.active && "bg-primary-subtle text-primary"
                             )}>
                             <t.icon className="size-4" />
                           </span>
@@ -426,11 +406,8 @@ const TimetableActionsDropdown = ({
                         <button
                           key={index}
                           type="button"
-                          onClick={() => {
-                            setSheetOpen(false)
-                            requestDuplicate(index)
-                          }}
-                          className="hover:bg-accent flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg p-3 text-left text-sm transition-colors">
+                          onClick={closeThen(() => requestDuplicate(index))}
+                          className="hover:bg-accent flex w-full items-center justify-between gap-4 rounded-lg p-3 text-left text-sm transition-colors">
                           <span className="truncate">{label(index)}</span>
                           {named(index) && (
                             <span className="text-muted-foreground shrink-0 text-xs">
@@ -474,7 +451,7 @@ const TimetableActionsDropdown = ({
                         children: icon,
                         onClick: onToggleIndexPicker,
                         className: indexPickerEnabled
-                          ? "bg-primary/10 text-primary hover:bg-primary/15 hover:text-primary"
+                          ? "bg-primary-subtle text-primary hover:bg-accent hover:text-primary"
                           : undefined
                       }
                     )

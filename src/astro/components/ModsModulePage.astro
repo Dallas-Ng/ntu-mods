@@ -7,6 +7,10 @@ import type {
   DbModule,
   DbPrerequisiteNode
 } from "@/lib/server/db/types"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { cardVariants } from "@/components/ui/card"
+import { TextLink } from "@/components/ui/text-link"
+import { SectionHeading } from "@/components/header"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import ModsDescription from "@/components/mods/mods-description"
 import ModsExpandableFields from "@/components/mods/mods-expandable-fields"
@@ -138,10 +142,12 @@ const jsonLd = [
 />
 {
   !isCurrentOffering && (
-    <div class="mb-4 rounded-2xl border border-amber-300 bg-amber-50 px-5 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-300">
-      Not offered in the current semester. Last offered{" "}
-      {semesterLabelForCurrent}
-    </div>
+    <Alert variant="warning" role="note" className="mb-4">
+      <AlertDescription>
+        Not offered in the current semester. Last offered{" "}
+        {semesterLabelForCurrent}
+      </AlertDescription>
+    </Alert>
   )
 }
 
@@ -202,7 +208,7 @@ const jsonLd = [
   }
 
   <section class="space-y-4">
-    <h2 class="text-lg font-semibold tracking-tight">Available indexes</h2>
+    <SectionHeading>Available indexes</SectionHeading>
     <ModsIndexTable
       indexes={indexes}
       precomputedMatrix={{ TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS }}
@@ -212,8 +218,8 @@ const jsonLd = [
   {
     otherSemesters.length > 0 && (
       <section class="space-y-4">
-        <h2 class="text-lg font-semibold tracking-tight">Other offerings</h2>
-        <div class="rounded-2xl border p-2 text-sm">
+        <SectionHeading>Other offerings</SectionHeading>
+        <div class="bg-muted rounded-2xl p-2 text-sm">
           <div class="text-muted-foreground grid grid-cols-[4.5rem_repeat(3,minmax(0,1fr))] items-center gap-1 px-1 pb-1 text-xs font-medium sm:grid-cols-[6rem_repeat(3,minmax(0,1fr))]">
             <span class="px-2">Year</span>
             <span class="text-center">Sem 1</span>
@@ -250,7 +256,7 @@ const jsonLd = [
   }
 
   <section class="space-y-4">
-    <h2 class="text-lg font-semibold tracking-tight">Other relevant mods</h2>
+    <SectionHeading>Other relevant mods</SectionHeading>
     <RelatedModules
       related={related}
       emptyHref="/mods"
@@ -262,18 +268,22 @@ const jsonLd = [
     guides.length > 0 && (
       <section class="space-y-4">
         <div class="flex items-baseline justify-between gap-4">
-          <h2 class="text-lg font-semibold tracking-tight">Planning guides</h2>
-          <a
+          <SectionHeading>Planning guides</SectionHeading>
+          <TextLink
             href="/articles"
-            class="text-primary text-sm font-medium whitespace-nowrap hover:underline">
+            variant="action"
+            className="text-sm whitespace-nowrap">
             View all articles
-          </a>
+          </TextLink>
         </div>
         <div class="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           {guides.map((g) => (
             <a
               href={g.url}
-              class="group bg-muted hover:bg-accent overflow-hidden rounded-2xl transition-colors">
+              class:list={[
+                cardVariants({ interactive: true }),
+                "group overflow-hidden"
+              ]}>
               {g.thumbnail && (
                 <img
                   src={g.thumbnail}
@@ -285,13 +295,13 @@ const jsonLd = [
                 />
               )}
               <div class="p-4">
-                <p class="text-foreground/70 text-xs">
+                <p class="text-muted-foreground text-xs">
                   {g.category} · {g.readingTime}
                 </p>
-                <h3 class="group-hover:text-primary mt-2 line-clamp-2 font-semibold transition-colors">
+                <h3 class="mt-2 line-clamp-2 font-semibold transition-colors">
                   {g.title}
                 </h3>
-                <p class="text-foreground/80 mt-2 line-clamp-2 text-sm text-pretty">
+                <p class="text-foreground mt-2 line-clamp-2 text-sm text-pretty">
                   {g.description}
                 </p>
               </div>

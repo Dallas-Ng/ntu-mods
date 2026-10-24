@@ -19,6 +19,7 @@
 - [Getting started](#getting-started)
 - [Project structure](#project-structure)
 - [Architecture](docs/architecture.md)
+- [Design rules](docs/design.md)
 - [Contributing](#contributing)
 - [Deployment](docs/deployment.md)
 - [Maintenance](docs/maintenance.md)

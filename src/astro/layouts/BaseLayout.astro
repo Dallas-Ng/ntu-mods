@@ -2,6 +2,7 @@
 import "@/styles/globals.css"
 
 import { Font } from "astro:assets"
+import { X } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { BUILD_ENV, IS_PROD } from "@/lib/constants"
@@ -170,16 +171,8 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
       <button
         type="button"
         aria-label="Dismiss announcement"
-        class="absolute top-1/2 right-1.5 z-10 flex size-6 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md text-black/70 transition-colors hover:bg-black/10 hover:text-black">
-        <svg
-          viewBox="0 0 24 24"
-          class="size-4"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg
-        >
+        class="absolute top-1/2 right-1.5 z-10 flex size-6 -translate-y-1/2 items-center justify-center rounded-md text-black/70 transition-colors hover:bg-black/10 hover:text-black">
+        <X className="size-4" aria-hidden="true" />
       </button>
     </div>
     <script is:inline define:vars={{ key: `dismissed-banner:${BANNER_ID}` }}>

@@ -7,6 +7,8 @@ import { formatCount } from "@/lib/format"
 import { collectionPageJsonLd } from "@/lib/json-ld"
 import { getModuleUrl } from "@/lib/module-url"
 import { getAllModuleMetadata, getLatestSemester } from "@/lib/server/db/repo"
+import { TextLink } from "@/components/ui/text-link"
+import { SectionHeading } from "@/components/header"
 import ModsPage from "@/components/mods/mods-page"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -63,16 +65,16 @@ const modsJsonLd = collectionPageJsonLd({
   <ModsPage client:load initialModules={initialModules} />
 
   <section class="mt-12 space-y-3" aria-labelledby="mods-about">
-    <h2 id="mods-about" class="text-lg font-semibold tracking-tight">
+    <SectionHeading id="mods-about">
       About the NTU module browser
-    </h2>
-    <p class="text-muted-foreground text-sm leading-relaxed text-pretty">
+    </SectionHeading>
+    <p class="text-sm leading-relaxed text-pretty">
       Search every module offered at NTU by code or title, and narrow the
       results by module type, school, level, day and time. Each module page
       lists its academic units, prerequisites, mutually exclusive modules, exam
       date, and every class index with its timeslots and venues.
     </p>
-    <p class="text-muted-foreground text-sm leading-relaxed text-pretty">
+    <p class="text-sm leading-relaxed text-pretty">
       The browser currently covers {coverage}, and earlier semesters are
       available back to AY2014. Module data comes from NTU's public course and
       exam timetables and is refreshed each semester. Add any module straight to
@@ -82,24 +84,24 @@ const modsJsonLd = collectionPageJsonLd({
 
   <details class="mt-10 border-t pt-4">
     <summary
-      class="text-muted-foreground hover:text-foreground cursor-pointer text-sm transition-colors">
+      class="text-muted-foreground hover:text-foreground text-sm transition-colors">
       Browse all {moduleCount} modules by code
     </summary>
     <div class="mt-3 grid gap-x-6 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
       {
         directory.map(([prefix, list]) => (
           <details class="text-sm">
-            <summary class="text-muted-foreground hover:text-foreground cursor-pointer py-1">
+            <summary class="text-muted-foreground hover:text-foreground py-1">
               {prefix}
-              <span class="text-muted-foreground/70 ml-1">({list.length})</span>
+              <span class="text-muted-foreground ml-1">({list.length})</span>
             </summary>
             <ul class="mb-2 space-y-1 pl-4 text-xs">
               {list.map(({ code, title }) => (
                 <li>
-                  <a href={getModuleUrl(code)} class="hover:underline">
+                  <TextLink href={getModuleUrl(code)} variant="subtle">
                     <span class="text-muted-foreground font-mono">{code}</span>{" "}
                     {title}
-                  </a>
+                  </TextLink>
                 </li>
               ))}
             </ul>

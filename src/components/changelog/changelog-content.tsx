@@ -12,26 +12,24 @@ import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { UNSEEN_CHANGELOG_IDS } from "@/hooks/use-changelog-unseen"
 import { useHydrated } from "@/hooks/use-hydrated"
+import { cardVariants } from "@/components/ui/card"
 import ArticleToc, {
   MobileSectionDropdown
 } from "@/components/articles/article-toc"
 import Container from "@/components/container"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
+import { NewBadge } from "@/components/new-dot"
 
 type ChangelogFilter = ChangelogCategory | "All"
 
+// Status colours where a category has one; the rest stay neutral.
 const CATEGORY_STYLES: Record<ChangelogCategory, string> = {
-  "New Feature":
-    "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-300",
-  Improvement:
-    "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-300",
-  "Bug Fix":
-    "border-rose-200 bg-rose-50 text-rose-700 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-300",
-  Content:
-    "border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-900 dark:bg-violet-950 dark:text-violet-300",
-  Data: "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300",
-  Performance:
-    "border-cyan-200 bg-cyan-50 text-cyan-700 dark:border-cyan-900 dark:bg-cyan-950 dark:text-cyan-300"
+  "New Feature": "bg-success-subtle text-success",
+  Improvement: "bg-primary-subtle text-primary",
+  "Bug Fix": "bg-destructive-subtle text-destructive",
+  Content: "bg-muted text-foreground",
+  Data: "bg-warning-subtle text-warning",
+  Performance: "bg-muted text-foreground"
 }
 
 const CATEGORIES = Object.keys(CATEGORY_STYLES) as ChangelogCategory[]
@@ -40,7 +38,7 @@ const FILTERS = ["All", ...CATEGORIES] as ChangelogFilter[]
 
 const getCategoryBadgeClassName = (category: ChangelogCategory) =>
   cn(
-    "inline-flex h-6 w-fit items-center whitespace-nowrap rounded-full border px-2 text-xs leading-none font-medium",
+    "inline-flex h-6 w-fit items-center whitespace-nowrap rounded-full px-2 text-xs leading-none font-medium",
     CATEGORY_STYLES[category]
   )
 
@@ -66,11 +64,12 @@ const ChangelogFilters = ({
           track("changelog_filter_changed", { filter })
         }}
         className={cn(
-          "inline-flex h-6 w-fit cursor-pointer items-center rounded-full border px-2 text-xs leading-none font-medium transition-opacity hover:opacity-80",
-          activeFilter === filter && "ring-ring ring-2 ring-offset-1",
-          filter === "All"
-            ? "border-border bg-muted text-foreground"
-            : CATEGORY_STYLES[filter]
+          "inline-flex h-6 w-fit items-center rounded-full px-2 text-xs leading-none font-medium transition-colors",
+          activeFilter !== filter
+            ? "bg-muted text-foreground hover:bg-accent"
+            : filter === "All"
+              ? "bg-primary-subtle text-primary"
+              : CATEGORY_STYLES[filter]
         )}>
         {filter}
       </button>
@@ -120,13 +119,14 @@ const ChangelogReleaseSection = ({
   return (
     <section
       id={slug}
-      className="bg-muted relative scroll-mt-32 rounded-2xl p-5 md:p-6 lg:scroll-mt-20">
+      className={cn(
+        cardVariants(),
+        "relative scroll-mt-32 p-5 md:p-6 lg:scroll-mt-20"
+      )}>
       {isUnseen && (
-        <span className="absolute top-4 right-4 rounded-full bg-yellow-400 px-2 py-0.5 text-[10px] font-semibold text-black md:top-6 md:right-6">
-          New
-        </span>
+        <NewBadge className="absolute top-4 right-4 md:top-6 md:right-6" />
       )}
-      <p className="text-foreground/75 text-sm">{release.date}</p>
+      <p className="text-foreground text-sm">{release.date}</p>
       <h2 className="mt-1 text-xl font-semibold">
         <a
           href={`#${slug}`}
@@ -242,13 +242,13 @@ const ChangelogContent = () => {
           <div className="space-y-8">
             {sortedQuarters.map(({ id, label, releases }) => (
               <section key={id} id={id} className="scroll-mt-20 space-y-3">
-                <h2 className="text-xl font-semibold">
+                <SectionHeading>
                   {label}{" "}
                   <span className="text-muted-foreground text-sm font-normal">
                     {releases.length}{" "}
                     {releases.length === 1 ? "update" : "updates"}
                   </span>
-                </h2>
+                </SectionHeading>
 
                 {releases.map((release) => (
                   <ChangelogReleaseSection
@@ -263,7 +263,7 @@ const ChangelogContent = () => {
             <button
               type="button"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="text-muted-foreground hover:text-foreground inline-flex cursor-pointer items-center gap-1.5 text-sm transition-colors">
+              className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 text-sm transition-colors">
               <ArrowUp className="size-4" />
               Back to the latest updates
             </button>

@@ -4,8 +4,10 @@ import { useEffect, useState } from "react"
 import { PanelBottom, X } from "lucide-react"
 
 import { track } from "@/lib/analytics"
+import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
+import { cardVariants } from "@/components/ui/card"
 import { Migration } from "@/components/migration"
 import MobileTimetableModifierButton from "@/components/timetable/buttons/mobile-timetable-modifier-button"
 import TimetableActionsDropdown from "@/components/timetable/buttons/timetable-actions-dropdown"
@@ -84,7 +86,10 @@ const TimetablePageContent = () => {
         {overflow && !below && !hintDismissed && (
           <div
             role="status"
-            className="bg-muted panel-border hidden items-center gap-3 rounded-lg px-3 py-2 text-sm md:flex">
+            className={cn(
+              cardVariants(),
+              "panel-border hidden items-center gap-3 rounded-lg px-3 py-2 text-sm md:flex"
+            )}>
             <PanelBottom className="text-muted-foreground size-4 shrink-0" />
             <span className="flex-1">
               This timetable is wide. Put the panel below to give it the full
@@ -106,7 +111,7 @@ const TimetablePageContent = () => {
               type="button"
               aria-label="Dismiss"
               onClick={dismissHint}
-              className="text-muted-foreground hover:text-foreground cursor-pointer">
+              className="text-muted-foreground hover:text-foreground">
               <X className="size-4" />
             </button>
           </div>

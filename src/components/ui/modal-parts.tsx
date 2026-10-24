@@ -2,8 +2,8 @@
 
 import { cn } from "@/lib/utils"
 
-// The few pieces every toolbar modal and drawer is built from, so Share,
-// Import, Calendar and the rest read as one family.
+// The few pieces every ResponsiveModal is built from, so Share, Import,
+// Calendar, confirmations and the rest read as one family.
 
 /** A labelled block: a title, a muted hint, then the control. */
 export const ModalSection = ({
@@ -36,7 +36,7 @@ export const ModalOption = ({
   hint?: string
   children: React.ReactNode
 }) => (
-  <div className="flex items-center justify-between gap-4 rounded-lg border p-3">
+  <div className="bg-muted flex items-center justify-between gap-4 rounded-lg p-3">
     <div className="space-y-0.5">
       <p className="text-sm font-medium">{title}</p>
       {hint && <p className="text-muted-foreground text-xs">{hint}</p>}
@@ -74,7 +74,7 @@ export const ModalNote = ({
     className={cn(
       "rounded-lg px-3 py-2 text-xs",
       tone === "danger"
-        ? "border-destructive/30 bg-destructive/10 text-destructive border"
+        ? "bg-destructive-subtle text-destructive"
         : "bg-muted text-muted-foreground"
     )}>
     {children}

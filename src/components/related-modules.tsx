@@ -1,5 +1,7 @@
 import { ChevronRight } from "lucide-react"
 
+import { TextLink } from "@/components/ui/text-link"
+
 interface Props {
   related: Array<{ code: string; title: string }>
   emptyHref?: string
@@ -29,11 +31,12 @@ const RelatedModules = ({ related, emptyHref, emptyLabel }: Props) =>
       ))}
     </ul>
   ) : emptyHref && emptyLabel ? (
-    <a
+    <TextLink
       href={emptyHref}
-      className="text-muted-foreground hover:text-primary-alt text-sm transition-colors">
+      variant="subtle"
+      className="text-muted-foreground text-sm">
       {emptyLabel}
-    </a>
+    </TextLink>
   ) : null
 
 export default RelatedModules

@@ -15,6 +15,7 @@ import {
 import { readTranscriptPdf, transcriptErrorProps } from "@/lib/fgo"
 import { shareTranscript } from "@/lib/transcript-share"
 import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { ToolSteps } from "@/components/tools/tool-steps"
 import { TranscriptDropzone } from "@/components/tools/transcript-dropzone"
@@ -39,9 +40,9 @@ const SCALE = [
 const pct = (gp: number) => `${((Math.max(1, Math.min(5, gp)) - 1) / 4) * 100}%`
 
 const STATUS_DOT = {
-  secured: "bg-emerald-500",
+  secured: "bg-success",
   possible: "bg-primary",
-  "out of reach": "bg-muted-foreground/40"
+  "out of reach": "bg-muted-foreground"
 } as const
 
 const STATUS_TEXT = {
@@ -205,7 +206,7 @@ const CgpaPlanner = () => {
         />
       )}
 
-      <section className="bg-muted space-y-5 rounded-2xl p-5">
+      <section className={cn(cardVariants(), "space-y-5 p-5")}>
         <h2 className="text-sm font-medium">Your grades so far</h2>
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
           <Field
@@ -239,7 +240,7 @@ const CgpaPlanner = () => {
       </section>
 
       {leftMissing ? (
-        <p className="bg-muted text-muted-foreground rounded-2xl p-5 text-sm">
+        <p className={cn(cardVariants(), "text-muted-foreground p-5 text-sm")}>
           Almost there. Enter the AU you still have to take above and your goals
           appear here.
         </p>
@@ -266,7 +267,7 @@ const CgpaPlanner = () => {
             <h2 className="text-sm font-medium">Pick a goal</h2>
             <div>
               {/* Tabs: one sliding "head" joins the picked goal to the panel */}
-              <div className="bg-muted/40 relative grid grid-cols-4 rounded-t-2xl">
+              <div className="bg-muted relative grid grid-cols-4 rounded-t-2xl">
                 <span
                   aria-hidden
                   className="absolute inset-y-0 left-0 w-1/4 transition-transform duration-300 ease-out motion-reduce:transition-none"
@@ -357,7 +358,7 @@ const CgpaPlanner = () => {
                   )}
                   {active.status === "secured" && (
                     <div className="space-y-1">
-                      <p className="text-4xl font-bold tracking-tighter text-emerald-600 md:text-5xl dark:text-emerald-400">
+                      <p className="text-success text-4xl font-bold tracking-tighter md:text-5xl">
                         Already secured
                       </p>
                       <p className="text-muted-foreground text-sm">
@@ -404,7 +405,7 @@ const CgpaPlanner = () => {
                       </p>
                       <p className="mt-1.5 flex flex-wrap items-center justify-end gap-2">
                         {final - c > 0.005 && (
-                          <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                          <span className="text-success text-sm font-medium">
                             +{fmt(final - c)}
                           </span>
                         )}
@@ -426,7 +427,7 @@ const CgpaPlanner = () => {
                       <div className="relative mx-2 h-5">
                         <span
                           className={cn(
-                            "text-primary absolute bottom-0 flex flex-col text-[11px] font-medium whitespace-nowrap",
+                            "text-primary absolute bottom-0 flex flex-col text-xs font-medium whitespace-nowrap",
                             active.required > 4
                               ? "-translate-x-full items-end"
                               : active.required < 2

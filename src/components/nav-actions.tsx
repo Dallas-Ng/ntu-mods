@@ -9,9 +9,8 @@ import { useTheme } from "@/hooks/use-theme"
 
 import { Button } from "./ui/button"
 
-// Same grey as the nav text links: solid only on hover or on its own page.
-export const NAV_ICON =
-  "text-muted-foreground hover:bg-transparent hover:text-foreground dark:hover:bg-transparent"
+// Grey like the nav text links, with the same background on hover.
+export const NAV_ICON = "text-muted-foreground hover:text-foreground"
 
 const NavActions = () => {
   const { theme, setTheme } = useTheme()
@@ -31,9 +30,9 @@ const NavActions = () => {
           track("settings_theme_changed", { theme: next })
         }}>
         {theme === "light" ? (
-          <Moon className="size-5" />
+          <Moon className="size-4" />
         ) : (
-          <Sun className="size-5" />
+          <Sun className="size-4" />
         )}
       </Button>
       <Button
@@ -44,7 +43,7 @@ const NavActions = () => {
         size="icon"
         className={cn(NAV_ICON, pathname === "/feedback" && "text-foreground")}>
         <a href="/feedback">
-          <MessageSquare className="size-5" />
+          <MessageSquare className="size-4" />
         </a>
       </Button>
     </div>

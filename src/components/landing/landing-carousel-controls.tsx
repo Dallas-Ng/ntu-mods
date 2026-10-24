@@ -1,5 +1,8 @@
 import { ChevronLeft, ChevronRight, type LucideIcon } from "lucide-react"
 
+import { cn } from "@/lib/utils"
+import { controlOnCard } from "@/components/ui/card"
+
 type Ring = {
   // Changing this restarts the turn (use the item currently shown)
   turnKey: string | number
@@ -35,8 +38,11 @@ const CircleButton = ({
     type="button"
     aria-label={label}
     onClick={onClick}
-    className="bg-background hover:bg-accent relative flex size-9 items-center justify-center rounded-full transition-colors duration-150 motion-reduce:transition-none md:size-10">
-    <Icon aria-hidden="true" className="size-5" />
+    className={cn(
+      controlOnCard,
+      "relative flex size-9 items-center justify-center rounded-full duration-150 motion-reduce:transition-none md:size-10"
+    )}>
+    <Icon aria-hidden="true" className="size-4" />
     {ring && (
       <svg
         key={ring.turnKey}

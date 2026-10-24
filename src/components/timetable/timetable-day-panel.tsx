@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import { type Stop } from "@/lib/venue-map"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { TextLink } from "@/components/ui/text-link"
 import CampusMap, { type Focus } from "@/components/map/campus-map"
 import { LegRow, StopRow } from "@/components/map/day-route"
 import { useWalkDay } from "@/components/timetable/use-walk-day"
@@ -219,13 +220,13 @@ const TimetableDayPanel = () => {
       <p className="text-muted-foreground mt-6 text-center text-xs">
         Walking times are estimates. Map data from NTU Maps (MazeMap) and
         OpenStreetMap.{" "}
-        <a
+        <TextLink
           href="/maps"
           target="_blank"
           rel="noopener noreferrer"
-          className="hover:text-foreground underline underline-offset-2">
+          variant="muted">
           Open campus map
-        </a>
+        </TextLink>
       </p>
     </div>
   )

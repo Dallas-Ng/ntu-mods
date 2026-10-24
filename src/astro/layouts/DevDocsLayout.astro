@@ -1,9 +1,13 @@
 ---
-import { ChevronDown } from "lucide-react"
-
 import { MCP_CLIENTS } from "@/lib/developers/mcp-clients"
 import { DEV_LINKS } from "@/lib/developers/pages"
+import { htmlHeadings } from "@/lib/html-headings"
 import { webPageJsonLd } from "@/lib/json-ld"
+import { SideNavDrawer } from "@/components/ui/side-nav-drawer"
+import ArticleToc, {
+  MobileSectionDropdown
+} from "@/components/articles/article-toc"
+import Header from "@/components/header"
 import DevNav from "@/astro/components/DevNav.astro"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
@@ -27,6 +31,13 @@ const currentLabel =
   MCP_CLIENTS.find((c) => path === `/developers/mcp/${c.id}`)?.label ??
   "Menu"
 const jsonLd = webPageJsonLd({ name: title, description, path })
+
+// Render the page once and list its h2s for "On this page", so each docs
+// page gets the right nav without keeping a heading list by hand. The HTML is
+// re-emitted with set:html; client:* islands inside still hydrate (checked
+// with the code blocks' client:visible), but check again if one is added.
+const body = await Astro.slots.render("default")
+const headings = htmlHeadings(body)
 ---
 
 <BaseLayout
@@ -37,37 +48,38 @@ const jsonLd = webPageJsonLd({ name: title, description, path })
   <JsonLd data={jsonLd} />
 
   <div
-    class="grid gap-6 lg:grid-cols-[12rem_minmax(0,1fr)] xl:gap-10 [&>*]:min-w-0">
+    class="grid gap-6 lg:grid-cols-[12rem_minmax(0,48rem)] lg:justify-center xl:grid-cols-[12rem_minmax(0,48rem)_14rem] xl:gap-10 [&>*]:min-w-0">
     <aside class="hidden lg:block">
       <DevNav path={path} class="sticky top-24 space-y-5" />
     </aside>
 
-    <div class="max-w-3xl min-w-0 space-y-8">
-      <details class="group rounded-xl border lg:hidden">
-        <summary
-          class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 [&::-webkit-details-marker]:hidden">
-          <span class="flex min-w-0 flex-col">
-            <span class="text-muted-foreground text-xs">Developer docs</span>
-            <span class="truncate text-sm font-medium">{currentLabel}</span>
-          </span>
-          <ChevronDown
-            class="text-muted-foreground size-4 shrink-0 transition-transform group-open:rotate-180"
-          />
-        </summary>
-        <div class="max-h-[65vh] overflow-y-auto border-t p-2">
-          <DevNav path={path} class="space-y-4" />
-        </div>
-      </details>
-
-      <div class="space-y-3">
-        {eyebrow && <p class="text-sm font-semibold">{eyebrow}</p>}
-        <h1 class="text-3xl leading-[1] font-semibold">{heading}</h1>
-        <p class="text-foreground/80 text-sm">{intro}</p>
+    <div class="flex max-w-3xl min-w-0 flex-col gap-8">
+      {
+        /* One row under the navbar on phones: the docs menu, then On this page. */
+      }
+      <div class="sticky top-[4.5rem] z-[5] flex justify-end gap-2 xl:hidden">
+        <SideNavDrawer
+          client:load
+          side="left"
+          title="Developer docs"
+          label={currentLabel}>
+          <DevNav path={path} class="space-y-5" />
+        </SideNavDrawer>
+        <MobileSectionDropdown
+          client:idle
+          headings={headings}
+          desktopFrom="xl"
+          floating={false}
+        />
       </div>
+
+      <Header eyebrow={eyebrow} title={heading} subtitle={intro} />
 
       <div class="dev-docs space-y-8">
-        <slot />
+        <Fragment set:html={body} />
       </div>
     </div>
+
+    <ArticleToc client:idle headings={headings} desktopFrom="xl" />
   </div>
 </BaseLayout>

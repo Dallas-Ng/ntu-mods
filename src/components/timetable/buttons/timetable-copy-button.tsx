@@ -12,9 +12,12 @@ import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { usePlanNames } from "@/hooks/use-plan-names"
 import { useTimetable } from "@/hooks/use-timetable"
 import { Button } from "@/components/ui/button"
+import {
+  ModalFooter,
+  ModalNote,
+  ModalSection
+} from "@/components/ui/modal-parts"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
-
-import { ModalFooter, ModalNote, ModalSection } from "./modal-parts"
 
 const TimetableCopyButton = () => {
   const { timetables, updateTimetable, qsTimetable, updateTimetableIndex } =
@@ -41,7 +44,7 @@ const TimetableCopyButton = () => {
       custom_block_count: qsCustomCourses?.length ?? 0
     })
     window.location.assign("/timetable")
-    toast.success("Successfully copied timetable")
+    toast.success("Timetable copied")
     setOpen(false)
   }
 
@@ -72,10 +75,10 @@ const TimetableCopyButton = () => {
                   onClick={() => setTarget(i)}
                   aria-pressed={target === i}
                   className={cn(
-                    "h-8 max-w-full cursor-pointer truncate rounded-md border px-3 text-sm transition-colors",
+                    "bg-muted h-8 max-w-full truncate rounded-md px-3 text-sm transition-colors",
                     target === i
                       ? "bg-foreground text-background border-transparent"
-                      : "text-muted-foreground hover:border-foreground"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground"
                   )}>
                   {label(i)}
                 </button>

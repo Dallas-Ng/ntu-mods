@@ -1,9 +1,12 @@
 import { siteConfig } from "@/config/site"
 import { LATEST_SEMESTER_LABEL } from "@/lib/semesters"
 import type { ArticleHeading } from "@/lib/server/articles"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { cardVariants } from "@/components/ui/card"
+import { TextLink } from "@/components/ui/text-link"
 import Container from "@/components/container"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 import HeadingAnchor from "@/components/heading-anchor"
 
 interface FaqConfig {
@@ -15,8 +18,6 @@ interface FaqConfig {
 }
 
 const REPO_URL = siteConfig.links.repo
-const LINK_CLASS =
-  "text-primary hover:text-primary/80 underline underline-offset-2 transition-colors"
 
 const FAQ_GROUPS = [
   { id: "about", title: "About NTUMods" },
@@ -49,12 +50,7 @@ const FAQ_CONFIG: FaqConfig[] = [
         The latest semester available is{" "}
         <strong>{LATEST_SEMESTER_LABEL}</strong>. If this is outdated and you
         need data for a newer semester, feel free to request it via the{" "}
-        <a
-          href="#feedback"
-          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-          feedback form below
-        </a>
-        .
+        <TextLink href="#feedback">feedback form below</TextLink>.
       </>
     ),
     answerText: `The latest semester available is ${LATEST_SEMESTER_LABEL}. If this is outdated and you need data for a newer semester, feel free to request it via the feedback form.`
@@ -72,15 +68,10 @@ const FAQ_CONFIG: FaqConfig[] = [
     question: "How do I plan my timetable?",
     answer: (
       <>
-        Head to the{" "}
-        <a
-          href="/timetable"
-          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-          timetable
-        </a>{" "}
-        page and search for a module by code or title. Select it, then choose an
-        index that fits your schedule. The app automatically detects conflicts
-        with your existing classes and highlights them.
+        Head to the <TextLink href="/timetable">timetable</TextLink> page and
+        search for a module by code or title. Select it, then choose an index
+        that fits your schedule. The app automatically detects conflicts with
+        your existing classes and highlights them.
       </>
     ),
     answerText:
@@ -99,15 +90,10 @@ const FAQ_CONFIG: FaqConfig[] = [
     question: "How do I browse modules?",
     answer: (
       <>
-        Use the{" "}
-        <a
-          href="/mods"
-          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-          mods
-        </a>{" "}
-        page to search and filter all NTU modules. Click on any module to see
-        its full details: description, academic units, prerequisites, exam
-        schedule, and all available indexes with their timeslots and venues.
+        Use the <TextLink href="/mods">mods</TextLink> page to search and filter
+        all NTU modules. Click on any module to see its full details:
+        description, academic units, prerequisites, exam schedule, and all
+        available indexes with their timeslots and venues.
       </>
     ),
     answerText:
@@ -152,15 +138,11 @@ const FAQ_CONFIG: FaqConfig[] = [
         screen or sessions. We don&apos;t collect your name or contact details.
         Everything you add to your timetable is stored only in your browser and
         never sent to our servers. See the{" "}
-        <a
-          href="/privacy"
-          className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-          Privacy Policy
-        </a>{" "}
-        for full details. The CGPA and FGO tools read your transcript PDF in
-        your browser and never upload the file. By default, module codes, terms
-        and grades (never your name or matric number) are also sent for
-        analytics. Untick the share box before uploading to opt out.
+        <TextLink href="/privacy">Privacy Policy</TextLink> for full details.
+        The CGPA and FGO tools read your transcript PDF in your browser and
+        never upload the file. By default, module codes, terms and grades (never
+        your name or matric number) are also sent for analytics. Untick the
+        share box before uploading to opt out.
       </>
     ),
     answerText:
@@ -173,13 +155,9 @@ const FAQ_CONFIG: FaqConfig[] = [
     answer: (
       <>
         Yes. The code is released under the MIT licence and lives on{" "}
-        <a
-          href={REPO_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={LINK_CLASS}>
+        <TextLink href={REPO_URL} target="_blank" rel="noopener noreferrer">
           GitHub
-        </a>
+        </TextLink>
         . Module and exam data belongs to NTU and is presented here for
         convenience.
       </>
@@ -197,13 +175,12 @@ const FAQ_CONFIG: FaqConfig[] = [
         anything beyond a small fix, open an issue first so we can agree on the
         approach. Then fork the repository, make your change, run the checks and
         open a pull request. The steps are in{" "}
-        <a
+        <TextLink
           href={`${REPO_URL}/blob/main/CONTRIBUTING.md`}
           target="_blank"
-          rel="noopener noreferrer"
-          className={LINK_CLASS}>
+          rel="noopener noreferrer">
           CONTRIBUTING.md
-        </a>
+        </TextLink>
         . Typo fixes, bug reports, accessibility and performance improvements
         and new articles are all useful.
       </>
@@ -217,18 +194,13 @@ const FAQ_CONFIG: FaqConfig[] = [
     question: "How do I report a bug or wrong data?",
     answer: (
       <>
-        Use the{" "}
-        <a href="/feedback" className={LINK_CLASS}>
-          feedback form
-        </a>{" "}
-        or open a{" "}
-        <a
+        Use the <TextLink href="/feedback">feedback form</TextLink> or open a{" "}
+        <TextLink
           href={`${REPO_URL}/issues/new/choose`}
           target="_blank"
-          rel="noopener noreferrer"
-          className={LINK_CLASS}>
+          rel="noopener noreferrer">
           GitHub issue
-        </a>
+        </TextLink>
         . For wrong module data, include the module code and semester.
       </>
     ),
@@ -243,18 +215,14 @@ const FAQ_CONFIG: FaqConfig[] = [
       <>
         Please do not open a public issue. Use GitHub&apos;s private
         vulnerability reporting, described in{" "}
-        <a
+        <TextLink
           href={`${REPO_URL}/blob/main/SECURITY.md`}
           target="_blank"
-          rel="noopener noreferrer"
-          className={LINK_CLASS}>
+          rel="noopener noreferrer">
           SECURITY.md
-        </a>{" "}
+        </TextLink>{" "}
         and in the site&apos;s{" "}
-        <a href="/.well-known/security.txt" className={LINK_CLASS}>
-          security.txt
-        </a>
-        .
+        <TextLink href="/.well-known/security.txt">security.txt</TextLink>.
       </>
     ),
     answerText:
@@ -293,7 +261,7 @@ const FaqContent = ({ children, mobileNav }: Props) => {
           {mobileNav}
 
           <Header
-            title="Frequently Asked Questions"
+            title="Frequently asked questions"
             subtitle="Answers for planning timetables, browsing modules, exporting schedules, understanding how your data is stored, and contributing to the open-source project."
           />
 
@@ -311,13 +279,16 @@ const FaqContent = ({ children, mobileNav }: Props) => {
                   <section
                     id={id}
                     key={id}
-                    className="bg-muted scroll-mt-20 space-y-3 rounded-2xl p-5">
-                    <h3 className="text-xl font-semibold">
+                    className={cn(
+                      cardVariants(),
+                      "scroll-mt-20 space-y-3 p-5"
+                    )}>
+                    <SectionHeading as="h3">
                       {question}
                       <HeadingAnchor id={id} label={question} />
-                    </h3>
+                    </SectionHeading>
 
-                    <p className="text-muted-foreground text-sm">{answer}</p>
+                    <p className="text-sm leading-relaxed">{answer}</p>
                   </section>
                 )
               )}
@@ -326,12 +297,15 @@ const FaqContent = ({ children, mobileNav }: Props) => {
 
           <div
             id="feedback"
-            className="bg-muted flex scroll-mt-20 flex-col justify-between gap-4 rounded-2xl p-5 sm:flex-row sm:items-center">
+            className={cn(
+              cardVariants(),
+              "flex scroll-mt-20 flex-col justify-between gap-4 p-5 sm:flex-row sm:items-center"
+            )}>
             <div>
-              <h2 className="text-xl font-semibold">
+              <SectionHeading>
                 Feedback
                 <HeadingAnchor id="feedback" label="Feedback" />
-              </h2>
+              </SectionHeading>
 
               <p className="text-muted-foreground text-sm">
                 Have a problem or suggestion? Let us know.
@@ -339,7 +313,7 @@ const FaqContent = ({ children, mobileNav }: Props) => {
             </div>
 
             <a href="/feedback">
-              <Button>Share Feedback</Button>
+              <Button>Share feedback</Button>
             </a>
           </div>
         </div>

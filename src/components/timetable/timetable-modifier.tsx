@@ -34,7 +34,7 @@ interface ModuleRowProps {
   indexKey: string
   isActive: boolean
   onOpenChange: (moduleKey: string) => void
-  onRemove: (event: MouseEvent<HTMLDivElement>, moduleKey: string) => void
+  onRemove: (event: MouseEvent<HTMLButtonElement>, moduleKey: string) => void
 }
 
 const ModuleRow = ({
@@ -78,11 +78,13 @@ const ModuleRow = ({
           )}
         </div>
 
-        <div
-          className="flex size-8 cursor-pointer items-center justify-center"
+        <button
+          type="button"
+          aria-label={`Remove ${moduleKey}`}
+          className="flex size-8 items-center justify-center"
           onClick={(e) => onRemove(e, moduleKey)}>
           <Trash2 className="text-muted-foreground hover:text-foreground size-4 transition-colors" />
-        </div>
+        </button>
       </div>
     </div>
   )
@@ -139,7 +141,7 @@ const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
   const [activeKey, setActiveKey] = useState<string | null>(null)
 
   const handleRemoveClick = (
-    event: MouseEvent<HTMLDivElement>,
+    event: MouseEvent<HTMLButtonElement>,
     moduleKey: string
   ) => {
     event.stopPropagation()

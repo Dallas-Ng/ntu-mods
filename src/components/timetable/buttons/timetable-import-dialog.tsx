@@ -10,10 +10,13 @@ import { decodeTextBundle } from "@/lib/timetable-share"
 import { cn } from "@/lib/utils"
 import { usePlanNames } from "@/hooks/use-plan-names"
 import { Button } from "@/components/ui/button"
+import {
+  ModalFooter,
+  ModalNote,
+  ModalSection
+} from "@/components/ui/modal-parts"
 import { ResponsiveModal } from "@/components/ui/responsive-modal"
 import { Textarea } from "@/components/ui/textarea"
-
-import { ModalFooter, ModalNote, ModalSection } from "./modal-parts"
 
 interface Props {
   open: boolean
@@ -74,7 +77,7 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
             rows={4}
             placeholder="NTUMODS1-…"
             aria-invalid={isInvalid}
-            className="resize-none font-mono text-xs break-all"
+            className="resize-none font-mono text-xs break-all md:text-xs"
           />
           {isInvalid && (
             <ModalNote tone="danger">
@@ -100,10 +103,10 @@ const TimetableImportDialog = ({ open, onOpenChange }: Props) => {
                 onClick={() => setTargetPlan(i)}
                 aria-pressed={targetPlan === i}
                 className={cn(
-                  "h-8 max-w-full cursor-pointer truncate rounded-md border px-3 text-sm transition-colors",
+                  "bg-muted h-8 max-w-full truncate rounded-md px-3 text-sm transition-colors",
                   targetPlan === i
                     ? "bg-foreground text-background border-transparent"
-                    : "text-muted-foreground hover:border-foreground"
+                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
                 )}>
                 {label(i)}
               </button>

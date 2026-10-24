@@ -147,19 +147,19 @@ const TimetableIndexNote = ({
           variant="outline"
           value={scope}
           onValueChange={changeScope}
-          className="text-[11px]">
+          className="text-xs">
           {/* The outline variant's hover:bg-accent is identical to
              data-[state=on]:bg-accent — hovering the unselected option
              would make it look selected too. Give hover a distinct,
              lighter colour so which one is actually active stays clear. */}
           <ToggleGroupItem
             value="index"
-            className="hover:bg-muted hover:text-foreground data-[state=on]:hover:bg-accent data-[state=on]:hover:text-accent-foreground h-6 px-2 text-[11px]">
+            className="hover:bg-accent hover:text-foreground data-[state=on]:hover:bg-accent data-[state=on]:hover:text-accent-foreground h-6 px-2 text-xs">
             This index
           </ToggleGroupItem>
           <ToggleGroupItem
             value="module"
-            className="hover:bg-muted hover:text-foreground data-[state=on]:hover:bg-accent data-[state=on]:hover:text-accent-foreground h-6 px-2 text-[11px]">
+            className="hover:bg-accent hover:text-foreground data-[state=on]:hover:bg-accent data-[state=on]:hover:text-accent-foreground h-6 px-2 text-xs">
             All indexes
           </ToggleGroupItem>
         </ToggleGroup>
@@ -172,7 +172,7 @@ const TimetableIndexNote = ({
         placeholder="e.g. bring laptop, seat near the door"
         // Stay at the default 16px on mobile — anything smaller triggers
         // iOS Safari's auto-zoom on focus. Only shrink on desktop.
-        className="min-h-10 sm:text-xs"
+        className="min-h-10 sm:text-xs md:text-xs"
       />
     </div>
   )
@@ -280,7 +280,7 @@ const TimetableIndexModifier = (props: Props) => {
       }>
       <Command
         shouldFilter={false}
-        className="bg-muted/60 min-h-0 flex-1 border md:rounded-t-none">
+        className="bg-muted min-h-0 flex-1 border md:rounded-t-none">
         <div className="h-fit w-full border-b">
           <CommandInput
             placeholder="Search for code, timing or tutorial group"

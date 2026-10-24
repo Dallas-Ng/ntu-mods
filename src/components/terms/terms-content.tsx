@@ -1,12 +1,15 @@
 import { siteConfig } from "@/config/site"
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
+import { TextLink } from "@/components/ui/text-link"
 import Container from "@/components/container"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 
 const TermsContent = () => {
   return (
-    <Container size="sm" className="text-muted-foreground space-y-6">
-      <div className="text-foreground">
-        <Header title="Terms of Use" subtitle="Last Updated: 23 October 2026" />
+    <Container size="sm" className="space-y-8">
+      <div>
+        <Header title="Terms of Use" subtitle="Last updated: 23 October 2026" />
       </div>
 
       <p className="text-sm">
@@ -15,10 +18,8 @@ const TermsContent = () => {
         please do not use the Service.
       </p>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Using the Service
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Using the service</SectionHeading>
 
         <p>
           NTUMods is a free, open-source tool for planning NTU timetables and
@@ -31,10 +32,8 @@ const TermsContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Not Affiliated with NTU
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Not affiliated with NTU</SectionHeading>
 
         <p>
           NTUMods is an independent project. It is not affiliated with, endorsed
@@ -46,8 +45,8 @@ const TermsContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">No Warranty</h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>No warranty</SectionHeading>
 
         <p>
           The Service is provided &quot;as is&quot; and &quot;as
@@ -57,10 +56,8 @@ const TermsContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Limitation of Liability
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Limitation of liability</SectionHeading>
 
         <p>
           To the extent permitted by law, we are not liable for any loss arising
@@ -71,48 +68,37 @@ const TermsContent = () => {
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Your Data and Privacy
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Your data and privacy</SectionHeading>
 
         <p>
           Your timetable and settings are stored in your browser. How we handle
           analytics, cookies and consent, including the opt-in banner shown in
           regions that require it, is described in the{" "}
-          <a
-            href="/privacy"
-            className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
-            Privacy Policy
-          </a>
-          , which forms part of these terms.
+          <TextLink href="/privacy">Privacy Policy</TextLink>, which forms part
+          of these terms.
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Open Source and Content
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Open source and content</SectionHeading>
 
         <p>
           The source code is published on{" "}
-          <a
+          <TextLink
             href={siteConfig.links.repo}
             target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary underline underline-offset-2">
+            rel="noopener noreferrer">
             GitHub
-          </a>{" "}
+          </TextLink>{" "}
           under the licence in its repository. Module and exam data is
           NTU&apos;s; we present it for convenience. Articles and site design
           remain with their authors unless stated otherwise.
         </p>
       </section>
 
-      <section className="bg-muted space-y-3 rounded-2xl p-5 text-sm">
-        <h2 className="text-foreground text-xl font-semibold">
-          Changes and Governing Law
-        </h2>
+      <section className={cn(cardVariants(), "space-y-3 p-5 text-sm")}>
+        <SectionHeading>Changes and governing law</SectionHeading>
 
         <p>
           We may change these terms or the Service at any time, and will update

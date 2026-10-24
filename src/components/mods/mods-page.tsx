@@ -16,7 +16,8 @@ import { pushSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
-import Header from "@/components/header"
+import { cardVariants, controlOnCard } from "@/components/ui/card"
+import Header, { SectionHeading } from "@/components/header"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
 import ModsFavouriteButton from "@/components/mods/mods-favourite-button"
@@ -216,7 +217,7 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
   return (
     <div className="relative space-y-3">
       <Header
-        title="NTU Modules"
+        title="NTU modules"
         subtitle={`AY${year}/${nextYear} Semester ${semester}`}
       />
 
@@ -235,7 +236,7 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
             }
             aria-label="Favourites only">
             <Heart
-              className={`size-3.5 ${favouritesOnly === "true" ? "fill-rose-500 text-rose-500" : ""}`}
+              className={`size-4 ${favouritesOnly === "true" ? "fill-rose-500 text-rose-500" : ""}`}
             />
             <span className="hidden sm:inline">Favourites</span>
           </Button>
@@ -316,7 +317,7 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
       )}
 
       {!isLoading && (
-        <p className="text-muted-foreground hover:text-primary-alt text-center text-sm transition-colors">
+        <p className="text-muted-foreground text-center text-sm">
           <a
             href="https://wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"
             target="_blank"
@@ -362,7 +363,10 @@ function ModuleResults({
         year={year}
         semester={semester}
         showText={false}
-        triggerClassName="bg-background hover:bg-background/60 size-8 rounded-full p-0 active:scale-95"
+        triggerClassName={cn(
+          controlOnCard,
+          "text-muted-foreground size-8 rounded-full p-0 active:scale-95"
+        )}
         triggerVariant="ghost"
       />
     )
@@ -372,7 +376,7 @@ function ModuleResults({
     return (
       <ModsFavouriteButton
         moduleKey={m.code}
-        className="bg-background hover:bg-background/60 size-8 rounded-full active:scale-95"
+        className={cn(controlOnCard, "size-8 rounded-full active:scale-95")}
       />
     )
   }
@@ -395,7 +399,7 @@ function ModuleResults({
         {footer}
       </div>
     ) : (
-      <div className="bg-muted overflow-hidden rounded-2xl">
+      <div className={cn(cardVariants(), "overflow-hidden")}>
         {modules.map((m, i) => (
           <div key={i} className="border-background border-b-2 last:border-b-0">
             <ModuleListRow
@@ -422,7 +426,7 @@ function ModuleResults({
         ))}
       </div>
     ) : (
-      <div className="bg-muted overflow-hidden rounded-2xl">
+      <div className={cn(cardVariants(), "overflow-hidden")}>
         {Array.from({ length: LOADING_LIST_COUNT }).map((_, i) => (
           <div
             key={i}
@@ -459,12 +463,12 @@ function ModuleResults({
 
           return (
             <div key={key} className="space-y-2">
-              <h3 className="text-sm font-semibold">
+              <SectionHeading as="h3">
                 {label}{" "}
                 <span className="text-muted-foreground">
                   ({modules.length})
                 </span>
-              </h3>
+              </SectionHeading>
               {renderModules(visible, footer)}
             </div>
           )

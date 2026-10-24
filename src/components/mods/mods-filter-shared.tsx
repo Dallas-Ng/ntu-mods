@@ -187,7 +187,7 @@ export function ClearLink({ onClick }: { onClick: () => void }) {
   return (
     <button
       type="button"
-      className="text-muted-foreground hover:text-foreground mt-2 cursor-pointer px-1 text-xs transition-colors"
+      className="text-muted-foreground hover:text-foreground mt-2 px-1 text-xs transition-colors"
       onClick={onClick}>
       Clear
     </button>
@@ -316,7 +316,7 @@ function PickerHeader({
         {onClear && (
           <button
             type="button"
-            className="text-muted-foreground hover:text-foreground cursor-pointer text-xs transition-colors"
+            className="text-muted-foreground hover:text-foreground text-xs transition-colors"
             onClick={onClear}>
             Clear
           </button>
@@ -349,7 +349,7 @@ export function DaysPicker({
           value: String(d),
           label: TRUN_DAY_MAP[d as keyof typeof TRUN_DAY_MAP]
         }))}
-        className="[&_[data-slot=toggle-group-item]]:h-9 [&_[data-slot=toggle-group-item]]:text-[13px]"
+        className="[&_[data-slot=toggle-group-item]]:h-9 [&_[data-slot=toggle-group-item]]:text-sm"
       />
     </div>
   )

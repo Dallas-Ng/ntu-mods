@@ -1,12 +1,13 @@
 ---
-import { ArrowRight } from "lucide-react"
-
 import { siteConfig } from "@/config/site"
 import { datasetJsonLd } from "@/lib/json-ld"
 import {
   getLatestExamSemester,
   getSemesterExamsData
 } from "@/lib/server/db/repo"
+import { buttonVariants } from "@/components/ui/button"
+import { cardVariants } from "@/components/ui/card"
+import { LinkArrow } from "@/components/ui/text-link"
 import ExamsList from "@/components/exams/exams-list"
 import Header from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
@@ -71,7 +72,7 @@ const facts = [
   ogImage={`${siteConfig.url}/og/exams.png`}
   ogImageAlt="NTUMods exam schedule listing NTU exam dates and times for SC modules"
   size="md"
-  containerClassName="space-y-6">
+  containerClassName="space-y-8">
   <JsonLd
     data={datasetJsonLd({
       name: `NTU Exam Schedule ${label}`,
@@ -82,14 +83,17 @@ const facts = [
     })}
   />
   <Header
-    title="NTU Exam Schedule"
+    title="NTU exam schedule"
     subtitle={total > 0
       ? `Final exam dates, times and durations for ${label}, from NTU's official timetable.`
       : `No exam data available for ${label}`}
   />
 
   <div
-    class="bg-muted flex flex-col gap-4 rounded-2xl p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+    class:list={[
+      cardVariants(),
+      "flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6"
+    ]}>
     <div class="min-w-0 space-y-1">
       <p class="text-xl font-bold tracking-tight">Find your exam dates</p>
       <p class="text-muted-foreground text-sm text-pretty">
@@ -98,9 +102,9 @@ const facts = [
     </div>
     <a
       href="/articles/ntu-exam-schedule-ay2026"
-      class="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-full px-5 text-sm font-medium whitespace-nowrap transition-colors">
+      class={buttonVariants({ size: "lg", className: "group shrink-0" })}>
       Read the guide
-      <ArrowRight class="size-4" />
+      <LinkArrow />
     </a>
   </div>
 

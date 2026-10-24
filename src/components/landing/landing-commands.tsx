@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react"
 import { ChevronDown } from "lucide-react"
 
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
+import { NewBadge } from "@/components/new-dot"
+
 // Phones show this many rows until "Show all" is pressed; desktop shows every row
 const PHONE_ROWS = 4
 
@@ -81,7 +85,9 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
         onKeyDown={onKeyDown}
         placeholder="Find a feature or tool"
         aria-label="Find a feature or tool"
-        className="bg-muted placeholder:text-foreground/60 focus-visible:ring-primary h-14 w-full rounded-xl px-5 text-lg font-semibold tracking-tight outline-none focus-visible:ring-2 md:h-16 md:px-8 md:text-2xl"
+        className={cn(
+          "bg-muted placeholder:text-muted-foreground focus-visible:ring-primary h-14 w-full rounded-xl px-5 text-lg font-semibold tracking-tight outline-none focus-visible:ring-2 md:h-16 md:px-8 md:text-2xl"
+        )}
       />
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[7fr_5fr]">
@@ -113,10 +119,13 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                   className={`flex flex-col gap-4 rounded-xl p-4 transition-colors duration-150 md:px-6 md:py-5 lg:flex-row lg:items-center ${
                     on
                       ? "lg:bg-primary lg:text-primary-foreground"
-                      : "lg:hover:bg-muted"
+                      : "lg:hover:bg-accent"
                   } max-lg:active:bg-muted`}>
                   {c.art && (
-                    <span className="bg-muted flex h-40 items-center justify-center rounded-lg p-4 sm:h-48 lg:hidden">
+                    <span
+                      className={cn(
+                        "bg-muted flex h-40 items-center justify-center rounded-lg p-4 sm:h-48 lg:hidden"
+                      )}>
                       <img
                         src={c.art}
                         width={c.artSize?.[0]}
@@ -132,9 +141,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                     <span className="block text-2xl leading-[1.1] font-bold tracking-tight md:text-3xl">
                       {c.name}
                       {c.isNew && (
-                        <span className="ml-3 inline-block rounded-full bg-yellow-400 px-3 py-1 align-middle text-sm font-semibold tracking-normal text-black">
-                          New
-                        </span>
+                        <NewBadge size="lg" className="ml-3 align-middle" />
                       )}
                     </span>
                     <span className="mt-1 block max-w-xl text-sm md:text-base lg:hidden">
@@ -157,7 +164,9 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
             type="button"
             aria-expanded={showAll}
             onClick={() => setShowAll((v) => !v)}
-            className="bg-muted hover:bg-accent flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-colors duration-150 lg:hidden">
+            className={cn(
+              "bg-muted hover:bg-accent flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-colors duration-150 lg:hidden"
+            )}>
             {showAll ? "Show fewer" : `Show all ${rows.length} features`}
             <ChevronDown
               aria-hidden="true"
@@ -170,7 +179,10 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
 
         <div
           aria-hidden="true"
-          className="bg-muted sticky top-24 hidden h-[480px] self-start overflow-hidden rounded-2xl p-6 lg:block">
+          className={cn(
+            cardVariants(),
+            "sticky top-24 hidden h-[480px] self-start overflow-hidden p-6 lg:block"
+          )}>
           {commands.map((c) => (
             <div
               key={c.href + c.name}

@@ -10,6 +10,8 @@ import { useDebounce } from "@/hooks/use-debounce"
 import { usePathname } from "@/hooks/use-pathname"
 import { replaceSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { Button } from "@/components/ui/button"
+import { cardVariants } from "@/components/ui/card"
+import { InlineCode } from "@/components/ui/inline-code"
 import { Input } from "@/components/ui/input"
 import {
   Popover,
@@ -19,6 +21,7 @@ import {
 } from "@/components/ui/popover"
 import { Skeleton } from "@/components/ui/skeleton"
 import { ArticleThumb } from "@/components/articles/article-thumb"
+import { SectionHeading } from "@/components/header"
 
 export interface ArticleListItem {
   slug: string
@@ -86,7 +89,10 @@ function ArticleCard({
   return (
     <a
       href={`/articles/${article.slug}`}
-      className="group bg-muted hover:bg-accent flex flex-col overflow-hidden rounded-2xl transition-colors">
+      className={cn(
+        cardVariants({ interactive: true }),
+        "group flex flex-col overflow-hidden"
+      )}>
       <div className="relative">
         <ArticleThumb text={article.thumbnailText || article.title} />
         {/* Absolutely positioned, so the views arriving later cannot reflow the card. */}
@@ -106,23 +112,23 @@ function ArticleCard({
         )}
       </div>
       <div className="flex-1 p-4">
-        <div className="text-foreground/70 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
+        <div className="text-muted-foreground flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs">
           <span>{formatShortDate(article.date)}</span>
           <span aria-hidden="true">·</span>
           <span>{article.readingTime}</span>
           {showCategory && (
             <>
               <span aria-hidden="true">·</span>
-              <span className="bg-primary/10 text-primary dark:bg-background dark:text-muted-foreground rounded px-1.5 py-0.5">
+              <span className="bg-primary-subtle text-primary rounded px-1.5 py-0.5">
                 {article.category}
               </span>
             </>
           )}
         </div>
-        <h2 className="group-hover:text-primary mt-2 line-clamp-2 font-semibold wrap-break-word transition-colors">
+        <h2 className="mt-2 line-clamp-2 font-semibold wrap-break-word transition-colors">
           {article.title}
         </h2>
-        <p className="text-foreground/80 mt-2 line-clamp-3 text-sm leading-6 wrap-break-word">
+        <p className="text-foreground mt-2 line-clamp-3 text-sm leading-6 wrap-break-word">
           {article.description}
         </p>
       </div>
@@ -274,12 +280,14 @@ export default function ArticlesList({
 
   if (articles.length === 0) {
     return (
-      <div className="bg-muted text-foreground/80 rounded-2xl p-4 text-sm wrap-break-word sm:p-6">
+      <div
+        className={cn(
+          cardVariants(),
+          "text-foreground p-4 text-sm wrap-break-word sm:p-6"
+        )}>
         No articles published yet. Copy{" "}
-        <code className="bg-muted rounded px-1 py-0.5">
-          content/articles/_template.md
-        </code>{" "}
-        into the same folder without the leading underscore to publish one.
+        <InlineCode>content/articles/_template.md</InlineCode> into the same
+        folder without the leading underscore to publish one.
       </div>
     )
   }
@@ -479,7 +487,7 @@ export default function ArticlesList({
           <div className="space-y-8">
             {groupedArticles.map(({ category, articles: groupArticles }) => (
               <section key={category}>
-                <h2 className="mb-3 text-xl font-semibold">{category}</h2>
+                <SectionHeading className="mb-3">{category}</SectionHeading>
                 <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                   {groupArticles.map((article) => (
                     <ArticleCard
@@ -508,7 +516,11 @@ export default function ArticlesList({
           </div>
         )
       ) : (
-        <div className="bg-muted text-foreground/80 rounded-2xl p-4 text-sm wrap-break-word sm:p-6">
+        <div
+          className={cn(
+            cardVariants(),
+            "text-foreground p-4 text-sm wrap-break-word sm:p-6"
+          )}>
           No articles match those filters.
         </div>
       )}

@@ -14,7 +14,7 @@ const TimetableSettingsDialog = ({ open, onOpenChange }: Props) => {
       open={open}
       onOpenChange={onOpenChange}
       nested={false}
-      title="Table Settings"
+      title="Table settings"
       showDescription
       description="Customise the appearance of the timetable table."
       className="max-h-[85vh] overflow-y-auto sm:max-w-2xl">

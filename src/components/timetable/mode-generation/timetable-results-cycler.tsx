@@ -37,13 +37,13 @@ const TimetableResultsCycler = ({
   const current = combinations[currentIndex]
 
   return (
-    <div className="flex flex-col gap-2 rounded-lg border p-3">
+    <div className="bg-muted flex flex-col gap-2 rounded-lg p-3">
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground text-xs">
           {combinations.length}{" "}
           {uniqueTimeslotsOnly ? "unique layout" : "option"}
           {combinations.length !== 1 ? "s" : ""} found
-          {truncated && " (more exist — try relaxing constraints)"}
+          {truncated && " (there are more: try relaxing constraints)"}
         </span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

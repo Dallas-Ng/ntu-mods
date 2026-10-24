@@ -65,9 +65,9 @@ function PlanItems({
           <button
             key={i}
             onClick={() => onSelect(i)}
-            className="hover:bg-accent flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors">
+            className="hover:bg-accent flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors">
             <Check
-              className={`size-3.5 transition-opacity ${inPlan ? "opacity-100" : "opacity-0"}`}
+              className={`size-4 transition-opacity ${inPlan ? "opacity-100" : "opacity-0"}`}
             />
             <span className="min-w-0 flex-1 truncate text-left">
               {label(i)}
@@ -155,9 +155,9 @@ const ModsAddToTimetableButton = ({
       title={inAnyPlan ? "In timetable" : "Add to timetable"}
       className={cn("gap-1.5", triggerClassName)}>
       {inAnyPlan ? (
-        <CalendarCheck className="text-primary size-3.5 shrink-0" />
+        <CalendarCheck className="text-primary size-4 shrink-0" />
       ) : (
-        <CalendarPlus className="size-3.5 shrink-0" />
+        <CalendarPlus className="size-4 shrink-0" />
       )}
       {textEl}
     </Button>

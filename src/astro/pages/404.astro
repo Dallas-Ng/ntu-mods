@@ -3,6 +3,8 @@ import { ON_DEMAND_CACHE_CONTROL } from "@/lib/edge-cache"
 import { buildModuleMeta, buildRelatedArticles } from "@/lib/module-meta"
 import { getModuleUrl } from "@/lib/module-url"
 import { getLatestModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
+import { TextLink } from "@/components/ui/text-link"
+import Header from "@/components/header"
 import ModsModulePage from "@/astro/components/ModsModulePage.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 import { SNAPSHOT_HEADER } from "@/astro/middleware"
@@ -60,11 +62,10 @@ if (snapshot) {
     </BaseLayout>
   ) : (
     <BaseLayout title="Page not found" noindex>
-      <h1 class="mb-2 text-xl">This page does not exist</h1>
-
-      <a href="/" class="hover:text-primary-alt">
-        Click here to return home
-      </a>
+      <Header title="This page does not exist" />
+      <TextLink href="/" className="mt-3 inline-block">
+        Return home
+      </TextLink>
     </BaseLayout>
   )
 }

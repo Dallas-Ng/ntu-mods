@@ -1,7 +1,7 @@
 "use client"
 
 import { useMemo, useRef, useState } from "react"
-import { Check, Copy, Sparkles } from "lucide-react"
+import { Sparkles } from "lucide-react"
 
 import { reportError, track as trackEvent } from "@/lib/analytics"
 import type { EventSuffix } from "@/lib/analytics-events"
@@ -26,7 +26,9 @@ import {
   AccordionTrigger
 } from "@/components/ui/accordion"
 import { Button } from "@/components/ui/button"
+import { cardVariants } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
+import { CopyButton } from "@/components/ui/copy-button"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -35,6 +37,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
+import { TextLink } from "@/components/ui/text-link"
 import { Toggle } from "@/components/ui/toggle"
 import { ToolSteps } from "@/components/tools/tool-steps"
 import {
@@ -82,7 +85,6 @@ export default function FgoOptimiser() {
   const [extraBde, setExtraBde] = useState("0")
   const [error, setError] = useState("")
   const [busy, setBusy] = useState(false)
-  const [copied, setCopied] = useState(false)
   const input = useRef<HTMLInputElement>(null)
 
   const quotaAu = Number(quota)
@@ -191,19 +193,10 @@ export default function FgoOptimiser() {
     })
   }
 
-  async function copyList() {
-    const text = pickedMods
+  const copyText = () =>
+    pickedMods
       .map((m) => `${m.code} ${m.name} (${m.grade}, ${m.au} AU)`)
       .join("\n")
-    try {
-      await navigator.clipboard.writeText(text)
-      track("list_copied", { picks: pickedMods.length })
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1500)
-    } catch {
-      setCopied(false)
-    }
-  }
 
   const fileInput = (
     <input
@@ -241,14 +234,13 @@ export default function FgoOptimiser() {
               body: (
                 <>
                   Download the official PDF from the{" "}
-                  <a
+                  <TextLink
                     href={TRANSCRIPT_URL}
                     onClick={() => track("transcript_link_clicked")}
                     target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-500 underline">
+                    rel="noopener noreferrer">
                     Self-Help Transcript System
-                  </a>
+                  </TextLink>
                   .
                 </>
               )
@@ -286,7 +278,7 @@ export default function FgoOptimiser() {
       <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
         {/* Result and quota: first on mobile, sticky on the right on desktop */}
         <aside className="space-y-3 lg:sticky lg:top-20 lg:order-2">
-          <div className="bg-muted space-y-4 rounded-2xl p-5">
+          <div className={cn(cardVariants(), "space-y-4 p-5")}>
             <div className="bg-background rounded-xl p-4">
               <p className="text-muted-foreground text-xs">Projected CGPA</p>
               <p className="flex items-baseline gap-2">
@@ -294,7 +286,7 @@ export default function FgoOptimiser() {
                   {fmt(projected)}
                 </span>
                 {gained > 0 && (
-                  <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">
+                  <span className="text-success text-sm font-medium">
                     +{fmt(gained)}
                   </span>
                 )}
@@ -381,7 +373,7 @@ export default function FgoOptimiser() {
                     ` (${extra.core + extra.bde} AU)`}
                 </AccordionTrigger>
                 <AccordionContent className="space-y-3">
-                  <p className="text-muted-foreground text-xs">
+                  <p className="text-muted-foreground text-sm">
                     A module you declared FGO on and then failed becomes No
                     Record and leaves your transcript, but still uses quota. Add
                     those AU here, with any S/U from before the FGO rules.
@@ -434,17 +426,17 @@ export default function FgoOptimiser() {
           </div>
 
           {pickedMods.length > 0 && (
-            <div className="bg-muted overflow-hidden rounded-2xl">
-              <div className="bg-background/50 text-muted-foreground flex items-center justify-between border-b px-3 py-1.5 text-xs font-medium tracking-wide uppercase">
+            <div className={cn(cardVariants(), "overflow-hidden")}>
+              <div className="bg-background text-muted-foreground flex items-center justify-between border-b px-3 py-1.5 text-xs font-medium tracking-wide uppercase">
                 Declare in the FGO portal
-                <Button
-                  variant="ghost"
-                  size="xs"
-                  onClick={() => void copyList()}
-                  className="normal-case">
-                  {copied ? <Check /> : <Copy />}
-                  {copied ? "Copied" : "Copy"}
-                </Button>
+                <CopyButton
+                  value={copyText}
+                  label
+                  onCopied={() =>
+                    track("list_copied", { picks: pickedMods.length })
+                  }
+                  className="normal-case"
+                />
               </div>
               <ul className="divide-y text-sm">
                 {pickedMods.map((m) => (
@@ -470,8 +462,8 @@ export default function FgoOptimiser() {
         <div className="min-w-0 space-y-3 lg:order-1">
           {error && <p className="text-destructive text-sm">{error}</p>}
 
-          <div className="bg-muted overflow-hidden rounded-2xl">
-            <div className="bg-background/50 text-muted-foreground flex items-center gap-3 border-b px-3 py-2 text-xs font-medium tracking-wide uppercase">
+          <div className={cn(cardVariants(), "overflow-hidden")}>
+            <div className="bg-background text-muted-foreground flex items-center gap-3 border-b px-3 py-2 text-xs font-medium tracking-wide uppercase">
               <span className="w-8 shrink-0">FGO</span>
               <span className="flex-1">Module</span>
               <span className="w-12 shrink-0 text-center">Grade</span>
@@ -488,7 +480,7 @@ export default function FgoOptimiser() {
 
             {terms.map((term) => (
               <div key={term}>
-                <p className="bg-background/30 text-muted-foreground border-b px-3 py-1.5 text-xs font-medium">
+                <p className="bg-background text-muted-foreground border-b px-3 py-1.5 text-xs font-medium">
                   {term}
                 </p>
                 <div className="divide-y border-b last:border-b-0">
@@ -510,8 +502,8 @@ export default function FgoOptimiser() {
                           }
                           className={cn(
                             "flex items-center gap-3 px-3 py-2",
-                            selectable && "hover:bg-accent/50 cursor-pointer",
-                            on && !prior && "bg-primary/10",
+                            selectable && "hover:bg-accent cursor-pointer",
+                            on && !prior && "bg-primary-subtle",
                             m.locked && "opacity-60"
                           )}>
                           <div
@@ -554,7 +546,7 @@ export default function FgoOptimiser() {
                             className={cn(
                               "hidden w-12 shrink-0 text-right text-xs tabular-nums sm:block",
                               delta !== undefined && delta > 0.005
-                                ? "text-emerald-600 dark:text-emerald-400"
+                                ? "text-success"
                                 : "text-muted-foreground"
                             )}>
                             {delta === undefined

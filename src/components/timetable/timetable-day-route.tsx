@@ -46,7 +46,7 @@ const Preview = () => {
 
   return (
     <div ref={ref}>
-      <div className="bg-muted/50 panel-border group-hover:border-foreground/30 relative h-36 overflow-hidden rounded-lg transition-colors">
+      <div className="bg-muted panel-border group-hover:border-foreground/30 relative h-36 overflow-hidden rounded-lg transition-colors">
         {data ? (
           <div className="pointer-events-none absolute inset-0 [&_button]:hidden">
             <CampusMap

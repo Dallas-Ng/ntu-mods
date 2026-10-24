@@ -139,7 +139,7 @@ const shareLink = async (title: string, view: string) => {
     track("map_shared", { method: "copy", view })
     return true
   } catch {
-    toast.error("Could not copy the link")
+    toast.error("Could not copy the link. Copy it by hand instead.")
     track("map_shared", { method: "failed", view })
     return false
   }
@@ -185,7 +185,7 @@ const HeaderShare = ({ title, view }: { title: string; view: string }) => {
       aria-label={done ? "Link shared" : "Share this view"}
       title="Share this view"
       onClick={share}
-      className="hover:bg-accent flex size-8 cursor-pointer items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
+      className="hover:bg-accent flex size-8 items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
       <ShareIcon done={done} />
     </button>
   )
@@ -1087,7 +1087,7 @@ const SearchPill = ({
               type="button"
               onClick={onClearScope}
               aria-label={`Leave ${scope}`}
-              className="bg-primary/10 text-primary flex shrink-0 cursor-pointer items-center gap-1 rounded-full py-0.5 pr-1.5 pl-2.5 text-xs font-semibold transition-transform duration-150 ease-out active:scale-[0.96]">
+              className="bg-primary/10 text-primary flex shrink-0 items-center gap-1 rounded-full py-0.5 pr-1.5 pl-2.5 text-xs font-semibold transition-transform duration-150 ease-out active:scale-[0.96]">
               {scope}
               <X className="size-3" />
             </button>
@@ -1131,7 +1131,7 @@ const SearchPill = ({
                 onQ("")
                 inputRef.current?.focus()
               }}
-              className="hover:bg-accent flex size-8 cursor-pointer items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
+              className="hover:bg-accent flex size-8 items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
               <X className="size-4" />
             </button>
           ) : (
@@ -1139,7 +1139,7 @@ const SearchPill = ({
               type="button"
               aria-label="Get directions"
               onClick={onDirections}
-              className="bg-primary text-primary-foreground flex size-8 cursor-pointer items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
+              className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
               <Navigation className="size-4" />
             </button>
           )}
@@ -1261,7 +1261,7 @@ const CategoryChips = ({
       }
       disabled={!edge[side]}
       onClick={() => go(side === "left" ? -1 : 1)}
-      className="bg-foreground text-background flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full shadow-md transition-[opacity,transform] duration-150 ease-out enabled:hover:scale-105 enabled:active:scale-[0.92] disabled:cursor-default disabled:opacity-25">
+      className="bg-foreground text-background flex size-8 shrink-0 items-center justify-center rounded-full shadow-md transition-[opacity,transform] duration-150 ease-out enabled:hover:scale-105 enabled:active:scale-[0.92] disabled:cursor-default disabled:opacity-25">
       {side === "left" ? (
         <ChevronLeft className="size-4" />
       ) : (
@@ -1288,7 +1288,7 @@ const CategoryChips = ({
               onClick={() => onChange(on ? null : c.key)}
               className={cn(
                 FLOATING,
-                "flex h-9 shrink-0 cursor-pointer items-center gap-1.5 rounded-full px-3.5 text-sm font-medium whitespace-nowrap transition-[transform,background-color,color] duration-150 ease-out active:scale-[0.96]",
+                "flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-sm font-medium whitespace-nowrap transition-[transform,background-color,color] duration-150 ease-out active:scale-[0.96]",
                 on
                   ? "bg-primary text-primary-foreground border-transparent"
                   : "hover:bg-accent"
@@ -1359,7 +1359,7 @@ const ScrollHint = ({
           }
           className={cn(
             FLOATING,
-            "hover:bg-accent animate-in fade-in-0 absolute bottom-2 left-1/2 flex h-7 -translate-x-1/2 cursor-pointer items-center gap-1 rounded-full px-3 text-xs font-medium transition-transform duration-150 ease-out active:scale-[0.96] motion-reduce:animate-none"
+            "hover:bg-accent animate-in fade-in-0 absolute bottom-2 left-1/2 flex h-7 -translate-x-1/2 items-center gap-1 rounded-full px-3 text-xs font-medium transition-transform duration-150 ease-out active:scale-[0.96] motion-reduce:animate-none"
           )}>
           More <ChevronDown className="size-3.5" />
         </button>
@@ -1585,7 +1585,7 @@ const ExplorePanel = ({
               key={k}
               type="button"
               onClick={() => onSelect(`v:${k}`)}
-              className="hover:bg-accent cursor-pointer rounded-full border px-3 py-1 text-sm transition-[transform,background-color] duration-150 ease-out active:scale-[0.96]">
+              className="hover:bg-accent rounded-full border px-3 py-1 text-sm transition-[transform,background-color] duration-150 ease-out active:scale-[0.96]">
               {k}
             </button>
           ))}
@@ -1601,7 +1601,7 @@ const ExplorePanel = ({
                 <button
                   type="button"
                   onClick={() => onRoute(a.id, b.id)}
-                  className="group hover:bg-accent focus-visible:ring-ring/50 flex min-h-11 w-full cursor-pointer items-center gap-3 rounded-xl px-2 py-1.5 text-left transition-[background-color,transform] duration-150 ease-out outline-none focus-visible:ring-[3px] active:scale-[0.99]">
+                  className="group hover:bg-accent focus-visible:ring-ring/50 flex min-h-11 w-full items-center gap-3 rounded-xl px-2 py-1.5 text-left transition-[background-color,transform] duration-150 ease-out outline-none focus-visible:ring-[3px] active:scale-[0.99]">
                   <span className="bg-muted group-hover:bg-background flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors duration-150">
                     <Footprints className="size-4" />
                   </span>
@@ -1688,7 +1688,7 @@ const CategoryPanel = ({
           type="button"
           aria-label="Close list"
           onClick={onClose}
-          className="hover:bg-accent flex size-8 cursor-pointer items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
+          className="hover:bg-accent flex size-8 items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
           <X className="size-4" />
         </button>
       </div>
@@ -1707,7 +1707,7 @@ const CategoryPanel = ({
                   "min-w-10 rounded-lg border px-2.5 py-1 text-xs font-medium tabular-nums transition-[transform,background-color] duration-150 ease-out",
                   level === z
                     ? "bg-primary text-primary-foreground border-transparent"
-                    : "hover:bg-accent cursor-pointer active:scale-[0.96]"
+                    : "hover:bg-accent active:scale-[0.96]"
                 )}
                 title={`${n} on ${levelLabel(data, z)}`}>
                 {levelShort(data, z)}
@@ -1736,7 +1736,7 @@ const CategoryPanel = ({
               <button
                 type="button"
                 onClick={() => onSelect(p.id)}
-                className="hover:bg-accent -mx-2 flex w-[calc(100%+1rem)] cursor-pointer items-center justify-between gap-3 rounded-lg px-2 py-2.5 text-left transition-colors">
+                className="hover:bg-accent -mx-2 flex w-[calc(100%+1rem)] items-center justify-between gap-3 rounded-lg px-2 py-2.5 text-left transition-colors">
                 <span className="min-w-0">
                   <span className="block truncate text-sm">{main}</span>
                   {extra && (
@@ -1782,7 +1782,7 @@ const Pill = ({
       className={cn(
         cls,
         !active &&
-          "hover:bg-accent cursor-pointer transition-transform duration-150 ease-out active:scale-[0.96]"
+          "hover:bg-accent transition-transform duration-150 ease-out active:scale-[0.96]"
       )}>
       {children}
     </button>
@@ -1833,7 +1833,7 @@ const PlacePanel = ({
       <button
         type="button"
         onClick={onBack}
-        className="text-muted-foreground hover:text-foreground -ml-1 flex cursor-pointer items-center gap-1 text-xs font-medium transition-colors">
+        className="text-muted-foreground hover:text-foreground -ml-1 flex items-center gap-1 text-xs font-medium transition-colors">
         <ArrowLeft className="size-3.5" /> {backLabel}
       </button>
 
@@ -1909,7 +1909,7 @@ const PlacePanel = ({
                         "min-w-10 rounded-lg border px-2.5 py-1 text-xs font-medium tabular-nums transition-[transform,background-color] duration-150 ease-out",
                         level === z
                           ? "bg-primary text-primary-foreground border-transparent"
-                          : "hover:bg-accent cursor-pointer active:scale-[0.96]"
+                          : "hover:bg-accent active:scale-[0.96]"
                       )}>
                       {levelShort(data, z)}
                     </button>
@@ -1926,7 +1926,7 @@ const PlacePanel = ({
                     key={p.id}
                     type="button"
                     onClick={() => onSelect(p.id)}
-                    className="hover:bg-accent cursor-pointer rounded-full border px-2.5 py-0.5 text-xs transition-[transform,background-color] duration-150 ease-out active:scale-[0.96]">
+                    className="hover:bg-accent rounded-full border px-2.5 py-0.5 text-xs transition-[transform,background-color] duration-150 ease-out active:scale-[0.96]">
                     {p.name}
                   </button>
                 ))}
@@ -1971,7 +1971,7 @@ const DirectionsPanel = ({
           type="button"
           aria-label="Close directions"
           onClick={onClose}
-          className="hover:bg-accent flex size-8 cursor-pointer items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
+          className="hover:bg-accent flex size-8 items-center justify-center rounded-full transition-transform duration-150 ease-out active:scale-[0.92]">
           <X className="size-4" />
         </button>
       </div>

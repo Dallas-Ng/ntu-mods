@@ -23,7 +23,7 @@ import { useTheme } from "@/hooks/use-theme"
 
 import ChangelogButton from "./changelog-button"
 import NavActions from "./nav-actions"
-import { NewDot } from "./new-dot"
+import { NewBadge, NewDot } from "./new-dot"
 import { Button } from "./ui/button"
 import {
   Drawer,
@@ -32,6 +32,7 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "./ui/drawer"
+import { TextLink } from "./ui/text-link"
 
 const NEW_DOTS: Record<string, string> = {
   "/tools": "seen-tools",
@@ -128,11 +129,7 @@ const Navbar = () => {
                                   className="hover:bg-accent flex h-full flex-col gap-1 rounded-lg p-3 transition-colors">
                                   <span className="flex items-center gap-2 text-sm font-semibold">
                                     {tool.name}
-                                    {tool.isNew && (
-                                      <span className="rounded-full bg-yellow-400 px-1.5 py-0.5 text-[10px] leading-none font-semibold text-black">
-                                        New
-                                      </span>
-                                    )}
+                                    {tool.isNew && <NewBadge />}
                                   </span>
                                   <span className="text-muted-foreground text-xs">
                                     {tool.desc}
@@ -176,11 +173,11 @@ const Navbar = () => {
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-1 sm:gap-2">
-          <a href="/faq#current-semester" className="hover:underline">
+          <TextLink href="/faq#current-semester" variant="subtle">
             <span className="text-sm whitespace-nowrap">
               {LATEST_SEMESTER_LABEL_SHORT}
             </span>
-          </a>
+          </TextLink>
 
           {/* One row, so the three icons are evenly spaced */}
           <div className="hidden items-center md:flex">
@@ -196,7 +193,7 @@ const Navbar = () => {
                 size="icon"
                 variant="ghost"
                 className="md:hidden">
-                <Menu className="size-5" />
+                <Menu className="size-4" />
               </Button>
             </DrawerTrigger>
 
@@ -225,7 +222,7 @@ const Navbar = () => {
 
               {/* Nav links */}
               <nav className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3">
-                <p className="text-muted-foreground/60 mb-1 px-4 text-[11px] font-semibold tracking-widest uppercase">
+                <p className="text-muted-foreground mb-1 px-4 text-xs font-semibold tracking-widest uppercase">
                   Menu
                 </p>
                 {siteConfig.navLinks.map((link) => (
@@ -260,9 +257,9 @@ const Navbar = () => {
                       Changelog
                     </span>
                     {changelogUnseen > 0 && (
-                      <span className="rounded-full bg-yellow-400 px-1.5 py-0.5 text-[10px] font-semibold text-black">
+                      <NewBadge>
                         {changelogUnseen > 9 ? "9+" : changelogUnseen}
-                      </span>
+                      </NewBadge>
                     )}
                   </a>
                 </DrawerClose>
@@ -276,7 +273,7 @@ const Navbar = () => {
                 </DrawerClose>
                 <button
                   onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                  className="hover:bg-accent text-muted-foreground flex w-full cursor-pointer items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                  className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                   {theme === "light" ? (
                     <Sun className="size-4" />
                   ) : (

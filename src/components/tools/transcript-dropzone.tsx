@@ -5,6 +5,7 @@ import { FileUp, Lock, Upload } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { TextLink } from "@/components/ui/text-link"
 import { ShareCheckbox } from "@/components/tools/share-checkbox"
 
 export const TRANSCRIPT_URL =
@@ -52,7 +53,7 @@ export function TranscriptDropzone({
       }}
       className={cn(
         "flex flex-col items-center gap-5 rounded-2xl border-2 border-dashed px-5 py-10 text-center transition-colors sm:py-14",
-        dragging && "border-primary bg-primary/5"
+        dragging && "border-primary bg-primary-subtle"
       )}>
       <span className="bg-background flex size-14 items-center justify-center rounded-full">
         <FileUp className="text-muted-foreground size-6" />
@@ -74,16 +75,15 @@ export function TranscriptDropzone({
         </Button>
       </div>
       <p className="text-muted-foreground max-w-md text-xs text-pretty">
-        <Lock className="mr-1.5 inline size-3.5 align-[-2px]" />
+        <Lock className="mr-1.5 inline size-3 align-[-2px]" />
         Your PDF is read in your browser and never uploaded.{" "}
-        <a
+        <TextLink
           href={TRANSCRIPT_URL}
           onClick={onLinkClick}
           target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 underline">
+          rel="noopener noreferrer">
           Get your transcript
-        </a>
+        </TextLink>
       </p>
       <ShareCheckbox checked={share} onChange={onShareChange} />
       {error && <p className="text-destructive text-sm">{error}</p>}

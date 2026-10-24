@@ -1,6 +1,7 @@
 ---
 import { siteConfig } from "@/config/site"
 import { collectionPageJsonLd } from "@/lib/json-ld"
+import { TextLink } from "@/components/ui/text-link"
 import ArticlesList from "@/components/articles/articles-list"
 import Header from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
@@ -60,24 +61,24 @@ const articlesJsonLd = collectionPageJsonLd({
   ogImage={`${siteConfig.url}/og/articles.png`}
   ogImageAlt="NTUMods guides for NTU students, including NTULearn, FGO and degree audit"
   size="md"
-  containerClassName="space-y-3">
+  containerClassName="space-y-8">
   <JsonLd data={articlesJsonLd} />
   <Header
     title="Articles"
     subtitle="Guides, updates, and notes from NTUMods."
   />
   <ArticlesList articles={articleList} categories={categories} client:load />
-  <nav aria-label="Browse by topic" class="pt-4 text-sm">
-    <span class="text-foreground/70">Browse by topic: </span>
+  <nav aria-label="Browse by topic" class="text-sm">
+    <span class="text-muted-foreground">Browse by topic: </span>
     {
       categories.map((category, i) => (
         <>
           {i > 0 && ", "}
-          <a
+          <TextLink
             href={`/articles/${slugifyCategory(category)}`}
-            class="text-primary underline-offset-4 hover:underline">
+            variant="action">
             {category}
-          </a>
+          </TextLink>
         </>
       ))
     }

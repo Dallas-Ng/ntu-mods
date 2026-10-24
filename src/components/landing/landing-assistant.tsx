@@ -1,4 +1,7 @@
 import { siteConfig } from "@/config/site"
+import { cn } from "@/lib/utils"
+import { cardVariants, controlOnCard } from "@/components/ui/card"
+import { ExternalLinkIcon, TextLink } from "@/components/ui/text-link"
 import {
   CLAUDE_COLOUR,
   ClaudeIcon,
@@ -14,12 +17,16 @@ const LandingAssistant = () => {
 
   return (
     <section className="mx-auto max-w-7xl px-4">
-      <div className="bg-muted landing-reveal grid gap-8 rounded-3xl p-3 md:gap-10 md:p-10 lg:grid-cols-2 lg:items-center">
+      <div
+        className={cn(
+          cardVariants(),
+          "landing-reveal grid gap-8 rounded-3xl p-3 md:gap-10 md:p-10 lg:grid-cols-2 lg:items-center"
+        )}>
         <div className="flex flex-col gap-5 px-2 pt-2 md:p-0">
           <h2 className="max-w-xl text-3xl leading-[1.15] font-bold tracking-tight text-balance md:text-5xl md:leading-[1.1]">
             Ask Claude or ChatGPT about NTU
           </h2>
-          <p className="text-foreground/80 max-w-md text-base leading-relaxed md:text-lg">
+          <p className="text-foreground max-w-md text-base leading-relaxed md:text-lg">
             Add NTUMods once and your assistant looks up modules, class indexes
             and exam dates for you. No sign-in, and nothing about you is shared.
           </p>
@@ -27,19 +34,23 @@ const LandingAssistant = () => {
             <div className="grid gap-3 sm:w-fit sm:auto-cols-fr sm:grid-flow-col">
               <a
                 href={siteConfig.links.claudeDirectory}
-                className="bg-background text-foreground hover:bg-background/70 inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold whitespace-nowrap transition-colors sm:px-6">
+                className={cn(
+                  controlOnCard,
+                  "text-foreground inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold whitespace-nowrap sm:px-6"
+                )}>
                 <ClaudeIcon
                   className="size-5 shrink-0"
                   style={{ color: CLAUDE_COLOUR }}
                 />
                 Add to Claude
-                <span aria-hidden className="text-muted-foreground">
-                  ↗
-                </span>
+                <ExternalLinkIcon />
               </a>
               <a
                 href={`${tool.href}#connect`}
-                className="bg-background text-foreground hover:bg-background/70 inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold whitespace-nowrap transition-colors sm:px-6">
+                className={cn(
+                  controlOnCard,
+                  "text-foreground inline-flex h-12 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold whitespace-nowrap sm:px-6"
+                )}>
                 <span className="flex -space-x-2">
                   {[
                     [CursorIcon, CURSOR_COLOUR],
@@ -63,17 +74,16 @@ const LandingAssistant = () => {
                   </span>
                 </span>
                 Add to others
-                <span aria-hidden className="text-muted-foreground">
-                  ↗
-                </span>
+                <ExternalLinkIcon />
               </a>
             </div>
             {tool.guide && (
-              <a
+              <TextLink
                 href={tool.guide.href}
-                className="text-primary w-fit text-sm font-semibold underline-offset-4 hover:underline">
+                variant="action"
+                className="w-fit text-sm">
                 {tool.guide.label}
-              </a>
+              </TextLink>
             )}
           </div>
         </div>

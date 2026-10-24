@@ -108,7 +108,7 @@ const MapOptions = ({
           type="button"
           className={cn(
             FLOATING,
-            "flex h-11 w-[84px] cursor-pointer items-center justify-center gap-2 px-3 text-sm font-semibold transition-transform duration-150 ease-out active:scale-[0.97]"
+            "flex h-11 w-[84px] items-center justify-center gap-2 px-3 text-sm font-semibold transition-transform duration-150 ease-out active:scale-[0.97]"
           )}>
           <Layers className="size-4" /> Map
         </button>
@@ -134,7 +134,7 @@ const MapOptions = ({
               else onMapStyle(key)
             }}
             className={cn(
-              "flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border p-2.5 text-sm font-medium transition-[transform,background-color] duration-150 ease-out active:scale-[0.97]",
+              "flex flex-col items-center gap-1.5 rounded-lg border p-2.5 text-sm font-medium transition-[transform,background-color] duration-150 ease-out active:scale-[0.97]",
               mapStyle === key
                 ? "border-primary bg-primary/10 text-primary"
                 : "hover:bg-accent"
@@ -162,7 +162,7 @@ const MapOptions = ({
                 onClick={() => onHybridTone(t.key)}
                 style={{ background: t.swatch }}
                 className={cn(
-                  "size-7 cursor-pointer rounded-full border-2 transition-transform duration-150 ease-out active:scale-[0.92]",
+                  "size-7 rounded-full border-2 transition-transform duration-150 ease-out active:scale-[0.92]",
                   hybridTone === t.key
                     ? "border-primary ring-primary/30 ring-2"
                     : "border-border"

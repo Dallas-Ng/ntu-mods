@@ -3,9 +3,10 @@ import { Search } from "lucide-react"
 
 import type { ArticleHeading } from "@/lib/server/articles"
 import { Input } from "@/components/ui/input"
+import { TextLink } from "@/components/ui/text-link"
 import { MobileSectionDropdown } from "@/components/articles/article-toc"
 import Container from "@/components/container"
-import Header from "@/components/header"
+import Header, { SectionHeading } from "@/components/header"
 import HeadingAnchor from "@/components/heading-anchor"
 import LinkCard from "@/components/links/link-card"
 
@@ -92,7 +93,7 @@ const LINK_CATEGORIES: LinkCategory[] = [
   },
   {
     id: "library-campus",
-    title: "Library & Campus",
+    title: "Library & campus",
     type: "external",
     links: [
       {
@@ -104,6 +105,11 @@ const LINK_CATEGORIES: LinkCategory[] = [
         name: "Facilities Booking",
         href: "https://ntu.facilitiesbooking.com/bookings.aspx",
         desc: "Book sports halls and other campus facilities"
+      },
+      {
+        name: "NTU Campus Map",
+        href: "https://maps.ntu.edu.sg/",
+        desc: "Official map of buildings, venues, and directions around campus"
       },
       {
         name: "NTU Library",
@@ -128,8 +134,30 @@ const LINK_CATEGORIES: LinkCategory[] = [
     ]
   },
   {
+    id: "student-life",
+    title: "Student life",
+    type: "external",
+    links: [
+      {
+        name: "Clubs & Societies",
+        href: "https://www.ntu.edu.sg/life-at-ntu/student-life/student-activities-and-engagement/clubs-groups-societies/special-interest-clubs",
+        desc: "Special interest clubs for arts, culture, sports, and community work"
+      },
+      {
+        name: "Students' Union",
+        href: "https://www.ntu.edu.sg/life-at-ntu/student-life/student-activities-and-engagement/clubs-groups-societies/ntu-students-union-council",
+        desc: "The NTU Students' Union Council and its constituent clubs"
+      },
+      {
+        name: "Health Care",
+        href: "https://www.ntu.edu.sg/life-at-ntu/health-and-safety/services/health-care",
+        desc: "On-campus clinic, medical scheme, and student insurance"
+      }
+    ]
+  },
+  {
     id: "career-exchange",
-    title: "Career & Exchange",
+    title: "Career & exchange",
     type: "external",
     links: [
       {
@@ -156,7 +184,7 @@ const LINK_CATEGORIES: LinkCategory[] = [
   },
   {
     id: "finance-admin",
-    title: "Finance & Admin",
+    title: "Finance & admin",
     type: "external",
     links: [
       {
@@ -168,6 +196,11 @@ const LINK_CATEGORIES: LinkCategory[] = [
         name: "Fee Payment",
         href: "https://ntuadminonestop.service-now.com/ntussp",
         desc: "Pay tuition and other fees through the One Stop portal"
+      },
+      {
+        name: "One Stop @ SAC",
+        href: "https://www.ntu.edu.sg/life-at-ntu/student-life/student-services/onestop",
+        desc: "Student's Pass, concession card, insurance, and lost and found"
       },
       {
         name: "IT Helpdesk",
@@ -205,6 +238,46 @@ const LINK_CATEGORIES: LinkCategory[] = [
         name: "FGO Optimiser",
         href: "/tools/fgo-optimiser",
         desc: "Upload your transcript and find the modules to Flexible-Grade for the highest CGPA"
+      },
+      {
+        name: "Campus Map",
+        href: "/maps",
+        desc: "Find any room by its timetable code and get walking directions between classes"
+      },
+      {
+        name: "Wallpaper Maker",
+        href: "/screenshot",
+        desc: "Export your timetable as a phone wallpaper or shareable image"
+      },
+      {
+        name: "AI Assistant Connector",
+        href: "/developers/mcp",
+        desc: "Add NTUMods to Claude or ChatGPT and ask about modules, indexes, and exams"
+      },
+      {
+        name: "Guides",
+        href: "/articles",
+        desc: "Guides on planning modules, choosing BDEs, balancing workload, and preparing for STARS"
+      },
+      {
+        name: "FAQ",
+        href: "/faq",
+        desc: "Quick answers on planning, exporting, sharing, and how your data is stored"
+      },
+      {
+        name: "Changelog",
+        href: "/changelog",
+        desc: "Every new feature, fix, and data update"
+      },
+      {
+        name: "Feedback",
+        href: "/feedback",
+        desc: "Report wrong data, suggest a feature, or ask a question"
+      },
+      {
+        name: "Developer Docs",
+        href: "/developers",
+        desc: "Free REST API, open data files, and the MCP server"
       }
     ]
   }
@@ -242,17 +315,15 @@ const LinksContent = ({ children }: Props) => {
           <MobileSectionDropdown headings={linkHeadings} />
 
           <Header
-            title="Student Links"
+            title="Student links"
             subtitle="Quick links to the most-used NTU student portals, from course registration and grades to career, exchange, and campus facilities."
           />
 
           <p className="text-muted-foreground text-sm">
             Not sure what each portal does?{" "}
-            <a
-              href="/articles/ntu-student-portal-links"
-              className="text-primary hover:text-primary/80 underline underline-offset-2 transition-colors">
+            <TextLink href="/articles/ntu-student-portal-links">
               Read the full guide
-            </a>{" "}
+            </TextLink>{" "}
             for a breakdown of every portal and when to use it.
           </p>
 
@@ -277,10 +348,10 @@ const LinksContent = ({ children }: Props) => {
             {visible.map(({ id, title, type, links }) => (
               <section id={id} key={id} className="scroll-mt-20 space-y-4">
                 <div className="space-y-0.5">
-                  <h2 className="text-xl font-semibold">
+                  <SectionHeading>
                     {title}
                     <HeadingAnchor id={id} label={title} />
-                  </h2>
+                  </SectionHeading>
                   <p className="text-muted-foreground text-xs">
                     {type === "internal"
                       ? "NTUMods (unofficial)"

@@ -19,6 +19,10 @@ state/          Zustand stores
 types/          Global types
 ```
 
+## Design
+
+Shared components, type, colour, borders, icons, hover, dialogs and copy rules: [docs/design.md](../docs/design.md). Read it before changing anything visible.
+
 ## Rendering model
 
 Cloudflare Workers has no filesystem, so every route is prerendered at build time (plain Node, via the adapter's `prerenderEnvironment`) except:

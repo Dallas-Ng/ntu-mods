@@ -1,25 +1,24 @@
 "use client"
 
+import { useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { ArrowLeft } from "lucide-react"
+import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
+import { ConfirmDialog } from "@/components/ui/confirm-dialog"
 import { Code } from "@/components/developers/code"
 
 const DebugContent = () => {
   const state = useBoundState()
   const { resetTimetables, resetSettings } = state
 
-  const resetApplicationState = () => {
-    const confirmed = confirm(
-      "If you encountered any problems, press confirm. Otherwise, press cancel."
-    )
+  const [confirmOpen, setConfirmOpen] = useState(false)
 
-    if (confirmed) {
-      resetTimetables()
-      resetSettings()
-      alert("Application state reset successfully.")
-    }
+  const resetApplicationState = () => {
+    resetTimetables()
+    resetSettings()
+    toast.success("Application state reset")
   }
 
   return (
@@ -28,8 +27,8 @@ const DebugContent = () => {
         <Button
           variant="outline"
           size="sm"
-          className="flex w-fit cursor-pointer items-center gap-1 text-sm">
-          <ArrowLeft className="size-5" />
+          className="flex w-fit items-center gap-1 text-sm">
+          <ArrowLeft className="size-4" />
           Go Back to Timetable
         </Button>
       </a>
@@ -41,9 +40,18 @@ const DebugContent = () => {
           (including the courses you added)
         </p>
 
-        <Button onClick={resetApplicationState}>
-          Click here to reset application state
+        <Button variant="destructive" onClick={() => setConfirmOpen(true)}>
+          Reset application state
         </Button>
+        <ConfirmDialog
+          open={confirmOpen}
+          onOpenChange={setConfirmOpen}
+          title="Reset application state?"
+          description="This deletes your timetables, custom blocks and settings on this device."
+          confirmLabel="Reset"
+          destructive
+          onConfirm={resetApplicationState}
+        />
       </div>
 
       <Code code={JSON.stringify({ ...state }, null, 2)} lang="json" />

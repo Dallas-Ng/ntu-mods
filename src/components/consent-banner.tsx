@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 
 import { consentRequired, getStoredConsent, setConsent } from "@/lib/consent"
 import { Button } from "@/components/ui/button"
+import { TextLink } from "@/components/ui/text-link"
 
 const OPEN_EVENT = "ntumods:open-consent"
 
@@ -50,13 +51,7 @@ const ConsentBanner = () => {
         We would like to use Google Analytics and PostHog to understand how
         NTUMods is used. They set cookies and collect usage data. Nothing is
         loaded unless you accept, and you can change your mind in the footer.
-        See our{" "}
-        <a
-          href="/privacy#analytics"
-          className="text-primary underline underline-offset-2">
-          Privacy Policy
-        </a>
-        .
+        See our <TextLink href="/privacy#analytics">Privacy Policy</TextLink>.
       </p>
       <div className="mt-3 flex gap-2">
         <Button size="sm" className="flex-1" onClick={() => choose("denied")}>

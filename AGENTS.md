@@ -2,6 +2,8 @@
 
 Repository map: [README.md](README.md). Flags and invariants: [scraper/README.md](scraper/README.md). Post-publish checks: [db/README.md](db/README.md).
 
+Changing anything visible (components, styles, copy): follow [docs/design.md](docs/design.md), and update it in the same change if a rule must change.
+
 ## Refresh the latest course data
 
 Scrapes the newest semester from the NTU portals and republishes it. One

@@ -42,7 +42,7 @@ const TimetableDownloadCalendarButton = ({
   // Explains the file first; the download happens from the dialog.
   const openDialog = () => {
     if (isEmpty) {
-      toast.info("Please fill up your timetable first")
+      toast.info("Add modules to your timetable first")
       return
     }
     setOpen(true)
@@ -99,7 +99,7 @@ const TimetableDownloadCalendarButton = ({
       })
     } catch (e) {
       reportError("calendar_download", e)
-      toast.error("Something went wrong, please try again later")
+      toast.error("Something went wrong. Try again later.")
     }
 
     setLoading(false)

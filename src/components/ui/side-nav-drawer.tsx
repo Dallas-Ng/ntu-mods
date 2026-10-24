@@ -25,6 +25,8 @@ interface Props {
   label?: string
   /** Hides the right button, e.g. until the reader scrolls past the title. */
   hidden?: boolean
+  /** Width at which the desktop side nav takes over and this trigger goes. */
+  desktopFrom?: "lg" | "xl"
   open?: boolean
   onOpenChange?: (open: boolean) => void
   children: React.ReactNode
@@ -36,6 +38,7 @@ export const SideNavDrawer = ({
   title,
   label,
   hidden = false,
+  desktopFrom = "lg",
   open,
   onOpenChange,
   children
@@ -50,7 +53,8 @@ export const SideNavDrawer = ({
           aria-hidden={hidden}
           tabIndex={hidden ? -1 : 0}
           className={cn(
-            "bg-background/80 not-prose fixed top-20 right-4 z-20 shadow-md backdrop-blur-xl transition-[opacity,transform] duration-200 lg:hidden",
+            "bg-background/80 not-prose fixed top-20 right-4 z-20 shadow-md backdrop-blur-xl transition-[opacity,transform] duration-200",
+            desktopFrom === "xl" ? "xl:hidden" : "lg:hidden",
             hidden && "pointer-events-none -translate-y-2 opacity-0"
           )}>
           <List />

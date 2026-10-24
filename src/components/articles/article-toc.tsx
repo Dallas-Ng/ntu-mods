@@ -24,6 +24,8 @@ interface Props {
   headings: TocHeading[]
   /** Also list depth-3 headings, indented under the depth-2 heading above. */
   nested?: boolean
+  /** From which width the desktop nav shows; xl where a left nav takes room. */
+  desktopFrom?: "lg" | "xl"
 }
 
 // Where a section lands after a jump: just below the navbar. The same line
@@ -113,7 +115,11 @@ const getVisibleHeadings = (headings: TocHeading[], nested?: boolean) =>
  * navbar opens a drawer from the right listing every section. It stays out of
  * the way until the reader has scrolled past the page title.
  */
-export const MobileSectionDropdown = ({ headings, nested }: Props) => {
+export const MobileSectionDropdown = ({
+  headings,
+  nested,
+  desktopFrom
+}: Props) => {
   const visibleHeadings = useMemo(
     () => getVisibleHeadings(headings, nested),
     [headings, nested]
@@ -145,6 +151,7 @@ export const MobileSectionDropdown = ({ headings, nested }: Props) => {
       side="right"
       title="On this page"
       hidden={!scrolled}
+      desktopFrom={desktopFrom}
       open={open}
       onOpenChange={setOpen}>
       <nav className="space-y-0.5">
@@ -191,7 +198,7 @@ export const MobileSectionDropdown = ({ headings, nested }: Props) => {
   )
 }
 
-const ArticleToc = ({ headings, nested }: Props) => {
+const ArticleToc = ({ headings, nested, desktopFrom = "lg" }: Props) => {
   const visibleHeadings = useMemo(
     () => getVisibleHeadings(headings, nested),
     [headings, nested]
@@ -229,7 +236,8 @@ const ArticleToc = ({ headings, nested }: Props) => {
   if (!visibleHeadings.length) return null
 
   return (
-    <aside className="hidden lg:block">
+    <aside
+      className={desktopFrom === "xl" ? "hidden xl:block" : "hidden lg:block"}>
       <div className="sticky top-24 space-y-2">
         <p className={sideNavLabel}>On this page</p>
         <nav

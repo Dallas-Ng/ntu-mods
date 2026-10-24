@@ -8,6 +8,7 @@ import { cardVariants } from "@/components/ui/card"
 import { ExternalLinkIcon } from "@/components/ui/text-link"
 import { CLAUDE_COLOUR, ClaudeIcon, OpenAIIcon } from "@/components/brand-icons"
 import HeadingAnchor from "@/components/heading-anchor"
+import AssistantPreview from "@/components/tools/assistant-preview"
 import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
 
 export const prerender = true
@@ -49,6 +50,12 @@ const { title, desc } = siteConfig.metatags.developersMcp
       code, and the MCP server when you want an AI assistant to ask the
       questions.
     </p>
+    <div class={`${cardVariants()} rounded-3xl p-3 md:p-6`}>
+      <div
+        class="bg-background flex items-center justify-center rounded-2xl p-2 md:p-8">
+        <AssistantPreview client:visible />
+      </div>
+    </div>
     <p>
       Ready to use it? Go to <a href="#connect">Connect</a>, or pick your
       assistant under <strong>Adding to</strong> in the side menu.

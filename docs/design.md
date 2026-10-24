@@ -23,7 +23,7 @@ Never copy a shared piece's classes into a page. If it cannot do what you need, 
 | Inline code                       | `InlineCode` (articles and dev docs get it from CSS)                  | `<code className="bg-muted …">`          |
 | Copy to clipboard                 | `CopyButton` (`label` for "Copy"/"Copied")                            | Your own clipboard state                 |
 | Dialog                            | `ResponsiveModal` with `modal-parts` (`ModalSection`, `ModalFooter`…) | Raw `Dialog` or `Drawer`                 |
-| Ask before an irreversible action | `ConfirmDialog`                                                       | `window.confirm()`, `alert()`            |
+| Ask before an irreversible action | `ConfirmDialog` (WebMCP tools excepted, see below)                    | `window.confirm()`, `alert()`            |
 | Notice on a page                  | `Alert` (`warning`, `destructive`); `role="note"` if not urgent       | A coloured `div`                         |
 | Note inside a dialog              | `ModalNote` (`danger` for errors)                                     | A coloured `p`                           |
 | "New" pill or unseen count        | `NewBadge` (`sm`, `md`, `lg`)                                         | `bg-yellow-400 rounded-full …`           |
@@ -128,8 +128,9 @@ Focus and cursor:
 
 ## Dialogs, drawers and side navs
 
+- The one `window.confirm()` left is `confirmWithUser` in `lib/webmcp/handlers.ts`: an assistant's tool call needs a synchronous yes or no from the person before it changes their plans, which a React dialog cannot give.
 - `ResponsiveModal` is a dialog on desktop and a bottom drawer on phones. `nested` (the default) is for modals opened from inside another drawer; pass `nested={false}` when opened from the page.
-- Tapping the dimmed backdrop closes every drawer (it is a `Drawer.Close`), and opening one moves focus to its panel. Keep both in `ui/drawer.tsx`.
+- Tapping the dimmed backdrop closes every drawer (it is a `Drawer.Close`), and opening one moves focus to its panel. Keep both in `ui/drawer.tsx`. A drawer that must not close on a tap (`dismissible={false}`) needs that close guarded there first.
 - Phone side navs use `SideNavDrawer`: `side="left"` is a bar naming the current page that opens the section nav; `side="right"` is the square "On this page" button. Where a page has both, put them in one sticky row (`floating={false}`) so they never overlap. `desktopFrom` says from which width the desktop nav replaces them.
 - The docs layout builds "On this page" from each page's `h2`s with an `id` (`lib/html-headings.ts`), so a docs section heading needs an `id` and a `HeadingAnchor`.
 - The section name in a breadcrumb truncates first; the page name stays whole.

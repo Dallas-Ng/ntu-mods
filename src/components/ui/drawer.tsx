@@ -102,7 +102,8 @@ function DrawerContent({
     <DrawerPortal data-slot="drawer-portal">
       {/* A close control, not just a backdrop: on touch, Radix waits for the
           click after a tap, and iOS Safari sends none from an element with
-          no click handler, so tapping the mask did nothing. */}
+          no click handler, so tapping the mask did nothing. It closes even
+          a dismissible={false} drawer; guard it here before adding one. */}
       <DrawerPrimitive.Close asChild>
         <DrawerOverlay />
       </DrawerPrimitive.Close>

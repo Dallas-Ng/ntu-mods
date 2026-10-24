@@ -33,7 +33,9 @@ const currentLabel =
 const jsonLd = webPageJsonLd({ name: title, description, path })
 
 // Render the page once and list its h2s for "On this page", so each docs
-// page gets the right nav without keeping a heading list by hand.
+// page gets the right nav without keeping a heading list by hand. The HTML is
+// re-emitted with set:html; client:* islands inside still hydrate (checked
+// with the code blocks' client:visible), but check again if one is added.
 const body = await Astro.slots.render("default")
 const headings = htmlHeadings(body)
 ---

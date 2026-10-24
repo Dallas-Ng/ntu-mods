@@ -40,8 +40,14 @@ function CopyButton({
         aria-label={label ? undefined : copied ? "Copied" : "Copy"}
         onClick={(event) => {
           onClick?.(event)
-          navigator.clipboard
-            .writeText(typeof value === "function" ? value() : value)
+          // Inside a promise: without a clipboard API (http, old browsers)
+          // navigator.clipboard is undefined and would throw synchronously.
+          Promise.resolve()
+            .then(() =>
+              navigator.clipboard.writeText(
+                typeof value === "function" ? value() : value
+              )
+            )
             .then(() => {
               setCopied(true)
               onCopied?.()

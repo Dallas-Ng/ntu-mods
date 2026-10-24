@@ -40,6 +40,54 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "A more consistent site",
+    date: "24 Oct 2026",
+    items: [
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Every page now shares the same cards, links, buttons, headings and
+            icons. Text is easier to read in light mode, cards stand out from
+            the page, and hovering anything clickable gives the same feedback
+            everywhere.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            The <ChangelogLink href="/developers">developer docs</ChangelogLink>{" "}
+            have an On this page list again, and the page sits centred between
+            its two side navs. On phones, both navs open as drawers from a bar
+            under the menu.
+          </>
+        )
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            <ChangelogLink href="/links">Student links</ChangelogLink> adds the
+            official campus map, One Stop @ SAC, a Student life section with
+            clubs, the Students&apos; Union and health care, and every NTUMods
+            page.
+          </>
+        )
+      },
+      {
+        category: "Bug Fix",
+        content: (
+          <>
+            On phones, tapping the dimmed area beside an open drawer now closes
+            it, and the copy button on code no longer shows above the menu.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "MCP server",
     date: "23 Oct 2026",
     items: [

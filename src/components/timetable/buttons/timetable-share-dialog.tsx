@@ -65,10 +65,13 @@ const TimetableShareDialog = ({
   }
 
   const copy = (text: string, message: string) =>
-    navigator.clipboard.writeText(text).then(
-      () => toast.success(message),
-      () => toast.error("Could not copy the link. Copy it by hand instead.")
-    )
+    // Inside a promise so a missing clipboard API reaches the error toast.
+    Promise.resolve()
+      .then(() => navigator.clipboard.writeText(text))
+      .then(
+        () => toast.success(message),
+        () => toast.error("Could not copy. Copy it by hand instead.")
+      )
 
   const handleCopyLink = () => {
     const isMobile = /Mobi|Android/i.test(navigator.userAgent)

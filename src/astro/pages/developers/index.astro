@@ -1,6 +1,7 @@
 ---
 import { siteConfig } from "@/config/site"
 import { DEV_PAGES } from "@/lib/developers/pages"
+import { cardVariants } from "@/components/ui/card"
 import HeadingAnchor from "@/components/heading-anchor"
 import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
 
@@ -55,7 +56,7 @@ const practices: [string, string][] = [
         DEV_PAGES.filter((page) => page.href !== "/developers").map((page) => (
           <a
             href={page.href}
-            class="bg-muted hover:bg-accent space-y-1 rounded-2xl p-4 transition-colors">
+            class:list={[cardVariants({ interactive: true }), "space-y-1 p-4"]}>
             <span class="block font-semibold">{page.label}</span>
             <span class="text-foreground block text-sm">
               {page.description}

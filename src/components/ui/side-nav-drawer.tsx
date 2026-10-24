@@ -71,7 +71,7 @@ export const SideNavDrawer = ({
           type="button"
           // Below the navbar (z-10): at the end of the page the bar scrolls
           // up with its column and must slide under the navbar, not over it.
-          className="bg-background/80 sticky top-[4.5rem] z-[5] flex w-full min-w-0 flex-1 cursor-pointer items-center gap-3 rounded-xl border px-4 py-2 text-left shadow-sm backdrop-blur-xl lg:hidden">
+          className="bg-background/80 sticky top-[4.5rem] z-[5] flex w-full min-w-0 flex-1 items-center gap-3 rounded-xl border px-4 py-2 text-left shadow-sm backdrop-blur-xl lg:hidden">
           <PanelLeft className="text-muted-foreground size-4 shrink-0" />
           {/* The section name gives way first; the page name never shrinks and
               only truncates past 70% of the bar. */}

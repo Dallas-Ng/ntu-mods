@@ -86,8 +86,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
         placeholder="Find a feature or tool"
         aria-label="Find a feature or tool"
         className={cn(
-          cardVariants(),
-          "placeholder:text-muted-foreground focus-visible:ring-primary h-14 w-full rounded-xl px-5 text-lg font-semibold tracking-tight outline-none focus-visible:ring-2 md:h-16 md:px-8 md:text-2xl"
+          "bg-muted placeholder:text-muted-foreground focus-visible:ring-primary h-14 w-full rounded-xl px-5 text-lg font-semibold tracking-tight outline-none focus-visible:ring-2 md:h-16 md:px-8 md:text-2xl"
         )}
       />
 
@@ -125,8 +124,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
                   {c.art && (
                     <span
                       className={cn(
-                        cardVariants(),
-                        "flex h-40 items-center justify-center rounded-lg p-4 sm:h-48 lg:hidden"
+                        "bg-muted flex h-40 items-center justify-center rounded-lg p-4 sm:h-48 lg:hidden"
                       )}>
                       <img
                         src={c.art}
@@ -167,8 +165,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
             aria-expanded={showAll}
             onClick={() => setShowAll((v) => !v)}
             className={cn(
-              cardVariants({ interactive: true }),
-              "flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold duration-150 lg:hidden"
+              "bg-muted hover:bg-accent flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-colors duration-150 lg:hidden"
             )}>
             {showAll ? "Show fewer" : `Show all ${rows.length} features`}
             <ChevronDown
@@ -184,7 +181,7 @@ const LandingCommands = ({ commands }: { commands: Command[] }) => {
           aria-hidden="true"
           className={cn(
             cardVariants(),
-            "sticky top-24 hidden h-[480px] self-start overflow-hidden rounded-2xl p-6 lg:block"
+            "sticky top-24 hidden h-[480px] self-start overflow-hidden p-6 lg:block"
           )}>
           {commands.map((c) => (
             <div

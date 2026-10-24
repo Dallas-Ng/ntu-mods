@@ -1,5 +1,6 @@
 ---
 import { siteConfig } from "@/config/site"
+import { cardVariants } from "@/components/ui/card"
 import { CardCta, TextLink } from "@/components/ui/text-link"
 import MapsPageContent from "@/components/map/maps-page-content"
 import MapGuide from "@/astro/components/MapGuide.astro"
@@ -36,7 +37,10 @@ const CREDITS = [
 
   <a
     href="/articles/ntu-campus-map-guide"
-    class="bg-muted hover:bg-accent group mx-auto mt-12 flex max-w-3xl flex-col overflow-hidden rounded-xl transition-colors sm:flex-row">
+    class:list={[
+      cardVariants({ interactive: true }),
+      "group mx-auto mt-12 flex max-w-3xl flex-col overflow-hidden sm:flex-row"
+    ]}>
     <div class="bg-muted sm:w-80 sm:shrink-0">
       <img
         src="/articles/ntu-campus-map-guide/overview.webp"

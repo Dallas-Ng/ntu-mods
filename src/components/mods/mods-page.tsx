@@ -399,7 +399,7 @@ function ModuleResults({
         {footer}
       </div>
     ) : (
-      <div className={cn(cardVariants(), "overflow-hidden rounded-2xl")}>
+      <div className={cn(cardVariants(), "overflow-hidden")}>
         {modules.map((m, i) => (
           <div key={i} className="border-background border-b-2 last:border-b-0">
             <ModuleListRow
@@ -426,7 +426,7 @@ function ModuleResults({
         ))}
       </div>
     ) : (
-      <div className={cn(cardVariants(), "overflow-hidden rounded-2xl")}>
+      <div className={cn(cardVariants(), "overflow-hidden")}>
         {Array.from({ length: LOADING_LIST_COUNT }).map((_, i) => (
           <div
             key={i}

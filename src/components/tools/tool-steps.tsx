@@ -12,9 +12,7 @@ export function ToolSteps({
   return (
     <ol className="grid gap-4 sm:grid-cols-3">
       {steps.map((step, i) => (
-        <li
-          key={step.title}
-          className={cn(cardVariants(), "space-y-2 rounded-2xl p-5")}>
+        <li key={step.title} className={cn(cardVariants(), "space-y-2 p-5")}>
           <span className="bg-background text-muted-foreground flex size-6 items-center justify-center rounded-full text-xs font-semibold">
             {i + 1}
           </span>

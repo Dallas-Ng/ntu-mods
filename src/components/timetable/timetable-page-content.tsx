@@ -111,7 +111,7 @@ const TimetablePageContent = () => {
               type="button"
               aria-label="Dismiss"
               onClick={dismissHint}
-              className="text-muted-foreground hover:text-foreground cursor-pointer">
+              className="text-muted-foreground hover:text-foreground">
               <X className="size-4" />
             </button>
           </div>

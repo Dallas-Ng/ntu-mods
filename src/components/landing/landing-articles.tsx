@@ -55,7 +55,7 @@ const LandingArticles = async () => {
           href={`/articles/${lead.slug}`}
           className={cn(
             cardVariants({ interactive: true }),
-            "landing-reveal group flex flex-col overflow-hidden rounded-2xl"
+            "landing-reveal group flex flex-col overflow-hidden"
           )}>
           <div className="relative flex flex-1 flex-col justify-center gap-3 p-5 md:p-6 lg:min-h-[300px]">
             <Meta a={lead} />

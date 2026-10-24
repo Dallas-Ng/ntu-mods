@@ -121,7 +121,7 @@ const ChangelogReleaseSection = ({
       id={slug}
       className={cn(
         cardVariants(),
-        "relative scroll-mt-32 rounded-2xl p-5 md:p-6 lg:scroll-mt-20"
+        "relative scroll-mt-32 p-5 md:p-6 lg:scroll-mt-20"
       )}>
       {isUnseen && (
         <NewBadge className="absolute top-4 right-4 md:top-6 md:right-6" />
@@ -263,7 +263,7 @@ const ChangelogContent = () => {
             <button
               type="button"
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="text-muted-foreground hover:text-foreground inline-flex cursor-pointer items-center gap-1.5 text-sm transition-colors">
+              className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 text-sm transition-colors">
               <ArrowUp className="size-4" />
               Back to the latest updates
             </button>

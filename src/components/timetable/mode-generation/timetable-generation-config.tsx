@@ -133,7 +133,7 @@ const CollisionIgnoreSection = () => {
                         globallyRelaxed
                           ? "cursor-not-allowed opacity-50"
                           : active
-                            ? "bg-foreground text-background cursor-pointer border-transparent"
+                            ? "bg-foreground text-background border-transparent"
                             : "text-muted-foreground hover:bg-accent hover:text-foreground"
                       }`}>
                       {COURSE_TYPE[type as keyof typeof COURSE_TYPE]}
@@ -201,7 +201,7 @@ const LockedModulesSection = () => {
                   toggleModuleLock(key)
                   track("timetable_module_lock_toggled", { locked: !isLocked })
                 }}
-                className={`focus-visible:ring-ring/50 flex h-6 cursor-pointer items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
+                className={`focus-visible:ring-ring/50 flex h-6 items-center gap-1.5 rounded border px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   isLocked
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -308,7 +308,7 @@ const SettingsForm = ({
               <button
                 key={pref}
                 onClick={() => updateConfig({ loadPreference: pref })}
-                className={`focus-visible:ring-ring/50 flex h-8 flex-1 cursor-pointer items-center justify-center rounded-md border text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
+                className={`focus-visible:ring-ring/50 flex h-8 flex-1 items-center justify-center rounded-md border text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   config.loadPreference === pref
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -381,7 +381,7 @@ const SettingsForm = ({
               <button
                 key={type}
                 onClick={() => toggleSkippable(type)}
-                className={`focus-visible:ring-ring/50 h-7 cursor-pointer rounded-md border px-2.5 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
+                className={`focus-visible:ring-ring/50 h-7 rounded-md border px-2.5 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px] ${
                   active
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -412,7 +412,7 @@ const SettingsForm = ({
             setBlockOpen(true)
             track("timetable_dialog_opened", { dialog: "blacklist" })
           }}
-          className="bg-muted text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-between rounded-md px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
+          className="bg-muted text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full items-center justify-between rounded-md px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
           <span>
             {config.blacklistedTimeslots.length > 0
               ? `${config.blacklistedTimeslots.length} slot${config.blacklistedTimeslots.length !== 1 ? "s" : ""} blocked`
@@ -592,7 +592,7 @@ const TimetableGenerationConfig = () => {
       {/* Settings trigger */}
       <button
         onClick={() => setOpen(true)}
-        className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full cursor-pointer items-center justify-between rounded-lg border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
+        className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 flex w-full items-center justify-between rounded-lg border px-3 py-2 text-xs transition-colors outline-none focus-visible:ring-[3px]">
         <div className="flex items-center gap-1.5">
           <Settings2Icon className="size-3" />
           <span>Generation Settings</span>

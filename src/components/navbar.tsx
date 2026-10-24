@@ -32,6 +32,7 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "./ui/drawer"
+import { TextLink } from "./ui/text-link"
 
 const NEW_DOTS: Record<string, string> = {
   "/tools": "seen-tools",
@@ -172,11 +173,11 @@ const Navbar = () => {
         </div>
 
         <div className="flex flex-1 items-center justify-end gap-1 sm:gap-2">
-          <a href="/faq#current-semester" className="hover:underline">
+          <TextLink href="/faq#current-semester" variant="subtle">
             <span className="text-sm whitespace-nowrap">
               {LATEST_SEMESTER_LABEL_SHORT}
             </span>
-          </a>
+          </TextLink>
 
           {/* One row, so the three icons are evenly spaced */}
           <div className="hidden items-center md:flex">
@@ -272,7 +273,7 @@ const Navbar = () => {
                 </DrawerClose>
                 <button
                   onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                  className="hover:bg-accent text-muted-foreground flex w-full cursor-pointer items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
+                  className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
                   {theme === "light" ? (
                     <Sun className="size-4" />
                   ) : (

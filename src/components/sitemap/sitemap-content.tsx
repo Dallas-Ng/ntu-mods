@@ -211,10 +211,7 @@ const SitemapContent = async () => {
             <a
               key={link.href}
               href={link.href}
-              className={cn(
-                cardVariants({ interactive: true }),
-                "group rounded-2xl p-4"
-              )}>
+              className={cn(cardVariants({ interactive: true }), "group p-4")}>
               <p className="text-foreground font-semibold">{link.label}</p>
               <p className="text-muted-foreground mt-0.5 text-sm">
                 {link.description}
@@ -231,10 +228,7 @@ const SitemapContent = async () => {
             <a
               key={link.href}
               href={link.href}
-              className={cn(
-                cardVariants({ interactive: true }),
-                "group rounded-2xl p-4"
-              )}>
+              className={cn(cardVariants({ interactive: true }), "group p-4")}>
               <p className="text-foreground font-semibold">{link.label}</p>
               <p className="text-muted-foreground mt-0.5 text-sm">
                 {link.description}
@@ -254,7 +248,7 @@ const SitemapContent = async () => {
                 href={`/articles/${article.slug}`}
                 className={cn(
                   cardVariants({ interactive: true }),
-                  "group rounded-2xl p-4"
+                  "group p-4"
                 )}>
                 <p className="text-muted-foreground mb-1 text-xs">
                   {article.category}

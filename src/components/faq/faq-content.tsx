@@ -281,7 +281,7 @@ const FaqContent = ({ children, mobileNav }: Props) => {
                     key={id}
                     className={cn(
                       cardVariants(),
-                      "scroll-mt-20 space-y-3 rounded-2xl p-5"
+                      "scroll-mt-20 space-y-3 p-5"
                     )}>
                     <SectionHeading as="h3">
                       {question}
@@ -299,7 +299,7 @@ const FaqContent = ({ children, mobileNav }: Props) => {
             id="feedback"
             className={cn(
               cardVariants(),
-              "flex scroll-mt-20 flex-col justify-between gap-4 rounded-2xl p-5 sm:flex-row sm:items-center"
+              "flex scroll-mt-20 flex-col justify-between gap-4 p-5 sm:flex-row sm:items-center"
             )}>
             <div>
               <SectionHeading>

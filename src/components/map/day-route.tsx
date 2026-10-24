@@ -220,7 +220,7 @@ export const StopRow = ({
       type="button"
       onClick={onClick}
       className={cn(
-        "hover:bg-accent flex w-full cursor-pointer items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors",
+        "hover:bg-accent flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors",
         clashWith && "bg-destructive/10 hover:bg-destructive/15",
         selected && "bg-accent"
       )}>

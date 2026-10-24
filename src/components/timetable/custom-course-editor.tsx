@@ -276,7 +276,7 @@ const SessionRowEditor = ({
                 onClick={() => toggleDay(day)}
                 aria-pressed={active}
                 className={cn(
-                  "bg-muted focus-visible:ring-ring/50 h-6 cursor-pointer rounded px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px]",
+                  "bg-muted focus-visible:ring-ring/50 h-6 rounded px-2 text-xs font-medium transition-colors outline-none focus-visible:ring-[3px]",
                   active
                     ? "bg-foreground text-background border-transparent"
                     : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -482,7 +482,7 @@ export const CourseModal = ({
                   )}>
                   <button
                     type="button"
-                    className="h-full cursor-pointer px-2.5"
+                    className="h-full px-2.5"
                     onClick={() =>
                       setForm((f) => ({ ...f, activeIndexKey: index._key }))
                     }>
@@ -643,7 +643,7 @@ const CustomCourseEditor = () => {
                 <button
                   type="button"
                   aria-label={`Remove ${course.name}`}
-                  className="flex size-8 shrink-0 cursor-pointer items-center justify-center"
+                  className="flex size-8 shrink-0 items-center justify-center"
                   onClick={(e) => {
                     e.stopPropagation()
                     removeCustomCourse(course.id)
@@ -666,7 +666,7 @@ const CustomCourseEditor = () => {
                           selectCustomCourseIndex(course.id, courseIndex.id)
                         }
                         className={cn(
-                          "bg-muted focus-visible:ring-ring/50 h-5 cursor-pointer rounded px-1.5 text-[0.65rem] font-medium transition-colors outline-none focus-visible:ring-[3px]",
+                          "bg-muted focus-visible:ring-ring/50 h-5 rounded px-1.5 text-[0.65rem] font-medium transition-colors outline-none focus-visible:ring-[3px]",
                           isActive
                             ? "bg-foreground text-background border-transparent"
                             : "text-muted-foreground hover:bg-accent hover:text-foreground"
@@ -683,7 +683,7 @@ const CustomCourseEditor = () => {
       </div>
 
       <button
-        className="hover:bg-accent focus-visible:ring-ring/50 mx-4 mt-1 flex w-[calc(100%-2rem)] cursor-pointer items-center justify-center gap-1.5 rounded-md border border-dashed p-2 text-sm transition-colors outline-none focus-visible:ring-[3px]"
+        className="hover:bg-accent focus-visible:ring-ring/50 mx-4 mt-1 flex w-[calc(100%-2rem)] items-center justify-center gap-1.5 rounded-md border border-dashed p-2 text-sm transition-colors outline-none focus-visible:ring-[3px]"
         onClick={() => setAddOpen(true)}>
         <Plus className="size-4" />
         Add custom block

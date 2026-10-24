@@ -15,7 +15,6 @@ import {
   Utensils
 } from "lucide-react"
 
-import { cardVariants } from "@/components/ui/card"
 import { SectionHeading } from "@/components/header"
 
 const STEPS = [
@@ -245,8 +244,7 @@ const TIPS = [
         <li class="flex items-start gap-3">
           <span
             class:list={[
-              cardVariants(),
-              "text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-lg"
+              "bg-muted text-muted-foreground flex size-9 shrink-0 items-center justify-center rounded-lg"
             ]}
             aria-hidden="true">
             {i === 0 && <CornerUpLeft className="size-4" />}

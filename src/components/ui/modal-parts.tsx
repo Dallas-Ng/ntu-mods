@@ -74,7 +74,7 @@ export const ModalNote = ({
     className={cn(
       "rounded-lg px-3 py-2 text-xs",
       tone === "danger"
-        ? "border-destructive/30 bg-destructive-subtle text-destructive border"
+        ? "bg-destructive-subtle text-destructive"
         : "bg-muted text-muted-foreground"
     )}>
     {children}

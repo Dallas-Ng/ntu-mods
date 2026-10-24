@@ -407,7 +407,7 @@ const TimetableActionsDropdown = ({
                           key={index}
                           type="button"
                           onClick={closeThen(() => requestDuplicate(index))}
-                          className="hover:bg-accent flex w-full cursor-pointer items-center justify-between gap-4 rounded-lg p-3 text-left text-sm transition-colors">
+                          className="hover:bg-accent flex w-full items-center justify-between gap-4 rounded-lg p-3 text-left text-sm transition-colors">
                           <span className="truncate">{label(index)}</span>
                           {named(index) && (
                             <span className="text-muted-foreground shrink-0 text-xs">

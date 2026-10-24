@@ -5,7 +5,7 @@ import { BookOpen } from "lucide-react"
 import { siteConfig } from "@/config/site"
 import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
-import { controlOnCard } from "@/components/ui/card"
+import { cardVariants, controlOnCard } from "@/components/ui/card"
 import { CardCta } from "@/components/ui/text-link"
 import { NewBadge } from "@/components/new-dot"
 import AssistantPreview from "@/components/tools/assistant-preview"
@@ -125,7 +125,8 @@ const ToolsGrid = () => (
         <div
           key={tool.href}
           className={cn(
-            "bg-muted hover:bg-accent group relative flex flex-col gap-6 rounded-2xl p-5 transition-colors md:p-6",
+            cardVariants({ interactive: true }),
+            "group relative flex flex-col gap-6 p-5 md:p-6",
             wide && "md:col-span-2 md:flex-row-reverse"
           )}>
           <div

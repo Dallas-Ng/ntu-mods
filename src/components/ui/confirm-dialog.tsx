@@ -13,8 +13,6 @@ interface Props {
   /** Red confirm button, for actions that replace or delete data. */
   destructive?: boolean
   onConfirm: () => void
-  /** See ResponsiveModal: false when opened from the page, not a drawer. */
-  nested?: boolean
 }
 
 /** Asks before an action the user cannot undo. Use instead of confirm(). */
@@ -25,13 +23,12 @@ export const ConfirmDialog = ({
   description,
   confirmLabel,
   destructive = false,
-  onConfirm,
-  nested = false
+  onConfirm
 }: Props) => (
   <ResponsiveModal
     open={open}
     onOpenChange={onOpenChange}
-    nested={nested}
+    nested={false}
     title={title}
     description={description}
     showDescription

@@ -1316,7 +1316,7 @@ const CampusMap = ({
               aria-label="Choose a level"
               className={cn(
                 FLOATING,
-                "flex h-11 w-[84px] cursor-pointer items-center justify-center gap-2 px-3 text-sm font-semibold transition-transform duration-150 ease-out active:scale-[0.97]"
+                "flex h-11 w-[84px] items-center justify-center gap-2 px-3 text-sm font-semibold transition-transform duration-150 ease-out active:scale-[0.97]"
               )}>
               <StairsIcon />
               <span className="min-w-5 text-center tabular-nums">
@@ -1467,7 +1467,7 @@ const MapButton = ({
     type="button"
     aria-label={label}
     onClick={onClick}
-    className="hover:bg-accent flex size-10 cursor-pointer items-center justify-center transition-[background-color,transform] duration-150 ease-out active:scale-[0.94] [&_svg]:size-4">
+    className="hover:bg-accent flex size-10 items-center justify-center transition-[background-color,transform] duration-150 ease-out active:scale-[0.94] [&_svg]:size-4">
     {children}
   </button>
 )
@@ -1502,7 +1502,7 @@ const LevelOption = ({
     aria-pressed={active}
     onClick={onClick}
     className={cn(
-      "flex w-full cursor-pointer items-center justify-between gap-4 rounded-md px-2.5 py-1.5 text-left text-sm transition-colors max-lg:py-3",
+      "flex w-full items-center justify-between gap-4 rounded-md px-2.5 py-1.5 text-left text-sm transition-colors max-lg:py-3",
       active
         ? "bg-primary text-primary-foreground"
         : "hover:bg-accent text-foreground"

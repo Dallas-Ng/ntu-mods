@@ -63,7 +63,7 @@ const FeedbackSection = () => {
                   }
                   className={cn(
                     controlOnCard,
-                    "flex w-full cursor-pointer items-center justify-between gap-4 rounded-2xl px-4 py-3 text-left text-sm font-medium transition-[color,box-shadow,transform] duration-150 active:scale-[0.99]"
+                    "flex w-full items-center justify-between gap-4 rounded-2xl px-4 py-3 text-left text-sm font-medium transition-[color,box-shadow,transform] duration-150 active:scale-[0.99]"
                   )}>
                   {label}
                   <ArrowDown className="text-muted-foreground size-4 shrink-0 lg:hidden" />

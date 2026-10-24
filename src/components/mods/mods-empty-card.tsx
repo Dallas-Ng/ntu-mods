@@ -7,11 +7,7 @@ import { Button } from "../ui/button"
 
 const ModsEmptyCard = () => {
   return (
-    <div
-      className={cn(
-        cardVariants(),
-        "w-full space-y-4 rounded-2xl p-8 text-center"
-      )}>
+    <div className={cn(cardVariants(), "w-full space-y-4 p-8 text-center")}>
       <div className="flex justify-center">
         <img
           src="/not-found.svg"

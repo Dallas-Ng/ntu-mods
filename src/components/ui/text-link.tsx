@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils"
  * - action: a standalone call to action under a section, like "See all"
  * - subtle: a list or nav entry that only changes colour on hover
  */
-const textLinkVariants = cva("cursor-pointer transition-colors", {
+const textLinkVariants = cva("transition-colors", {
   variants: {
     variant: {
       default:

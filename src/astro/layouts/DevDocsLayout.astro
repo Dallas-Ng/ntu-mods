@@ -1,6 +1,7 @@
 ---
 import { MCP_CLIENTS } from "@/lib/developers/mcp-clients"
 import { DEV_LINKS } from "@/lib/developers/pages"
+import { htmlHeadings } from "@/lib/html-headings"
 import { webPageJsonLd } from "@/lib/json-ld"
 import { SideNavDrawer } from "@/components/ui/side-nav-drawer"
 import ArticleToc, {
@@ -34,26 +35,7 @@ const jsonLd = webPageJsonLd({ name: title, description, path })
 // Render the page once and list its h2s for "On this page", so each docs
 // page gets the right nav without keeping a heading list by hand.
 const body = await Astro.slots.render("default")
-const decode = (text: string) =>
-  text
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#0?39;|&apos;/g, "'")
-const headings = [
-  ...body.matchAll(/<h2\b[^>]*\bid="([^"]+)"[^>]*>([\s\S]*?)<\/h2>/g)
-].map(([, id, inner]) => ({
-  id,
-  depth: 2,
-  // Drop the "#" HeadingAnchor link, then any other tags.
-  text: decode(
-    inner
-      .replace(/<a\b[^>]*>[\s\S]*?<\/a>/g, "")
-      .replace(/<[^>]+>/g, "")
-      .trim()
-  )
-}))
+const headings = htmlHeadings(body)
 ---
 
 <BaseLayout

@@ -91,7 +91,7 @@ function ArticleCard({
       href={`/articles/${article.slug}`}
       className={cn(
         cardVariants({ interactive: true }),
-        "group flex flex-col overflow-hidden rounded-2xl"
+        "group flex flex-col overflow-hidden"
       )}>
       <div className="relative">
         <ArticleThumb text={article.thumbnailText || article.title} />
@@ -283,7 +283,7 @@ export default function ArticlesList({
       <div
         className={cn(
           cardVariants(),
-          "text-foreground rounded-2xl p-4 text-sm wrap-break-word sm:p-6"
+          "text-foreground p-4 text-sm wrap-break-word sm:p-6"
         )}>
         No articles published yet. Copy{" "}
         <InlineCode>content/articles/_template.md</InlineCode> into the same
@@ -519,7 +519,7 @@ export default function ArticlesList({
         <div
           className={cn(
             cardVariants(),
-            "text-foreground rounded-2xl p-4 text-sm wrap-break-word sm:p-6"
+            "text-foreground p-4 text-sm wrap-break-word sm:p-6"
           )}>
           No articles match those filters.
         </div>

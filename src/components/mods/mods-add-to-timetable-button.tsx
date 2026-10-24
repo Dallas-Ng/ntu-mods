@@ -65,7 +65,7 @@ function PlanItems({
           <button
             key={i}
             onClick={() => onSelect(i)}
-            className="hover:bg-accent flex w-full cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors">
+            className="hover:bg-accent flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition-colors">
             <Check
               className={`size-4 transition-opacity ${inPlan ? "opacity-100" : "opacity-0"}`}
             />

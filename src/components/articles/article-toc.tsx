@@ -11,7 +11,6 @@ import {
 
 import type { ArticleHeading } from "@/lib/server/articles"
 import { cn } from "@/lib/utils"
-import { cardVariants } from "@/components/ui/card"
 import { sideNavItem, sideNavLabel } from "@/components/ui/side-nav"
 import { SideNavDrawer } from "@/components/ui/side-nav-drawer"
 
@@ -251,8 +250,7 @@ const ArticleToc = ({ headings, nested, desktopFrom = "lg" }: Props) => {
             <span
               aria-hidden="true"
               className={cn(
-                cardVariants(),
-                "pointer-events-none absolute right-0 left-0 rounded-lg transition-[top,height] duration-300 ease-out motion-reduce:transition-none"
+                "bg-muted pointer-events-none absolute right-0 left-0 rounded-lg transition-[top,height] duration-300 ease-out motion-reduce:transition-none"
               )}
               style={{ top: indicator.top, height: indicator.height }}>
               <span className="bg-primary absolute top-1/2 left-0 h-4 w-0.5 -translate-y-1/2 rounded-full" />

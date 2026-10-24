@@ -278,7 +278,7 @@ export default function FgoOptimiser() {
       <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
         {/* Result and quota: first on mobile, sticky on the right on desktop */}
         <aside className="space-y-3 lg:sticky lg:top-20 lg:order-2">
-          <div className={cn(cardVariants(), "space-y-4 rounded-2xl p-5")}>
+          <div className={cn(cardVariants(), "space-y-4 p-5")}>
             <div className="bg-background rounded-xl p-4">
               <p className="text-muted-foreground text-xs">Projected CGPA</p>
               <p className="flex items-baseline gap-2">
@@ -426,7 +426,7 @@ export default function FgoOptimiser() {
           </div>
 
           {pickedMods.length > 0 && (
-            <div className={cn(cardVariants(), "overflow-hidden rounded-2xl")}>
+            <div className={cn(cardVariants(), "overflow-hidden")}>
               <div className="bg-background text-muted-foreground flex items-center justify-between border-b px-3 py-1.5 text-xs font-medium tracking-wide uppercase">
                 Declare in the FGO portal
                 <CopyButton
@@ -462,7 +462,7 @@ export default function FgoOptimiser() {
         <div className="min-w-0 space-y-3 lg:order-1">
           {error && <p className="text-destructive text-sm">{error}</p>}
 
-          <div className={cn(cardVariants(), "overflow-hidden rounded-2xl")}>
+          <div className={cn(cardVariants(), "overflow-hidden")}>
             <div className="bg-background text-muted-foreground flex items-center gap-3 border-b px-3 py-2 text-xs font-medium tracking-wide uppercase">
               <span className="w-8 shrink-0">FGO</span>
               <span className="flex-1">Module</span>

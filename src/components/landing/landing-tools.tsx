@@ -27,7 +27,7 @@ const LandingTools = () => {
             key={tool.href}
             className={cn(
               cardVariants(),
-              "landing-reveal flex min-h-[320px] flex-col justify-between gap-10 rounded-2xl p-5 md:p-6"
+              "landing-reveal flex min-h-[320px] flex-col justify-between gap-10 p-5 md:p-6"
             )}>
             <div>
               <h3 className="text-2xl leading-tight font-bold tracking-tight md:text-3xl">

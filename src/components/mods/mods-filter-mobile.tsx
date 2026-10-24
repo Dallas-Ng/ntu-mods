@@ -186,7 +186,7 @@ function DrawerHead({
       {onReset && (
         <button
           type="button"
-          className="text-primary cursor-pointer py-1.5 text-sm"
+          className="text-primary py-1.5 text-sm"
           onClick={onReset}>
           {resetLabel}
         </button>
@@ -397,7 +397,7 @@ export const ModsFilterDrawer = ({
 
                 <button
                   type="button"
-                  className="flex w-full cursor-pointer items-center justify-between border-t pt-4 text-left text-base"
+                  className="flex w-full items-center justify-between border-t pt-4 text-left text-base"
                   onClick={() => drawer.setSchoolOpen(true)}>
                   School
                   <span className="text-muted-foreground flex min-w-0 items-center gap-1.5 text-sm">

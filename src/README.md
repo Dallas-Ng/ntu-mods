@@ -51,7 +51,7 @@ Surfaces, all fixed tokens (no `bg-muted/50`-style opacity, except see-through g
 | `primary-subtle`                                                 | Blue callouts, active and selected items    |
 | `success`, `warning`, `destructive` (each with a `-subtle` fill) | Status: alerts, changelog tags, API status  |
 
-Borders are for tables (always), form controls, the outline button, floating layers (dialogs, menus, popovers, sticky bars) and dashed drop zones. Everything else (cards, chips, inline code, callouts, alerts, tags, option tiles) has no border and is told apart by its fill. Dividers between rows and sections are fine. No raw Tailwind palette colours (`emerald-500`, `slate-200`) outside the timetable grid, the map and the landing illustrations.
+Borders are for tables (always), form controls, the outline button, floating layers (dialogs, menus, popovers, sticky bars) and dashed drop zones. Everything else (cards, chips, inline code, callouts, alerts, tags, option tiles) has no border and is told apart by its fill. Dividers between rows and sections are fine. No raw Tailwind palette colours (`emerald-500`, `slate-200`) outside the timetable grid, the map, the landing illustrations and the favourite heart's `rose-500` (a state colour, not an error, so not `destructive`).
 
 Icons are lucide (stroke 2), sized by context:
 

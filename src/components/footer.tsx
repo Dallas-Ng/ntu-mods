@@ -124,7 +124,7 @@ const Footer = () => {
           <li id="cookie-settings" hidden>
             <button
               type="button"
-              className="hover:text-primary cursor-pointer transition-colors">
+              className="hover:text-primary transition-colors">
               Cookie settings
             </button>
           </li>

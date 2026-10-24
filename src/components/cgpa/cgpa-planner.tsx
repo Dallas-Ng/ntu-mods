@@ -206,7 +206,7 @@ const CgpaPlanner = () => {
         />
       )}
 
-      <section className={cn(cardVariants(), "space-y-5 rounded-2xl p-5")}>
+      <section className={cn(cardVariants(), "space-y-5 p-5")}>
         <h2 className="text-sm font-medium">Your grades so far</h2>
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
           <Field
@@ -240,11 +240,7 @@ const CgpaPlanner = () => {
       </section>
 
       {leftMissing ? (
-        <p
-          className={cn(
-            cardVariants(),
-            "text-muted-foreground rounded-2xl p-5 text-sm"
-          )}>
+        <p className={cn(cardVariants(), "text-muted-foreground p-5 text-sm")}>
           Almost there. Enter the AU you still have to take above and your goals
           appear here.
         </p>

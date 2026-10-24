@@ -15,7 +15,8 @@ export const ModuleCard = ({ module, cardClassName }: ModuleCardProps) => (
   <a key={module.code} href={`/mods/${module.code}`}>
     <div
       className={cn(
-        "bg-muted hover:bg-accent text-muted-foreground rounded-2xl p-4 text-sm transition-colors",
+        cardVariants({ interactive: true }),
+        "text-muted-foreground p-4 text-sm",
         cardClassName
       )}>
       <p className="font-mono text-xs">{module.code}</p>
@@ -84,7 +85,8 @@ export const ModuleCardDetail = ({
   return (
     <div
       className={cn(
-        "bg-muted hover:bg-accent group relative flex h-32 flex-col rounded-2xl p-4 transition-colors",
+        cardVariants({ interactive: true }),
+        "group relative flex h-32 flex-col p-4",
         isCurrentSemester ? "bg-muted border-transparent" : "border-border"
       )}>
       <a
@@ -127,7 +129,7 @@ export const ModuleCardDetail = ({
 }
 
 export const ModuleCardDetailLoading = () => (
-  <div className={cn(cardVariants(), "flex h-32 flex-col rounded-2xl p-4")}>
+  <div className={cn(cardVariants(), "flex h-32 flex-col p-4")}>
     <Skeleton className="bg-foreground/10 dark:bg-background mb-2 h-4 w-16" />
     <Skeleton className="bg-foreground/10 dark:bg-background mb-1 h-5 w-full" />
     <Skeleton className="bg-foreground/10 dark:bg-background h-5 w-3/4" />

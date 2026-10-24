@@ -21,7 +21,7 @@ const TimetableHiddenContentHelper = () => {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="text-muted-foreground flex cursor-pointer items-start gap-1 text-left text-xs hover:underline md:items-center">
+        className="text-muted-foreground flex items-start gap-1 text-left text-xs hover:underline md:items-center">
         <span>
           <InfoIcon className="size-3" />
         </span>

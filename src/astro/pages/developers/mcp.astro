@@ -4,6 +4,7 @@ import { ChevronRight } from "lucide-react"
 import { siteConfig } from "@/config/site"
 import { MCP_CLIENTS } from "@/lib/developers/mcp-clients"
 import { directoryListings, mcpUrl } from "@/lib/developers/mcp-docs"
+import { cardVariants } from "@/components/ui/card"
 import { ExternalLinkIcon } from "@/components/ui/text-link"
 import { CLAUDE_COLOUR, ClaudeIcon, OpenAIIcon } from "@/components/brand-icons"
 import HeadingAnchor from "@/components/heading-anchor"
@@ -111,7 +112,10 @@ const { title, desc } = siteConfig.metatags.developersMcp
       {
         MCP_CLIENTS.map((c) => (
           <a
-            class="bg-muted hover:bg-accent flex items-center justify-between rounded-2xl p-4 transition-colors"
+            class:list={[
+              cardVariants({ interactive: true }),
+              "flex items-center justify-between p-4"
+            ]}
             href={`/developers/mcp/${c.id}`}>
             <span class="text-sm font-semibold">{c.label}</span>
             <ChevronRight className="text-muted-foreground size-4 shrink-0" />

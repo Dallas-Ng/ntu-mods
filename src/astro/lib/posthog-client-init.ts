@@ -90,11 +90,28 @@ type ExceptionEntry = {
   stacktrace?: { frames?: { filename?: unknown }[] }
 }
 
+// Chrome on iOS injects a script that overflows the stack. It runs as an
+// inline script, so its frame filename is the page URL, not a .js file
+// (issue #325). Real stack overflows in our bundles keep a .js filename.
+function isChromeIosInjectedOverflow(properties: Record<string, unknown>) {
+  if (properties.$browser !== "Chrome iOS") return false
+  const list = properties.$exception_list
+  if (!Array.isArray(list)) return false
+  return (list as ExceptionEntry[]).every((e) => {
+    if (typeof e?.value !== "string" || !/call stack size/i.test(e.value))
+      return false
+    const top = e.stacktrace?.frames?.[0]?.filename
+    return typeof top === "string" && !/\.m?js(\?|$)/.test(top)
+  })
+}
+
 function isInjectedError(event: {
   event: string
   properties?: Record<string, unknown>
 }) {
   if (event.event !== "$exception") return false
+  if (event.properties && isChromeIosInjectedOverflow(event.properties))
+    return true
   const list = event.properties?.$exception_list
   if (!Array.isArray(list)) return false
   return (list as ExceptionEntry[]).some((e) => {

@@ -126,7 +126,9 @@ function weekday(dateStr: string) {
 
 function ExamTable({ items }: { items: DbExam[] }) {
   return (
-    <div className={cn(cardVariants(), "overflow-hidden")}>
+    // translate="no": in-page translation wraps text nodes, so React fails
+    // with removeChild NotFoundError when filtering swaps rows (issue #326)
+    <div translate="no" className={cn(cardVariants(), "overflow-hidden")}>
       {/* Header, desktop only */}
       <div className="text-muted-foreground hidden items-center gap-4 px-5 py-3 text-xs font-medium md:flex">
         <span className="w-24 shrink-0">Module</span>

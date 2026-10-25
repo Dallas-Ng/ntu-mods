@@ -1,6 +1,29 @@
-import LandingCommands, { type Command } from "./landing-commands"
+import type { ComponentType } from "react"
+import {
+  Footprints,
+  Image as ImageIcon,
+  Layers,
+  Share2,
+  SlidersHorizontal,
+  SquareDashed
+} from "lucide-react"
 
-const FEATURES: Command[] = [
+import { cn } from "@/lib/utils"
+import { cardVariants } from "@/components/ui/card"
+import { TextLink } from "@/components/ui/text-link"
+import { NewBadge } from "@/components/new-dot"
+
+type Feature = {
+  name: string
+  href: string
+  desc: string
+  art?: string
+  /** Intrinsic [width, height] of `art`, so the image reserves its aspect ratio. */
+  artSize?: [number, number]
+  isNew?: boolean
+}
+
+const FEATURES: Feature[] = [
   {
     name: "Auto-generate timetable",
     art: "/landing/auto-generate.svg",
@@ -93,10 +116,110 @@ const FEATURES: Command[] = [
   }
 ]
 
+const byName = (n: string) => FEATURES.find((f) => f.name === n) as Feature
+
+// The headline feature, shown large
+const HERO = byName("Auto-generate timetable")
+
+// The timetable features, as small cards
+const CORE: [string, ComponentType<{ className?: string }>][] = [
+  ["Walking between classes", Footprints],
+  ["Filter and search", SlidersHorizontal],
+  ["Multiple plans", Layers],
+  ["Custom blocks", SquareDashed],
+  ["Share with friends", Share2],
+  ["Save as photo or calendar", ImageIcon]
+]
+
+// Everything else is a link in a row under the cards
+const ALSO = [
+  "All courses and indexes",
+  "Exam schedule",
+  "Campus map",
+  "Student links",
+  "Planning guides",
+  "Student tools"
+].map(byName)
+
 const LandingFeatures = () => (
-  <div className="mx-auto max-w-7xl px-4">
-    <LandingCommands commands={FEATURES} />
-  </div>
+  <section
+    aria-labelledby="landing-features-heading"
+    className="mx-auto max-w-7xl px-4">
+    <h2
+      id="landing-features-heading"
+      className="landing-reveal mb-10 max-w-2xl text-3xl leading-none font-bold tracking-tighter md:text-4xl">
+      Everything you need to plan your semester
+    </h2>
+
+    <div className="landing-reveal grid gap-3 lg:grid-cols-[5fr_7fr]">
+      <a
+        href={HERO.href}
+        className={cn(
+          cardVariants({ interactive: true }),
+          "flex flex-col justify-between gap-6 p-5 md:p-6"
+        )}>
+        <span className="bg-background flex min-h-48 flex-1 items-center justify-center rounded-lg p-6">
+          <img
+            src={HERO.art}
+            width={HERO.artSize?.[0]}
+            height={HERO.artSize?.[1]}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            className="h-40 w-full object-contain"
+          />
+        </span>
+        <span>
+          <span className="block text-2xl leading-tight font-bold tracking-tight">
+            {HERO.name}
+          </span>
+          <span className="mt-2 block max-w-md text-sm md:text-base">
+            {HERO.desc}
+          </span>
+        </span>
+      </a>
+
+      <ul className="grid gap-3 sm:grid-cols-2">
+        {CORE.map(([name, Icon]) => {
+          const f = byName(name)
+          return (
+            <li key={f.name} className="contents">
+              <a
+                href={f.href}
+                className={cn(
+                  cardVariants({ interactive: true }),
+                  "flex flex-col gap-3 p-4 md:p-5"
+                )}>
+                <Icon className="text-muted-foreground size-5" />
+                <span>
+                  <span className="block text-base leading-tight font-bold">
+                    {f.name}
+                    {f.isNew && (
+                      <NewBadge size="md" className="ml-2 align-middle" />
+                    )}
+                  </span>
+                  <span className="text-muted-foreground mt-1 block text-sm">
+                    {f.desc}
+                  </span>
+                </span>
+              </a>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+
+    <ul className="landing-reveal mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+      <li className="text-muted-foreground text-sm">Also included</li>
+      {ALSO.map((f) => (
+        <li key={f.name}>
+          <TextLink href={f.href} variant="action" className="text-sm">
+            {f.name}
+          </TextLink>
+        </li>
+      ))}
+    </ul>
+  </section>
 )
 
 export default LandingFeatures

@@ -27,6 +27,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -121,6 +122,8 @@ def run_upsync(acadsem: str, scope: str | None, dry_run: bool) -> None:
 
 
 def process(acadsem: str, a: argparse.Namespace) -> None:
+    if not re.fullmatch(r"\d{4};[0-9A-Za-z]+", acadsem):
+        raise SystemExit(f"'{acadsem}' is not a semester code like 2026;1")
     print(f"\n=== {acadsem} ===")
     if a.scope != "exams":
         courses, content = scrape_courses(acadsem, a.workers, a.refetch)

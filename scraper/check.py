@@ -124,6 +124,8 @@ def _read(path: Path) -> dict:
 
 def check_semester(acadsem: str) -> bool:
     """Run the check for one semester, print the report, return ok/not."""
+    if not re.fullmatch(r"\d{4};[0-9A-Za-z]+", acadsem):
+        raise SystemExit(f"'{acadsem}' is not a semester code like 2026;1")
     key = acadsem.replace(";", "_")
     live = None
     if (API_DIR / "metadata" / f"{key}.json").exists():

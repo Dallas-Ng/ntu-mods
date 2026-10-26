@@ -18,6 +18,7 @@
 
 import { expect, test } from "@playwright/test"
 
+import { stripTags } from "../src/lib/html-headings"
 import {
   activeOfferingCodes,
   latestOfferings
@@ -103,10 +104,9 @@ test.describe("module URL strategy", () => {
     const bad: string[] = []
     for (const o of sample([...current, ...past], 15, "mods-h1")) {
       const html = await (await request.get(`/mods/${o.code}`)).text()
-      const h1 = /<h1[^>]*>([\s\S]*?)<\/h1>/
-        .exec(html)?.[1]
-        .replace(/<[^>]+>/g, "")
-        .replace(/&amp;/g, "&")
+      const inner = /<h1[^>]*>([\s\S]*?)<\/h1>/.exec(html)?.[1]
+      const h1 = (inner === undefined ? undefined : stripTags(inner))
+        ?.replace(/&amp;/g, "&")
         .replace(/\s+/g, " ")
         .trim()
       if (

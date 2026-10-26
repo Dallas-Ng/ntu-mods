@@ -9,9 +9,10 @@ const base = arg("base", "https://ntumods.com").replace(/\/$/, "")
 const concurrency = Number(arg("concurrency", 5))
 
 const sitemap = await (await fetch(`${base}/sitemap-0.xml`)).text()
-const urls = [...sitemap.matchAll(/<loc>([^<]+)</g)].map((m) =>
-  m[1].replace("https://ntumods.com", base)
-)
+// Only same-origin URLs: a sitemap must not point the warmer at other hosts.
+const urls = [...sitemap.matchAll(/<loc>([^<]+)</g)]
+  .map((m) => m[1].replace("https://ntumods.com", base))
+  .filter((u) => u.startsWith(`${base}/`) || u === base)
 console.log(`Warming ${urls.length} URLs on ${base}`)
 
 let done = 0

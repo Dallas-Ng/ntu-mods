@@ -18,6 +18,16 @@ const decode = (text: string) =>
     )
   })
 
+/** Strips tags until none remain, so "<<b>script>" cannot reassemble one. */
+export const stripTags = (html: string) => {
+  let prev: string
+  do {
+    prev = html
+    html = html.replace(/<[^>]+>/g, "")
+  } while (html !== prev)
+  return html
+}
+
 /**
  * The h2s with an id in rendered HTML, for an "On this page" nav. Drops the
  * "#" HeadingAnchor link and any other tags inside the heading. Astro writes
@@ -29,10 +39,7 @@ export const htmlHeadings = (html: string): ArticleHeading[] =>
       id,
       depth: 2,
       text: decode(
-        inner
-          .replace(/<a\b[^>]*>[\s\S]*?<\/a>/g, "")
-          .replace(/<[^>]+>/g, "")
-          .trim()
+        stripTags(inner.replace(/<a\b[^>]*>[\s\S]*?<\/a>/g, "")).trim()
       )
     })
   )

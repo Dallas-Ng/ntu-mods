@@ -105,7 +105,8 @@ test.describe("module URL strategy", () => {
       const html = await (await request.get(`/mods/${o.code}`)).text()
       const h1 = /<h1[^>]*>([\s\S]*?)<\/h1>/
         .exec(html)?.[1]
-        .replace(/<[^>]+>/g, "")
+        .replace(/<[^>]*>/g, "")
+        .replace(/[<>]/g, "")
         .replace(/&amp;/g, "&")
         .replace(/\s+/g, " ")
         .trim()

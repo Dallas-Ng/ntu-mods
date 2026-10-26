@@ -19,7 +19,7 @@ const decode = (text: string) =>
   })
 
 /** Strips tags until none remain, so "<<b>script>" cannot reassemble one. */
-const stripTags = (html: string) => {
+export const stripTags = (html: string) => {
   let prev: string
   do {
     prev = html

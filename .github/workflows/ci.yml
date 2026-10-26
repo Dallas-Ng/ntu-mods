@@ -6,6 +6,9 @@ on:
   push:
     branches: [main] # caches only, no tests: PRs can read main's caches, not each other's
 
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   # A newer commit supersedes the older run. On main that is safe for the

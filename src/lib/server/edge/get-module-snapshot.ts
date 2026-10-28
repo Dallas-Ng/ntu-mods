@@ -151,21 +151,27 @@ export async function isSameAsLatest(
 ): Promise<boolean> {
   const db = env.DB
   if (!db || snapshot.isLatestOffering) return false
-  const latest = await db
-    .prepare(MODULE_LATEST_SEM_SQL)
+  const current = await db
+    .prepare(
+      `
+      SELECT o.title, o.description, o.au, o.grade_type
+        FROM offerings o
+        JOIN semesters s ON s.sem = o.sem
+       WHERE o.code = ?
+       ORDER BY s.sort_key DESC
+       LIMIT 1
+    `
+    )
     .bind(code)
-    .first<DbSemesterRow>()
-  if (!latest) return false
-  const current = await getModuleSnapshot(
-    new URL("http://internal/"),
-    code,
-    latest.year,
-    latest.semester
-  )
+    .first<Pick<DbOfferingRow, "title" | "description" | "au" | "grade_type">>()
   if (!current) return false
   return (
-    snapshotFingerprint(current.moduleData) ===
-    snapshotFingerprint(snapshot.moduleData)
+    snapshotFingerprint({
+      title: current.title,
+      description: current.description ?? undefined,
+      au: current.au,
+      gradeType: current.grade_type ?? undefined
+    }) === snapshotFingerprint(snapshot.moduleData)
   )
 }
 

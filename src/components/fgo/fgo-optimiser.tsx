@@ -8,6 +8,7 @@ import type { EventSuffix } from "@/lib/analytics-events"
 import {
   cgpa,
   FGO_CORE_SUBCAP,
+  NoTranscriptTextError,
   optimise,
   parseTranscriptLines,
   quotaUsage,
@@ -146,13 +147,17 @@ export default function FgoOptimiser() {
         previously_fgo: parsed.mods.filter((m) => m.status === "fgo").length
       })
     } catch (e) {
-      reportError("transcript_upload", e, {
-        tool: "fgo",
-        ...transcriptErrorProps(e, file)
-      })
+      if (!(e instanceof NoTranscriptTextError)) {
+        reportError("transcript_upload", e, {
+          tool: "fgo",
+          ...transcriptErrorProps(e, file)
+        })
+      }
       track("upload_failed")
       setError(
-        "Could not read that PDF. Use the official transcript from the NTU Self-Help Transcript System, or the NIE Academic Progress Report."
+        e instanceof NoTranscriptTextError
+          ? e.message
+          : "Could not read that PDF. Use the official transcript from the NTU Self-Help Transcript System, or the NIE Academic Progress Report."
       )
     } finally {
       setBusy(false)

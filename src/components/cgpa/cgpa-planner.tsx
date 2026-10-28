@@ -12,7 +12,11 @@ import {
   projectedCgpa,
   type BandResult
 } from "@/lib/cgpa"
-import { readTranscriptPdf, transcriptErrorProps } from "@/lib/fgo"
+import {
+  NoTranscriptTextError,
+  readTranscriptPdf,
+  transcriptErrorProps
+} from "@/lib/fgo"
 import { shareTranscript } from "@/lib/transcript-share"
 import { cn } from "@/lib/utils"
 import { cardVariants } from "@/components/ui/card"
@@ -129,13 +133,17 @@ const CgpaPlanner = () => {
       track("transcript_loaded")
       if (share) shareTranscript("cgpa", mods)
     } catch (e) {
-      reportError("transcript_upload", e, {
-        tool: "cgpa",
-        ...transcriptErrorProps(e, file)
-      })
+      if (!(e instanceof NoTranscriptTextError)) {
+        reportError("transcript_upload", e, {
+          tool: "cgpa",
+          ...transcriptErrorProps(e, file)
+        })
+      }
       track("upload_failed")
       setError(
-        "Could not read that PDF. Use the official transcript from the NTU Self-Help Transcript System, or type your CGPA."
+        e instanceof NoTranscriptTextError
+          ? `${e.message} You can also type your CGPA below.`
+          : "Could not read that PDF. Use the official transcript from the NTU Self-Help Transcript System, or type your CGPA."
       )
     } finally {
       setBusy(false)

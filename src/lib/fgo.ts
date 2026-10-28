@@ -327,6 +327,15 @@ export class TranscriptReadError extends Error {
   }
 }
 
+export class NoTranscriptTextError extends Error {
+  constructor() {
+    super(
+      "This PDF has no selectable text. Upload the original transcript PDF rather than a scan or photo."
+    )
+    this.name = "NoTranscriptTextError"
+  }
+}
+
 export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
   const info: TranscriptInfo = { bytes: file.size }
   let stage: TranscriptStage = "load_pdf"
@@ -357,6 +366,7 @@ export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
       lines.push(...itemsToLines(items, width))
     }
     info.lines = lines.length
+    if (!lines.some((line) => line.trim())) throw new NoTranscriptTextError()
     stage = "parse"
     const parsed = parseTranscriptLines(lines)
     if (!parsed.mods.some((m) => m.status === "graded")) {
@@ -365,6 +375,7 @@ export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
     }
     return parsed
   } catch (e) {
+    if (e instanceof NoTranscriptTextError) throw e
     throw new TranscriptReadError(stage, e, info)
   }
 }

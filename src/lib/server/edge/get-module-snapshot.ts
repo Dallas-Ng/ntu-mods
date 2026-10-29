@@ -85,7 +85,8 @@ export async function getModuleSnapshot(
   _requestUrl: URL,
   code: string,
   year: string,
-  semester: string
+  semester: string,
+  includeDetails = true
 ): Promise<ModuleSnapshot | null> {
   // These come straight off the URL. They are bound as query parameters rather
   // than interpolated, so this is not an injection guard — it rejects
@@ -107,11 +108,20 @@ export async function getModuleSnapshot(
     latestSem,
     moduleLatest
   ] = await Promise.all([
-    db.prepare(OFFERING_SQL).bind(code, sem).first<DbOfferingRow>(),
     db
-      .prepare(OFFERING_PREREQUISITES_SQL)
+      .prepare(
+        includeDetails
+          ? OFFERING_SQL
+          : "SELECT * FROM offerings WHERE code = ? AND sem = ?"
+      )
       .bind(code, sem)
-      .all<DbPrerequisiteRow>(),
+      .first<DbOfferingRow>(),
+    includeDetails
+      ? db
+          .prepare(OFFERING_PREREQUISITES_SQL)
+          .bind(code, sem)
+          .all<DbPrerequisiteRow>()
+      : Promise.resolve({ results: [] as DbPrerequisiteRow[] }),
     db
       .prepare(OFFERING_INDEX_KEYS_SQL)
       .bind(code, sem)
@@ -138,6 +148,34 @@ export async function getModuleSnapshot(
     isCurrentOffering: latestSem === sem,
     isLatestOffering: moduleLatest?.sem === sem
   }
+}
+
+/** Load only the index keys and slots needed by the MCP index tool. */
+export async function getModuleIndexes(
+  code: string,
+  year: string,
+  semester: string
+): Promise<Record<string, Index[]> | null> {
+  if (
+    !/^[A-Z0-9]{2,12}$/.test(code) ||
+    !/^\d{4}$/.test(year) ||
+    !/^[12ST]$/.test(semester)
+  )
+    return null
+  const db = env.DB
+  if (!db) return null
+  const sem = `${year}_${semester}`
+  const [keys, slots] = await Promise.all([
+    db
+      .prepare(OFFERING_INDEX_KEYS_SQL)
+      .bind(code, sem)
+      .all<{ index_key: string }>(),
+    db.prepare(OFFERING_SLOTS_SQL).bind(code, sem).all<DbSlotRow>()
+  ])
+  return toIndexes(
+    slots.results ?? [],
+    (keys.results ?? []).map((row) => row.index_key)
+  )
 }
 
 /**

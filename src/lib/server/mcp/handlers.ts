@@ -16,10 +16,7 @@ import {
 } from "@/lib/mcp/validate"
 import { toModuleJson } from "@/lib/module-json"
 import { latestSemester, latestYear } from "@/lib/semesters"
-import type {
-  ModuleFullSnapshot,
-  ModuleSnapshot
-} from "@/lib/server/edge/get-module-snapshot"
+import type { ModuleFullSnapshot } from "@/lib/server/edge/get-module-snapshot"
 import { ToolError } from "@/lib/webmcp/core"
 
 type SeasonIndexes = Record<string, Record<string, Index[]>>
@@ -29,11 +26,11 @@ export interface McpDeps {
   loadAsset(path: string): Promise<unknown | null>
   getKnownCodes(): Promise<Set<string> | null>
   getLatestModuleSnapshot(code: string): Promise<ModuleFullSnapshot | null>
-  getModuleSnapshot(
+  getModuleIndexes(
     code: string,
     year: string,
     semester: string
-  ): Promise<ModuleSnapshot | null>
+  ): Promise<Record<string, Index[]> | null>
   /** Shared edge cache for D1 results. Values are JSON. */
   cache: {
     get(key: string): Promise<unknown | undefined>
@@ -143,8 +140,7 @@ export function createMcpHandlers(deps: McpDeps) {
             )
           )?.[code]
         : await cached(`indexes/${code}/${year}_${semester}`, async () => {
-            const snapshot = await deps.getModuleSnapshot(code, year, semester)
-            return snapshot?.indexes ?? null
+            return deps.getModuleIndexes(code, year, semester)
           })
       if (!moduleIndexes || Object.keys(moduleIndexes).length === 0) {
         throw new ToolError(`${code} has no indexes in ${year};${semester}.`)

@@ -1,10 +1,7 @@
 import { vi } from "vitest"
 
 import { latestSemester, latestYear } from "@/lib/semesters"
-import type {
-  ModuleFullSnapshot,
-  ModuleSnapshot
-} from "@/lib/server/edge/get-module-snapshot"
+import type { ModuleFullSnapshot } from "@/lib/server/edge/get-module-snapshot"
 import { createMcpHandlers, type McpDeps } from "@/lib/server/mcp/handlers"
 
 export const LATEST = `${latestYear}_${latestSemester}`
@@ -77,10 +74,7 @@ export function setup(over: Partial<McpDeps> = {}) {
       async () => new Set<string>(modules.map((m) => m.code))
     ),
     getLatestModuleSnapshot: vi.fn(async (code: string) => snapshot(code)),
-    getModuleSnapshot: vi.fn(
-      async () =>
-        ({ indexes: { "20001": [slot()] } }) as unknown as ModuleSnapshot
-    ),
+    getModuleIndexes: vi.fn(async () => ({ "20001": [slot()] })),
     cache: {
       get: vi.fn(async (key: string) => store.get(key)),
       put: vi.fn(async (key: string, value: unknown) => {

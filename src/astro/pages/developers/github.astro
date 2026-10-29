@@ -1,0 +1,113 @@
+---
+import { siteConfig } from "@/config/site"
+import GithubStars from "@/components/developers/github-stars"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const repo = siteConfig.links.repo
+---
+
+<DevDocsLayout
+  title="NTUMods on GitHub"
+  description="Explore the NTUMods source code on GitHub, contribute to the project or give it a star."
+  path="/developers/github"
+  eyebrow="Community"
+  heading="GitHub"
+  intro="NTUMods is open source. Explore the code, suggest an improvement or help make it better.">
+  <div class="flex flex-col gap-4">
+    <h2 id="repository">
+      Explore the repository<HeadingAnchor
+        id="repository"
+        label="Explore the repository"
+      />
+    </h2>
+    <p>
+      The <a href={repo}>NTUMods repository on GitHub</a> contains the site, course
+      data and documentation. If you find NTUMods useful, you can give the repository
+      a star.
+    </p>
+
+    <GithubStars client:load repoUrl={repo} />
+
+    <h2 id="ways-to-help">
+      Ways to help<HeadingAnchor id="ways-to-help" label="Ways to help" />
+    </h2>
+    <p>
+      You do not need to be an experienced programmer or an NTU student to
+      contribute. You can report a bug, suggest an idea, fix a typo, improve
+      documentation or write an article. You can also help with accessibility,
+      performance or how the site works on a phone.
+    </p>
+
+    <h2 id="report-an-issue">
+      Report a problem or suggest an idea<HeadingAnchor
+        id="report-an-issue"
+        label="Report a problem or suggest an idea"
+      />
+    </h2>
+    <p>
+      An issue is a way to start a conversation about a problem or improvement.
+      You will need a free GitHub account. Visit the <a
+        href={`${repo}/issues/new/choose`}>new issue page</a
+      >, choose the option that fits and describe what you found or would like
+      to see. For a bug, include the steps to reproduce it, what you expected
+      and what happened instead. Screenshots can help too.
+    </p>
+    <p>
+      If course data looks wrong, include the module code and semester in your
+      issue. The maintainer refreshes this data, so please do not edit the data
+      files yourself. For a security problem, use <a
+        href={`${repo}/security/advisories/new`}>private reporting on GitHub</a
+      > instead of a public issue.
+    </p>
+
+    <h2 id="first-contribution">
+      Make your first contribution<HeadingAnchor
+        id="first-contribution"
+        label="Make your first contribution"
+      />
+    </h2>
+    <p>
+      A contribution can be a small change, such as fixing a typo. If you have
+      an idea beyond a small fix, open an issue first so you can discuss the
+      approach. It is fine to ask questions if you are unsure where to start.
+    </p>
+    <p>
+      New to GitHub? Follow the <a href="/developers/github/first-contribution"
+        >first contribution walkthrough</a
+      > to fix a typo in your browser.
+    </p>
+    <ol>
+      <li>
+        <strong>Fork the repository.</strong> On the <a href={repo}
+          >repository page</a
+        >, select Fork to create your own copy on GitHub.
+      </li>
+      <li>
+        <strong>Set up the project.</strong> Follow the <a
+          href={`${repo}#getting-started`}>getting started instructions</a
+        > to download your copy and run NTUMods on your computer. You will need Node.js
+        and pnpm, but no Cloudflare account or secrets.
+      </li>
+      <li>
+        <strong>Create a branch and make your change.</strong> A branch keeps your
+        work separate from the main version. Keep your change focused, and run the
+        checks in the <a href={`${repo}/blob/main/CONTRIBUTING.md`}
+          >contribution guide</a
+        > before submitting it.
+      </li>
+      <li>
+        <strong>Open a pull request.</strong> Push your branch to GitHub, then open
+        a pull request to propose your change for review. Describe what you changed
+        and why. For a visual change, include a screenshot.
+      </li>
+    </ol>
+    <p>
+      The <a href={`${repo}/blob/main/CONTRIBUTING.md`}>contribution guide</a>
+      has the full setup and checklist. If you get stuck, ask in an issue or your
+      pull request. Questions are welcome.
+    </p>
+  </div>
+</DevDocsLayout>

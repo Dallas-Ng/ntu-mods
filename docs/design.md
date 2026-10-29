@@ -117,7 +117,7 @@ One hover signal per element:
 - Surfaces (cards, rows, menu items, chips, option tiles, icon buttons): background to `accent`. The text inside does not change colour.
 - White controls on a grey surface (`controlOnCard`): stay white, content turns black, a shadow appears. The accent fill is the card's own hover colour, so it would make them vanish.
 - Text-only links (`TextLink`): grey text goes black, black text goes blue, inline links dim.
-- Solid buttons: a slightly darker fill.
+- Solid buttons: a slightly darker fill. The GitHub stars button uses the foreground colour in dark mode, with a slightly darker hover, so it stands out.
 - No lift, scale, opacity or border-colour hovers. A go-to arrow may nudge (`LinkArrow` does this).
 
 Focus and cursor:

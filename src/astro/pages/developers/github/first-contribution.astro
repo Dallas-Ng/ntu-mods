@@ -1,0 +1,87 @@
+---
+import { siteConfig } from "@/config/site"
+import HeadingAnchor from "@/components/heading-anchor"
+import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
+
+export const prerender = true
+
+const repo = siteConfig.links.repo
+---
+
+<DevDocsLayout
+  title="Your first NTUMods contribution"
+  description="A beginner-friendly walkthrough for fixing a typo and opening your first pull request on GitHub."
+  path="/developers/github/first-contribution"
+  eyebrow="Community"
+  heading="Your first contribution"
+  intro="A small typo fix is a good way to learn how to contribute. This walkthrough uses GitHub in your browser.">
+  <div class="flex flex-col gap-4">
+    <h2 id="find-a-typo">
+      1. Find a typo<HeadingAnchor id="find-a-typo" label="1. Find a typo" />
+    </h2>
+    <p>
+      Sign in to GitHub or create a free account. Then visit the <a href={repo}
+        >NTUMods repository</a
+      > and look through the README or documentation for a typo you would like to
+      fix. This is an example to follow when you find one, so there is no need to
+      add a typo just to practise.
+    </p>
+
+    <h2 id="edit-the-file">
+      2. Edit the file<HeadingAnchor
+        id="edit-the-file"
+        label="2. Edit the file"
+      />
+    </h2>
+    <p>
+      Open the file containing the typo and select the pencil icon to edit it.
+      If GitHub asks you to fork the repository, follow the prompt. A fork is
+      your own copy of the project, where you can make changes without altering
+      the original. Correct the typo in the editor and check that you have not
+      changed anything else.
+    </p>
+
+    <h2 id="save-your-change">
+      3. Save your change<HeadingAnchor
+        id="save-your-change"
+        label="3. Save your change"
+      />
+    </h2>
+    <p>
+      Select <strong>Commit changes</strong>. A commit is a saved snapshot of
+      your change. Give it a short description, such as <code
+        >Fix typo in README</code
+      >. If asked, choose to create a new branch for the change. A branch keeps
+      your work separate from the main version.
+    </p>
+
+    <h2 id="open-a-pull-request">
+      4. Open a pull request<HeadingAnchor
+        id="open-a-pull-request"
+        label="4. Open a pull request"
+      />
+    </h2>
+    <p>
+      Follow GitHub's prompt to propose the change and create a pull request
+      against the NTUMods repository. A pull request lets the maintainer review
+      your change before it becomes part of the project. Give it a clear title
+      and briefly describe what you fixed, then submit it.
+    </p>
+
+    <h2 id="after-submitting">
+      What happens next<HeadingAnchor
+        id="after-submitting"
+        label="What happens next"
+      />
+    </h2>
+    <p>
+      The maintainer can review your pull request, ask a question or suggest an
+      edit. You can reply on the pull request if you need help. Once the change
+      is ready, it can be merged into the project. For larger changes and the
+      checks to run locally, see the <a
+        href={`${repo}/blob/main/CONTRIBUTING.md`}>contribution guide</a
+      >. You can also <a href={`${repo}/issues/new/choose`}>open an issue</a> if you
+      are unsure where to start.
+    </p>
+  </div>
+</DevDocsLayout>

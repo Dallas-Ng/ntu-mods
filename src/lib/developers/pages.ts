@@ -34,6 +34,12 @@ export const DEV_PAGES = [
     label: "WebMCP",
     description:
       "Early preview: browser tools that let an assistant work on your own saved plans."
+  },
+  {
+    group: "Community",
+    href: "/developers/github",
+    label: "GitHub",
+    description: "Explore the source code, contribute or star the project."
   }
 ] as const
 
@@ -59,6 +65,16 @@ export const DEV_NAV: { title: string; items: NavItem[] }[] = [
     items: [
       { href: "/developers", label: "Overview" },
       { href: "/developers/quickstart", label: "Quickstart" }
+    ]
+  },
+  {
+    title: "Community",
+    items: [
+      { href: "/developers/github", label: "GitHub" },
+      {
+        href: "/developers/github/first-contribution",
+        label: "Your first contribution"
+      }
     ]
   },
   {

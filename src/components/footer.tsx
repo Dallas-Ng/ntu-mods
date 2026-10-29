@@ -32,14 +32,14 @@ const FOOTER_GROUPS = [
     title: "Developers",
     links: [
       { label: "Overview", href: "/developers" },
+      { label: "GitHub", href: siteConfig.links.repo },
       { label: "MCP Server", href: "/developers/mcp" },
       { label: "REST API", href: "/developers/api" },
       { label: "WebMCP", href: "/developers/webmcp" },
       {
         label: "Contributing",
         href: `${siteConfig.links.repo}/blob/main/CONTRIBUTING.md`
-      },
-      { label: "GitHub", href: siteConfig.links.repo }
+      }
     ]
   }
 ]

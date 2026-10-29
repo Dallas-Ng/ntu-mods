@@ -4,7 +4,7 @@ import { env, waitUntil } from "cloudflare:workers"
 import { ON_DEMAND_CACHE_CONTROL } from "@/lib/edge-cache"
 import {
   getLatestModuleSnapshot,
-  getModuleSnapshot
+  getModuleIndexes
 } from "@/lib/server/edge/get-module-snapshot"
 import { getKnownCodes } from "@/lib/server/edge/known-codes"
 import { createMcpEndpoint } from "@/lib/server/mcp/endpoint"
@@ -28,8 +28,7 @@ const endpoint = createMcpEndpoint(
     },
     getKnownCodes: () => getKnownCodes(origin),
     getLatestModuleSnapshot,
-    getModuleSnapshot: (code, year, semester) =>
-      getModuleSnapshot(new URL("http://internal/"), code, year, semester),
+    getModuleIndexes,
     cache: {
       async get(key) {
         const hit = await caches.default.match(key)

@@ -95,7 +95,7 @@ describe("get_module_indexes", () => {
       day: "Tue",
       venue: "LT1"
     })
-    expect(deps.getModuleSnapshot).not.toHaveBeenCalled()
+    expect(deps.getModuleIndexes).not.toHaveBeenCalled()
     expect(deps.loadAsset).toHaveBeenCalledTimes(1)
   })
 
@@ -112,13 +112,13 @@ describe("get_module_indexes", () => {
       semester: "1"
     })
     expect(result.indexes[0].index).toBe("20001")
-    expect(deps.getModuleSnapshot).toHaveBeenCalledTimes(1)
+    expect(deps.getModuleIndexes).toHaveBeenCalledTimes(1)
     expect(deps.loadAsset).not.toHaveBeenCalled()
   })
 
   it("caches a missing offering so repeat calls skip the database", async () => {
     const { handlers, deps } = setup({
-      getModuleSnapshot: vi.fn(async () => null)
+      getModuleIndexes: vi.fn(async () => null)
     })
     const call = () =>
       handlers.get_module_indexes({
@@ -128,7 +128,7 @@ describe("get_module_indexes", () => {
       })
     await expect(call()).rejects.toThrow(/no indexes/)
     await expect(call()).rejects.toThrow(/no indexes/)
-    expect(deps.getModuleSnapshot).toHaveBeenCalledTimes(1)
+    expect(deps.getModuleIndexes).toHaveBeenCalledTimes(1)
   })
 
   it("rejects an unknown semester before any I/O", async () => {
@@ -142,7 +142,7 @@ describe("get_module_indexes", () => {
     ).rejects.toThrow(ToolError)
     expect(deps.loadAsset).not.toHaveBeenCalled()
     expect(deps.getKnownCodes).not.toHaveBeenCalled()
-    expect(deps.getModuleSnapshot).not.toHaveBeenCalled()
+    expect(deps.getModuleIndexes).not.toHaveBeenCalled()
   })
 
   it("errors for a module with no indexes", async () => {

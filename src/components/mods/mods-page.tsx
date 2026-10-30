@@ -288,29 +288,33 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
         )}
       </div>
 
-      <ModuleResults
-        isLoading={isLoading}
-        // Prerendered first cards of the default view, shown instead of
-        // skeletons until the full list arrives. Only valid for the default
-        // view: any URL filter makes them the wrong results.
-        initialModules={
-          hasActiveFilters ||
-          favouritesOnly === "true" ||
-          modsGroupBy !== "none"
-            ? undefined
-            : initialModules
-        }
-        viewMode={modsViewMode}
-        groupedModules={groupedModules}
-        displayedModules={displayedModules}
-        expandedGroups={expandedGroups}
-        onExpandGroup={(key) =>
-          setExpandedGroups((prev) => new Set(Array.from(prev).concat(key)))
-        }
-        searchTerm={searchTerm}
-        year={year}
-        semester={semester}
-      />
+      {/* translate="no": in-page translation wraps text nodes, so React fails
+          with removeChild NotFoundError when search swaps results (issue #334) */}
+      <div translate="no">
+        <ModuleResults
+          isLoading={isLoading}
+          // Prerendered first cards of the default view, shown instead of
+          // skeletons until the full list arrives. Only valid for the default
+          // view: any URL filter makes them the wrong results.
+          initialModules={
+            hasActiveFilters ||
+            favouritesOnly === "true" ||
+            modsGroupBy !== "none"
+              ? undefined
+              : initialModules
+          }
+          viewMode={modsViewMode}
+          groupedModules={groupedModules}
+          displayedModules={displayedModules}
+          expandedGroups={expandedGroups}
+          onExpandGroup={(key) =>
+            setExpandedGroups((prev) => new Set(Array.from(prev).concat(key)))
+          }
+          searchTerm={searchTerm}
+          year={year}
+          semester={semester}
+        />
+      </div>
 
       {!isLoading && hasMore && modsGroupBy === "none" && (
         <div ref={loaderRef} className="h-4" />

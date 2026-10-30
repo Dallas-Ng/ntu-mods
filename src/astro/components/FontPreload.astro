@@ -1,0 +1,26 @@
+---
+// Preloads a family's core font file, which is the first one in `fontData`
+// (src/config/fonts.mjs lists it first). `<Font preload>` cannot be used:
+// it preloads every file, and the extended one must only download when a
+// page contains one of its characters (docs/fonts.md).
+import { fontData } from "astro:assets"
+
+interface Props {
+  cssVariable: string
+}
+
+const { cssVariable } = Astro.props
+const core = fontData[cssVariable]?.[0]?.src[0]
+---
+
+{
+  core && (
+    <link
+      rel="preload"
+      href={core.url}
+      as="font"
+      type={`font/${core.format}`}
+      crossorigin
+    />
+  )
+}

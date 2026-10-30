@@ -6,6 +6,7 @@ import react from "@astrojs/react"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig, fontProviders, sessionDrivers } from "astro/config"
 
+import { fontVariants } from "./src/config/fonts.mjs"
 import hastFigure from "./src/lib/hast-figure.mjs"
 
 // Vite serves pre-bundled deps with a one-year `immutable` cache header. After
@@ -79,28 +80,29 @@ export default defineConfig({
   // adapter's session requirement without needing any KV namespace at all.
   session: { driver: sessionDrivers.memory() },
   integrations: [react()],
-  // Replaces next/font's Inter. Same deal: downloaded and self-hosted at build
-  // time, so there's no render-blocking request to fonts.googleapis.com and no
-  // third-party origin in the critical path. Wired to Tailwind's --font-sans in
-  // src/styles/globals.css.
+  // Replaces next/font's Inter. Same deal: self-hosted, so there's no
+  // render-blocking request to fonts.googleapis.com and no third-party origin in
+  // the critical path. Wired to Tailwind's --font-sans in src/styles/globals.css.
+  //
+  // Each family is two files: a small core that the layouts preload, and an
+  // extended one behind unicode-range that only downloads when a page needs one
+  // of its characters. Both are the same family and the same weights, so Astro's
+  // generated fallback faces and `display` are unchanged. The files are made by
+  // scripts/fonts/subset-fonts.py (docs/fonts.md); don't edit them by hand.
   fonts: [
     {
-      provider: fontProviders.google(),
+      provider: fontProviders.local(),
       name: "Inter",
       cssVariable: "--font-inter",
-      subsets: ["latin"],
-      weights: [400, 500, 600, 700],
-      styles: ["normal"],
+      options: { variants: fontVariants("inter", [400, 500, 600, 700]) },
       fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"]
     },
     // Handwriting for the article thumbnails (src/components/articles/article-thumb.tsx).
     {
-      provider: fontProviders.google(),
+      provider: fontProviders.local(),
       name: "Patrick Hand",
       cssVariable: "--font-hand",
-      subsets: ["latin"],
-      weights: [400],
-      styles: ["normal"],
+      options: { variants: fontVariants("patrick-hand", [400]) },
       // Preloaded on article pages; hide text for the instant it takes rather than swap and shift.
       display: "block",
       fallbacks: ["cursive"]

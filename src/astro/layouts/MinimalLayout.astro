@@ -11,6 +11,7 @@ import ConsentBanner from "@/components/consent-banner"
 import MobileTracker from "@/components/mobile-tracker"
 import WebMcpProvider from "@/components/webmcp-provider"
 import Analytics from "@/astro/components/Analytics.astro"
+import FontPreload from "@/astro/components/FontPreload.astro"
 import StaleChunkReload from "@/astro/components/StaleChunkReload.astro"
 
 interface Props {
@@ -71,7 +72,8 @@ const resolvedTitle =
     <link rel="icon" href="/favicon.ico" />
     <link rel="ai-catalog" href="/.well-known/ai-catalog.json" />
 
-    <Font cssVariable="--font-inter" preload />
+    <Font cssVariable="--font-inter" />
+    <FontPreload cssVariable="--font-inter" />
 
     <script is:inline>
       // Runs before paint to avoid a light/dark flash — theme state lives in

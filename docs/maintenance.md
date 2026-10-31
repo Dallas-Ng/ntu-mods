@@ -12,3 +12,7 @@ Manual tasks at the start of each semester.
    ```ts
    const MIN_DATE = new Date("YYYY-MM-DD")
    ```
+
+## When fonts change
+
+The web fonts are committed subsets, rebuilt by hand with `python3 scripts/fonts/subset-fonts.py`. Rerun it when a new character shows up on most pages, when a weight or font feature is added, or when the source fonts are replaced; see [fonts.md § When to rerun](fonts.md#when-to-rerun).

@@ -17,6 +17,7 @@ import MobileTracker from "@/components/mobile-tracker"
 import Navbar from "@/components/navbar"
 import WebMcpProvider from "@/components/webmcp-provider"
 import Analytics from "@/astro/components/Analytics.astro"
+import FontPreload from "@/astro/components/FontPreload.astro"
 import StaleChunkReload from "@/astro/components/StaleChunkReload.astro"
 
 interface Props {
@@ -142,8 +143,16 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
     <link rel="icon" href="/favicon.ico" />
     <link rel="ai-catalog" href="/.well-known/ai-catalog.json" />
 
-    <Font cssVariable="--font-inter" preload />
-    {handFont && <Font cssVariable="--font-hand" preload />}
+    <Font cssVariable="--font-inter" />
+    <FontPreload cssVariable="--font-inter" />
+    {
+      handFont && (
+        <>
+          <Font cssVariable="--font-hand" />
+          <FontPreload cssVariable="--font-hand" />
+        </>
+      )
+    }
 
     <script is:inline>
       // Runs before paint to avoid a light/dark flash — theme state lives in

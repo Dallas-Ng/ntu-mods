@@ -48,6 +48,7 @@ Five sizes, each with one job:
 
 - No other sizes and no `text-[13px]`. The only off-scale exception outside the exempt areas is `NewBadge`'s 10px `sm` size.
 - A grey description of something is 14px; a hint or footnote is 12px.
+- Fonts are committed subsets (`docs/fonts.md`). Use weights 400, 500, 600 or 700 and `tabular-nums` as the only OpenType feature; another weight, `font-feature-settings` or `font-variation-settings` needs the font script changed first.
 - Inputs, textareas and the command search are 16px on phones (iOS Safari zooms into anything smaller) and 14px from `md`. The placeholder always matches the typed text; never set a separate `placeholder:text-*` size.
 
 ## Colour

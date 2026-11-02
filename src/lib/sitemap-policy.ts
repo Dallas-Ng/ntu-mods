@@ -18,10 +18,17 @@ export const moduleYearCutoff = (now = new Date()) => currentAYStart(now) - 2
  * programme lists drift, but the page is still a near-duplicate, and Google
  * folds it into /mods/CODE anyway. Shared by the page's canonical tag and the
  * sitemap so the two cannot disagree.
+ *
+ * Text is compared by letters and digits only: the portal re-cases titles
+ * between semesters ("To" vs "to") and mangles punctuation in descriptions
+ * ("organization?s"), and Google still treats those pages as duplicates.
  */
+const squash = (s?: string) => s?.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "")
+
 export const snapshotFingerprint = (m: {
   title: string
   description?: string
   au?: string | number
   gradeType?: string
-}) => JSON.stringify([m.title, m.description, m.au, m.gradeType])
+}) =>
+  JSON.stringify([squash(m.title), squash(m.description), m.au, m.gradeType])

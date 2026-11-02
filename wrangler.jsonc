@@ -114,23 +114,19 @@
   // parsing a whole ~3MB file per request. D1 indexes those lookups directly,
   // so the binding is gone. The namespace itself still exists and can be
   // re-bound if this ever needs reverting.
-  // Sampled, not 1: log and trace events are billed per event past the
-  // included 20M a month, there is no spend cap, and most invocations are
-  // PostHog proxy calls nobody reads. Server errors still reach PostHog
-  // through reportServerError.
   "observability": {
     "enabled": true,
-    "head_sampling_rate": 0.1,
+    "head_sampling_rate": 1,
     "logs": {
       "enabled": true,
-      "head_sampling_rate": 0.1,
+      "head_sampling_rate": 1,
       "persist": true,
       "invocation_logs": true
     },
     "traces": {
       "enabled": true,
       "persist": true,
-      "head_sampling_rate": 0.02
+      "head_sampling_rate": 1
     },
     "issues": {
       "enabled": true

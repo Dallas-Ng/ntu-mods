@@ -19,6 +19,9 @@ function targetFor(path: string): string {
   return `https://us.i.posthog.com/${path}`
 }
 
+const isCacheableAsset = (path: string) =>
+  path.startsWith("static/") || path.startsWith("array/")
+
 // Headers that describe *this* origin rather than the upstream request, and
 // must not be forwarded verbatim to PostHog.
 const STRIPPED_REQUEST_HEADERS = ["host", "cookie", "cf-connecting-ip"]
@@ -51,6 +54,14 @@ const handler: APIRoute = async ({ params, request }) => {
 
   const responseHeaders = new Headers(proxied.headers)
   for (const name of STRIPPED_RESPONSE_HEADERS) responseHeaders.delete(name)
+  // The SDK bundle and its config are the same for every visitor; let the edge
+  // answer them instead of running the Worker and PostHog's origin each time.
+  if (request.method === "GET" && proxied.ok && isCacheableAsset(path)) {
+    responseHeaders.set(
+      "Cache-Control",
+      "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400"
+    )
+  }
 
   return new Response(proxied.body, {
     status: proxied.status,

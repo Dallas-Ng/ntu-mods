@@ -1,5 +1,7 @@
 import type { MiddlewareHandler } from "astro"
 
+import { trailingSlashRedirect } from "@/lib/trailing-slash"
+
 // Module pages are prerendered under their canonical uppercase code only, so a
 // lowercase URL would otherwise hard-404. Next used to normalise these with a
 // 308 inside the route itself; that isn't possible on a prerendered route, so
@@ -18,6 +20,17 @@ const MODULE_PATH = /^\/mods\/([A-Za-z0-9]+)((?:\/[A-Za-z0-9]+)*)$/
 export const SNAPSHOT_HEADER = "x-module-snapshot"
 
 export const onRequest: MiddlewareHandler = async (context, next) => {
+  const slashless = trailingSlashRedirect(
+    context.url.pathname,
+    context.url.search
+  )
+  if (slashless) {
+    return context.redirect(
+      slashless,
+      context.request.method === "GET" ? 301 : 308
+    )
+  }
+
   const match = MODULE_PATH.exec(context.url.pathname)
 
   if (match) {

@@ -37,7 +37,7 @@ export function consentRequired(): Promise<boolean> {
       if (cached) return cached === "1"
     } catch {}
     try {
-      const res = await fetch("/api/consent-region", { cache: "no-store" })
+      const res = await fetch("/api/consent-region")
       if (!res.ok) throw new Error(String(res.status))
       const { required } = await res.json()
       try {

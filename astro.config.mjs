@@ -116,7 +116,11 @@ export default defineConfig({
   // edge/browser Cache-Control on prerendered pages (public/_headers), so
   // prefetched navigations are cheap cache hits, not fresh renders.
   prefetch: { defaultStrategy: "hover" },
-  trailingSlash: "never",
+  // "ignore", not "never": with "never" Astro 308-redirects every request that
+  // ends in "/", including PostHog's POSTs to /ingest/e/, so each analytics
+  // event cost two Worker invocations. src/astro/middleware.ts now redirects
+  // trailing slashes itself and leaves /ingest alone.
+  trailingSlash: "ignore",
   // "file" emits /faq.html, not /faq/index.html. Cloudflare's asset server
   // serves a directory-style build at /faq/ and 307s /faq to it — so with the
   // default format every canonical, sitemap and internal URL (all slashless)

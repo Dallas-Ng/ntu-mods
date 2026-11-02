@@ -34,6 +34,13 @@ const meta = snapshot ? buildModuleMeta(moduleKey, snapshot.moduleData) : null
 if (snapshot) {
   Astro.response.headers.set(SNAPSHOT_HEADER, "1")
   Astro.response.headers.set("Cache-Control", ON_DEMAND_CACHE_CONTROL)
+} else {
+  // Scanner and typo URLs repeat; a short edge copy stops each one re-running
+  // a full render (and, for /mods/CODE, a D1 lookup).
+  Astro.response.headers.set(
+    "Cache-Control",
+    "public, max-age=300, s-maxage=3600"
+  )
 }
 ---
 

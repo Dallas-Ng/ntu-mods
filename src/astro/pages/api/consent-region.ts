@@ -5,7 +5,8 @@ import { consentRequiredFor } from "@/lib/consent-regions"
 export const prerender = false
 
 // Tells the banner whether the visitor's country requires analytics opt-in.
-// Per-visitor, so it must never be cached.
+// Per-visitor, so only the visitor's own browser may keep it (a shared edge copy
+// would hand one country's answer to another).
 export const GET: APIRoute = ({ request }) => {
   const cf = (request as { cf?: { country?: string; regionCode?: string } }).cf
   const country = request.headers.get("cf-ipcountry") ?? cf?.country
@@ -13,7 +14,7 @@ export const GET: APIRoute = ({ request }) => {
   return new Response(JSON.stringify({ required }), {
     headers: {
       "Content-Type": "application/json",
-      "Cache-Control": "private, no-store"
+      "Cache-Control": "private, max-age=43200"
     }
   })
 }

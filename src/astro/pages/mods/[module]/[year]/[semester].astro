@@ -1,4 +1,6 @@
 ---
+import { TriangleAlert } from "lucide-react"
+
 import { ON_DEMAND_CACHE_CONTROL } from "@/lib/edge-cache"
 import { formatTitle } from "@/lib/format"
 import { breadcrumbListJsonLd } from "@/lib/json-ld"
@@ -8,7 +10,7 @@ import {
   getModuleSnapshot,
   isSameAsLatest
 } from "@/lib/server/edge/get-module-snapshot"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { TextLink } from "@/components/ui/text-link"
 import Breadcrumbs from "@/components/breadcrumbs"
 import Header, { SectionHeading } from "@/components/header"
@@ -79,9 +81,13 @@ const crumbs = [
   <JsonLd data={breadcrumbListJsonLd(crumbs)} />
   {
     !isCurrentOffering && (
-      <Alert variant="warning" role="note">
-        <AlertDescription className="block">
-          Historical snapshot: {semLabel} ·{" "}
+      <Alert variant="warning" role="note" className="py-4 text-base">
+        <TriangleAlert />
+        <AlertTitle className="line-clamp-none text-base font-semibold">
+          You are viewing an old semester: {semLabel}
+        </AlertTitle>
+        <AlertDescription className="block text-sm">
+          Class times, venues and exams may have changed since.{" "}
           <TextLink href={getModuleUrl(code)} variant="muted" arrow>
             View current offering
           </TextLink>
@@ -220,6 +226,19 @@ const crumbs = [
 
   <div class="mt-10 space-y-2">
     <SectionHeading>Available indexes</SectionHeading>
+    {
+      !isCurrentOffering && (
+        <Alert variant="warning" role="note">
+          <TriangleAlert />
+          <AlertDescription className="block">
+            These class times are for {semLabel} only.{" "}
+            <TextLink href={getModuleUrl(code)} variant="muted" arrow>
+              See the current timings
+            </TextLink>
+          </AlertDescription>
+        </Alert>
+      )
+    }
     <ModsIndexTable indexes={indexes} />
   </div>
 </BaseLayout>

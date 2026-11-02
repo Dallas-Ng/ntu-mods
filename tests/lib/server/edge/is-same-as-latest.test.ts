@@ -1,5 +1,5 @@
-import { env } from "cloudflare:workers"
 import { DatabaseSync } from "node:sqlite"
+import { env } from "cloudflare:workers"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
 import { isSameAsLatest } from "@/lib/server/edge/get-module-snapshot"
@@ -71,5 +71,28 @@ describe("isSameAsLatest", () => {
     } finally {
       db.close()
     }
+  })
+
+  it("ignores case and punctuation noise between semesters", async () => {
+    const first = vi.fn().mockResolvedValue({
+      title: "Accounting for Decision Making & Control",
+      description: "Support management's goals",
+      au: "3",
+      grade_type: null
+    })
+    env.DB = {
+      prepare: () => ({ bind: () => ({ first }) })
+    } as unknown as D1Database
+
+    expect(
+      await isSameAsLatest("SC1001", {
+        ...snapshot,
+        moduleData: {
+          ...snapshot.moduleData,
+          title: "Accounting For Decision Making & Control",
+          description: "Support management?s goals"
+        }
+      })
+    ).toBe(true)
   })
 })

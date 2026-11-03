@@ -10,26 +10,26 @@ npx wrangler deploy --config dist/server/wrangler.json
 
 ```mermaid
 flowchart LR
-    PUSH[Push] --> WB[Workers Builds<br/>pnpm install + pnpm build]
+    PUSH[Push] --> WB[Workers Builds<br/>install + pnpm build]
     WB -- main --> PROD["wrangler deploy<br/>(production)"]
     WB -- other branch --> PREV["wrangler preview<br/>(Access-protected)"]
 ```
 
 ## Build settings
 
-Production and previews use the Workers Builds install (a full `pnpm install --frozen-lockfile`, so its dependency cache applies) and the plain `pnpm build`. Nothing is customised: no `--prod`, no `NODE_ENV`, no `SKIP_DEPENDENCY_INSTALL`. The build does not need devDependencies, but Workers Builds installs before it runs the build command, so skipping them would only add a second install. Everything the build runs (`astro`, `tailwindcss`, `tsx`, `wrangler`, `@posthog/cli`) is in `dependencies`; leave it there.
+Production skips the automatic dependency install with the build variable `SKIP_DEPENDENCY_INSTALL=1`, then runs `pnpm install --prod --frozen-lockfile && pnpm build`. This installs only production dependencies in one pass. Workers Builds caches the pnpm store; keep build tools (`astro`, `tailwindcss`, `tsx`, `wrangler`, `@posthog/cli`) in `dependencies`. Previews still use the automatic full install and `pnpm build`.
 
 These settings live in the dashboard (Workers & Pages, then `ntu-mods`, Settings, Builds), not in the repository:
 
 | Setting         | Production                                               | Previews                                                  |
 | --------------- | -------------------------------------------------------- | --------------------------------------------------------- |
-| Build command   | `pnpm build`                                             | `pnpm build`                                              |
+| Build command   | `pnpm install --prod --frozen-lockfile && pnpm build`     | `pnpm build`                                              |
 | Deploy command  | `npx wrangler deploy --config dist/server/wrangler.json` | n/a                                                       |
 | Preview command | n/a                                                      | `npx wrangler preview --config dist/server/wrangler.json` |
 
-Build variables on both: `CLOUDFLARE_ACCOUNT_ID` and `PUBLIC_POSTHOG_TOKEN`. Production also sets `POSTHOG_CLI_API_KEY` (a personal API key with the error tracking write and organization read scopes) and `POSTHOG_CLI_PROJECT_ID`, so error stack traces in PostHog point at real source lines ([`scripts/upload-sourcemaps.mjs`](../scripts/upload-sourcemaps.mjs)).
+Build variables on both: `CLOUDFLARE_ACCOUNT_ID` and `PUBLIC_POSTHOG_TOKEN`. Production also sets `SKIP_DEPENDENCY_INSTALL=1`, `POSTHOG_CLI_API_KEY` (a personal API key with the error tracking write and organization read scopes) and `POSTHOG_CLI_PROJECT_ID`, so error stack traces in PostHog point at real source lines ([`scripts/upload-sourcemaps.mjs`](../scripts/upload-sourcemaps.mjs)).
 
-Measured on Workers Builds (October 2026): about 1m 40s to 3m 10s per build. The install phase takes 1 to 1m 40s depending on whether the dependency cache restores, the build itself 17 to 40s, and the deploy 9 to 47s.
+Before the production-only install change, measured on Workers Builds (October 2026): about 1m 40s to 3m 10s per build. The install phase takes 1 to 1m 40s depending on whether the dependency cache restores, the build itself 17 to 40s, and the deploy 9 to 47s.
 
 ## Preview deployments
 

@@ -10,6 +10,8 @@ import { ToolError } from "@/lib/webmcp/core"
 export type Args = Record<string, unknown>
 
 export const MODULE_CODE = /^[A-Z0-9]{2,12}$/
+const LEVEL = /^[1-7]$/ // e.g. "1" through "7"
+const SCHOOL = /^[A-Z0-9]{2,8}$/ // e.g. "CSC"
 export const MAX_QUERY_LENGTH = 100
 const CATEGORIES = ["CORE", "GLOAD", "MLOAD", "GERP", "CNY", "USP"]
 const KNOWN_SEMESTERS = new Set(SEMESTERS.map((s) => s.code))
@@ -67,11 +69,11 @@ export function searchFilters(args: Args) {
     throw new ToolError(`category must be one of ${CATEGORIES.join(", ")}.`)
   }
   const level = String(args.level ?? "all")
-  if (level !== "all" && !/^[1-7]$/.test(level)) {
+  if (level !== "all" && !LEVEL.test(level)) {
     throw new ToolError("level must be a digit from 1 to 7.")
   }
   const code = args.school ? String(args.school).toUpperCase() : ""
-  if (code && !/^[A-Z0-9]{2,8}$/.test(code)) {
+  if (code && !SCHOOL.test(code)) {
     throw new ToolError("school must be a school code such as CSC or EEE.")
   }
   const school = code && code !== "ALL" ? code : "all"

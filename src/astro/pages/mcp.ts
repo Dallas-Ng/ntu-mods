@@ -15,13 +15,13 @@ export const prerender = false
 // The ASSETS binding is fetched with the origin the request came in on: the
 // dev server refuses any other host. Set per request; it is the same host for
 // every request an isolate serves, so interleaved requests cannot disagree.
-let origin = new URL("https://ntumods.com")
+let origin = "https://ntumods.com"
 
 // Built once per isolate so the memoised data files survive between requests.
 const endpoint = createMcpEndpoint(
   createMcpHandlers({
     async loadAsset(path) {
-      const res = await env.ASSETS.fetch(new URL(path, origin))
+      const res = await env.ASSETS.fetch(`${origin}${path}`)
       if (res.status === 404) return null
       if (!res.ok) throw new Error(`${path} ${res.status}`)
       return res.json()
@@ -50,6 +50,6 @@ const endpoint = createMcpEndpoint(
 
 // ALL, so GET and DELETE reach the endpoint and get a proper 405.
 export const ALL: APIRoute = ({ request, url }) => {
-  origin = new URL(url.origin)
-  return endpoint(request)
+  origin = url.origin
+  return endpoint(request, url.origin)
 }

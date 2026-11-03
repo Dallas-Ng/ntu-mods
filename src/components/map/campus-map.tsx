@@ -41,6 +41,9 @@ import {
 import { PlaceIcon } from "@/components/map/category-icons"
 import { MapMenu } from "@/components/map/map-menu"
 
+const PARENTHESISED_SUFFIX = /\s*\(.*?\)\s*$/ // e.g. "North Spine (NS)" -> " (NS)"
+const ROOM_PREFIX = /^[A-Z0-9.]+-/ // e.g. "NS1-01" -> "NS1-"
+
 export interface Pin {
   id: string
   x: number
@@ -688,7 +691,7 @@ const CampusMap = ({
         key: `h:${h.id}`,
         x,
         y: y + 22,
-        text: h.label.replace(/\s*\(.*?\)\s*$/, ""),
+        text: h.label.replace(PARENTHESISED_SUFFIX, ""),
         prio: 70,
         cls: "font-semibold"
       })
@@ -748,7 +751,7 @@ const CampusMap = ({
         key: `l:${l.id}`,
         x,
         y: y + 13,
-        text: l.n.replace(/\s*\(.*?\)\s*$/, ""),
+        text: l.n.replace(PARENTHESISED_SUFFIX, ""),
         prio: l.c === "hall" ? 30 : 10,
         cls: "",
         muted: true
@@ -1545,8 +1548,8 @@ const RoomLabels = ({
         return null
       const text =
         r.v ??
-        ((r.n ?? "").replace(/\s*\(.*?\)\s*$/, "") ||
-          (r.c ?? "").replace(/^[A-Z0-9.]+-/, ""))
+        ((r.n ?? "").replace(PARENTHESISED_SUFFIX, "") ||
+          (r.c ?? "").replace(ROOM_PREFIX, ""))
       if (!text || (x1 - x0) / mpp < text.length * 5 + 8) return null
       return (
         <text key={r.i} x={(x0 + x1) / 2} y={(y0 + y1) / 2}>

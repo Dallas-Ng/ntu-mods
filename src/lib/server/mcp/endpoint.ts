@@ -56,7 +56,10 @@ export function createMcpEndpoint(handlers: McpHandlers) {
     onerror: (error) => console.error("[mcp] protocol error", error.message)
   })
 
-  return async function handle(request: Request): Promise<Response> {
+  return async function handle(
+    request: Request,
+    origin?: string
+  ): Promise<Response> {
     // Kill switch: a Worker secret, so it survives deploys and flips in
     // seconds from the dashboard, with no build and no paid plan.
     if (env.MCP_DISABLED) {
@@ -76,7 +79,7 @@ export function createMcpEndpoint(handlers: McpHandlers) {
     }
     // Required by the MCP spec against DNS rebinding. Vendor servers and CLI
     // clients send no Origin, so they pass.
-    if (isCrossSite(request))
+    if (isCrossSite(request, origin))
       return reply(403, "Cross-site requests are not allowed.")
 
     const limited = await rateLimit("MCP_LIMITER", request)

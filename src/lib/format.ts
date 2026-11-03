@@ -1,5 +1,9 @@
+const TITLE_CHARS = /[^a-zA-Z ]/g // e.g. "Maths 2!" -> "2" and "!"
+const WHITESPACE = /\s+/g // e.g. "A  B" -> "  "
+const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})/ // e.g. "2026-11-03"
+
 export const formatTitle = (courseTitle: string) => {
-  return courseTitle.replace(/[^a-zA-Z ]/g, "").replace(/\s+/g, " ")
+  return courseTitle.replace(TITLE_CHARS, "").replace(WHITESPACE, " ")
 }
 
 export function formatHhmm(hhmm: number): string {
@@ -48,7 +52,7 @@ const MONTHS = [
  * returned unchanged.
  */
 const formatDate = (date: string, short: boolean) => {
-  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(date)
+  const match = ISO_DATE.exec(date)
   const month = match && MONTHS[Number(match[2]) - 1]
   if (!month) return date
   return `${Number(match[3])} ${short ? month.slice(0, 3) : month} ${match[1]}`

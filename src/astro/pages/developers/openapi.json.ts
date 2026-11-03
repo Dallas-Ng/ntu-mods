@@ -6,8 +6,10 @@ import { getLatestExamSemester, getLatestSemester } from "@/lib/server/db/repo"
 export const prerender = true
 
 export const GET: APIRoute = async () => {
-  const { year, semester } = await getLatestSemester()
-  const exams = await getLatestExamSemester()
+  const [{ year, semester }, exams] = await Promise.all([
+    getLatestSemester(),
+    getLatestExamSemester()
+  ])
 
   return new Response(
     JSON.stringify(

@@ -25,6 +25,12 @@ const MAX_NAME_LENGTH = 40
 const MAX_LABEL_LENGTH = 30
 const MAX_TYPE_LENGTH = 20
 const MAX_VENUE_LENGTH = 60
+const BASE64_PLUS = /\+/g
+const BASE64_SLASH = /\//g
+const BASE64_PADDING = /=+$/
+const URL_BASE64_DASH = /-/g
+const URL_BASE64_UNDERSCORE = /_/g
+const MODULE_CODE = /^[A-Z0-9]{2,12}$/ // e.g. "SC1001"
 
 type EncodedSession = [
   type: string,
@@ -52,11 +58,16 @@ const toBase64Url = (input: string): string => {
   const bytes = new TextEncoder().encode(input)
   let binary = ""
   for (const byte of bytes) binary += String.fromCharCode(byte)
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "")
+  return btoa(binary)
+    .replace(BASE64_PLUS, "-")
+    .replace(BASE64_SLASH, "_")
+    .replace(BASE64_PADDING, "")
 }
 
 const fromBase64Url = (input: string): string => {
-  const base64 = input.replace(/-/g, "+").replace(/_/g, "/")
+  const base64 = input
+    .replace(URL_BASE64_DASH, "+")
+    .replace(URL_BASE64_UNDERSCORE, "/")
   const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4)
   const binary = atob(padded)
   const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0))
@@ -204,7 +215,7 @@ const decodeTimetable = (raw: unknown): Timetable => {
   for (const [key, value] of Object.entries(raw as Record<string, unknown>)) {
     if (Object.keys(timetable).length >= MAX_MODULES) break
     if (typeof value !== "string") continue
-    if (!/^[A-Z0-9]{2,12}$/.test(key)) continue
+    if (!MODULE_CODE.test(key)) continue
     timetable[key] = value.slice(0, 20)
   }
   return timetable

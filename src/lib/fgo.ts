@@ -31,6 +31,12 @@ const ROW_RE =
   /^\*?\s*([A-Z]{2,5}\d{1,4}[A-Z]?)\s+(?:(.*?)\s*)?(?<!\d)(\d{1,2}\.\d)\s+([A-Z][A-Za-z+-]*)(?:\s+\d{1,2}\.\d{1,2})?$/
 const CGPA_RE = /Cumulative Grade Point Average\s*:\s*(\d\.\d+)/i
 
+const WHITESPACE_RE = /\s+/g // e.g. "A  B" -> "  "
+const UPPERCASE_RE = /[A-Z]/g // e.g. "Ab3" -> "A"
+const LOWERCASE_RE = /[a-z]/g // e.g. "Ab3" -> "b"
+const DIGIT_RE = /\d/g // e.g. "Ab3" -> "3"
+const REPEATED_CHAR_RE = /(.)\1+/g // e.g. "AAA" -> "AAA"
+
 export type ModStatus =
   /** Letter grade that counts towards CGPA. */
   | "graded"
@@ -62,7 +68,7 @@ export function parseTranscriptLines(lines: string[]): ParsedTranscript {
   let statedCgpa: number | null = null
 
   for (const raw of lines) {
-    const line = raw.replace(/\s+/g, " ").trim()
+    const line = raw.replace(WHITESPACE_RE, " ").trim()
     const cgpa = CGPA_RE.exec(line)
     if (cgpa) statedCgpa = Number(cgpa[1])
 
@@ -290,12 +296,12 @@ export function transcriptDiagnostics(lines: string[]): TranscriptDiagnostics {
   const text = lines.join("\n")
   const shape = (l: string) =>
     l
-      .replace(/\s+/g, " ")
+      .replace(WHITESPACE_RE, " ")
       .trim()
-      .replace(/[A-Z]/g, "A")
-      .replace(/[a-z]/g, "a")
-      .replace(/\d/g, "9")
-      .replace(/(.)\1+/g, "$1")
+      .replace(UPPERCASE_RE, "A")
+      .replace(LOWERCASE_RE, "a")
+      .replace(DIGIT_RE, "9")
+      .replace(REPEATED_CHAR_RE, "$1")
       .slice(0, 40)
   const codeLines = lines.filter((l) => CODE_LINE_RE.test(l))
   return {
@@ -307,7 +313,7 @@ export function transcriptDiagnostics(lines: string[]): TranscriptDiagnostics {
     unmatched_shapes: [
       ...new Set(
         codeLines
-          .filter((l) => !ROW_RE.test(l.replace(/\s+/g, " ").trim()))
+          .filter((l) => !ROW_RE.test(l.replace(WHITESPACE_RE, " ").trim()))
           .map(shape)
       )
     ].slice(0, 3)
@@ -340,12 +346,13 @@ export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
   const info: TranscriptInfo = { bytes: file.size }
   let stage: TranscriptStage = "load_pdf"
   try {
-    const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs")
-    const { default: PdfWorker } =
-      await import("pdfjs-dist/legacy/build/pdf.worker.min.mjs?worker")
+    const [pdfjs, { default: PdfWorker }, data] = await Promise.all([
+      import("pdfjs-dist/legacy/build/pdf.mjs"),
+      import("pdfjs-dist/legacy/build/pdf.worker.min.mjs?worker"),
+      file.arrayBuffer()
+    ])
     pdfjs.GlobalWorkerOptions.workerPort = new PdfWorker()
-    const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() })
-      .promise
+    const pdf = await pdfjs.getDocument({ data }).promise
     info.pages = pdf.numPages
     stage = "extract_text"
     const lines: string[] = []

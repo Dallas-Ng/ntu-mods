@@ -70,6 +70,32 @@ beforeEach(() => {
 })
 
 describe("timetable tools", () => {
+  it("keeps edits made while module data is loading", async () => {
+    let releaseModules!: (response: Response) => void
+    const modulesResponse = new Promise<Response>((resolve) => {
+      releaseModules = resolve
+    })
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((url: string) => {
+        if (url.endsWith("/modules.json")) return modulesResponse
+        return Promise.resolve(Response.json(indexes))
+      })
+    )
+
+    const pending = h.add_module_to_timetable({ code: "BB1002" })
+    useBoundState.getState().updateTimetable({ AA1001: "100" }, 0)
+    releaseModules(Response.json({ modules }))
+
+    const result = (await pending) as { index: string; clashesWith: string[] }
+    expect(result.index).toBe("201")
+    expect(result.clashesWith).toEqual([])
+    expect(useBoundState.getState().timetables[0]).toEqual({
+      AA1001: "100",
+      BB1002: "201"
+    })
+  })
+
   it("picks a non-clashing index when none is given", async () => {
     await h.add_module_to_timetable({ code: "aa1001" })
     const result = (await h.add_module_to_timetable({ code: "BB1002" })) as {

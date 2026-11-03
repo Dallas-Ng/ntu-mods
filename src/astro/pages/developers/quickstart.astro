@@ -7,8 +7,10 @@ import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
 
 export const prerender = true
 
-const { year, semester } = await getLatestSemester()
-const exams = await getLatestExamSemester()
+const [{ year, semester }, exams] = await Promise.all([
+  getLatestSemester(),
+  getLatestExamSemester()
+])
 const sem = `${year}_${semester}`
 const examSem = exams ? `${exams.year}_${exams.semester}` : sem
 const base = siteConfig.url

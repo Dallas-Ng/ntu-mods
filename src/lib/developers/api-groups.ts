@@ -9,8 +9,10 @@ import type { ApiGroup } from "@/components/developers/api-explorer"
 type Schema = Record<string, any>
 
 export async function getApiGroups(): Promise<ApiGroup[]> {
-  const { year, semester } = await getLatestSemester()
-  const exams = await getLatestExamSemester()
+  const [{ year, semester }, exams] = await Promise.all([
+    getLatestSemester(),
+    getLatestExamSemester()
+  ])
   const spec = buildOpenApi({
     indexSemester: `${year}_${semester}`,
     examSemester: exams ? `${exams.year}_${exams.semester}` : null

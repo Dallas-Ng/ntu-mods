@@ -46,6 +46,9 @@ import { snapshotFingerprint } from "@/lib/sitemap-policy"
  * needs reverting.
  */
 const TITLE_CHUNK = 90
+const YEAR = /^\d{4}$/ // e.g. "2026"
+const SEMESTER = /^[12ST]$/ // e.g. "1", "2", "S" or "T"
+const CODE = /^[A-Z0-9]{2,12}$/ // e.g. "SC1001"
 
 export interface ModuleSnapshot {
   moduleData: DbModule
@@ -82,17 +85,17 @@ function getLatestSem(db: D1Database): Promise<string | null> {
 }
 
 export async function getModuleSnapshot(
-  _requestUrl: URL,
   code: string,
   year: string,
   semester: string,
-  includeDetails = true
+  includeDetails = true,
+  knownModuleLatest?: string
 ): Promise<ModuleSnapshot | null> {
   // These come straight off the URL. They are bound as query parameters rather
   // than interpolated, so this is not an injection guard — it rejects
   // nonsense cheaply before spending five D1 round trips on it.
-  if (!/^\d{4}$/.test(year) || !/^[12ST]$/.test(semester)) return null
-  if (!/^[A-Z0-9]{2,12}$/.test(code)) return null
+  if (!YEAR.test(year) || !SEMESTER.test(semester)) return null
+  if (!CODE.test(code)) return null
 
   const db = env.DB
   if (!db) return null
@@ -112,7 +115,11 @@ export async function getModuleSnapshot(
       .prepare(
         includeDetails
           ? OFFERING_SQL
-          : "SELECT * FROM offerings WHERE code = ? AND sem = ?"
+          : `SELECT code, title, au, categories, description, grade_type,
+                   not_available_to_programme, not_available_to_all_programme_with,
+                   not_available_as_bdeue_to_programme, not_available_as_core_to_programme,
+                   not_available_as_pe_to_programme, mutually_exclusive_with, extras
+              FROM offerings WHERE code = ? AND sem = ?`
       )
       .bind(code, sem)
       .first<DbOfferingRow>(),
@@ -129,7 +136,9 @@ export async function getModuleSnapshot(
     db.prepare(OFFERING_SLOTS_SQL).bind(code, sem).all<DbSlotRow>(),
     db.prepare(OFFERING_EXAM_SQL).bind(code, sem).first<DbExamRow>(),
     getLatestSem(db),
-    db.prepare(MODULE_LATEST_SEM_SQL).bind(code).first<DbSemesterRow>()
+    knownModuleLatest === undefined
+      ? db.prepare(MODULE_LATEST_SEM_SQL).bind(code).first<DbSemesterRow>()
+      : Promise.resolve({ sem: knownModuleLatest })
   ])
 
   if (!offering) return null
@@ -156,11 +165,7 @@ export async function getModuleIndexes(
   year: string,
   semester: string
 ): Promise<Record<string, Index[]> | null> {
-  if (
-    !/^[A-Z0-9]{2,12}$/.test(code) ||
-    !/^\d{4}$/.test(year) ||
-    !/^[12ST]$/.test(semester)
-  )
+  if (!CODE.test(code) || !YEAR.test(year) || !SEMESTER.test(semester))
     return null
   const db = env.DB
   if (!db) return null
@@ -240,7 +245,7 @@ export interface ModuleFullSnapshot extends ModuleSnapshot {
 export async function getLatestModuleSnapshot(
   code: string
 ): Promise<ModuleFullSnapshot | null> {
-  if (!/^[A-Z0-9]{2,12}$/.test(code)) return null
+  if (!CODE.test(code)) return null
 
   const db = env.DB
   if (!db) return null
@@ -251,16 +256,9 @@ export async function getLatestModuleSnapshot(
     .first<DbSemesterRow>()
   if (!latest) return null
 
-  const snapshot = await getModuleSnapshot(
-    new URL("http://internal/"),
-    code,
-    latest.year,
-    latest.semester
-  )
-  if (!snapshot) return null
-
-  const [otherSemesters, requiresRows, requiredByRows, relatedRows] =
+  const [snapshot, otherSemesters, requiresRows, requiredByRows, relatedRows] =
     await Promise.all([
+      getModuleSnapshot(code, latest.year, latest.semester, true, latest.sem),
       db
         .prepare(MODULE_OTHER_SEMESTERS_SQL)
         .bind(code, latest.sem)
@@ -275,6 +273,7 @@ export async function getLatestModuleSnapshot(
         .bind(latest.sem, `${code.slice(0, 2)}%`, code)
         .all<{ code: string; title: string }>()
     ])
+  if (!snapshot) return null
 
   const requires = (requiresRows.results ?? []).map((r) => r.code).sort()
   const requiredBy = (requiredByRows.results ?? []).map((r) => r.code).sort()

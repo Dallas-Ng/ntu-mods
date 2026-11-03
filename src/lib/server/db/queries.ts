@@ -28,7 +28,7 @@
  * inserted" wrong.
  */
 export const LATEST_SEMESTER_SQL = `
-  SELECT sem, code, year, semester, name
+  SELECT sem
     FROM semesters
    WHERE EXISTS (SELECT 1 FROM offerings o WHERE o.sem = semesters.sem)
    ORDER BY sort_key DESC

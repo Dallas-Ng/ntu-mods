@@ -4,6 +4,8 @@ import { filterModules } from "@/lib/filter-modules"
 // Pure helpers shared by the browser WebMCP handlers and the worker's /mcp
 // handlers, so both search, filter and describe data the same way.
 
+const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/ // e.g. "2026-11-03"
+
 export const DAYS = [
   "Online/TBA",
   "Mon",
@@ -28,7 +30,7 @@ export const describeSlot = (slot: Index) => ({
 export function normaliseDate(value: string): string {
   const v = value.trim()
   if (!v) return ""
-  const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v)
+  const iso = ISO_DATE.exec(v)
   if (iso) {
     const month = new Date(
       Date.UTC(2000, Number(iso[2]) - 1, 1)

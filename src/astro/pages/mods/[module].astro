@@ -47,15 +47,23 @@ if (!current) return new Response(null, { status: 404 })
 
 const { year, semester } = current
 
-const [allMeta, indexes, exam, prereqGraph, prereqNode, allSemesters] =
-  await Promise.all([
-    getAllModuleMetadata(year, semester),
-    getModuleIndexesData(moduleKey, year, semester),
-    getModuleExamData(moduleKey, year, semester),
-    getPrerequisiteGraph(),
-    getModulePrerequisites(moduleKey),
-    getModuleSemesters(moduleKey)
-  ])
+const [
+  allMeta,
+  indexes,
+  exam,
+  prereqGraph,
+  prereqNode,
+  allSemesters,
+  knownCodes
+] = await Promise.all([
+  getAllModuleMetadata(year, semester),
+  getModuleIndexesData(moduleKey, year, semester),
+  getModuleExamData(moduleKey, year, semester),
+  getPrerequisiteGraph(),
+  getModulePrerequisites(moduleKey),
+  getModuleSemesters(moduleKey),
+  getAllModuleCodes()
+])
 
 const moduleData = allMeta[moduleKey]
 if (!moduleData) return new Response(null, { status: 404 })
@@ -78,7 +86,6 @@ const related = Object.values(allMeta)
 
 const { title, description } = buildModuleMeta(moduleKey, moduleData)
 const relatedArticles = buildRelatedArticles(moduleData)
-const knownCodes = await getAllModuleCodes()
 ---
 
 <BaseLayout

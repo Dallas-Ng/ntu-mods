@@ -39,9 +39,9 @@ export async function rateLimit(
  * site; requests without Origin (curl, server code) pass and are left to the
  * rate limit.
  */
-export function isCrossSite(request: Request): boolean {
+export function isCrossSite(request: Request, requestOrigin?: string): boolean {
   const origin = request.headers.get("origin")
-  return !!origin && origin !== new URL(request.url).origin
+  return !!origin && origin !== (requestOrigin ?? new URL(request.url).origin)
 }
 
 /** True when the declared body is larger than `max` bytes. */

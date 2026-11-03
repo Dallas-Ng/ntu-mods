@@ -47,8 +47,15 @@ import type { WebMcpToolName } from "./definitions"
 
 type Args = Record<string, unknown>
 
-const MODULE_CODE = /^[A-Z0-9]{2,12}$/
+const MODULE_CODE = /^[A-Z0-9]{2,12}$/ // e.g. "SC1001"
 const PLAN_COUNT = 5
+const YEAR = /^\d{4}$/ // e.g. "2026"
+const SEMESTER = /^[12ST]$/ // e.g. "1", "2", "S" or "T"
+const FIXED_TIME = /^\d{4}-\d{4}$/ // e.g. "0830-0920"
+const MODULE_PATH = /^\/mods\/([A-Z0-9]+)/i // e.g. "/mods/SC1001" -> "SC1001"
+const CLOCK_TIME = /^(\d{1,2})[.:](\d{2})\s*(am|pm)$/i // e.g. "9.00 am" -> "9", "00", "am"
+const ALLOWED_PATH =
+  /^\/(?:(?:timetable|mods|exams|tools|articles|faq|links|changelog|settings|screenshot|privacy|feedback|ai-instructions|sitemap)(?:\/[A-Za-z0-9_-]+){0,3})?(?:\?[A-Za-z0-9_\-=&.%]*)?$/ // e.g. "/mods/SC1001"
 
 const store = () => useBoundState.getState()
 
@@ -82,7 +89,7 @@ const semesterOf = (args: Args) => {
   }
   const year = String(args.year ?? latestYear)
   const semester = String(args.semester ?? latestSemester)
-  if (!/^\d{4}$/.test(year) || !/^[12ST]$/.test(semester)) {
+  if (!YEAR.test(year) || !SEMESTER.test(semester)) {
     throw new ToolError(
       "year must be like 2026 and semester one of 1, 2, S, T."
     )
@@ -94,8 +101,7 @@ const semesterOf = (args: Args) => {
   }
 }
 
-const hasFixedTime = (slot: Index) =>
-  slot.day > 0 && /^\d{4}-\d{4}$/.test(slot.time)
+const hasFixedTime = (slot: Index) => slot.day > 0 && FIXED_TIME.test(slot.time)
 
 /** Ask the user before something destructive; the agent cannot answer for them. */
 function confirmWithUser(message: string) {
@@ -155,13 +161,13 @@ interface PlanEntry {
 }
 
 async function loadPlan(planIndex: number) {
-  const state = store()
-  const timetable = state.timetables[planIndex] ?? {}
-  const customCourses = state.customCourses[planIndex] ?? []
   const [modules, indexes] = await Promise.all([
     loadModules(),
     loadLatestIndexes()
   ])
+  const state = store()
+  const timetable = state.timetables[planIndex] ?? {}
+  const customCourses = state.customCourses[planIndex] ?? []
   const byCode = new Map(modules.map((m) => [m.code, m]))
   const customIndexes = customCoursesToAllIndexes(customCourses)
 
@@ -229,7 +235,7 @@ function findClashes(entries: PlanEntry[]) {
 
 /** "9.00 am" -> minutes since midnight; NaN if the format is unfamiliar. */
 const examMinutes = (value: string) => {
-  const m = /^(\d{1,2})[.:](\d{2})\s*(am|pm)$/i.exec(value.trim())
+  const m = CLOCK_TIME.exec(value.trim())
   if (!m) return NaN
   return (
     ((Number(m[1]) % 12) + (m[3].toLowerCase() === "pm" ? 12 : 0)) * 60 +
@@ -320,8 +326,10 @@ async function addModule(
   indexKey: string | undefined,
   planIndex: number
 ) {
-  const { moduleIndexes, indexes } = await requireOffered(code)
-  const plan = await loadPlan(planIndex)
+  const [{ moduleIndexes, indexes }, plan] = await Promise.all([
+    requireOffered(code),
+    loadPlan(planIndex)
+  ])
 
   let chosen = indexKey
   if (chosen !== undefined && !moduleIndexes[chosen]) {
@@ -489,7 +497,7 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
     const description = document
       .querySelector('meta[name="description"]')
       ?.getAttribute("content")
-    const module = /^\/mods\/([A-Z0-9]+)/i.exec(location.pathname)?.[1]
+    const module = MODULE_PATH.exec(location.pathname)?.[1]
     return {
       path: location.pathname + location.search,
       title: document.title,
@@ -501,9 +509,7 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
 
   navigate_to: (args) => {
     const path = String(args.path ?? "")
-    const ALLOWED =
-      /^\/(?:(?:timetable|mods|exams|tools|articles|faq|links|changelog|settings|screenshot|privacy|feedback|ai-instructions|sitemap)(?:\/[A-Za-z0-9_-]+){0,3})?(?:\?[A-Za-z0-9_\-=&.%]*)?$/
-    if (!ALLOWED.test(path)) {
+    if (!ALLOWED_PATH.test(path)) {
       throw new ToolError(
         `"${path}" is not a page on this site. See get_site_info for pages.`
       )
@@ -532,7 +538,7 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
   get_module: (args) => fetchModuleRecord(moduleCode(args)),
 
   get_current_module: () => {
-    const code = /^\/mods\/([A-Z0-9]+)/i.exec(location.pathname)?.[1]
+    const code = MODULE_PATH.exec(location.pathname)?.[1]
     if (!code) throw new ToolError("The user is not on a module page.")
     return fetchModuleRecord(code.toUpperCase())
   },
@@ -559,8 +565,10 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
   find_compatible_indexes: async (args) => {
     const code = moduleCode(args)
     const planIndex = planOf(args)
-    const { moduleIndexes } = await requireOffered(code)
-    const plan = await loadPlan(planIndex)
+    const [{ moduleIndexes }, plan] = await Promise.all([
+      requireOffered(code),
+      loadPlan(planIndex)
+    ])
     const others = plan.entries.filter((e) => e.code !== code)
 
     const rows = Object.entries(moduleIndexes).map(([index, slots]) => {

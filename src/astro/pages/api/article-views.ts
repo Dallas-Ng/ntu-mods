@@ -61,8 +61,8 @@ export const GET: APIRoute = async ({ url }) => {
 
 // Records this visitor (idempotent) and returns the unique-view count,
 // including the baseline from before the counter existed.
-export const POST: APIRoute = async ({ request }) => {
-  if (isCrossSite(request)) return json({ error: "Forbidden" }, 403)
+export const POST: APIRoute = async ({ request, url }) => {
+  if (isCrossSite(request, url.origin)) return json({ error: "Forbidden" }, 403)
   const limited = await rateLimit("VIEWS_LIMITER", request)
   if (limited) return limited
 

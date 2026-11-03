@@ -171,9 +171,11 @@ export const levelShort = (data: VenueData, z: number) => {
   return z === 0 ? "G" : /^B\d/.test(n) ? n : `L${n}`
 }
 
+const BASEMENT_LEVEL = /^B\d/ // e.g. "B2"
+
 export const levelLabel = (data: VenueData, z: number) => {
   const n = levelName(data, z)
-  return /^B\d/.test(n)
+  return BASEMENT_LEVEL.test(n)
     ? `Basement ${n.slice(1)}`
     : z === 0
       ? "Ground"

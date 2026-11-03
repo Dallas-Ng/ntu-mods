@@ -1,5 +1,5 @@
-import { env } from "cloudflare:workers"
 import { DatabaseSync } from "node:sqlite"
+import { env } from "cloudflare:workers"
 import { afterEach, describe, expect, it, vi } from "vitest"
 
 import {
@@ -20,7 +20,7 @@ describe("narrow snapshot reads", () => {
         return {
           bind: () => ({
             first: async () =>
-              sql.includes("SELECT * FROM offerings")
+              sql.includes("FROM offerings WHERE code = ? AND sem = ?")
                 ? {
                     code: "SC1001",
                     sem: "2024_1",
@@ -38,14 +38,13 @@ describe("narrow snapshot reads", () => {
         }
       }
     } as unknown as D1Database
-    const result = await getModuleSnapshot(
-      new URL("https://example.com"),
-      "SC1001",
-      "2024",
-      "1",
-      false
-    )
+    const result = await getModuleSnapshot("SC1001", "2024", "1", false)
     expect(result?.moduleData.title).toBe("Computing")
+    const offeringQuery = queries.find((sql) =>
+      sql.includes("FROM offerings WHERE code = ? AND sem = ?")
+    )
+    expect(offeringQuery).not.toContain("SELECT *")
+    expect(offeringQuery).not.toContain("faculty")
     expect(queries.some((sql) => sql.includes("FROM prerequisites"))).toBe(
       false
     )

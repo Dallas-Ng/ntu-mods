@@ -1560,7 +1560,7 @@ const ExplorePanel = ({
   const popular = useMemo(
     () =>
       Object.entries(data.venues)
-        .filter(([, v]) => v.how !== "fuzzy" && /^[A-Za-z0-9]/.test(v.name))
+        .filter(([, v]) => v.how !== "fuzzy" && ALPHANUMERIC_START.test(v.name))
         .sort((a, b) => b[1].slots - a[1].slots)
         .slice(0, 8)
         .map(([k]) => k),
@@ -1633,11 +1633,15 @@ const POPULAR_WALKS = [
 ] as const
 
 /** "Nanyang Business School (S3)" -> "Nanyang Business School". */
-const shortName = (name: string) => name.replace(/\s*\([^)]*\)\s*$/, "")
+const PARENTHESISED_SUFFIX = /\s*\([^)]*\)\s*$/ // e.g. "North Spine (NS)" -> " (NS)"
+const NAME_AND_SUFFIX = /^(.*?)\s*\(([^)]*)\)\s*$/ // e.g. "North Spine (NS)" -> "North Spine", "NS"
+const ALPHANUMERIC_START = /^[A-Za-z0-9]/ // e.g. "LT1"
+
+const shortName = (name: string) => name.replace(PARENTHESISED_SUFFIX, "")
 
 /** "Female Toilet (North Spine)" -> ["Female Toilet", "North Spine"]. */
 const splitName = (name: string): [string, string | null] => {
-  const m = name.match(/^(.*?)\s*\(([^)]*)\)\s*$/)
+  const m = name.match(NAME_AND_SUFFIX)
   return m ? [m[1], m[2]] : [name, null]
 }
 
@@ -1823,7 +1827,7 @@ const PlacePanel = ({
             (p) =>
               p.kind === "venue" &&
               p.b === place.b &&
-              /^[A-Za-z0-9]/.test(p.name)
+              ALPHANUMERIC_START.test(p.name)
           )
         )
       : []

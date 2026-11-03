@@ -25,15 +25,19 @@ export interface SiteFacts {
  * the same data the site is built from so they cannot drift out of date.
  */
 export async function getSiteFacts(): Promise<SiteFacts> {
-  const { year, semester } = await getLatestSemester()
-  const { modules, indexes } = await getSemesterCounts(year, semester)
-  const examSemester = await getLatestExamSemester()
-  const exams = examSemester
-    ? Object.keys(
-        await getSemesterExamsData(examSemester.year, examSemester.semester)
-      ).length
-    : 0
-  const articles = await getAllArticles()
+  const [current, examSemester, articles, codes] = await Promise.all([
+    getLatestSemester(),
+    getLatestExamSemester(),
+    getAllArticles(),
+    getAllModuleCodes()
+  ])
+  const [{ modules, indexes }, examsData] = await Promise.all([
+    getSemesterCounts(current.year, current.semester),
+    examSemester
+      ? getSemesterExamsData(examSemester.year, examSemester.semester)
+      : Promise.resolve({})
+  ])
+  const exams = Object.keys(examsData).length
 
   const groups = new Map<string, Article[]>()
   for (const a of articles) {
@@ -52,7 +56,7 @@ export async function getSiteFacts(): Promise<SiteFacts> {
     modules,
     indexes,
     exams,
-    uniqueModuleCodes: (await getAllModuleCodes()).length,
+    uniqueModuleCodes: codes.length,
     articles,
     articlesByCategory
   }

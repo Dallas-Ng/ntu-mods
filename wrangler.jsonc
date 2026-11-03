@@ -13,7 +13,7 @@
   // The adapter emits its own correct, self-contained wrangler.json in
   // dist/server/ after a successful build (real main + assets paths,
   // relative to dist/server/). Deploy using THAT file, not this one:
-  //   Build command:  pnpm build
+  //   Production build command: pnpm install --prod --frozen-lockfile && pnpm build
   //   Deploy command: npx wrangler deploy --config dist/server/wrangler.json
   "name": "ntu-mods",
   // Keep the production workers.dev route off — deploy re-generates

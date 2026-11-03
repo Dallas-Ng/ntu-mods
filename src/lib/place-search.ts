@@ -46,12 +46,15 @@ const SYNONYMS: Record<string, string[]> = {
   study: ["library", "lounge"]
 }
 
+const DIACRITICS = /[̀-ͯ]/g // e.g. the accent in decomposed "é"
+const NON_SEARCH_CHARS = /[^a-z0-9+]+/g // e.g. "north-spine" -> "-"
+
 const norm = (s: string) =>
   s
     .toLowerCase()
     .normalize("NFKD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/[^a-z0-9+]+/g, " ")
+    .replace(DIACRITICS, "")
+    .replace(NON_SEARCH_CHARS, " ")
     .trim()
 
 interface Indexed {

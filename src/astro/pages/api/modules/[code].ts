@@ -71,7 +71,7 @@ export const GET: APIRoute = async ({ params, url, request }) => {
 
   // Made-up codes stop here without a D1 query, so D1 work is capped at one
   // lookup per real module (then cached), however fast someone guesses codes.
-  const codes = await getKnownCodes(url)
+  const codes = await getKnownCodes(url.origin)
   if (codes && !codes.has(code)) {
     return reply({ error: `No module ${code}` }, 404, {
       "Cache-Control": MISS_CACHE

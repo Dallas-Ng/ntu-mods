@@ -9,11 +9,9 @@ import { env } from "cloudflare:workers"
  */
 let known: Promise<Set<string> | null> | undefined
 
-async function load(requestUrl: URL): Promise<Set<string> | null> {
+async function load(origin: string): Promise<Set<string> | null> {
   try {
-    const res = await env.ASSETS.fetch(
-      new URL("/data/api/module-codes.json", requestUrl)
-    )
+    const res = await env.ASSETS.fetch(`${origin}/data/api/module-codes.json`)
     if (!res.ok) return null
     const codes = (await res.json()) as string[]
     return codes.length ? new Set(codes) : null
@@ -22,8 +20,8 @@ async function load(requestUrl: URL): Promise<Set<string> | null> {
   }
 }
 
-export async function getKnownCodes(requestUrl: URL) {
-  known ??= load(requestUrl)
+export async function getKnownCodes(origin: string) {
+  known ??= load(origin)
   const codes = await known
   if (!codes) known = undefined // retry on the next request
   return codes

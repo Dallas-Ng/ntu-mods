@@ -32,12 +32,11 @@ const STRIPPED_RESPONSE_HEADERS = ["set-cookie"]
 // PostHog batches (and session recordings) are the only legitimate bodies.
 const MAX_BODY_BYTES = 5_000_000
 
-const handler: APIRoute = async ({ params, request }) => {
+const handler: APIRoute = async ({ params, request, url }) => {
   if (bodyTooLarge(request, MAX_BODY_BYTES)) {
     return new Response("Request too large", { status: 413 })
   }
   const path = params.path ?? ""
-  const url = new URL(request.url)
   const target = targetFor(path) + url.search
 
   const headers = new Headers(request.headers)

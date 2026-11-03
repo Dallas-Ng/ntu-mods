@@ -20,10 +20,10 @@ function json(body: unknown, status: number) {
 // Feedback text plus the optional local-data dump, with room for JSON escaping.
 const MAX_BODY_BYTES = 500_000
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, url: requestUrl }) => {
   // Each accepted request sends an email, so refuse cross-site, oversized and
   // repeated posts before doing any work.
-  if (isCrossSite(request))
+  if (isCrossSite(request, requestUrl.origin))
     return json({ success: false, error: "Forbidden" }, 403)
   if (bodyTooLarge(request, MAX_BODY_BYTES)) {
     return json({ success: false, error: "Request too large" }, 413)

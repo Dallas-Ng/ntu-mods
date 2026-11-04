@@ -45,9 +45,7 @@ const WORKTREE_ROOTS = (() => {
   }
 })()
 
-// Same WORKERS_CI/CF_PAGES signal used in scripts/indexnow.mjs to detect a
-// real Cloudflare deploy vs a local `pnpm build` — not the commit's git
-// branch or any account/zone info, just "was this built by CI".
+// Distinguish Cloudflare CI builds from local builds.
 const BUILD_ENV =
   process.env.WORKERS_CI === "1" || process.env.CF_PAGES === "1"
     ? "ci"

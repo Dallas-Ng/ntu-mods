@@ -157,10 +157,7 @@ const Navbar = () => {
                 return (
                   <NavigationMenu.Item key={link.route}>
                     <NavigationMenu.Link asChild>
-                      <a
-                        href={link.route}
-                        data-astro-prefetch="hover"
-                        className={itemClass}>
+                      <a href={link.route} className={itemClass}>
                         {link.label}
                         {dot}
                       </a>
@@ -232,7 +229,6 @@ const Navbar = () => {
                   <DrawerClose key={link.route} asChild>
                     <a
                       href={link.route}
-                      data-astro-prefetch="tap"
                       className={cn(
                         "hover:bg-accent flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium transition-colors",
                         pathname.includes(link.route)

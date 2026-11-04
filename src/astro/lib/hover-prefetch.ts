@@ -5,6 +5,7 @@
 // worker requests"). An untagged fetch is served from the edge cache like any
 // other request and honours the long Cache-Control on prerendered pages.
 const seen = new Set<string>()
+const moduleSnapshotPath = /^\/mods\/[^/]+\/\d{4}\/[12ST]\/?$/i
 let timer: number | undefined
 
 const conn = (navigator as { connection?: { saveData?: boolean } }).connection
@@ -16,6 +17,9 @@ function prefetch(target: EventTarget | null) {
   if (a.dataset.noPrefetch !== undefined) return
   const url = new URL(a.href, location.href)
   if (url.origin !== location.origin) return
+  // Semester snapshots can trigger a Worker render and D1 reads on a miss.
+  // Fetch them when the visitor follows the link.
+  if (moduleSnapshotPath.test(url.pathname)) return
   if (url.pathname === location.pathname && url.search === location.search)
     return
   if (seen.has(url.pathname + url.search)) return

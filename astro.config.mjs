@@ -110,10 +110,9 @@ export default defineConfig({
   // (src/lib/hast-figure.mjs). Sätteri is Astro's default Markdown processor;
   // it is named here only to attach the plugin.
   markdown: { processor: satteri({ hastPlugins: [hastFigure] }) },
-  // Hover-triggered prefetch of same-origin links — pairs with the long
-  // edge/browser Cache-Control on prerendered pages (public/_headers), so
-  // prefetched navigations are cheap cache hits, not fresh renders.
-  prefetch: { prefetchAll: true, defaultStrategy: "hover" },
+  // Astro's built-in prefetch is off: its <link rel="prefetch"> requests get a
+  // 503 from Cloudflare. src/astro/lib/hover-prefetch.ts does it with fetch().
+  prefetch: false,
   // "ignore", not "never": with "never" Astro 308-redirects every request that
   // ends in "/", including PostHog's POSTs to /ingest/e/, so each analytics
   // event cost two Worker invocations. src/astro/middleware.ts now redirects

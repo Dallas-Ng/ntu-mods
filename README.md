@@ -13,6 +13,15 @@
 
 ![NTUMods banner](/public/og-image.png)
 
+## NTUMods in numbers
+
+- **139,000 visitors** and **114,000 recorded module searches** from May to November 2026.
+- **31,000 active visitors** over 30 days ending in November 2026.
+- **2,400 completed generator runs** and **78,000 timetable options** from October to November 2026.
+- **116,000 organic Google Search clicks** and **2.49 million impressions** from July 2025 to November 2026.
+
+Figures are rounded. PostHog counts distinct visitor IDs on ntumods.com. Search figures come from Google Search Console.
+
 **Quick links**
 
 - [Features](#features)

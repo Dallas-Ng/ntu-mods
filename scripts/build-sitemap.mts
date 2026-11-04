@@ -5,6 +5,7 @@
 // module pages stay out of the sitemap even though the routes still resolve (a
 // crawl-budget decision, not a routing one).
 import { execFileSync } from "child_process"
+import { createHash } from "node:crypto"
 import fs from "fs/promises"
 import path from "path"
 import { fileURLToPath } from "url"
@@ -22,6 +23,8 @@ const SITE_URL = process.env.SITE_URL || "https://ntumods.com"
 const SITEMAP_SIZE = 5000
 const OUT_DIR = path.join(ROOT, "dist", "client")
 
+type SitemapRoute = { loc: string; lastmod?: string; fingerprint?: string }
+
 // changefreq and priority are ignored by Google, and a lastmod that is always
 // "now" teaches it to ignore lastmod too. So lastmod is only written when a
 // real date is known: an article's frontmatter, or the git history of the
@@ -33,6 +36,9 @@ const IS_SHALLOW =
     cwd: ROOT,
     encoding: "utf8"
   }).trim() !== "false"
+
+const fingerprint = (value: unknown) =>
+  createHash("sha256").update(JSON.stringify(value)).digest("hex")
 
 const gitDates = new Map()
 function gitDate(file) {
@@ -58,7 +64,7 @@ const slugifyCategory = (category) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
 
-async function getArticleRoutes() {
+async function getArticleRoutes(): Promise<SitemapRoute[]> {
   const articlesDir = path.join(ROOT, "content/articles")
   const files = (await fs.readdir(articlesDir)).filter(
     (f) => f.endsWith(".md") && !f.startsWith("_")
@@ -66,12 +72,14 @@ async function getArticleRoutes() {
 
   const slugs = []
   const dates = new Map()
+  const fingerprints = new Map()
   const categories = new Set()
 
   for (const file of files) {
     const slug = file.replace(/\.md$/, "")
     slugs.push(slug)
     const raw = await fs.readFile(path.join(articlesDir, file), "utf-8")
+    fingerprints.set(slug, fingerprint(raw))
     const field = (name) =>
       new RegExp(`^${name}:\\s*["']?([^"'\\n]+)`, "m").exec(raw)?.[1].trim()
     const modified = field("updated") || field("date")
@@ -87,7 +95,8 @@ async function getArticleRoutes() {
   return [
     ...slugs.map((slug) => ({
       loc: `/articles/${slug}`,
-      lastmod: dates.get(slug)
+      lastmod: dates.get(slug),
+      fingerprint: fingerprints.get(slug)
     })),
     ...categorySlugs.map((slug) => ({ loc: `/articles/${slug}` }))
   ]
@@ -97,11 +106,25 @@ async function getArticleRoutes() {
 // exclusions it applied are now versionedOfferings' own filtering: excluding
 // each module's current offering (those URLs redirect to /mods/:code) and the
 // year cutoff, which drops old thin pages that read as soft 404s.
+function moduleFingerprint(code: string, year: string, semester: string) {
+  return fingerprint([
+    year,
+    semester,
+    json.getModuleMetadata(code, year, semester),
+    json.getModuleExamData(code, year, semester),
+    json.getModuleIndexesData(code, year, semester)
+  ])
+}
+
 function getModuleRoutes() {
   const modulePaths = json
     .latestOfferings()
     .filter((o) => Number(o.year) >= MODULE_YEAR_CUTOFF)
-    .map((o) => ({ loc: `/mods/${o.code}`, lastmod: semDate(o.sem) }))
+    .map((o) => ({
+      loc: `/mods/${o.code}`,
+      lastmod: semDate(o.sem),
+      fingerprint: moduleFingerprint(o.code, o.year, o.semester)
+    }))
 
   // An older snapshot matching the module's latest offering canonicalises to
   // /mods/CODE (see isSameAsLatest in get-module-snapshot.ts), so listing it
@@ -121,7 +144,8 @@ function getModuleRoutes() {
     )
     .map((o) => ({
       loc: `/mods/${o.code}/${o.year}/${o.semester}`,
-      lastmod: semDate(`${o.year}_${o.semester}`)
+      lastmod: semDate(`${o.year}_${o.semester}`),
+      fingerprint: moduleFingerprint(o.code, o.year, o.semester)
     }))
 
   return [...modulePaths, ...versionedPaths]
@@ -171,7 +195,7 @@ async function main() {
     getModuleRoutes()
   ])
 
-  const allRoutes = [
+  const allRoutes: SitemapRoute[] = [
     ...CORE_ROUTES.map((loc) => ({ loc })),
     ...articleRoutes,
     ...moduleRoutes
@@ -202,6 +226,17 @@ async function main() {
     .map((_, i) => `<sitemap><loc>${SITE_URL}/sitemap-${i}.xml</loc></sitemap>`)
     .join("\n")}\n</sitemapindex>`
   await fs.writeFile(path.join(OUT_DIR, "sitemap.xml"), indexXml)
+
+  // The deploy command reads this from the live site before replacing it.
+  // Only hashes and sitemap paths are exposed.
+  const indexNowRoutes = new Map<string, string | null>()
+  for (const { loc, fingerprint } of allRoutes) {
+    indexNowRoutes.set(loc, fingerprint ?? indexNowRoutes.get(loc) ?? null)
+  }
+  await fs.writeFile(
+    path.join(OUT_DIR, "indexnow-manifest.json"),
+    JSON.stringify(Object.fromEntries(indexNowRoutes))
+  )
 
   const robotsTxt = `# *\nUser-agent: *\nAllow: /\n\n# Host\nHost: ${SITE_URL}\n\n# Sitemaps\nSitemap: ${SITE_URL}/sitemap.xml\n`
   await fs.writeFile(path.join(OUT_DIR, "robots.txt"), robotsTxt)

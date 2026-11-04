@@ -2,16 +2,16 @@
 
 Part of [NTUMods](../README.md). System overview: [architecture.md](architecture.md). The routes that need D1 at runtime are described in [src/README.md](../src/README.md#rendering-model); seeding and verifying data is in [db/README.md](../db/README.md).
 
-The site runs on Cloudflare Workers. The root [`wrangler.jsonc`](../wrangler.jsonc) is deliberately assets-only: `@astrojs/cloudflare` emits the real, self-contained worker config after a successful build, so deploy with that one.
+The site runs on Cloudflare Workers. The root [`wrangler.jsonc`](../wrangler.jsonc) is deliberately assets-only: `@astrojs/cloudflare` emits the real, self-contained worker config after a successful build, and the production deploy command uses it.
 
 ```bash
-npx wrangler deploy --config dist/server/wrangler.json
+pnpm run deploy
 ```
 
 ```mermaid
 flowchart LR
     PUSH[Push] --> WB[Workers Builds<br/>install + pnpm build]
-    WB -- main --> PROD["wrangler deploy<br/>(production)"]
+    WB -- main --> PROD["pnpm run deploy<br/>(production)"]
     WB -- other branch --> PREV["wrangler preview<br/>(Access-protected)"]
 ```
 
@@ -24,7 +24,7 @@ These settings live in the dashboard (Workers & Pages, then `ntu-mods`, Settings
 | Setting         | Production                                               | Previews                                                  |
 | --------------- | -------------------------------------------------------- | --------------------------------------------------------- |
 | Build command   | `pnpm install --prod --frozen-lockfile && pnpm build`     | `pnpm build`                                              |
-| Deploy command  | `npx wrangler deploy --config dist/server/wrangler.json` | n/a                                                       |
+| Deploy command  | `pnpm run deploy` | n/a                                                       |
 | Preview command | n/a                                                      | `npx wrangler preview --config dist/server/wrangler.json` |
 
 Build variables on both: `CLOUDFLARE_ACCOUNT_ID` and `PUBLIC_POSTHOG_TOKEN`. Production also sets `SKIP_DEPENDENCY_INSTALL=1`, `POSTHOG_CLI_API_KEY` (a personal API key with the error tracking write and organization read scopes) and `POSTHOG_CLI_PROJECT_ID`, so error stack traces in PostHog point at real source lines ([`scripts/upload-sourcemaps.mjs`](../scripts/upload-sourcemaps.mjs)).
@@ -41,7 +41,12 @@ Pushes to non-production branches get a preview through Cloudflare [Worker Previ
 4. **Bindings and secrets:** previews do not inherit production settings. The `DB` D1 binding (the production database, which previews only read) is declared in the `previews` block of `wrangler.jsonc`, so nothing is needed in the dashboard for it. Secrets are not in config. To get the feedback form and PostHog on previews, add `RESEND_KEY` and `PUBLIC_POSTHOG_TOKEN` through the preview settings or `npx wrangler preview base-config secret put <NAME>`.
 5. **Access control:** previews are served on `*.ntumods.com`, which, unlike `workers.dev` previews, gets no automatic `X-Robots-Tag: noindex`. Protect them with Cloudflare Access instead: Settings, Domains & Routes, then **Enable Cloudflare Access** on Preview URLs (previews only, not production).
 
-Preview builds skip the IndexNow submission (`WORKERS_CI_BRANCH` is not `main`).
+IndexNow runs only from the production deploy command. Set the production deploy
+command in the Cloudflare dashboard to `pnpm run deploy`. The first deployment
+publishes a baseline without sending a batch. Later deployments compare against
+the live baseline and submit new URLs, changed module and article content, and
+sitemap removals that now redirect or return 404 or 410. Keep the preview command
+as shown above.
 
 ## Secrets
 

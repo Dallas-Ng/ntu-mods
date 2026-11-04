@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import {
+  InvalidTranscriptPdfError,
   NoTranscriptTextError,
   readTranscriptPdf,
   TranscriptReadError
@@ -41,6 +42,7 @@ function mockPdf(pages: string[][]) {
 
 const file = {
   size: 349009,
+  type: "application/pdf",
   arrayBuffer: async () => new ArrayBuffer(0)
 } as File
 
@@ -82,6 +84,22 @@ describe("readTranscriptPdf", () => {
     })
     await expect(readTranscriptPdf(file)).rejects.toBeInstanceOf(
       TranscriptReadError
+    )
+  })
+
+  it("rejects an image dropped into the upload without loading PDF.js", async () => {
+    await expect(
+      readTranscriptPdf({ ...file, type: "image/png" } as File)
+    ).rejects.toBeInstanceOf(InvalidTranscriptPdfError)
+    expect(getDocument).not.toHaveBeenCalled()
+  })
+
+  it("reports an invalid PDF as an input error", async () => {
+    const error = new Error("Invalid PDF structure.")
+    error.name = "InvalidPDFException"
+    getDocument.mockReturnValue({ promise: Promise.reject(error) })
+    await expect(readTranscriptPdf(file)).rejects.toBeInstanceOf(
+      InvalidTranscriptPdfError
     )
   })
 })

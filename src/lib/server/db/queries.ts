@@ -95,7 +95,8 @@ export const OFFERING_EXAM_SQL = `
 
 /** A code's most recent offering — mirrors moduleSemestersIndex()[0] in json-source.ts. */
 export const MODULE_LATEST_SEM_SQL = `
-  SELECT s.sem AS sem, s.year AS year, s.semester AS semester
+  SELECT s.sem AS sem, s.year AS year, s.semester AS semester,
+         o.title, o.description, o.au, o.grade_type
     FROM offerings o
     JOIN semesters s ON s.sem = o.sem
    WHERE o.code = ?

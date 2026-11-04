@@ -84,13 +84,16 @@ function getLatestSem(db: D1Database): Promise<string | null> {
   return latestSemPromise
 }
 
+type LatestOfferingRow = DbSemesterRow &
+  Pick<DbOfferingRow, "title" | "description" | "au" | "grade_type">
+
 export async function getModuleSnapshot(
   code: string,
   year: string,
   semester: string,
   includeDetails = true,
   knownModuleLatest?: string
-): Promise<ModuleSnapshot | null> {
+): Promise<(ModuleSnapshot & { canonicalToLatest: boolean }) | null> {
   // These come straight off the URL. They are bound as query parameters rather
   // than interpolated, so this is not an injection guard — it rejects
   // nonsense cheaply before spending five D1 round trips on it.
@@ -137,14 +140,17 @@ export async function getModuleSnapshot(
     db.prepare(OFFERING_EXAM_SQL).bind(code, sem).first<DbExamRow>(),
     getLatestSem(db),
     knownModuleLatest === undefined
-      ? db.prepare(MODULE_LATEST_SEM_SQL).bind(code).first<DbSemesterRow>()
-      : Promise.resolve({ sem: knownModuleLatest })
+      ? db.prepare(MODULE_LATEST_SEM_SQL).bind(code).first<LatestOfferingRow>()
+      : Promise.resolve(null)
   ])
 
   if (!offering) return null
 
+  const moduleData = toDbModule(offering, prerequisites.results ?? [])
+  const isLatestOffering = (knownModuleLatest ?? moduleLatest?.sem) === sem
+
   return {
-    moduleData: toDbModule(offering, prerequisites.results ?? []),
+    moduleData,
     indexes: toIndexes(
       slots.results ?? [],
       (indexKeys.results ?? []).map((r) => r.index_key)
@@ -155,7 +161,10 @@ export async function getModuleSnapshot(
     // so a newly listed but unscraped semester made every module render the
     // "historical snapshot" banner.
     isCurrentOffering: latestSem === sem,
-    isLatestOffering: moduleLatest?.sem === sem
+    isLatestOffering,
+    canonicalToLatest:
+      isLatestOffering ||
+      (moduleLatest !== null && isSameAsLatest(moduleData, moduleLatest))
   }
 }
 
@@ -188,33 +197,17 @@ export async function getModuleIndexes(
  * grade type as the module's latest offering. Google folds those into /mods/CODE
  * anyway ("Google chose different canonical"), so they should declare it.
  */
-export async function isSameAsLatest(
-  code: string,
-  snapshot: ModuleSnapshot
-): Promise<boolean> {
-  const db = env.DB
-  if (!db || snapshot.isLatestOffering) return false
-  const current = await db
-    .prepare(
-      `
-      SELECT o.title, o.description, o.au, o.grade_type
-        FROM offerings o
-        JOIN semesters s ON s.sem = o.sem
-       WHERE o.code = ?
-       ORDER BY s.sort_key DESC
-       LIMIT 1
-    `
-    )
-    .bind(code)
-    .first<Pick<DbOfferingRow, "title" | "description" | "au" | "grade_type">>()
-  if (!current) return false
+function isSameAsLatest(
+  moduleData: DbModule,
+  current: LatestOfferingRow
+): boolean {
   return (
     snapshotFingerprint({
       title: current.title,
       description: current.description ?? undefined,
       au: current.au,
       gradeType: current.grade_type ?? undefined
-    }) === snapshotFingerprint(snapshot.moduleData)
+    }) === snapshotFingerprint(moduleData)
   )
 }
 

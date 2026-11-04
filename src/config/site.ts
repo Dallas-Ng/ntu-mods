@@ -184,9 +184,9 @@ export const siteConfig = {
     telegram: "https://t.me/dallas_ng",
     coffee: "https://buymeacoffee.com/dallasng",
     sponsor: "https://github.com/sponsors/Dallas-Ng",
-    // Official directory listings of the MCP server. Claude's is still being
-    // published. Set openai to the listing URL once it exists.
+    // Official directory listings of the MCP server.
     claudeDirectory: "https://claude.ai/directory/ntumods",
-    openaiDirectory: null as string | null
+    openaiDirectory:
+      "https://chatgpt.com/plugins/plugin_asdk_app_6adb29ef41c88191a71fe55fc2d0aa6a"
   }
 } as const

@@ -115,7 +115,7 @@ export default defineConfig({
   // Hover-triggered prefetch of same-origin links — pairs with the long
   // edge/browser Cache-Control on prerendered pages (public/_headers), so
   // prefetched navigations are cheap cache hits, not fresh renders.
-  prefetch: { defaultStrategy: "hover" },
+  prefetch: { prefetchAll: true, defaultStrategy: "hover" },
   // "ignore", not "never": with "never" Astro 308-redirects every request that
   // ends in "/", including PostHog's POSTs to /ingest/e/, so each analytics
   // event cost two Worker invocations. src/astro/middleware.ts now redirects

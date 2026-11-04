@@ -342,7 +342,17 @@ export class NoTranscriptTextError extends Error {
   }
 }
 
+export class InvalidTranscriptPdfError extends Error {
+  constructor() {
+    super(
+      "This file is not a readable PDF. Upload the original transcript PDF."
+    )
+    this.name = "InvalidTranscriptPdfError"
+  }
+}
+
 export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
+  if (file.type.startsWith("image/")) throw new InvalidTranscriptPdfError()
   const info: TranscriptInfo = { bytes: file.size }
   let stage: TranscriptStage = "load_pdf"
   try {
@@ -383,6 +393,13 @@ export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
     return parsed
   } catch (e) {
     if (e instanceof NoTranscriptTextError) throw e
+    if (
+      stage === "load_pdf" &&
+      e instanceof Error &&
+      e.name === "InvalidPDFException"
+    ) {
+      throw new InvalidTranscriptPdfError()
+    }
     throw new TranscriptReadError(stage, e, info)
   }
 }

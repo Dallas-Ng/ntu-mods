@@ -132,6 +132,37 @@ function isInjectedError(event: {
   })
 }
 
+// A promise rejected with something that isn't an Error (a DOM event, a bare
+// object: issues #343 and #344) becomes PostHog's "<type> captured as exception
+// with keys: …" placeholder, with no message and no stack — nothing to act on.
+// Nothing here rejects with a non-Error, and every one of our catch handlers
+// passes an Error to reportError, so these come from scripts in the page.
+const NON_ERROR_VALUE = / captured as exception with keys: /
+
+function isNonErrorException(properties: Record<string, unknown>) {
+  const list = properties.$exception_list
+  if (!Array.isArray(list) || list.length === 0) return false
+  return (list as ExceptionEntry[]).every((e) => {
+    if (typeof e?.value !== "string" || !NON_ERROR_VALUE.test(e.value))
+      return false
+    // A stack means something threw a real object we could look at; keep it.
+    return (e.stacktrace?.frames ?? []).length === 0
+  })
+}
+
+/** `before_send`: true drops the event. */
+export function isNoise(event: {
+  event: string
+  properties?: Record<string, unknown>
+}) {
+  if (isInjectedError(event)) return true
+  return (
+    event.event === "$exception" &&
+    !!event.properties &&
+    isNonErrorException(event.properties)
+  )
+}
+
 async function initPosthog() {
   // Imported here rather than at the top so the SDK is only downloaded once
   // the page has loaded. track() calls made before then are queued.
@@ -143,7 +174,7 @@ async function initPosthog() {
     capture_exceptions: true,
     debug: import.meta.env.DEV,
     disable_session_recording: true,
-    before_send: (event) => (event && isInjectedError(event) ? null : event),
+    before_send: (event) => (event && isNoise(event) ? null : event),
     loaded: (ph) => {
       // Init only runs once consent is granted, but an earlier withdrawal
       // may have left PostHog's own opt-out flag set.

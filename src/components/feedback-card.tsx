@@ -1,13 +1,13 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, type SyntheticEvent } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import * as z from "zod"
 
 import { siteConfig } from "@/config/site"
 import { reportError, track, whenAnalyticsReady } from "@/lib/analytics"
+import { FeedbackFormSchema, type FeedbackForm } from "@/lib/feedback"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -24,14 +24,6 @@ import { Switch } from "@/components/ui/switch"
 import { TextLink } from "@/components/ui/text-link"
 import { Textarea } from "@/components/ui/textarea"
 
-const FormSchema = z.object({
-  email: z.optional(z.string()),
-  feedback: z
-    .string()
-    .min(10, { message: "Feedback must be at least 10 characters long." }),
-  includeLocalData: z.boolean()
-})
-
 interface Props {
   divClassName?: string
   /** Text to start the message with; a new value replaces what is typed. */
@@ -41,8 +33,8 @@ interface Props {
 const FeedbackCard = ({ divClassName, starter }: Props) => {
   const [loading, setLoading] = useState(false)
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const form = useForm<FeedbackForm>({
+    resolver: zodResolver(FeedbackFormSchema),
     defaultValues: {
       email: "",
       feedback: "",
@@ -56,7 +48,7 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
     form.setFocus("feedback")
   }, [starter, form])
 
-  const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+  const onSubmit = async (data: FeedbackForm) => {
     setLoading(true)
 
     const localData = data.includeLocalData
@@ -119,10 +111,23 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
     }
   }
 
+  // handleSubmit returns a promise that only rejects if the resolver itself
+  // throws (a validation failure resolves with field errors). Left unhandled,
+  // that surfaces as an anonymous unhandled rejection, which is how issue #353
+  // was reported, so catch it and say something the visitor can act on.
+  const submitForm = (e: SyntheticEvent<HTMLFormElement>) => {
+    void form
+      .handleSubmit(onSubmit)(e)
+      .catch((error) => {
+        toast.error("Error submitting feedback. Please try again later")
+        reportError("feedback_validate", error)
+      })
+  }
+
   return (
     <div className={cn("bg-muted rounded-2xl p-5", divClassName)}>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={submitForm} className="space-y-4">
           <FormField
             control={form.control}
             name="email"

@@ -1,6 +1,4 @@
-import { addDays, format, startOfWeek } from "date-fns"
-import { createEvents, EventAttributes } from "ics"
-
+import { createIcs, type IcsEvent } from "./ics"
 import { parseTime } from "./parse-time"
 import { latestSemester, latestYear } from "./semesters"
 
@@ -10,10 +8,31 @@ const WEEK_1_START: Record<string, string> = {
   "2026;1": "2026-08-10",
   "2026;2": "2027-01-11"
 }
-const MIN_DATE = new Date(
-  WEEK_1_START[`${latestYear};${latestSemester}`] ?? "2026-08-10"
+
+/** "2026-08-10" -> that day at 00:00 local, not UTC (which would shift the date). */
+const parseLocalDate = (isoDate: string) => {
+  const [year, month, day] = isoDate.split("-").map(Number)
+  return new Date(year, month - 1, day)
+}
+
+/** The Monday of the week containing `date`. */
+const startOfWeek = (date: Date) => {
+  const monday = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+  monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7))
+  return monday
+}
+
+const addDays = (date: Date, days: number) => {
+  const next = new Date(date)
+  next.setDate(next.getDate() + days)
+  return next
+}
+
+const WEEK_1_MONDAY = startOfWeek(
+  parseLocalDate(
+    WEEK_1_START[`${latestYear};${latestSemester}`] ?? "2026-08-10"
+  )
 )
-const WEEK_1_MONDAY = startOfWeek(MIN_DATE, { weekStartsOn: 1 })
 
 const TOTAL_TEACHING_WEEKS = 13
 // Recess Week always falls between Teaching Week 7 and Teaching Week 8,
@@ -64,6 +83,17 @@ const DEFAULT_TABLE_CELL: IcsTableCellSettings = {
 }
 
 /**
+ * Stable UID per module/index/week. Calendar apps read the same UID as the
+ * same event, so re-exporting a timetable updates events in place instead of
+ * duplicating them. Anything outside the RFC 5545 URI-safe set becomes a dash.
+ */
+const eventUid = (moduleKey: string, indexKey: string, weekNumber: number) =>
+  `${moduleKey}-${indexKey}-w${weekNumber}@ntumods.com`.replace(
+    /[^A-Za-z0-9.@_-]/g,
+    "-"
+  )
+
+/**
  * Generate an ICS calendar from a timetable.
  * @param timetable - { moduleKey: indexKey } — moduleKey covers both real
  *   modules (code) and custom blocks (customCourseModuleKey), mirroring
@@ -88,7 +118,7 @@ export const getIcs = (
   moduleRemarks: Record<string, string> = {},
   indexRemarks: Record<string, string> = {}
 ) => {
-  const events: EventAttributes[] = []
+  const events: IcsEvent[] = []
 
   for (const [moduleKey, indexKey] of Object.entries(timetable)) {
     const indexes = indexLookup[indexKey] ?? []
@@ -143,9 +173,10 @@ export const getIcs = (
           .join("\n")
 
         events.push({
-          title: eventTitle,
-          start: format(start, "yyyyMMdd'T'HHmmss"),
-          end: format(end, "yyyyMMdd'T'HHmmss"),
+          uid: eventUid(moduleKey, index.key, weekNumber),
+          summary: eventTitle,
+          start,
+          end,
           location: index.venue,
           description
         })
@@ -153,5 +184,5 @@ export const getIcs = (
     }
   }
 
-  return createEvents(events).value
+  return createIcs(events)
 }

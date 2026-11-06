@@ -104,7 +104,19 @@ export const POST: APIRoute = async ({ request, url: requestUrl }) => {
       "feedback",
       new Error(`Resend ${res.status}: ${error.slice(0, 500)}`)
     )
-    return json({ success: false, error: "Failed to send feedback" }, 500)
+    // Production visitors get a plain message. Previews are behind Cloudflare
+    // Access, so Resend's own words are only read by us, and they are the
+    // fastest way to tell a stale key from an unverified sending domain.
+    const isProduction =
+      requestUrl.hostname === "ntumods.com" ||
+      requestUrl.hostname === "www.ntumods.com"
+    const reason = isProduction
+      ? `Resend ${res.status}`
+      : `Resend ${res.status}: ${error.slice(0, 300)}`
+    return json(
+      { success: false, error: `Failed to send feedback (${reason})` },
+      500
+    )
   }
 
   // Only with an ID from the visitor's own PostHog, which exists only once

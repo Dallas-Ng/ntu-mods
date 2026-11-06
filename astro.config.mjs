@@ -172,17 +172,11 @@ export default defineConfig({
         "react/jsx-runtime",
         "react/jsx-dev-runtime",
         "posthog-js",
-        "@hookform/resolvers/zod",
         "class-variance-authority",
-        "clsx",
         "cmdk",
-        "date-fns",
-        "ics",
         "lucide-react",
         "pdfjs-dist",
-        "photoswipe",
         "radix-ui",
-        "react-hook-form",
         "shiki/core",
         "shiki/engine/javascript",
         "shiki/themes/github-light.mjs",
@@ -195,7 +189,6 @@ export default defineConfig({
         "sonner",
         "tailwind-merge",
         "vaul",
-        "zod",
         "zustand",
         "zustand/middleware"
       ]
@@ -217,7 +210,6 @@ export default defineConfig({
           // chunks instead of one file per module.
           manualChunks(id) {
             if (id.includes("node_modules")) {
-              if (id.includes("@mlc-ai/web-llm")) return "vendor-webllm"
               // One catch-all vendor chunk meant every page downloaded every
               // dependency (pdfjs, posthog, zod...) even when it used one.
               // Split the heavy ones so a page only pulls what it imports.
@@ -227,27 +219,8 @@ export default defineConfig({
                 )?.[1]
               if (pkg === "react" || pkg === "react-dom" || pkg === "scheduler")
                 return "vendor-react"
-              // Keep the GitHub stars animation out of the shared vendor bundle.
-              if (
-                [
-                  "@animate-ui/react",
-                  "motion",
-                  "motion-dom",
-                  "motion-utils",
-                  "framer-motion"
-                ].includes(pkg)
-              )
-                return "vendor-github-stars"
               if (pkg === "posthog-js") return "vendor-posthog"
               if (pkg === "pdfjs-dist") return "vendor-pdfjs"
-              if (pkg === "photoswipe") return "vendor-photoswipe"
-              if (pkg === "date-fns") return "vendor-date-fns"
-              if (
-                pkg === "zod" ||
-                pkg === "react-hook-form" ||
-                pkg === "@hookform/resolvers"
-              )
-                return "vendor-forms"
               return "vendor"
             }
             // track() is imported by the PostHog init script on every page and

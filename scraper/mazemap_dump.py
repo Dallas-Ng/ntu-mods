@@ -17,11 +17,14 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 OUT = Path(__file__).resolve().parent / "data" / "mazemap"
 API = "https://api.mazemap.com"
 TAG = "ntu-sg"
 s = requests.Session()
+s.mount("https://", HTTPAdapter(max_retries=Retry(total=3, backoff_factor=1, status_forcelist=(500,502,503,504)), pool_connections=8, pool_maxsize=8))
 
 
 def get(path: str, **params):

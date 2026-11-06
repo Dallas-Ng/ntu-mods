@@ -3,19 +3,13 @@ import { env, waitUntil } from "cloudflare:workers"
 
 import { reportServerError } from "@/lib/posthog-server"
 import { isCrossSite, rateLimit } from "@/lib/server/guard"
+import { json } from "@/lib/server/json"
 import { getAllArticles } from "@/astro/lib/articles"
 
 export const prerender = false
 
 const SLUG = /^[a-z0-9-]{1,100}$/
 const VISITOR = /^[A-Za-z0-9_-]{8,64}$/
-
-function json(body: unknown, status = 200, headers?: HeadersInit) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "Content-Type": "application/json", ...headers }
-  })
-}
 
 // All counts at once, for the articles list. Briefly cached: a stale list
 // count is harmless and this scans the whole table.

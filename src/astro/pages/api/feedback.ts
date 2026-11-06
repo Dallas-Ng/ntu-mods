@@ -4,18 +4,12 @@ import { env, waitUntil } from "cloudflare:workers"
 import type { AnalyticsEvent } from "@/lib/analytics-events"
 import { createPostHogClient, reportServerError } from "@/lib/posthog-server"
 import { bodyTooLarge, isCrossSite, rateLimit } from "@/lib/server/guard"
+import { json } from "@/lib/server/json"
 
 export const prerender = false
 
 const MAX_FEEDBACK_LENGTH = 10_000
 const MAX_LOCAL_DATA_LENGTH = 200_000
-
-function json(body: unknown, status: number) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "Content-Type": "application/json" }
-  })
-}
 
 // Feedback text plus the optional local-data dump, with room for JSON escaping.
 const MAX_BODY_BYTES = 500_000

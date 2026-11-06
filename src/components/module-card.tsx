@@ -103,7 +103,7 @@ export const ModuleCardDetail = ({
         <p className="mt-1 line-clamp-2 text-base leading-snug font-semibold tracking-tight">
           {highlightText(moduleData.title, searchTerm)}
         </p>
-        <div className="mt-3 flex flex-wrap gap-1 text-xs">
+        <div className="mt-auto flex flex-wrap gap-1 pt-3 text-xs">
           {!isCurrentSemester && (
             <span className="bg-muted text-foreground rounded-full px-2 py-0.5">
               {lastOffered(moduleData)}

@@ -15,7 +15,7 @@ import fs from "fs"
 import path from "path"
 
 import { MODULE_CODE_RE } from "./lib/constants.mjs"
-import { deriveCategories, deriveFaculty } from "./lib/derive.mjs"
+import { deriveCategories, deriveFaculty, readJson } from "./lib/derive.mjs"
 
 import {
   getAllModuleMetadata,
@@ -31,8 +31,6 @@ import {
 
 const ROOT = path.join(import.meta.dirname, "../..")
 const SRC = path.join(ROOT, "src/data/api")
-const readJson = (p: string) => JSON.parse(fs.readFileSync(p, "utf-8"))
-
 /**
  * Object key order is not part of the contract — nothing downstream reads a
  * module's fields positionally — so it is normalised away. Array order IS part

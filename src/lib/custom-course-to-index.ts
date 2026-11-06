@@ -2,8 +2,7 @@ import {
   customCourseModuleKey,
   PRESET_INDEX_TYPES
 } from "@/lib/custom-course-colors"
-
-const toMinutes = (hhmm: number) => Math.floor(hhmm / 100) * 60 + (hhmm % 100)
+import { hhmmToMinutes } from "@/lib/parse-time"
 
 const padHhmm = (n: number) => String(n).padStart(4, "0")
 
@@ -29,7 +28,8 @@ const sessionToIndex = (
   time: `${padHhmm(session.startTime)}-${padHhmm(session.endTime)}`,
   venue: session.venue,
   remarks: session.type, // session type label — used for color lookup and display
-  duration: (toMinutes(session.endTime) - toMinutes(session.startTime)) / 30,
+  duration:
+    (hhmmToMinutes(session.endTime) - hhmmToMinutes(session.startTime)) / 30,
   isCustom: true
 })
 

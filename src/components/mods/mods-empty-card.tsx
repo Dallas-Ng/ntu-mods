@@ -5,13 +5,19 @@ import { cardVariants } from "@/components/ui/card"
 
 import { Button } from "../ui/button"
 
-const ModsEmptyCard = () => {
+const ModsEmptyCard = ({
+  searchTerm,
+  onReset
+}: {
+  searchTerm?: string
+  onReset: () => void
+}) => {
   return (
     <div className={cn(cardVariants(), "w-full space-y-4 p-8 text-center")}>
       <div className="flex justify-center">
         <img
           src="/not-found.svg"
-          alt="theres no search results, try changing your filters..."
+          alt=""
           width={300}
           height={200}
           className="pb-4"
@@ -19,14 +25,16 @@ const ModsEmptyCard = () => {
       </div>
 
       <div>
-        <p className="text-sm">No modules found, try changing your filters</p>
+        <p className="text-sm">
+          {searchTerm
+            ? `No modules match "${searchTerm}"`
+            : "No modules match your filters"}
+        </p>
       </div>
 
       <div>
-        <Button
-          variant="secondary"
-          onClick={() => window.location.assign("/mods")}>
-          Click here to reset filters
+        <Button variant="secondary" onClick={onReset}>
+          Reset filters
         </Button>
       </div>
     </div>

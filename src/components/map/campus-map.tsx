@@ -17,7 +17,7 @@ import {
   Plus
 } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { clamp, cn } from "@/lib/utils"
 import {
   legColour,
   levelLabel,
@@ -174,8 +174,6 @@ const ROOM_TYPES_TEACHING =
 const CONTROLS_TOP = 160
 /** Zoom, fit and help stacked: it shows only when all of it fits above the sheet. */
 const STACK_H = 82 + 48 * 2 + 8
-
-const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 
 const CampusMap = ({
   data,

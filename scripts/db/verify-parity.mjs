@@ -14,12 +14,10 @@ import path from "path"
 import { DatabaseSync } from "node:sqlite"
 
 import { d1Query } from "./lib/d1.mjs"
-import { ROOT, deriveCategories, deriveFaculty } from "./lib/derive.mjs"
+import { ROOT, deriveCategories, deriveFaculty, readJson } from "./lib/derive.mjs"
 
 const SRC = path.join(ROOT, "src/data/api")
 const DB = path.join(ROOT, "db/ntu-mods.sqlite")
-
-const readJson = (p) => JSON.parse(fs.readFileSync(p, "utf-8"))
 
 let failures = 0
 const MAX_REPORTED = 20

@@ -25,6 +25,8 @@ import {
   filterExams,
   searchModuleList
 } from "@/lib/mcp/shared"
+import { moduleCode, type Args } from "@/lib/mcp/validate"
+import { hhmmToMinutes } from "@/lib/parse-time"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
 import {
   LATEST_SEMESTER_LABEL,
@@ -45,9 +47,6 @@ import type { WebMcpToolName } from "./definitions"
 
 // ─── small helpers ──────────────────────────────────────────────────────────
 
-type Args = Record<string, unknown>
-
-const MODULE_CODE = /^[A-Z0-9]{2,12}$/ // e.g. "SC1001"
 const PLAN_COUNT = 5
 const YEAR = /^\d{4}$/ // e.g. "2026"
 const SEMESTER = /^[12ST]$/ // e.g. "1", "2", "S" or "T"
@@ -58,16 +57,6 @@ const ALLOWED_PATH =
   /^\/(?:(?:timetable|mods|exams|tools|articles|faq|links|changelog|settings|screenshot|privacy|feedback|ai-instructions|sitemap)(?:\/[A-Za-z0-9_-]+){0,3})?(?:\?[A-Za-z0-9_\-=&.%]*)?$/ // e.g. "/mods/SC1001"
 
 const store = () => useBoundState.getState()
-
-const moduleCode = (args: Args, key = "code"): string => {
-  const value = String(args[key] ?? "")
-    .trim()
-    .toUpperCase()
-  if (!MODULE_CODE.test(value)) {
-    throw new ToolError(`"${String(args[key])}" is not a valid module code.`)
-  }
-  return value
-}
 
 /** Zero-based plan index; the active plan when the caller names none. */
 const planOf = (args: Args): number => {
@@ -109,8 +98,6 @@ function confirmWithUser(message: string) {
     throw new ToolError("The user declined, so nothing was changed.")
   }
 }
-
-const toMinutes = (hhmm: number) => Math.floor(hhmm / 100) * 60 + (hhmm % 100)
 
 const isValidHhmm = (value: unknown): value is number =>
   Number.isInteger(value) &&
@@ -377,7 +364,7 @@ function sanitiseGenerationConfig(input: unknown): Partial<GenerationConfig> {
       !Number.isInteger(o?.day) ||
       !isValidHhmm(o?.startTime) ||
       !isValidHhmm(o?.endTime) ||
-      toMinutes(o.endTime) <= toMinutes(o.startTime)
+      hhmmToMinutes(o.endTime) <= hhmmToMinutes(o.startTime)
     ) {
       throw new ToolError(
         "Each time window needs day, startTime and a later endTime."
@@ -746,7 +733,7 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
           s.day! > 7 ||
           !isValidHhmm(s.startTime) ||
           !isValidHhmm(s.endTime) ||
-          toMinutes(s.endTime) <= toMinutes(s.startTime)
+          hhmmToMinutes(s.endTime) <= hhmmToMinutes(s.startTime)
         ) {
           throw new ToolError(
             "Each session needs day 1-7, startTime and a later endTime (HHMM)."
@@ -807,7 +794,9 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
       ...plan.state.generationConfig,
       ...sanitiseGenerationConfig(args.config)
     }
-    if (toMinutes(config.dayEndTime) <= toMinutes(config.dayStartTime)) {
+    if (
+      hhmmToMinutes(config.dayEndTime) <= hhmmToMinutes(config.dayStartTime)
+    ) {
       throw new ToolError("dayEndTime must be later than dayStartTime.")
     }
 

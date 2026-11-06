@@ -1,4 +1,5 @@
 import { siteConfig } from "@/config/site"
+import { getModulePrefix } from "@/lib/format"
 import { getModuleTitles } from "@/lib/server/db/repo"
 import { cn } from "@/lib/utils"
 import { cardVariants } from "@/components/ui/card"
@@ -169,10 +170,6 @@ const TOOL_LINKS = [
     description: "Share feedback, report a bug, or suggest an improvement"
   }
 ]
-
-function getModulePrefix(code: string) {
-  return code.match(/^[A-Z]+/)?.[0] ?? "#"
-}
 
 // Server-rendered at build time (this page is prerendered, and this component
 // already reads articles off the filesystem), so it can fetch module titles

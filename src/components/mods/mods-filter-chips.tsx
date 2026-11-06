@@ -119,7 +119,7 @@ function FilterChip({
             active && ACTIVE
           )}>
           <span className="truncate">{label}</span>
-          <ChevronDown className="size-3 opacity-60" />
+          <ChevronDown className="size-4 opacity-60" />
         </Button>
       </PopoverTrigger>
       {/* Focus the popover itself rather than its first control, which would

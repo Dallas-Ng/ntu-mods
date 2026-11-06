@@ -336,9 +336,11 @@ const pageDescription =
 </BaseLayout>
 
 <script>
-  import PhotoSwipe from "photoswipe"
+  import { initArticleLightbox } from "@/astro/lib/article-lightbox"
 
-  import "photoswipe/style.css"
+  // Click-to-zoom for body figures. The hero thumbnail is not-prose, so the
+  // selector inside initArticleLightbox leaves it alone.
+  initArticleLightbox()
 
   // Edge fades on article tables: flag which sides of each scroll box still
   // have content, so globals.css can fade that edge.
@@ -376,30 +378,6 @@ const pageDescription =
       link.setAttribute("aria-label", "Link to this section")
       link.textContent = "#"
       heading.append(link)
-    })
-
-  // Body figures only; the not-prose hero thumbnail is excluded by the selector.
-  // Lightbox with wheel / double-click / pinch zoom and drag-to-pan, so the
-  // screenshots can be read at full resolution, not just enlarged to fit.
-  document
-    .querySelectorAll<HTMLImageElement>("article.prose figure img")
-    .forEach((img) => {
-      img.addEventListener("click", () => {
-        new PhotoSwipe({
-          dataSource: [
-            {
-              src: img.currentSrc || img.src,
-              width: img.naturalWidth,
-              height: img.naturalHeight,
-              alt: img.alt
-            }
-          ],
-          wheelToZoom: true,
-          maxZoomLevel: 3,
-          showHideAnimationType: "fade",
-          bgOpacity: 0.92
-        }).init()
-      })
     })
 
   // Fenced code in the Markdown arrives as a plain <pre>. Swap each one for the

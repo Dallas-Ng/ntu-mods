@@ -43,7 +43,6 @@
     "cmdk": "^1.1.1",
     "lucide-react": "^0.511.0",
     "pdfjs-dist": "^6.4.299",
-    "photoswipe": "^5.4.4",
     "posthog-js": "^1.438.12",
     "posthog-node": "^5.56.2",
     "radix-ui": "^1.4.3",

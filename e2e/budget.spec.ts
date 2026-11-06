@@ -27,7 +27,6 @@ const BUDGET_KB = 380
 
 // Heavy libraries that must stay behind dynamic imports.
 const FORBIDDEN = /vendor-pdfjs|pdf\.worker|vendor-webllm/
-const ARTICLE_ONLY = /vendor-photoswipe/
 
 const builtPage = (p: string) =>
   path.join(DIST, p === "/" ? "index.html" : `${p}.html`)
@@ -65,11 +64,6 @@ test.describe("client JS budget", () => {
         files.filter((f) => FORBIDDEN.test(f)),
         "heavy chunk loaded up front"
       ).toEqual([])
-      if (!p.startsWith("/articles/"))
-        expect(
-          files.filter((f) => ARTICLE_ONLY.test(f)),
-          "article-only chunk"
-        ).toEqual([])
     })
   }
 })

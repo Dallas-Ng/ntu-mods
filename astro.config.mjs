@@ -176,7 +176,6 @@ export default defineConfig({
         "cmdk",
         "lucide-react",
         "pdfjs-dist",
-        "photoswipe",
         "radix-ui",
         "shiki/core",
         "shiki/engine/javascript",
@@ -223,7 +222,6 @@ export default defineConfig({
                 return "vendor-react"
               if (pkg === "posthog-js") return "vendor-posthog"
               if (pkg === "pdfjs-dist") return "vendor-pdfjs"
-              if (pkg === "photoswipe") return "vendor-photoswipe"
               return "vendor"
             }
             // track() is imported by the PostHog init script on every page and

@@ -1,6 +1,6 @@
-import { addDays, format, startOfWeek } from "date-fns"
-import { createEvents, EventAttributes } from "ics"
+import { addDays, startOfWeek } from "date-fns"
 
+import { createIcs, type IcsEvent } from "./ics"
 import { parseTime } from "./parse-time"
 import { latestSemester, latestYear } from "./semesters"
 
@@ -64,6 +64,17 @@ const DEFAULT_TABLE_CELL: IcsTableCellSettings = {
 }
 
 /**
+ * Stable UID per module/index/week. Calendar apps read the same UID as the
+ * same event, so re-exporting a timetable updates events in place instead of
+ * duplicating them. Anything outside the RFC 5545 URI-safe set becomes a dash.
+ */
+const eventUid = (moduleKey: string, indexKey: string, weekNumber: number) =>
+  `${moduleKey}-${indexKey}-w${weekNumber}@ntumods.com`.replace(
+    /[^A-Za-z0-9.@_-]/g,
+    "-"
+  )
+
+/**
  * Generate an ICS calendar from a timetable.
  * @param timetable - { moduleKey: indexKey } — moduleKey covers both real
  *   modules (code) and custom blocks (customCourseModuleKey), mirroring
@@ -88,7 +99,7 @@ export const getIcs = (
   moduleRemarks: Record<string, string> = {},
   indexRemarks: Record<string, string> = {}
 ) => {
-  const events: EventAttributes[] = []
+  const events: IcsEvent[] = []
 
   for (const [moduleKey, indexKey] of Object.entries(timetable)) {
     const indexes = indexLookup[indexKey] ?? []
@@ -143,9 +154,10 @@ export const getIcs = (
           .join("\n")
 
         events.push({
-          title: eventTitle,
-          start: format(start, "yyyyMMdd'T'HHmmss"),
-          end: format(end, "yyyyMMdd'T'HHmmss"),
+          uid: eventUid(moduleKey, index.key, weekNumber),
+          summary: eventTitle,
+          start,
+          end,
           location: index.venue,
           description
         })
@@ -153,5 +165,5 @@ export const getIcs = (
     }
   }
 
-  return createEvents(events).value
+  return createIcs(events)
 }

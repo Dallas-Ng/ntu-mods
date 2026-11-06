@@ -177,7 +177,6 @@ export default defineConfig({
         "clsx",
         "cmdk",
         "date-fns",
-        "ics",
         "lucide-react",
         "pdfjs-dist",
         "photoswipe",

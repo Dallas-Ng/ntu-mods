@@ -13,7 +13,7 @@ import {
 
 import { track } from "@/lib/analytics"
 import { latestSemester, latestYear } from "@/lib/semesters"
-import { cn } from "@/lib/utils"
+import { clamp, cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
 import { useTimetable } from "@/hooks/use-timetable"
 import { useTimetableIndexes } from "@/hooks/use-timetable-indexes"
@@ -38,9 +38,6 @@ const CANVAS_PRESETS: Record<
   phone: { label: "Phone", aspectRatio: "9 / 19.5" },
   classic: { label: "9:16", aspectRatio: "9 / 16" }
 }
-
-const clamp = (value: number, min: number, max: number) =>
-  Math.min(Math.max(value, min), max)
 
 const ScreenshotPageContent = () => {
   return (

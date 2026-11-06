@@ -79,7 +79,9 @@ export const ModsFilterButton = ({
     <Button
       variant="outline"
       size="sm"
-      aria-label="All filters"
+      aria-label={
+        activeCount > 0 ? `Filters, ${activeCount} active` : "Filters"
+      }
       className="relative h-9 w-9 shrink-0 md:hidden"
       onClick={() => drawer.openView("all")}>
       <SlidersHorizontal className="size-4" />
@@ -119,22 +121,15 @@ export const ModsFilterPills = ({
         onClick={() => drawer.openView("types")}>
         {label("Type", types, TYPE_OPTIONS)}
       </Pill>
-      {/* On by default, so it reads as a quiet default and only turns solid
-          when someone switches it off to see every semester. */}
+      {/* Same label and fill as the desktop chip: filled means on. */}
       <Pill
-        active={!f.semesterOnly}
+        active={f.semesterOnly}
         pressed={f.semesterOnly}
         onClick={() =>
           f.setParam("currentOnly", f.semesterOnly ? "false" : "true", "true")
         }>
-        {f.semesterOnly ? (
-          <>
-            <Check className="size-4" />
-            This semester
-          </>
-        ) : (
-          "All semesters"
-        )}
+        {f.semesterOnly && <Check className="size-4" />}
+        This semester only
       </Pill>
     </div>
   )
@@ -166,7 +161,7 @@ function Pill({
       <span className="flex min-w-0 items-center gap-1.5 truncate">
         {children}
       </span>
-      {caret && <ChevronDown className="size-3 shrink-0 opacity-60" />}
+      {caret && <ChevronDown className="size-4 shrink-0 opacity-60" />}
     </Button>
   )
 }
@@ -182,7 +177,7 @@ function DrawerHead({
 }) {
   return (
     <div className="flex min-h-12 items-center justify-between px-4">
-      <h2 className="text-lg font-semibold">{title}</h2>
+      <h2 className="text-base font-semibold">{title}</h2>
       {onReset && (
         <button
           type="button"

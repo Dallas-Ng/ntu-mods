@@ -22,12 +22,6 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger
-} from "@/components/ui/tooltip"
 
 interface Props {
   moduleKey: string
@@ -146,13 +140,18 @@ const ModsAddToTimetableButton = ({
     return <span className="hidden sm:inline">{label}</span>
   })()
 
-  const triggerBtn = (
+  const baseLabel = inAnyPlan ? "In timetable" : "Add to timetable"
+  const buttonLabel = hasIndexes
+    ? baseLabel
+    : `${baseLabel} (no schedule available)`
+
+  const trigger = (
     <Button
       variant={triggerVariant ?? (inAnyPlan ? "secondary" : "outline")}
       size="sm"
       disabled={!hasIndexes}
-      aria-label={inAnyPlan ? "In timetable" : "Add to timetable"}
-      title={inAnyPlan ? "In timetable" : "Add to timetable"}
+      aria-label={buttonLabel}
+      title={buttonLabel}
       className={cn("gap-1.5", triggerClassName)}>
       {inAnyPlan ? (
         <CalendarCheck className="text-primary size-4 shrink-0" />
@@ -161,21 +160,6 @@ const ModsAddToTimetableButton = ({
       )}
       {textEl}
     </Button>
-  )
-
-  const trigger = !hasIndexes ? (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span className={cn("flex", triggerClassName && "h-full w-full")}>
-            {triggerBtn}
-          </span>
-        </TooltipTrigger>
-        <TooltipContent side="top">No schedule available</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  ) : (
-    triggerBtn
   )
 
   // Buttons start enabled before the season file is fetched, so the picker is

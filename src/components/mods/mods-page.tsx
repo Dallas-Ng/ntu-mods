@@ -1,11 +1,12 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { ChevronDown, Heart, LayoutGrid, List } from "lucide-react"
 
 import type { AllModule } from "@/types/mods"
 import { track } from "@/lib/analytics"
 import { filterModules, groupModules } from "@/lib/filter-modules"
+import { formatCount } from "@/lib/format"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
@@ -17,6 +18,7 @@ import { useSeasonIndexes } from "@/hooks/use-season-indexes"
 import { useSettings } from "@/hooks/use-settings"
 import { Button } from "@/components/ui/button"
 import { cardVariants, controlOnCard } from "@/components/ui/card"
+import { ExternalLinkIcon, TextLink } from "@/components/ui/text-link"
 import Header, { SectionHeading } from "@/components/header"
 import ModsAddToTimetableButton from "@/components/mods/mods-add-to-timetable-button"
 import ModsEmptyCard from "@/components/mods/mods-empty-card"
@@ -71,7 +73,6 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
   )
   const [displayCount, setDisplayCount] = useState(PAGE_SIZE)
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set())
-  const loaderRef = useRef<HTMLDivElement>(null)
 
   const allowedDays =
     moduleDay !== "all"
@@ -96,6 +97,7 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
 
   const hasActiveFilters =
     searchTerm !== "" ||
+    favouritesOnly === "true" ||
     moduleType !== "all" ||
     moduleFaculty !== "all" ||
     moduleLevel !== "all" ||
@@ -184,8 +186,8 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
   )
 
   const hasMore = displayCount < filteredModules.length
-  const moduleCountLabel = `${filteredModules.length} module${
-    filteredModules.length !== 1 ? "s" : ""
+  const moduleCountLabel = `${formatCount(filteredModules.length)} ${
+    filteredModules.length === 1 ? "module" : "modules"
   }`
 
   useEffect(() => {
@@ -197,22 +199,12 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
     moduleFaculty,
     moduleLevel,
     currentOnly,
+    favouritesOnly,
     modsGroupBy,
     moduleDay,
     moduleTimeStart,
     moduleTimeEnd
   ])
-
-  useEffect(() => {
-    if (!loaderRef.current) return
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasMore) {
-        setDisplayCount((c) => c + PAGE_SIZE)
-      }
-    })
-    observer.observe(loaderRef.current)
-    return () => observer.disconnect()
-  }, [hasMore])
 
   return (
     <div className="relative space-y-3">
@@ -234,6 +226,7 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
             onClick={() =>
               setFavouritesOnly(favouritesOnly === "true" ? "false" : "true")
             }
+            aria-pressed={favouritesOnly === "true"}
             aria-label="Favourites only">
             <Heart
               className={`size-4 ${favouritesOnly === "true" ? "fill-rose-500 text-rose-500" : ""}`}
@@ -248,7 +241,14 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
         <ModsFilterDrawer drawer={filterDrawer} {...filterProps} />
       </div>
 
-      {!isLoading && filteredModules.length === 0 && <ModsEmptyCard />}
+      {!isLoading && filteredModules.length === 0 && (
+        <ModsEmptyCard searchTerm={searchTerm} onReset={clearAllFilters} />
+      )}
+
+      {/* Always mounted so screen readers announce each change of the count. */}
+      <p role="status" className="sr-only">
+        {!isLoading && moduleCountLabel}
+      </p>
 
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1 pt-1 pb-1 sm:flex sm:justify-between">
         <div className="min-w-0 sm:flex sm:items-center sm:gap-3">
@@ -260,7 +260,9 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
           </div>
 
           {!isLoading && filteredModules.length > 0 && (
-            <p className="text-muted-foreground hidden text-sm whitespace-nowrap sm:block">
+            <p
+              aria-hidden
+              className="text-muted-foreground hidden text-sm whitespace-nowrap tabular-nums sm:block">
               {moduleCountLabel}
             </p>
           )}
@@ -270,6 +272,7 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
             variant={modsViewMode === "cards" ? "secondary" : "ghost"}
             size="sm"
             onClick={() => setViewMode("cards")}
+            aria-pressed={modsViewMode === "cards"}
             aria-label="Card view">
             <LayoutGrid className="size-4" />
           </Button>
@@ -277,12 +280,15 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
             variant={modsViewMode === "list" ? "secondary" : "ghost"}
             size="sm"
             onClick={() => setViewMode("list")}
+            aria-pressed={modsViewMode === "list"}
             aria-label="List view">
             <List className="size-4" />
           </Button>
         </div>
         {!isLoading && filteredModules.length > 0 && (
-          <p className="text-muted-foreground col-start-1 text-sm whitespace-nowrap sm:hidden">
+          <p
+            aria-hidden
+            className="text-muted-foreground col-start-1 text-sm whitespace-nowrap tabular-nums sm:hidden">
             {moduleCountLabel}
           </p>
         )}
@@ -307,8 +313,12 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
           groupedModules={groupedModules}
           displayedModules={displayedModules}
           expandedGroups={expandedGroups}
-          onExpandGroup={(key) =>
-            setExpandedGroups((prev) => new Set(Array.from(prev).concat(key)))
+          onToggleGroup={(key) =>
+            setExpandedGroups((prev) => {
+              const next = new Set(prev)
+              if (!next.delete(key)) next.add(key)
+              return next
+            })
           }
           searchTerm={searchTerm}
           year={year}
@@ -317,17 +327,30 @@ const ModsPage = ({ initialModules }: { initialModules?: AllModule[] }) => {
       </div>
 
       {!isLoading && hasMore && modsGroupBy === "none" && (
-        <div ref={loaderRef} className="h-4" />
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-muted-foreground text-xs tabular-nums">
+            Showing {formatCount(displayedModules.length)} of{" "}
+            {formatCount(filteredModules.length)}
+          </p>
+          <Button
+            variant="outline"
+            onClick={() => setDisplayCount((c) => c + PAGE_SIZE)}>
+            Show more
+          </Button>
+        </div>
       )}
 
       {!isLoading && (
         <p className="text-muted-foreground text-center text-sm">
-          <a
+          <TextLink
+            variant="muted"
             href="https://wis.ntu.edu.sg/webexe/owa/aus_subj_cont.main"
             target="_blank"
-            rel="noreferrer">
-            Updated as at AY{year}/{nextYear}
-          </a>
+            rel="noreferrer"
+            className="inline-flex items-center gap-1">
+            Course data from NTU, AY{year}/{nextYear}
+            <ExternalLinkIcon />
+          </TextLink>
         </p>
       )}
     </div>
@@ -341,7 +364,7 @@ interface ModuleResultsProps {
   groupedModules: ReturnType<typeof groupModules> | null
   displayedModules: AllModule[]
   expandedGroups: Set<string>
-  onExpandGroup: (key: string) => void
+  onToggleGroup: (key: string) => void
   searchTerm: string
   year: string
   semester: string
@@ -354,7 +377,7 @@ function ModuleResults({
   groupedModules,
   displayedModules,
   expandedGroups,
-  onExpandGroup,
+  onToggleGroup,
   searchTerm,
   year,
   semester
@@ -369,7 +392,7 @@ function ModuleResults({
         showText={false}
         triggerClassName={cn(
           controlOnCard,
-          "text-muted-foreground size-8 rounded-full p-0 active:scale-95"
+          "text-muted-foreground size-8 rounded-full p-0 motion-safe:enabled:active:scale-[0.96]"
         )}
         triggerVariant="ghost"
       />
@@ -380,7 +403,10 @@ function ModuleResults({
     return (
       <ModsFavouriteButton
         moduleKey={m.code}
-        className={cn(controlOnCard, "size-8 rounded-full active:scale-95")}
+        className={cn(
+          controlOnCard,
+          "size-8 rounded-full motion-safe:enabled:active:scale-[0.96]"
+        )}
       />
     )
   }
@@ -453,15 +479,19 @@ function ModuleResults({
             ? modules
             : modules.slice(0, GROUP_DEFAULT_VISIBLE)
           const hidden = modules.length - GROUP_DEFAULT_VISIBLE
+          // Stays mounted after expanding (as "Show fewer") so focus is kept.
           const footer =
-            !isExpanded && hidden > 0 ? (
+            hidden > 0 ? (
               <Button
                 variant="outline"
                 size="sm"
                 className="w-full"
-                onClick={() => onExpandGroup(key)}>
-                <ChevronDown className="mr-1 size-4" />
-                See {hidden} more
+                aria-expanded={isExpanded}
+                onClick={() => onToggleGroup(key)}>
+                <ChevronDown
+                  className={cn("size-4", isExpanded && "rotate-180")}
+                />
+                {isExpanded ? "Show fewer" : `See ${formatCount(hidden)} more`}
               </Button>
             ) : undefined
 

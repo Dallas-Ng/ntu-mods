@@ -5,6 +5,7 @@ import { ChevronDown, Search } from "lucide-react"
 
 import { track } from "@/lib/analytics"
 import { CODE_QUERY_RE } from "@/lib/filter-modules"
+import { getModulePrefix } from "@/lib/format"
 import type { DbExam } from "@/lib/server/db/types"
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
@@ -79,10 +80,6 @@ const KNOWN_SCHOOLS = new Set(Object.values(EXAM_PREFIX_LABELS))
 
 function getPrefixLabel(prefix: string): string {
   return EXAM_PREFIX_LABELS[prefix] ?? prefix
-}
-
-function getModulePrefix(code: string) {
-  return code.match(/^[A-Z]+/)?.[0] ?? "#"
 }
 
 function parseDateForSort(dateStr: string): number {

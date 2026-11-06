@@ -18,6 +18,8 @@ import { SEM_LABEL } from "./constants.mjs"
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 export const ROOT = path.join(__dirname, "../../..")
 
+export const readJson = (p) => JSON.parse(fs.readFileSync(p, "utf-8"))
+
 /**
  * Faculty keys, read straight out of src/lib/module-constants.ts rather than
  * duplicated, so the two can never drift. Order matters: the rule is

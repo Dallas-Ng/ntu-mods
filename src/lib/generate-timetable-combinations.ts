@@ -1,12 +1,7 @@
 import { isCustomCourseKey } from "@/lib/custom-course-colors"
+import { hhmmToMinutes, parseTimeNumber } from "@/lib/parse-time"
 
 const DEFAULT_TIME_BUDGET_MS = 300
-
-function hhmmToMinutes(hhmm: number): number {
-  const h = Math.floor(hhmm / 100)
-  const m = hhmm % 100
-  return h * 60 + m
-}
 
 function minutesToHhmm(minutes: number): number {
   const h = Math.floor(minutes / 60)
@@ -23,11 +18,6 @@ export function timeslotsOverlap(a: Index, b: Index): boolean {
     (aEnd > bStart && aEnd <= bEnd) ||
     (aStart <= bStart && aEnd >= bEnd)
   )
-}
-
-function parseTimeNumber(index: Index): { startTime: number; endTime: number } {
-  const split = index.time.split("-")
-  return { startTime: parseInt(split[0]), endTime: parseInt(split[1]) }
 }
 
 function slotStartMinutes(index: Index): number {

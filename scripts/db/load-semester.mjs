@@ -27,7 +27,7 @@ import path from "path"
 import { DatabaseSync } from "node:sqlite"
 
 import { d1Query } from "./lib/d1.mjs"
-import { ROOT, SEM_ORDER, parseSem } from "./lib/derive.mjs"
+import { ROOT, SEM_ORDER, parseSem, readJson } from "./lib/derive.mjs"
 import {
   SCOPE_TABLES,
   deleteScope,
@@ -64,7 +64,6 @@ const batched = (db, table, where, params) =>
     maxRows: MAX_STMT_ROWS,
   })
 
-const readJson = (p) => JSON.parse(fs.readFileSync(p, "utf-8"))
 const semKey = (code) => code.replace(";", "_")
 
 /**

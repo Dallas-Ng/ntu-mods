@@ -7,6 +7,10 @@ export const parseTime = (index: Index) => {
   return { startTime, endTime }
 }
 
+/** 1330 -> 810 (minutes since midnight). */
+export const hhmmToMinutes = (hhmm: number) =>
+  Math.floor(hhmm / 100) * 60 + (hhmm % 100)
+
 export const parseTimeNumber = (index: Index) => {
   const split = index.time.split("-")
   const startTime = parseInt(split[0])

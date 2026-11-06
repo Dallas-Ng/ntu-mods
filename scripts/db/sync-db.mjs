@@ -24,7 +24,7 @@ import fs from "fs"
 import path from "path"
 import { DatabaseSync } from "node:sqlite"
 
-import { ROOT, parseSem, semesterName } from "./lib/derive.mjs"
+import { ROOT, parseSem, readJson, semesterName } from "./lib/derive.mjs"
 import {
   hashOf,
   prepareAll,
@@ -54,8 +54,6 @@ if (FROM !== "json" && FROM !== "d1") {
 if (flag("if-missing") && fs.existsSync(OUT)) {
   process.exit(0)
 }
-
-const readJson = (p) => JSON.parse(fs.readFileSync(p, "utf-8"))
 
 /** Semesters present on disk, plus the portal's names where we have them. */
 function collectSemesters(src) {

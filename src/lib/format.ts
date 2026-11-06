@@ -6,6 +6,10 @@ export const formatTitle = (courseTitle: string) => {
   return courseTitle.replace(TITLE_CHARS, "").replace(WHITESPACE, " ")
 }
 
+/** Letters before the digits in a module code ("CZ1001" -> "CZ"); "#" if none. */
+export const getModulePrefix = (code: string) =>
+  code.match(/^[A-Z]+/)?.[0] ?? "#"
+
 export function formatHhmm(hhmm: number): string {
   const h = Math.floor(hhmm / 100)
   const m = hhmm % 100

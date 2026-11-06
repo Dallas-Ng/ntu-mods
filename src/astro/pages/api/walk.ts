@@ -2,6 +2,7 @@ import type { APIRoute } from "astro"
 import { env, waitUntil } from "cloudflare:workers"
 
 import { rateLimit } from "@/lib/server/guard"
+import { json } from "@/lib/server/json"
 import { reverseWalk, type WalkResult } from "@/lib/venue-map"
 import {
   buildWalk,
@@ -22,12 +23,6 @@ export const prerender = false
 
 // The Workers edge cache; the DOM typings do not know `default`.
 const edge = () => (caches as unknown as { default: Cache }).default
-
-const json = (body: unknown, status = 200, headers?: HeadersInit) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: { "Content-Type": "application/json", ...headers }
-  })
 
 export const GET: APIRoute = async ({ url, request }) => {
   const a = parsePoint(url.searchParams.get("a"))

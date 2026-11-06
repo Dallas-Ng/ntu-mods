@@ -25,13 +25,13 @@ export interface IcsEvent {
 
 const pad = (value: number) => String(value).padStart(2, "0")
 
-/** `20270111T083000` — floating local time, as `DTSTART`/`DTEND` take it. */
+/** `20270111T083000`: floating local time, as `DTSTART`/`DTEND` take it. */
 export const formatIcsDate = (date: Date) =>
   `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}T${pad(
     date.getHours()
   )}${pad(date.getMinutes())}${pad(date.getSeconds())}`
 
-/** `20261106T024632Z` — UTC, as `DTSTAMP` requires. */
+/** `20261106T024632Z`: UTC, as `DTSTAMP` requires. */
 const formatIcsUtc = (date: Date) =>
   `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(
     date.getUTCDate()

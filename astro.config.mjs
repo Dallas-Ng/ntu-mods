@@ -210,7 +210,6 @@ export default defineConfig({
           // chunks instead of one file per module.
           manualChunks(id) {
             if (id.includes("node_modules")) {
-              if (id.includes("@mlc-ai/web-llm")) return "vendor-webllm"
               // One catch-all vendor chunk meant every page downloaded every
               // dependency (pdfjs, posthog, zod...) even when it used one.
               // Split the heavy ones so a page only pulls what it imports.

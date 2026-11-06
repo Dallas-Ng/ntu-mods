@@ -6,10 +6,6 @@
 // Kept apart from analytics.ts, which imports posthog-js, so the server-side
 // feedback route can check its event name without bundling the browser SDK.
 export const ANALYTICS_EVENTS = [
-  "ai_chat_reset",
-  "ai_message_sent",
-  "ai_model_load_started",
-  "ai_timetable_generated",
   "api_example_sent",
   "api_operation_opened",
   "article_viewed",

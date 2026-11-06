@@ -3,7 +3,7 @@
  *
  * Tests:  how much JavaScript each page loads up front, and which heavy
  *         chunks it pulls in.
- * Why:    a stray static import of pdfjs, web-llm or the forms bundle, or a
+ * Why:    a stray static import of pdfjs or the forms bundle, or a
  *         creeping dependency, makes every page slower and nothing else fails.
  * How:    reads the built HTML in dist/ and follows its entry scripts,
  *         client:load islands and their static imports (lazy dynamic imports
@@ -26,7 +26,7 @@ import { DIST, sample, sitemapPaths } from "./lib/urls"
 const BUDGET_KB = 380
 
 // Heavy libraries that must stay behind dynamic imports.
-const FORBIDDEN = /vendor-pdfjs|pdf\.worker|vendor-webllm/
+const FORBIDDEN = /vendor-pdfjs|pdf\.worker/
 
 const builtPage = (p: string) =>
   path.join(DIST, p === "/" ? "index.html" : `${p}.html`)

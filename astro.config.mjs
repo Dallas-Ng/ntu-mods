@@ -222,17 +222,6 @@ export default defineConfig({
                 )?.[1]
               if (pkg === "react" || pkg === "react-dom" || pkg === "scheduler")
                 return "vendor-react"
-              // Keep the GitHub stars animation out of the shared vendor bundle.
-              if (
-                [
-                  "@animate-ui/react",
-                  "motion",
-                  "motion-dom",
-                  "motion-utils",
-                  "framer-motion"
-                ].includes(pkg)
-              )
-                return "vendor-github-stars"
               if (pkg === "posthog-js") return "vendor-posthog"
               if (pkg === "pdfjs-dist") return "vendor-pdfjs"
               if (pkg === "photoswipe") return "vendor-photoswipe"

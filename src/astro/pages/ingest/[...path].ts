@@ -48,7 +48,8 @@ const handler: APIRoute = async ({ params, request, url }) => {
     body:
       request.method === "GET" || request.method === "HEAD"
         ? undefined
-        : await request.arrayBuffer()
+        : await request.arrayBuffer(),
+    signal: AbortSignal.timeout(15_000)
   })
 
   const responseHeaders = new Headers(proxied.headers)

@@ -93,7 +93,8 @@ export const POST: APIRoute = async ({ request, url: requestUrl }) => {
       to: "ngdallas1@gmail.com",
       subject: "New Feedback on NTUMods",
       text: emailLines.join("\n")
-    })
+    }),
+    signal: AbortSignal.timeout(15_000)
   })
 
   if (!res.ok) {

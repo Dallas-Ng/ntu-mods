@@ -31,6 +31,8 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 import mazemap_dump
 
@@ -122,6 +124,14 @@ def hall_label(name: str) -> str | None:
     return None
 
 session = requests.Session()
+_retry = HTTPAdapter(
+    max_retries=Retry(
+        total=3, backoff_factor=1, status_forcelist=(500, 502, 503, 504),
+        allowed_methods=("GET", "POST"),
+    ),
+    pool_connections=8, pool_maxsize=8,
+)
+session.mount("https://", _retry)
 
 
 def get_json(url: str, **params) -> dict:

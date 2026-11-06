@@ -25,6 +25,7 @@ import {
   filterExams,
   searchModuleList
 } from "@/lib/mcp/shared"
+import { moduleCode, type Args } from "@/lib/mcp/validate"
 import { hhmmToMinutes } from "@/lib/parse-time"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
 import {
@@ -46,9 +47,6 @@ import type { WebMcpToolName } from "./definitions"
 
 // ─── small helpers ──────────────────────────────────────────────────────────
 
-type Args = Record<string, unknown>
-
-const MODULE_CODE = /^[A-Z0-9]{2,12}$/ // e.g. "SC1001"
 const PLAN_COUNT = 5
 const YEAR = /^\d{4}$/ // e.g. "2026"
 const SEMESTER = /^[12ST]$/ // e.g. "1", "2", "S" or "T"
@@ -59,16 +57,6 @@ const ALLOWED_PATH =
   /^\/(?:(?:timetable|mods|exams|tools|articles|faq|links|changelog|settings|screenshot|privacy|feedback|ai-instructions|sitemap)(?:\/[A-Za-z0-9_-]+){0,3})?(?:\?[A-Za-z0-9_\-=&.%]*)?$/ // e.g. "/mods/SC1001"
 
 const store = () => useBoundState.getState()
-
-const moduleCode = (args: Args, key = "code"): string => {
-  const value = String(args[key] ?? "")
-    .trim()
-    .toUpperCase()
-  if (!MODULE_CODE.test(value)) {
-    throw new ToolError(`"${String(args[key])}" is not a valid module code.`)
-  }
-  return value
-}
 
 /** Zero-based plan index; the active plan when the caller names none. */
 const planOf = (args: Args): number => {

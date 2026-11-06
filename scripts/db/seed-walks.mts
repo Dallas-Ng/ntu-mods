@@ -29,7 +29,6 @@ import {
   type Feature,
   type RoutePoint
 } from "../../src/lib/walk-route.ts"
-import { toMin } from "../../src/lib/venue-map.ts"
 
 const arg = (name: string, fallback: string) => {
   const i = process.argv.indexOf(`--${name}`)
@@ -57,6 +56,8 @@ const timetable: Record<
   string,
   Record<string, { day: number; time: string; venue: string }[]>
 > = JSON.parse(fs.readFileSync(path.join(indexes, `${sem}.json`), "utf8"))
+
+const toMin = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(2, 4))
 
 // Classes per (day, venue, start, end): how many sit in each slot.
 const slots = new Map<string, number>()

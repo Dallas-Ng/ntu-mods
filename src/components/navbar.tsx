@@ -202,7 +202,7 @@ const Navbar = () => {
               className="flex flex-col p-0">
               <DrawerTitle className="sr-only">Navigation menu</DrawerTitle>
               {/* Header */}
-              <div className="flex items-center justify-between border-b px-5 pb-4">
+              <div className="flex h-16 shrink-0 items-center justify-between border-b px-5">
                 <a href="/" className="flex items-center gap-2">
                   <img
                     src="/logo.webp"

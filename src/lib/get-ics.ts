@@ -1,5 +1,3 @@
-import { addDays, startOfWeek } from "date-fns"
-
 import { createIcs, type IcsEvent } from "./ics"
 import { parseTime } from "./parse-time"
 import { latestSemester, latestYear } from "./semesters"
@@ -10,10 +8,31 @@ const WEEK_1_START: Record<string, string> = {
   "2026;1": "2026-08-10",
   "2026;2": "2027-01-11"
 }
-const MIN_DATE = new Date(
-  WEEK_1_START[`${latestYear};${latestSemester}`] ?? "2026-08-10"
+
+/** "2026-08-10" -> that day at 00:00 local, not UTC (which would shift the date). */
+const parseLocalDate = (isoDate: string) => {
+  const [year, month, day] = isoDate.split("-").map(Number)
+  return new Date(year, month - 1, day)
+}
+
+/** The Monday of the week containing `date`. */
+const startOfWeek = (date: Date) => {
+  const monday = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+  monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7))
+  return monday
+}
+
+const addDays = (date: Date, days: number) => {
+  const next = new Date(date)
+  next.setDate(next.getDate() + days)
+  return next
+}
+
+const WEEK_1_MONDAY = startOfWeek(
+  parseLocalDate(
+    WEEK_1_START[`${latestYear};${latestSemester}`] ?? "2026-08-10"
+  )
 )
-const WEEK_1_MONDAY = startOfWeek(MIN_DATE, { weekStartsOn: 1 })
 
 const TOTAL_TEACHING_WEEKS = 13
 // Recess Week always falls between Teaching Week 7 and Teaching Week 8,

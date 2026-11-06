@@ -176,7 +176,6 @@ export default defineConfig({
         "class-variance-authority",
         "clsx",
         "cmdk",
-        "date-fns",
         "lucide-react",
         "pdfjs-dist",
         "photoswipe",
@@ -240,7 +239,6 @@ export default defineConfig({
               if (pkg === "posthog-js") return "vendor-posthog"
               if (pkg === "pdfjs-dist") return "vendor-pdfjs"
               if (pkg === "photoswipe") return "vendor-photoswipe"
-              if (pkg === "date-fns") return "vendor-date-fns"
               if (
                 pkg === "zod" ||
                 pkg === "react-hook-form" ||

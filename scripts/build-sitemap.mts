@@ -11,6 +11,7 @@ import path from "path"
 import { fileURLToPath } from "url"
 
 import * as json from "../src/lib/server/db/json-source.ts"
+import { slugifyCategory } from "../src/lib/server/articles.ts"
 import {
   moduleYearCutoff,
   snapshotFingerprint,
@@ -56,13 +57,6 @@ const semDate = (sem) => gitDate(`src/data/api/metadata/${sem}.json`)
 
 const SITEMAP_YEAR_CUTOFF = versionedYearCutoff()
 const MODULE_YEAR_CUTOFF = moduleYearCutoff()
-
-const slugifyCategory = (category) =>
-  category
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
 
 async function getArticleRoutes(): Promise<SitemapRoute[]> {
   const articlesDir = path.join(ROOT, "content/articles")

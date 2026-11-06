@@ -276,7 +276,7 @@ export interface Stop {
   venue: MapVenue | null
 }
 
-const toMin = (hhmm: string) =>
+export const toMin = (hhmm: string) =>
   Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(2, 4))
 
 export const fmtMin = (m: number) =>

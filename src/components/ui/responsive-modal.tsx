@@ -85,7 +85,10 @@ export const ResponsiveModal = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className={cn(footer && "flex flex-col overflow-hidden", className)}>
+        className={cn(
+          footer ? "flex flex-col overflow-hidden" : undefined,
+          className
+        )}>
         <DialogHeader>
           <DialogTitle className="flex items-center">{title}</DialogTitle>
           <DialogDescription

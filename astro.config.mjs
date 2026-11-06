@@ -173,7 +173,6 @@ export default defineConfig({
         "react/jsx-dev-runtime",
         "posthog-js",
         "class-variance-authority",
-        "clsx",
         "cmdk",
         "lucide-react",
         "pdfjs-dist",

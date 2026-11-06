@@ -1,45 +1,50 @@
-import { zodResolver } from "@hookform/resolvers/zod"
 import { describe, expect, it } from "vitest"
 
-import { FeedbackFormSchema, MIN_FEEDBACK_LENGTH } from "@/lib/feedback"
+import {
+  FEEDBACK_TOO_SHORT_MESSAGE,
+  MIN_FEEDBACK_LENGTH,
+  validateFeedback
+} from "@/lib/feedback"
 
-// The resolver is what a form submit runs. It must resolve with field errors for
-// invalid input: throwing a ZodError instead is what became PostHog issue #353
-// ("ZodError" with no useful stack), when @hookform/resolvers 3 met zod 4.
-const resolve = (feedback: string) =>
-  zodResolver(FeedbackFormSchema)(
-    { email: "", feedback, includeLocalData: true },
-    undefined,
-    {
-      criteriaMode: "firstError",
-      fields: {},
-      shouldUseNativeValidation: false,
-      names: []
-    }
-  )
+const form = (feedback: string) => ({
+  email: "",
+  feedback,
+  includeLocalData: true
+})
 
 describe("feedback form", () => {
-  it("returns a field error for a message that is too short", async () => {
-    const result = await resolve("too short")
+  it("returns a field error for a message that is too short", () => {
+    const { errors } = validateFeedback(form("too short"))
 
-    expect(result.errors).toEqual({
-      feedback: {
-        type: "too_small",
-        message: `Feedback must be at least ${MIN_FEEDBACK_LENGTH} characters long.`
-      }
+    expect(errors).toEqual({ feedback: FEEDBACK_TOO_SHORT_MESSAGE })
+    expect(FEEDBACK_TOO_SHORT_MESSAGE).toBe(
+      `Feedback must be at least ${MIN_FEEDBACK_LENGTH} characters long.`
+    )
+  })
+
+  it("does not count whitespace towards the minimum", () => {
+    const { errors } = validateFeedback(form(" ".repeat(MIN_FEEDBACK_LENGTH)))
+
+    expect(errors.feedback).toBe(FEEDBACK_TOO_SHORT_MESSAGE)
+  })
+
+  it("accepts a real message and trims it", () => {
+    const { errors, values } = validateFeedback(
+      form("  the timetable export is great  ")
+    )
+
+    expect(errors).toEqual({})
+    expect(values.feedback).toBe("the timetable export is great")
+  })
+
+  it("keeps the other fields as they were", () => {
+    const { values } = validateFeedback({
+      email: "me@example.com",
+      feedback: "a long enough message",
+      includeLocalData: false
     })
-  })
 
-  it("does not count whitespace towards the minimum", async () => {
-    const result = await resolve(" ".repeat(MIN_FEEDBACK_LENGTH))
-
-    expect(result.errors.feedback?.type).toBe("too_small")
-  })
-
-  it("accepts a real message and trims it", async () => {
-    const result = await resolve("  the timetable export is great  ")
-
-    expect(result.errors).toEqual({})
-    expect(result.values.feedback).toBe("the timetable export is great")
+    expect(values.email).toBe("me@example.com")
+    expect(values.includeLocalData).toBe(false)
   })
 })

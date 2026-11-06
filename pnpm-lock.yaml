@@ -178,9 +178,6 @@ importers:
       '@astrojs/react':
         specifier: ^6.0.1
         version: 6.0.1(@types/node@22.20.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(esbuild@0.28.1)(jiti@2.7.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)(supports-color@10.2.2)(tsx@4.23.1)(yaml@2.9.0)
-      '@hookform/resolvers':
-        specifier: ^5.9.2
-        version: 5.9.2(ajv@8.20.0)(react-hook-form@7.74.0(react@19.2.5))(yup@1.3.3)(zod@4.6.7)
       '@mlc-ai/web-llm':
         specifier: ^0.2.83
         version: 0.2.83
@@ -235,9 +232,6 @@ importers:
       react-dom:
         specifier: 19.2.5
         version: 19.2.5(react@19.2.5)
-      react-hook-form:
-        specifier: ^7.74.0
-        version: 7.74.0(react@19.2.5)
       shiki:
         specifier: ^4.5.0
         version: 4.5.0
@@ -262,9 +256,6 @@ importers:
       wrangler:
         specifier: 4.146.0
         version: 4.146.0(@types/node@22.20.1)
-      zod:
-        specifier: ^4.6.6
-        version: 4.6.7
       zustand:
         specifier: ^4.4.7
         version: 4.4.7(@types/react@19.2.14)(react@19.2.5)
@@ -1059,84 +1050,6 @@ packages:
 
   '@floating-ui/utils@0.2.1':
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
-
-  '@hookform/resolvers@5.9.2':
-    resolution: {integrity: sha512-RtjTnZqsC38s4NKp2XO3fD8IA5uyN4tB7McQ5C6uiMPcV+WWO8F+wVa3e+BXUpH2ScgxghAlwFRMVqjT9WChAQ==}
-    peerDependencies:
-      '@sinclair/typebox': '>=0.25.24'
-      '@standard-schema/spec': ^1.0.0
-      '@typeschema/main': '>=0.13.7'
-      '@vinejs/vine': ^2.0.0 || ^3.0.0 || ^4.0.0
-      ajv: ^8.12.0
-      ajv-errors: ^3.0.0
-      ajv-formats: ^2.1.1
-      arktype: ^2.0.0
-      ata-validator: ^1.23.0
-      class-transformer: '>=0.4.0'
-      class-validator: '>=0.12.0'
-      computed-types: ^1.0.0
-      effect: ^3.10.3
-      fluentvalidation-ts: ^3.0.0
-      fp-ts: ^2.7.0
-      io-ts: ^2.0.0
-      joi: ^17.0.0 || ^18.0.0
-      nope-validator: '>=0.12.0'
-      react-hook-form: ^7.55.0
-      superstruct: '>=0.12.0'
-      typanion: ^3.3.2
-      valibot: '>=0.31.0 || ^1.0.0-beta.4 || ^1.0.0-rc'
-      vest: '>=6.0.0'
-      yup: ^1.0.0
-      zod: ^3.25.0 || ^4.0.0
-    peerDependenciesMeta:
-      '@sinclair/typebox':
-        optional: true
-      '@standard-schema/spec':
-        optional: true
-      '@typeschema/main':
-        optional: true
-      '@vinejs/vine':
-        optional: true
-      ajv:
-        optional: true
-      ajv-errors:
-        optional: true
-      ajv-formats:
-        optional: true
-      arktype:
-        optional: true
-      ata-validator:
-        optional: true
-      class-transformer:
-        optional: true
-      class-validator:
-        optional: true
-      computed-types:
-        optional: true
-      effect:
-        optional: true
-      fluentvalidation-ts:
-        optional: true
-      fp-ts:
-        optional: true
-      io-ts:
-        optional: true
-      joi:
-        optional: true
-      nope-validator:
-        optional: true
-      superstruct:
-        optional: true
-      typanion:
-        optional: true
-      valibot:
-        optional: true
-      vest:
-        optional: true
-      yup:
-        optional: true
-      zod:
-        optional: true
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -2526,9 +2439,6 @@ packages:
 
   '@speed-highlight/core@1.2.17':
     resolution: {integrity: sha512-Z92FwKpCtfaW1V0jTU/fh3QzYEZN8wDwrzRIBoADCJfn4mJCNcJN/XegifX7BDrQ8/h9Xh/JnbyMchL0FqXrkg==}
-
-  '@standard-schema/utils@0.3.0':
-    resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
   '@tailwindcss/node@4.3.3':
     resolution: {integrity: sha512-/T8IKEsf9VTU6tLjgC7+sv2mOPtQxzE2jMw7u4Tt40Tx+QSZxpzh95/H6cMKoja9XuW7iMdLJYBB0o9G1CaAgg==}
@@ -4642,9 +4552,6 @@ packages:
   prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
 
-  property-expr@2.0.6:
-    resolution: {integrity: sha512-SVtmxhRE/CGkn3eZY1T6pC8Nln6Fr/lu1mKSgRud0eC73whjGfoAogbn78LkD8aFL0zz3bAFerKSnOl7NlErBA==}
-
   property-information@7.2.0:
     resolution: {integrity: sha512-IAtzIB6sUiWaJYrX9smp3V46pBGbBeLFRGdh25kg1334VcBlD8HzhPeNIWQH9zhGmo2itIe25EHt9dQP7G5hmg==}
 
@@ -4684,12 +4591,6 @@ packages:
     resolution: {integrity: sha512-J5bAZz+DXMMwW/wV3xzKke59Af6CHY7G4uYLN1OvBcKEsWOs4pQExj86BBKamxl/Ik5bx9whOrvBlSDfWzgSag==}
     peerDependencies:
       react: ^19.2.5
-
-  react-hook-form@7.74.0:
-    resolution: {integrity: sha512-yR6wHr99p9wFv686jhRWVSFhUvDvNbdUf2dKlbno8/VKOCuoNobDGC6S+M2dua9A9Yo8vpcrp8assIYbsZCQ9g==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      react: ^16.8.0 || ^17 || ^18 || ^19
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -5021,9 +4922,6 @@ packages:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
     engines: {node: '>=6'}
 
-  tiny-case@1.0.3:
-    resolution: {integrity: sha512-Eet/eeMhkO6TX8mnUteS9zgPbUMQa4I6Kkp5ORiBD5476/m+PIRiumP5tmh5ioJpH7k51Kehawy2UDfsnxxY8Q==}
-
   tiny-inflate@1.0.3:
     resolution: {integrity: sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==}
 
@@ -5057,9 +4955,6 @@ packages:
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
-
-  toposort@2.0.2:
-    resolution: {integrity: sha512-0a5EOkAUp8D4moMi2W8ZF8jcga7BgZd91O/yabJCFY8az+XSzeGyTKs0Aoo897iV1Nj6guFq8orWDS96z91oGg==}
 
   tough-cookie@6.0.2:
     resolution: {integrity: sha512-exgYmnmL/sJpR3upZfXG5PoatXQii55xAiXGXzY+sROLZ/Y+SLcp9PgJNI9Vz37HpQ74WvDcLT8eqm+kV3FzrA==}
@@ -5095,10 +4990,6 @@ packages:
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
-
-  type-fest@2.19.0:
-    resolution: {integrity: sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==}
-    engines: {node: '>=12.20'}
 
   typed-array-buffer@1.0.3:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
@@ -5651,9 +5542,6 @@ packages:
 
   youch@4.1.0-beta.10:
     resolution: {integrity: sha512-rLfVLB4FgQneDr0dv1oddCVZmKjcJ6yX6mS4pU82Mq/Dt9a3cLZQ62pDBL4AUO+uVrCvtWz3ZFUL2HFAFJ/BXQ==}
-
-  yup@1.3.3:
-    resolution: {integrity: sha512-v8QwZSsHH2K3/G9WSkp6mZKO+hugKT1EmnMqLNUcfu51HU9MDyhlETT/JgtzprnrnQHPWsjc6MUDMBp/l9fNnw==}
 
   zod-validation-error@4.0.2:
     resolution: {integrity: sha512-Q6/nZLe6jxuU80qb/4uJ4t5v2VEZ44lzQjPDhYJNztRQ4wyWc6VF3D3Kb/fAuPetZQnhS3hnajCf9CsWesghLQ==}
@@ -6338,15 +6226,6 @@ snapshots:
       react-dom: 19.2.5(react@19.2.5)
 
   '@floating-ui/utils@0.2.1': {}
-
-  '@hookform/resolvers@5.9.2(ajv@8.20.0)(react-hook-form@7.74.0(react@19.2.5))(yup@1.3.3)(zod@4.6.7)':
-    dependencies:
-      '@standard-schema/utils': 0.3.0
-      react-hook-form: 7.74.0(react@19.2.5)
-    optionalDependencies:
-      ajv: 8.20.0
-      yup: 1.3.3
-      zod: 4.6.7
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -7609,8 +7488,6 @@ snapshots:
   '@sindresorhus/is@7.2.0': {}
 
   '@speed-highlight/core@1.2.17': {}
-
-  '@standard-schema/utils@0.3.0': {}
 
   '@tailwindcss/node@4.3.3':
     dependencies:
@@ -9913,9 +9790,6 @@ snapshots:
       object-assign: 4.1.1
       react-is: 16.13.1
 
-  property-expr@2.0.6:
-    optional: true
-
   property-information@7.2.0: {}
 
   punycode@2.3.1: {}
@@ -9997,10 +9871,6 @@ snapshots:
     dependencies:
       react: 19.2.5
       scheduler: 0.27.0
-
-  react-hook-form@7.74.0(react@19.2.5):
-    dependencies:
-      react: 19.2.5
 
   react-is@16.13.1: {}
 
@@ -10457,9 +10327,6 @@ snapshots:
 
   tapable@2.3.3: {}
 
-  tiny-case@1.0.3:
-    optional: true
-
   tiny-inflate@1.0.3: {}
 
   tinybench@6.1.4: {}
@@ -10484,9 +10351,6 @@ snapshots:
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
-
-  toposort@2.0.2:
-    optional: true
 
   tough-cookie@6.0.2:
     dependencies:
@@ -10522,9 +10386,6 @@ snapshots:
   type-check@0.4.0:
     dependencies:
       prelude-ls: 1.2.1
-
-  type-fest@2.19.0:
-    optional: true
 
   typed-array-buffer@1.0.3:
     dependencies:
@@ -11058,14 +10919,6 @@ snapshots:
       '@speed-highlight/core': 1.2.17
       cookie: 1.1.1
       youch-core: 0.3.3
-
-  yup@1.3.3:
-    dependencies:
-      property-expr: 2.0.6
-      tiny-case: 1.0.3
-      toposort: 2.0.2
-      type-fest: 2.19.0
-    optional: true
 
   zod-validation-error@4.0.2(zod@4.6.7):
     dependencies:

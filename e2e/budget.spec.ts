@@ -26,9 +26,7 @@ import { DIST, sample, sitemapPaths } from "./lib/urls"
 const BUDGET_KB = 380
 
 // Heavy libraries that must stay behind dynamic imports.
-// vendor-forms (zod, react-hook-form) belongs to the footer feedback card,
-// which hydrates on scroll; it must not creep into the initial load.
-const FORBIDDEN = /vendor-pdfjs|pdf\.worker|vendor-webllm|vendor-forms/
+const FORBIDDEN = /vendor-pdfjs|pdf\.worker|vendor-webllm/
 const ARTICLE_ONLY = /vendor-photoswipe/
 
 const builtPage = (p: string) =>

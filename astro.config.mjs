@@ -172,7 +172,6 @@ export default defineConfig({
         "react/jsx-runtime",
         "react/jsx-dev-runtime",
         "posthog-js",
-        "@hookform/resolvers/zod",
         "class-variance-authority",
         "clsx",
         "cmdk",
@@ -180,7 +179,6 @@ export default defineConfig({
         "pdfjs-dist",
         "photoswipe",
         "radix-ui",
-        "react-hook-form",
         "shiki/core",
         "shiki/engine/javascript",
         "shiki/themes/github-light.mjs",
@@ -193,7 +191,6 @@ export default defineConfig({
         "sonner",
         "tailwind-merge",
         "vaul",
-        "zod",
         "zustand",
         "zustand/middleware"
       ]
@@ -239,12 +236,6 @@ export default defineConfig({
               if (pkg === "posthog-js") return "vendor-posthog"
               if (pkg === "pdfjs-dist") return "vendor-pdfjs"
               if (pkg === "photoswipe") return "vendor-photoswipe"
-              if (
-                pkg === "zod" ||
-                pkg === "react-hook-form" ||
-                pkg === "@hookform/resolvers"
-              )
-                return "vendor-forms"
               return "vendor"
             }
             // track() is imported by the PostHog init script on every page and

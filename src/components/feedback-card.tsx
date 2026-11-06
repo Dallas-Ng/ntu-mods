@@ -1,25 +1,15 @@
 "use client"
 
-import { useEffect, useState, type SyntheticEvent } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useEffect, useId, useRef, useState, type FormEvent } from "react"
 import { toast } from "sonner"
 
 import { siteConfig } from "@/config/site"
 import { reportError, track, whenAnalyticsReady } from "@/lib/analytics"
-import { FeedbackFormSchema, type FeedbackForm } from "@/lib/feedback"
+import { validateFeedback } from "@/lib/feedback"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { TextLink } from "@/components/ui/text-link"
 import { Textarea } from "@/components/ui/textarea"
@@ -32,26 +22,57 @@ interface Props {
 
 const FeedbackCard = ({ divClassName, starter }: Props) => {
   const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState("")
+  const [feedback, setFeedback] = useState("")
+  const [includeLocalData, setIncludeLocalData] = useState(true)
+  const [feedbackError, setFeedbackError] = useState<string>()
 
-  const form = useForm<FeedbackForm>({
-    resolver: zodResolver(FeedbackFormSchema),
-    defaultValues: {
-      email: "",
-      feedback: "",
-      includeLocalData: true
-    }
-  })
+  // Stable ids so every label, description and error message is wired to its
+  // control (the same ids the Form primitives used to generate).
+  const emailId = useId()
+  const feedbackId = useId()
+  const feedbackMessageId = `${feedbackId}-message`
+  const localDataId = useId()
+  const localDataDescriptionId = `${localDataId}-description`
+
+  const feedbackRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     if (!starter) return
-    form.setValue("feedback", starter.text, { shouldValidate: false })
-    form.setFocus("feedback")
-  }, [starter, form])
+    setFeedback(starter.text)
+    setFeedbackError(undefined)
+    feedbackRef.current?.focus()
+  }, [starter])
 
-  const onSubmit = async (data: FeedbackForm) => {
+  const onFeedbackChange = (value: string) => {
+    setFeedback(value)
+    // Once an error is showing, re-check on every keystroke so it clears as
+    // soon as the message is long enough.
+    if (feedbackError)
+      setFeedbackError(
+        validateFeedback({ email, feedback: value, includeLocalData }).errors
+          .feedback
+      )
+  }
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    const { values, errors } = validateFeedback({
+      email,
+      feedback,
+      includeLocalData
+    })
+
+    if (errors.feedback) {
+      setFeedbackError(errors.feedback)
+      return
+    }
+
+    setFeedbackError(undefined)
     setLoading(true)
 
-    const localData = data.includeLocalData
+    const localData = values.includeLocalData
       ? Object.fromEntries(
           Object.keys(localStorage).map((key) => [
             key,
@@ -61,8 +82,8 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
       : undefined
 
     const body = {
-      author: data.email ?? "anon",
-      feedback: data.feedback,
+      author: values.email || "anon",
+      feedback: values.feedback,
       category: "feedback",
       url: window.location.href,
       localData: localData ? JSON.stringify(localData) : undefined
@@ -88,9 +109,9 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
     }
 
     track("feedback_submitted", {
-      has_email: !!data.email,
-      feedback_length: data.feedback.length,
-      included_local_data: data.includeLocalData
+      has_email: !!values.email,
+      feedback_length: values.feedback.length,
+      included_local_data: values.includeLocalData
     })
 
     try {
@@ -102,7 +123,9 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
         })
         .unwrap()
 
-      form.reset()
+      setEmail("")
+      setFeedback("")
+      setIncludeLocalData(true)
     } catch (e) {
       // Toast already surfaced it; keep the input so it isn't retyped.
       reportError("feedback_submit", e)
@@ -111,107 +134,85 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
     }
   }
 
-  // handleSubmit returns a promise that only rejects if the resolver itself
-  // throws (a validation failure resolves with field errors). Left unhandled,
-  // that surfaces as an anonymous unhandled rejection, which is how issue #353
-  // was reported, so catch it and say something the visitor can act on.
-  const submitForm = (e: SyntheticEvent<HTMLFormElement>) => {
-    void form
-      .handleSubmit(onSubmit)(e)
-      .catch((error) => {
-        toast.error("Error submitting feedback. Please try again later")
-        reportError("feedback_validate", error)
-      })
-  }
-
   return (
     <div className={cn("bg-muted rounded-2xl p-5", divClassName)}>
-      <Form {...form}>
-        <form onSubmit={submitForm} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email (optional)</FormLabel>
-                <FormControl>
-                  <Input
-                    autoComplete="off"
-                    placeholder="your@email.com"
-                    className="bg-background"
-                    {...field}
-                  />
-                </FormControl>
-
-                <FormDescription>
-                  I&apos;ll use this to follow up with you.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div className="grid gap-2">
+          <Label htmlFor={emailId}>Email (optional)</Label>
+          <Input
+            id={emailId}
+            autoComplete="off"
+            placeholder="your@email.com"
+            className="bg-background"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
+          <p className="text-muted-foreground text-sm">
+            I&apos;ll use this to follow up with you.
+          </p>
+        </div>
 
-          <FormField
-            control={form.control}
-            name="feedback"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Feedback</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Share your thoughts, report an issue, or suggest an improvement..."
-                    {...field}
-                    className="bg-background min-h-[160px]"
-                  />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
+        <div className="grid gap-2">
+          <Label
+            htmlFor={feedbackId}
+            data-error={!!feedbackError}
+            className="data-[error=true]:text-destructive">
+            Feedback
+          </Label>
+          <Textarea
+            id={feedbackId}
+            ref={feedbackRef}
+            placeholder="Share your thoughts, report an issue, or suggest an improvement..."
+            className="bg-background min-h-[160px]"
+            aria-invalid={!!feedbackError}
+            aria-describedby={feedbackError ? feedbackMessageId : undefined}
+            value={feedback}
+            onChange={(e) => onFeedbackChange(e.target.value)}
           />
-
-          <FormField
-            control={form.control}
-            name="includeLocalData"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between gap-4">
-                <div className="space-y-0.5">
-                  <FormLabel>Include my timetable data</FormLabel>
-                  <FormDescription className="text-pretty">
-                    Attaches your saved timetables and settings to help debug
-                    the issue. On by default, turn off to exclude it.
-                  </FormDescription>
-                </div>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-muted-foreground shrink-0 text-xs whitespace-nowrap">
-              Developer?{" "}
-              <TextLink
-                href={`${siteConfig.links.repo}/issues`}
-                target="_blank"
-                rel="noopener noreferrer">
-                Open an issue or PR
-              </TextLink>
-              .
+          {feedbackError ? (
+            <p id={feedbackMessageId} className="text-destructive text-sm">
+              {feedbackError}
             </p>
-            <Button
-              type="submit"
-              className="w-full sm:w-auto sm:max-w-[200px] sm:flex-1"
-              disabled={loading}>
-              Submit
-            </Button>
+          ) : null}
+        </div>
+
+        <div className="flex flex-row items-center justify-between gap-4">
+          <div className="space-y-0.5">
+            <Label htmlFor={localDataId}>Include my timetable data</Label>
+            <p
+              id={localDataDescriptionId}
+              className="text-muted-foreground text-sm text-pretty">
+              Attaches your saved timetables and settings to help debug the
+              issue. On by default, turn off to exclude it.
+            </p>
           </div>
-        </form>
-      </Form>
+          <Switch
+            id={localDataId}
+            aria-describedby={localDataDescriptionId}
+            checked={includeLocalData}
+            onCheckedChange={setIncludeLocalData}
+          />
+        </div>
+
+        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-muted-foreground shrink-0 text-xs whitespace-nowrap">
+            Developer?{" "}
+            <TextLink
+              href={`${siteConfig.links.repo}/issues`}
+              target="_blank"
+              rel="noopener noreferrer">
+              Open an issue or PR
+            </TextLink>
+            .
+          </p>
+          <Button
+            type="submit"
+            className="w-full sm:w-auto sm:max-w-[200px] sm:flex-1"
+            disabled={loading}>
+            Submit
+          </Button>
+        </div>
+      </form>
     </div>
   )
 }

@@ -7,7 +7,9 @@ import { formatCount } from "@/lib/format"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
-const REPO = "Dallas-Ng/ntu-mods"
+/** "https://github.com/owner/name" -> "owner/name", as the API path wants it. */
+export const repoPath = (repoUrl: string) =>
+  new URL(repoUrl).pathname.replace(/^\/+|\/+$/g, "")
 
 /** Pick the star count out of a GitHub repository payload, if it has one. */
 export const readStarCount = (repo: unknown) => {
@@ -35,7 +37,7 @@ export default function GithubStars({ repoUrl }: { repoUrl: string }) {
   useEffect(() => {
     const controller = new AbortController()
 
-    fetch(`https://api.github.com/repos/${REPO}`, {
+    fetch(`https://api.github.com/repos/${repoPath(repoUrl)}`, {
       signal: controller.signal,
       headers: { Accept: "application/vnd.github+json" }
     })
@@ -48,7 +50,7 @@ export default function GithubStars({ repoUrl }: { repoUrl: string }) {
       })
 
     return () => controller.abort()
-  }, [])
+  }, [repoUrl])
 
   const loaded = stars !== undefined
 

@@ -1,6 +1,20 @@
 import { describe, expect, it } from "vitest"
 
-import { readStarCount } from "@/components/developers/github-stars"
+import { readStarCount, repoPath } from "@/components/developers/github-stars"
+
+describe("repoPath", () => {
+  it("turns a repository URL into the API path", () => {
+    expect(repoPath("https://github.com/Dallas-Ng/ntu-mods")).toBe(
+      "Dallas-Ng/ntu-mods"
+    )
+  })
+
+  it("ignores a trailing slash", () => {
+    expect(repoPath("https://github.com/Dallas-Ng/ntu-mods/")).toBe(
+      "Dallas-Ng/ntu-mods"
+    )
+  })
+})
 
 describe("readStarCount", () => {
   it("reads the count from a GitHub repository payload", () => {

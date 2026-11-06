@@ -28,6 +28,13 @@ const BUDGET_KB = 380
 // Heavy libraries that must stay behind dynamic imports.
 const FORBIDDEN = /vendor-pdfjs|pdf\.worker/
 
+// The article lightbox belongs to article pages only. PhotoSwipe used to have a
+// vendor chunk of its own to guard; it is now a ~3 KB inline script, so the
+// guard follows a marker in its code rather than a package name.
+const ARTICLE_ONLY = "image-lightbox"
+const loadsArticleOnly = (file: string) =>
+  fs.readFileSync(path.join(DIST, file), "utf8").includes(ARTICLE_ONLY)
+
 const builtPage = (p: string) =>
   path.join(DIST, p === "/" ? "index.html" : `${p}.html`)
 
@@ -64,6 +71,11 @@ test.describe("client JS budget", () => {
         files.filter((f) => FORBIDDEN.test(f)),
         "heavy chunk loaded up front"
       ).toEqual([])
+      if (!p.startsWith("/articles/"))
+        expect(
+          files.filter((f) => loadsArticleOnly(f)),
+          "article-only chunk"
+        ).toEqual([])
     })
   }
 })

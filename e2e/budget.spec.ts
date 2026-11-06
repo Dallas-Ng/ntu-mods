@@ -32,15 +32,24 @@ const FORBIDDEN = /vendor-pdfjs|pdf\.worker/
 // vendor chunk of its own to guard; it is now a ~3 KB inline script, so the
 // guard follows a marker in its code rather than a package name.
 const ARTICLE_ONLY = "image-lightbox"
+const DIST_ROOT = path.resolve(DIST)
+const resolveInDist = (target: string) => {
+  const resolved = path.resolve(DIST_ROOT, `.${path.sep}${target}`)
+  const rel = path.relative(DIST_ROOT, resolved)
+  if (rel.startsWith("..") || path.isAbsolute(rel)) {
+    throw new Error(`Path escapes DIST: ${target}`)
+  }
+  return resolved
+}
 const loadsArticleOnly = (file: string) =>
-  fs.readFileSync(path.join(DIST, file), "utf8").includes(ARTICLE_ONLY)
+  fs.readFileSync(resolveInDist(file), "utf8").includes(ARTICLE_ONLY)
 
 const builtPage = (p: string) =>
-  path.join(DIST, p === "/" ? "index.html" : `${p}.html`)
+  resolveInDist(p === "/" ? "index.html" : `${p}.html`)
 
 const builtDir = (dir: string) =>
   fs
-    .readdirSync(path.join(DIST, dir))
+    .readdirSync(resolveInDist(dir))
     .filter((f) => f.endsWith(".html"))
     .map((f) => `/${dir}/${f.slice(0, -5)}`)
 

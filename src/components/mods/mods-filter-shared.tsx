@@ -25,6 +25,7 @@ export type FacetKey = "moduleLevel" | "moduleType" | "moduleFaculty"
 
 export const FILTER_KEYS = [
   "searchTerm",
+  "favouritesOnly",
   "moduleType",
   "moduleFaculty",
   "moduleLevel",
@@ -118,7 +119,7 @@ export function useFilters(props: ModsFilterProps) {
   /** Clears every filter but leaves the search box alone. */
   const resetFilters = () =>
     deleteParams(
-      FILTER_KEYS.filter((k) => k !== "searchTerm"),
+      FILTER_KEYS.filter((k) => k !== "searchTerm" && k !== "favouritesOnly"),
       "all"
     )
 

@@ -54,7 +54,10 @@ const ModsSearchInput = ({ paramsValue }: { paramsValue: string }) => {
           "pl-9",
           value.length > 0 && "ring-ring rounded-md ring-1"
         )}
+        type="search"
         name="searchTerm"
+        autoComplete="off"
+        aria-label="Search modules"
         placeholder="Search by module name or code…"
         value={currSearchTerm}
         onChange={(e) => setCurrSearchTerm(e.target.value)}

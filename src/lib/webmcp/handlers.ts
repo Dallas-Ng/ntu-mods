@@ -25,6 +25,7 @@ import {
   filterExams,
   searchModuleList
 } from "@/lib/mcp/shared"
+import { hhmmToMinutes } from "@/lib/parse-time"
 import { resolveBestIndex } from "@/lib/resolve-best-index"
 import {
   LATEST_SEMESTER_LABEL,
@@ -109,8 +110,6 @@ function confirmWithUser(message: string) {
     throw new ToolError("The user declined, so nothing was changed.")
   }
 }
-
-const toMinutes = (hhmm: number) => Math.floor(hhmm / 100) * 60 + (hhmm % 100)
 
 const isValidHhmm = (value: unknown): value is number =>
   Number.isInteger(value) &&
@@ -377,7 +376,7 @@ function sanitiseGenerationConfig(input: unknown): Partial<GenerationConfig> {
       !Number.isInteger(o?.day) ||
       !isValidHhmm(o?.startTime) ||
       !isValidHhmm(o?.endTime) ||
-      toMinutes(o.endTime) <= toMinutes(o.startTime)
+      hhmmToMinutes(o.endTime) <= hhmmToMinutes(o.startTime)
     ) {
       throw new ToolError(
         "Each time window needs day, startTime and a later endTime."
@@ -746,7 +745,7 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
           s.day! > 7 ||
           !isValidHhmm(s.startTime) ||
           !isValidHhmm(s.endTime) ||
-          toMinutes(s.endTime) <= toMinutes(s.startTime)
+          hhmmToMinutes(s.endTime) <= hhmmToMinutes(s.startTime)
         ) {
           throw new ToolError(
             "Each session needs day 1-7, startTime and a later endTime (HHMM)."
@@ -807,7 +806,9 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
       ...plan.state.generationConfig,
       ...sanitiseGenerationConfig(args.config)
     }
-    if (toMinutes(config.dayEndTime) <= toMinutes(config.dayStartTime)) {
+    if (
+      hhmmToMinutes(config.dayEndTime) <= hhmmToMinutes(config.dayStartTime)
+    ) {
       throw new ToolError("dayEndTime must be later than dayStartTime.")
     }
 

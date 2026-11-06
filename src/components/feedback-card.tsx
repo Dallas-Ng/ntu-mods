@@ -5,7 +5,12 @@ import { toast } from "sonner"
 
 import { siteConfig } from "@/config/site"
 import { reportError, track, whenAnalyticsReady } from "@/lib/analytics"
-import { validateFeedback } from "@/lib/feedback"
+import {
+  describeFeedbackFailure,
+  FEEDBACK_SEND_FAILED_MESSAGE,
+  FeedbackSubmitError,
+  validateFeedback
+} from "@/lib/feedback"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -91,7 +96,8 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
 
     // fetch only rejects on network failure, a 500 (bad Resend key, say)
     // still resolves, so the status has to be checked explicitly or
-    // toast.promise reports success for a submission that never sent.
+    // toast.promise reports success for a submission that never sent. The
+    // route explains itself in JSON, so the body goes into the error too.
     //
     // PostHog loads after the page does, so wait briefly for its ID: without
     // it the email and the server-side event can't be tied to this visitor.
@@ -105,7 +111,10 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
         body: JSON.stringify({ ...body, distinctId })
       })
 
-      if (!res.ok) throw new Error(`Feedback request failed (${res.status})`)
+      if (!res.ok)
+        throw new FeedbackSubmitError(
+          describeFeedbackFailure(res, await res.text())
+        )
     }
 
     track("feedback_submitted", {
@@ -119,7 +128,10 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
         .promise(submitFeedback(), {
           loading: "Submitting feedback...",
           success: "Feedback submitted!",
-          error: "Error submitting feedback. Please try again later"
+          error: (error: unknown) =>
+            error instanceof FeedbackSubmitError
+              ? error.userMessage
+              : FEEDBACK_SEND_FAILED_MESSAGE
         })
         .unwrap()
 

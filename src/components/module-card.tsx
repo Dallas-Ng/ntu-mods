@@ -86,23 +86,26 @@ export const ModuleCardDetail = ({
     <div
       className={cn(
         cardVariants({ interactive: true }),
-        "group relative flex h-32 flex-col p-4",
-        isCurrentSemester ? "bg-muted border-transparent" : "border-border"
+        "group relative flex min-h-32 flex-col p-4"
       )}>
       <a
         href={getHref(moduleData, code)}
         className="flex min-w-0 flex-1 flex-col pr-20 after:absolute after:inset-0 after:rounded-2xl">
-        <div className="text-muted-foreground flex items-center gap-1.5 text-xs whitespace-nowrap">
-          <span className="font-mono">{highlightText(code, searchTerm)}</span>
-          {moduleData.au && <span>· {moduleData.au} AU</span>}
-          {faculty && <span>· {faculty}</span>}
+        <div className="text-muted-foreground flex min-w-0 items-center gap-1.5 text-xs">
+          <span className="shrink-0 font-mono">
+            {highlightText(code, searchTerm)}
+          </span>
+          {moduleData.au && (
+            <span className="shrink-0">· {moduleData.au} AU</span>
+          )}
+          {faculty && <span className="truncate">· {faculty}</span>}
         </div>
         <p className="mt-1 line-clamp-2 text-base leading-snug font-semibold tracking-tight">
           {highlightText(moduleData.title, searchTerm)}
         </p>
-        <div className="mt-auto flex gap-1 overflow-hidden text-xs">
+        <div className="mt-3 flex flex-wrap gap-1 text-xs">
           {!isCurrentSemester && (
-            <span className="bg-muted text-foreground shrink-0 rounded-full px-2 py-0.5">
+            <span className="bg-muted text-foreground rounded-full px-2 py-0.5">
               {lastOffered(moduleData)}
             </span>
           )}
@@ -110,7 +113,7 @@ export const ModuleCardDetail = ({
             <span
               key={i}
               className={cn(
-                "text-muted-foreground shrink-0 truncate rounded-full px-2 py-0.5",
+                "text-muted-foreground rounded-full px-2 py-0.5",
                 isCurrentSemester ? "bg-background" : "bg-muted"
               )}>
               {MODULE_CATEGORY[category]}
@@ -161,6 +164,12 @@ export const ModuleListRow = ({
         <span className="w-full min-w-0 flex-1 truncate text-sm">
           {highlightText(moduleData.title, searchTerm)}
         </span>
+
+        {!isCurrentSemester && (
+          <span className="bg-muted text-foreground w-fit shrink-0 rounded-full px-2 py-0.5 text-xs sm:hidden">
+            {lastOffered(moduleData)}
+          </span>
+        )}
 
         <div className="text-muted-foreground hidden shrink-0 items-center gap-1 text-xs sm:flex">
           {!isCurrentSemester && (

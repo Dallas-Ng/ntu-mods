@@ -6,6 +6,7 @@ import { ChevronDown, Search } from "lucide-react"
 import { track } from "@/lib/analytics"
 import { CODE_QUERY_RE } from "@/lib/filter-modules"
 import { getModulePrefix } from "@/lib/format"
+import { getExamModuleUrl } from "@/lib/module-url"
 import type { DbExam } from "@/lib/server/db/types"
 import { cn } from "@/lib/utils"
 import { useDebounce } from "@/hooks/use-debounce"
@@ -136,7 +137,7 @@ function ExamTable({ items }: { items: DbExam[] }) {
         {items.map((exam) => (
           <a
             key={exam.key}
-            href={`/mods/${exam.key}`}
+            href={getExamModuleUrl(exam.key)}
             className="hover:bg-accent flex flex-col gap-1 px-5 py-3 transition-colors md:flex-row md:items-center md:gap-4">
             <span className="w-24 shrink-0 text-sm font-semibold whitespace-nowrap">
               {exam.key}

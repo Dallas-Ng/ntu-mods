@@ -2,7 +2,7 @@
 title: "Easy BDEs at NTU: How to Find One That Actually Fits"
 description: "Not every BDE is equally demanding. Learn how to identify easy BDEs at NTU by assessment type, workload pattern, and what 'easy' actually means for your semester."
 date: "2026-05-19"
-updated: "2026-05-19"
+updated: "2026-11-18"
 author: "NTUMods"
 category: "BDE"
 thumbnailText: "Easy BDEs"
@@ -77,7 +77,7 @@ One thing to be clear about: exam-free does not mean light. Design BDEs need rea
 
 If what you want is modules that do not ask much of you each week, the trade-off is usually that the stakes are higher at the end. Most BDEs with low weekly demands compensate with a bigger final deliverable.
 
-Some communication and writing BDEs work this way. There is a lecture to attend, the weekly reading is light or optional, and the main grade comes from one or two assignments. [CS2026 Media Presentation & Performance](/mods/CS2026) and similar modules often have a lighter footprint week to week, though the presentations themselves are graded.
+Some communication and writing BDEs work this way. There is a lecture to attend, the weekly reading is light or optional, and the main grade comes from one or two assignments. These modules often have a lighter footprint week to week, though the presentations themselves are graded. Check the module page for the assessment breakdown before you bid.
 
 Some business BDEs also have lighter weekly demands outside class. [BU5603 Negotiation: Strategy & Practice](/mods/BU5603) does not require heavy preparation before every session the way a language BDE does. The trade-off is that class participation is graded, so you still have to show up and engage properly during the session.
 

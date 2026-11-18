@@ -36,7 +36,7 @@
 - Custom courses and blocks (gym, CCA, work) with multiple options, treated as real obstacles during generation
 - Walking time between back-to-back classes, shown on the campus map with a warning when the gap is too short
 - Share a timetable by URL, export to `.ics` with a preview, or save a screenshot
-- Appearance settings for radius, density, contrast, colour palette and table scale, with dark mode
+- Appearance settings for radius, density, contrast, colour palette and table scale, with dark mode. Granular control recolours or fades a class type, or one module, so the classes you skip recede
 
 **Modules and exams**
 

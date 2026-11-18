@@ -9,6 +9,15 @@ export const INDEX_TYPE_COLOR_KEYS = [
 
 export type IndexTypeColorKey = (typeof INDEX_TYPE_COLOR_KEYS)[number]
 
+export const INDEX_TYPE_LABELS: Record<IndexTypeColorKey, string> = {
+  lec: "LEC",
+  lab: "LAB",
+  sem: "SEM",
+  tut: "TUT",
+  des: "DES",
+  prj: "PRJ"
+}
+
 export interface TimetableColorToken {
   bg: string
   bgHover: string
@@ -19,6 +28,25 @@ export interface TimetableColorToken {
   textAltDark: string
   border: string
 }
+
+/**
+ * A tweak on top of the chosen palette, for one class type. The picked
+ * colour's hue and saturation retint the palette, whose lightness ramp is
+ * what keeps every text pair readable.
+ */
+export interface IndexTypeStyleOverride {
+  /** Hex colour, e.g. `#e11d48`. Omitted keeps the palette's own colour. */
+  color?: string
+  /** 0-100. Fades the whole block: fill, text and border. */
+  opacity?: number
+}
+
+export type IndexTypeOverrides = Partial<
+  Record<IndexTypeColorKey, IndexTypeStyleOverride>
+>
+
+/** Per module (`CZ2002`): an override for each of its class types. */
+export type ModuleIndexTypeOverrides = Record<string, IndexTypeOverrides>
 
 type TimetablePalette = {
   label: string
@@ -479,11 +507,46 @@ export interface AppearanceSettings {
   density: AppearanceDensity
   contrast: ContrastPreset
   timetableStyle: TimetableStylePreset
+  /** Colour and opacity tweaks per class type, on top of the palette. */
+  typeOverrides: IndexTypeOverrides
+  /** The same tweaks for a single module, winning over its type defaults. */
+  moduleOverrides: ModuleIndexTypeOverrides
+  /**
+   * Off uses the chosen palette as designed. On applies the per-type and
+   * per-module overrides and exposes the controls that edit them.
+   */
+  granularColors: boolean
 }
 
 export const DEFAULT_APPEARANCE_SETTINGS: AppearanceSettings = {
   radius: 8,
   density: "comfortable",
   contrast: "normal",
-  timetableStyle: "classic"
+  timetableStyle: "classic",
+  typeOverrides: {},
+  moduleOverrides: {},
+  granularColors: false
 }
+
+/**
+ * Fills in fields added after a visitor's settings were saved. Old persisted
+ * settings only carry the original four keys, and the grid reads the new ones
+ * directly rather than through a merge.
+ */
+export const withAppearanceDefaults = (
+  appearance?: Partial<AppearanceSettings>
+): AppearanceSettings => ({
+  ...DEFAULT_APPEARANCE_SETTINGS,
+  ...appearance,
+  typeOverrides: appearance?.typeOverrides ?? {},
+  moduleOverrides: appearance?.moduleOverrides ?? {},
+  granularColors:
+    appearance?.granularColors ?? DEFAULT_APPEARANCE_SETTINGS.granularColors
+})
+
+/**
+ * When Appearance last gained something worth pointing out (granular class
+ * colours). Students who have not opened it since this date see a pulse on
+ * its button. An ISO date, compared as text against the stored open time.
+ */
+export const APPEARANCE_FEATURE_RELEASED = "2026-11-18"

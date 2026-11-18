@@ -1,6 +1,7 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
+import { withAppearanceDefaults } from "@/config/appearance-settings"
 import { normalizeCustomCourses } from "@/lib/custom-course-migrate"
 
 import { createFavouritesSlice, FavouritesSlice } from "./favourites.state"
@@ -35,6 +36,14 @@ export const migrateBoundState = (
     )
   }
 
+  // v4: per-type and per-module timetable colour overrides
+  if (version < 4 && state.settings) {
+    state.settings = {
+      ...state.settings,
+      appearance: withAppearanceDefaults(state.settings.appearance)
+    }
+  }
+
   return state
 }
 
@@ -57,7 +66,7 @@ const useBoundStore = create(
     },
     {
       name: "ntu-mods",
-      version: 3,
+      version: 4,
       migrate: migrateBoundState
     }
   )

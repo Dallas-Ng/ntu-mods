@@ -5,10 +5,10 @@ import { useEffect, useMemo } from "react"
 import {
   APPEARANCE_DENSITIES,
   CONTRAST_PRESETS,
-  DEFAULT_APPEARANCE_SETTINGS,
   INDEX_TYPE_COLOR_KEYS,
-  TIMETABLE_STYLE_PRESETS
+  withAppearanceDefaults
 } from "@/config/appearance-settings"
+import { getIndexTypeVars, getTimetablePreset } from "@/lib/index-type-colors"
 import { useSettings } from "@/hooks/use-settings"
 import { useTheme } from "@/hooks/use-theme"
 
@@ -16,12 +16,9 @@ const AppearanceStyleProvider = () => {
   const { resolvedTheme } = useTheme()
   const { settings } = useSettings()
   // Memoized so the effect below runs on real appearance changes rather than
-  // on every render — a fresh object literal would change identity each time.
+  // on every render, a fresh object literal would change identity each time.
   const appearance = useMemo(
-    () => ({
-      ...DEFAULT_APPEARANCE_SETTINGS,
-      ...settings.appearance
-    }),
+    () => withAppearanceDefaults(settings.appearance),
     [settings.appearance]
   )
 
@@ -32,9 +29,6 @@ const AppearanceStyleProvider = () => {
       APPEARANCE_DENSITIES.comfortable
     const contrast =
       CONTRAST_PRESETS[appearance.contrast] ?? CONTRAST_PRESETS.normal
-    const timetable =
-      TIMETABLE_STYLE_PRESETS[appearance.timetableStyle] ??
-      TIMETABLE_STYLE_PRESETS.classic
     const isDark = resolvedTheme === "dark"
 
     root.style.setProperty(
@@ -44,23 +38,23 @@ const AppearanceStyleProvider = () => {
     root.style.setProperty("--radius", `${appearance.radius / 16}rem`)
     root.style.setProperty("--cell-padding", density.cellPadding)
     root.style.setProperty("--table-padding", density.tablePadding)
-    root.style.setProperty("--index-bg-opacity-dark", timetable.opacity)
-    root.style.setProperty(
-      "--index-bg-opacity-dark-hover",
-      timetable.opacityHover
-    )
+
+    // Custom blocks and lunch keep the palette's shared alpha; only the six
+    // class types have their own.
+    const preset = getTimetablePreset(appearance.timetableStyle)
+    root.style.setProperty("--index-bg-opacity-dark", preset.opacity)
+    root.style.setProperty("--index-bg-opacity-dark-hover", preset.opacityHover)
 
     INDEX_TYPE_COLOR_KEYS.forEach((key) => {
-      const value = timetable.colors[key]
+      const vars = getIndexTypeVars(
+        appearance.timetableStyle,
+        key,
+        appearance.granularColors ? appearance.typeOverrides?.[key] : undefined
+      )
 
-      root.style.setProperty(`--index-${key}-bg`, value.bg)
-      root.style.setProperty(`--index-${key}-bg-hover`, value.bgHover)
-      root.style.setProperty(`--index-${key}-bg-dark`, value.bgDark)
-      root.style.setProperty(`--index-${key}-text`, value.text)
-      root.style.setProperty(`--index-${key}-text-alt`, value.textAlt)
-      root.style.setProperty(`--index-${key}-text-dark`, value.textDark)
-      root.style.setProperty(`--index-${key}-text-alt-dark`, value.textAltDark)
-      root.style.setProperty(`--index-${key}-border`, value.border)
+      Object.entries(vars).forEach(([name, value]) => {
+        root.style.setProperty(name, value)
+      })
     })
   }, [appearance, resolvedTheme])
 

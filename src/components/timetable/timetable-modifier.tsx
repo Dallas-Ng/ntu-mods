@@ -27,6 +27,7 @@ import TimetableGenerationConfig from "./mode-generation/timetable-generation-co
 import { RemarkTooltipContent } from "./remark-tooltip-content"
 import TimetableDayRoute from "./timetable-day-route"
 import TimetableIndexModifier from "./timetable-index-modifier"
+import TimetableModuleColours from "./timetable-module-colours"
 import TimetableModulesSelect from "./timetable-modules-select"
 
 interface ModuleRowProps {
@@ -93,6 +94,8 @@ const ModuleRow = ({
         </div>
 
         <div className="flex items-center">
+          <TimetableModuleColours moduleKey={moduleKey} indexKey={indexKey} />
+
           <button
             type="button"
             aria-label={hidden ? `Show ${moduleKey}` : `Hide ${moduleKey}`}

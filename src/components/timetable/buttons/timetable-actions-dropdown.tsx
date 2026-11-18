@@ -24,6 +24,7 @@ import { planHasData } from "@/lib/plan-name"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { useAllModules } from "@/hooks/use-all-modules"
+import { useAppearanceNew } from "@/hooks/use-appearance-new"
 import { useCustomCourses } from "@/hooks/use-custom-courses"
 import { useHydrated } from "@/hooks/use-hydrated"
 import { usePlanNames } from "@/hooks/use-plan-names"
@@ -53,6 +54,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "@/components/ui/tooltip"
+import { NewBadge, PulseDot } from "@/components/new-dot"
 import AppearanceSettings from "@/components/settings/appearance-settings"
 
 import TimetableCalendarDialog from "./timetable-calendar-dialog"
@@ -98,6 +100,7 @@ const TimetableActionsDropdown = ({
   useOpenedTracker("import", importOpen)
   useOpenedTracker("settings", settingsOpen)
   useOpenedTracker("appearance", appearanceOpen)
+  const appearanceNew = useAppearanceNew(appearanceOpen)
 
   // Open the first time; after that the student's last choice is kept.
   // Saved settings from before this one existed have no value yet.
@@ -349,13 +352,14 @@ const TimetableActionsDropdown = ({
           <Button
             variant="outline"
             size="sm"
-            className="ml-auto h-8 gap-1.5"
+            className="relative ml-auto h-8 gap-1.5"
             onClick={() => {
               setSheetView("tools")
               setSheetOpen(true)
             }}>
             <Wrench className="size-4" />
             Tools
+            {appearanceNew && <PulseDot />}
           </Button>
 
           <Drawer open={sheetOpen} onOpenChange={setSheetOpen}>
@@ -391,8 +395,11 @@ const TimetableActionsDropdown = ({
                             <t.icon className="size-4" />
                           </span>
                           <span className="min-w-0">
-                            <span className="block text-sm font-medium">
+                            <span className="flex items-center gap-2 text-sm font-medium">
                               {t.title}
+                              {t.title === "Appearance" && appearanceNew && (
+                                <NewBadge>New</NewBadge>
+                              )}
                             </span>
                             <span className="text-muted-foreground block text-xs">
                               {t.hint}
@@ -585,8 +592,14 @@ const TimetableActionsDropdown = ({
                   <Palette className="size-4" />,
                   (icon) =>
                     iconButton("Appearance", {
-                      children: icon,
-                      onClick: () => setAppearanceOpen(true)
+                      children: (
+                        <>
+                          {icon}
+                          {appearanceNew && <PulseDot />}
+                        </>
+                      ),
+                      onClick: () => setAppearanceOpen(true),
+                      className: "relative"
                     })
                 )}
               </div>
@@ -620,6 +633,7 @@ const TimetableActionsDropdown = ({
                 open ? "scale-100 opacity-100" : "scale-50 -rotate-90 opacity-0"
               )}
             />
+            {appearanceNew && !open && <PulseDot />}
             <span className="sr-only">
               {open ? "Close tools" : "Open tools"}
             </span>

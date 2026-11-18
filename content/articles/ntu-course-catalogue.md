@@ -2,7 +2,7 @@
 title: "NTU Course Catalogue: Browse All Modules by School (AY2026/2027 Semester 2)"
 description: "The full NTU course catalogue for AY2026/2027 Semester 2 — every school, module prefix, and how many modules each offers, with links to browse or search on NTUMods."
 date: "2026-08-06"
-updated: "2026-10-15"
+updated: "2026-11-18"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "Course catalogue"
@@ -85,7 +85,7 @@ Every module page shows prerequisites, exclusions, mutually exclusive modules, i
 
 ### How many modules does NTU offer in total?
 
-NTUMods shows approximately 1,092 module offerings across all schools for AY2026/2027 Semester 2. This count changes each semester — check the [Module Browser](/mods) for the current live total.
+NTUMods shows approximately 1,145 module offerings across all schools for AY2026/2027 Semester 2. This count changes each semester — check the [Module Browser](/mods) for the current live total.
 
 ### How do I find which school offers a specific module code?
 

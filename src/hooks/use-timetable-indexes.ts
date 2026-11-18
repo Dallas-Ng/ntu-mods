@@ -17,16 +17,32 @@ const NO_HIDDEN = new Set<string>()
  * snapshots (an argument timetable) never hide anything: hidden flags belong
  * to the visitor's own saved plans.
  */
+export const resolveHiddenModules = (
+  timetables: Timetable[],
+  timetableIndex: number,
+  timetable: Timetable,
+  hiddenModules: string[][] | undefined
+): Set<string> => {
+  if (timetables[timetableIndex] !== timetable) return NO_HIDDEN
+  const list = hiddenModules?.[timetableIndex]
+  return list?.length ? new Set(list) : NO_HIDDEN
+}
+
 const useHiddenModules = (timetable: Timetable): Set<string> => {
   const timetables = useBoundState((s) => s.timetables)
   const timetableIndex = useBoundState((s) => s.timetableIndex)
   const hiddenModules = useBoundState((s) => s.hiddenModules)
 
-  return useMemo(() => {
-    if (timetables[timetableIndex] !== timetable) return NO_HIDDEN
-    const list = hiddenModules?.[timetableIndex]
-    return list?.length ? new Set(list) : NO_HIDDEN
-  }, [timetables, timetableIndex, timetable, hiddenModules])
+  return useMemo(
+    () =>
+      resolveHiddenModules(
+        timetables,
+        timetableIndex,
+        timetable,
+        hiddenModules
+      ),
+    [timetables, timetableIndex, timetable, hiddenModules]
+  )
 }
 
 export const useTimetableIndexes = (

@@ -70,6 +70,25 @@ describe("migrateBoundState", () => {
     expect(migrated.hiddenModules).toBe(state.hiddenModules)
   })
 
+  it("backfills appearance colour fields when migrating from before v4", () => {
+    const state = {
+      timetables: [{}, {}, {}, {}, {}],
+      settings: { appearance: { radius: 12, timetableStyle: "classic" } }
+    }
+    const migrated = migrateBoundState(state, 3)
+    expect(migrated.settings.appearance).toMatchObject({
+      radius: 12,
+      typeOverrides: {},
+      moduleOverrides: {},
+      granularColors: false
+    })
+  })
+
+  it("leaves state without settings alone at v3", () => {
+    const migrated = migrateBoundState({ timetables: [{}] }, 3)
+    expect(migrated.settings).toBeUndefined()
+  })
+
   it("applies both migrations in sequence for a very old (v0) persisted state", () => {
     const state = {
       customCourses: [

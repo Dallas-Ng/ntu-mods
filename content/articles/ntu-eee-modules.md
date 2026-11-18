@@ -2,7 +2,7 @@
 title: "NTU EEE Modules: Courses Offered by the School of Electrical & Electronic Engineering (AY2026/2027 Semester 2)"
 description: "A complete list of NTU EEE modules for AY2026/2027 Semester 2: circuits, signals, power systems, and the IE-prefix data science & AI electives EEE offers, with prerequisites and how to browse them on NTUMods."
 date: "2026-08-06"
-updated: "2026-10-15"
+updated: "2026-11-18"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "EEE modules"
@@ -59,6 +59,12 @@ These are commonly taken as BDEs by non-EEE students, or as advanced electives b
 | Module | Title | AU |
 |---|---|---|
 | [EE5093](/mods/EE5093) | Energy Devices for Sustainable Urban Environment | 3 |
+| [EE6111](/mods/EE6111) | 5G Communication & Beyond | 3 |
+| [EE6309](/mods/EE6309) | VLSI Systems | 3 |
+| [EE6403](/mods/EE6403) | Distributed Multimedia Systems | 3 |
+| [EE6405](/mods/EE6405) | Natural Language Processing | 3 |
+| [EE6427](/mods/EE6427) | Video Signal Processing | 3 |
+| [EE6601](/mods/EE6601) | Advanced Wafer Processing | 3 |
 
 ## Information Engineering & AI track (IE)
 
@@ -106,7 +112,7 @@ EE-prefix modules cover the core electrical engineering curriculum, circuits, po
 
 ### How many EEE modules does NTU offer in AY2026/2027 Semester 2?
 
-NTUMods shows approximately 45 EEE modules (EE + IE) available for AY2026/2027 Semester 2. Check the [Module Browser](/mods?moduleFaculty=EEE) for the current live count and availability, since offerings change each semester.
+NTUMods shows approximately 51 EEE modules (EE + IE) available for AY2026/2027 Semester 2. Check the [Module Browser](/mods?moduleFaculty=EEE) for the current live count and availability, since offerings change each semester.
 
 ### Can non-EEE students take EEE modules as BDEs?
 

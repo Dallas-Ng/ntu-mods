@@ -2,7 +2,7 @@
 title: "NTU Timetable Planner: How to Build Your Semester Schedule on NTUMods"
 description: "Step-by-step: use the NTUMods timetable planner to pick indexes, spot clashes, and lock in your semester before STARS bidding opens."
 date: "2026-06-14"
-updated: "2026-09-22"
+updated: "2026-11-18"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "Timetable planner"
@@ -30,6 +30,7 @@ You can:
 - See lectures, tutorials, and labs laid out as a week view
 - Spot clashes between modules before you bid
 - Build multiple timetable versions to compare
+- Hide a module without removing it, and set your own colours for your classes
 
 It pulls live module data including current-semester indexes, so what you see reflects what will actually be available when STARS opens.
 
@@ -54,6 +55,10 @@ Once your core and lab modules are placed, fill in the remaining gaps with BDEs 
 At this stage, the planner's clash detection is useful. If a BDE index overlaps with a tutorial or lecture, the planner highlights it. You can try a different index or a different module without having to track conflicts manually.
 
 If you are unsure which BDE to add, browse the [Complete NTU BDE List](/articles/complete-ntu-bde-list) or filter by category on [NTUMods](/mods). Then bring the module into the planner to see how it actually sits in your week.
+
+## Compare options without removing modules
+
+Each registered module in the side panel has an eye button. Hiding a module takes it out of the grid, the screenshot, the map, walk times and clash counts, but it stays registered with the index you chose. Use it to see how your week looks without a module you are unsure about, then show it again when you want it back. Hidden modules are saved per plan, so a backup plan can hide different modules from your main one.
 
 ## Step 4: Build a backup timetable
 
@@ -102,6 +107,10 @@ Use the planner to prepare your shortlist and verify index choices. Then use tho
 
 Click the map preview under the Generate Timetable button and pick a day. It shows your classes in order on the [NTU campus map](/maps), the walking time between each pair of venues, and a warning when the gap before the next class is shorter than the walk. Times are estimates, so leave extra room for crowded lifts and stairs. Walks are looked up one day at a time, and only once the preview scrolls into view. The full list of changes is in [the timetable planner redesign](/articles/ntu-timetable-planner-redesign).
 
+## Set your own colours
+
+Open Appearance and turn on Granular control. Tap a class type (LEC, LAB, SEM, TUT, DES or PRJ) to change the colour and opacity of every block of that type. To change one module only, use the palette button on that module. A module setting wins over a class type setting. The (i) beside Granular control has a short guide. See [the timetable planner redesign](/articles/ntu-timetable-planner-redesign) for the other appearance options.
+
 ## Turn your timetable into a wallpaper
 
 Once your timetable is final, the [NTUMods Wallpaper Maker](/screenshot) exports it as a phone wallpaper or shareable image, so your classes are one glance away without opening an app.
@@ -136,7 +145,11 @@ Yes. Once your timetable is built, use **Save to Calendar** on the [timetable pa
 
 ### Does the planner show exam dates?
 
-Not directly on the grid, but you can cross-check your shortlisted modules against the [NTU Exam Schedule](/exams) before finalising your plan, so exam clustering doesn't surprise you later.
+Not directly on the grid, but you can cross-check your shortlisted modules against the [NTU Exam Schedule](/exams) before finalising your plan, so exam clustering doesn't surprise you later. The schedule lists both Semester 1 and Semester 2 exams, with a Semester filter.
+
+### Does hiding a module drop it from my registration?
+
+No. A hidden module stays in your plan with its chosen index. It only leaves the grid, the screenshot, the map, walk times and clash counts until you show it again.
 
 ### How do I check the NTU class schedule for a module?
 

@@ -2,7 +2,7 @@
 title: "NTU Business Modules: Courses Offered by Nanyang Business School (AY2026/2027 Semester 2)"
 description: "A complete list of NTU business modules offered by Nanyang Business School (NBS) for AY2026/2027 Semester 2. Covers accountancy & business (AB), banking & finance (BF), and how to browse all business modules on NTUMods."
 date: "2026-06-20"
-updated: "2026-10-15"
+updated: "2026-11-18"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "Business mods"
@@ -46,6 +46,8 @@ These modules cover the fundamentals of business, finance, marketing, management
 | [AB3602](/mods/AB3602) | Strategic Management | 3 |
 | [AB5102](/mods/AB5102) | Forensic Accounting & Fraud Investigation | 3 |
 | [AB5103](/mods/AB5103) | Accounting & Audit Analytics | 3 |
+| [AB5203](/mods/AB5203) | Finance Workshop II: Global Markets & Investment Management | 2 |
+| [AB5401](/mods/AB5401) | Sustainability, Business, & Operations Management | 3 |
 | [AB5601](/mods/AB5601) | Negotiate To Get What You Want: Strategy & Practice | 4 |
 | [AB5602](/mods/AB5602) | Leadership In Organisations | 4 |
 
@@ -100,6 +102,8 @@ BF modules are specialised finance courses covering investments, corporate finan
 | [BF3219](/mods/BF3219) | Alternative Investments | 3 |
 | [BF3222](/mods/BF3222) | Blockchain & AI in Finance | 4 |
 | [BF3223](/mods/BF3223) | Blockchain & AI in Finance | 3 |
+| [BF3225](/mods/BF3225) | Mergers, Acquisitions & Corporate Restructurings | 3 |
+| [BF3229](/mods/BF3229) | Generative AI & Finance | 3 |
 
 ---
 
@@ -133,4 +137,4 @@ Some AB modules are open to non-business students as BDEs. Most BF modules are r
 
 ### How many NTU business modules are available in AY2026/2027 Semester 2?
 
-NTUMods shows approximately 49 NBS modules (AB + BF) available for AY2026/2027 Semester 2. Not all are open to all students.
+NTUMods shows approximately 53 NBS modules (AB + BF) available for AY2026/2027 Semester 2. Not all are open to all students.

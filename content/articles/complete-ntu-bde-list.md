@@ -2,7 +2,7 @@
 title: "Complete NTU BDE List: Every BDE Category and Module (AY2026/2027 Semester 2)"
 description: "A complete NTU BDE list by category: languages, business, computing, humanities, arts, science, engineering, and more. Updated for AY2026/2027 Semester 2. Browse all 780+ BDE modules on NTUMods."
 date: "2026-05-21"
-updated: "2026-10-15"
+updated: "2026-11-18"
 author: "NTUMods"
 category: "BDE"
 thumbnailText: "Every BDE"
@@ -15,7 +15,7 @@ Updated for AY2026/2027 Semester 2 (October 2026).
 
 NTU has over 780 BDE modules available in the current semester across languages, business, computing, humanities, science, engineering, arts, and more. This page organises them by category so you can find what is available for your interests and programme.
 
-> **Planning around exams?** The [NTU Exam Schedule](/exams) shows AY2026/2027 Semester 1 exam dates. The Semester 2 exam timetable is not released yet, so check it again once it is out. Check exam clashes before you finalise your BDE shortlist.
+> **Planning around exams?** The [NTU Exam Schedule](/exams) shows AY2026/2027 Semester 1 and Semester 2 exam dates. Semester 2 exams run from 26 April to 6 May 2027. Check exam clashes before you finalise your BDE shortlist.
 
 Not sure what a BDE is or how many you need? Start with [What Is a BDE at NTU](/articles/what-is-a-bde-at-ntu). For the most popular BDEs and what students say about them, see [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu).
 
@@ -284,7 +284,6 @@ Popular for building practical skills in writing, presenting, journalism, advert
 | [CS2300](/mods/CS2300) | Acting &  Directing for TV &  Film |
 | [CS4054](/mods/CS4054) | Asian Cinema |
 | [CS4198](/mods/CS4198) | Popular Animation in a Global Context |
-| [CS4270](/mods/CS4270) | Cinema & Nation |
 
 ---
 
@@ -425,7 +424,6 @@ Philosophy, history, literature, economics, linguistics, art history. Reading an
 | [HG2016](/mods/HG2016) | Language & Music |
 | [HG2023](/mods/HG2023) | Language & Gender |
 | [HG2031](/mods/HG2031) | History of English |
-| [HC2010](/mods/HC2010) | Classical Chinese Fiction |
 | [HF5101](/mods/HF5101) | Introduction to Chinese Creative Writing |
 | [HZ5101](/mods/HZ5101) | Introduction to Creative Writing |
 | [HZ5201](/mods/HZ5201) | Creative Writing: Poetry |

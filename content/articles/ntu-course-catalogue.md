@@ -2,7 +2,7 @@
 title: "NTU Course Catalogue: Browse All Modules by School (AY2026/2027 Semester 2)"
 description: "The full NTU course catalogue for AY2026/2027 Semester 2 — every school, module prefix, and how many modules each offers, with links to browse or search on NTUMods."
 date: "2026-08-06"
-updated: "2026-10-15"
+updated: "2026-11-18"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "Course catalogue"
@@ -17,39 +17,39 @@ NTU offers around 1,100 modules across its schools each semester. This page is a
 
 ## Modules by school
 
-New this semester: see [what is new in AY2026/2027 Semester 2](/articles/ntu-ay2026-semester-2-whats-new), including the 61 modules that appear for the first time.
+New this semester: see [what is new in AY2026/2027 Semester 2](/articles/ntu-ay2026-semester-2-whats-new), including the 99 modules that appear for the first time.
 
 | School | Code | Modules (AY2026/27 Sem 2) |
 |---|---|---|
-| Business (Nanyang Business School) | [BUS](/mods?moduleFaculty=BUS) | 114 |
-| Art, Design & Media | [ADM](/mods?moduleFaculty=ADM) | 82 |
-| Humanities (School of Humanities) | [SOH](/mods?moduleFaculty=SOH) | 78 |
-| Electrical & Electronic Engineering | [EEE](/mods?moduleFaculty=EEE) | 64 |
+| Business (Nanyang Business School) | [BUS](/mods?moduleFaculty=BUS) | 115 |
+| Art, Design & Media | [ADM](/mods?moduleFaculty=ADM) | 83 |
+| Humanities (School of Humanities) | [SOH](/mods?moduleFaculty=SOH) | 80 |
+| Electrical & Electronic Engineering | [EEE](/mods?moduleFaculty=EEE) | 69 |
+| NIE (National Institute of Education) | [NIE](/mods?moduleFaculty=NIE) | 58 |
 | Computer Science | [CSC](/mods?moduleFaculty=CSC) | 56 |
-| NIE (National Institute of Education) | [NIE](/mods?moduleFaculty=NIE) | 56 |
-| Mechanical & Aerospace Engineering | [ME](/mods?moduleFaculty=ME) | 54 |
-| Communication Studies | [CS](/mods?moduleFaculty=CS) | 47 |
-| Psychology | [PSY](/mods?moduleFaculty=PSY) | 35 |
-| Biological Sciences | [BS](/mods?moduleFaculty=BS) | 34 |
+| Mechanical & Aerospace Engineering | [ME](/mods?moduleFaculty=ME) | 51 |
+| Communication Studies | [CS](/mods?moduleFaculty=CS) | 45 |
+| Mathematical Sciences | [MATH](/mods?moduleFaculty=MATH) | 34 |
+| Biological Sciences | [BS](/mods?moduleFaculty=BS) | 33 |
 | Materials Engineering | [MAT](/mods?moduleFaculty=MAT) | 33 |
-| Mathematical Sciences | [MATH](/mods?moduleFaculty=MATH) | 32 |
-| English | [ELH](/mods?moduleFaculty=ELH) | 28 |
-| Physics and Applied Physics | [PHY](/mods?moduleFaculty=PHY) | 28 |
-| Sociology | [SOC](/mods?moduleFaculty=SOC) | 28 |
-| Economics | [ECON](/mods?moduleFaculty=ECON) | 27 |
-| Chinese | [CHIN](/mods?moduleFaculty=CHIN) | 25 |
-| Accountancy | [ACC](/mods?moduleFaculty=ACC) | 24 |
-| Environmental Earth Systems Science | [EESS](/mods?moduleFaculty=EESS) | 24 |
+| Psychology | [PSY](/mods?moduleFaculty=PSY) | 31 |
+| Sociology | [SOC](/mods?moduleFaculty=SOC) | 30 |
+| English | [ELH](/mods?moduleFaculty=ELH) | 29 |
+| Physics and Applied Physics | [PHY](/mods?moduleFaculty=PHY) | 29 |
+| Economics | [ECON](/mods?moduleFaculty=ECON) | 26 |
+| Accountancy | [ACC](/mods?moduleFaculty=ACC) | 26 |
+| Sport Science and Management | [SSM](/mods?moduleFaculty=SSM) | 26 |
+| Chinese | [CHIN](/mods?moduleFaculty=CHIN) | 24 |
+| Linguistics & Multilingual Studies | [LMS](/mods?moduleFaculty=LMS) | 24 |
+| Environmental Earth Systems Science | [EESS](/mods?moduleFaculty=EESS) | 23 |
 | Chemical & Biomolecular Engineering | [CBE](/mods?moduleFaculty=CBE) | 23 |
-| History | [HIST](/mods?moduleFaculty=HIST) | 23 |
-| Linguistics & Multilingual Studies | [LMS](/mods?moduleFaculty=LMS) | 23 |
-| Chemistry and Biological Chemistry | [CHEM](/mods?moduleFaculty=CHEM) | 19 |
+| History | [HIST](/mods?moduleFaculty=HIST) | 22 |
+| Chemistry and Biological Chemistry | [CHEM](/mods?moduleFaculty=CHEM) | 18 |
 | Public Policy And Global Affairs | [PPGA](/mods?moduleFaculty=PPGA) | 18 |
+| Civil & Environmental Engineering | [CEE](/mods?moduleFaculty=CEE) | 17 |
 | Philosophy | [PHIL](/mods?moduleFaculty=PHIL) | 15 |
-| Civil & Environmental Engineering | [CEE](/mods?moduleFaculty=CEE) | 14 |
-| Maritime Studies | [MS](/mods?moduleFaculty=MS) | 11 |
-| Nanyang Technopreneurship Centre | [NTC](/mods?moduleFaculty=NTC) | 8 |
-| Sport Science and Management | [SSM](/mods?moduleFaculty=SSM) | 6 |
+| Maritime Studies | [MS](/mods?moduleFaculty=MS) | 12 |
+| Nanyang Technopreneurship Centre | [NTC](/mods?moduleFaculty=NTC) | 9 |
 
 Module counts change every semester as offerings are added, removed, or moved between semesters — the [Module Browser](/mods) always reflects the current live count.
 
@@ -85,7 +85,7 @@ Every module page shows prerequisites, exclusions, mutually exclusive modules, i
 
 ### How many modules does NTU offer in total?
 
-NTUMods shows approximately 1,092 module offerings across all schools for AY2026/2027 Semester 2. This count changes each semester — check the [Module Browser](/mods) for the current live total.
+NTUMods shows approximately 1,145 module offerings across all schools for AY2026/2027 Semester 2. This count changes each semester — check the [Module Browser](/mods) for the current live total.
 
 ### How do I find which school offers a specific module code?
 

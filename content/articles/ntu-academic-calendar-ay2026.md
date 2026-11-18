@@ -2,7 +2,7 @@
 title: "NTU Academic Calendar 2026/2027 (AY2026/27): Semester Dates & Term Breaks"
 description: "NTU academic calendar 2026/2027 — semester 1 & 2 start/end dates, recess week, exam period dates, and STARS registration rounds. Updated for AY2026/27."
 date: "2026-06-20"
-updated: "2026-10-09"
+updated: "2026-11-18"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "Academic calendar"
@@ -43,13 +43,13 @@ These dates come from the official NTU academic calendar for AY2026-27 (publishe
 | Teaching Week 13 ends | 13 Nov 2026 |
 | Revision and exams | Mid November to early December 2026 |
 
-**Exam data for AY2026/2027 Semester 1** is available at [NTUMods Exam Schedule](/exams) — 389 modules with scheduled exams, searchable by module code.
+**Exam data for AY2026/2027 Semester 1** is available at [NTUMods Exam Schedule](/exams) with 385 modules scheduled from 23 November to 3 December 2026, searchable by module code.
 
 ## AY2026/2027 Semester 2
 
 **Semester 2** runs from January to early May 2027.
 
-Module and class index data for this semester is live: see [what is new in Semester 2](/articles/ntu-ay2026-semester-2-whats-new).
+The Semester 2 exam timetable is also out: 394 modules, from 26 April to 6 May 2027, on the same [exam schedule](/exams). Module and class index data for this semester is live: see [what is new in Semester 2](/articles/ntu-ay2026-semester-2-whats-new).
 
 | Phase | Approximate timing |
 |---|---|

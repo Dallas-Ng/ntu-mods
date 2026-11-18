@@ -1,21 +1,75 @@
 ---
 import { siteConfig } from "@/config/site"
 import { faqPageJsonLd } from "@/lib/json-ld"
+import {
+  getCurrentYearExamSemesters,
+  getLatestSemester,
+  getSemesterCounts,
+  getSemesterExamsData
+} from "@/lib/server/db/repo"
 import ArticleToc, {
   MobileSectionDropdown
 } from "@/components/articles/article-toc"
-import FaqContent, { faqHeadings, faqItems } from "@/components/faq/faq-content"
+import FaqContent, {
+  faqHeadings,
+  faqItemsFor,
+  type DataStatusItem
+} from "@/components/faq/faq-content"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
+
+const n = (value: number) => value.toLocaleString("en-US")
+const termName = (semester: string) =>
+  semester === "S" || semester === "T" ? "Special Term" : `Semester ${semester}`
+
+// Modules and class indexes come from the newest semester with offerings;
+// exams can span two semesters while one is still being sat.
+const latest = await getLatestSemester()
+const { modules, indexes } = await getSemesterCounts(
+  latest.year,
+  latest.semester
+)
+const examSemesters = await getCurrentYearExamSemesters()
+const examCounts = await Promise.all(
+  examSemesters.map(
+    async (s) =>
+      Object.keys(await getSemesterExamsData(s.year, s.semester)).length
+  )
+)
+const latestLabel = `AY${latest.year} ${termName(latest.semester)}`
+
+const dataStatus: DataStatusItem[] = [
+  {
+    label: "Modules",
+    coverage: latestLabel,
+    detail: `${n(modules)} modules`
+  },
+  {
+    label: "Class indexes",
+    coverage: latestLabel,
+    detail: `${n(indexes)} indexes`
+  },
+  {
+    label: "Exams",
+    coverage:
+      examSemesters.length > 0
+        ? `AY${examSemesters[0].year} ${examSemesters.map((s) => termName(s.semester)).join(" and ")}`
+        : "Not released yet",
+    detail:
+      examSemesters.length > 0
+        ? `${n(examCounts.reduce((a, b) => a + b, 0))} exams`
+        : "Shown once NTU publishes the timetable"
+  }
+]
 ---
 
 <BaseLayout
   title={siteConfig.metatags.faq.title}
   description={siteConfig.metatags.faq.desc}
   canonical="/faq">
-  <FaqContent>
+  <FaqContent dataStatus={dataStatus}>
     <MobileSectionDropdown
       client:idle
       slot="mobileNav"
@@ -24,5 +78,5 @@ export const prerender = true
     />
     <ArticleToc client:idle headings={faqHeadings} nested />
   </FaqContent>
-  <JsonLd data={faqPageJsonLd(faqItems)} />
+  <JsonLd data={faqPageJsonLd(faqItemsFor(dataStatus))} />
 </BaseLayout>

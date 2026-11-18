@@ -2,6 +2,7 @@
 title: "NTU Timetable Planner Redesign: Walking Times, Named Plans and a Cleaner Layout"
 description: "The NTUMods timetable planner has been redesigned. See the walk between your classes on the campus map, name your plans, move the panel below the grid, and change how the timetable looks."
 date: "2026-10-21"
+updated: "2026-11-18"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "Planner redesign"
@@ -84,6 +85,14 @@ Each section of the panel can be collapsed, has a short explanation behind its i
 ![The Appearance dialog showing a sticky preview of the six class types, sliders and toggles for radius, density and contrast, and six colour palettes](/articles/ntu-timetable-redesign/appearance.webp "The preview stays at the top while you scroll through the options.")
 
 The paint-palette icon in the toolbar opens Appearance. You can change the corner radius, the density and the contrast, and choose from six colour palettes for the class types: Classic, Soft, Vivid, Candy, 80s Terminal and Blueprint. The preview at the top shows each class type as you change things, and stays in place while the options scroll underneath it. On a phone it opens as a drawer.
+
+### Granular colour and opacity control
+
+Palettes colour every class of a type the same way. If you want more control, turn on Granular control in Appearance. Tap a class type in the preview (LEC, LAB, SEM, TUT, DES or PRJ), then pick a colour and drag the opacity slider to change every block of that type. To change one module only, use the palette button on that module in the side panel. A module setting wins over a class type setting, and your choices are kept if you turn Granular control off. The (i) beside Granular control opens a short guide with screenshots.
+
+## Hide a module without removing it
+
+Each registered module in the side panel has an eye button. A hidden module leaves the grid, the screenshot, the map, walk times and clash counts, but stays registered with its chosen index. This is useful for testing how your week looks without a module you are unsure about. Hidden modules are saved per plan.
 
 ## A standardised scale for the timetable
 

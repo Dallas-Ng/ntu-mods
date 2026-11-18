@@ -2,66 +2,72 @@
 import { siteConfig } from "@/config/site"
 import { datasetJsonLd } from "@/lib/json-ld"
 import {
-  getLatestExamSemester,
+  getCurrentYearExamSemesters,
   getSemesterExamsData
 } from "@/lib/server/db/repo"
 import { buttonVariants } from "@/components/ui/button"
 import { cardVariants } from "@/components/ui/card"
 import { LinkArrow } from "@/components/ui/text-link"
-import ExamsList from "@/components/exams/exams-list"
+import ExamsList, { type ListedExam } from "@/components/exams/exams-list"
 import Header from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
 
-const LAST_UPDATED = "27 July 2026"
+const LAST_UPDATED = "18 November 2026"
 
-// Previously: read the latest semester, and if it had no exams, walk the
-// portal's semester list backwards until one did. That is a single indexed
-// query — the newest semester that actually has exam rows.
-async function getExamData() {
-  const latest = await getLatestExamSemester()
-  if (!latest) return { exams: {}, label: "" }
+// Every semester with exams in the newest academic year is listed together,
+// so semester 1 exams still running stay visible once semester 2 is released.
+const semesters = await getCurrentYearExamSemesters()
+const parts = await Promise.all(
+  semesters.map(async ({ year, semester }) => {
+    const short =
+      semester === "1" || semester === "2" ? `S${semester}` : semester
+    const label = `AY${year} ${short}`
+    const exams = Object.values(await getSemesterExamsData(year, semester))
+    return { year, semester, label, exams }
+  })
+)
 
-  const isSpecial = latest.semester === "S" || latest.semester === "T"
-  return {
-    exams: await getSemesterExamsData(latest.year, latest.semester),
-    label: isSpecial
-      ? `AY${latest.year} Special Term`
-      : `AY${latest.year} Semester ${latest.semester}`
-  }
-}
-
-const { exams, label } = await getExamData()
-const examList = Object.values(exams)
+const examList: ListedExam[] = parts.flatMap((p) =>
+  p.exams.map((e) => ({ ...e, semester: p.label }))
+)
 const total = examList.length
+const moduleCount = new Set(examList.map((e) => e.key)).size
+
+const termName = (semester: string) =>
+  semester === "S" || semester === "T" ? "Special Term" : `Semester ${semester}`
+const label =
+  parts.length === 0
+    ? ""
+    : `AY${parts[0].year} ${parts.map((p) => termName(p.semester)).join(" and ")}`
 
 // Exam dates are "23 November 2026" strings, so sort them as dates.
-const dates = [...new Set(examList.map((e) => e.date))].sort(
-  (a, b) => new Date(a).getTime() - new Date(b).getTime()
-)
+const sortDates = (list: { date: string }[]) =>
+  [...new Set(list.map((e) => e.date))].sort(
+    (a, b) => new Date(a).getTime() - new Date(b).getTime()
+  )
 const fmt = (d: string, year = false) =>
   new Date(d).toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",
     ...(year && { year: "numeric" })
   })
-const period =
-  dates.length > 0
+const periodOf = (list: { date: string }[]) => {
+  const dates = sortDates(list)
+  return dates.length > 0
     ? `${fmt(dates[0])} to ${fmt(dates[dates.length - 1], true)}`
     : "TBC"
-const updated = new Date(`${LAST_UPDATED} UTC`).toLocaleDateString("en-GB", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC"
-})
+}
 const facts = [
-  { label: "Exam period", value: period, wide: true },
-  { label: "Modules", value: String(total) },
-  { label: "Exam days", value: String(dates.length) },
-  { label: "Last updated", value: updated }
+  ...parts.map((p) => ({
+    label: `${p.label} exam period`,
+    value: periodOf(p.exams),
+    wide: true
+  })),
+  { label: "Modules", value: String(moduleCount), wide: false },
+  { label: "Exams", value: String(total), wide: false }
 ]
 ---
 
@@ -86,7 +92,7 @@ const facts = [
     title="NTU exam schedule"
     subtitle={total > 0
       ? `Final exam dates, times and durations for ${label}, from NTU's official timetable.`
-      : `No exam data available for ${label}`}
+      : "No exam data available yet."}
   />
 
   <div
@@ -108,14 +114,14 @@ const facts = [
     </a>
   </div>
 
-  <dl class="grid grid-cols-6 gap-x-4 gap-y-5 md:grid-cols-4 md:gap-x-0">
+  <dl class="grid grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-4 md:gap-x-0">
     {
       facts.map(({ label, value, wide }, i) => (
         <div
           class:list={[
-            "space-y-1 md:col-span-1",
-            wide ? "col-span-6" : "col-span-2",
-            i > 0 && "md:border-l md:pl-6"
+            "space-y-1 md:col-span-2",
+            wide ? "col-span-2" : "col-span-1",
+            i % 2 === 1 && "md:border-l md:pl-6"
           ]}>
           <dt class="text-muted-foreground text-sm whitespace-nowrap">
             {label}

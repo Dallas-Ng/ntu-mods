@@ -1,7 +1,9 @@
 ---
 import { siteConfig } from "@/config/site"
 import { datasetJsonLd } from "@/lib/json-ld"
+import { getExamModuleUrl } from "@/lib/module-url"
 import {
+  getAllModuleCodes,
   getCurrentYearExamSemesters,
   getSemesterExamsData
 } from "@/lib/server/db/repo"
@@ -19,6 +21,8 @@ const LAST_UPDATED = "18 November 2026"
 
 // Every semester with exams in the newest academic year is listed together,
 // so semester 1 exams still running stay visible once semester 2 is released.
+// NTU sometimes lists an exam for a module it never loaded, so it has no page.
+const pageUrls = new Set((await getAllModuleCodes()).map((c) => `/mods/${c}`))
 const semesters = await getCurrentYearExamSemesters()
 const parts = await Promise.all(
   semesters.map(async ({ year, semester }) => {
@@ -31,7 +35,11 @@ const parts = await Promise.all(
 )
 
 const examList: ListedExam[] = parts.flatMap((p) =>
-  p.exams.map((e) => ({ ...e, semester: p.label }))
+  p.exams.map((e) => ({
+    ...e,
+    semester: p.label,
+    hasPage: pageUrls.has(getExamModuleUrl(e.key))
+  }))
 )
 const total = examList.length
 

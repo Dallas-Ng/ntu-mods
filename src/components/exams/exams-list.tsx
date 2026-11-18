@@ -33,7 +33,11 @@ const NO_FILTERS: Filters = {
 const TIME_BUCKETS = ["Morning", "Afternoon", "Evening"] as const
 
 /** An exam tagged with the semester it belongs to, e.g. "AY2026 S1". */
-export type ListedExam = DbExam & { semester: string }
+export type ListedExam = DbExam & {
+  semester: string
+  /** False when NTU lists an exam for a module that has no page on the site. */
+  hasPage: boolean
+}
 
 interface Props {
   exams: ListedExam[]
@@ -131,6 +135,22 @@ function weekday(dateStr: string) {
     : d.toLocaleDateString("en-GB", { weekday: "long" })
 }
 
+const ROW_CLASS =
+  "flex flex-col gap-1 px-5 py-3 md:flex-row md:items-center md:gap-4"
+
+/** A link to the module page, or a plain row when the module has none. */
+function Row({ href, children }: { href?: string; children: React.ReactNode }) {
+  return href ? (
+    <a
+      href={href}
+      className={cn(ROW_CLASS, "hover:bg-accent transition-colors")}>
+      {children}
+    </a>
+  ) : (
+    <div className={ROW_CLASS}>{children}</div>
+  )
+}
+
 function ExamTable({ items }: { items: ListedExam[] }) {
   return (
     // translate="no": in-page translation wraps text nodes, so React fails
@@ -144,10 +164,9 @@ function ExamTable({ items }: { items: ListedExam[] }) {
       </div>
       <div className="divide-background divide-y-2">
         {items.map((exam) => (
-          <a
+          <Row
             key={`${exam.semester}-${exam.key}`}
-            href={getExamModuleUrl(exam.key)}
-            className="hover:bg-accent flex flex-col gap-1 px-5 py-3 transition-colors md:flex-row md:items-center md:gap-4">
+            href={exam.hasPage ? getExamModuleUrl(exam.key) : undefined}>
             <span className="w-24 shrink-0 text-sm font-semibold whitespace-nowrap">
               {exam.key}
             </span>
@@ -164,7 +183,7 @@ function ExamTable({ items }: { items: ListedExam[] }) {
                 </span>
               )}
             </span>
-          </a>
+          </Row>
         ))}
       </div>
     </div>

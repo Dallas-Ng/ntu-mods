@@ -17,6 +17,12 @@ export interface TimetableSlice {
    */
   uniqueTimeslotsOnly: boolean
   lockedModules: string[]
+  /**
+   * Module keys hidden from the grid and the map, one list per plan. A
+   * hidden module stays registered: it keeps its index and still counts
+   * for generation, it is only not drawn.
+   */
+  hiddenModules: string[][]
   hasOnboarded: boolean
   customCourses: CustomCourse[][]
   /** User notes, keyed by moduleKey. Not sourced from STARS — user-owned. */
@@ -37,6 +43,7 @@ export interface TimetableSlice {
   resetGenerationConfig: () => void
   setUniqueTimeslotsOnly: (value: boolean) => void
   toggleModuleLock: (moduleKey: string) => void
+  toggleModuleHidden: (moduleKey: string) => void
   setHasOnboarded: (value: boolean) => void
   addCustomCourse: (course: Omit<CustomCourse, "id">) => void
   updateCustomCourse: (
@@ -58,13 +65,17 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
   generationConfig: DEFAULT_GENERATION_CONFIG,
   uniqueTimeslotsOnly: true,
   lockedModules: [],
+  hiddenModules: [[], [], [], [], []],
   hasOnboarded: false,
   customCourses: [[], [], [], [], []],
   moduleRemarks: {},
   indexRemarks: {},
   migrateTimetable: (timetable: Timetable) =>
     set((state) => ({
-      timetables: [{ ...timetable }, {}, {}, {}, {}]
+      timetables: [{ ...timetable }, {}, {}, {}, {}],
+      hiddenModules: setHiddenForPlan(state.hiddenModules, 0, (list) =>
+        list.filter((key) => key in timetable)
+      )
     })),
   updateTimetable: (timetable: Timetable, timetableIndex: number) => {
     set((state) => {
@@ -73,7 +84,15 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
 
       updatedTimetables[timetableIndex] = updatedTimetable
 
-      return { ...state, timetables: updatedTimetables }
+      return {
+        ...state,
+        timetables: updatedTimetables,
+        hiddenModules: setHiddenForPlan(
+          state.hiddenModules,
+          timetableIndex,
+          (list) => list.filter((key) => key in updatedTimetable)
+        )
+      }
     })
   },
   addItemToTimetable: (moduleKey: string, indexKey: string) => {
@@ -92,7 +111,16 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
       const updatedTimetables = [...state.timetables]
       updatedTimetables[state.timetableIndex] = updatedTimetable
 
-      return { ...state, timetables: updatedTimetables }
+      // Re-adding a module through search brings it back out of hiding.
+      return {
+        ...state,
+        timetables: updatedTimetables,
+        hiddenModules: setHiddenForPlan(
+          state.hiddenModules,
+          state.timetableIndex,
+          (list) => list.filter((key) => key !== moduleKey)
+        )
+      }
     })
   },
   removeItemFromTimetable: (moduleKey: string) => {
@@ -104,7 +132,15 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
 
       updatedTimetables[state.timetableIndex] = updatedTimetable
 
-      return { ...state, timetables: updatedTimetables }
+      return {
+        ...state,
+        timetables: updatedTimetables,
+        hiddenModules: setHiddenForPlan(
+          state.hiddenModules,
+          state.timetableIndex,
+          (list) => list.filter((key) => key !== moduleKey)
+        )
+      }
     })
   },
   updateItemIndex: (moduleKey: string, indexKey: string) => {
@@ -143,6 +179,9 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
       return {
         timetables: updatedTimetables,
         customCourses: updatedCustomCourses,
+        hiddenModules: setHiddenForPlan(state.hiddenModules, toIndex, () => [
+          ...(state.hiddenModules?.[fromIndex] ?? [])
+        ]),
         timetableIndex: toIndex
       }
     }),
@@ -151,7 +190,8 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
       timetables: [{}, {}, {}, {}, {}],
       timetableIndex: 0,
       planNames: ["", "", "", "", ""],
-      customCourses: [[], [], [], [], []]
+      customCourses: [[], [], [], [], []],
+      hiddenModules: [[], [], [], [], []]
     }))
   },
   setTimetableCreationMode: (mode: TimetableCreationMode) => {
@@ -181,6 +221,18 @@ export const createTimetableSlice: StateCreator<TimetableSlice> = (set) => ({
       lockedModules: state.lockedModules.includes(moduleKey)
         ? state.lockedModules.filter((k) => k !== moduleKey)
         : [...state.lockedModules, moduleKey]
+    }))
+  },
+  toggleModuleHidden: (moduleKey: string) => {
+    set((state) => ({
+      hiddenModules: setHiddenForPlan(
+        state.hiddenModules,
+        state.timetableIndex,
+        (list) =>
+          list.includes(moduleKey)
+            ? list.filter((key) => key !== moduleKey)
+            : [...list, moduleKey]
+      )
     }))
   },
   setHasOnboarded: (value: boolean) => {
@@ -260,3 +312,13 @@ const setRemark = (
   else updated[key] = remark
   return updated
 }
+
+/** Rewrites one plan's hidden list, keeping every other plan untouched. */
+const setHiddenForPlan = (
+  hiddenModules: string[][] | undefined,
+  plan: number,
+  update: (list: string[]) => string[]
+) =>
+  Array.from({ length: 5 }, (_, i) =>
+    i === plan ? update(hiddenModules?.[i] ?? []) : (hiddenModules?.[i] ?? [])
+  )

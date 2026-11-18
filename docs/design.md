@@ -108,6 +108,7 @@ Lucide only, stroke 2, sized by context:
 
 - No `size-3.5`; pick 3 or 4 by the text beside it.
 - Icon-only buttons show a grey icon that turns black on hover. A state colour (blue for in your timetable, red for a favourite) replaces the grey.
+- A toggle whose state the icon itself shows (the registered module's eye-off) keeps the black on-colour while the state is active.
 - Arrows by meaning: `LinkArrow` to go somewhere, `ChevronRight` to open a row in a list, `ExternalLinkIcon` to leave the site, `ChevronDown` to expand. Never a typed arrow.
 - No hand-drawn copies of lucide icons; import the component (it works in `.astro` too).
 

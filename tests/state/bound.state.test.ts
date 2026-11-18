@@ -52,6 +52,24 @@ describe("migrateBoundState", () => {
     expect(migrated.indexRemarks).toEqual({ "CZ2001:A1": "note2" })
   })
 
+  it("backfills per-plan hiddenModules when migrating from before v3", () => {
+    const state = {
+      timetables: [{}, {}, {}, {}, {}],
+      customCourses: [[], [], [], [], []]
+    }
+    const migrated = migrateBoundState(state, 2)
+    expect(migrated.hiddenModules).toEqual([[], [], [], [], []])
+  })
+
+  it("preserves existing hiddenModules once already at v3", () => {
+    const state = {
+      timetables: [{}, {}, {}, {}, {}],
+      hiddenModules: [["CZ2001"], [], [], [], []]
+    }
+    const migrated = migrateBoundState(state, 3)
+    expect(migrated.hiddenModules).toBe(state.hiddenModules)
+  })
+
   it("applies both migrations in sequence for a very old (v0) persisted state", () => {
     const state = {
       customCourses: [
@@ -74,5 +92,6 @@ describe("migrateBoundState", () => {
     expect(migrated.customCourses[0][0].indexes).toHaveLength(1)
     expect(migrated.moduleRemarks).toEqual({})
     expect(migrated.indexRemarks).toEqual({})
+    expect(migrated.hiddenModules).toEqual([[], [], [], [], []])
   })
 })

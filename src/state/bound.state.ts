@@ -26,6 +26,15 @@ export const migrateBoundState = (
     state.indexRemarks = state.indexRemarks ?? {}
   }
 
+  // v3: per-plan hidden modules
+  if (version < 3) {
+    const plans = Array.isArray(state.timetables) ? state.timetables.length : 5
+    const hidden = Array.isArray(state.hiddenModules) ? state.hiddenModules : []
+    state.hiddenModules = Array.from({ length: plans }, (_, i) =>
+      Array.isArray(hidden[i]) ? hidden[i] : []
+    )
+  }
+
   return state
 }
 
@@ -48,7 +57,7 @@ const useBoundStore = create(
     },
     {
       name: "ntu-mods",
-      version: 2,
+      version: 3,
       migrate: migrateBoundState
     }
   )

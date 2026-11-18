@@ -123,6 +123,74 @@ describe("timetable slice: module lock toggle", () => {
   })
 })
 
+describe("timetable slice: module hide toggle", () => {
+  it("toggles a module hidden while it stays registered", () => {
+    const store = makeStore()
+    store.getState().addItemToTimetable("CZ2001", "A1")
+
+    store.getState().toggleModuleHidden("CZ2001")
+    expect(store.getState().hiddenModules[0]).toEqual(["CZ2001"])
+    expect(store.getState().timetables[0]).toEqual({ CZ2001: "A1" })
+
+    store.getState().toggleModuleHidden("CZ2001")
+    expect(store.getState().hiddenModules[0]).toEqual([])
+  })
+
+  it("hiding is per plan", () => {
+    const store = makeStore()
+    store.getState().addItemToTimetable("CZ2001", "A1")
+    store.getState().toggleModuleHidden("CZ2001")
+
+    store.getState().updateTimetableIndex(1)
+    store.getState().toggleModuleHidden("CZ2001")
+
+    expect(store.getState().hiddenModules[0]).toEqual(["CZ2001"])
+    expect(store.getState().hiddenModules[1]).toEqual(["CZ2001"])
+  })
+
+  it("removing a registered module clears its hidden flag", () => {
+    const store = makeStore()
+    store.getState().addItemToTimetable("CZ2001", "A1")
+    store.getState().toggleModuleHidden("CZ2001")
+
+    store.getState().removeItemFromTimetable("CZ2001")
+
+    expect(store.getState().timetables[0]).toEqual({})
+    expect(store.getState().hiddenModules[0]).toEqual([])
+  })
+
+  it("re-adding a module through search unhides it", () => {
+    const store = makeStore()
+    store.getState().addItemToTimetable("CZ2001", "A1")
+    store.getState().toggleModuleHidden("CZ2001")
+
+    store.getState().addItemToTimetable("CZ2001", "A2")
+
+    expect(store.getState().timetables[0]).toEqual({ CZ2001: "A2" })
+    expect(store.getState().hiddenModules[0]).toEqual([])
+  })
+
+  it("duplicating a plan copies its hidden list", () => {
+    const store = makeStore()
+    store.getState().addItemToTimetable("CZ2001", "A1")
+    store.getState().toggleModuleHidden("CZ2001")
+
+    store.getState().duplicateTimetable(0, 1)
+
+    expect(store.getState().hiddenModules[1]).toEqual(["CZ2001"])
+  })
+
+  it("resetTimetables clears hidden lists", () => {
+    const store = makeStore()
+    store.getState().addItemToTimetable("CZ2001", "A1")
+    store.getState().toggleModuleHidden("CZ2001")
+
+    store.getState().resetTimetables()
+
+    expect(store.getState().hiddenModules).toEqual([[], [], [], [], []])
+  })
+})
+
 describe("timetable slice: custom course CRUD", () => {
   it("addCustomCourse appends only to the current timetable slot", () => {
     const store = makeStore()

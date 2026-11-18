@@ -2,7 +2,7 @@
 
 import { useState, type MouseEvent } from "react"
 import { useBoundState } from "@/state/bound.state"
-import { Trash2 } from "lucide-react"
+import { Eye, EyeOff, Trash2 } from "lucide-react"
 
 import { track } from "@/lib/analytics"
 import { getRemarkScope, REMARK_SCOPE_DOT_CLASS } from "@/lib/remark-scope"
@@ -33,16 +33,24 @@ interface ModuleRowProps {
   moduleKey: string
   indexKey: string
   isActive: boolean
+  /** Hidden from the grid and the map; still registered. */
+  hidden: boolean
   onOpenChange: (moduleKey: string) => void
   onRemove: (event: MouseEvent<HTMLButtonElement>, moduleKey: string) => void
+  onToggleHide: (
+    event: MouseEvent<HTMLButtonElement>,
+    moduleKey: string
+  ) => void
 }
 
 const ModuleRow = ({
   moduleKey,
   indexKey,
   isActive,
+  hidden,
   onOpenChange,
-  onRemove
+  onRemove,
+  onToggleHide
 }: ModuleRowProps) => {
   const moduleRemark = useBoundState((s) => s.moduleRemarks[moduleKey])
   const indexRemark = useBoundState(
@@ -59,7 +67,13 @@ const ModuleRow = ({
       )}>
       <div className="flex w-full items-center justify-between">
         <div className="flex items-center gap-1">
-          <div className="w-16 font-medium">{moduleKey}</div>
+          <div
+            className={cn(
+              "w-16 font-medium",
+              hidden && "text-muted-foreground"
+            )}>
+            {moduleKey}
+          </div>
           <div className="text-muted-foreground text-sm tabular-nums">
             {indexKey}
           </div>
@@ -78,13 +92,27 @@ const ModuleRow = ({
           )}
         </div>
 
-        <button
-          type="button"
-          aria-label={`Remove ${moduleKey}`}
-          className="flex size-8 items-center justify-center"
-          onClick={(e) => onRemove(e, moduleKey)}>
-          <Trash2 className="text-muted-foreground hover:text-foreground size-4 transition-colors" />
-        </button>
+        <div className="flex items-center">
+          <button
+            type="button"
+            aria-label={hidden ? `Show ${moduleKey}` : `Hide ${moduleKey}`}
+            title={hidden ? `Show ${moduleKey}` : `Hide ${moduleKey}`}
+            className="flex size-8 items-center justify-center"
+            onClick={(e) => onToggleHide(e, moduleKey)}>
+            {hidden ? (
+              <EyeOff className="size-4" />
+            ) : (
+              <Eye className="text-muted-foreground hover:text-foreground size-4 transition-colors" />
+            )}
+          </button>
+          <button
+            type="button"
+            aria-label={`Remove ${moduleKey}`}
+            className="flex size-8 items-center justify-center"
+            onClick={(e) => onRemove(e, moduleKey)}>
+            <Trash2 className="text-muted-foreground hover:text-foreground size-4 transition-colors" />
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -130,6 +158,7 @@ interface ModifierProps {
 }
 
 const ALL_SECTIONS = ["modules", "custom", "generate"]
+const HIDDEN_NONE: string[] = []
 const triggerClass =
   "items-center px-4 py-3.5 font-semibold hover:no-underline [&>svg]:translate-y-0"
 // A header that is only a title: no chevron, no click.
@@ -139,6 +168,10 @@ const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
   const [open, setOpen] = useState(ALL_SECTIONS)
   const { timetable, removeItemFromTimetable } = useTimetable()
   const [activeKey, setActiveKey] = useState<string | null>(null)
+  const toggleModuleHidden = useBoundState((s) => s.toggleModuleHidden)
+  const hiddenList = useBoundState(
+    (s) => s.hiddenModules[s.timetableIndex] ?? HIDDEN_NONE
+  )
 
   const handleRemoveClick = (
     event: MouseEvent<HTMLButtonElement>,
@@ -147,6 +180,19 @@ const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
     event.stopPropagation()
     removeItemFromTimetable(moduleKey)
     track("module_removed", {
+      module_code: moduleKey,
+      source: "timetable_sidebar"
+    })
+  }
+
+  const handleHideToggle = (
+    event: MouseEvent<HTMLButtonElement>,
+    moduleKey: string
+  ) => {
+    event.stopPropagation()
+    const hidden = hiddenList.includes(moduleKey)
+    toggleModuleHidden(moduleKey)
+    track(hidden ? "module_shown" : "module_hidden", {
       module_code: moduleKey,
       source: "timetable_sidebar"
     })
@@ -193,7 +239,8 @@ const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
                   )}
                   <InfoTip title="Registered modules">
                     The modules in this plan. Click one to see its indexes and
-                    change it.
+                    change it. The eye hides a module from the grid and the map
+                    without removing it.
                   </InfoTip>
                 </span>
               </AccordionTrigger>
@@ -206,8 +253,10 @@ const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
                         moduleKey={moduleKey}
                         indexKey={indexKey}
                         isActive={activeKey === moduleKey}
+                        hidden={hiddenList.includes(moduleKey)}
                         onOpenChange={setActiveKey}
                         onRemove={handleRemoveClick}
+                        onToggleHide={handleHideToggle}
                       />
                     ))}
                   </div>

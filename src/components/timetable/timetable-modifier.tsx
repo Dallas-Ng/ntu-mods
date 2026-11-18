@@ -173,7 +173,7 @@ const TimetableModifier = ({ horizontal = false }: ModifierProps) => {
   const [activeKey, setActiveKey] = useState<string | null>(null)
   const toggleModuleHidden = useBoundState((s) => s.toggleModuleHidden)
   const hiddenList = useBoundState(
-    (s) => s.hiddenModules[s.timetableIndex] ?? HIDDEN_NONE
+    (s) => s.hiddenModules?.[s.timetableIndex] ?? HIDDEN_NONE
   )
 
   const handleRemoveClick = (

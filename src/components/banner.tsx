@@ -1,7 +1,8 @@
 import { LinkArrow } from "@/components/ui/text-link"
 
-const BANNER_TEXT = "New: see the walk between your classes on the timetable"
-const BANNER_HREF = "/timetable"
+const BANNER_TEXT =
+  "New: hide modules, set class colours and see S1 and S2 exams together"
+const BANNER_HREF = "/changelog"
 
 /** Derived from the text, so editing the banner re-shows it to people who
  * closed the previous one. */

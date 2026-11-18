@@ -40,6 +40,77 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Hide modules, colour control and exam periods",
+    date: "18 Nov 2026",
+    note: "All features and improvements in this release are based on feedback from an anonymous student. Thank you!",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Hide a module without removing it. Each module in the{" "}
+            <ChangelogLink href="/timetable">timetable</ChangelogLink> sidebar
+            has an eye button. A hidden module leaves the grid, the screenshot,
+            the map, walk times and clash counts, but stays registered with its
+            chosen index. Hidden modules are saved per plan. Docs:{" "}
+            <ChangelogLink href="/articles/ntu-timetable-planner-guide">
+              NTU Timetable Planner Guide
+            </ChangelogLink>
+            .
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            Set the colour and opacity of your classes. Turn on Granular control
+            in Appearance, then tap a class type (LEC, LAB, SEM, TUT, DES, PRJ)
+            to change every block of that type. Use the palette button on a
+            module to change that module only. A module setting wins over a
+            class type setting. The (i) beside Granular control has a short
+            guide.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            The <ChangelogLink href="/exams">Exam Schedule</ChangelogLink> now
+            lists Semester 1 and Semester 2 exams of the newest academic year
+            together, with a semester filter, so Semester 1 exams stay visible
+            after Semester 2 is released. Exam rows link to a module page only
+            when that module has one.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            The semester-only filter in the{" "}
+            <ChangelogLink href="/mods">module browser</ChangelogLink> now names
+            the current semester, and the{" "}
+            <ChangelogLink href="/faq">FAQ</ChangelogLink> shows which semester
+            each dataset covers, with its count of modules, class indexes and
+            exams.
+          </>
+        )
+      },
+      {
+        category: "Data",
+        content: (
+          <>
+            AY 2026/2027 Semester 1 and Semester 2 course data, class indexes
+            and the Semester 2 exam timetable (26 April to 6 May 2027) are
+            refreshed.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "A more consistent site",
     date: "24 Oct 2026",
     items: [

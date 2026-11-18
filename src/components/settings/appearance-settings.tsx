@@ -7,58 +7,31 @@ import {
   CONTRAST_PRESETS,
   DEFAULT_APPEARANCE_SETTINGS,
   INDEX_TYPE_COLOR_KEYS,
-  TIMETABLE_STYLE_PRESETS
+  INDEX_TYPE_LABELS,
+  TIMETABLE_STYLE_PRESETS,
+  withAppearanceDefaults,
+  type IndexTypeColorKey,
+  type IndexTypeStyleOverride
 } from "@/config/appearance-settings"
 import { track } from "@/lib/analytics"
+import { getIndexTypeStyle } from "@/lib/get-index-type-style"
+import { clampOpacity } from "@/lib/index-type-colors"
 import { cn } from "@/lib/utils"
+import { useGranularNew } from "@/hooks/use-appearance-new"
 import { useSettings } from "@/hooks/use-settings"
 
+import { PulseDot } from "../new-dot"
+import ColourOverlay from "../timetable/colour-overlay"
+import IndexTypeColourPanel from "../timetable/index-type-colour-panel"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
+import { Switch } from "../ui/switch"
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group"
+import GranularControlInfo from "./granular-control-info"
 
 interface IconProps {
   label?: boolean
 }
-
-const TIMETABLE_PREVIEW_TYPES = [
-  {
-    label: "LEC",
-    background:
-      "bg-[hsl(var(--index-lec-bg))] dark:bg-[hsl(var(--index-lec-bg-dark)/var(--index-bg-opacity-dark))]",
-    text: "text-[hsl(var(--index-lec-text))] dark:text-[hsl(var(--index-lec-text-dark))]"
-  },
-  {
-    label: "LAB",
-    background:
-      "bg-[hsl(var(--index-lab-bg))] dark:bg-[hsl(var(--index-lab-bg-dark)/var(--index-bg-opacity-dark))]",
-    text: "text-[hsl(var(--index-lab-text))] dark:text-[hsl(var(--index-lab-text-dark))]"
-  },
-  {
-    label: "SEM",
-    background:
-      "bg-[hsl(var(--index-sem-bg))] dark:bg-[hsl(var(--index-sem-bg-dark)/var(--index-bg-opacity-dark))]",
-    text: "text-[hsl(var(--index-sem-text))] dark:text-[hsl(var(--index-sem-text-dark))]"
-  },
-  {
-    label: "TUT",
-    background:
-      "bg-[hsl(var(--index-tut-bg))] dark:bg-[hsl(var(--index-tut-bg-dark)/var(--index-bg-opacity-dark))]",
-    text: "text-[hsl(var(--index-tut-text))] dark:text-[hsl(var(--index-tut-text-dark))]"
-  },
-  {
-    label: "DES",
-    background:
-      "bg-[hsl(var(--index-des-bg))] dark:bg-[hsl(var(--index-des-bg-dark)/var(--index-bg-opacity-dark))]",
-    text: "text-[hsl(var(--index-des-text))] dark:text-[hsl(var(--index-des-text-dark))]"
-  },
-  {
-    label: "PRJ",
-    background:
-      "bg-[hsl(var(--index-prj-bg))] dark:bg-[hsl(var(--index-prj-bg-dark)/var(--index-bg-opacity-dark))]",
-    text: "text-[hsl(var(--index-prj-text))] dark:text-[hsl(var(--index-prj-text-dark))]"
-  }
-] as const
 
 export const LightThemeIcon = (props: IconProps) => {
   return (
@@ -160,10 +133,7 @@ interface AppearanceProps {
 
 const AppearanceSettings = ({ compact = false }: AppearanceProps) => {
   const { settings, updateSettings } = useSettings()
-  const appearance = {
-    ...DEFAULT_APPEARANCE_SETTINGS,
-    ...settings.appearance
-  }
+  const appearance = withAppearanceDefaults(settings.appearance)
 
   const updateAppearance = (next: Partial<typeof appearance>) => {
     updateSettings({
@@ -172,6 +142,20 @@ const AppearanceSettings = ({ compact = false }: AppearanceProps) => {
         ...next
       }
     })
+  }
+
+  const { isNew: granularNew, markSeen: markGranularSeen } = useGranularNew()
+
+  const updateTypeOverride = (
+    key: IndexTypeColorKey,
+    next: IndexTypeStyleOverride | undefined
+  ) => {
+    const typeOverrides = { ...appearance.typeOverrides }
+
+    if (!next) delete typeOverrides[key]
+    else typeOverrides[key] = next
+
+    updateAppearance({ typeOverrides })
   }
 
   const densityContrast = (
@@ -270,33 +254,104 @@ const AppearanceSettings = ({ compact = false }: AppearanceProps) => {
         </Button>
       </div>
 
+      {appearance.granularColors && (
+        <p className="text-muted-foreground text-xs">
+          Tap a class box to change its colour.
+        </p>
+      )}
+
       <div
         className={cn(
           "grid gap-2 text-xs",
           compact ? "grid-cols-6" : "grid-cols-2 sm:grid-cols-3"
         )}>
-        {TIMETABLE_PREVIEW_TYPES.map((type) => (
-          <div
-            key={type.label}
-            className={cn(
-              "rounded-md p-[var(--cell-padding)]",
-              // Miniature timetable cells: grid exception to the type scale.
-              compact &&
-                "min-w-0 p-1.5 text-center text-[10px] sm:p-2 sm:text-left sm:text-xs",
-              type.background
-            )}>
-            <p className={cn("font-bold", type.text)}>{type.label}</p>
-            <p
+        {INDEX_TYPE_COLOR_KEYS.map((key) => {
+          const label = INDEX_TYPE_LABELS[key]
+          const typeStyle = getIndexTypeStyle(label)
+          const override = appearance.typeOverrides[key]
+          const opacity = appearance.granularColors
+            ? clampOpacity(override?.opacity ?? 100)
+            : 100
+
+          const box = (
+            <div
               className={cn(
-                "text-muted-foreground",
-                compact && "hidden sm:block"
-              )}>
-              Index 00000
-            </p>
-          </div>
-        ))}
+                "rounded-md p-[var(--cell-padding)]",
+                // Miniature timetable cells: grid exception to the type scale.
+                compact &&
+                  "min-w-0 p-1.5 text-center text-[10px] sm:p-2 sm:text-left sm:text-xs",
+                typeStyle.background
+              )}
+              style={opacity < 100 ? { opacity: opacity / 100 } : undefined}>
+              <p className={cn("font-bold", typeStyle.text)}>{label}</p>
+              <p
+                className={cn(
+                  "text-muted-foreground",
+                  compact && "hidden sm:block"
+                )}>
+                Index 00000
+              </p>
+            </div>
+          )
+
+          // Off, the six boxes are the palette's preview. On, each box is the
+          // way into that class type's colour.
+          if (!appearance.granularColors) return <div key={key}>{box}</div>
+
+          return (
+            <ColourOverlay
+              key={key}
+              title={`${label} colour`}
+              trigger={
+                <button
+                  type="button"
+                  aria-label={`Edit ${label} colour`}
+                  className="focus-visible:ring-ring hover:ring-ring/40 min-w-0 rounded-md text-left transition-shadow outline-none hover:ring-2 focus-visible:ring-2 focus-visible:ring-offset-2">
+                  {box}
+                </button>
+              }>
+              <IndexTypeColourPanel
+                type={key}
+                appearance={appearance}
+                override={override}
+                onChange={(next) => updateTypeOverride(key, next)}
+              />
+            </ColourOverlay>
+          )
+        })}
       </div>
     </div>
+  )
+
+  const coloursBlock = (
+    <section className="flex items-start justify-between gap-3">
+      <div className="min-w-0 space-y-1">
+        <div className="flex items-center gap-1.5">
+          <p className="relative text-sm leading-none font-semibold">
+            Granular control
+            {granularNew && <PulseDot className="-top-1 -right-3" />}
+          </p>
+          <GranularControlInfo onOpen={markGranularSeen} />
+        </div>
+        <p className="text-muted-foreground text-xs">
+          Set the colour and opacity of each class type from the boxes above, or
+          of one module from its palette button in the timetable.
+        </p>
+      </div>
+
+      <Switch
+        checked={appearance.granularColors}
+        onCheckedChange={(checked) => {
+          updateAppearance({ granularColors: checked })
+          markGranularSeen()
+          track("settings_appearance_changed", {
+            setting: "granular_colors",
+            value: checked
+          })
+        }}
+        aria-label="Granular control"
+      />
+    </section>
   )
 
   const radiusBlock = (
@@ -344,6 +399,7 @@ const AppearanceSettings = ({ compact = false }: AppearanceProps) => {
         <div className="min-w-0 space-y-6">
           {radiusBlock}
           {densityContrast}
+          {coloursBlock}
         </div>
         <div className="space-y-6">
           <section className="space-y-3">
@@ -495,6 +551,8 @@ const AppearanceSettings = ({ compact = false }: AppearanceProps) => {
           })}
         </div>
       </section>
+
+      {coloursBlock}
     </div>
   )
 }

@@ -61,6 +61,7 @@ export const ANALYTICS_EVENTS = [
   "mods_grouped",
   "mods_view_changed",
   "module_added",
+  "module_colours_changed",
   "module_favourited",
   "module_hidden",
   "module_removed",

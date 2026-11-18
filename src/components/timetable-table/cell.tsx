@@ -1,12 +1,20 @@
 "use client"
 
+import type { CSSProperties } from "react"
 import { useBoundState } from "@/state/bound.state"
 
+import { withAppearanceDefaults } from "@/config/appearance-settings"
 import {
   getCustomBlockStyle,
   isCustomCourseKey
 } from "@/lib/custom-course-colors"
+import { getIndexColorKey } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
+import {
+  clampOpacity,
+  getActiveOverride,
+  getModuleCellVars
+} from "@/lib/index-type-colors"
 import { getRemarkScope, REMARK_SCOPE_DOT_CLASS } from "@/lib/remark-scope"
 import { cn } from "@/lib/utils"
 import { useSettings } from "@/hooks/use-settings"
@@ -86,6 +94,24 @@ export const TimetableTableCell = (props: Props) => {
   // Styling and Modifications
   const isCustom = isCustomCourseKey(moduleKey)
   const indexStyle = getIndexTypeStyle(index.type)
+  const appearance = withAppearanceDefaults(settings.appearance)
+  const colourKey = getIndexColorKey(index.type)
+
+  // A module can tint its own blocks. Its vars go inline so they win over the
+  // palette on :root, and custom properties inherit into the text inside.
+  const moduleVars = isCustom
+    ? undefined
+    : getModuleCellVars(appearance, moduleKey, colourKey)
+
+  // Opacity fades the whole block, text included. It goes through a variable
+  // so the dimmed and hover states can still multiply on top of it.
+  const activeOverride = isCustom
+    ? undefined
+    : getActiveOverride(appearance, colourKey, moduleKey)
+  const blockOpacity =
+    activeOverride?.opacity == null
+      ? 1
+      : clampOpacity(activeOverride.opacity) / 100
 
   // Custom blocks: preset types (and Lunch) use their own color scheme
   const backgroundClass = isCustom
@@ -112,6 +138,12 @@ export const TimetableTableCell = (props: Props) => {
 
   const cellHeightPx = rowHeightPx * index.duration
 
+  const cellStyle = {
+    ...(moduleVars as CSSProperties | undefined),
+    "--cell-block-opacity": String(blockOpacity),
+    ...(clamp ? { height: cellHeightPx } : {})
+  } as CSSProperties
+
   const cellContent = (
     <div
       className={cn(
@@ -121,6 +153,9 @@ export const TimetableTableCell = (props: Props) => {
         // padding. The density setting only takes effect from md: up.
         "relative flex cursor-pointer items-center rounded-lg p-[0.25rem] break-words md:p-[var(--cell-padding)]",
         clamp ? "overflow-hidden" : "h-full",
+        // The block's own opacity, composed with any dimmed state through
+        // --cell-state-opacity. Values live in CSS so the dark variants stay.
+        "opacity-[calc(var(--cell-block-opacity,1)*var(--cell-state-opacity,1))]",
         backgroundClass,
         previewCandidate &&
           "ring-primary/80 hover:ring-primary shadow-md ring-1",
@@ -129,8 +164,9 @@ export const TimetableTableCell = (props: Props) => {
           "outline-primary outline-2 -outline-offset-2 outline-dashed",
         hoverState === "current" &&
           "outline-foreground/50 outline-2 -outline-offset-2",
-        dimmed && "opacity-30 dark:opacity-20",
-        pickerDimmed && "pointer-events-none opacity-[0.12] dark:opacity-[0.08]"
+        dimmed && "[--cell-state-opacity:0.3] dark:[--cell-state-opacity:0.2]",
+        pickerDimmed &&
+          "pointer-events-none [--cell-state-opacity:0.12] dark:[--cell-state-opacity:0.08]"
       )}
       // h-full (100% of the td) is a no-op here: table cells always grow to
       // fit their content regardless of the td's own declared height, so
@@ -138,7 +174,7 @@ export const TimetableTableCell = (props: Props) => {
       // hidden — only then does the td's content height stay bounded to it,
       // instead of the overflowing text quietly dragging the whole row
       // (and every other column sharing it) taller.
-      style={clamp ? { height: cellHeightPx } : undefined}
+      style={cellStyle}
       onClick={onClick}>
       {remarkScope && (
         <span

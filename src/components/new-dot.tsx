@@ -73,3 +73,18 @@ export function NewBadge({
     </span>
   )
 }
+
+/** Yellow pulse in the corner of a button; the button must be `relative`. */
+export function PulseDot({ className }: { className?: string }) {
+  return (
+    <span
+      className={cn(
+        "pointer-events-none absolute top-0.5 right-0.5 flex size-2",
+        className
+      )}
+      aria-hidden="true">
+      <span className="absolute inline-flex size-full animate-ping rounded-full bg-yellow-400 opacity-75 motion-reduce:animate-none" />
+      <span className="relative inline-flex size-2 rounded-full bg-yellow-400" />
+    </span>
+  )
+}

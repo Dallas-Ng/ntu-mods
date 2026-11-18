@@ -121,6 +121,7 @@ One hover signal per element:
 - Text-only links (`TextLink`): grey text goes black, black text goes blue, inline links dim.
 - Solid buttons: a slightly darker fill. The GitHub stars button uses the foreground colour in dark mode, with a slightly darker hover, so it stands out.
 - No lift, scale, opacity or border-colour hovers. A go-to arrow may nudge (`LinkArrow` does this).
+- A tile whose fill is the thing being previewed (the six class boxes in Appearance, under granular control) shows a `ring` on hover instead of an accent fill, since an accent fill would hide the preview.
 
 Focus and cursor:
 
@@ -163,3 +164,5 @@ A component that uses `z-index` inside itself creates its own stacking context (
 4. Checked in the browser, light and dark, desktop and phone width (`pnpm db:seed-local` first, see `CLAUDE.md`)?
 5. Copy: sentence case, no em dashes?
 6. A new rule or exception? Update this file in the same change.
+
+- A feature added to Appearance is pointed out with a yellow pulse (`PulseDot`) on its toolbar button, and a "New" badge on its row in the phone Tools drawer, until the student next opens Appearance. Move `APPEARANCE_FEATURE_RELEASED` in `src/config/appearance-settings.ts` to the feature's release date to show it again. The Granular control row has its own pulse, cleared when the student turns it on or opens its (i) guide (screenshots in `public/appearance`, a light and a dark `.webp` each).

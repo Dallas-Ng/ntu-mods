@@ -3,6 +3,7 @@
 import { ChevronDown } from "lucide-react"
 
 import { parseFilterList } from "@/lib/filter-modules"
+import { LATEST_SEMESTER_LABEL_COMPACT } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -80,7 +81,7 @@ export const ModsFilterChips = (props: ModsFilterProps) => {
         onClick={() =>
           f.setParam("currentOnly", f.semesterOnly ? "false" : "true", "true")
         }>
-        This semester only
+        {LATEST_SEMESTER_LABEL_COMPACT} only
       </Button>
 
       {props.onClearAll && (

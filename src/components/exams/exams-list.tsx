@@ -20,14 +20,27 @@ import {
   PopoverTrigger
 } from "@/components/ui/popover"
 
-type FilterKey = "date" | "school" | "level" | "time"
+type FilterKey = "semester" | "date" | "school" | "level" | "time"
 type Filters = Record<FilterKey, string[]>
 
-const NO_FILTERS: Filters = { date: [], school: [], level: [], time: [] }
+const NO_FILTERS: Filters = {
+  semester: [],
+  date: [],
+  school: [],
+  level: [],
+  time: []
+}
 const TIME_BUCKETS = ["Morning", "Afternoon", "Evening"] as const
 
+/** An exam tagged with the semester it belongs to, e.g. "AY2026 S1". */
+export type ListedExam = DbExam & {
+  semester: string
+  /** False when NTU lists an exam for a module that has no page on the site. */
+  hasPage: boolean
+}
+
 interface Props {
-  exams: DbExam[]
+  exams: ListedExam[]
 }
 
 const EXAM_PREFIX_LABELS: Record<string, string> = {
@@ -87,8 +100,8 @@ function parseDateForSort(dateStr: string): number {
   return new Date(dateStr).getTime()
 }
 
-function groupByDate(exams: DbExam[]) {
-  const groups = new Map<string, DbExam[]>()
+function groupByDate(exams: ListedExam[]) {
+  const groups = new Map<string, ListedExam[]>()
   exams.forEach((exam) => {
     groups.set(exam.date, [...(groups.get(exam.date) ?? []), exam])
   })
@@ -122,7 +135,23 @@ function weekday(dateStr: string) {
     : d.toLocaleDateString("en-GB", { weekday: "long" })
 }
 
-function ExamTable({ items }: { items: DbExam[] }) {
+const ROW_CLASS =
+  "flex flex-col gap-1 px-5 py-3 md:flex-row md:items-center md:gap-4"
+
+/** A link to the module page, or a plain row when the module has none. */
+function Row({ href, children }: { href?: string; children: React.ReactNode }) {
+  return href ? (
+    <a
+      href={href}
+      className={cn(ROW_CLASS, "hover:bg-accent transition-colors")}>
+      {children}
+    </a>
+  ) : (
+    <div className={ROW_CLASS}>{children}</div>
+  )
+}
+
+function ExamTable({ items }: { items: ListedExam[] }) {
   return (
     // translate="no": in-page translation wraps text nodes, so React fails
     // with removeChild NotFoundError when filtering swaps rows (issue #326)
@@ -135,10 +164,9 @@ function ExamTable({ items }: { items: DbExam[] }) {
       </div>
       <div className="divide-background divide-y-2">
         {items.map((exam) => (
-          <a
-            key={exam.key}
-            href={getExamModuleUrl(exam.key)}
-            className="hover:bg-accent flex flex-col gap-1 px-5 py-3 transition-colors md:flex-row md:items-center md:gap-4">
+          <Row
+            key={`${exam.semester}-${exam.key}`}
+            href={exam.hasPage ? getExamModuleUrl(exam.key) : undefined}>
             <span className="w-24 shrink-0 text-sm font-semibold whitespace-nowrap">
               {exam.key}
             </span>
@@ -155,7 +183,7 @@ function ExamTable({ items }: { items: DbExam[] }) {
                 </span>
               )}
             </span>
-          </a>
+          </Row>
         ))}
       </div>
     </div>
@@ -172,8 +200,9 @@ function getTimeBucket(start: string) {
   return m < 17 * 60 ? "Afternoon" : "Evening"
 }
 
-function matchesFilters(exam: DbExam, f: Filters) {
+function matchesFilters(exam: ListedExam, f: Filters) {
   return (
+    (!f.semester.length || f.semester.includes(exam.semester)) &&
     (!f.date.length || f.date.includes(exam.date)) &&
     (!f.school.length ||
       f.school.includes(getPrefixLabel(getModulePrefix(exam.key)))) &&
@@ -268,7 +297,7 @@ export default function ExamsList({ exams }: Props) {
   const hasFilters = Object.values(filters).some((v) => v.length > 0)
 
   const filterOptions = useMemo(() => {
-    const tally = (get: (e: DbExam) => string) => {
+    const tally = (get: (e: ListedExam) => string) => {
       const m = new Map<string, number>()
       exams.forEach((e) => m.set(get(e), (m.get(get(e)) ?? 0) + 1))
       return m
@@ -284,7 +313,12 @@ export default function ExamsList({ exams }: Props) {
       (d) => `${d.replace(/\s\d{4}$/, "")} · ${weekday(d).slice(0, 3)}`
     ).sort((a, b) => parseDateForSort(a.value) - parseDateForSort(b.value))
 
+    const semesters = toOptions(tally((e) => e.semester)).sort((a, b) =>
+      a.value.localeCompare(b.value)
+    )
+
     return {
+      semester: semesters,
       date: dates,
       school: toOptions(
         tally((e) => getPrefixLabel(getModulePrefix(e.key)))
@@ -350,6 +384,12 @@ export default function ExamsList({ exams }: Props) {
       </div>
 
       <div className="flex flex-wrap gap-2">
+        <FilterChip
+          label="Semester"
+          options={filterOptions.semester}
+          selected={filters.semester}
+          onChange={(v) => setFilters((f) => ({ ...f, semester: v }))}
+        />
         <FilterChip
           label="Date"
           options={filterOptions.date}

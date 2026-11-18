@@ -13,3 +13,6 @@ export const LATEST_SEMESTER_LABEL = isSpecialTerm
 export const LATEST_SEMESTER_LABEL_SHORT = isSpecialTerm
   ? `AY${latestYear} Special Term`
   : `AY${latestYear} S${latestSemester}`
+
+/** Two-digit academic year, e.g. "AY26/27 S2", for tight spots like filter chips. */
+export const LATEST_SEMESTER_LABEL_COMPACT = `AY${latestYear.slice(2)}/${String(Number(latestYear) + 1).slice(2)} ${isSpecialTerm ? "Special Term" : `S${latestSemester}`}`

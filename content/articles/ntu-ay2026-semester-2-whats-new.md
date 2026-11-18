@@ -164,7 +164,7 @@ All 61 new modules:
 | [HH2003](/mods/HH2003) | Environmental History of Modern Japan                        | 3   | History                             |
 | [HH3077](/mods/HH3077) | Other Natures: Disease & Ecologies in Oceanic Worlds         | 3   | History                             |
 | [HH4032](/mods/HH4032) | World War III: A History?                                    | 4   | History                             |
-| [HP3102](/mods/HP3102) | Methods in Research Synthesis                                | 3   | Psychology                          |
+| HP3102 | Methods in Research Synthesis                                | 3   | Psychology                          |
 | [HP4210](/mods/HP4210) | Data Analytics for Neuroimaging                              | 4   | Psychology                          |
 | [HR1004](/mods/HR1004) | Introduction to the Histories of Art II                      | 3   | Humanities                          |
 | [HW0211](/mods/HW0211) | Academic Communication in the Arts, Design & Media Studies   | 2   | Philosophy                          |
@@ -175,7 +175,7 @@ All 61 new modules:
 | [LK5008](/mods/LK5008) | Korean Language Level 8                                      | 3   | Humanities                          |
 | [LP5001](/mods/LP5001) | Portuguese Language Level 1                                  | 3   | Humanities                          |
 | [MA2604](/mods/MA2604) | Classical Control Theory for Robotic Applications            | 3   | Mechanical & Aerospace Engineering  |
-| [MA5008](/mods/MA5008) | Campus Ceo - Innovation to Business                          | 3   | Mechanical & Aerospace Engineering  |
+| MA5008 | Campus Ceo - Innovation to Business                          | 3   | Mechanical & Aerospace Engineering  |
 | [MS5001](/mods/MS5001) | Innovating with Materials: Thinking Deep                     | 3   | Materials Engineering               |
 | [SC3099](/mods/SC3099) | Capstone Project                                             | 4   | Computer Science                    |
 | [SP0057](/mods/SP0057) | Dress to Express? Style-Fashion-Dress in Global Contexts     | 3   | Sport Science and Management        |

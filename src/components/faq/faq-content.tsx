@@ -9,6 +9,14 @@ import Container from "@/components/container"
 import Header, { SectionHeading } from "@/components/header"
 import HeadingAnchor from "@/components/heading-anchor"
 
+/** One dataset and the newest semester(s) it covers, shown in the "current semester" answer. */
+export interface DataStatusItem {
+  label: string
+  /** e.g. "AY2026 Semester 2" or "AY2026 Semester 1 and Semester 2". */
+  coverage: string
+  detail: string
+}
+
 interface FaqConfig {
   id: string
   group: string
@@ -237,13 +245,27 @@ export const faqHeadings: ArticleHeading[] = FAQ_GROUPS.flatMap((group) => [
   )
 ])
 
+const statusText = (status: DataStatusItem[]) =>
+  status
+    .map(({ label, coverage, detail }) => `${label}: ${coverage} (${detail}).`)
+    .join(" ")
+
 /** Question/answer pairs for the FAQPage JSON-LD built in the faq page. */
-export const faqItems = FAQ_CONFIG.map(({ question, answer, answerText }) => ({
-  question,
-  answer: answerText ?? (answer as string)
-}))
+export const faqItemsFor = (status: DataStatusItem[]) =>
+  FAQ_CONFIG.map(({ id, question, answer, answerText }) => {
+    const text = answerText ?? (answer as string)
+    return {
+      question,
+      answer:
+        id === "current-semester" && status.length > 0
+          ? `${text} ${statusText(status)}`
+          : text
+    }
+  })
 
 interface Props {
+  /** What is available for each dataset, shown under "What semester is currently available?". */
+  dataStatus?: DataStatusItem[]
   /** Rendered as the second grid column, the .astro page passes its own
    * ArticleToc island here so this component can stay a zero-JS static
    * render (it has no interactivity of its own). */
@@ -253,7 +275,7 @@ interface Props {
   mobileNav?: React.ReactNode
 }
 
-const FaqContent = ({ children, mobileNav }: Props) => {
+const FaqContent = ({ children, mobileNav, dataStatus = [] }: Props) => {
   return (
     <Container size="md">
       <div className="grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem] [&>*]:min-w-0">
@@ -289,6 +311,24 @@ const FaqContent = ({ children, mobileNav }: Props) => {
                     </SectionHeading>
 
                     <p className="text-sm leading-relaxed">{answer}</p>
+
+                    {id === "current-semester" && dataStatus.length > 0 && (
+                      <dl className="divide-background divide-y-2 overflow-hidden rounded-lg">
+                        {dataStatus.map(({ label, coverage, detail }) => (
+                          <div
+                            key={label}
+                            className="bg-background flex flex-col gap-0.5 px-4 py-3 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                            <dt className="text-sm font-medium">{label}</dt>
+                            <dd className="text-sm sm:text-right">
+                              {coverage}
+                              <span className="text-muted-foreground block text-xs">
+                                {detail}
+                              </span>
+                            </dd>
+                          </div>
+                        ))}
+                      </dl>
+                    )}
                   </section>
                 )
               )}

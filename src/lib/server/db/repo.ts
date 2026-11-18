@@ -46,6 +46,22 @@ export async function getLatestExamSemester(): Promise<{
   return latest ? { year: latest.year, semester: latest.semester } : null
 }
 
+/**
+ * Every semester with exams in the newest academic year that has any, oldest
+ * first. The exam page shows these together, so semester 1 exams still
+ * running stay listed once the semester 2 timetable is out.
+ */
+export async function getCurrentYearExamSemesters(): Promise<
+  { year: string; semester: string }[]
+> {
+  const all = json.semestersWithExams()
+  if (!all.length) return []
+  return all
+    .filter((s) => s.year === all[0].year)
+    .reverse()
+    .map(({ year, semester }) => ({ year, semester }))
+}
+
 /** Every module code that was ever offered. Used by the sitemap, not getStaticPaths — see getActiveModuleCodes for the build subset. */
 export async function getAllModuleCodes(): Promise<string[]> {
   return json.latestOfferings().map((o) => o.code)

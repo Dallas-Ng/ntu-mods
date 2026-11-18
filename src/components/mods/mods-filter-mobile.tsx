@@ -10,6 +10,7 @@ import {
 
 import { parseFilterList } from "@/lib/filter-modules"
 import { TRUN_DAY_MAP } from "@/lib/module-constants"
+import { LATEST_SEMESTER_LABEL_COMPACT } from "@/lib/semesters"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -129,7 +130,7 @@ export const ModsFilterPills = ({
           f.setParam("currentOnly", f.semesterOnly ? "false" : "true", "true")
         }>
         {f.semesterOnly && <Check className="size-4" />}
-        This semester only
+        {LATEST_SEMESTER_LABEL_COMPACT} only
       </Pill>
     </div>
   )
@@ -314,9 +315,12 @@ export const ModsFilterDrawer = ({
               <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto px-4 pt-1 pb-3">
                 <label className="flex cursor-pointer items-center justify-between gap-4">
                   <span>
-                    <span className="block text-base">This semester only</span>
+                    <span className="block text-base">
+                      {LATEST_SEMESTER_LABEL_COMPACT} only
+                    </span>
                     <span className="text-muted-foreground block text-xs">
-                      Hide modules not offered this semester
+                      Hide modules not offered in{" "}
+                      {LATEST_SEMESTER_LABEL_COMPACT}
                     </span>
                   </span>
                   <Switch

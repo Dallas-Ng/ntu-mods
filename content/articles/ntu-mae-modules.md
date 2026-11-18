@@ -100,7 +100,7 @@ The School of Mechanical & Aerospace Engineering (MAE) uses the module code pref
 | [MA4853](/mods/MA4853) | Manufacturing Systems | 3 |
 | [MA4854](/mods/MA4854) | Quality Assurance & Management | 3 |
 | [MA4892](/mods/MA4892) | Engineering Project Management: Principles & Practice | 3 |
-| [MA5008](/mods/MA5008) | Campus Ceo - Innovation to Business | 3 |
+| MA5008 | Campus Ceo - Innovation to Business | 3 |
 | [RE1201](/mods/RE1201) | Accounting for Managerial Decisions | 3 |
 | [RE1202](/mods/RE1202) | Foundations of Engineering Leadership | 1 |
 | [RE1402](/mods/RE1402) | Strategic Marketing | 3 |

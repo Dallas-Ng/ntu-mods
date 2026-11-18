@@ -15,7 +15,7 @@ Updated for AY2026/2027 Semester 2 (October 2026).
 
 NTU has over 780 BDE modules available in the current semester across languages, business, computing, humanities, science, engineering, arts, and more. This page organises them by category so you can find what is available for your interests and programme.
 
-> **Planning around exams?** The [NTU Exam Schedule](/exams) shows AY2026/2027 Semester 1 exam dates. The Semester 2 exam timetable is not released yet, so check it again once it is out. Check exam clashes before you finalise your BDE shortlist.
+> **Planning around exams?** The [NTU Exam Schedule](/exams) shows AY2026/2027 Semester 1 and Semester 2 exam dates. Semester 2 exams run from 26 April to 6 May 2027. Check exam clashes before you finalise your BDE shortlist.
 
 Not sure what a BDE is or how many you need? Start with [What Is a BDE at NTU](/articles/what-is-a-bde-at-ntu). For the most popular BDEs and what students say about them, see [Most Popular BDEs at NTU](/articles/most-popular-bdes-at-ntu).
 

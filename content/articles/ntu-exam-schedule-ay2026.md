@@ -1,32 +1,36 @@
 ---
-title: "NTU Exam Schedule AY2026/2027 Semester 1: How to Find Your Exam Dates"
-description: "NTU exam dates for AY2026/2027 Semester 1 are now available on NTUMods. Here's how to find your exam timetable, spot clashes, and plan your modules around the exam period."
+title: "NTU Exam Schedule AY2026/2027: Semester 1 and Semester 2 Exam Dates"
+description: "NTU exam dates for AY2026/2027 Semester 1 and Semester 2 are on NTUMods. Find your exam timetable, filter by semester, spot clashes and plan your modules around the exam period."
 date: "2026-07-27"
+updated: "2026-11-18"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "Exam schedule"
-tags: ["ntu exam schedule", "ntu exams ay2026", "ntu exam timetable", "ntu exam dates 2026", "ntumods exams", "ntu final exam schedule", "ntu exam ay2026 s1", "ntu exam period 2026"]
+tags: ["ntu exam schedule", "ntu exams ay2026", "ntu exam timetable", "ntu exam dates 2026", "ntumods exams", "ntu final exam schedule", "ntu exam ay2026 s1", "ntu exam ay2026 s2", "ntu semester 2 exam timetable", "ntu exam period 2026", "ntu exam period 2027"]
 ---
 
-# NTU Exam Schedule AY2026/2027 Semester 1: How to Find Your Exam Dates
+# NTU Exam Schedule AY2026/2027: Semester 1 and Semester 2 Exam Dates
 
-AY2026/2027 Semester 1 exam dates are now available, covering 394 modules with a centrally scheduled exam. If you are planning your modules for August 2026, you can check exam dates before you finalise your registration — which makes it much easier to avoid exam clashes and heavy exam stretches.
+Exam dates for both semesters of AY2026/2027 are now on NTUMods. Semester 1 covers 385 modules with a centrally scheduled exam, and Semester 2 covers 394. You can check exam dates before you finalise your registration, which makes it much easier to avoid exam clashes and heavy exam stretches.
 
 > **Go straight to the schedule:** [NTU Exam Schedule on NTUMods](/exams)
 >
-> **Last synced with NTU's official timetable:** 27 July 2026
+> **Last synced with NTU's official timetable:** 18 November 2026
 
 ## What the NTUMods exam schedule shows
 
 ![NTU exam schedule AY2026/2027 Semester 1 on NTUMods, searched for SC20 to list each module's exam date and time](/articles/ntu-exam-schedule-search-ntumods.webp "Search the NTU exam schedule by module code or name to see exam dates and times.")
 
-The exam schedule page lists every module with a scheduled exam for AY2026/2027 Semester 1. For each module you can see:
+The exam schedule page lists every module with a scheduled exam for AY2026/2027 Semester 1 and Semester 2 together. Semester 1 exams stay on the page after Semester 2 is released, so you can still look them up while they are running. For each module you can see:
 
+- The semester it belongs to
 - The exam date
 - The exam time slot
 - Whether it is a central exam or a departmental arrangement
 
 The data is sourced from NTU's official exam schedule and is updated when changes are made.
+
+Use the Semester filter to show one semester only. You can also filter by date, school, level and time of day. NTU sometimes lists an exam for a module that is not in the course data, and those rows have no link to a module page.
 
 Not every module has a centrally scheduled exam. Project-based modules and some continuous assessment modules may not appear — their assessment happens through coursework rather than a formal exam sitting.
 
@@ -47,7 +51,14 @@ This is especially relevant for BDE planning. Your core modules are often fixed,
 
 ### Know the exam period in advance
 
-The AY2026/2027 Semester 1 exam period runs from 23 November to 3 December 2026. Knowing which weeks are exam weeks helps you plan coursework deadlines, CCA commitments, and any part-time work around the intensive period.
+The AY2026/2027 exam periods, as listed in the NTU timetable, are:
+
+| Semester | Exam period | Modules with an exam |
+| --- | --- | --- |
+| Semester 1 | 23 November to 3 December 2026 | 385 |
+| Semester 2 | 26 April to 6 May 2027 | 394 |
+
+Knowing which weeks are exam weeks helps you plan coursework deadlines, CCA commitments, and any part-time work around the intensive period.
 
 Check the [NTU academic calendar](https://www.ntu.edu.sg/education/academic-calendar) for official term dates alongside the exam schedule.
 
@@ -80,7 +91,7 @@ NTU releases the examination timetable in mid May for Semester 1 and mid Novembe
 
 ### Where is the NTU exam schedule?
 
-The exam schedule for AY2026/2027 Semester 1 is available at [ntumods.com/exams](/exams). It shows exam dates and times for modules with centrally scheduled exams.
+The exam schedule for AY2026/2027 Semester 1 and Semester 2 is available at [ntumods.com/exams](/exams). It shows exam dates and times for modules with centrally scheduled exams.
 
 ### Does every module have a final exam?
 

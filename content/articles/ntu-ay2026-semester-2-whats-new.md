@@ -2,7 +2,7 @@
 title: "NTU AY2026/2027 Semester 2 Modules: What Is New and What Changed"
 description: "NTU Semester 2 AY2026/2027 modules are live on NTUMods: 1,092 modules, 4,306 indexes, 61 new modules and what changed since Semester 1."
 date: "2026-10-15"
-updated: "2026-10-15"
+updated: "2026-11-18"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "What's new"
@@ -31,7 +31,7 @@ AY2026/2027 Semester 2 module and class index data is now live on NTUMods. Semes
 >
 > [Browse Semester 2 modules](/mods "cta")
 
-> **Quick summary:** 1,092 modules and 4,306 class indexes are offered. That is slightly fewer than Semester 1 (1,138 modules and 4,591 indexes). 61 modules are new to the data. Art, Design & Media grew the most, while Communication Studies and Sport Science and Management shrank the most. The Semester 2 exam timetable is not released yet.
+> **Quick summary:** 1,092 modules and 4,306 class indexes are offered. That is slightly fewer than Semester 1 (1,138 modules and 4,591 indexes). 61 modules are new to the data. Art, Design & Media grew the most, while Communication Studies and Sport Science and Management shrank the most. The Semester 2 exam timetable is now out: 394 modules sit exams from 26 April to 6 May 2027.
 
 ## Semester 2 at a glance
 
@@ -222,9 +222,9 @@ See [Best CC Modules at NTU](/articles/best-cc-modules-ntu) if you are choosing 
 
 NTU lists the Semester 2 course registration period as December, and your own registration time appears in your personal course registration schedule. Dates can change, so confirm against the [official academic calendar](https://ntu.edu.sg/academic-calendar). Our [NTU Academic Calendar AY2026/2027](/articles/ntu-academic-calendar-ay2026) guide has the full list, and the [add/drop guide](/articles/ntu-add-drop-period-guide) explains the first two weeks.
 
-## What is not out yet
+## Semester 2 exam timetable
 
-- **Exam timetable.** NTU has not released the Semester 2 exam timetable, so [the exam schedule](/exams) keeps showing the Semester 1 exams, which have not finished yet. It will switch to Semester 2 once NTU publishes that timetable. See [NTU Exam Timetable and Seating](/articles/ntu-exam-timetable-seating-past-papers).
+NTU has released the Semester 2 exam timetable. 394 modules have a centrally scheduled exam, from 26 April to 6 May 2027. The [exam schedule](/exams) lists Semester 1 and Semester 2 exams together, with a Semester filter, so Semester 1 exams stay visible while they are still running. See [NTU Exam Schedule AY2026/2027](/articles/ntu-exam-schedule-ay2026) for how to use it, and [NTU Exam Timetable and Seating](/articles/ntu-exam-timetable-seating-past-papers) for seating and venues.
 
 ## How to plan your Semester 2 timetable
 
@@ -255,7 +255,7 @@ Many modules are offered in only one semester each year. Open the module page on
 
 ### Are the Semester 2 exam dates available?
 
-Not yet. NTU has not released the Semester 2 exam timetable. The [exam schedule](/exams) shows Semester 1 exams for now and will update when the Semester 2 timetable is published.
+Yes. Exams run from 26 April to 6 May 2027 and cover 394 modules. Find yours on the [exam schedule](/exams), and use the Semester filter to show Semester 2 only.
 
 ### Why do some modules show 0 AU?
 

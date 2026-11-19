@@ -59,12 +59,14 @@ const Navbar = () => {
   }, [])
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-10 w-full backdrop-blur-xl",
-        scrolled && "shadow"
-      )}>
-      <div className="container flex h-16 items-center gap-2 px-2 lg:px-4">
+    <header className={cn("sticky top-0 z-10 w-full", scrolled && "shadow")}>
+      {/* The glass sits on an absolute child, not on the sticky header. Safari
+          26 reads background-color and backdrop-filter from the sticky element
+          itself for the toolbar tint, so a blur here would tint the status bar
+          with whatever is scrolling behind it, scrim included. Absolute
+          children are ignored. See .toolbar-edge in globals.css. */}
+      <div aria-hidden="true" className="absolute inset-0 backdrop-blur-xl" />
+      <div className="relative container flex h-16 items-center gap-2 px-2 lg:px-4">
         <div className="flex min-w-0 items-center">
           <a href="/" className="flex shrink-0 items-center">
             <img

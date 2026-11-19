@@ -175,6 +175,8 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
     </script>
   </head>
   <body class="antialiased" data-build-env={BUILD_ENV}>
+    {/* Tints the iOS status bar; see .toolbar-edge in globals.css. */}
+    <div aria-hidden="true" class="toolbar-edge"></div>
     <AppearanceStyleProvider client:load />
     <div id="announcement" class="relative [&_p]:px-6">
       <Banner />

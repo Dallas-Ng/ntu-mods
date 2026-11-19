@@ -1,6 +1,9 @@
 import { create } from "zustand"
 
-/** Index currently hovered in the desktop index picker, previewed on the timetable. */
+/**
+ * Index currently hovered in the desktop index picker, previewed on the
+ * timetable.
+ */
 export const useIndexHover = create<{
   hovered: { moduleKey: string; indexKey: string; currentKey?: string } | null
   setHovered: (

@@ -15,7 +15,8 @@ interface Props {
 /**
  * Links to the screenshot page
  *
- * @param persistQuerystring - A boolean indicating whether to persist the querystring to the screenshot page.
+ * @param persistQuerystring - A boolean indicating whether to persist the
+ *   querystring to the screenshot page.
  */
 const StarsScreenshotButton = ({ persistQuerystring, labelled }: Props) => {
   let href = `/screenshot`

@@ -69,8 +69,8 @@ export function groupModules(modules: AllModule[], groupBy: ModsGroupBy) {
 }
 
 /**
- * Parses a multi-value filter param ("2,3", or "all"/empty for no filter).
- * A single value like "2" still parses, so older links keep working.
+ * Parses a multi-value filter param ("2,3", or "all"/empty for no filter). A
+ * single value like "2" still parses, so older links keep working.
  */
 export function parseFilterList(value: string | undefined): string[] {
   if (!value || value === "all") return []

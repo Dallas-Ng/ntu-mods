@@ -292,8 +292,10 @@ export const linkHeadings: ArticleHeading[] = LINK_CATEGORIES.map(
 )
 
 interface Props {
-  /** Rendered as the second grid column, passed in so the ArticleToc
-   * island can be controlled independently from the .astro page. */
+  /**
+   * Rendered as the second grid column, passed in so the ArticleToc island can
+   * be controlled independently from the .astro page.
+   */
   children?: React.ReactNode
 }
 

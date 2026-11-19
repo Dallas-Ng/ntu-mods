@@ -24,9 +24,9 @@ interface Props {
 }
 
 /**
- * A popover on desktop and a bottom drawer on phones, for the colour
- * controls. The drawer is nested because both places that use it already sit
- * inside a drawer on a phone.
+ * A popover on desktop and a bottom drawer on phones, for the colour controls.
+ * The drawer is nested because both places that use it already sit inside a
+ * drawer on a phone.
  */
 const ColourOverlay = ({
   trigger,

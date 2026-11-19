@@ -27,9 +27,9 @@ function GitHubLogo(props: ComponentProps<"svg">) {
 }
 
 /**
- * The GitHub star button on /developers/github. It renders immediately and
- * adds the count when GitHub answers: the number is decoration, so a blocked
- * or rate-limited request leaves a working link rather than a blank spot.
+ * The GitHub star button on /developers/github. It renders immediately and adds
+ * the count when GitHub answers: the number is decoration, so a blocked or
+ * rate-limited request leaves a working link rather than a blank spot.
  */
 export default function GithubStars({ repoUrl }: { repoUrl: string }) {
   const [stars, setStars] = useState<number>()

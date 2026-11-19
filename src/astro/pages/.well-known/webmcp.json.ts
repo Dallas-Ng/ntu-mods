@@ -7,8 +7,8 @@ import { WEBMCP_TOOLS } from "@/lib/webmcp/definitions"
 export const prerender = true
 
 /**
- * The tools the site registers through WebMCP, as data. Generated from the
- * same list the page registers, so the two cannot disagree.
+ * The tools the site registers through WebMCP, as data. Generated from the same
+ * list the page registers, so the two cannot disagree.
  */
 export const GET: APIRoute = () =>
   new Response(

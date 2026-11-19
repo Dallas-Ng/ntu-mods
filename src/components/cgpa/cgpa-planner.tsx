@@ -77,7 +77,10 @@ function Field({
   value: string
   step: string
   onChange: (v: string) => void
-  /** Replaces the hint, in the accent colour, while this field still needs input. */
+  /**
+   * Replaces the hint, in the accent colour, while this field still needs
+   * input.
+   */
   prompt?: string
 }) {
   return (

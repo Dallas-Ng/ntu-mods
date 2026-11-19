@@ -1,8 +1,9 @@
 /**
  * Pure data, no `import.meta.env` — unlike constants.ts, this file is safe to
  * import from plain Node/tsx scripts that aren't run through Vite, e.g.
- * server/db/json-source.ts and the build scripts that use it. Importing constants.ts directly from one of those
- * crashes on `import.meta.env.DEV` being undefined outside a Vite context.
+ * server/db/json-source.ts and the build scripts that use it. Importing
+ * constants.ts directly from one of those crashes on `import.meta.env.DEV`
+ * being undefined outside a Vite context.
  */
 
 export const STARS_TIMESLOTS = [
@@ -81,8 +82,8 @@ export const MODULE_CATEGORY = {
 /**
  * Shape of an NTU module code: 2-6 letter school/subject prefix, a 4-digit
  * level+serial, optional trailing letter (e.g. CZ2002, SC1005, AB1201A).
- * Mirrored at scripts/db/lib/constants.mjs for the scripts that can't import
- * a .ts file directly — keep the two in sync.
+ * Mirrored at scripts/db/lib/constants.mjs for the scripts that can't import a
+ * .ts file directly — keep the two in sync.
  */
 export const MODULE_CODE_RE = /^[A-Z]{2,6}\d{4}[A-Z]?$/
 

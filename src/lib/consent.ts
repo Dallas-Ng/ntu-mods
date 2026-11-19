@@ -51,7 +51,10 @@ export function consentRequired(): Promise<boolean> {
   return region
 }
 
-/** "pending" means the banner is (or will be) showing and nothing is allowed yet. */
+/**
+ * "pending" means the banner is (or will be) showing and nothing is allowed
+ * yet.
+ */
 export async function consentState(): Promise<Consent | "pending"> {
   const stored = getStoredConsent()
   if (stored) return stored

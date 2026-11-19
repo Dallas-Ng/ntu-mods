@@ -3,9 +3,7 @@ import { getUniqueLectures } from "./get-unique-lectures"
 import { STARS_TIMESLOTS } from "./module-constants"
 import { parseTimeNumber } from "./parse-time"
 
-/**
- * Helper function to get the first timeslot idx of the index
- */
+/** Helper function to get the first timeslot idx of the index */
 export const getFirstTsIndex = (index: Index) => {
   return STARS_TIMESLOTS.findIndex(
     (ts) => ts.start === parseTimeNumber(index).startTime
@@ -62,9 +60,7 @@ export const generateTimetableMatrix = (
     )
   ]
 
-  /**
-   * Remove LECTURE indexes that are not unique
-   */
+  /** Remove LECTURE indexes that are not unique */
   Object.keys(moduleIndexes).forEach((moduleKey) => {
     moduleIndexes[moduleKey] = moduleIndexes[moduleKey].filter((lecture) => {
       if (getIndexType(lecture.type) === "LEC") {
@@ -77,9 +73,7 @@ export const generateTimetableMatrix = (
     })
   })
 
-  /**
-   * Generate the max columns for each day
-   */
+  /** Generate the max columns for each day */
   const TABLE_MAX_DAY_COLUMNS: { [dayIndex: number]: number } = {
     1: 1,
     2: 1,
@@ -92,9 +86,11 @@ export const generateTimetableMatrix = (
 
   /**
    * Generate a matrix of indexes based on the timeslot
+   *
    * - Each row represents a timeslot
-   *  - Each column represents a day
-   *    - Each cell represents an index
+   * - Each column represents a day
+   *
+   *   - Each cell represents an index
    */
   const TABLE_MATRIX: { [tsIndex: number]: Index[][] } = {}
   for (let i = 0; i < STARS_TIMESLOTS.length; i++) {
@@ -124,8 +120,8 @@ export const generateTimetableMatrix = (
   })
 
   /**
-   * Sort the indexes in each cell by duration
-   * Higher duration to lower duration, this helps create a visual pattern
+   * Sort the indexes in each cell by duration Higher duration to lower
+   * duration, this helps create a visual pattern
    */
   Object.values(TABLE_MATRIX).forEach((row) => {
     row.forEach((day) => {
@@ -135,6 +131,7 @@ export const generateTimetableMatrix = (
 
   /**
    * Generate the max columns for each day
+   *
    * - This is used to generate the colspan for each cell
    */
   Object.values(TABLE_MATRIX).forEach((row) => {
@@ -148,6 +145,7 @@ export const generateTimetableMatrix = (
 
   /**
    * Cleaning of the matrix
+   *
    * - Remove empty rows (timeslots)
    * - Remove empty columns (days - only saturday and sunday)
    */
@@ -160,8 +158,8 @@ export const generateTimetableMatrix = (
   )
 
   /**
-   * Get the earliest and latest ts index so that we can show the
-   * empty rows in between
+   * Get the earliest and latest ts index so that we can show the empty rows in
+   * between
    */
   let earliestTime = 2359
   let latestTime = 700 // This should be the earliest time that a index can have

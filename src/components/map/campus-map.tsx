@@ -102,7 +102,7 @@ export interface Highlight {
 
 interface Props {
   data: VenueData
-  /** null = campus overview; otherwise the level whose floor plans are shown. */
+  /** Null = campus overview; otherwise the level whose floor plans are shown. */
   level: number | null
   onLevel: (z: number | null) => void
   pins: Pin[]
@@ -172,7 +172,10 @@ const ROOM_TYPES_TEACHING =
 
 /** Top-right stack (options, level, fullscreen) reaches this far down. */
 const CONTROLS_TOP = 160
-/** Zoom, fit and help stacked: it shows only when all of it fits above the sheet. */
+/**
+ * Zoom, fit and help stacked: it shows only when all of it fits above the
+ * sheet.
+ */
 const STACK_H = 82 + 48 * 2 + 8
 
 const CampusMap = ({

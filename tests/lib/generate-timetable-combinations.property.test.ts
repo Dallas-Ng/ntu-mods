@@ -8,10 +8,10 @@ import {
 import { DEFAULT_GENERATION_CONFIG } from "@/lib/generation-config"
 
 /**
- * These don't assert specific outputs (the example-based tests already do
- * that) — they throw random valid inputs at the engine and check invariants
- * that must hold no matter what: never hand back a clash, and the pure
- * overlap check must agree with a brute-force reference.
+ * These don't assert specific outputs (the example-based tests already do that)
+ * — they throw random valid inputs at the engine and check invariants that must
+ * hold no matter what: never hand back a clash, and the pure overlap check must
+ * agree with a brute-force reference.
  */
 
 // Half-hour slot index -> valid HHmm clock time, e.g. slot 1 -> 730, not 760.

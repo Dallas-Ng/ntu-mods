@@ -2,17 +2,17 @@
  * SQL for the D1 binding, used by exactly one caller:
  * edge/get-module-snapshot.ts, the on-demand historic-snapshot route.
  *
- * Every other read in the app — prerendered pages, client JSON artifacts,
- * the sitemap — goes through db/json-source.ts instead, reading
- * src/data/api directly. D1 only backs this one route; see its file for why
- * it needs a live query rather than a build-time read (it serves pages for
- * semesters that aren't prerendered).
+ * Every other read in the app — prerendered pages, client JSON artifacts, the
+ * sitemap — goes through db/json-source.ts instead, reading src/data/api
+ * directly. D1 only backs this one route; see its file for why it needs a live
+ * query rather than a build-time read (it serves pages for semesters that
+ * aren't prerendered).
  *
  * These are plain strings with `?` placeholders, D1's binding API.
  */
 
 /**
- * The latest semester means *the newest semester that actually has data*,
+ * The latest semester means _the newest semester that actually has data_,
  * ordered by sort_key.
  *
  * Deliberately NOT `semesters.json[0]`, which is what src/lib/semesters.ts uses
@@ -58,7 +58,10 @@ export const OFFERING_SQL = `
    WHERE o.code = ? AND o.sem = ?
 `
 
-/** Prerequisite groups for one offering, ordered so they rebuild the source nesting. */
+/**
+ * Prerequisite groups for one offering, ordered so they rebuild the source
+ * nesting.
+ */
 export const OFFERING_PREREQUISITES_SQL = `
   SELECT group_no, item_no, raw_text
     FROM prerequisites
@@ -87,13 +90,16 @@ export const OFFERING_EXAM_SQL = `
 
 /**
  * The rest of these back getLatestModuleSnapshot — the fallback for module
- * codes not in the active semester (so not statically built). It needs a
- * few things repo.ts gets for free from the in-memory JSON index
+ * codes not in the active semester (so not statically built). It needs a few
+ * things repo.ts gets for free from the in-memory JSON index
  * (moduleSemestersIndex): which semester is "current" for an arbitrary code,
  * its other offerings, and its prerequisite graph neighbourhood.
  */
 
-/** A code's most recent offering — mirrors moduleSemestersIndex()[0] in json-source.ts. */
+/**
+ * A code's most recent offering — mirrors moduleSemestersIndex()[0] in
+ * json-source.ts.
+ */
 export const MODULE_LATEST_SEM_SQL = `
   SELECT s.sem AS sem, s.year AS year, s.semester AS semester,
          o.title, o.description, o.au, o.grade_type
@@ -113,7 +119,10 @@ export const MODULE_OTHER_SEMESTERS_SQL = `
    ORDER BY s.sort_key DESC
 `
 
-/** Prerequisite codes for one offering — requires_code is null for the ~30% of items that are free text, not a module code. */
+/**
+ * Prerequisite codes for one offering — requires_code is null for the ~30% of
+ * items that are free text, not a module code.
+ */
 export const MODULE_REQUIRES_SQL = `
   SELECT DISTINCT requires_code AS code
     FROM prerequisites
@@ -121,10 +130,10 @@ export const MODULE_REQUIRES_SQL = `
 `
 
 /**
- * Codes that list this one as a prerequisite, as of THEIR most recent
- * offering — the inverse edge for the prerequisite graph. Mirrors the
- * `requiredBy` half of json-source.ts's getPrerequisiteGraph, restricted the
- * same way (each requiring module counted only at its latest offering).
+ * Codes that list this one as a prerequisite, as of THEIR most recent offering
+ * — the inverse edge for the prerequisite graph. Mirrors the `requiredBy` half
+ * of json-source.ts's getPrerequisiteGraph, restricted the same way (each
+ * requiring module counted only at its latest offering).
  */
 export const MODULE_REQUIRED_BY_SQL = `
   SELECT DISTINCT p.code AS code
@@ -136,7 +145,10 @@ export const MODULE_REQUIRED_BY_SQL = `
      )
 `
 
-/** Titles for a small, known set of codes (prerequisite-graph neighbours), each at ITS OWN latest offering. */
+/**
+ * Titles for a small, known set of codes (prerequisite-graph neighbours), each
+ * at ITS OWN latest offering.
+ */
 export function buildModuleTitlesSql(count: number): string {
   const placeholders = Array(count).fill("?").join(", ")
   return `
@@ -153,7 +165,10 @@ export function buildModuleTitlesSql(count: number): string {
   `
 }
 
-/** Sibling modules sharing this code's two-letter prefix, offered in the same semester — mirrors related-modules.tsx's filter. */
+/**
+ * Sibling modules sharing this code's two-letter prefix, offered in the same
+ * semester — mirrors related-modules.tsx's filter.
+ */
 export const MODULE_RELATED_SQL = `
   SELECT code, title FROM offerings
    WHERE sem = ? AND code LIKE ? AND code != ?

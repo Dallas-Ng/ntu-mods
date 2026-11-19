@@ -24,7 +24,9 @@
   ],
   "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
   "plugins": [
+    "prettier-plugin-jsdoc",
     "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-packagejson",
     "prettier-plugin-astro",
     "prettier-plugin-tailwindcss"
   ],

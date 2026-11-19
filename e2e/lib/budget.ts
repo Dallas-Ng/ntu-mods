@@ -2,9 +2,8 @@
  * Up-front JS measurement (lib/budget.ts)
  *
  * Provides: `initialJs`, the gzipped size and file list of the JavaScript a
- *           built page loads before any user action.
- * Why:      reads dist/ directly, so the budget check needs no server.
- * Used by:  budget.spec.ts.
+ * built page loads before any user action. Why: reads dist/ directly, so the
+ * budget check needs no server. Used by: budget.spec.ts.
  */
 
 import fs from "node:fs"
@@ -28,7 +27,10 @@ export interface JsCost {
   gzipBytes: number
 }
 
-/** Client JS a page loads up front: entry scripts, islands and their static imports. */
+/**
+ * Client JS a page loads up front: entry scripts, islands and their static
+ * imports.
+ */
 export function initialJs(htmlFile: string): JsCost {
   const html = fs.readFileSync(htmlFile, "utf8")
   const islands = [...html.matchAll(ISLAND)]

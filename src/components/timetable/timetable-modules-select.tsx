@@ -55,9 +55,7 @@ const TimetableModulesSelect = () => {
       (searchResults.length === 0 && inputValue.length !== 0))
 
   useOutsideClick(ref, () => {
-    /**
-     * Clear input value when user clicks outside
-     */
+    /** Clear input value when user clicks outside */
     setInputValue("")
   })
 

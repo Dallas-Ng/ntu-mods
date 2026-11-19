@@ -1,12 +1,10 @@
 /**
  * SEO readers and checks (lib/seo.ts)
  *
- * Provides: `readSeo` (one DOM pass for title, meta, JSON-LD, headings,
- *           images, links) and the problem lists built on it: meta tags,
- *           JSON-LD, heading outline, images, rendered content, warnings.
- * Why:      keeps the rules in one place so the specs only decide which pages
- *           to load.
- * Used by:  pages.spec.ts.
+ * Provides: `readSeo` (one DOM pass for title, meta, JSON-LD, headings, images,
+ * links) and the problem lists built on it: meta tags, JSON-LD, heading
+ * outline, images, rendered content, warnings. Why: keeps the rules in one
+ * place so the specs only decide which pages to load. Used by: pages.spec.ts.
  */
 
 import type { Page } from "@playwright/test"

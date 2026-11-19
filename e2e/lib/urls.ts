@@ -1,12 +1,11 @@
 /**
  * URLs and sampling (lib/urls.ts)
  *
- * Provides: the server and site origins, the sitemap as paths, a seeded
- *           random `sample`, `pagesUnderTest` (all static pages plus a sample
- *           of each dynamic kind) and a list of the built HTML files.
- * Why:      one deterministic sample for every spec; SEO_SAMPLE and SEO_SEED
- *           change it, so a failing run can be reproduced.
- * Used by:  every spec.
+ * Provides: the server and site origins, the sitemap as paths, a seeded random
+ * `sample`, `pagesUnderTest` (all static pages plus a sample of each dynamic
+ * kind) and a list of the built HTML files. Why: one deterministic sample for
+ * every spec; SEO_SAMPLE and SEO_SEED change it, so a failing run can be
+ * reproduced. Used by: every spec.
  */
 
 import fs from "node:fs"
@@ -72,8 +71,8 @@ export function sample<T>(items: T[], n: number, seed = SEED): T[] {
 }
 
 /**
- * All static pages, plus `perKind` random pages of each dynamic route.
- * Semester pages share one template, so a handful is enough (`caps`).
+ * All static pages, plus `perKind` random pages of each dynamic route. Semester
+ * pages share one template, so a handful is enough (`caps`).
  */
 export function pagesUnderTest(
   perKind = SAMPLE,

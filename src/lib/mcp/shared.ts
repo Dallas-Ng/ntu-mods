@@ -26,7 +26,10 @@ export const describeSlot = (slot: Index) => ({
   remarks: slot.isCustom ? "" : slot.remarks
 })
 
-/** "2026-11-23" or "23 Nov 2026" -> "23 november 2026", the casing list_exams compares in. */
+/**
+ * "2026-11-23" or "23 Nov 2026" -> "23 november 2026", the casing list_exams
+ * compares in.
+ */
 export function normaliseDate(value: string): string {
   const v = value.trim()
   if (!v) return ""
@@ -54,7 +57,7 @@ export interface SearchArgs {
 }
 
 /**
- * search_modules for the browser and for /mcp. `base` prefixes the module URL:
+ * Search_modules for the browser and for /mcp. `base` prefixes the module URL:
  * empty in the page, the site origin for agents that are not on it.
  */
 export function searchModuleList(
@@ -91,7 +94,10 @@ export function searchModuleList(
   }
 }
 
-/** list_exams: exams whose code or name contains `query`, optionally on one date. */
+/**
+ * List_exams: exams whose code or name contains `query`, optionally on one
+ * date.
+ */
 export function filterExams(
   exams: Exam[],
   args: { query: string; date: string; limit: number }

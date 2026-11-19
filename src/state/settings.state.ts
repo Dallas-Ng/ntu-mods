@@ -40,8 +40,10 @@ export interface Settings {
   appearance: AppearanceSettings
   modsViewMode: "cards" | "list"
   modsGroupBy: "none" | "level" | "au" | "faculty" | "type"
-  /** Force every timeslot row to the same fixed height, so lesson length
-   * vs. break length is visually proportional across the grid. */
+  /**
+   * Force every timeslot row to the same fixed height, so lesson length vs.
+   * break length is visually proportional across the grid.
+   */
   standardisedScale: boolean
   /** Timetable page: side panel on the right, or the panel below the grid. */
   timetableLayout: "side" | "below"

@@ -18,9 +18,9 @@ export interface TimetableSlice {
   uniqueTimeslotsOnly: boolean
   lockedModules: string[]
   /**
-   * Module keys hidden from the grid and the map, one list per plan. A
-   * hidden module stays registered: it keeps its index and still counts
-   * for generation, it is only not drawn.
+   * Module keys hidden from the grid and the map, one list per plan. A hidden
+   * module stays registered: it keeps its index and still counts for
+   * generation, it is only not drawn.
    */
   hiddenModules: string[][]
   hasOnboarded: boolean

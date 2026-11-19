@@ -145,7 +145,7 @@ const shareLink = async (title: string, view: string) => {
   }
 }
 
-/** shareLink plus a flag that stays on for 1.5 s after a successful share. */
+/** ShareLink plus a flag that stays on for 1.5 s after a successful share. */
 const useShare = (title: string, view: string) => {
   const [done, setDone] = useState(false)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
@@ -1304,7 +1304,10 @@ const CategoryChips = ({
   )
 }
 
-/** A scroll area that shows when there is more below: a fade and a "More" button. */
+/**
+ * A scroll area that shows when there is more below: a fade and a "More"
+ * button.
+ */
 const ScrollHint = ({
   className,
   children

@@ -55,8 +55,10 @@ export function useFilterDrawer() {
       setView(next)
       setOpen(true)
     },
-    /** From the pill the filters drawer is closed, so School opens on its
-     * own. From inside the filters drawer it nests on top of it. */
+    /**
+     * From the pill the filters drawer is closed, so School opens on its own.
+     * From inside the filters drawer it nests on top of it.
+     */
     openSchool: () => setSchoolOpen(true)
   }
 }

@@ -9,7 +9,10 @@ const WEEK_1_START: Record<string, string> = {
   "2026;2": "2027-01-11"
 }
 
-/** "2026-08-10" -> that day at 00:00 local, not UTC (which would shift the date). */
+/**
+ * "2026-08-10" -> that day at 00:00 local, not UTC (which would shift the
+ * date).
+ */
 const parseLocalDate = (isoDate: string) => {
   const [year, month, day] = isoDate.split("-").map(Number)
   return new Date(year, month - 1, day)
@@ -43,8 +46,8 @@ const range = (start: number, end: number) =>
   Array.from({ length: end - start + 1 }, (_, i) => start + i)
 
 /**
- * Parse a remarks string (e.g. "Teaching Wk1,3-13") into the list of
- * teaching week numbers (1-13) an index slot actually runs on.
+ * Parse a remarks string (e.g. "Teaching Wk1,3-13") into the list of teaching
+ * week numbers (1-13) an index slot actually runs on.
  */
 const parseTeachingWeeks = (remarks: string): number[] => {
   if (remarks === "") return range(1, TOTAL_TEACHING_WEEKS)
@@ -83,8 +86,8 @@ const DEFAULT_TABLE_CELL: IcsTableCellSettings = {
 }
 
 /**
- * Stable UID per module/index/week. Calendar apps read the same UID as the
- * same event, so re-exporting a timetable updates events in place instead of
+ * Stable UID per module/index/week. Calendar apps read the same UID as the same
+ * event, so re-exporting a timetable updates events in place instead of
  * duplicating them. Anything outside the RFC 5545 URI-safe set becomes a dash.
  */
 const eventUid = (moduleKey: string, indexKey: string, weekNumber: number) =>
@@ -95,19 +98,23 @@ const eventUid = (moduleKey: string, indexKey: string, weekNumber: number) =>
 
 /**
  * Generate an ICS calendar from a timetable.
+ *
  * @param timetable - { moduleKey: indexKey } — moduleKey covers both real
  *   modules (code) and custom blocks (customCourseModuleKey), mirroring
  *   whatever indexLookup/labelLookup are keyed with
- * @param indexLookup - flat map of indexKey -> Index slots
- * @param titleLookup - map of moduleKey -> full title/name shown in the event description
- * @param tableCell - which fields the user has toggled on for their timetable blocks;
- *   mirrors that same choice into the exported event's title/description
- * @param labelLookup - map of moduleKey -> short label shown in the event title's
- *   brackets; defaults to moduleKey itself (correct for real module codes)
- * @param moduleRemarks - map of moduleKey -> user's personal note, applies to every
- *   index of that module unless overridden by indexRemarks
- * @param indexRemarks - map of "moduleKey:indexKey" -> user's personal note for that
- *   specific index, takes priority over moduleRemarks
+ * @param indexLookup - Flat map of indexKey -> Index slots
+ * @param titleLookup - Map of moduleKey -> full title/name shown in the event
+ *   description
+ * @param tableCell - Which fields the user has toggled on for their timetable
+ *   blocks; mirrors that same choice into the exported event's
+ *   title/description
+ * @param labelLookup - Map of moduleKey -> short label shown in the event
+ *   title's brackets; defaults to moduleKey itself (correct for real module
+ *   codes)
+ * @param moduleRemarks - Map of moduleKey -> user's personal note, applies to
+ *   every index of that module unless overridden by indexRemarks
+ * @param indexRemarks - Map of "moduleKey:indexKey" -> user's personal note for
+ *   that specific index, takes priority over moduleRemarks
  */
 export const getIcs = (
   timetable: { [moduleKey: string]: string },

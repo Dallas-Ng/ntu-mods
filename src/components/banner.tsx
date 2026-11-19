@@ -4,8 +4,10 @@ const BANNER_TEXT =
   "New: hide modules, set class colours and see S1 and S2 exams together"
 const BANNER_HREF = "/changelog"
 
-/** Derived from the text, so editing the banner re-shows it to people who
- * closed the previous one. */
+/**
+ * Derived from the text, so editing the banner re-shows it to people who closed
+ * the previous one.
+ */
 export const BANNER_ID = (() => {
   let h = 0
   for (const c of BANNER_TEXT + BANNER_HREF) h = (h * 31 + c.charCodeAt(0)) | 0

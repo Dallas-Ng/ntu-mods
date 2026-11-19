@@ -37,14 +37,18 @@ interface Props {
   /** A lecture every index of the module shares: labelled "Common". */
   common?: boolean
   hideIndex?: boolean
-  /** Per-30-min-unit height baseline. Always applied as a minimum so a
-   * block's coloured area reaches its full duration even when its own
-   * text is short — fixes rowSpan cells otherwise collapsing to the
-   * height of whatever little content sits in the rows they span. */
+  /**
+   * Per-30-min-unit height baseline. Always applied as a minimum so a block's
+   * coloured area reaches its full duration even when its own text is short —
+   * fixes rowSpan cells otherwise collapsing to the height of whatever little
+   * content sits in the rows they span.
+   */
   rowHeightPx: number
-  /** Locks the cell to exactly `duration * rowHeightPx`, clipping overflow
-   * — used by the "standardised scale" setting so every 30 min timeslot
-   * stays the same height regardless of text length. */
+  /**
+   * Locks the cell to exactly `duration * rowHeightPx`, clipping overflow —
+   * used by the "standardised scale" setting so every 30 min timeslot stays the
+   * same height regardless of text length.
+   */
   clamp?: boolean
   //
   onMouseOver?: () => void

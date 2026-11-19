@@ -9,10 +9,13 @@ import Container from "@/components/container"
 import Header, { SectionHeading } from "@/components/header"
 import HeadingAnchor from "@/components/heading-anchor"
 
-/** One dataset and the newest semester(s) it covers, shown in the "current semester" answer. */
+/**
+ * One dataset and the newest semester(s) it covers, shown in the "current
+ * semester" answer.
+ */
 export interface DataStatusItem {
   label: string
-  /** e.g. "AY2026 Semester 2" or "AY2026 Semester 1 and Semester 2". */
+  /** E.g. "AY2026 Semester 2" or "AY2026 Semester 1 and Semester 2". */
   coverage: string
   detail: string
 }
@@ -264,14 +267,21 @@ export const faqItemsFor = (status: DataStatusItem[]) =>
   })
 
 interface Props {
-  /** What is available for each dataset, shown under "What semester is currently available?". */
+  /**
+   * What is available for each dataset, shown under "What semester is currently
+   * available?".
+   */
   dataStatus?: DataStatusItem[]
-  /** Rendered as the second grid column, the .astro page passes its own
-   * ArticleToc island here so this component can stay a zero-JS static
-   * render (it has no interactivity of its own). */
+  /**
+   * Rendered as the second grid column, the .astro page passes its own
+   * ArticleToc island here so this component can stay a zero-JS static render
+   * (it has no interactivity of its own).
+   */
   children?: React.ReactNode
-  /** Sticky section picker for screens without the side nav; passed as the
-   * `mobileNav` named slot for the same reason as `children`. */
+  /**
+   * Sticky section picker for screens without the side nav; passed as the
+   * `mobileNav` named slot for the same reason as `children`.
+   */
   mobileNav?: React.ReactNode
 }
 

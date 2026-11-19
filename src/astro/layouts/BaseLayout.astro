@@ -30,9 +30,11 @@ interface Props {
   size?: "full" | "md" | "sm"
   containerClassName?: string
   outerClassName?: string
-  /** Next's title template skips dynamic-segment routes (article/module
-   * detail pages using generateMetadata) — set this on their Astro
-   * equivalents to match. */
+  /**
+   * Next's title template skips dynamic-segment routes (article/module detail
+   * pages using generateMetadata) — set this on their Astro equivalents to
+   * match.
+   */
   noTitleSuffix?: boolean
   /** Error/utility pages that should never be indexed or canonicalised. */
   noindex?: boolean
@@ -40,7 +42,10 @@ interface Props {
   article?: { publishedTime: string; modifiedTime?: string }
   /** Tool pages with many fields: stop iOS zooming in on focus. */
   lockZoom?: boolean
-  /** Pages that draw ArticleThumb: preload the handwriting font so it does not swap in late. */
+  /**
+   * Pages that draw ArticleThumb: preload the handwriting font so it does not
+   * swap in late.
+   */
   handFont?: boolean
 }
 

@@ -1,12 +1,12 @@
 /**
  * MCP server (mcp.spec.ts)
  *
- * Tests:  /mcp answers a real tools/list and tools/call, turns away other
- *         methods, and /developers/mcp/tools documents exactly the tools it serves.
- * Why:    the route runs in workerd with the real MCP SDK, which unit tests
- *         cannot cover, and the docs must not name tools the server lacks.
- * How:    plain HTTP requests (no browser) against the running server.
- * Needs:  `pnpm build`, a running server and a seeded local D1.
+ * Tests: /mcp answers a real tools/list and tools/call, turns away other
+ * methods, and /developers/mcp/tools documents exactly the tools it serves.
+ * Why: the route runs in workerd with the real MCP SDK, which unit tests cannot
+ * cover, and the docs must not name tools the server lacks. How: plain HTTP
+ * requests (no browser) against the running server. Needs: `pnpm build`, a
+ * running server and a seeded local D1.
  */
 
 import { expect, test } from "@playwright/test"

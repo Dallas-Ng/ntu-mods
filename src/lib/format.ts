@@ -50,10 +50,10 @@ const MONTHS = [
 
 /**
  * Reads the YYYY-MM-DD prefix as written rather than through Date, so the
- * prerendered HTML and the browser agree whatever the visitor's timezone or
- * ICU build (toLocaleDateString shifted the day west of UTC and spells
- * September "Sept" or "Sep" depending on the engine). Anything else is
- * returned unchanged.
+ * prerendered HTML and the browser agree whatever the visitor's timezone or ICU
+ * build (toLocaleDateString shifted the day west of UTC and spells September
+ * "Sept" or "Sep" depending on the engine). Anything else is returned
+ * unchanged.
  */
 const formatDate = (date: string, short: boolean) => {
   const match = ISO_DATE.exec(date)

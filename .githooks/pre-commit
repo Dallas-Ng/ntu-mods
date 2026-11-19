@@ -14,9 +14,9 @@ has_staged() {
 }
 
 # format:staged rewrites the working tree, so stage the result again.
-if has_staged '*.ts' '*.tsx' '*.mdx' '*.astro'; then
+if has_staged '*.ts' '*.tsx' '*.mdx' '*.astro' 'package.json'; then
   pnpm run format:staged
-  staged '*.ts' '*.tsx' '*.mdx' '*.astro' | xargs -0 git add --
+  staged '*.ts' '*.tsx' '*.mdx' '*.astro' 'package.json' | xargs -0 git add --
 fi
 
 # oxlint exits non-zero on errors, which aborts the commit. Warnings pass.

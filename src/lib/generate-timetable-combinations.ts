@@ -37,7 +37,7 @@ function overlapsTimeslot(
 /**
  * Custom blocks are commitments the user has already made, not something the
  * generator gets to schedule. They still take part in collision detection, but
- * day-window / lunch / blacklist / spacing rules are about where *classes* may
+ * day-window / lunch / blacklist / spacing rules are about where _classes_ may
  * go — applying them to a 7am gym block would just make every combination
  * invalid.
  */
@@ -224,9 +224,9 @@ export interface GenerateOptions {
   currentTimetable?: Timetable
   /**
    * Count only distinct timeslot layouts against `maxResults`. Two combinations
-   * that put classes in exactly the same slots differ only in index numbers,
-   * so without this the result budget gets eaten by look-alikes and the user
-   * never sees the layouts further down the search tree.
+   * that put classes in exactly the same slots differ only in index numbers, so
+   * without this the result budget gets eaten by look-alikes and the user never
+   * sees the layouts further down the search tree.
    */
   uniqueTimeslotsOnly?: boolean
   timeBudgetMs?: number

@@ -2,32 +2,38 @@
   "name": "ntu-mods",
   "version": "0.1.0",
   "private": true,
-  "//engines": "pnpm build/dev no longer touch node:sqlite (they read src/data/api directly via json-source.ts) - the db: scripts still need it for publishing to D1, which is why this stays >=22.5. See also .node-version, which is what Cloudflare Workers Builds reads.",
-  "engines": {
-    "node": ">=22.5"
-  },
   "scripts": {
-    "prepare": "git config core.hooksPath .githooks",
-    "data": "tsx scripts/build-static-data.mts",
-    "dev": "pnpm data && astro dev --port ${PORT:-4321}",
     "build": "pnpm data && astro build && node scripts/upload-sourcemaps.mjs && tsx scripts/build-sitemap.mts",
-    "deploy": "node scripts/deploy.mjs",
-    "preview": "astro preview --port ${PORT:-4321}",
+    "data": "tsx scripts/build-static-data.mts",
     "db:build": "node scripts/db/sync-db.mjs --from json",
-    "db:pull": "node scripts/db/sync-db.mjs --from d1",
     "db:dump": "node scripts/db/reseed-d1.mjs",
-    "db:seed-local": "pnpm db:build && rm -rf .wrangler/state/v3/d1 && node scripts/db/reseed-d1.mjs --max-stmt-bytes 60000 && wrangler d1 migrations apply DB --local && wrangler d1 execute DB --local --file db/out/full.sql",
     "db:load": "node scripts/db/load-semester.mjs",
+    "db:pull": "node scripts/db/sync-db.mjs --from d1",
+    "db:seed-local": "pnpm db:build && rm -rf .wrangler/state/v3/d1 && node scripts/db/reseed-d1.mjs --max-stmt-bytes 60000 && wrangler d1 migrations apply DB --local && wrangler d1 execute DB --local --file db/out/full.sql",
     "db:seed-walks": "npx tsx scripts/db/seed-walks.mts",
     "db:verify": "node scripts/db/verify-parity.mjs && npx tsx scripts/db/verify-readers.mts",
+    "deploy": "node scripts/deploy.mjs",
+    "dev": "pnpm data && astro dev --port ${PORT:-4321}",
+    "format:check": "prettier --check \"**/*.{ts,tsx,mdx,astro}\" package.json --cache",
+    "format:staged": "git diff --cached --name-only --diff-filter=ACMR -z -- '*.ts' '*.tsx' '*.mdx' '*.astro' 'package.json' | xargs -0 -r prettier --write --ignore-unknown",
+    "format:write": "prettier --write \"**/*.{ts,tsx,mdx,astro}\" package.json --cache",
     "lint": "oxlint && astro check && tsc",
     "lint:fix": "oxlint --fix",
-    "format:write": "prettier --write \"**/*.{ts,tsx,mdx,astro}\" --cache",
-    "format:staged": "git diff --cached --name-only --diff-filter=ACMR -z -- '*.ts' '*.tsx' '*.mdx' '*.astro' | xargs -0 -r prettier --write --ignore-unknown",
-    "format:check": "prettier --check \"**/*.{ts,tsx,mdx,astro}\" --cache",
+    "prepare": "git config core.hooksPath .githooks",
+    "preview": "astro preview --port ${PORT:-4321}",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test"
+  },
+  "browserslist": {
+    "production": [
+      "baseline widely available"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.1.4",
@@ -70,19 +76,15 @@
     "oxlint": "^1.94.0",
     "prettier": "^3.10.1",
     "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-jsdoc": "1.8.1",
+    "prettier-plugin-packagejson": "3.1.0",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "^5",
     "vitest": "^5.0.0"
   },
-  "browserslist": {
-    "production": [
-      "baseline widely available"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "packageManager": "pnpm@12.14.0",
+  "engines": {
+    "node": ">=22.5"
   },
-  "packageManager": "pnpm@12.14.0"
+  "//engines": "pnpm build/dev no longer touch node:sqlite (they read src/data/api directly via json-source.ts) - the db: scripts still need it for publishing to D1, which is why this stays >=22.5. See also .node-version, which is what Cloudflare Workers Builds reads."
 }

@@ -97,8 +97,8 @@ interface CustomCourseSession {
 }
 
 /**
- * One alternative arrangement of a custom block, mirroring a module index:
- * the generator is free to pick whichever variant scores best.
+ * One alternative arrangement of a custom block, mirroring a module index: the
+ * generator is free to pick whichever variant scores best.
  */
 interface CustomCourseIndex {
   id: string
@@ -111,7 +111,7 @@ interface CustomCourse {
   name: string
   indexes: CustomCourseIndex[]
   selectedIndexId: string
-  /** @deprecated pre-variant shape — migrated away on store rehydrate */
+  /** @deprecated Pre-variant shape — migrated away on store rehydrate */
   sessions?: CustomCourseSession[]
 }
 

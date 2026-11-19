@@ -61,7 +61,10 @@ const SEARCHABLE: LandmarkCat[] = [
   "toilet"
 ]
 
-/** Every place a student might search for: class venues, landmarks, then buildings. */
+/**
+ * Every place a student might search for: class venues, landmarks, then
+ * buildings.
+ */
 export const buildPlaces = (data: VenueData): PickerPlace[] => {
   const { origin } = data
   const lonLat = (x: number, y: number) => ({

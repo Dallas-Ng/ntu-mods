@@ -27,16 +27,22 @@ interface Props {
   moduleKey: string
   year: string
   semester: string
-  /** Explicitly show/hide button text. Omit for responsive (icon-only on mobile, text on desktop). */
+  /**
+   * Explicitly show/hide button text. Omit for responsive (icon-only on mobile,
+   * text on desktop).
+   */
   showText?: boolean
   /** Extra classes applied to the trigger Button element. */
   triggerClassName?: string
-  /** Override the trigger Button variant. Defaults to outline/secondary based on plan state. */
+  /**
+   * Override the trigger Button variant. Defaults to outline/secondary based on
+   * plan state.
+   */
   triggerVariant?: "outline" | "ghost" | "secondary"
   /**
-   * This module's own indexes, when already available (e.g. server-fetched on the
-   * mod detail page). Lets the button render its enabled/disabled state without
-   * waiting on the full season indexes fetch.
+   * This module's own indexes, when already available (e.g. server-fetched on
+   * the mod detail page). Lets the button render its enabled/disabled state
+   * without waiting on the full season indexes fetch.
    */
   moduleIndexes?: Record<string, Index[]>
 }

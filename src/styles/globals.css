@@ -601,6 +601,11 @@ table td {
   /* The page's own colour, never the banner: the banner scrolls away and the
      toolbar should not change colour with it. */
   --page-top-color: hsl(var(--background));
+  /* How long the strip takes to change colour. It has to match the scrim that
+     is fading, or the strip snaps to the new colour while the page is still
+     fading. Each scrim sets its own duration below; with no scrim it snaps. */
+  --toolbar-tint-duration: 0s;
+  --toolbar-tint-ease: ease;
 }
 
 /* A scrim, mixed to the colour it looks like over the top of the page. The
@@ -609,6 +614,13 @@ table td {
    their exit fade, and keying on mount would hold the tint for that fade. */
 :root:has([data-slot="drawer-overlay"][data-state="open"]) {
   --toolbar-tint: color-mix(in srgb, black 50%, var(--page-top-color));
+}
+
+/* Vaul fades its overlay over 0.5s. Keyed on presence, not open state, so the
+   duration survives the exit fade and the strip fades back with the scrim. */
+:root:has([data-slot="drawer-overlay"]) {
+  --toolbar-tint-duration: 0.5s;
+  --toolbar-tint-ease: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 /* A sheet opened from inside another drawer stacks a second scrim. */
@@ -623,8 +635,16 @@ table td {
   --toolbar-tint: color-mix(in srgb, black 80%, var(--page-top-color));
 }
 
+/* Radix fades its overlay over the Tailwind animate default, 0.15s. */
+:root:has([data-slot="dialog-overlay"]) {
+  --toolbar-tint-duration: 0.15s;
+  --toolbar-tint-ease: ease;
+}
+
 :root:has(.image-lightbox[open]) {
   --toolbar-tint: color-mix(in srgb, black 90%, var(--page-top-color));
+  /* The lightbox has no fade, so the strip must not have one either. */
+  --toolbar-tint-duration: 0s;
 }
 
 .toolbar-edge {
@@ -639,9 +659,10 @@ table td {
   z-index: 60;
   pointer-events: none;
   background-color: var(--toolbar-tint, var(--page-top-color));
-  /* Never animate the strip: Safari reads the colour as a still sample, so a
-     transition shows up as a lag rather than a fade. */
-  transition: none;
+  /* Fade with the scrim it is standing in for, or it snaps ahead of the page.
+     The duration comes from whichever overlay is present, 0s otherwise. */
+  transition: background-color var(--toolbar-tint-duration)
+    var(--toolbar-tint-ease);
 }
 
 /* iOS Safari zooms the page when a field under 16px is focused. Keep pinch

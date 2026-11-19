@@ -104,6 +104,8 @@ const Footer = () => {
 
       <div className="border-border/60 container flex flex-col gap-2 border-t pt-6 pb-24 text-xs sm:flex-row sm:items-center sm:justify-between">
         <p className="text-muted-foreground">
+          {/* Server-rendered, so the year is fixed per request. */}
+          {/* oxlint-disable-next-line react/purity */}
           &copy; {new Date().getFullYear()} NTUMods.com. Not affiliated with
           Nanyang Technological University.
         </p>

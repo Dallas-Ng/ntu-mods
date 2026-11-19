@@ -96,7 +96,7 @@ const TimetableIndexNote = ({
   // indistinguishable from "not module-scoped" otherwise).
   useEffect(() => {
     setScope(moduleRemark && !indexRemark ? "module" : "index")
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [moduleKey, indexKey])
 
   const value = scope === "module" ? moduleRemark : indexRemark

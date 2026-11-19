@@ -3,12 +3,6 @@ import { hhmmToMinutes, parseTimeNumber } from "@/lib/parse-time"
 
 const DEFAULT_TIME_BUDGET_MS = 300
 
-function minutesToHhmm(minutes: number): number {
-  const h = Math.floor(minutes / 60)
-  const m = minutes % 60
-  return h * 100 + m
-}
-
 export function timeslotsOverlap(a: Index, b: Index): boolean {
   if (a.day !== b.day) return false
   const { startTime: aStart, endTime: aEnd } = parseTimeNumber(a)

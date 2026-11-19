@@ -180,7 +180,7 @@ export const generateTimetableMatrix = (
     (x) => x.end >= latestTime
   )
 
-  Object.entries(TABLE_MATRIX).forEach(([key, rowData], idx) => {
+  Object.entries(TABLE_MATRIX).forEach(([key], idx) => {
     // remove empty rows
     if (moduleIndexesFlat.length > 0) {
       if (earliestTsIndex > idx || idx > latestTsIndex) {

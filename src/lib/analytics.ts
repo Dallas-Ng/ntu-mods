@@ -23,7 +23,7 @@ export function setAnalyticsClient(ph: PostHog | null) {
   resolveReady(ph)
 }
 
-// The one place the client calls posthog.capture (eslint enforces it), so
+// The one place the client calls posthog.capture (oxlint enforces it), so
 // every event name is checked against ANALYTICS_EVENTS.
 export function track(event: AnalyticsEvent, properties?: Properties) {
   if (client) client.capture(event, properties)

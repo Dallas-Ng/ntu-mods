@@ -66,7 +66,7 @@ const TimetableModuleColours = ({ moduleKey, indexKey }: Props) => {
     next: IndexTypeStyleOverride | undefined
   ) => {
     const moduleOverrides = { ...appearance.moduleOverrides }
-    const current = { ...(moduleOverrides[moduleKey] ?? {}) }
+    const current = { ...moduleOverrides[moduleKey] }
 
     if (!next) delete current[key]
     else current[key] = next

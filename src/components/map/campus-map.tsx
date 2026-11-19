@@ -408,7 +408,7 @@ const CampusMap = ({
   const measured = size.w > 0
   useEffect(() => {
     if (focus && measured) fit(focus.bounds)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [focus?.nonce, measured])
 
   const zoomBy = (factor: number) => {
@@ -457,7 +457,7 @@ const CampusMap = ({
     }
     el.addEventListener("wheel", onWheel, { passive: false })
     return () => el.removeEventListener("wheel", onWheel)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [size.w, size.h])
 
   const onPointerDown = (e: React.PointerEvent) => {
@@ -777,7 +777,7 @@ const CampusMap = ({
         return true
       })
       .slice(0, 45)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [
     pins,
     marker,

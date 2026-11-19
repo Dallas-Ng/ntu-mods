@@ -115,7 +115,7 @@ export function metaProblems(s: SeoSnapshot, ref: PageRef): string[] {
   const ogUrl = need("og:url")
   if (ogUrl && ogUrl !== want) out.push(`og:url ${ogUrl} != ${want}`)
   const ogImage = need("og:image")
-  if (ogImage && !/^https:\/\//.test(ogImage)) {
+  if (ogImage && !ogImage.startsWith("https://")) {
     out.push(`og:image not absolute https: ${ogImage}`)
   }
   need("twitter:card")
@@ -165,7 +165,7 @@ const walk = (v: unknown, at: string, out: string[]) => {
     if (/^(url|item|logo|image|@id)$/.test(key) && !/^https?:\/\//.test(v)) {
       out.push(`${at} not absolute: ${v}`)
     }
-    if (/^date/.test(key) && !/^\d{4}-\d{2}-\d{2}/.test(v)) {
+    if (key.startsWith("date") && !/^\d{4}-\d{2}-\d{2}/.test(v)) {
       out.push(`${at} not ISO date: ${v}`)
     }
   } else if (typeof v === "number") {

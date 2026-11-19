@@ -573,7 +573,7 @@ const MapsPageContent = () => {
       scoped_to: activeCat ?? undefined,
       results: resultCountRef.current
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [searchSettled])
 
   // "toilet", "food", "lt": offer the whole category before hundreds of rooms.

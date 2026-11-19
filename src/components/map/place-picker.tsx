@@ -160,6 +160,8 @@ const PlacePicker = ({ label, places, value, onChange }: Props) => {
         if (!o) setQ("")
       }}>
       <PopoverTrigger asChild>
+        {/* Radix sets aria-controls on the trigger while the popover is open. */}
+        {/* oxlint-disable jsx-a11y/role-has-required-aria-props */}
         <Button
           variant="outline"
           role="combobox"
@@ -175,6 +177,7 @@ const PlacePicker = ({ label, places, value, onChange }: Props) => {
           </span>
           <ChevronsUpDown className="text-muted-foreground" />
         </Button>
+        {/* oxlint-enable jsx-a11y/role-has-required-aria-props */}
       </PopoverTrigger>
       <PopoverContent
         className="w-[var(--radix-popover-trigger-width)] min-w-64 p-0"

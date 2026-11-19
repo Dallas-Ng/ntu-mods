@@ -243,6 +243,13 @@
     @apply bg-background text-foreground;
   }
 
+  /* Safari 26 falls back to the root background for any edge with no fixed
+     element on it (the bottom toolbar). Keep it the page colour, never white
+     or black. The top edge is handled by .toolbar-edge. */
+  html {
+    background-color: hsl(var(--background));
+  }
+
   .dark strong,
   .dark b {
     color: white;
@@ -632,6 +639,9 @@ table td {
   z-index: 60;
   pointer-events: none;
   background-color: var(--toolbar-tint, var(--page-top-color));
+  /* Never animate the strip: Safari reads the colour as a still sample, so a
+     transition shows up as a lag rather than a fade. */
+  transition: none;
 }
 
 /* iOS Safari zooms the page when a field under 16px is focused. Keep pinch

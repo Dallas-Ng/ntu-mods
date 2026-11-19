@@ -53,7 +53,7 @@ const TableSettings = ({ toggleBorder = false }: Props) => {
         if (!controller.signal.aborted) reportError("random_samples_fetch", e)
       })
     return () => controller.abort()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [rerollKey])
 
   const reRollIndex = () => setRerollKey((k) => k + 1)

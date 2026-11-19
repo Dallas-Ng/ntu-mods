@@ -25,9 +25,9 @@ interface Props {
 }
 
 /**
- * The palette button in a module's row, next to remove. It opens that
- * module's class types, each with the same colour picker and opacity control
- * as the six class boxes in Appearance.
+ * The palette button in a module's row, next to remove. It opens that module's
+ * class types, each with the same colour picker and opacity control as the six
+ * class boxes in Appearance.
  */
 const TimetableModuleColours = ({ moduleKey, indexKey }: Props) => {
   const { settings, updateSettings } = useSettings()
@@ -66,7 +66,7 @@ const TimetableModuleColours = ({ moduleKey, indexKey }: Props) => {
     next: IndexTypeStyleOverride | undefined
   ) => {
     const moduleOverrides = { ...appearance.moduleOverrides }
-    const current = { ...(moduleOverrides[moduleKey] ?? {}) }
+    const current = { ...moduleOverrides[moduleKey] }
 
     if (!next) delete current[key]
     else current[key] = next

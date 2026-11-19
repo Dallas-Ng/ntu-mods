@@ -174,7 +174,7 @@ const TimetableBlacklistEditor = () => {
       window.removeEventListener("touchmove", handleTouchMove)
       window.removeEventListener("touchend", handleTouchEnd)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [
     updateGenerationConfig,
     blacklistedTimeslots,

@@ -21,11 +21,15 @@ const COLOR_INPUT_CLASS =
 interface Props {
   type: IndexTypeColorKey
   appearance: AppearanceSettings
-  /** The override this level owns. Edits start from it, and it also decides
-   * whether "Use default" has anything to clear. */
+  /**
+   * The override this level owns. Edits start from it, and it also decides
+   * whether "Use default" has anything to clear.
+   */
   override?: IndexTypeStyleOverride
-  /** What the blocks show right now, when a type override sits underneath a
-   * module's. Defaults to `override`. */
+  /**
+   * What the blocks show right now, when a type override sits underneath a
+   * module's. Defaults to `override`.
+   */
   effective?: IndexTypeStyleOverride
   onChange: (next: IndexTypeStyleOverride | undefined) => void
   /** Set when the panel edits one module rather than the class type. */

@@ -39,7 +39,10 @@ const formatIcsUtc = (date: Date) =>
     date.getUTCSeconds()
   )}Z`
 
-/** RFC 5545 §3.3.11: backslash, semicolon and comma are escaped, newlines become `\n`. */
+/**
+ * RFC 5545 §3.3.11: backslash, semicolon and comma are escaped, newlines become
+ * `\n`.
+ */
 const escapeText = (value: string) =>
   value
     .replace(/\\/g, "\\\\")
@@ -48,9 +51,9 @@ const escapeText = (value: string) =>
     .replace(/\r\n|\r|\n/g, "\\n")
 
 /**
- * Fold a content line at 75 octets, continuing with a single leading space
- * (RFC 5545 §3.1). Octets, not characters: a multi-byte character must not be
- * split across the fold, so the budget is counted per code point.
+ * Fold a content line at 75 octets, continuing with a single leading space (RFC
+ * 5545 §3.1). Octets, not characters: a multi-byte character must not be split
+ * across the fold, so the budget is counted per code point.
  */
 const foldLine = (line: string) => {
   // TextEncoder, not Buffer: this also runs in the browser, where the export

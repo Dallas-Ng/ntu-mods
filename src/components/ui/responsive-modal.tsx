@@ -25,8 +25,8 @@ interface Props {
   /** Show the description under the title; otherwise screen readers only. */
   showDescription?: boolean
   /**
-   * On phones: a drawer nested in the one it was opened from (the default),
-   * or a plain drawer for a modal opened from the page itself.
+   * On phones: a drawer nested in the one it was opened from (the default), or
+   * a plain drawer for a modal opened from the page itself.
    */
   nested?: boolean
   children: React.ReactNode
@@ -38,8 +38,8 @@ interface Props {
 
 /**
  * A dialog on desktop and a drawer on phones. The drawer is a nested one,
- * because on a phone these are always opened from inside the "Add mods"
- * drawer: a plain drawer would fight it for the drag gesture.
+ * because on a phone these are always opened from inside the "Add mods" drawer:
+ * a plain drawer would fight it for the drag gesture.
  */
 export const ResponsiveModal = ({
   open,

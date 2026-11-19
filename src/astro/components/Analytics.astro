@@ -30,7 +30,6 @@
     const dataLayer = (w.dataLayer = (w.dataLayer as unknown[]) || [])
     function gtag(..._args: unknown[]) {
       // gtag.js expects the arguments object itself, not an array
-      // eslint-disable-next-line prefer-rest-params
       dataLayer.push(arguments)
     }
     w.gtag = gtag

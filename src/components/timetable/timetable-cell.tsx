@@ -55,9 +55,7 @@ const TimetableCell = (props: Props) => {
   )
   const hasDifferenceInVenue = variations.some((v) => v.venue !== index.venue)
 
-  /**
-   * The actual rendered table-cell
-   */
+  /** The actual rendered table-cell */
   return (
     <td
       className={cn("p-1", tdClassName)}

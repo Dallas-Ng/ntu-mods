@@ -1,8 +1,5 @@
 import { getIndexType } from "./get-index-type"
 
-/**
- *
- */
 const areObjectsEqual = (
   obj1: Index,
   obj2: Index,
@@ -20,9 +17,9 @@ const areObjectsEqual = (
 }
 
 /**
- * Get unique lectures from the moduleIndexMap.
- * Lectures sharing the same timeslot across multiple venues are collapsed into
- * one entry; if more than one venue existed the venue is shown as "Multiple Venues".
+ * Get unique lectures from the moduleIndexMap. Lectures sharing the same
+ * timeslot across multiple venues are collapsed into one entry; if more than
+ * one venue existed the venue is shown as "Multiple Venues".
  */
 export const getUniqueLectures = (
   moduleIndexMap: TimetableWithIndex,

@@ -8,8 +8,8 @@ const padHhmm = (n: number) => String(n).padStart(4, "0")
 
 /**
  * Custom session labels are free text. Map the preset ones onto their real
- * IndexType so type-aware generation settings still apply, and fall back to
- * LEC for user-defined labels like "Gym".
+ * IndexType so type-aware generation settings still apply, and fall back to LEC
+ * for user-defined labels like "Gym".
  */
 const toIndexType = (sessionType: string): IndexType =>
   PRESET_INDEX_TYPES.has(sessionType) ? (sessionType as IndexType) : "LEC"
@@ -63,8 +63,8 @@ export const customCoursesToIndexMap = (
 
 /**
  * Custom blocks as extra entries for getIcs's timetable/indexLookup/
- * titleLookup/labelLookup — they don't live in `timetable` or seasonIndexes,
- * so each block is keyed by its own synthetic moduleKey pointing at itself.
+ * titleLookup/labelLookup — they don't live in `timetable` or seasonIndexes, so
+ * each block is keyed by its own synthetic moduleKey pointing at itself.
  */
 export const customCoursesToIcsInputs = (courses: CustomCourse[]) => {
   const timetable: Record<string, string> = {}

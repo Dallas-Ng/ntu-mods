@@ -10,9 +10,9 @@ const isStale = (openedAt: string | null) =>
   openedAt === null || openedAt < APPEARANCE_FEATURE_RELEASED
 
 /**
- * True until the student opens Appearance on or after the release of its
- * newest feature. The stamp is a date, so a later feature only has to move
- * the release date to bring the pulse back for everyone.
+ * True until the student opens Appearance on or after the release of its newest
+ * feature. The stamp is a date, so a later feature only has to move the release
+ * date to bring the pulse back for everyone.
  */
 export function useAppearanceNew(open: boolean) {
   const [isNew, setIsNew] = useState(false)

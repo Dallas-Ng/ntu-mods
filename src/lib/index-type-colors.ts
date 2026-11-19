@@ -34,10 +34,10 @@ interface Tint {
 }
 
 /**
- * Turns a picked hex colour into the hue and saturation that retint a
- * palette. The picker's lightness is dropped on purpose: every token keeps
- * the palette's own lightness, which is what guarantees the text pairs stay
- * readable. Greys keep zero saturation, so they stay grey.
+ * Turns a picked hex colour into the hue and saturation that retint a palette.
+ * The picker's lightness is dropped on purpose: every token keeps the palette's
+ * own lightness, which is what guarantees the text pairs stay readable. Greys
+ * keep zero saturation, so they stay grey.
  */
 export const hexToTint = (hex: string): Tint | null => {
   const match = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec(hex.trim())
@@ -77,8 +77,8 @@ export const hexToTint = (hex: string): Tint | null => {
 
 /**
  * Replaces a palette token's hue and saturation with the picked colour's,
- * keeping the palette's lightness. The token keeps its `H S% L%` shape, so
- * the existing `hsl(var(--token)/alpha)` classes read it unchanged.
+ * keeping the palette's lightness. The token keeps its `H S% L%` shape, so the
+ * existing `hsl(var(--token)/alpha)` classes read it unchanged.
  */
 export const tintToken = (token: string, tint: Tint) => {
   const [, , lightness] = token.trim().split(/\s+/)
@@ -155,9 +155,9 @@ export const getEffectiveOverride = (
     : appearance.typeOverrides?.[key]
 
 /**
- * The override that actually applies. With granular control off the palette
- * is drawn exactly as designed, though the saved overrides are kept for when
- * it is switched back on.
+ * The override that actually applies. With granular control off the palette is
+ * drawn exactly as designed, though the saved overrides are kept for when it is
+ * switched back on.
  */
 export const getActiveOverride = (
   appearance: AppearanceSettings,
@@ -170,10 +170,10 @@ export const getActiveOverride = (
 
 /**
  * Every custom property one class type's cells read. Writing these on an
- * element re-tints that element and everything inside it, which is how a
- * single module overrides its own blocks without touching the palette.
- * Opacity is not in here: the cell applies it to the whole block so the fill,
- * text and border fade together.
+ * element re-tints that element and everything inside it, which is how a single
+ * module overrides its own blocks without touching the palette. Opacity is not
+ * in here: the cell applies it to the whole block so the fill, text and border
+ * fade together.
  */
 export const getIndexTypeVars = (
   timetableStyle: TimetableStylePreset,
@@ -198,8 +198,8 @@ export const getIndexTypeVars = (
 
 /**
  * Vars for a module's cell, or nothing when the module does not override this
- * type or granular control is off. Types without a module override already
- * read the root vars.
+ * type or granular control is off. Types without a module override already read
+ * the root vars.
  */
 export const getModuleCellVars = (
   appearance: AppearanceSettings,

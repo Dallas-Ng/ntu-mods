@@ -2,8 +2,9 @@
  * Encoding for sharing a timetable outside the app.
  *
  * Two carriers, one payload shape:
- *  - a link, where custom blocks ride along in the reserved `cb` query param
- *  - a text bundle (`NTUMODS1-…`), for when the link would get unwieldy
+ *
+ * - A link, where custom blocks ride along in the reserved `cb` query param
+ * - A text bundle (`NTUMODS1-…`), for when the link would get unwieldy
  *
  * Everything is packed as positional tuples before base64url-ing so the string
  * stays short enough to survive being pasted around.

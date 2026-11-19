@@ -14,8 +14,8 @@ const NO_HIDDEN = new Set<string>()
 
 /**
  * Module keys hidden on the stored plan being viewed. Shared links and other
- * snapshots (an argument timetable) never hide anything: hidden flags belong
- * to the visitor's own saved plans.
+ * snapshots (an argument timetable) never hide anything: hidden flags belong to
+ * the visitor's own saved plans.
  */
 export const resolveHiddenModules = (
   timetables: Timetable[],

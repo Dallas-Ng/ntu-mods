@@ -4,7 +4,8 @@ import { Skeleton } from "@/components/ui/skeleton"
  * The map's layout drawn in grey, so the page looks right from the first paint
  * (it is in the prerendered HTML) and nothing jumps when the data arrives.
  * Sizes and positions are measured from the real controls (search pill, chips,
- * home sheet, Map/Level/fullscreen buttons, zoom stack), so keep them in step with those.
+ * home sheet, Map/Level/fullscreen buttons, zoom stack), so keep them in step
+ * with those.
  */
 const CHIPS = [160, 83, 83, 141, 139, 115, 94, 121, 94, 163]
 const BUSY = [75, 57, 60, 66, 56, 50, 85, 48]

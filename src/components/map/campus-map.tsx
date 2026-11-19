@@ -102,7 +102,7 @@ export interface Highlight {
 
 interface Props {
   data: VenueData
-  /** null = campus overview; otherwise the level whose floor plans are shown. */
+  /** Null = campus overview; otherwise the level whose floor plans are shown. */
   level: number | null
   onLevel: (z: number | null) => void
   pins: Pin[]
@@ -172,7 +172,10 @@ const ROOM_TYPES_TEACHING =
 
 /** Top-right stack (options, level, fullscreen) reaches this far down. */
 const CONTROLS_TOP = 160
-/** Zoom, fit and help stacked: it shows only when all of it fits above the sheet. */
+/**
+ * Zoom, fit and help stacked: it shows only when all of it fits above the
+ * sheet.
+ */
 const STACK_H = 82 + 48 * 2 + 8
 
 const CampusMap = ({
@@ -408,7 +411,7 @@ const CampusMap = ({
   const measured = size.w > 0
   useEffect(() => {
     if (focus && measured) fit(focus.bounds)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [focus?.nonce, measured])
 
   const zoomBy = (factor: number) => {
@@ -457,7 +460,7 @@ const CampusMap = ({
     }
     el.addEventListener("wheel", onWheel, { passive: false })
     return () => el.removeEventListener("wheel", onWheel)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [size.w, size.h])
 
   const onPointerDown = (e: React.PointerEvent) => {
@@ -777,7 +780,7 @@ const CampusMap = ({
         return true
       })
       .slice(0, 45)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [
     pins,
     marker,

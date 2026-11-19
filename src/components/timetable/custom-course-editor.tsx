@@ -365,7 +365,7 @@ export const CourseModal = ({
   useEffect(() => {
     if (open)
       setForm(initial ? courseToForm(initial) : makeDefaultForm(initialName))
-  }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [open]) // oxlint-disable-line react/exhaustive-deps
 
   const activeIndex =
     form.indexes.find((i) => i._key === form.activeIndexKey) ?? form.indexes[0]

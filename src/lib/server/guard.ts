@@ -9,8 +9,8 @@ type LimiterName =
 
 /**
  * 429 when this IP is over the named Workers Rate Limiting binding, else null.
- * A missing binding (local dev) never limits.
- * ponytail: limits are per Cloudflare location; add a WAF rule for a global cap.
+ * A missing binding (local dev) never limits. ponytail: limits are per
+ * Cloudflare location; add a WAF rule for a global cap.
  */
 export async function rateLimit(
   name: LimiterName,

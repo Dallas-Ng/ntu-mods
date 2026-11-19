@@ -31,7 +31,10 @@ export const useQsTimetable = (): Timetable | undefined => {
   }, [searchParams])
 }
 
-/** Custom blocks travelling in a share link, if the sharer opted to include them. */
+/**
+ * Custom blocks travelling in a share link, if the sharer opted to include
+ * them.
+ */
 export const useQsCustomCourses = (): CustomCourse[] | undefined => {
   const searchParams = useSearchParams()
   const encoded = searchParams.get(CUSTOM_BLOCKS_PARAM)

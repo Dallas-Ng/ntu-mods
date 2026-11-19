@@ -77,7 +77,7 @@ const selectAll = (state: StoreState) => state
 /**
  * Main state in the app
  *
- * zustand's default selector (api.getState) ignores the snapshot it is handed,
+ * Zustand's default selector (api.getState) ignores the snapshot it is handed,
  * so a bare `useBoundState()` would read the live state even mid-hydration;
  * defaulting to an identity selector keeps the server snapshot in effect.
  */

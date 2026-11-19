@@ -80,9 +80,9 @@ export function getModelContext(): ModelContext | undefined {
 export const normalise = (value: unknown): unknown => value ?? { ok: true }
 
 /**
- * A rejected execute() reaches the agent only as "tool rejected": the reason
- * is not forwarded. Failures the agent can act on therefore resolve with an
- * error object instead of throwing.
+ * A rejected execute() reaches the agent only as "tool rejected": the reason is
+ * not forwarded. Failures the agent can act on therefore resolve with an error
+ * object instead of throwing.
  */
 export const failure = (message: string) => ({ error: message })
 

@@ -1,0 +1,97 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  // .astro frontmatter is linted; the template markup is not, because oxlint
+  // has no Astro template support yet. `astro check` covers that side.
+  "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y"],
+  "env": {
+    "browser": true,
+    "node": true,
+    "astro": true
+  },
+  "categories": {
+    "correctness": "error"
+  },
+  "options": {
+    "reportUnusedDisableDirectives": "warn"
+  },
+  "ignorePatterns": [".astro/**", ".next/**", "dist/**", "node_modules/**"],
+  "rules": {
+    // Unused imports and locals are one rule here; ESLint needed
+    // eslint-plugin-unused-imports because the base rule misread TypeScript.
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
+    ],
+    "react/rules-of-hooks": "error",
+    // Off before the move and still off: these flag patterns the site uses
+    // deliberately (stable keys from indexes, generated JSX) or arrange
+    // state in effects on purpose.
+    "react/jsx-key": "off",
+    "react/jsx-no-target-blank": "off",
+    "react/immutability": "off",
+    "react/refs": "off",
+    "react/set-state-in-effect": "off",
+    "jsx-a11y/alt-text": ["warn", { "elements": ["img"], "img": ["Image"] }],
+    "jsx-a11y/aria-props": "warn",
+    "jsx-a11y/aria-proptypes": "warn",
+    "jsx-a11y/aria-unsupported-elements": "warn",
+    "jsx-a11y/role-has-required-aria-props": "warn",
+    "jsx-a11y/role-supports-aria-props": "warn",
+    // The six rules above are the set the project has always run. The rest of
+    // oxlint's jsx-a11y plugin is off for now: it cannot see through the shared
+    // wrappers (Button, Select, custom controls), so most findings are false
+    // positives. Turn one back on when its findings have been reviewed.
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "jsx-a11y/interactive-supports-focus": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/mouse-events-have-key-events": "off",
+    "jsx-a11y/no-autofocus": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "jsx-a11y/no-noninteractive-tabindex": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/prefer-tag-over-role": "off",
+    // Client events go through track() in @/lib/analytics, which only accepts
+    // names listed in @/lib/analytics-events. The feedback route captures with
+    // posthog-node and checks its name with `satisfies AnalyticsEvent` instead.
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "posthog-js",
+            "allowTypeImports": true,
+            "message": "Use track() from @/lib/analytics. posthog-js loads after the page does (see posthog-client-init)."
+          }
+        ]
+      }
+    ],
+    "no-restricted-properties": [
+      "error",
+      {
+        "object": "posthog",
+        "property": "capture",
+        "message": "Use track() from @/lib/analytics so the event name is checked against ANALYTICS_EVENTS."
+      }
+    ]
+  },
+  "overrides": [
+    {
+      // These two are where the raw calls are meant to live.
+      "files": ["src/lib/analytics.ts", "src/astro/pages/api/feedback.ts"],
+      "rules": {
+        "no-restricted-properties": "off"
+      }
+    },
+    {
+      "files": ["src/astro/lib/posthog-client-init.ts"],
+      "rules": {
+        "no-restricted-imports": "off"
+      }
+    }
+  ]
+}

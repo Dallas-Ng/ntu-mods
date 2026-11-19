@@ -50,8 +50,8 @@ export interface BandResult {
 }
 
 /**
- * Average grade points the remaining AU must earn to finish on `target`.
- * Zero or less means the class is secured whatever the remaining grades are.
+ * Average grade points the remaining AU must earn to finish on `target`. Zero
+ * or less means the class is secured whatever the remaining grades are.
  */
 export function requiredAverage(
   cgpa: number,

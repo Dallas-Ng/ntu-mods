@@ -18,10 +18,10 @@ const STARTERS = [
 ] as const
 
 /**
- * Bottom of every page: words on the left, the form on the right, as one
- * flat panel centred in a fixed width, so it lines up on narrow pages
- * (articles, links) as well as full-width ones. The form already sends the
- * page URL with each submission.
+ * Bottom of every page: words on the left, the form on the right, as one flat
+ * panel centred in a fixed width, so it lines up on narrow pages (articles,
+ * links) as well as full-width ones. The form already sends the page URL with
+ * each submission.
  */
 const FeedbackSection = () => {
   const [starter, setStarter] = useState<{ text: string; id: number }>()

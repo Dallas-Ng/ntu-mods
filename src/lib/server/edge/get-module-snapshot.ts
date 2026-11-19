@@ -31,11 +31,11 @@ import type {
 import { snapshotFingerprint } from "@/lib/sitemap-policy"
 
 /**
- * Request-time counterpart to src/lib/server/db/repo.ts, for the one route
- * that renders historic module snapshots on-demand rather than prerendering
- * them. repo.ts uses `node:sqlite` against a local file, which Cloudflare
- * Workers cannot load; this one runs the same SQL from
- * src/lib/server/db/queries.ts through the D1 binding.
+ * Request-time counterpart to src/lib/server/db/repo.ts, for the one route that
+ * renders historic module snapshots on-demand rather than prerendering them.
+ * repo.ts uses `node:sqlite` against a local file, which Cloudflare Workers
+ * cannot load; this one runs the same SQL from src/lib/server/db/queries.ts
+ * through the D1 binding.
  *
  * This replaces the previous ASSETS-fetch + KV-slice + self-heal-on-miss
  * arrangement, which existed only because the data lived in whole-semester JSON
@@ -194,8 +194,9 @@ export async function getModuleIndexes(
 
 /**
  * True when an older semester's page has the same title, description, AUs and
- * grade type as the module's latest offering. Google folds those into /mods/CODE
- * anyway ("Google chose different canonical"), so they should declare it.
+ * grade type as the module's latest offering. Google folds those into
+ * /mods/CODE anyway ("Google chose different canonical"), so they should
+ * declare it.
  */
 function isSameAsLatest(
   moduleData: DbModule,
@@ -218,7 +219,10 @@ export interface ModuleFullSnapshot extends ModuleSnapshot {
   prereqNode: DbPrerequisiteNode | null
   prereqGraph: Record<string, DbPrerequisiteNode>
   related: Array<{ code: string; title: string }>
-  /** Prerequisite codes that have a module page, so unknown ones stay plain text. */
+  /**
+   * Prerequisite codes that have a module page, so unknown ones stay plain
+   * text.
+   */
   knownCodes: string[]
 }
 
@@ -228,12 +232,12 @@ export interface ModuleFullSnapshot extends ModuleSnapshot {
  * semester and therefore not in its getStaticPaths — see
  * src/astro/pages/404.astro, the route that calls this.
  *
- * Unlike getModuleSnapshot, the caller doesn't know which semester a code
- * was last offered in, so this resolves that first and then fetches
- * everything the /mods/[module] page needs: the offering itself, its other
- * semesters, and a two-hop slice of the prerequisite graph (this module's
- * direct edges plus their titles) rather than the whole graph, which is
- * only ever built from JSON at build time.
+ * Unlike getModuleSnapshot, the caller doesn't know which semester a code was
+ * last offered in, so this resolves that first and then fetches everything the
+ * /mods/[module] page needs: the offering itself, its other semesters, and a
+ * two-hop slice of the prerequisite graph (this module's direct edges plus
+ * their titles) rather than the whole graph, which is only ever built from JSON
+ * at build time.
  */
 export async function getLatestModuleSnapshot(
   code: string

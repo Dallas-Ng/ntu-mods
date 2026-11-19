@@ -25,8 +25,10 @@ function DrawerTrigger({
   return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />
 }
 
-/** A drawer opened from inside another open drawer must use this instead of
- * `Drawer` — vaul renders two independent, competing drag sheets otherwise. */
+/**
+ * A drawer opened from inside another open drawer must use this instead of
+ * `Drawer` — vaul renders two independent, competing drag sheets otherwise.
+ */
 function DrawerNestedRoot({
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.NestedRoot>) {

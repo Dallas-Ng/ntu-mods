@@ -92,13 +92,14 @@ Open [http://localhost:4321](http://localhost:4321). Re-run `pnpm db:seed-local`
 
 Useful commands:
 
-| Command         | What it does                     |
-| --------------- | -------------------------------- |
-| `pnpm dev`      | Start the dev server             |
-| `pnpm lint`     | ESLint, `astro check`, and `tsc` |
-| `pnpm test`     | Unit tests (Vitest)              |
-| `pnpm test:e2e` | End-to-end tests (Playwright)    |
-| `pnpm build`    | Production build                 |
+| Command             | What it does                     |
+| ------------------- | -------------------------------- |
+| `pnpm dev`          | Start the dev server             |
+| `pnpm lint`         | oxlint, `astro check`, and `tsc` |
+| `pnpm format:check` | Prettier check                   |
+| `pnpm test`         | Unit tests (Vitest)              |
+| `pnpm test:e2e`     | End-to-end tests (Playwright)    |
+| `pnpm build`        | Production build                 |
 
 ## Project structure
 

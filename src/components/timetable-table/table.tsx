@@ -39,7 +39,10 @@ interface Props {
   fullCell?: boolean
   showModuleKeyAsCommon?: boolean
   alwaysHighlightLectures?: boolean
-  /** Ids from `findCommonLectures`: these lectures are labelled and hover as one. */
+  /**
+   * Ids from `findCommonLectures`: these lectures are labelled and hover as
+   * one.
+   */
   commonLectures?: Set<string>
   /** Called when the grid becomes wider than its box (it then scrolls sideways). */
   onOverflowChange?: (overflow: boolean) => void

@@ -1,8 +1,8 @@
 import type { ModuleFullSnapshot } from "@/lib/server/edge/get-module-snapshot"
 
 /**
- * One module as the public JSON record: what GET /api/modules/:code and the
- * MCP get_module tool both return, so the two cannot drift.
+ * One module as the public JSON record: what GET /api/modules/:code and the MCP
+ * get_module tool both return, so the two cannot drift.
  */
 export function toModuleJson({
   moduleData,

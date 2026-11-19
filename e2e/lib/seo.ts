@@ -1,12 +1,10 @@
 /**
  * SEO readers and checks (lib/seo.ts)
  *
- * Provides: `readSeo` (one DOM pass for title, meta, JSON-LD, headings,
- *           images, links) and the problem lists built on it: meta tags,
- *           JSON-LD, heading outline, images, rendered content, warnings.
- * Why:      keeps the rules in one place so the specs only decide which pages
- *           to load.
- * Used by:  pages.spec.ts.
+ * Provides: `readSeo` (one DOM pass for title, meta, JSON-LD, headings, images,
+ * links) and the problem lists built on it: meta tags, JSON-LD, heading
+ * outline, images, rendered content, warnings. Why: keeps the rules in one
+ * place so the specs only decide which pages to load. Used by: pages.spec.ts.
  */
 
 import type { Page } from "@playwright/test"
@@ -115,7 +113,7 @@ export function metaProblems(s: SeoSnapshot, ref: PageRef): string[] {
   const ogUrl = need("og:url")
   if (ogUrl && ogUrl !== want) out.push(`og:url ${ogUrl} != ${want}`)
   const ogImage = need("og:image")
-  if (ogImage && !/^https:\/\//.test(ogImage)) {
+  if (ogImage && !ogImage.startsWith("https://")) {
     out.push(`og:image not absolute https: ${ogImage}`)
   }
   need("twitter:card")
@@ -165,7 +163,7 @@ const walk = (v: unknown, at: string, out: string[]) => {
     if (/^(url|item|logo|image|@id)$/.test(key) && !/^https?:\/\//.test(v)) {
       out.push(`${at} not absolute: ${v}`)
     }
-    if (/^date/.test(key) && !/^\d{4}-\d{2}-\d{2}/.test(v)) {
+    if (key.startsWith("date") && !/^\d{4}-\d{2}-\d{2}/.test(v)) {
       out.push(`${at} not ISO date: ${v}`)
     }
   } else if (typeof v === "number") {

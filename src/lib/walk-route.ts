@@ -8,9 +8,9 @@ import type { WalkResult } from "@/lib/venue-map"
 export const UPSTREAM = "https://routing.mazemap.com/routing/path/"
 
 /**
- * Routes only change when the map does. To purge them, bump this when the
- * venue data is rebuilt (scraper/venues.py) and run `DELETE FROM walks`; stale
- * rows and edge entries are never read again.
+ * Routes only change when the map does. To purge them, bump this when the venue
+ * data is rebuilt (scraper/venues.py) and run `DELETE FROM walks`; stale rows
+ * and edge entries are never read again.
  */
 export const ROUTE_CACHE_VERSION = "1"
 
@@ -69,7 +69,10 @@ export interface Feature {
   }
 }
 
-/** Group consecutive path pieces by level; a change of level is a stairs/lift hop. */
+/**
+ * Group consecutive path pieces by level; a change of level is a stairs/lift
+ * hop.
+ */
 export const buildWalk = (features: Feature[]): WalkResult => {
   const result: WalkResult = {
     metres: 0,

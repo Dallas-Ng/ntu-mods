@@ -1,16 +1,15 @@
 /**
  * Per-page SEO (pages.spec.ts)
  *
- * Tests:  for each sampled page: 200 and indexable, meta and social tags,
- *         JSON-LD shape for its type, heading outline, images, real content,
- *         and an og:image that resolves.
- * Why:    these are the tags and markup crawlers rely on, and they break
- *         quietly when a template or data change reaches only some pages.
- * How:    loads each page once with JavaScript off, so what is checked is what
- *         crawlers that skip JS see. One test per page runs every check as a
- *         soft assertion, so a failure names the page and each check.
- * Needs:  `pnpm build`, a running server and a seeded local D1.
- * Sample: every static page, SEO_SAMPLE per article and module, 5 semesters.
+ * Tests: for each sampled page: 200 and indexable, meta and social tags,
+ * JSON-LD shape for its type, heading outline, images, real content, and an
+ * og:image that resolves. Why: these are the tags and markup crawlers rely on,
+ * and they break quietly when a template or data change reaches only some
+ * pages. How: loads each page once with JavaScript off, so what is checked is
+ * what crawlers that skip JS see. One test per page runs every check as a soft
+ * assertion, so a failure names the page and each check. Needs: `pnpm build`, a
+ * running server and a seeded local D1. Sample: every static page, SEO_SAMPLE
+ * per article and module, 5 semesters.
  */
 
 import { expect, test } from "./fixtures"

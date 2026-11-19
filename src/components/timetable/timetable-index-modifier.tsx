@@ -66,14 +66,14 @@ interface TimetableIndexNoteProps {
 }
 
 /**
- * A note defaults to being tied to the currently selected index (most
- * notes are index-specific — "bring laptop" for a particular lab group),
- * with an escape hatch to widen it to every index of the module.
+ * A note defaults to being tied to the currently selected index (most notes are
+ * index-specific — "bring laptop" for a particular lab group), with an escape
+ * hatch to widen it to every index of the module.
  *
  * Every keystroke writes straight to the store — no local draft, no
- * save-on-blur. A popover can close in ways that never fire blur (Escape,
- * for one), and a note is throwaway enough that losing it silently on
- * dismiss would be worse than a few extra store writes.
+ * save-on-blur. A popover can close in ways that never fire blur (Escape, for
+ * one), and a note is throwaway enough that losing it silently on dismiss would
+ * be worse than a few extra store writes.
  */
 const TimetableIndexNote = ({
   moduleKey,
@@ -96,7 +96,7 @@ const TimetableIndexNote = ({
   // indistinguishable from "not module-scoped" otherwise).
   useEffect(() => {
     setScope(moduleRemark && !indexRemark ? "module" : "index")
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [moduleKey, indexKey])
 
   const value = scope === "module" ? moduleRemark : indexRemark

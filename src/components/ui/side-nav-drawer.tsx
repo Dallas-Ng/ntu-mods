@@ -15,9 +15,10 @@ import {
 interface Props {
   /**
    * Which edge the drawer slides from, and the trigger that opens it:
-   * - right: a square icon button pinned under the navbar ("On this page")
-   * - left: a bar across the top of the content naming the current page
-   *   (section nav, like the developer docs)
+   *
+   * - Right: a square icon button pinned under the navbar ("On this page")
+   * - Left: a bar across the top of the content naming the current page (section
+   *   nav, like the developer docs)
    */
   side: "left" | "right"
   title: string
@@ -27,8 +28,10 @@ interface Props {
   hidden?: boolean
   /** Width at which the desktop side nav takes over and this trigger goes. */
   desktopFrom?: "lg" | "xl"
-  /** Right button pinned under the navbar; false puts it in the page flow,
-   * e.g. beside the docs bar so the two never overlap. */
+  /**
+   * Right button pinned under the navbar; false puts it in the page flow, e.g.
+   * beside the docs bar so the two never overlap.
+   */
   floating?: boolean
   open?: boolean
   onOpenChange?: (open: boolean) => void

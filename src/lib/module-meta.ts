@@ -1,6 +1,9 @@
 import type { DbModule } from "@/lib/server/db/types"
 
-/** Head title/description for a module's "current offering" page — shared by the static build and the on-demand fallback so they read identically. */
+/**
+ * Head title/description for a module's "current offering" page — shared by the
+ * static build and the on-demand fallback so they read identically.
+ */
 export function buildModuleMeta(code: string, moduleData: DbModule) {
   // Descriptions are multi-line prose; a raw newline in a <meta> attribute is noise.
   const trimmed = moduleData.description?.replace(/\s+/g, " ").trim()
@@ -28,7 +31,10 @@ const FACULTY_ARTICLE: Record<string, { href: string; label: string }> = {
   }
 }
 
-/** Contextual "Planning Guides" links shown on a module page — shared by the static build and the on-demand fallback so they read identically. */
+/**
+ * Contextual "Planning Guides" links shown on a module page — shared by the
+ * static build and the on-demand fallback so they read identically.
+ */
 export function buildRelatedArticles(moduleData: DbModule) {
   return [
     ...(moduleData.faculty && FACULTY_ARTICLE[moduleData.faculty]

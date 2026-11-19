@@ -1,6 +1,12 @@
 {
+  // Prettier formats on save. oxlint runs through the Oxc extension
+  // (oxc.oxc-vscode), which uses the copy installed in node_modules.
+  // Oxfmt is off: it drops comments in .astro files, and Prettier already
+  // matches the committed style.
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "oxc.enable.oxlint": true,
+  "oxc.enable.oxfmt": false,
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

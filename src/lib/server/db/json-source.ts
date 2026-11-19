@@ -1,20 +1,20 @@
 /**
- * In-memory reader over src/data/api, the canonical data source for
- * everything except the on-demand historic-snapshot route (which reads D1
- * live instead — see edge/get-module-snapshot.ts). Used by db/repo.ts and by
- * the two build scripts (build-static-data.mts, build-sitemap.mts) so there
- * is exactly one place that walks the JSON tree.
+ * In-memory reader over src/data/api, the canonical data source for everything
+ * except the on-demand historic-snapshot route (which reads D1 live instead —
+ * see edge/get-module-snapshot.ts). Used by db/repo.ts and by the two build
+ * scripts (build-static-data.mts, build-sitemap.mts) so there is exactly one
+ * place that walks the JSON tree.
  *
- * Each semester file is read and parsed once, then cached for the life of
- * the process — a full build touches every semester anyway (getStaticPaths
- * alone spans all of them), so this is a straight win over re-parsing.
+ * Each semester file is read and parsed once, then cached for the life of the
+ * process — a full build touches every semester anyway (getStaticPaths alone
+ * spans all of them), so this is a straight win over re-parsing.
  *
  * Faculty/category derivation and semester-name/ordering logic mirror
  * scripts/db/lib/derive.mjs. That file can't import this one — it's a plain
  * .mjs run by `node` directly, no TypeScript loader — so the two are kept in
  * sync by hand. This side gets to import src/lib/module-constants.ts normally
- * rather than scraping it as source text, which is why MODULE_FACULTY here
- * is a real import instead of a regex.
+ * rather than scraping it as source text, which is why MODULE_FACULTY here is a
+ * real import instead of a regex.
  */
 
 import fs from "fs"
@@ -58,7 +58,10 @@ const SEM_LABEL: Record<string, string> = {
   T: "Teaching Term"
 }
 
-/** Fallback name for a semester the committed semesters.json doesn't already have a portal name for. */
+/**
+ * Fallback name for a semester the committed semesters.json doesn't already
+ * have a portal name for.
+ */
 export function semesterName(year: string, semester: string): string {
   return `Acad Yr ${year} ${SEM_LABEL[semester] ?? `Semester ${semester}`}`
 }
@@ -67,8 +70,8 @@ const FACULTY_KEYS = Object.keys(MODULE_FACULTY)
 
 /**
  * A module's faculty, from its programme keys. Mirrors derive.mjs's
- * deriveFaculty exactly: last matching segment across all searchKeys wins,
- * "" if nothing matches.
+ * deriveFaculty exactly: last matching segment across all searchKeys wins, ""
+ * if nothing matches.
  */
 export function deriveFaculty(searchKeys: string[]): string {
   let result = ""
@@ -102,7 +105,10 @@ export function deriveCategories(searchKeys: string[]): string[] {
   return Array.from(included)
 }
 
-/** One entry in metadata/{sem}.json — the raw scraped shape, before faculty/categories are derived. */
+/**
+ * One entry in metadata/{sem}.json — the raw scraped shape, before
+ * faculty/categories are derived.
+ */
 type RawModule = Omit<
   DbModule,
   | "faculty"
@@ -130,10 +136,9 @@ function readMetadata(sem: string): MetadataFile {
 
 const indexesCache = new Map<string, IndexesFile>()
 /**
- * Index keys are sorted per module on the way in — the raw file's nested
- * order follows scrape order, not index-key order, but every consumer
- * (this artifact, the per-module page's index table) expects "08501" before
- * "08504".
+ * Index keys are sorted per module on the way in — the raw file's nested order
+ * follows scrape order, not index-key order, but every consumer (this artifact,
+ * the per-module page's index table) expects "08501" before "08504".
  */
 export function readIndexes(sem: string): IndexesFile {
   let data = indexesCache.get(sem)
@@ -199,8 +204,8 @@ export function semestersWithExams(): SemesterEntry[] {
 let moduleSemestersCache: Map<string, SemesterEntry[]> | null = null
 /**
  * Every code's list of offered semesters, newest first — built by scanning
- * semestersWithOfferings() once. `list[0]` is that module's "current"
- * offering everywhere below, matching sort_key DESC in the old SQL.
+ * semestersWithOfferings() once. `list[0]` is that module's "current" offering
+ * everywhere below, matching sort_key DESC in the old SQL.
  */
 function moduleSemestersIndex(): Map<string, SemesterEntry[]> {
   if (moduleSemestersCache) return moduleSemestersCache
@@ -221,10 +226,9 @@ export function getModuleSemesters(code: string): SemesterEntry[] {
 }
 
 /**
- * Codes offered in the active/latest semester only — the getStaticPaths
- * subset for the /mods/[module] build. Everything else (~3,200 of the 4,300
- * codes ever offered) renders on demand instead; see
- * src/astro/pages/404.astro.
+ * Codes offered in the active/latest semester only — the getStaticPaths subset
+ * for the /mods/[module] build. Everything else (~3,200 of the 4,300 codes ever
+ * offered) renders on demand instead; see src/astro/pages/404.astro.
  */
 export function activeOfferingCodes(): string[] {
   const [latest] = semestersWithOfferings()
@@ -377,11 +381,11 @@ export function getSemesterExamsData(
 }
 
 /**
- * Each module's prerequisites as of its most recent offering, plus the
- * inverse edges. Only prerequisite items that resolve to a module code
- * become edges; the rest are free text and are dropped here (unlike the D1
- * path, nothing keeps the free text — this only ever fed the graph).
- * Modules with no edges in either direction are omitted.
+ * Each module's prerequisites as of its most recent offering, plus the inverse
+ * edges. Only prerequisite items that resolve to a module code become edges;
+ * the rest are free text and are dropped here (unlike the D1 path, nothing
+ * keeps the free text — this only ever fed the graph). Modules with no edges in
+ * either direction are omitted.
  */
 export function getPrerequisiteGraph(): Record<string, DbPrerequisiteNode> {
   const info = new Map<string, { title: string; requires: Set<string> }>()

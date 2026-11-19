@@ -45,9 +45,9 @@ const userMessageFor = (status: number, detail: string) => {
 }
 
 /**
- * Explain a failed `/api/feedback` response. The route returns
- * `{ error }` with a reason, so keep it in the reported message instead of
- * losing it: "500" alone says nothing about which key or limit failed.
+ * Explain a failed `/api/feedback` response. The route returns `{ error }` with
+ * a reason, so keep it in the reported message instead of losing it: "500"
+ * alone says nothing about which key or limit failed.
  */
 export const describeFeedbackFailure = (
   res: { status: number; statusText?: string },

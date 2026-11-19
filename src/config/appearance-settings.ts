@@ -30,9 +30,9 @@ export interface TimetableColorToken {
 }
 
 /**
- * A tweak on top of the chosen palette, for one class type. The picked
- * colour's hue and saturation retint the palette, whose lightness ramp is
- * what keeps every text pair readable.
+ * A tweak on top of the chosen palette, for one class type. The picked colour's
+ * hue and saturation retint the palette, whose lightness ramp is what keeps
+ * every text pair readable.
  */
 export interface IndexTypeStyleOverride {
   /** Hex colour, e.g. `#e11d48`. Omitted keeps the palette's own colour. */
@@ -546,7 +546,7 @@ export const withAppearanceDefaults = (
 
 /**
  * When Appearance last gained something worth pointing out (granular class
- * colours). Students who have not opened it since this date see a pulse on
- * its button. An ISO date, compared as text against the stored open time.
+ * colours). Students who have not opened it since this date see a pulse on its
+ * button. An ISO date, compared as text against the stored open time.
  */
 export const APPEARANCE_FEATURE_RELEASED = "2026-11-18"

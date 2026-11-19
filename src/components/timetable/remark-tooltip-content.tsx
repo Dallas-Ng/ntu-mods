@@ -6,8 +6,10 @@ interface Props {
   indexRemark?: string
 }
 
-/** Shared body for the tooltip shown on the timetable block and the
- * sidebar row — keeps the two in sync when either changes. */
+/**
+ * Shared body for the tooltip shown on the timetable block and the sidebar row
+ * — keeps the two in sync when either changes.
+ */
 export const RemarkTooltipContent = ({ moduleRemark, indexRemark }: Props) => (
   <>
     {moduleRemark && (

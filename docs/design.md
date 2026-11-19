@@ -142,12 +142,15 @@ Focus and cursor:
 
 | Layer   | What                                                 |
 | ------- | ---------------------------------------------------- |
+| `z-60`  | The iOS toolbar tint strip (`.toolbar-edge`)         |
 | `z-50`  | Dialogs, drawers, popovers and their backdrops       |
 | `z-20`  | The floating "On this page" button                   |
 | `z-10`  | The navbar                                           |
 | `z-[5]` | The sticky docs bar (it must slide under the navbar) |
 
 A component that uses `z-index` inside itself creates its own stacking context (`isolate`, as `CodeBlock` does), so its layers cannot rise above the navbar or the sticky bars.
+
+The strip is the only element above dialogs that touches the top edge (toasts are higher, but start 80px down). iOS Safari mostly ignores `theme-color` and takes the status bar and toolbar colour from the topmost solid element at the middle of the top edge of the page. A dimming layer is skipped and pixel-sampled instead, and that sample sticks, so the strip has to sit above the scrim. Its colour is the page background mixed with any open scrim, all in `globals.css`, and it has to stay opaque: a translucent strip is pixel-sampled instead. It reads the page colour only, never the banner, so the toolbar does not change colour as the banner scrolls away. The scrim has to switch in the same frame as the strip: Safari samples the strip once per change, so a scrim fade leaves the toolbar on the old colour until the fade ends. That is why the drawer and dialog overlays have no fade. Mount it once in `BaseLayout`; a modal `<dialog>` needs its own copy inside it, because the top layer paints above everything (the article lightbox does this, and gives up 5px at the top of the image for it). Do not put a transparent, full-viewport fixed layer above the strip: Safari samples pixels again and caches a stale colour. Do not put a background or `backdrop-filter` on anything else fixed or sticky at the top edge either: Safari samples those too, so the navbar's glass lives on an absolute child, which it ignores.
 
 ## Copy
 

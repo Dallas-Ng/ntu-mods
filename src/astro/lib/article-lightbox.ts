@@ -32,7 +32,14 @@ export const createLightbox = (doc: Document = document): ArticleLightbox => {
   image.className = IMAGE_CLASS
   image.alt = ""
 
-  dialog.append(closeButton, image)
+  // A modal <dialog> lives in the top layer, above the page's own toolbar strip,
+  // so it needs its own copy to tint the status bar over the black backdrop.
+  // Reads the same .toolbar-edge rule and --toolbar-tint (globals.css).
+  const toolbarEdge = doc.createElement("div")
+  toolbarEdge.className = "toolbar-edge"
+  toolbarEdge.setAttribute("aria-hidden", "true")
+
+  dialog.append(toolbarEdge, closeButton, image)
   doc.body.append(dialog)
 
   const close = () => {

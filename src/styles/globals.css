@@ -243,6 +243,13 @@
     @apply bg-background text-foreground;
   }
 
+  /* Safari 26 falls back to the root background for any edge with no fixed
+     element on it (the bottom toolbar). Keep it the page colour, never white
+     or black. The top edge is handled by .toolbar-edge. */
+  html {
+    background-color: hsl(var(--background));
+  }
+
   .dark strong,
   .dark b {
     color: white;
@@ -559,6 +566,9 @@ table td {
    actual size inside the scrolling dialog. */
 .image-lightbox {
   @apply fixed inset-0 z-50 m-0 h-full max-h-none w-full max-w-none border-0 bg-black/90 p-0;
+  /* Room for the .toolbar-edge strip the lightbox carries, so the strip tints
+     the status bar without covering the top of the image. */
+  padding-top: 5px;
 }
 
 .image-lightbox[open] {
@@ -581,6 +591,62 @@ table td {
   @apply size-5;
 }
 
+/* iOS Safari's status bar and toolbar. Safari mostly ignores `theme-color` and
+   copies the colour of the topmost solid, fixed element touching the middle of
+   the top edge. A dimming layer is treated as an overlay and skipped, then
+   pixel-sampled and cached, so a scrim can never tint the toolbar on its own.
+   `.toolbar-edge`, mounted in BaseLayout, is a solid strip on that edge, above
+   everything, and takes the colour of whatever is under it. */
+:root {
+  /* The page's own colour, never the banner: the banner scrolls away and the
+     toolbar should not change colour with it. */
+  --page-top-color: hsl(var(--background));
+}
+
+/* A scrim, mixed to the colour it looks like over the top of the page. The
+   percentages match the overlays in ui/drawer.tsx, ui/dialog.tsx and
+   article-lightbox.ts. */
+:root:has([data-slot="drawer-overlay"][data-state="open"]) {
+  --toolbar-tint: color-mix(in srgb, black 50%, var(--page-top-color));
+}
+
+/* A sheet opened from inside another drawer stacks a second scrim. */
+:root:has(
+  [data-slot="drawer-overlay"][data-state="open"]
+    ~ [data-slot="drawer-overlay"][data-state="open"]
+) {
+  --toolbar-tint: color-mix(in srgb, black 75%, var(--page-top-color));
+}
+
+:root:has([data-slot="dialog-overlay"][data-state="open"]) {
+  --toolbar-tint: color-mix(in srgb, black 80%, var(--page-top-color));
+}
+
+:root:has(.image-lightbox[open]) {
+  --toolbar-tint: color-mix(in srgb, black 90%, var(--page-top-color));
+}
+
+/* Safari samples the strip once per change, so the scrim has to switch in the
+   same frame as the strip. A fade leaves the toolbar on the old colour until
+   it ends, which reads as a lag. Vaul's fade is unlayered, hence !important. */
+[data-slot="drawer-overlay"],
+[data-slot="dialog-overlay"] {
+  animation: none !important;
+}
+
+.toolbar-edge {
+  position: fixed;
+  inset-inline: 0;
+  /* 5px on screen is the least Safari samples; the rest sits off-screen so the
+     sample point lands inside the strip. */
+  top: -7px;
+  height: 12px;
+  /* Above dialogs and drawers (z-50): an element below them is not the topmost
+     one at the edge, so Safari would skip it. */
+  z-index: 60;
+  pointer-events: none;
+  background-color: var(--toolbar-tint, var(--page-top-color));
+}
 
 /* iOS Safari zooms the page when a field under 16px is focused. Keep pinch
    zoom available (accessibility); just never trigger the automatic one. */

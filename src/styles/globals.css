@@ -15,9 +15,6 @@
   /* Strong ease-out for UI entrances: fast start, long soft landing. */
   --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
 
-  /* The announcement banner. The iOS toolbar tint reads the same token, so
-     the two can never drift apart. */
-  --color-banner: var(--banner);
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -106,8 +103,6 @@
      and primary-subtle are set dark enough to show against the page. */
   :root {
     --background: 240 97% 99.2%;
-    /* oklch, like Tailwind's palette, so this is exactly its yellow-300. */
-    --banner: oklch(90.5% 0.182 98.111);
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -596,29 +591,28 @@ table td {
    `.toolbar-edge`, mounted in BaseLayout, is a solid strip on that edge, above
    everything, and takes the colour of whatever is under it. */
 :root {
-  /* What is actually at the top of the page: the announcement banner while it
-     is on screen, the page otherwise. BaseLayout keeps [data-banner] in step
-     with scrolling and with dismissal. */
+  /* The page's own colour, never the banner: the banner scrolls away and the
+     toolbar should not change colour with it. */
   --page-top-color: hsl(var(--background));
-}
-
-:root[data-banner] {
-  --page-top-color: var(--banner);
 }
 
 /* A scrim, mixed to the colour it looks like over the top of the page. The
    percentages match the overlays in ui/drawer.tsx, ui/dialog.tsx and
-   article-lightbox.ts. */
-:root:has([data-slot="drawer-overlay"]) {
+   article-lightbox.ts. Only an open overlay counts: both stay mounted through
+   their exit fade, and keying on mount would hold the tint for that fade. */
+:root:has([data-slot="drawer-overlay"][data-state="open"]) {
   --toolbar-tint: color-mix(in srgb, black 50%, var(--page-top-color));
 }
 
 /* A sheet opened from inside another drawer stacks a second scrim. */
-:root:has([data-slot="drawer-overlay"] ~ [data-slot="drawer-overlay"]) {
+:root:has(
+  [data-slot="drawer-overlay"][data-state="open"]
+    ~ [data-slot="drawer-overlay"][data-state="open"]
+) {
   --toolbar-tint: color-mix(in srgb, black 75%, var(--page-top-color));
 }
 
-:root:has([data-slot="dialog-overlay"]) {
+:root:has([data-slot="dialog-overlay"][data-state="open"]) {
   --toolbar-tint: color-mix(in srgb, black 80%, var(--page-top-color));
 }
 

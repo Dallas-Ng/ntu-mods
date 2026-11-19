@@ -83,7 +83,7 @@ const keywords = defaults.keywords.join(", ")
 const author = defaults.authors.map(({ name }) => name).join(", ")
 ---
 
-<html lang="en" data-scroll-behavior="smooth" data-banner>
+<html lang="en" data-scroll-behavior="smooth">
   <head>
     <meta charset="utf-8" />
     <meta
@@ -191,37 +191,15 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
       // Inline so a dismissed banner is gone before first paint
       var el = document.getElementById("announcement")
       try {
-        if (localStorage.getItem(key)) {
-          el.remove()
-          el = null
-        }
+        if (localStorage.getItem(key)) el.remove()
       } catch (e) {}
-
-      // The banner is the top of the page until it scrolls off, so the toolbar
-      // tint has to follow it. --page-top-color in globals.css reads this.
-      var root = document.documentElement
-      function syncTop() {
-        root.toggleAttribute(
-          "data-banner",
-          !!el && el.getBoundingClientRect().bottom > 0
-        )
-      }
-      // <html data-banner> is rendered, so this also clears it when the banner
-      // was dismissed or the page is already scrolled.
-      syncTop()
-
-      if (el) {
+      if (el)
         el.querySelector("button").addEventListener("click", function () {
           el.remove()
-          el = null
-          syncTop()
           try {
             localStorage.setItem(key, "1")
           } catch (e) {}
         })
-        addEventListener("scroll", syncTop, { passive: true })
-        addEventListener("resize", syncTop, { passive: true })
-      }
     </script>
     <div
       class={`bg-background flex min-h-screen flex-col ${outerClassName ?? ""}`}>

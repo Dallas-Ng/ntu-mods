@@ -83,7 +83,7 @@ const keywords = defaults.keywords.join(", ")
 const author = defaults.authors.map(({ name }) => name).join(", ")
 ---
 
-<html lang="en" data-scroll-behavior="smooth">
+<html lang="en" data-scroll-behavior="smooth" data-banner>
   <head>
     <meta charset="utf-8" />
     <meta
@@ -175,6 +175,8 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
     </script>
   </head>
   <body class="antialiased" data-build-env={BUILD_ENV}>
+    {/* Tints the iOS status bar; see .toolbar-edge in globals.css. */}
+    <div aria-hidden="true" class="toolbar-edge"></div>
     <AppearanceStyleProvider client:load />
     <div id="announcement" class="relative [&_p]:px-6">
       <Banner />
@@ -189,15 +191,37 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
       // Inline so a dismissed banner is gone before first paint
       var el = document.getElementById("announcement")
       try {
-        if (localStorage.getItem(key)) el.remove()
+        if (localStorage.getItem(key)) {
+          el.remove()
+          el = null
+        }
       } catch (e) {}
-      if (el)
+
+      // The banner is the top of the page until it scrolls off, so the toolbar
+      // tint has to follow it. --page-top-color in globals.css reads this.
+      var root = document.documentElement
+      function syncTop() {
+        root.toggleAttribute(
+          "data-banner",
+          !!el && el.getBoundingClientRect().bottom > 0
+        )
+      }
+      // <html data-banner> is rendered, so this also clears it when the banner
+      // was dismissed or the page is already scrolled.
+      syncTop()
+
+      if (el) {
         el.querySelector("button").addEventListener("click", function () {
           el.remove()
+          el = null
+          syncTop()
           try {
             localStorage.setItem(key, "1")
           } catch (e) {}
         })
+        addEventListener("scroll", syncTop, { passive: true })
+        addEventListener("resize", syncTop, { passive: true })
+      }
     </script>
     <div
       class={`bg-background flex min-h-screen flex-col ${outerClassName ?? ""}`}>

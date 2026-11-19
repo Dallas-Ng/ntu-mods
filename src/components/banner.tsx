@@ -16,7 +16,7 @@ export const Banner = () => (
   <a href={BANNER_HREF} className="group">
     <div
       data-nosnippet
-      className="relative z-10 flex items-center justify-center bg-yellow-300 px-2 py-1.5 md:p-1">
+      className="bg-banner relative z-10 flex items-center justify-center px-2 py-1.5 md:p-1">
       <p className="text-center text-sm leading-[1.2] font-medium text-balance text-black md:leading-5">
         {BANNER_TEXT}
         <LinkArrow className="ml-1 inline align-[-3px]" />

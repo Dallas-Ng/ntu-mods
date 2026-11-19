@@ -72,7 +72,7 @@ Surfaces are fixed tokens:
 | `success`, `warning`, `destructive` (each with a `-subtle` fill) | Status: alerts, changelog tags, API status  |
 
 - No opacity tints (`bg-muted/50`, `bg-primary/10`). The exceptions are see-through glass (navbar, docs bar, the floating "On this page" button, dialog backdrop), `Skeleton`'s translucent `bg-foreground/10`, and the darker hover of solid buttons (`hover:bg-primary/90`).
-- No raw Tailwind palette colours (`emerald-500`, `slate-200`). Exceptions: the exempt areas, the yellow `NewBadge`, the yellow banner, and the favourite heart's `rose-500` (a state colour, not an error).
+- No raw Tailwind palette colours (`emerald-500`, `slate-200`). Exceptions: the exempt areas, the yellow `NewBadge`, the `banner` token (the iOS toolbar tint reads it too), and the favourite heart's `rose-500` (a state colour, not an error).
 - Light and dark mode both have to work. The theme is class-based (`localStorage.theme`), not the system setting.
 
 ## Borders
@@ -142,12 +142,15 @@ Focus and cursor:
 
 | Layer   | What                                                 |
 | ------- | ---------------------------------------------------- |
+| `z-60`  | The iOS toolbar tint strip (`.toolbar-edge`)         |
 | `z-50`  | Dialogs, drawers, popovers and their backdrops       |
 | `z-20`  | The floating "On this page" button                   |
 | `z-10`  | The navbar                                           |
 | `z-[5]` | The sticky docs bar (it must slide under the navbar) |
 
 A component that uses `z-index` inside itself creates its own stacking context (`isolate`, as `CodeBlock` does), so its layers cannot rise above the navbar or the sticky bars.
+
+The strip is the only element above dialogs that touches the top edge (toasts are higher, but start 80px down). iOS Safari mostly ignores `theme-color` and takes the status bar and toolbar colour from the topmost solid element at the middle of the top edge of the page. A dimming layer is skipped and pixel-sampled instead, and that sample sticks, so the strip has to sit above the scrim. Its colour is `--page-top-color` (the page background, or the banner while it is on screen) mixed with any open scrim, all in `globals.css`, and it has to stay opaque: a translucent strip is pixel-sampled instead. Mount it once in `BaseLayout`; a modal `<dialog>` needs its own copy inside it, because the top layer paints above everything (the article lightbox does this, and gives up 5px at the top of the image for it). Do not put a transparent, full-viewport fixed layer above the strip: Safari samples pixels again and caches a stale colour.
 
 ## Copy
 

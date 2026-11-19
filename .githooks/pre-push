@@ -1,0 +1,7 @@
+#!/bin/sh
+# Full checks before anything leaves the machine. Takes about 20s.
+# Skip with: git push --no-verify
+set -e
+
+pnpm lint
+pnpm format:check

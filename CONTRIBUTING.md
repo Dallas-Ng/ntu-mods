@@ -19,6 +19,8 @@ pnpm dev
 
 `pnpm db:seed-local` builds a local D1 database under `.wrangler/state`. Run it before `pnpm dev`, and again whenever `src/data/api` changes. You do not need a Cloudflare account or any secrets to run the site.
 
+In VS Code, install the Prettier and [Oxc](https://marketplace.visualstudio.com/items?itemName=oxc.oxc-vscode) extensions. The workspace settings already format on save with Prettier and lint with oxlint, using the copies in `node_modules`.
+
 ## Make a change
 
 1. Fork the repository and branch from `main`, for example `feat/my-feature`.
@@ -27,11 +29,14 @@ pnpm dev
 
    ```bash
    pnpm lint
+   pnpm format:check
    pnpm test
    pnpm test:e2e
    ```
 
    `pnpm test:e2e` needs a prior `pnpm build`. CI runs the same checks on every pull request.
+
+   `pnpm install` points Git at `.githooks`, so checks run as you work: a commit formats and oxlints the staged files, and a push runs `pnpm lint` and `pnpm format:check`. Either can be bypassed with `--no-verify`, but CI enforces the same checks.
 
 4. Open a pull request against `main` and fill in the template.
 

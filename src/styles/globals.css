@@ -648,6 +648,15 @@ table td {
   background-color: var(--toolbar-tint, var(--page-top-color));
 }
 
+/* Only iOS Safari samples the strip. Everywhere else it is just an opaque 5px
+   band over the top of the page (a visible gap above the banner), so hide it.
+   -webkit-touch-callout is supported on iOS only. */
+@supports not (-webkit-touch-callout: none) {
+  .toolbar-edge {
+    display: none;
+  }
+}
+
 /* iOS Safari zooms the page when a field under 16px is focused. Keep pinch
    zoom available (accessibility); just never trigger the automatic one. */
 html {

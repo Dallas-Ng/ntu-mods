@@ -657,6 +657,14 @@ table td {
   }
 }
 
+/* Set by applyTheme (hooks/use-theme.ts) around a theme change so every colour
+   flips in the same frame instead of fading at different speeds. */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
 /* iOS Safari zooms the page when a field under 16px is focused. Keep pinch
    zoom available (accessibility); just never trigger the automatic one. */
 html {

@@ -20,7 +20,15 @@ const readStoredTheme = (): Theme => {
 
 export const applyTheme = (theme: Theme) => {
   const resolved = theme === "system" ? getSystemTheme() : theme
-  document.documentElement.classList.toggle("dark", resolved === "dark")
+  const root = document.documentElement
+  // Switch every colour in one frame: .theme-switching turns transitions off
+  // (globals.css) while the class flips, then comes off after the repaint.
+  root.classList.add("theme-switching")
+  root.classList.toggle("dark", resolved === "dark")
+  void root.offsetHeight
+  requestAnimationFrame(() =>
+    requestAnimationFrame(() => root.classList.remove("theme-switching"))
+  )
 }
 
 export function useTheme() {

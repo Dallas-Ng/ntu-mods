@@ -18,8 +18,9 @@ import re
 import sys
 from pathlib import Path
 
-DATA_DIR = Path(__file__).parent / "data"
-API_DIR = Path(__file__).parent.parent / "src" / "data" / "api"
+SCRAPER_DIR = Path(__file__).resolve().parent
+DATA_DIR = SCRAPER_DIR / "data"
+API_DIR = SCRAPER_DIR.parent / "src" / "data" / "api"
 
 SLOT_TYPES = {"LEC", "LAB", "SEM", "TUT", "DES", "PRJ"}
 TIME_RE = re.compile(r"^(\d{2})(\d{2})-(\d{2})(\d{2})$")

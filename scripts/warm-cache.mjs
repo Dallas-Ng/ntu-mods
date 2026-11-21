@@ -3,30 +3,39 @@
 //   node scripts/warm-cache.mjs [--base https://ntumods.com] [--concurrency 5]
 const arg = (name, fallback) => {
   const i = process.argv.indexOf(`--${name}`)
-  return i > -1 ? process.argv[i + 1] : fallback
+  return i > -1 && i + 1 < process.argv.length ? process.argv[i + 1] : fallback
 }
-const rawBase = arg("base", "https://ntumods.com").replace(/\/$/, "")
-const baseUrl = new URL(rawBase)
+const baseUrl = new URL(arg("base", "https://ntumods.com"))
 if (baseUrl.protocol !== "https:" && baseUrl.protocol !== "http:") {
   throw new Error(`Unsupported --base protocol: ${baseUrl.protocol}`)
 }
-const base = baseUrl.origin + baseUrl.pathname.replace(/\/$/, "")
+const basePath = baseUrl.pathname.replace(/\/+$/, "")
+const base = `${baseUrl.origin}${basePath}`
 const concurrency = Number(arg("concurrency", 5))
 
 const sitemap = await (await fetch(`${base}/sitemap-0.xml`)).text()
 // Only same-origin URLs: a sitemap must not point the warmer at other hosts.
-const urls = [...sitemap.matchAll(/<loc>([^<]+)</g)]
-  .map((m) => m[1].replace("https://ntumods.com", base))
-  .flatMap((u) => {
-    try {
-      const parsed = new URL(u)
-      if (parsed.origin !== baseUrl.origin) return []
-      if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return []
-      return [parsed.href]
-    } catch {
+const urls = [...sitemap.matchAll(/<loc>([^<]+)</g)].flatMap((m) => {
+  try {
+    const loc = new URL(m[1])
+    const target =
+      loc.origin === "https://ntumods.com"
+        ? new URL(`${base}${loc.pathname}${loc.search}${loc.hash}`)
+        : loc
+    if (target.origin !== baseUrl.origin) return []
+    if (target.protocol !== "https:" && target.protocol !== "http:") return []
+    if (
+      basePath &&
+      target.pathname !== basePath &&
+      !target.pathname.startsWith(`${basePath}/`)
+    ) {
       return []
     }
-  })
+    return [target.href]
+  } catch {
+    return []
+  }
+})
 console.log(`Warming ${urls.length} URLs on ${base}`)
 
 let done = 0

@@ -351,6 +351,28 @@ export class InvalidTranscriptPdfError extends Error {
   }
 }
 
+export class NotATranscriptError extends Error {
+  constructor() {
+    super(
+      "This PDF does not look like a transcript. Upload the official transcript PDF."
+    )
+    this.name = "NotATranscriptError"
+  }
+}
+
+// Errors caused by the file the user chose, not by a bug. Shown to the user
+// as is and not reported.
+export function isExpectedTranscriptError(e: unknown) {
+  return (
+    e instanceof NoTranscriptTextError ||
+    e instanceof InvalidTranscriptPdfError ||
+    e instanceof NotATranscriptError
+  )
+}
+
+// A real transcript has dozens of lines; a handful means a different document.
+const MIN_TRANSCRIPT_LINES = 5
+
 export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
   if (file.type.startsWith("image/")) throw new InvalidTranscriptPdfError()
   const info: TranscriptInfo = { bytes: file.size }
@@ -387,12 +409,14 @@ export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
     stage = "parse"
     const parsed = parseTranscriptLines(lines)
     if (!parsed.mods.some((m) => m.status === "graded")) {
+      if (lines.length < MIN_TRANSCRIPT_LINES) throw new NotATranscriptError()
       Object.assign(info, transcriptDiagnostics(lines))
       throw new Error("no modules found")
     }
     return parsed
   } catch (e) {
-    if (e instanceof NoTranscriptTextError) throw e
+    if (e instanceof NoTranscriptTextError || e instanceof NotATranscriptError)
+      throw e
     if (
       stage === "load_pdf" &&
       e instanceof Error &&

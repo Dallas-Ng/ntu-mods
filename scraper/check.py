@@ -117,6 +117,14 @@ def check(mdata: dict, indexes: dict, exams: dict, live: dict[str, dict] | None)
     return problems, notes
 
 
+def _contained(base: Path, path: Path) -> Path:
+    root = base.resolve()
+    resolved = path.resolve()
+    if not resolved.is_relative_to(root):
+        raise ValueError(f"Path escapes {root}: {resolved}")
+    return resolved
+
+
 def _read(path: Path) -> dict:
     """Missing file = {} — lets --scope exams run without a course scrape."""
     return json.loads(path.read_text()) if path.exists() else {}
@@ -128,9 +136,15 @@ def check_semester(acadsem: str) -> bool:
         raise SystemExit(f"'{acadsem}' is not a semester code like 2026;1")
     key = acadsem.replace(";", "_")
     live = None
-    if (API_DIR / "metadata" / f"{key}.json").exists():
-        live = {k: _read(API_DIR / d / f"{key}.json") for k, d in (("mdata", "metadata"), ("indexes", "indexes"), ("exams", "exams"))}
-    problems, notes = check(*(_read(DATA_DIR / f"{n}_{key}.json") for n in ("03_mdata", "04_indexes", "05_exams")), live)
+    if _contained(API_DIR, API_DIR / "metadata" / f"{key}.json").exists():
+        live = {
+            k: _read(_contained(API_DIR, API_DIR / d / f"{key}.json"))
+            for k, d in (("mdata", "metadata"), ("indexes", "indexes"), ("exams", "exams"))
+        }
+    problems, notes = check(
+        *(_read(_contained(DATA_DIR, DATA_DIR / f"{n}_{key}.json")) for n in ("03_mdata", "04_indexes", "05_exams")),
+        live,
+    )
     print(f"[Check] {acadsem}")
     for n in notes:
         print(f"  note: {n}")

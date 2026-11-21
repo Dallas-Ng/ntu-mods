@@ -5,14 +5,28 @@ const arg = (name, fallback) => {
   const i = process.argv.indexOf(`--${name}`)
   return i > -1 ? process.argv[i + 1] : fallback
 }
-const base = arg("base", "https://ntumods.com").replace(/\/$/, "")
+const rawBase = arg("base", "https://ntumods.com").replace(/\/$/, "")
+const baseUrl = new URL(rawBase)
+if (baseUrl.protocol !== "https:" && baseUrl.protocol !== "http:") {
+  throw new Error(`Unsupported --base protocol: ${baseUrl.protocol}`)
+}
+const base = baseUrl.origin + baseUrl.pathname.replace(/\/$/, "")
 const concurrency = Number(arg("concurrency", 5))
 
 const sitemap = await (await fetch(`${base}/sitemap-0.xml`)).text()
 // Only same-origin URLs: a sitemap must not point the warmer at other hosts.
 const urls = [...sitemap.matchAll(/<loc>([^<]+)</g)]
   .map((m) => m[1].replace("https://ntumods.com", base))
-  .filter((u) => u.startsWith(`${base}/`) || u === base)
+  .flatMap((u) => {
+    try {
+      const parsed = new URL(u)
+      if (parsed.origin !== baseUrl.origin) return []
+      if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return []
+      return [parsed.href]
+    } catch {
+      return []
+    }
+  })
 console.log(`Warming ${urls.length} URLs on ${base}`)
 
 let done = 0

@@ -17,7 +17,7 @@ const LandingCTA = ({ semesterLabel }: Props) => {
         <span className="hidden sm:inline"> data</span>
         <ChevronRight aria-hidden="true" className="-ml-1 size-4" />
       </a>
-      <h1 className="max-w-5xl text-3xl leading-[0.98] font-bold tracking-tighter min-[380px]:text-4xl md:text-5xl xl:text-6xl">
+      <h1 className="mx-auto max-w-5xl text-3xl leading-[0.98] font-bold tracking-tighter min-[380px]:text-4xl md:text-5xl xl:mx-0 xl:text-6xl">
         Build your NTU timetable
       </h1>
 

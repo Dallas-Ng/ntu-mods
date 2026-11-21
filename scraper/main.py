@@ -53,13 +53,21 @@ def sort_key(acadsem: str) -> int:
     return int(year) * 10 + SEM_ORDER[sem]
 
 
+def _contained(base: Path, path: Path) -> Path:
+    root = base.resolve()
+    resolved = path.resolve()
+    if not resolved.is_relative_to(root):
+        raise ValueError(f"Path escapes {root}: {resolved}")
+    return resolved
+
+
 def data_path(name: str, acadsem: str) -> Path:
-    return DATA_DIR / f"{name}_{acadsem.replace(';', '_')}.json"
+    return _contained(DATA_DIR, DATA_DIR / f"{name}_{acadsem.replace(';', '_')}.json")
 
 
 def exam_csv_path(acadsem: str) -> Path:
     year, sem = acadsem.split(";", 1)
-    return EXAMS_DIR / f"exams-{year}-{int(year) + 1}-s{sem.lower()}.csv"
+    return _contained(EXAMS_DIR, EXAMS_DIR / f"exams-{year}-{int(year) + 1}-s{sem.lower()}.csv")
 
 
 def write_json(path: Path, data) -> None:
@@ -114,7 +122,8 @@ def run_upsync(acadsem: str, scope: str | None, dry_run: bool) -> None:
     pairs = [("03_mdata", "metadata"), ("04_indexes", "indexes")] if scope != "exams" else []
     pairs += [("05_exams", "exams")] if scope != "courses" else []
     for name, dest in pairs:
-        src, dst = DATA_DIR / f"{name}_{key}.json", API_DIR / dest / f"{key}.json"
+        src = _contained(DATA_DIR, DATA_DIR / f"{name}_{key}.json")
+        dst = _contained(API_DIR, API_DIR / dest / f"{key}.json")
         print(f"[Upsync] {src.relative_to(REPO_ROOT)} -> {dst.relative_to(REPO_ROOT)}{' (dry run)' if dry_run else ''}")
         if not dry_run:
             dst.parent.mkdir(parents=True, exist_ok=True)

@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 import {
   InvalidTranscriptPdfError,
   NoTranscriptTextError,
+  NotATranscriptError,
   readTranscriptPdf,
   TranscriptReadError
 } from "@/lib/fgo"
@@ -62,12 +63,19 @@ describe("readTranscriptPdf", () => {
     }
   )
 
-  it("still reports non-empty PDFs with no recognised modules as parse failures", async () => {
+  it("rejects near-empty PDFs as not a transcript without a parse failure", async () => {
     mockPdf([["Unrecognised transcript text"]])
+    await expect(readTranscriptPdf(file)).rejects.toBeInstanceOf(
+      NotATranscriptError
+    )
+  })
+
+  it("still reports longer PDFs with no recognised modules as parse failures", async () => {
+    mockPdf([Array.from({ length: 8 }, (_, i) => `Unrecognised line ${i}`)])
     await expect(readTranscriptPdf(file)).rejects.toMatchObject({
       name: "TranscriptReadError",
       stage: "parse",
-      info: { pages: 1, lines: 1 }
+      info: { pages: 1, lines: 8 }
     })
   })
 

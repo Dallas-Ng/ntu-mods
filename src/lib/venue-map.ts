@@ -1,4 +1,10 @@
 // Types and helpers for the campus map (data from scraper/venues.py).
+import { formatRemarks } from "./format"
+import {
+  ALL_TEACHING_WEEKS,
+  parseTeachingWeeks,
+  weeksOverlap
+} from "./teaching-weeks"
 
 export type LandmarkCat =
   | "hall"
@@ -259,6 +265,11 @@ export const estimateWalk = (
 
 // --- the student's day -----------------------------------------------------
 
+export interface StopVenueNote {
+  venueKey: string
+  remarks: string
+}
+
 export interface Stop {
   id: string
   /** Module code, or the name of a custom block. */
@@ -274,6 +285,17 @@ export interface Stop {
   end: number
   venueKey: string
   venue: MapVenue | null
+  /** Remarks of the primary slot (e.g. "Teaching Wk1-9,11-13"). */
+  remarks: string
+  /** Teaching weeks (1-13) this stop runs on across all folded variations. */
+  weeks: number[]
+  /** Teaching weeks this stop is held at a physical (non-online) venue. */
+  physicalWeeks: number[]
+  /**
+   * Alternate venues when the same class moves rooms or goes online on some
+   * weeks.
+   */
+  otherVenues: StopVenueNote[]
 }
 
 const toMin = (hhmm: string) =>
@@ -282,33 +304,172 @@ const toMin = (hhmm: string) =>
 export const fmtMin = (m: number) =>
   `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`
 
-/** Classes on `day` (1 = Monday), earliest first. */
+const isNonPhysicalVenue = (venueKey: string) => {
+  const upper = venueKey.toUpperCase()
+  return upper === "" || upper === "ONLINE"
+}
+
+/**
+ * Format alternate venues for a folded stop, e.g. "online Wk10" or "LT28,
+ * LKC-LT Wk7 · online Wk10".
+ */
+export const formatOtherVenues = (
+  otherVenues: StopVenueNote[],
+  primaryRemarks: string
+): string[] => {
+  if (!otherVenues.length) return []
+
+  const physicalByRemarks = new Map<string, string[]>()
+  const onlineRemarks: string[] = []
+
+  for (const { venueKey, remarks } of otherVenues) {
+    if (!venueKey) continue
+    if (venueKey.toUpperCase() === "ONLINE") {
+      if (!onlineRemarks.includes(remarks)) onlineRemarks.push(remarks)
+      continue
+    }
+    const list = physicalByRemarks.get(remarks) ?? []
+    if (!list.includes(venueKey)) list.push(venueKey)
+    physicalByRemarks.set(remarks, list)
+  }
+
+  const parts: string[] = []
+  for (const [remarks, keys] of physicalByRemarks) {
+    const wk = remarks === primaryRemarks ? "" : formatRemarks(remarks).trim()
+    const rooms = keys.length > 2 ? `+${keys.length} rooms` : keys.join(", ")
+    parts.push(wk ? `${rooms} ${wk}` : rooms)
+  }
+  for (const remarks of onlineRemarks) {
+    const wk = formatRemarks(remarks).trim()
+    parts.push(wk ? `online ${wk}` : "online")
+  }
+  return parts
+}
+
+/**
+ * Classes on `day` (1 = Monday), earliest first.
+ *
+ * NTU often lists the same class multiple times for the same day and time when
+ * it moves online on e-Learning week (e.g. "ONLINE" in Wk10 alongside a room in
+ * Wk1-9,11-13) or changes rooms on specific weeks. Fold those variations into
+ * one stop anchored to its primary physical venue so they do not appear as
+ * self-clashes or break walking legs between neighbouring classes.
+ */
 export const dayStops = (
   timetable: TimetableWithIndex,
   day: number,
   venues: VenueData["venues"]
 ): Stop[] => {
-  const stops: Stop[] = []
+  type Group = { code: string; slots: Index[] }
+  const groups = new Map<string, Group>()
+  let customSeq = 0
+
   for (const [code, slots] of Object.entries(timetable))
     for (const s of slots) {
-      if (s.day !== day) continue
-      const [a, b] = s.time.split("-")
-      const key = s.venue.trim()
-      stops.push({
-        id: `${code}:${s.key}:${s.type}:${s.time}:${stops.length}`,
-        code: s.isCustom ? s.group : code,
-        type: s.type,
-        typeLabel: s.isCustom ? s.remarks : s.type,
-        custom: Boolean(s.isCustom),
-        group: s.group,
-        day,
-        start: toMin(a),
-        end: toMin(b),
-        venueKey: key,
-        venue: venues[key] ?? null
-      })
+      if (s.day !== day || !s.time || !s.time.includes("-")) continue
+      const groupKey = s.isCustom
+        ? `custom|${code}|${s.key}|${s.time}|${customSeq++}`
+        : `${code}|${s.key}|${s.type}|${s.group}|${s.time}`
+      const existing = groups.get(groupKey)
+      if (existing) existing.slots.push(s)
+      else groups.set(groupKey, { code, slots: [s] })
     }
+
+  const stops: Stop[] = []
+  for (const { code, slots } of groups.values()) {
+    const candidates = slots.map((s) => {
+      const venueKey = s.venue.trim()
+      const weeks = s.isCustom
+        ? [...ALL_TEACHING_WEEKS]
+        : parseTeachingWeeks(s.remarks)
+      return {
+        slot: s,
+        venueKey,
+        venue: venues[venueKey] ?? null,
+        weeks,
+        physical: !isNonPhysicalVenue(venueKey)
+      }
+    })
+
+    // Prefer a physical venue over ONLINE/empty, then the venue with the most
+    // weeks, then one that resolves on the map.
+    const primary = candidates.reduce((best, cur) => {
+      if (cur.physical !== best.physical) return cur.physical ? cur : best
+      if (cur.weeks.length !== best.weeks.length)
+        return cur.weeks.length > best.weeks.length ? cur : best
+      if (Boolean(cur.venue) !== Boolean(best.venue))
+        return cur.venue ? cur : best
+      return best
+    })
+
+    const allWeeks = new Set<number>()
+    const physicalWeeks = new Set<number>()
+    const otherVenues: StopVenueNote[] = []
+    const seenOther = new Set<string>()
+
+    for (const c of candidates) {
+      for (const w of c.weeks) {
+        allWeeks.add(w)
+        if (c.physical) physicalWeeks.add(w)
+      }
+      if (c.venueKey && c.venueKey !== primary.venueKey) {
+        const noteKey = `${c.venueKey}|${c.slot.remarks}`
+        if (!seenOther.has(noteKey)) {
+          seenOther.add(noteKey)
+          otherVenues.push({ venueKey: c.venueKey, remarks: c.slot.remarks })
+        }
+      }
+    }
+
+    const s = primary.slot
+    const [a, b] = s.time.split("-")
+    stops.push({
+      id: `${code}:${s.key}:${s.type}:${s.day}:${s.time}:${stops.length}`,
+      code: s.isCustom ? s.group : code,
+      type: s.type,
+      typeLabel: s.isCustom ? s.remarks : s.type,
+      custom: Boolean(s.isCustom),
+      group: s.group,
+      day,
+      start: toMin(a),
+      end: toMin(b),
+      venueKey: primary.venueKey,
+      venue: primary.venue,
+      remarks: s.isCustom ? "" : s.remarks,
+      weeks: [...allWeeks].sort((x, y) => x - y),
+      physicalWeeks: [...physicalWeeks].sort((x, y) => x - y),
+      otherVenues
+    })
+  }
+
   return stops.sort((x, y) => x.start - y.start)
+}
+
+/**
+ * Classes that overlap in time on at least one shared teaching week (stops are
+ * sorted by start), with who they overlap with. Back-to-back (end == start) or
+ * disjoint weeks (e.g. odd vs even weeks) are not clashes.
+ */
+export const findStopClashes = (stops: Stop[]) => {
+  const withCodes = new Map<string, string[]>()
+  let pairs = 0
+  stops.forEach((b, i) => {
+    for (let j = 0; j < i; j++) {
+      const a = stops[j]
+      if (a.end <= b.start) continue
+      if (!weeksOverlap(a.weeks, b.weeks)) continue
+      pairs++
+      withCodes.set(a.id, [
+        ...(withCodes.get(a.id) ?? []),
+        `${b.code} ${b.typeLabel}`.trim()
+      ])
+      withCodes.set(b.id, [
+        ...(withCodes.get(b.id) ?? []),
+        `${a.code} ${a.typeLabel}`.trim()
+      ])
+    }
+  })
+  return { withCodes, pairs }
 }
 
 export type LegStatus = "ok" | "close" | "tight"

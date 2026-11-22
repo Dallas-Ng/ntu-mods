@@ -40,6 +40,37 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Campus map lab locations and split-week walking routes",
+    date: "22 Nov 2026",
+    note: "Fixes in this release are based on bug reports from an anonymous student. Thank you!",
+    items: [
+      {
+        category: "Bug Fix",
+        content: (
+          <>
+            The <ChangelogLink href="/maps">campus map</ChangelogLink> now pins
+            HPL to the Hardware Project Lab (N4-01C-09A, Level 1) and SPL to the
+            Software Projects Lab (N4-B1B-11, Basement 1) in Block N4, instead
+            of matching HPL to the HPLC room at NIE7.
+          </>
+        )
+      },
+      {
+        category: "Bug Fix",
+        content: (
+          <>
+            Walking between classes on the{" "}
+            <ChangelogLink href="/timetable">timetable</ChangelogLink> now folds
+            split-week entries (such as e-Learning Week online slots or one-week
+            room changes) into a single stop with its alternate weeks noted,
+            instead of showing false overlap warnings or dropping walking legs.
+            Classes on disjoint teaching weeks no longer report clashes.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Hide modules, colour control and exam periods",
     date: "18 Nov 2026",
     note: "All features and improvements in this release are based on feedback from an anonymous student. Thank you!",

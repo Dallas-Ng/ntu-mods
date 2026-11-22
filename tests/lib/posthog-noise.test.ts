@@ -4,10 +4,12 @@ import { isNoise } from "@/astro/lib/posthog-client-init"
 
 const exception = (
   value: string,
-  frames: { filename?: unknown }[] = []
+  frames: { filename?: unknown }[] = [],
+  extraProperties: Record<string, unknown> = {}
 ): { event: string; properties: Record<string, unknown> } => ({
   event: "$exception",
   properties: {
+    ...extraProperties,
     $exception_list: [
       {
         type: "Error",
@@ -72,5 +74,95 @@ describe("PostHog before_send filter", () => {
       "Object captured as exception with keys: [object has no keys]"
     )
     expect(isNoise({ ...event, event: "$pageview" })).toBe(false)
+  })
+
+  it("drops Google Search App iOS injected stack overflow (#380)", () => {
+    expect(
+      isNoise(
+        exception(
+          "Maximum call stack size exceeded.",
+          [
+            { filename: "https://ntumods.com/mods" },
+            { filename: "https://ntumods.com/mods" }
+          ],
+          { $browser: "Google Search App", $os: "iOS" }
+        )
+      )
+    ).toBe(true)
+  })
+
+  it("drops Chrome iOS injected stack overflow (#325), even with desktop UA", () => {
+    expect(
+      isNoise(
+        exception(
+          "Maximum call stack size exceeded.",
+          [{ filename: "https://ntumods.com/timetable" }],
+          { $browser: "Chrome iOS", $os: "Mac OS X" }
+        )
+      )
+    ).toBe(true)
+  })
+
+  it("drops other iOS WKWebView injected stack overflows with native frames", () => {
+    expect(
+      isNoise(
+        exception(
+          "Maximum call stack size exceeded.",
+          [
+            { filename: "https://ntumods.com/mods" },
+            { filename: "[native code]" }
+          ],
+          { $browser: "Mobile Safari", $os: "iOS" }
+        )
+      )
+    ).toBe(true)
+  })
+
+  it("keeps real iOS stack overflows that include a bundle frame", () => {
+    expect(
+      isNoise(
+        exception(
+          "Maximum call stack size exceeded.",
+          [
+            { filename: "https://ntumods.com/mods" },
+            { filename: "https://ntumods.com/_astro/mods-page.abc123.js" }
+          ],
+          { $browser: "Google Search App", $os: "iOS" }
+        )
+      )
+    ).toBe(false)
+  })
+
+  it("keeps iOS stack overflows with no named frames", () => {
+    expect(
+      isNoise(
+        exception(
+          "Maximum call stack size exceeded.",
+          [{ filename: "<anonymous>" }, { filename: "[native code]" }],
+          { $browser: "Google Search App", $os: "iOS" }
+        )
+      )
+    ).toBe(false)
+  })
+
+  it("keeps desktop stack overflows with page URL frames", () => {
+    expect(
+      isNoise(
+        exception(
+          "Maximum call stack size exceeded.",
+          [{ filename: "https://ntumods.com/mods" }],
+          { $browser: "Chrome", $os: "Mac OS X" }
+        )
+      )
+    ).toBe(false)
+  })
+
+  it("keeps iOS exception events with an empty exception list", () => {
+    expect(
+      isNoise({
+        event: "$exception",
+        properties: { $os: "iOS", $browser: "Chrome iOS", $exception_list: [] }
+      })
+    ).toBe(false)
   })
 })

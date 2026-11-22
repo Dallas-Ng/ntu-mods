@@ -5,7 +5,12 @@ import { ChevronDown, Search } from "lucide-react"
 
 import { track } from "@/lib/analytics"
 import { CODE_QUERY_RE } from "@/lib/filter-modules"
-import { getModulePrefix } from "@/lib/format"
+import {
+  compareCodePoints,
+  formatDisplayDateWeekday,
+  getModulePrefix,
+  parseDisplayDateUtc
+} from "@/lib/format"
 import { getExamModuleUrl } from "@/lib/module-url"
 import type { DbExam } from "@/lib/server/db/types"
 import { cn } from "@/lib/utils"
@@ -97,7 +102,7 @@ function getPrefixLabel(prefix: string): string {
 }
 
 function parseDateForSort(dateStr: string): number {
-  return new Date(dateStr).getTime()
+  return parseDisplayDateUtc(dateStr)
 }
 
 function groupByDate(exams: ListedExam[]) {
@@ -107,8 +112,12 @@ function groupByDate(exams: ListedExam[]) {
   })
   return Array.from(groups, ([key, items]) => ({
     key,
-    items: items.sort((a, b) => a.key.localeCompare(b.key))
-  })).sort((a, b) => parseDateForSort(a.key) - parseDateForSort(b.key))
+    items: items.sort((a, b) => compareCodePoints(a.key, b.key))
+  })).sort(
+    (a, b) =>
+      parseDateForSort(a.key) - parseDateForSort(b.key) ||
+      compareCodePoints(a.key, b.key)
+  )
 }
 
 function toTitleCase(str: string) {
@@ -129,10 +138,7 @@ function formatDuration(start: string, end: string) {
 }
 
 function weekday(dateStr: string) {
-  const d = new Date(dateStr)
-  return isNaN(d.getTime())
-    ? ""
-    : d.toLocaleDateString("en-GB", { weekday: "long" })
+  return formatDisplayDateWeekday(dateStr)
 }
 
 const ROW_CLASS =
@@ -311,10 +317,14 @@ export default function ExamsList({ exams }: Props) {
     const dates = toOptions(
       tally((e) => e.date),
       (d) => `${d.replace(/\s\d{4}$/, "")} · ${weekday(d).slice(0, 3)}`
-    ).sort((a, b) => parseDateForSort(a.value) - parseDateForSort(b.value))
+    ).sort(
+      (a, b) =>
+        parseDateForSort(a.value) - parseDateForSort(b.value) ||
+        compareCodePoints(a.value, b.value)
+    )
 
     const semesters = toOptions(tally((e) => e.semester)).sort((a, b) =>
-      a.value.localeCompare(b.value)
+      compareCodePoints(a.value, b.value)
     )
 
     return {
@@ -326,14 +336,14 @@ export default function ExamsList({ exams }: Props) {
         (a, b) =>
           Number(!KNOWN_SCHOOLS.has(a.value)) -
             Number(!KNOWN_SCHOOLS.has(b.value)) ||
-          a.label.localeCompare(b.label)
+          compareCodePoints(a.label, b.label)
       ),
       level: toOptions(
         tally((e) => getLevel(e.key)),
         (l) => `${l}000 level`
       )
         .filter((o) => o.value)
-        .sort((a, b) => a.value.localeCompare(b.value)),
+        .sort((a, b) => compareCodePoints(a.value, b.value)),
       time: TIME_BUCKETS.map((b) => ({
         value: b,
         label: b,

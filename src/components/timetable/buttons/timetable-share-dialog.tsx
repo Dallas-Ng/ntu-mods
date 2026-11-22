@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { ClipboardCopy, LinkIcon } from "lucide-react"
 import { toast } from "sonner"
 
@@ -34,6 +34,11 @@ const TimetableShareDialog = ({
   customCourses
 }: Props) => {
   const [includeCustomBlocks, setIncludeCustomBlocks] = useState(true)
+  const [origin, setOrigin] = useState(BASE_URL)
+
+  useEffect(() => {
+    setOrigin(window.location.origin)
+  }, [])
 
   const withCustom = useMemo(
     () => (includeCustomBlocks ? customCourses : []),
@@ -41,13 +46,8 @@ const TimetableShareDialog = ({
   )
 
   const link = useMemo(
-    () =>
-      buildShareLink(
-        typeof window === "undefined" ? BASE_URL : window.location.origin,
-        timetable,
-        withCustom
-      ),
-    [timetable, withCustom]
+    () => buildShareLink(origin, timetable, withCustom),
+    [origin, timetable, withCustom]
   )
 
   const textBundle = useMemo(

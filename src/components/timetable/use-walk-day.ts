@@ -35,12 +35,17 @@ export const useWalkDay = (enabled: boolean, selected?: string) => {
     return s
   }, [moduleIndexMap])
 
-  // Today if it has classes, else the first day that does.
+  // Today if it has classes, else the first day that does. Resolved after mount
+  // so SSR and client never disagree across a timezone boundary.
+  const [today, setToday] = useState<number>(1)
+  useEffect(() => {
+    setToday(todayNumber())
+  }, [])
   const [picked, setPicked] = useState<number>()
   const day =
     picked ??
-    (busyDays.has(todayNumber())
-      ? todayNumber()
+    (busyDays.has(today)
+      ? today
       : ([1, 2, 3, 4, 5, 6, 7].find((d) => busyDays.has(d)) ?? 1))
 
   const route = useDayRoute(data, moduleIndexMap, day, selected)

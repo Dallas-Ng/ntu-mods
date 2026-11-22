@@ -15,7 +15,11 @@ const getSystemTheme = (): "light" | "dark" =>
 
 const readStoredTheme = (): Theme => {
   if (typeof window === "undefined") return "dark"
-  return (localStorage.getItem(THEME_STORAGE_KEY) as Theme | null) ?? "dark"
+  try {
+    return (localStorage.getItem(THEME_STORAGE_KEY) as Theme | null) ?? "dark"
+  } catch {
+    return "dark"
+  }
 }
 
 export const applyTheme = (theme: Theme) => {
@@ -60,7 +64,9 @@ export function useTheme() {
   }, [theme])
 
   const setTheme = useCallback((next: Theme) => {
-    localStorage.setItem(THEME_STORAGE_KEY, next)
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, next)
+    } catch {}
     applyTheme(next)
     setThemeState(next)
     window.dispatchEvent(new Event(THEME_CHANGE_EVENT))

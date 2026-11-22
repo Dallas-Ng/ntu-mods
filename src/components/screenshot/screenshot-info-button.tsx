@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { BadgeInfo } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -22,7 +22,13 @@ const detectPhone = (): PhoneType =>
 
 const ScreenshotInfoButton = () => {
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [tabValue, setTabValue] = useState<PhoneType>(detectPhone)
+  // Start with a fixed default so SSR and first client render agree, then pick
+  // the visitor's platform after mount.
+  const [tabValue, setTabValue] = useState<PhoneType>("ios")
+
+  useEffect(() => {
+    setTabValue(detectPhone())
+  }, [])
 
   return (
     <>

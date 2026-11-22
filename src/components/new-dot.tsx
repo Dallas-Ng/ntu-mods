@@ -10,12 +10,18 @@ export function useNewDot(storageKey: string, triggerRoute: string) {
   const pathname = usePathname()
 
   useEffect(() => {
-    setIsNew(!localStorage.getItem(storageKey))
+    try {
+      setIsNew(!localStorage.getItem(storageKey))
+    } catch {
+      setIsNew(false)
+    }
   }, [storageKey])
 
   useEffect(() => {
     if (isNew && pathname.startsWith(triggerRoute)) {
-      localStorage.setItem(storageKey, "1")
+      try {
+        localStorage.setItem(storageKey, "1")
+      } catch {}
       setIsNew(false)
     }
   }, [pathname, triggerRoute, storageKey, isNew])

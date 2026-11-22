@@ -192,9 +192,7 @@ const HeaderShare = ({ title, view }: { title: string; view: string }) => {
 }
 
 const sortPlaces = (rows: PickerPlace[]) =>
-  rows.sort((a, b) =>
-    a.name.localeCompare(b.name, undefined, { numeric: true })
-  )
+  rows.sort((a, b) => a.name.localeCompare(b.name, "en-US", { numeric: true }))
 
 // --- bottom sheet geometry (phones) ---
 /** The desktop map never drags shorter than this (30rem). */

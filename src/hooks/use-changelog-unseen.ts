@@ -16,13 +16,21 @@ const countUnseen = (seenId: string | null): number => {
   return idx === -1 ? CHANGELOG_IDS.length : idx
 }
 
-const computeUnseen = (): number => countUnseen(localStorage.getItem(SEEN_KEY))
+const readSeenId = (): string | null => {
+  if (typeof window === "undefined") return null
+  try {
+    return localStorage.getItem(SEEN_KEY)
+  } catch {
+    return null
+  }
+}
+
+const computeUnseen = (): number => countUnseen(readSeenId())
 
 // Read once at module load, before any effect marks the changelog as seen,
 // so the changelog page can still flag the releases that were new on arrival.
 // Full page loads only (no client router), so this is fresh per visit.
-const seenIdOnLoad =
-  typeof window === "undefined" ? null : localStorage.getItem(SEEN_KEY)
+const seenIdOnLoad = readSeenId()
 
 export const UNSEEN_CHANGELOG_IDS = new Set(
   CHANGELOG_IDS.slice(0, countUnseen(seenIdOnLoad))
@@ -48,7 +56,9 @@ export function useChangelogUnseenCount() {
 
   useEffect(() => {
     if (!pathname.startsWith("/changelog")) return
-    localStorage.setItem(SEEN_KEY, LATEST_CHANGELOG_ID)
+    try {
+      localStorage.setItem(SEEN_KEY, LATEST_CHANGELOG_ID)
+    } catch {}
     setCount(0)
     window.dispatchEvent(new Event(SEEN_EVENT))
   }, [pathname])

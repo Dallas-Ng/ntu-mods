@@ -1,6 +1,7 @@
 const TITLE_CHARS = /[^a-zA-Z ]/g // e.g. "Maths 2!" -> "2" and "!"
 const WHITESPACE = /\s+/g // e.g. "A  B" -> "  "
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})/ // e.g. "2026-11-03"
+const DISPLAY_DATE = /^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/ // e.g. "23 November 2026"
 
 export const formatTitle = (courseTitle: string) => {
   return courseTitle.replace(TITLE_CHARS, "").replace(WHITESPACE, " ")
@@ -67,3 +68,71 @@ export const formatShortDate = (date: string) => formatDate(date, true)
 
 /** "2026-09-03" -> "3 September 2026" */
 export const formatLongDate = (date: string) => formatDate(date, false)
+
+const WEEKDAYS = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday"
+]
+
+const MONTH_INDEX = new Map<string, number>(
+  MONTHS.flatMap((name, i) => [
+    [name.toLowerCase(), i],
+    [name.slice(0, 3).toLowerCase(), i]
+  ])
+)
+
+const parseDisplayDateParts = (dateStr: string) => {
+  const match = DISPLAY_DATE.exec(dateStr.trim())
+  if (!match) return null
+  const day = Number(match[1])
+  const monthIdx = MONTH_INDEX.get(match[2].toLowerCase())
+  const year = Number(match[3])
+  if (monthIdx === undefined) return null
+  const ms = Date.UTC(year, monthIdx, day)
+  const d = new Date(ms)
+  if (
+    d.getUTCFullYear() !== year ||
+    d.getUTCMonth() !== monthIdx ||
+    d.getUTCDate() !== day
+  ) {
+    return null
+  }
+  return { day, monthIdx, year, ms, weekday: WEEKDAYS[d.getUTCDay()] }
+}
+
+/**
+ * Parses a "23 November 2026" display date as UTC midnight without Date.parse
+ * or local timezone drift, so SSR and client hydration agree across engines.
+ */
+export const parseDisplayDateUtc = (dateStr: string): number =>
+  parseDisplayDateParts(dateStr)?.ms ?? NaN
+
+/** "23 November 2026" -> "Monday", independent of browser locale or timezone. */
+export const formatDisplayDateWeekday = (dateStr: string): string =>
+  parseDisplayDateParts(dateStr)?.weekday ?? ""
+
+/** "23 November 2026" -> "23 Nov" (or "23 Nov 2026" when `withYear` is true). */
+export const formatDisplayDateShort = (
+  dateStr: string,
+  withYear = false
+): string => {
+  const parts = parseDisplayDateParts(dateStr)
+  if (!parts) return dateStr
+  const shortMonth = MONTHS[parts.monthIdx].slice(0, 3)
+  return withYear
+    ? `${parts.day} ${shortMonth} ${parts.year}`
+    : `${parts.day} ${shortMonth}`
+}
+
+/**
+ * Code-point string comparison. Unlike bare `localeCompare`, this never shifts
+ * order for digraphs (e.g. AA in da-DK/nb-NO, CH in cs-CZ/sk-SK, CS in hu-HU),
+ * keeping SSR HTML and client hydration identical across browser locales.
+ */
+export const compareCodePoints = (a: string, b: string): number =>
+  a < b ? -1 : a > b ? 1 : 0

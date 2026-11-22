@@ -129,7 +129,7 @@ export const searchPlaces = <T extends Searchable>(
     .sort(
       (a, b) =>
         b[0] - a[0] ||
-        a[1].name.localeCompare(b[1].name, undefined, { numeric: true })
+        a[1].name.localeCompare(b[1].name, "en-US", { numeric: true })
     )
     .slice(0, limit)
     .map((x) => x[1])

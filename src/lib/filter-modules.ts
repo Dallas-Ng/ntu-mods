@@ -60,10 +60,10 @@ export function groupModules(modules: AllModule[], groupBy: ModsGroupBy) {
   }))
   if (groupBy === "level" || groupBy === "au") {
     entries.sort((a, b) =>
-      a.key.localeCompare(b.key, undefined, { numeric: true })
+      a.key.localeCompare(b.key, "en-US", { numeric: true })
     )
   } else {
-    entries.sort((a, b) => a.label.localeCompare(b.label))
+    entries.sort((a, b) => a.label.localeCompare(b.label, "en-US"))
   }
   return entries
 }

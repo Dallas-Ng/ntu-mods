@@ -1,6 +1,7 @@
 import { createIcs, type IcsEvent } from "./ics"
 import { parseTime } from "./parse-time"
 import { latestSemester, latestYear } from "./semesters"
+import { parseTeachingWeeks } from "./teaching-weeks"
 
 // Teaching Week 1 start per semester, from the official NTU academic calendar.
 // Add a line when a new semester's data ships.
@@ -37,32 +38,9 @@ const WEEK_1_MONDAY = startOfWeek(
   )
 )
 
-const TOTAL_TEACHING_WEEKS = 13
 // Recess Week always falls between Teaching Week 7 and Teaching Week 8,
 // so calendar dates for weeks 8-13 are shifted back by one extra week.
 const RECESS_AFTER_WEEK = 7
-
-const range = (start: number, end: number) =>
-  Array.from({ length: end - start + 1 }, (_, i) => start + i)
-
-/**
- * Parse a remarks string (e.g. "Teaching Wk1,3-13") into the list of teaching
- * week numbers (1-13) an index slot actually runs on.
- */
-const parseTeachingWeeks = (remarks: string): number[] => {
-  if (remarks === "") return range(1, TOTAL_TEACHING_WEEKS)
-  if (remarks === "Not conducted during Teaching Weeks") return []
-
-  const match = remarks.match(/^Teaching Wk(.+)$/)
-  if (!match) return range(1, TOTAL_TEACHING_WEEKS)
-
-  const weeks = new Set<number>()
-  for (const token of match[1].split(",")) {
-    const [start, end] = token.split("-").map(Number)
-    for (let week = start; week <= (end ?? start); week++) weeks.add(week)
-  }
-  return [...weeks].sort((a, b) => a - b)
-}
 
 const teachingWeekMonday = (weekNumber: number) => {
   const calendarWeekOffset =

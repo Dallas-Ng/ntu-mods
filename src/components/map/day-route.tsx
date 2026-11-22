@@ -11,12 +11,15 @@ import {
   PRESET_INDEX_TYPES
 } from "@/lib/custom-course-colors"
 import { getIndexType } from "@/lib/get-index-type"
+import { weeksOverlap } from "@/lib/teaching-weeks"
 import { cn } from "@/lib/utils"
 import {
   dayStops,
   estimateWalk,
   fetchWalk,
+  findStopClashes,
   fmtMin,
+  formatOtherVenues,
   legStatus,
   levelLabel,
   type LegStatus,
@@ -79,6 +82,7 @@ export const useDayRoute = (
         const a = stops[i - 1]
         const b = stops[i]
         if (!a.venue || !b.venue || a.venueKey === b.venueKey) continue
+        if (!weeksOverlap(a.physicalWeeks, b.physicalWeeks)) continue
         const gap = b.start - a.end
         if (gap < 0 || gap > MAX_GAP) continue
         const walk = await fetchWalk(a.venue, b.venue)
@@ -102,28 +106,7 @@ export const useDayRoute = (
     }
   }, [data, stops])
 
-  // Classes that overlap in time (stops are sorted by start), with who
-  // they overlap with. Back-to-back (end == start) is not a clash.
-  const clashes = useMemo(() => {
-    const withCodes = new Map<string, string[]>()
-    let pairs = 0
-    stops.forEach((b, i) => {
-      for (let j = 0; j < i; j++) {
-        const a = stops[j]
-        if (a.end <= b.start) continue
-        pairs++
-        withCodes.set(a.id, [
-          ...(withCodes.get(a.id) ?? []),
-          `${b.code} ${b.typeLabel}`.trim()
-        ])
-        withCodes.set(b.id, [
-          ...(withCodes.get(b.id) ?? []),
-          `${a.code} ${a.typeLabel}`.trim()
-        ])
-      }
-    })
-    return { withCodes, pairs }
-  }, [stops])
+  const clashes = useMemo(() => findStopClashes(stops), [stops])
 
   const pins: Pin[] = useMemo(() => {
     const byVenue = new Map<string, Pin>()
@@ -211,7 +194,8 @@ export const StopRow = ({
     stop.venueKey || "No venue",
     v && v.z !== 0 ? levelLabel(data, v.z) : null,
     !v && stop.venueKey && stop.venueKey !== "ONLINE" ? "not on the map" : null,
-    v?.how === "fuzzy" ? "approximate" : null
+    v?.how === "fuzzy" ? "approximate" : null,
+    ...formatOtherVenues(stop.otherVenues, stop.remarks)
   ]
     .filter(Boolean)
     .join(" · ")
@@ -247,7 +231,9 @@ export const StopRow = ({
             {fmtMin(stop.start)} to {fmtMin(stop.end)}
           </span>
         </span>
-        <span className="text-muted-foreground block truncate text-xs">
+        <span
+          className="text-muted-foreground block truncate text-xs"
+          title={place}>
           {place}
         </span>
         {clashWith && (
@@ -263,13 +249,23 @@ export const StopRow = ({
 
 export const LegRow = ({ a, b, leg }: { a: Stop; b: Stop; leg?: Leg }) => {
   const gap = b.start - a.end
+  const sharedWeeks = weeksOverlap(a.weeks, b.weeks)
+  const overlaps = gap < 0 && sharedWeeks
   let text: string
   let status: LegStatus = "ok"
-  if (gap < 0) {
+  if (!sharedWeeks) {
+    text = "Different weeks"
+  } else if (overlaps) {
     text = `Overlaps by ${-gap} min`
     status = "tight"
   } else if (a.venueKey === b.venueKey) text = "Same venue"
-  else if (!a.venue || !b.venue || gap > MAX_GAP) text = `${gap} min break`
+  else if (
+    !a.venue ||
+    !b.venue ||
+    gap > MAX_GAP ||
+    !weeksOverlap(a.physicalWeeks, b.physicalWeeks)
+  )
+    text = `${gap} min break`
   else if (!leg) text = "Working out the walk..."
   else {
     status = leg.status
@@ -279,14 +275,18 @@ export const LegRow = ({ a, b, leg }: { a: Stop; b: Stop; leg?: Leg }) => {
   return (
     <div className="ml-3 flex items-center gap-3 py-1.5">
       <span className="flex w-6 shrink-0 justify-center">
-        {gap < 0 ? (
+        {overlaps ? (
           <AlertTriangle className="text-destructive size-3.5" />
         ) : (
           <Footprints className={cn("size-3.5", statusText[status])} />
         )}
       </span>
       <span
-        className={cn("text-xs", statusText[status], gap < 0 && "font-medium")}>
+        className={cn(
+          "text-xs",
+          statusText[status],
+          overlaps && "font-medium"
+        )}>
         {text}
       </span>
     </div>

@@ -85,23 +85,47 @@ const INJECTED_SOURCE = new RegExp(
   "i"
 )
 
+type ExceptionFrame = { filename?: unknown }
+
 type ExceptionEntry = {
   value?: unknown
-  stacktrace?: { frames?: { filename?: unknown }[] }
+  stacktrace?: { frames?: ExceptionFrame[] }
 }
 
-// Chrome on iOS injects a script that overflows the stack. It runs as an
-// inline script, so its frame filename is the page URL, not a .js file
-// (issue #325). Real stack overflows in our bundles keep a .js filename.
-function isChromeIosInjectedOverflow(properties: Record<string, unknown>) {
-  if (properties.$browser !== "Chrome iOS") return false
+const IOS_WEBVIEW_BROWSERS = new Set(["Chrome iOS", "Google Search App"])
+
+function isNamedFrame(
+  frame: ExceptionFrame | undefined
+): frame is { filename: string } {
+  return (
+    typeof frame?.filename === "string" &&
+    frame.filename !== "<anonymous>" &&
+    frame.filename !== "[native code]"
+  )
+}
+
+// iOS WKWebView browsers (Chrome iOS, Google Search App, etc.) inject user
+// scripts that can overflow the stack. WebKit reports them with the page URL
+// as the frame filename instead of a .js file (issues #325, #380). Real stack
+// overflows in our bundles always include a .js/.mjs frame.
+function isIosInjectedOverflow(properties: Record<string, unknown>) {
+  if (
+    properties.$os !== "iOS" &&
+    (typeof properties.$browser !== "string" ||
+      !IOS_WEBVIEW_BROWSERS.has(properties.$browser))
+  ) {
+    return false
+  }
   const list = properties.$exception_list
-  if (!Array.isArray(list)) return false
+  if (!Array.isArray(list) || list.length === 0) return false
   return (list as ExceptionEntry[]).every((e) => {
     if (typeof e?.value !== "string" || !/call stack size/i.test(e.value))
       return false
-    const top = e.stacktrace?.frames?.[0]?.filename
-    return typeof top === "string" && !/\.m?js(\?|$)/.test(top)
+    const named = (e.stacktrace?.frames ?? []).filter(isNamedFrame)
+    return (
+      named.length > 0 &&
+      named.every((f) => !/\.m?js([?#]|$)/i.test(f.filename))
+    )
   })
 }
 
@@ -110,8 +134,7 @@ function isInjectedError(event: {
   properties?: Record<string, unknown>
 }) {
   if (event.event !== "$exception") return false
-  if (event.properties && isChromeIosInjectedOverflow(event.properties))
-    return true
+  if (event.properties && isIosInjectedOverflow(event.properties)) return true
   const list = event.properties?.$exception_list
   if (!Array.isArray(list)) return false
   return (list as ExceptionEntry[]).some((e) => {
@@ -120,12 +143,7 @@ function isInjectedError(event: {
     // Like Sentry, judge by the throwing (last non-anonymous) frame, so an
     // extension further up the stack doesn't hide an error from our code.
     const frames = e?.stacktrace?.frames ?? []
-    const last = frames.findLast(
-      (f) =>
-        typeof f?.filename === "string" &&
-        f.filename !== "<anonymous>" &&
-        f.filename !== "[native code]"
-    )
+    const last = frames.findLast(isNamedFrame)
     return (
       typeof last?.filename === "string" && INJECTED_SOURCE.test(last.filename)
     )

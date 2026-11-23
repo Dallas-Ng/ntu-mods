@@ -5,6 +5,7 @@ import {
   NoTranscriptTextError,
   NotATranscriptError,
   readTranscriptPdf,
+  transcriptErrorProps,
   TranscriptReadError
 } from "@/lib/fgo"
 
@@ -70,12 +71,113 @@ describe("readTranscriptPdf", () => {
     )
   })
 
-  it("still reports longer PDFs with no recognised modules as parse failures", async () => {
-    mockPdf([Array.from({ length: 8 }, (_, i) => `Unrecognised line ${i}`)])
+  it("rejects longer PDFs with no transcript signals as not a transcript with diagnostics", async () => {
+    mockPdf([
+      [
+        "AY2025",
+        "SG6501",
+        ...Array.from({ length: 8 }, (_, i) => `Unrecognised line ${i}`)
+      ]
+    ])
+    const err = await readTranscriptPdf(file).catch((e) => e)
+    expect(err).toBeInstanceOf(NotATranscriptError)
+    expect(transcriptErrorProps(err, file)).toMatchObject({
+      stage: "not_a_transcript",
+      pages: 1,
+      lines: 10,
+      items: 10,
+      empty_pages: 0,
+      markers: [],
+      unsplit_mods: 0
+    })
+  })
+
+  it("recovers single-column transcripts whose rows span across pageWidth / 2", async () => {
+    getDocument.mockReturnValue({
+      promise: Promise.resolve({
+        numPages: 1,
+        getMetadata: async () => ({
+          info: { Producer: "Oracle BI Publisher", Author: "Jane Tan" }
+        }),
+        getPage: async () => ({
+          getViewport: () => ({ width: 600, height: 842 }),
+          streamTextContent: () =>
+            new ReadableStream({
+              start(controller) {
+                controller.enqueue({
+                  items: [
+                    {
+                      str: "2025-2026 SEMESTER 1",
+                      transform: [1, 0, 0, 1, 40, 700]
+                    },
+                    {
+                      str: "SC1003 COMPUTING",
+                      transform: [1, 0, 0, 1, 40, 680]
+                    },
+                    { str: "3.0 A", transform: [1, 0, 0, 1, 450, 680] }
+                  ]
+                })
+                controller.close()
+              }
+            })
+        })
+      })
+    })
+    await expect(readTranscriptPdf(file)).resolves.toMatchObject({
+      mods: [{ code: "SC1003", au: 3, grade: "A" }]
+    })
+  })
+
+  it("classifies producer_bucket without leaking raw PDF metadata", async () => {
+    getDocument.mockReturnValue({
+      promise: Promise.resolve({
+        numPages: 1,
+        getMetadata: async () => ({
+          info: {
+            Producer: "Adobe Scan 24.0",
+            Title: "Jane Tan Secret Transcript"
+          }
+        }),
+        getPage: async () => ({
+          getViewport: () => ({ width: 600, height: 842 }),
+          streamTextContent: () =>
+            new ReadableStream({
+              start(controller) {
+                controller.enqueue({
+                  items: Array.from({ length: 6 }, (_, row) => ({
+                    str: `Line ${row}`,
+                    transform: [1, 0, 0, 1, 40, 700 - row * 20]
+                  }))
+                })
+                controller.close()
+              }
+            })
+        })
+      })
+    })
+    const err = await readTranscriptPdf(file).catch((e) => e)
+    expect(err).toBeInstanceOf(NotATranscriptError)
+    const props = transcriptErrorProps(err, file)
+    expect(props).toMatchObject({
+      stage: "not_a_transcript",
+      producer_bucket: "scanner",
+      orientation: "portrait"
+    })
+    expect(JSON.stringify(props)).not.toContain("Jane")
+  })
+
+  it("still reports transcript-like PDFs with no recognised modules as parse failures", async () => {
+    mockPdf([
+      [
+        "NANYANG TECHNOLOGICAL UNIVERSITY",
+        "2025-2026 SEMESTER 1",
+        ...Array.from({ length: 6 }, (_, i) => `Unrecognised line ${i}`)
+      ]
+    ])
     await expect(readTranscriptPdf(file)).rejects.toMatchObject({
       name: "TranscriptReadError",
       stage: "parse",
-      info: { pages: 1, lines: 8 }
+      info: { pages: 1, lines: 8, markers: ["ntu"], term_lines: 1 }
     })
   })
 

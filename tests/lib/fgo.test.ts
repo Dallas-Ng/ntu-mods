@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest"
 
 import {
   cgpa,
+  NotATranscriptError,
   optimise,
   parseTranscriptLines,
   quotaUsage,
+  transcriptDiagnostics,
   transcriptErrorProps,
   TranscriptReadError
 } from "@/lib/fgo"
@@ -173,5 +175,55 @@ describe("transcriptErrorProps", () => {
       bytes: 1234,
       file_type: "application/pdf"
     })
+  })
+
+  it("exposes expected-error stage and diagnostics without the file name", () => {
+    const err = new NotATranscriptError({
+      bytes: 1234,
+      pages: 2,
+      lines: 123,
+      markers: []
+    })
+    const props = transcriptErrorProps(err, file)
+    expect(props).toEqual({
+      stage: "not_a_transcript",
+      bytes: 1234,
+      pages: 2,
+      lines: 123,
+      markers: [],
+      file_type: "application/pdf"
+    })
+    expect(JSON.stringify(props)).not.toContain("Jane")
+  })
+})
+
+describe("transcriptDiagnostics", () => {
+  it("captures parser near-misses, char classes and masked line shapes", () => {
+    const lines = [
+      "AY2025/26 SEM 1",
+      "SC1003 INTRO TO COMPUTING 3.0 A",
+      "SC1004 LINEAR ALGEBRA 3.0 B+",
+      "SC1005 DIGITAL LOGIC B-",
+      "2025-2026 SEMESTER 1",
+      "SC2001 ALGORITHMS 3.0 PASS",
+      "SC2002 OOP 3.0 IP"
+    ]
+    const parsed = parseTranscriptLines(lines)
+    const diag = transcriptDiagnostics(lines, parsed)
+    expect(diag).toMatchObject({
+      rows_without_term: 2,
+      year_lines: 2,
+      grade_ending_lines: 1,
+      mods_fgo: 1,
+      mods_other: 1,
+      term_lines: 1,
+      non_ascii_chars: 0
+    })
+    expect(diag.alnum_chars).toBeGreaterThan(0)
+    expect(diag.digit_chars).toBeGreaterThan(0)
+    expect(diag.max_line_len).toBeGreaterThan(20)
+    expect(diag.sample_shapes).toHaveLength(5)
+    expect(diag.top_shapes.length).toBeGreaterThan(0)
+    expect(diag.top_shapes[0]).toMatch(/^\d+x /)
   })
 })

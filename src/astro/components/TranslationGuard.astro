@@ -1,0 +1,55 @@
+---
+// In-page translation (Chrome/Google Translate, Edge, Safari) and some
+// extensions replace text nodes with their own <font> wrappers. React still
+// holds the original nodes, so its next update calls removeChild or
+// insertBefore on a node that is no longer where it left it and the DOM
+// throws NotFoundError, unmounting the whole island (issues #326, #334, #387).
+// translate="no" on single lists fixed it one page at a time; this guard
+// covers every island.
+//
+// It only steps in when the DOM call would throw because a translator moved
+// the node:
+// - removeChild: the node is already detached, or sits inside a wrapper under
+//   this parent. It is removed where it actually is (or left alone).
+// - insertBefore: the reference node is inside a wrapper under this parent
+//   (insert before the wrapper), or detached (append, so nothing is lost).
+// Anything else still throws, so real bugs stay visible in error tracking.
+// The cost is that translated text React replaced can linger until reload,
+// which beats a blank island.
+//
+// Inline and in <head> so it is installed before any island hydrates.
+---
+
+<script is:inline>
+  ;(function () {
+    if (typeof Node !== "function" || !Node.prototype) return
+    var proto = Node.prototype
+    var removeChild = proto.removeChild
+    var insertBefore = proto.insertBefore
+
+    // The direct child of parent that contains node, or null.
+    function childContaining(parent, node) {
+      while (node && node.parentNode !== parent) node = node.parentNode
+      return node
+    }
+
+    proto.removeChild = function (child) {
+      if (child && child.parentNode !== this) {
+        if (!child.parentNode) return child
+        if (childContaining(this, child)) {
+          return removeChild.call(child.parentNode, child)
+        }
+      }
+      return removeChild.apply(this, arguments)
+    }
+
+    proto.insertBefore = function (node, ref) {
+      if (ref && ref.parentNode !== this) {
+        if (!ref.parentNode) return insertBefore.call(this, node, null)
+        var anchor = childContaining(this, ref)
+        if (anchor) return insertBefore.call(this, node, anchor)
+      }
+      return insertBefore.apply(this, arguments)
+    }
+  })()
+</script>

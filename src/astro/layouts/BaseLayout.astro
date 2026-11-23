@@ -19,6 +19,7 @@ import WebMcpProvider from "@/components/webmcp-provider"
 import Analytics from "@/astro/components/Analytics.astro"
 import FontPreload from "@/astro/components/FontPreload.astro"
 import StaleChunkReload from "@/astro/components/StaleChunkReload.astro"
+import TranslationGuard from "@/astro/components/TranslationGuard.astro"
 
 interface Props {
   title?: string
@@ -144,6 +145,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
       media="(prefers-color-scheme: dark)"
       content="black"
     />
+    <TranslationGuard />
     <StaleChunkReload />
     <link rel="icon" href="/favicon.ico" />
     <link rel="ai-catalog" href="/.well-known/ai-catalog.json" />

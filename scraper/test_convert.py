@@ -40,4 +40,11 @@ e = convert.to_exams('junk\n"Date","Day","Time","Course","Course Title","Duratio
                      '"23 November 2026","Monday","9.00 am","AAE18C","GRAMMAR","2 hr 30 min"\n')
 assert e == {"AAE18C": {"date": "23 November 2026", "day": 1, "start_time": "9.00 am", "end_time": "11.30 am",
                         "key": "AAE18C", "name": "GRAMMAR", "duration": 5}}
+e2 = convert.to_exams(
+    '"Date","Day","Time","Course","Course Title","Duration"\n'
+    '"6 May 2026","Wednesday","1.00 pm","AB1211","APPLIED BUSINESS MATHEMATICS","2 hr"\n',
+    "2026;2",
+)
+assert e2 == {"AB1211": {"date": "6 May 2027", "day": 4, "start_time": "1.00 pm", "end_time": "3.00 pm",
+                         "key": "AB1211", "name": "APPLIED BUSINESS MATHEMATICS", "duration": 4}}
 print("ok")

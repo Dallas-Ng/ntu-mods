@@ -13,10 +13,13 @@ it against what is live in src/data/api. Exit 1 = do not publish.
 
 from __future__ import annotations
 
+from datetime import datetime
 import json
 import re
 import sys
 from pathlib import Path
+
+import convert
 
 SCRAPER_DIR = Path(__file__).resolve().parent
 DATA_DIR = SCRAPER_DIR / "data"
@@ -31,7 +34,13 @@ MIN_KEEP = 0.8
 MAX_FIELD_LOSS = 0.05
 
 
-def check(mdata: dict, indexes: dict, exams: dict, live: dict[str, dict] | None) -> tuple[list[str], list[str]]:
+def check(
+    mdata: dict,
+    indexes: dict,
+    exams: dict,
+    live: dict[str, dict] | None,
+    acadsem: str | None = None,
+) -> tuple[list[str], list[str]]:
     """Returns ``(problems, notes)``. Any problem means do not publish."""
     problems: list[str] = []
     notes: list[str] = []
@@ -83,9 +92,19 @@ def check(mdata: dict, indexes: dict, exams: dict, live: dict[str, dict] | None)
     orphans = [c for c in exams if c not in mdata]
     if mdata and orphans:
         notes.append(f"{len(orphans)} exams for courses not in mdata (normal, a dozen or so): {orphans[:10]}")
+    expected_year = convert.expected_exam_year(acadsem) if acadsem else None
     for code, e in exams.items():
         if not 1 <= e.get("day", 0) <= 7:
             problems.append(f"exams {code}: day={e.get('day')}")
+        try:
+            exam_date = datetime.strptime(e.get("date", ""), "%d %B %Y")
+        except ValueError:
+            problems.append(f"exams {code}: date={e.get('date')!r}")
+        else:
+            if expected_year is not None and exam_date.year != expected_year:
+                problems.append(f"exams {code}: date {e['date']!r} is in {exam_date.year}, expected {expected_year}")
+            if e.get("day") != exam_date.weekday() + 1:
+                problems.append(f"exams {code}: day={e.get('day')} != {exam_date.weekday() + 1} for {e['date']!r}")
         for k in ("start_time", "end_time"):
             if not CLOCK_RE.match(e.get(k, "")):
                 problems.append(f"exams {code}: {k}={e.get(k)!r}")
@@ -145,6 +164,7 @@ def check_semester(acadsem: str) -> bool:
     problems, notes = check(
         *(_read(_contained(DATA_DIR, DATA_DIR / f"{n}_{key}.json")) for n in ("03_mdata", "04_indexes", "05_exams")),
         live,
+        acadsem,
     )
     print(f"[Check] {acadsem}")
     for n in notes:

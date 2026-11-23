@@ -206,7 +206,17 @@ def to_indexes(courses: dict[str, list[dict]]) -> dict[str, dict[str, list[dict]
 EXAM_CSV_HEADER = ["Date", "Day", "Time", "Course", "Course Title", "Duration"]
 
 
-def to_exams(csv_text: str) -> dict[str, dict]:
+def expected_exam_year(acadsem: str) -> int | None:
+    """Calendar year for Semester 1/2 exams (Sem 1 = YYYY, Sem 2 = YYYY + 1)."""
+    year_s, sem = acadsem.split(";", 1)
+    if sem == "1":
+        return int(year_s)
+    if sem == "2":
+        return int(year_s) + 1
+    return None
+
+
+def to_exams(csv_text: str, acadsem: str | None = None) -> dict[str, dict]:
     """Exam CSV (``Date,Day,Time,Course,Course Title,Duration``; any preamble
     lines before the header are skipped) -> exam JSON keyed by course code."""
     lines = [ln for ln in csv_text.splitlines() if ln.strip()]
@@ -214,6 +224,7 @@ def to_exams(csv_text: str) -> dict[str, dict]:
     if start is None:
         raise ValueError("Exam CSV has no 'Date,...' header row")
 
+    expected_year = expected_exam_year(acadsem) if acadsem else None
     result: dict[str, dict] = {}
     for row in csv.DictReader(lines[start:]):
         code = (row.get("Course") or "").strip().upper()
@@ -225,6 +236,10 @@ def to_exams(csv_text: str) -> dict[str, dict]:
         mins = int(m.group(1)) if (m := re.search(r"(\d+)\s*min", dur)) else 0
         units = (hours * 60 + mins) // 30
         date = datetime.strptime(date_s, "%d %B %Y")
+        # NTU's exam portal occasionally enters an exam under the academic start
+        # year (e.g. "6 May 2026" in AY2026-27 Sem 2) instead of expected_year.
+        if expected_year is not None and date.year == expected_year - 1:
+            date = date.replace(year=expected_year)
         start_t = datetime.strptime(time_s.lower(), "%I.%M %p")
         end_t = start_t + timedelta(minutes=units * 30)
         result[code] = {

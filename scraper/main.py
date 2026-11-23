@@ -142,7 +142,7 @@ def process(acadsem: str, a: argparse.Namespace) -> None:
         print(f"[Convert] {len(mdata)} courses, {sum(map(len, indexes.values()))} indexes")
     if a.scope != "courses":
         csv_text = scrape_exams(acadsem, a.refetch, a.plan_no)
-        exams = convert.to_exams(csv_text) if csv_text else {}
+        exams = convert.to_exams(csv_text, acadsem) if csv_text else {}
         write_json(data_path("05_exams", acadsem), exams)
         print(f"[Convert] {len(exams)} exams")
 

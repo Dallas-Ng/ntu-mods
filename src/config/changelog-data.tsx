@@ -40,6 +40,23 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Semester 2 exam date year fix",
+    date: "23 Nov 2026",
+    items: [
+      {
+        category: "Data",
+        content: (
+          <>
+            Fixed three AY 2026/2027 Semester 2 exams (AB1211, HP3805 and
+            HS2019) whose dates appeared as May 2026 instead of May 2027 on the{" "}
+            <ChangelogLink href="/timetable">timetable</ChangelogLink> and{" "}
+            <ChangelogLink href="/exams">exam schedule</ChangelogLink>.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Campus map lab locations and split-week walking routes",
     date: "22 Nov 2026",
     note: "Fixes in this release are based on bug reports from an anonymous student. Thank you!",

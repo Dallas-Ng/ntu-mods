@@ -136,13 +136,14 @@ const CgpaPlanner = () => {
       track("transcript_loaded")
       if (share) shareTranscript("cgpa", mods)
     } catch (e) {
+      const props = transcriptErrorProps(e, file)
       if (!isExpectedTranscriptError(e)) {
         reportError("transcript_upload", e, {
           tool: "cgpa",
-          ...transcriptErrorProps(e, file)
+          ...props
         })
       }
-      track("upload_failed")
+      track("upload_failed", props)
       setError(
         isExpectedTranscriptError(e)
           ? `${(e as Error).message} You can also type your CGPA below.`

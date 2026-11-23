@@ -147,13 +147,14 @@ export default function FgoOptimiser() {
         previously_fgo: parsed.mods.filter((m) => m.status === "fgo").length
       })
     } catch (e) {
+      const props = transcriptErrorProps(e, file)
       if (!isExpectedTranscriptError(e)) {
         reportError("transcript_upload", e, {
           tool: "fgo",
-          ...transcriptErrorProps(e, file)
+          ...props
         })
       }
-      track("upload_failed")
+      track("upload_failed", props)
       setError(
         isExpectedTranscriptError(e)
           ? (e as Error).message

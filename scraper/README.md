@@ -168,7 +168,7 @@ start < end; `duration = ceil(minutes / 30)`; every course exists in mdata. `typ
 `LEC LAB SEM TUT DES PRJ` is noted, not rejected. Identical slots under one index are
 deduplicated by the converter; slots differing only in remarks/venue legitimately repeat.
 
-**`05_exams`** — `day` in 1–7; `start_time`/`end_time` like `9.00 am`. Exams for courses
+**`05_exams`** — `day` in 1–7 matching `date`; `date` in the semester's calendar year (`YYYY` for Sem 1, `YYYY + 1` for Sem 2 — `to_exams` corrects off-by-one portal typos like `2026` in AY2026 Sem 2); `start_time`/`end_time` like `9.00 am`. Exams for courses
 absent from mdata (about a dozen a semester) are noted.
 
 ## Gotchas

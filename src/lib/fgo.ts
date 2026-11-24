@@ -31,6 +31,31 @@ const ROW_RE =
   /^\*?\s*([A-Z]{2,5}\d{1,4}[A-Z]?)\s+(?:(.*?)\s*)?(?<!\d)(\d{1,2}\.\d)\s+([A-Z][A-Za-z+-]*)(?:\s+\d{1,2}\.\d{1,2})?$/
 const CGPA_RE = /Cumulative Grade Point Average\s*:\s*(\d\.\d+)/i
 
+// NTU Degree Audit (wish.wis.ntu.edu.sg/pls/webexe/dars_result_ro) printed to
+// PDF from a browser. Uses "Academic Year YYYY ,Semester N" headers, integer
+// AU, trailing Course Type / Course Group / FGO Opt-In columns, and vertically
+// centred cells when long course titles wrap onto multiple lines.
+const DA_TERM_RE =
+  /^Academic\s+Year\s+(\d{4})\s*,?\s*(Semester\s+\d|Special\s+Term(?:\s+\d)?)\b/i
+const DA_STOP_RE = /^Courses\s+Registered\b/i
+const DA_FOOTER_RE =
+  /^(?:Total\s+AU\s+Earned|Semester\s+GPA|CGPA|Exam\s+Status)\b/i
+const DA_SEMESTER_CGPA_RE = /^CGPA\s+(\d\.\d+)\b/i
+const DA_SUMMARY_CGPA_RE =
+  /Cumulative\s+Grade\s+Point\s+Average\s*\(CGPA\)\s*:?\s*(\d\.\d+)/i
+const DA_QUOTA_RE = /FGO\s+Quota\s*\(Total\s+AU\)\s*:\s*(\d{1,2})\b/i
+const DA_EXERCISED_CORE_RE =
+  /FGO\s+Exercised\s*\(ICC\/Core\/MPE[^)]*\)\s*:\s*(\d{1,2})\b/i
+const DA_EXERCISED_BDE_RE = /FGO\s+Exercised\s*\(BDE\)\s*:\s*(\d{1,2})\b/i
+const DA_IGNORE_RE =
+  /^(?:\d{1,4}[/-]\d{1,2}[/-]\d{1,4}\b|https?:\/\/|.*wish\.wis\.ntu\.edu\.sg|.*\bDegree\s+Audit$|Page\s+\d+(?:\s+of\s+\d+)?$|\d+\s*\/\s*\d+$|Course\s+(?:Course\s+)?AU\s+Grade\b|(?:Course|AU|Grade|Type|Group|FGO|Opt-?In)(?:\s+(?:Course|AU|Grade|Type|Group|FGO|Opt-?In))*$)/i
+const DA_CODE_START_RE = /^\*?\s*([A-Z]{2,5}\d{1,4}[A-Z]?)(?:\s+(.*))?$/
+const DA_METRICS_TAIL_RE =
+  /(?:^|\s)(\d{1,2}(?:\.\d)?)\s+(A\+|A-|A|B\+|B-|B|C\+|C|D\+|D|F|PASS|FAIL|P|S|U|EX|TC|IP|NR|DI|ABS|LOA|IC|I|W|AUD)\s+(C|P|BDE|UE|PE|MPE|CORE|ICC|GER-?PE|GER-?CORE|GER|MAJOR-?PE|2ND(?:\s+Spec-PE|-?(?:PE|MAJ|SPEC))?|SPEC-?PE|SP|MINOR|FC|CC|EL)(?:\s+(?!Yes\b|No\b)([A-Z0-9][A-Z0-9-]{0,11}))?(?:\s+(Yes|No))?$/i
+const DA_BDE_TYPE_RE = /^(?:BDE|UE)$/i
+const TERM_ORDER_RE =
+  /^(\d{4})-\d{4}\s+(SEMESTER\s+(\d)|SPECIAL TERM(?:\s+(\d))?)$/i
+
 const WHITESPACE_RE = /\s+/g // e.g. "A  B" -> "  "
 const UPPERCASE_RE = /[A-Z]/g // e.g. "Ab3" -> "A"
 const LOWERCASE_RE = /[a-z]/g // e.g. "Ab3" -> "b"
@@ -55,11 +80,20 @@ export interface Mod {
   gp: number
   status: ModStatus
   locked: boolean
+  /** Pre-detected as BDE/UE (e.g. from a Degree Audit PDF). */
+  bde?: boolean
 }
+
+export type TranscriptFormat = "transcript" | "degree_audit"
 
 export interface ParsedTranscript {
   mods: Mod[]
   statedCgpa: number | null
+  format?: TranscriptFormat
+  /** Programme FGO quota stated on the document (e.g. Degree Audit: 21 or 24). */
+  fgoQuota?: number | null
+  /** FGO AU exercised on the document beyond visible FGO rows (e.g. No Record). */
+  extraFgoUsed?: ExtraUsage | null
 }
 
 export function parseTranscriptLines(lines: string[]): ParsedTranscript {
@@ -98,7 +132,205 @@ export function parseTranscriptLines(lines: string[]): ParsedTranscript {
       locked
     })
   }
-  return { mods, statedCgpa }
+  return { mods, statedCgpa, format: "transcript" }
+}
+
+function termSortKey(term: string): number {
+  const m = TERM_ORDER_RE.exec(term)
+  if (!m) return 0
+  const year = Number(m[1])
+  const sub = m[3] ? Number(m[3]) : m[4] ? 2 + Number(m[4]) : 3
+  return year * 10 + sub
+}
+
+interface PendingDegreeAuditRow {
+  code: string
+  nameParts: string[]
+  metrics: {
+    au: number
+    grade: string
+    courseType: string
+    fgoOptIn: boolean
+  } | null
+}
+
+function matchDegreeAuditMetrics(text: string) {
+  const m = DA_METRICS_TAIL_RE.exec(text)
+  if (!m) return null
+  return {
+    prefix: text.slice(0, m.index).trim(),
+    metrics: {
+      au: Number(m[1]),
+      grade: m[2],
+      courseType: m[3],
+      fgoOptIn: /^yes$/i.test(m[5] ?? "")
+    }
+  }
+}
+
+/**
+ * Parse lines extracted (without a midpoint split) from an NTU Degree Audit PDF
+ * printed from a browser (`dars_result_ro`). Handles vertically centred metrics
+ * when long course titles wrap across 2+ lines, and stops before `Courses
+ * Registered`.
+ */
+export function parseDegreeAuditLines(lines: string[]): ParsedTranscript {
+  const normalized = lines
+    .map((raw) => raw.replace(WHITESPACE_RE, " ").trim())
+    .filter(Boolean)
+  const fullText = normalized.join(" ")
+
+  const summaryCgpaMatch = DA_SUMMARY_CGPA_RE.exec(fullText)
+  const summaryCgpa = summaryCgpaMatch ? Number(summaryCgpaMatch[1]) : null
+  const quotaMatch = DA_QUOTA_RE.exec(fullText)
+  const fgoQuota = quotaMatch ? Number(quotaMatch[1]) : null
+  const exercisedCoreMatch = DA_EXERCISED_CORE_RE.exec(fullText)
+  const fgoExercisedCore = exercisedCoreMatch
+    ? Number(exercisedCoreMatch[1])
+    : null
+  const exercisedBdeMatch = DA_EXERCISED_BDE_RE.exec(fullText)
+  const fgoExercisedBde = exercisedBdeMatch
+    ? Number(exercisedBdeMatch[1])
+    : null
+
+  let term = ""
+  let seenTerm = false
+  let firstSemesterCgpa: number | null = null
+  const byTerm = new Map<string, Omit<Mod, "id">[]>()
+  let pending: PendingDegreeAuditRow | null = null
+
+  const flushPending = () => {
+    if (!pending || !pending.metrics || !term) {
+      pending = null
+      return
+    }
+    const { code, nameParts, metrics } = pending
+    const name = nameParts.join(" ").replace(WHITESPACE_RE, " ").trim()
+    const rawGrade = metrics.grade.toUpperCase()
+    const gp = GRADE_POINTS[rawGrade]
+    const isFgo =
+      gp === undefined &&
+      (rawGrade === "PASS" ||
+        (metrics.fgoOptIn && (rawGrade === "P" || rawGrade === "NR")))
+    const status: ModStatus =
+      gp !== undefined ? "graded" : isFgo ? "fgo" : "other"
+    const grade = isFgo && rawGrade === "P" ? "PASS" : rawGrade
+    const locked = status === "graded" && LOCKED_NAME_RE.test(name)
+    const bde = DA_BDE_TYPE_RE.test(metrics.courseType)
+    const bucket = byTerm.get(term) ?? []
+    bucket.push({
+      code,
+      name,
+      term,
+      au: metrics.au,
+      grade,
+      gp: gp ?? 0,
+      status,
+      locked,
+      ...(bde ? { bde: true } : {})
+    })
+    byTerm.set(term, bucket)
+    pending = null
+  }
+
+  for (const line of normalized) {
+    if (DA_STOP_RE.test(line)) {
+      flushPending()
+      break
+    }
+
+    const t = DA_TERM_RE.exec(line)
+    if (t) {
+      flushPending()
+      const year = Number(t[1])
+      term = `${year}-${year + 1} ${t[2].replace(WHITESPACE_RE, " ").toUpperCase()}`
+      seenTerm = true
+      continue
+    }
+
+    if (seenTerm && firstSemesterCgpa === null) {
+      const semCgpa = DA_SEMESTER_CGPA_RE.exec(line)
+      if (semCgpa) firstSemesterCgpa = Number(semCgpa[1])
+    }
+
+    if (!term) continue
+
+    if (DA_FOOTER_RE.test(line)) {
+      flushPending()
+      term = ""
+      continue
+    }
+
+    if (DA_IGNORE_RE.test(line)) continue
+
+    const codeMatch = DA_CODE_START_RE.exec(line)
+    if (codeMatch) {
+      flushPending()
+      const code = codeMatch[1]
+      const rest = (codeMatch[2] ?? "").trim()
+      const matched = rest ? matchDegreeAuditMetrics(rest) : null
+      if (matched) {
+        pending = {
+          code,
+          nameParts: matched.prefix ? [matched.prefix] : [],
+          metrics: matched.metrics
+        }
+      } else {
+        pending = {
+          code,
+          nameParts: rest ? [rest] : [],
+          metrics: null
+        }
+      }
+      continue
+    }
+
+    if (pending) {
+      if (!pending.metrics) {
+        const matched = matchDegreeAuditMetrics(line)
+        if (matched) {
+          if (matched.prefix) pending.nameParts.push(matched.prefix)
+          pending.metrics = matched.metrics
+          continue
+        }
+      }
+      pending.nameParts.push(line)
+    }
+  }
+  flushPending()
+
+  // Degree Audit lists newest semester first; sort chronologically to match
+  // official transcripts while keeping row order within each semester.
+  const ordered = [...byTerm.entries()]
+    .sort(([a], [b]) => termSortKey(a) - termSortKey(b))
+    .flatMap(([, rows]) => rows)
+  const mods: Mod[] = ordered.map((row, i) => ({
+    ...row,
+    id: `${row.term}|${row.code}|${i}`
+  }))
+
+  const parsedFgoCore = mods
+    .filter((m) => m.status === "fgo" && !m.bde)
+    .reduce((s, m) => s + m.au, 0)
+  const parsedFgoBde = mods
+    .filter((m) => m.status === "fgo" && m.bde)
+    .reduce((s, m) => s + m.au, 0)
+  const extraCore =
+    fgoExercisedCore !== null
+      ? Math.max(0, fgoExercisedCore - parsedFgoCore)
+      : 0
+  const extraBde =
+    fgoExercisedBde !== null ? Math.max(0, fgoExercisedBde - parsedFgoBde) : 0
+  const extraFgoUsed =
+    extraCore > 0 || extraBde > 0 ? { core: extraCore, bde: extraBde } : null
+
+  return {
+    mods,
+    statedCgpa: summaryCgpa ?? firstSemesterCgpa,
+    format: "degree_audit",
+    fgoQuota,
+    extraFgoUsed
+  }
 }
 
 /** CGPA over letter-graded modules, treating `selected` as Flexible-Graded. */
@@ -339,12 +571,14 @@ interface TranscriptDiagnostics {
   unsplit_mods?: number
   unsplit_term_lines?: number
   unsplit_markers?: string[]
+  unsplit_unmatched_shapes?: string[]
 }
 
 // Loose phrases any NTU transcript, results printout or NIE progress report
 // tends to carry (other programmes word these differently, so match widely).
 const MARKERS: [string, RegExp][] = [
   ["ntu", /nanyang|\bNTU\b|national institute of education/i],
+  ["degree_audit", /degree\s+audit|dars_result/i],
   ["student", /(name\s+of\s+student|student\s+name|\bstudent\b)/i],
   ["matric", /matric/i],
   ["programme", /programme|program\b/i],
@@ -487,9 +721,18 @@ export class InvalidTranscriptPdfError extends Error {
 export class NotATranscriptError extends Error {
   constructor(readonly info?: TranscriptInfo) {
     super(
-      "This PDF does not look like a transcript. Upload the official transcript PDF."
+      "This PDF does not look like a transcript. Upload the official transcript PDF or a Degree Audit PDF."
     )
     this.name = "NotATranscriptError"
+  }
+}
+
+export class NoGradedModulesError extends Error {
+  constructor(readonly info?: TranscriptInfo) {
+    super(
+      "No letter-graded modules were found in this PDF. Upload one with at least one letter grade."
+    )
+    this.name = "NoGradedModulesError"
   }
 }
 
@@ -499,8 +742,13 @@ export function isExpectedTranscriptError(e: unknown) {
   return (
     e instanceof NoTranscriptTextError ||
     e instanceof InvalidTranscriptPdfError ||
-    e instanceof NotATranscriptError
+    e instanceof NotATranscriptError ||
+    e instanceof NoGradedModulesError
   )
+}
+
+function hasGradedModules(parsed: ParsedTranscript) {
+  return parsed.mods.some((m) => m.status === "graded" && m.au > 0)
 }
 
 // A real transcript has dozens of lines; a handful means a different document.
@@ -590,29 +838,48 @@ export async function readTranscriptPdf(file: File): Promise<ParsedTranscript> {
     }
     stage = "parse"
     const parsed = parseTranscriptLines(lines)
-    if (!parsed.mods.some((m) => m.status === "graded")) {
-      const singleLines = pagesItems.flatMap(itemsToSingleColumnLines)
-      const singleParsed = parseTranscriptLines(singleLines)
-      if (singleParsed.mods.some((m) => m.status === "graded")) {
-        return singleParsed
-      }
-      const diag = transcriptDiagnostics(lines, parsed)
-      const singleDiag = transcriptDiagnostics(singleLines, singleParsed)
-      diag.unsplit_mods = singleParsed.mods.length
-      diag.unsplit_term_lines = singleDiag.term_lines
-      diag.unsplit_markers = singleDiag.markers
-      if (
-        lines.length < MIN_TRANSCRIPT_LINES ||
-        !looksLikeTranscript(parsed, diag, singleParsed, singleDiag)
-      ) {
-        throw new NotATranscriptError({ ...info, ...diag })
-      }
-      Object.assign(info, diag)
-      throw new Error("no modules found")
+    if (hasGradedModules(parsed)) return parsed
+
+    const singleLines = pagesItems.flatMap(itemsToSingleColumnLines)
+    const singleParsed = parseTranscriptLines(singleLines)
+    if (hasGradedModules(singleParsed)) return singleParsed
+
+    const degreeAuditParsed = parseDegreeAuditLines(singleLines)
+    if (hasGradedModules(degreeAuditParsed)) return degreeAuditParsed
+
+    const diag = transcriptDiagnostics(lines, parsed)
+    const singleDiag = transcriptDiagnostics(singleLines, singleParsed)
+    diag.unsplit_mods = singleParsed.mods.length + degreeAuditParsed.mods.length
+    diag.unsplit_term_lines = singleDiag.term_lines
+    diag.unsplit_markers = singleDiag.markers
+    diag.unsplit_unmatched_shapes = singleDiag.unmatched_shapes
+
+    const anyParsedMods =
+      parsed.mods.length > 0 ||
+      singleParsed.mods.length > 0 ||
+      degreeAuditParsed.mods.length > 0
+    const singleText = singleLines.join("\n")
+    const degreeAuditNoResults =
+      singleDiag.markers.includes("degree_audit") &&
+      /\bCourses\s+Registered\b/i.test(singleText) &&
+      !/\bExamination\s+Results\b/i.test(singleText)
+    if (anyParsedMods || degreeAuditNoResults) {
+      throw new NoGradedModulesError({ ...info, ...diag })
     }
-    return parsed
+    if (
+      lines.length < MIN_TRANSCRIPT_LINES ||
+      !looksLikeTranscript(parsed, diag, singleParsed, singleDiag)
+    ) {
+      throw new NotATranscriptError({ ...info, ...diag })
+    }
+    Object.assign(info, diag)
+    throw new Error("no modules found")
   } catch (e) {
-    if (e instanceof NoTranscriptTextError || e instanceof NotATranscriptError)
+    if (
+      e instanceof NoTranscriptTextError ||
+      e instanceof NotATranscriptError ||
+      e instanceof NoGradedModulesError
+    )
       throw e
     if (
       stage === "load_pdf" &&
@@ -650,6 +917,14 @@ export function transcriptErrorProps(e: unknown, file: File) {
   if (e instanceof NotATranscriptError) {
     return {
       stage: "not_a_transcript",
+      bytes: file.size,
+      ...e.info,
+      file_type: file.type
+    }
+  }
+  if (e instanceof NoGradedModulesError) {
+    return {
+      stage: "no_graded_modules",
       bytes: file.size,
       ...e.info,
       file_type: file.type

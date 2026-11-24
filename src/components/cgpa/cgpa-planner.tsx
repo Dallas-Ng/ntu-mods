@@ -125,7 +125,8 @@ const CgpaPlanner = () => {
     setBusy(true)
     setError("")
     try {
-      const { mods } = await readTranscriptPdf(file)
+      const parsed = await readTranscriptPdf(file)
+      const { mods } = parsed
       const { points, au } = gradedTotals(mods)
       if (au === 0) throw new Error("no modules found")
       setCgpa(fmt(points / au))
@@ -133,7 +134,7 @@ const CgpaPlanner = () => {
       setSource({ sample: false, name: file.name })
       // A transcript cannot say how many AU are left, so send them there.
       setTimeout(() => document.getElementById("left")?.focus(), 0)
-      track("transcript_loaded")
+      track("transcript_loaded", { format: parsed.format ?? "transcript" })
       if (share) shareTranscript("cgpa", mods)
     } catch (e) {
       const props = transcriptErrorProps(e, file)
@@ -147,7 +148,7 @@ const CgpaPlanner = () => {
       setError(
         isExpectedTranscriptError(e)
           ? `${(e as Error).message} You can also type your CGPA below.`
-          : "Could not read that PDF. Use the official transcript from the NTU Self-Help Transcript System, or type your CGPA."
+          : "Could not read that PDF. Use the official transcript from the NTU Self-Help Transcript System, a Degree Audit PDF, or type your CGPA."
       )
     } finally {
       setBusy(false)
@@ -214,7 +215,7 @@ const CgpaPlanner = () => {
             track("sample_loaded")
           }}
           onLinkClick={() => track("transcript_link_clicked")}
-          description="Drop the official PDF here to fill the fields below, or enter them yourself."
+          description="Drop your official transcript or Degree Audit PDF here to fill the fields below, or enter them yourself."
         />
       )}
 

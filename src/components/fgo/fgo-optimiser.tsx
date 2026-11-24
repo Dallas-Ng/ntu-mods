@@ -136,12 +136,16 @@ export default function FgoOptimiser() {
       const parsed = await readTranscriptPdf(file)
       setData(parsed)
       setFileName(file.name)
-      setBde(new Set())
+      setBde(new Set(parsed.mods.filter((m) => m.bde).map((m) => m.id)))
       setPicked(new Set())
-      setExtraCore("0")
-      setExtraBde("0")
+      if (parsed.fgoQuota === 21 || parsed.fgoQuota === 24) {
+        setQuota(String(parsed.fgoQuota))
+      }
+      setExtraCore(String(parsed.extraFgoUsed?.core ?? 0))
+      setExtraBde(String(parsed.extraFgoUsed?.bde ?? 0))
       if (share) shareTranscript("fgo", parsed.mods)
       track("transcript_loaded", {
+        format: parsed.format ?? "transcript",
         modules: parsed.mods.length,
         graded: parsed.mods.filter((m) => m.status === "graded").length,
         previously_fgo: parsed.mods.filter((m) => m.status === "fgo").length
@@ -158,7 +162,7 @@ export default function FgoOptimiser() {
       setError(
         isExpectedTranscriptError(e)
           ? (e as Error).message
-          : "Could not read that PDF. Use the official transcript from the NTU Self-Help Transcript System, or the NIE Academic Progress Report."
+          : "Could not read that PDF. Use the official transcript from the NTU Self-Help Transcript System, a Degree Audit PDF, or the NIE Academic Progress Report."
       )
     } finally {
       setBusy(false)
@@ -230,7 +234,7 @@ export default function FgoOptimiser() {
           onChoose={() => input.current?.click()}
           onSample={loadSample}
           onLinkClick={() => track("transcript_link_clicked")}
-          description="Drop the official PDF here, or choose it from your device. NIE students can use the Academic Progress Report."
+          description="Drop your official transcript or Degree Audit PDF here, or choose it from your device. NIE students can use the Academic Progress Report."
         />
 
         <ToolSteps

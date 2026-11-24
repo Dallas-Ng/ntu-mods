@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest"
 
 import {
   cgpa,
+  NoGradedModulesError,
   NotATranscriptError,
   optimise,
+  parseDegreeAuditLines,
   parseTranscriptLines,
   quotaUsage,
   transcriptDiagnostics,
@@ -77,6 +79,152 @@ describe("parseTranscriptLines edge cases", () => {
     expect(mods).toHaveLength(2)
     expect(mods[0]).toMatchObject({ code: "CC0003", au: 2, grade: "B-", gp: 3 })
     expect(mods[1]).toMatchObject({ name: "MATHEMATICS 1", au: 3, grade: "A" })
+  })
+})
+
+describe("parseDegreeAuditLines", () => {
+  const DA_LINES = [
+    "11/24/26, 11:11 PM Degree Audit",
+    "Degree Audit",
+    "Cumulative Grade Point Average (CGPA) 3.75 FGO Quota (Total AU): 24",
+    "Total (Grade Point x AU) for CGPA Computation 75 FGO Exercised (Total AU): 9",
+    "Total AU for CGPA Computation 20 FGO Exercised (ICC/Core/MPE cap at 12 AU): 6",
+    "Status SATISFACTORY FGO Exercised (BDE): 3",
+    "AU Requirements",
+    "Legend",
+    "GER - General Education Requirement",
+    "Examination Results",
+    "Academic Year 2025 ,Semester 2 Study Year 4",
+    "Course Course AU Grade Course Type Course Group FGO Opt-In",
+    "SC4031 INTERNET OF THINGS: COMMUNICATIONS",
+    "3 B P",
+    "& NETWORKING",
+    "SC4079 FINAL YEAR PROJECT 8 A- C",
+    "HP1000 INTRODUCTION TO PSYCHOLOGY 3 B+ BDE",
+    "Total AU Earned 14",
+    "Semester GPA 3.96",
+    "CGPA 3.75",
+    "Exam Status:- Satisfactory",
+    "Academic Year 2024 ,Special Term Study Year 3",
+    "Course Course AU Grade Course Type Course Group FGO Opt-In",
+    "SC3910 PROFESSIONAL ATTACHMENT 5 A+ C ICC",
+    "Total AU Earned 5",
+    "CGPA 3.60",
+    "Exam Status:- Satisfactory",
+    "Academic Year 2024 ,Semester 1 Study Year 2",
+    "Course Course Course FGO",
+    "Course Grade",
+    "AU Type Group Opt-In",
+    "SC2001 ALGORITHM DESIGN &",
+    "ANALYSIS AND 3 P C Yes",
+    "COMPLEXITY",
+    "https://wish.wis.ntu.edu.sg/pls/webexe/dars_result_ro.main_display 3/6",
+    "11/24/26, 11:11 PM Degree Audit",
+    "SC1013 PHYSICS FOR COMPUTING 2 P C",
+    "MOOC1 MORAL FOUNDATIONS OF POLITICS 2 P BDE",
+    "SC4079 FINAL YEAR PROJECT 8 IP C",
+    "BDE1 3 EX BDE",
+    "SC1003 INTRO TO 3 D DESIGN",
+    "3 B C",
+    "FUNDAMENTALS",
+    "Total AU Earned 20",
+    "Semester GPA 3.50",
+    "CGPA 3.50",
+    "Exam Status:- Satisfactory",
+    "Legend:",
+    "EX - Exempted from Course IP - In Progress NR - No Record",
+    "Courses Registered",
+    "Academic Course Index Course Course FGO",
+    "2025 2 SC3020 DATABASE SYSTEM PRINCIPLES 3 10501 P"
+  ]
+
+  it("parses wrapped rows, FGO opt-in, BDE flags, chronological order and stops before Courses Registered", () => {
+    const parsed = parseDegreeAuditLines(DA_LINES)
+    const by = (code: string, status?: string) =>
+      parsed.mods.find(
+        (m) => m.code === code && (status ? m.status === status : true)
+      )!
+
+    expect(parsed.format).toBe("degree_audit")
+    expect(parsed.statedCgpa).toBe(3.75)
+    expect(parsed.fgoQuota).toBe(24)
+    // 3 AU Core FGO is visible (SC2001), 6 AU stated -> 3 AU hidden Core + 3 AU hidden BDE
+    expect(parsed.extraFgoUsed).toEqual({ core: 3, bde: 3 })
+
+    // Courses Registered SC3020 must never be parsed.
+    expect(parsed.mods.some((m) => m.code === "SC3020")).toBe(false)
+
+    // Semesters sorted oldest to newest.
+    expect([...new Set(parsed.mods.map((m) => m.term))]).toEqual([
+      "2024-2025 SEMESTER 1",
+      "2024-2025 SPECIAL TERM",
+      "2025-2026 SEMESTER 2"
+    ])
+
+    // 2-line vertically centred wrap
+    expect(by("SC4031")).toMatchObject({
+      name: "INTERNET OF THINGS: COMMUNICATIONS & NETWORKING",
+      au: 3,
+      grade: "B",
+      gp: 3.5,
+      status: "graded",
+      locked: false
+    })
+
+    // 3-line wrap with metrics on middle line + FGO Opt-In Yes -> fgo
+    expect(by("SC2001")).toMatchObject({
+      name: "ALGORITHM DESIGN & ANALYSIS AND COMPLEXITY",
+      au: 3,
+      grade: "PASS",
+      status: "fgo"
+    })
+
+    // Title containing "3 D DESIGN" must not false-match metrics tail
+    expect(by("SC1003")).toMatchObject({
+      name: "INTRO TO 3 D DESIGN FUNDAMENTALS",
+      au: 3,
+      grade: "B",
+      status: "graded"
+    })
+
+    // Pass/Fail without FGO Opt-In -> other (does not consume FGO quota)
+    expect(by("SC1013").status).toBe("other")
+    expect(by("MOOC1")).toMatchObject({ status: "other", bde: true })
+    expect(by("BDE1")).toMatchObject({ name: "", status: "other", bde: true })
+
+    // BDE graded module pre-flagged
+    expect(by("HP1000")).toMatchObject({
+      au: 3,
+      grade: "B+",
+      status: "graded",
+      bde: true
+    })
+
+    // FYP IP ignored, FYP graded locked, attachment locked
+    expect(by("SC4079", "other")).toMatchObject({ grade: "IP", locked: false })
+    expect(by("SC4079", "graded")).toMatchObject({ grade: "A-", locked: true })
+    expect(by("SC3910")).toMatchObject({ grade: "A+", locked: true })
+  })
+
+  it("handles NR rows with FGO Opt-In and falls back to semester CGPA without Page 2 summary", () => {
+    const parsed = parseDegreeAuditLines([
+      "Examination Results",
+      "Academic Year 2025 ,Semester 1 Study Year 2",
+      "Course Course AU Grade Course Type Course Group FGO Opt-In",
+      "SC2000 PROBABILITY 3 B C",
+      "SC2008 COMPUTER NETWORK 3 NR C Yes",
+      "Total AU Earned 3",
+      "CGPA 3.50",
+      "Exam Status:- Satisfactory"
+    ])
+    expect(parsed.statedCgpa).toBe(3.5)
+    expect(parsed.fgoQuota).toBeNull()
+    expect(parsed.extraFgoUsed).toBeNull()
+    expect(parsed.mods.find((m) => m.code === "SC2008")).toMatchObject({
+      grade: "NR",
+      status: "fgo",
+      au: 3
+    })
   })
 })
 
@@ -194,6 +342,17 @@ describe("transcriptErrorProps", () => {
       file_type: "application/pdf"
     })
     expect(JSON.stringify(props)).not.toContain("Jane")
+  })
+
+  it("exposes no_graded_modules stage for NoGradedModulesError", () => {
+    const err = new NoGradedModulesError({ bytes: 1234, pages: 1, lines: 20 })
+    expect(transcriptErrorProps(err, file)).toEqual({
+      stage: "no_graded_modules",
+      bytes: 1234,
+      pages: 1,
+      lines: 20,
+      file_type: "application/pdf"
+    })
   })
 })
 

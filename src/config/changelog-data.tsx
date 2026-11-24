@@ -40,6 +40,43 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "Degree Audit PDF support for CGPA and FGO tools",
+    date: "24 Nov 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            The{" "}
+            <ChangelogLink href="/tools/fgo-optimiser">
+              FGO Optimiser
+            </ChangelogLink>{" "}
+            and{" "}
+            <ChangelogLink href="/tools/cgpa-planner">
+              CGPA Planner
+            </ChangelogLink>{" "}
+            now accept NTU Degree Audit PDFs printed from a browser, in addition
+            to official transcripts from the Self-Help Transcript System. In the
+            FGO Optimiser, BDE modules, programme FGO quota and earlier FGO
+            usage are filled in automatically from the Degree Audit.
+          </>
+        )
+      },
+      {
+        category: "Bug Fix",
+        content: (
+          <>
+            Fixed upload failures when uploading a Degree Audit PDF (including
+            wrapped multi-line course titles) or a PDF with no letter-graded
+            modules yet. PDFs that only contain exempted, in-progress or
+            pass/fail modules now show a clear message instead of a generic
+            unreadable-file error.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Semester 2 exam date year fix",
     date: "23 Nov 2026",
     items: [

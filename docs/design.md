@@ -72,7 +72,7 @@ Surfaces are fixed tokens:
 | `success`, `warning`, `destructive` (each with a `-subtle` fill) | Status: alerts, changelog tags, API status  |
 
 - No opacity tints (`bg-muted/50`, `bg-primary/10`). The exceptions are see-through glass (navbar, docs bar, the floating "On this page" button, dialog backdrop), `Skeleton`'s translucent `bg-foreground/10`, and the darker hover of solid buttons (`hover:bg-primary/90`).
-- No raw Tailwind palette colours (`emerald-500`, `slate-200`). Exceptions: the exempt areas, the yellow `NewBadge`, the yellow banner, and the favourite heart's `rose-500` (a state colour, not an error).
+- No raw Tailwind palette colours (`emerald-500`, `slate-200`). Exceptions: the exempt areas, the yellow `NewBadge`, and the favourite heart's `rose-500` (a state colour, not an error).
 - Light and dark mode both have to work. The theme is class-based (`localStorage.theme`), not the system setting.
 
 ## Borders

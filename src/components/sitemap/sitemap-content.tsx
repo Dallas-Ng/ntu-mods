@@ -32,6 +32,12 @@ const CORE_LINKS = [
       "Check NTU exam dates and times by module for the current semester"
   },
   {
+    label: "Academic calendar",
+    href: "/calendar",
+    description:
+      "NTU teaching weeks, recess, exam weeks and public holidays, with a calendar feed"
+  },
+  {
     label: "Campus map",
     href: "/maps",
     description:

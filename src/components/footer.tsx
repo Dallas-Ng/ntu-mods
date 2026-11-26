@@ -8,6 +8,7 @@ const FOOTER_GROUPS = [
       { label: "Timetable", href: "/timetable" },
       { label: "Mods", href: "/mods" },
       { label: "Exams", href: "/exams" },
+      { label: "Academic calendar", href: "/calendar" },
       { label: "Campus map", href: "/maps" },
       { label: "Articles", href: "/articles" }
     ]

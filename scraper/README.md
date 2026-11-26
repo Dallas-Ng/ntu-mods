@@ -131,7 +131,9 @@ pnpm db:verify   # D1 matches src/data/api exactly
 
 `academic_calendar.py` reads NTU's semester calendar PDF (linked from the
 [academic calendars page](https://www.ntu.edu.sg/admissions/matriculation/academic-calendars))
-into `src/data/api/calendar.json`, keyed by academic year. The `.ics` export
+into `src/data/api/calendar.json`, keyed by academic year. It feeds the
+`/calendar` page, the `/calendar.ics` subscription feed, the open
+`/data/api/calendar.json` file, and the timetable's `.ics` export, which
 uses it for the Monday of each teaching week, recess week, the revision and
 exam weeks, holidays (classes on them are dropped), early dismissals on the
 eves of some holidays, and no-class windows such as Students' Union Day.

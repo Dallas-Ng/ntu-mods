@@ -78,10 +78,10 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         content: (
           <>
             The redesigned navigation groups related pages into menus on desktop
-            and expandable sections on phones. Calendar and Developers now have
-            their own menus, and the semester indicator shows the current
-            teaching week, module, index and exam counts, and when the data was
-            last updated.
+            and expandable sections on phones. Calendar links directly to the
+            academic calendar, and Developers has its own menu. The semester
+            indicator shows the current teaching week, module, index and exam
+            counts, and when the data was last updated.
           </>
         )
       },

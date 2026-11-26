@@ -3,14 +3,14 @@
  *
  * Tests: the current-versus-past module split, that /mods/CODE shows the latest
  * offered semester, latest-semester and older-semester canonicals, the h1,
- * Course JSON-LD only on current modules, and the sitemap policy for module
- * URLs. Why: modules move between prerendered and on-demand every semester, and
- * the URL, status and canonical of /mods/CODE must not change when they do.
- * How: derives the expected result from the module data, then requests a sample
- * of URLs without following redirects. The per-page checks for /mods/CODE
- * itself (200, indexable, self-canonical) live in pages.spec. Needs: `pnpm
- * build`, a running server and a seeded local D1. Sample: SEO_SAMPLE modules
- * per group for the canonical checks, 5 to 15 for the rest.
+ * Course JSON-LD on current modules with descriptions, and the sitemap policy
+ * for module URLs. Why: modules move between prerendered and on-demand every
+ * semester, and the URL, status and canonical of /mods/CODE must not change
+ * when they do. How: derives the expected result from the module data, then
+ * requests a sample of URLs without following redirects. The per-page checks
+ * for /mods/CODE itself (200, indexable, self-canonical) live in pages.spec.
+ * Needs: `pnpm build`, a running server and a seeded local D1. Sample:
+ * SEO_SAMPLE modules per group for the canonical checks, 5 to 15 for the rest.
  */
 
 import { expect, test } from "@playwright/test"
@@ -115,15 +115,27 @@ test.describe("module URL strategy", () => {
     expect(bad).toEqual([])
   })
 
-  test("Course JSON-LD only on modules offered this semester", async ({
+  test("Course JSON-LD requires a current offering with a description", async ({
     request
   }) => {
     const hasCourse = async (code: string) =>
       /"@type":"Course"/.test(await (await request.get(`/mods/${code}`)).text())
-    for (const o of sample(current, 5, "ld-current"))
-      expect(await hasCourse(o.code), o.code).toBe(true)
-    for (const o of sample(past, 5, "ld-past"))
-      expect(await hasCourse(o.code), o.code).toBe(false)
+    for (const [group, modules, expected] of [
+      [
+        "current-described",
+        current.filter((o) => o.raw.description?.trim()),
+        true
+      ],
+      [
+        "current-undescribed",
+        current.filter((o) => !o.raw.description?.trim()),
+        false
+      ],
+      ["past-described", past.filter((o) => o.raw.description?.trim()), false]
+    ] as const) {
+      for (const o of sample(modules, 5, `ld-${group}`))
+        expect(await hasCourse(o.code), o.code).toBe(expected)
+    }
   })
 
   test("older semester pages are self-canonical or fold into /mods/CODE", async ({

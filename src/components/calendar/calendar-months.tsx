@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 
 import { useHydrated } from "@/hooks/use-hydrated"
 import type {
@@ -6,15 +6,17 @@ import type {
   SemesterCalendar
 } from "@/lib/academic-calendar"
 import {
+  dayCategories,
   dayNotes,
   mondayOf,
   semesterMonths,
   weekLabel,
+  type DayCategory,
   type DayNote,
   type MonthGrid,
   type WeekKind
 } from "@/lib/academic-calendar-days"
-import { calendarStatus, semesterName } from "@/lib/academic-calendar-events"
+import { semesterName } from "@/lib/academic-calendar-events"
 import {
   formatDayShort,
   formatRange,
@@ -22,21 +24,32 @@ import {
 } from "@/lib/calendar-format"
 import { cn } from "@/lib/utils"
 import { SectionHeading } from "@/components/header"
+import { cardVariants } from "@/components/ui/card"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { singaporeToday } from "./singapore-today"
 
-/** Week fills, matching the colours of NTU's own calendar PDF. */
+/**
+ * Colours by meaning, from calm to loud: an ordinary teaching day is a soft
+ * blue, recess is amber (a break), revision and exams are red (what matters
+ * most), and a day off is green, as Google Calendar marks holidays.
+ */
 export const WEEK_FILL: Record<WeekKind, string> = {
-  teaching: "bg-warning-subtle",
-  recess: "bg-primary-subtle",
-  exams: "bg-destructive-subtle"
+  teaching: "bg-primary-subtle",
+  recess: "bg-warning-subtle",
+  exams: "bg-destructive-subtle text-destructive font-semibold"
 }
+const HOLIDAY_FILL = "bg-success-subtle text-success font-semibold"
+/** The bar under a day that is only partly affected, or has an event. */
+const MARKER: Partial<Record<DayCategory, string>> = {
+  partial: "bg-success",
+  event: "bg-primary"
+}
+const TODAY = "bg-foreground text-background font-semibold"
 
 const MONTH_NAMES = [
   "January",
@@ -55,83 +68,104 @@ const MONTH_NAMES = [
 
 const WEEKDAYS = ["M", "T", "W", "T", "F", "S", "S"]
 
-interface DayCellProps {
-  iso: string
-  column: number
-  kind?: WeekKind
-  weekLong?: string
-  notes: DayNote[]
-  noClasses: boolean
-  today: boolean
+/** What the calendar is highlighting: a legend category or some dates. */
+type Highlight = { category: DayCategory } | { dates: Set<string> } | undefined
+
+const matches = (
+  highlight: Highlight,
+  iso: string,
+  categories: Set<DayCategory>
+) =>
+  !highlight
+    ? undefined
+    : "category" in highlight
+      ? categories.has(highlight.category)
+      : highlight.dates.has(iso)
+
+/** The look of one day, shared by the grid and the legend's samples. */
+const dayClass = (categories: Set<DayCategory>, today: boolean) => {
+  const kind = (["exams", "recess", "teaching"] as const).find((k) =>
+    categories.has(k)
+  )
+  return cn(
+    "relative mx-auto flex aspect-square w-full max-w-9 items-center justify-center rounded-lg text-sm tabular-nums transition-[opacity,box-shadow] motion-reduce:transition-none",
+    kind && WEEK_FILL[kind],
+    categories.has("holiday") && HOLIDAY_FILL,
+    today && cn(TODAY, "rounded-full")
+  )
 }
 
-const DayCell = ({
-  iso,
-  column,
-  kind,
-  weekLong,
-  notes,
-  noClasses,
-  today
-}: DayCellProps) => {
-  const weekend = column >= 5
-  const day = Number(iso.slice(8))
+const Marker = ({ categories }: { categories: Set<DayCategory> }) => {
+  const marker = (["partial", "event"] as const).find((c) => categories.has(c))
+  if (!marker || categories.has("holiday")) return null
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "absolute bottom-1 left-1/2 h-0.5 w-3.5 -translate-x-1/2 rounded-full",
+        MARKER[marker]
+      )}
+    />
+  )
+}
+
+interface DayProps {
+  iso: string
+  weekLong?: string
+  calendar: AcademicYearCalendar
+  today: boolean
+  highlight: Highlight
+}
+
+const Day = ({ iso, weekLong, calendar, today, highlight }: DayProps) => {
+  const categories = dayCategories(calendar, iso)
+  const notes: DayNote[] = dayNotes(calendar, iso)
+  const weekday = !["Sat", "Sun"].includes(weekdayShort(iso))
+  const hit = matches(highlight, iso, categories)
   const className = cn(
-    "relative flex h-8 items-center justify-center rounded-md text-sm tabular-nums",
-    !weekend && kind && WEEK_FILL[kind],
-    weekend && "text-muted-foreground",
-    noClasses && "text-destructive font-semibold",
-    today && "ring-foreground ring-2 ring-inset"
+    dayClass(categories, today),
+    !weekday && !categories.has("holiday") && !today && "text-muted-foreground",
+    hit === true && "ring-foreground ring-2",
+    hit === false && "opacity-30"
   )
   const label = [
     formatDayShort(iso),
-    !weekend && weekLong,
+    weekday && weekLong,
     ...notes.map((n) => n.text),
     today && "Today"
   ]
     .filter(Boolean)
     .join(". ")
+  const number = Number(iso.slice(8))
 
   if (notes.length === 0)
     return (
       <div role="gridcell" aria-label={label} className={className}>
-        {day}
+        {number}
       </div>
     )
 
   return (
-    <div role="gridcell">
+    <div role="gridcell" className="contents">
       <Popover>
         <PopoverTrigger
           aria-label={label}
-          // A ring, not an accent fill, on hover: the fill is the week type.
+          // A ring on hover, not an accent fill: the fill is the day's meaning.
           className={cn(
             className,
-            "hover:ring-ring focus-visible:ring-ring w-full hover:ring-2 hover:ring-inset focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset"
+            "hover:ring-ring focus-visible:ring-ring hover:ring-2 focus-visible:ring-2 focus-visible:outline-none"
           )}>
-          {day}
-          <span
-            aria-hidden
-            className={cn(
-              "absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full",
-              noClasses ? "bg-destructive" : "bg-foreground"
-            )}
-          />
+          {number}
+          <Marker categories={categories} />
         </PopoverTrigger>
         <PopoverContent className="w-64 space-y-2 text-sm">
           <p className="font-semibold">{formatDayShort(iso)}</p>
-          {weekLong && !weekend && (
+          {weekLong && weekday && (
             <p className="text-muted-foreground text-xs">{weekLong}</p>
           )}
           <ul className="space-y-1">
             {notes.map((n) => (
-              <li
-                key={n.text}
-                className={cn(
-                  n.type === "holiday" && "text-destructive font-medium"
-                )}>
-                {n.text}
-              </li>
+              <li key={n.text}>{n.text}</li>
             ))}
           </ul>
         </PopoverContent>
@@ -145,22 +179,25 @@ interface MonthProps {
   calendar: AcademicYearCalendar
   sem: SemesterCalendar
   today?: string
+  highlight: Highlight
 }
 
-const Month = ({ grid, calendar, sem, today }: MonthProps) => {
-  const noClassDates = new Set(calendar.noClassDays.map((d) => d.date))
+const Month = ({ grid, calendar, sem, today, highlight }: MonthProps) => {
   const name = `${MONTH_NAMES[grid.month - 1]} ${grid.year}`
 
   return (
-    <section aria-label={name} className="space-y-2">
-      <SectionHeading as="h3">{name}</SectionHeading>
+    <section
+      aria-label={name}
+      className={cardVariants({ className: "space-y-3 p-3 sm:p-4" })}>
+      <SectionHeading as="h3">{MONTH_NAMES[grid.month - 1]}</SectionHeading>
       <div
         role="grid"
         aria-label={name}
-        className="grid grid-cols-[1.75rem_repeat(7,minmax(0,1fr))] gap-1">
+        className="grid grid-cols-[1.25rem_repeat(7,minmax(0,1fr))] gap-1">
         <div role="row" className="contents">
           <div
             role="columnheader"
+            aria-label="Teaching week"
             className="text-muted-foreground flex h-6 items-center text-xs">
             Wk
           </div>
@@ -180,24 +217,22 @@ const Month = ({ grid, calendar, sem, today }: MonthProps) => {
             <div key={row.monday} role="row" className="contents">
               <div
                 role="rowheader"
-                aria-label={week?.long ?? "Not a semester week"}
+                aria-label={week?.long ?? "Outside the semester"}
                 className={cn(
-                  "text-muted-foreground flex h-8 items-center text-xs tabular-nums",
+                  "text-muted-foreground flex items-center text-xs tabular-nums",
                   current && "text-foreground font-semibold"
                 )}>
                 {week?.short}
               </div>
               {row.days.map((iso, column) =>
                 iso ? (
-                  <DayCell
+                  <Day
                     key={iso}
                     iso={iso}
-                    column={column}
-                    kind={week?.kind}
                     weekLong={week?.long}
-                    notes={dayNotes(calendar, iso)}
-                    noClasses={noClassDates.has(iso)}
+                    calendar={calendar}
                     today={iso === today}
+                    highlight={highlight}
                   />
                 ) : (
                   <div key={column} role="gridcell" aria-hidden />
@@ -211,30 +246,35 @@ const Month = ({ grid, calendar, sem, today }: MonthProps) => {
   )
 }
 
+interface DateToKnow {
+  start: string
+  end: string
+  text: string
+  category: DayCategory
+}
+
 /** The holidays, early finishes and events in a semester, in date order. */
-const datesToKnow = (calendar: AcademicYearCalendar, months: MonthGrid[]) => {
-  const first = `${months[0].year}-${String(months[0].month).padStart(2, "0")}-01`
-  const lastMonth = months[months.length - 1]
-  const last = `${lastMonth.year}-${String(lastMonth.month).padStart(2, "0")}-31`
-  const within = (iso: string) => first <= iso && iso <= last
-  const items: {
-    start: string
-    end: string
-    text: string
-    type: DayNote["type"]
-  }[] = [
+const datesToKnow = (
+  calendar: AcademicYearCalendar,
+  months: MonthGrid[]
+): DateToKnow[] => {
+  const iso = (y: number, m: number, d: number) =>
+    `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`
+  const first = iso(months[0].year, months[0].month, 1)
+  const end = months[months.length - 1]
+  const last = iso(end.year, end.month, 31)
+  const within = (d: string) => first <= d && d <= last
+  const items: DateToKnow[] = [
     ...calendar.noClassDays
       .filter((d) => within(d.date))
-      .filter(
-        // A Saturday holiday changes nothing for classes; a Sunday one has
-        // its Monday replacement listed instead.
-        (d) => !["Sat", "Sun"].includes(weekdayShort(d.date))
-      )
+      // A Saturday holiday changes nothing for classes; a Sunday one has
+      // its Monday replacement listed instead.
+      .filter((d) => !["Sat", "Sun"].includes(weekdayShort(d.date)))
       .map((d) => ({
         start: d.date,
         end: d.date,
         text: `${d.name}, no classes`,
-        type: "holiday" as const
+        category: "holiday" as const
       })),
     ...calendar.earlyDismissals
       .filter((d) => within(d.date))
@@ -242,7 +282,7 @@ const datesToKnow = (calendar: AcademicYearCalendar, months: MonthGrid[]) => {
         start: d.date,
         end: d.date,
         text: `${d.name}, classes end at ${d.until}`,
-        type: "early" as const
+        category: "partial" as const
       })),
     ...calendar.events
       .filter((e) => within(e.start))
@@ -254,24 +294,76 @@ const datesToKnow = (calendar: AcademicYearCalendar, months: MonthGrid[]) => {
           : e.note
             ? `${e.name} (${e.note})`
             : e.name,
-        type: e.noClasses ? ("noClasses" as const) : ("event" as const)
+        category: e.noClasses ? ("partial" as const) : ("event" as const)
       }))
   ]
   return items.sort((a, b) => a.start.localeCompare(b.start))
 }
+
+const datesIn = (start: string, end: string) => {
+  const dates = new Set<string>()
+  for (
+    let d = new Date(`${start}T00:00:00Z`);
+    d.toISOString().slice(0, 10) <= end;
+    d.setUTCDate(d.getUTCDate() + 1)
+  )
+    dates.add(d.toISOString().slice(0, 10))
+  return dates
+}
+
+/** A legend swatch drawn exactly like a day in the grid. */
+const Sample = ({
+  category,
+  day = 8
+}: {
+  category: DayCategory | "today"
+  day?: number
+}) => {
+  const categories = new Set<DayCategory>(
+    category === "today"
+      ? []
+      : category === "partial" || category === "event"
+        ? ["teaching", category]
+        : [category]
+  )
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        dayClass(categories, category === "today"),
+        "mx-0 size-7 max-w-7 shrink-0"
+      )}>
+      {day}
+      <Marker categories={categories} />
+    </span>
+  )
+}
+
+const LEGEND: { category: DayCategory | "today"; label: string }[] = [
+  { category: "teaching", label: "Teaching week" },
+  { category: "recess", label: "Recess week" },
+  { category: "exams", label: "Revision and exams" },
+  { category: "holiday", label: "Holiday, no classes" },
+  { category: "partial", label: "Classes end early" },
+  { category: "event", label: "Key event" },
+  { category: "today", label: "Today" }
+]
 
 interface Props {
   calendars: AcademicYearCalendar[]
 }
 
 /**
- * Each semester as month grids, shaded like NTU's PDF, with the dates that
- * change classes beside them. "Today" is only known in the browser, so it is
- * marked after hydration and the prerendered HTML stays the same for all.
+ * Both semesters as month cards. Hovering a legend item or a date to know
+ * highlights the matching days. "Today" is only known in the browser, so it is
+ * marked after hydration and the prerendered HTML is the same for all.
  */
 const CalendarMonths = ({ calendars }: Props) => {
   const hydrated = useHydrated()
   const today = hydrated ? singaporeToday() : undefined
+  const [highlight, setHighlight] = useState<Highlight>()
+  const clear = () => setHighlight(undefined)
+
   const blocks = useMemo(
     () =>
       calendars.flatMap((calendar) =>
@@ -289,91 +381,87 @@ const CalendarMonths = ({ calendars }: Props) => {
     [calendars]
   )
 
-  // Open on the semester running now (or the next one) once "now" is known.
-  // Before that, and in the prerendered HTML, the first semester is shown.
-  const [selected, setSelected] = useState(blocks[0]?.code ?? "")
-  useEffect(() => {
-    if (!today) return
-    const status = calendarStatus(calendars, today)
-    const code =
-      status.kind === "between" ? status.next?.semester : status.semester
-    if (code && blocks.some((b) => b.code === code)) setSelected(code)
-  }, [today, calendars, blocks])
-
-  const multipleYears =
-    new Set(blocks.map((b) => b.calendar.academicYear)).size > 1
-
   return (
-    <Tabs value={selected} onValueChange={setSelected} className="gap-6">
-      <TabsList className="w-full sm:w-auto sm:self-start">
-        {blocks.map(({ code, calendar }) => (
-          <TabsTrigger key={code} value={code} className="flex-1 sm:flex-none">
-            {semesterName(code)}
-            {multipleYears
-              ? ` AY${String(calendar.academicYear).slice(2)}/${String(calendar.academicYear + 1).slice(2)}`
-              : ""}
-          </TabsTrigger>
+    <div className="space-y-10">
+      <ul
+        aria-label="Legend"
+        className="flex flex-wrap gap-1"
+        onMouseLeave={clear}>
+        {LEGEND.map(({ category, label }) => (
+          <li key={category}>
+            <button
+              type="button"
+              onMouseEnter={() =>
+                category !== "today" && setHighlight({ category })
+              }
+              onFocus={() => category !== "today" && setHighlight({ category })}
+              onBlur={clear}
+              className="hover:bg-accent flex items-center gap-2 rounded-lg py-1 pr-2.5 pl-1 text-sm">
+              <Sample category={category} />
+              {label}
+            </button>
+          </li>
         ))}
-      </TabsList>
+      </ul>
+
       {blocks.map(({ code, calendar, sem, months, dates }) => {
         const id = `s${code.replace(";", "-")}`
         const ay = `AY${calendar.academicYear}/${String(calendar.academicYear + 1).slice(2)}`
         return (
-          // Mounted while hidden, so the prerendered page carries every
-          // semester for search engines and readers without JavaScript.
-          <TabsContent
-            key={code}
-            value={code}
-            forceMount
-            className="data-[state=inactive]:hidden">
-            <section aria-labelledby={id} className="space-y-4">
-              <div className="space-y-1">
-                <SectionHeading id={id}>
-                  {semesterName(code)}, {ay}
-                  {calendar.indicative ? " (provisional)" : ""}
-                </SectionHeading>
-                <p className="text-muted-foreground text-sm">
-                  Teaching starts {formatDayShort(sem.teachingWeeks["1"])}
-                  {sem.recess
-                    ? `, recess week is ${formatRange(sem.recess.start, sem.recess.end)}`
-                    : ""}
-                  {sem.revisionAndExams
-                    ? `, and revision and exams run ${formatRange(sem.revisionAndExams.start, sem.revisionAndExams.end)}.`
-                    : "."}
-                </p>
+          <section key={code} aria-labelledby={id} className="space-y-4">
+            <div className="space-y-1">
+              <SectionHeading id={id}>
+                {semesterName(code)}
+                <span className="text-muted-foreground font-normal">
+                  {" "}
+                  {ay}
+                  {calendar.indicative ? ", provisional" : ""}
+                </span>
+              </SectionHeading>
+              <p className="text-muted-foreground text-sm">
+                Teaching from {formatDayShort(sem.teachingWeeks["1"])}
+                {sem.recess
+                  ? `. Recess ${formatRange(sem.recess.start, sem.recess.end)}`
+                  : ""}
+                {sem.revisionAndExams
+                  ? `. Revision and exams ${formatRange(sem.revisionAndExams.start, sem.revisionAndExams.end)}.`
+                  : "."}
+              </p>
+            </div>
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_15rem]">
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-3">
+                {months.map((grid) => (
+                  <Month
+                    key={`${grid.year}-${grid.month}`}
+                    grid={grid}
+                    calendar={calendar}
+                    sem={sem}
+                    today={today}
+                    highlight={highlight}
+                  />
+                ))}
               </div>
-              <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_17rem]">
-                <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2 xl:grid-cols-3">
-                  {months.map((grid) => (
-                    <Month
-                      key={`${grid.year}-${grid.month}`}
-                      grid={grid}
-                      calendar={calendar}
-                      sem={sem}
-                      today={today}
-                    />
-                  ))}
-                </div>
-                {dates.length > 0 && (
-                  <aside
-                    aria-label={`Dates to know, ${semesterName(code)}`}
-                    className="space-y-3">
-                    <SectionHeading as="h3">Dates to know</SectionHeading>
-                    <ul className="space-y-3">
-                      {dates.map((d) => (
-                        <li
-                          key={`${d.start}-${d.text}`}
-                          className="flex gap-3 text-sm">
-                          <span
-                            aria-hidden
-                            className={cn(
-                              "mt-1.5 size-2 shrink-0 rounded-full",
-                              d.type === "holiday" || d.type === "noClasses"
-                                ? "bg-destructive"
-                                : d.type === "early"
-                                  ? "bg-warning"
-                                  : "bg-foreground"
-                            )}
+              {dates.length > 0 && (
+                <aside
+                  aria-label={`Dates to know, ${semesterName(code)}`}
+                  className="space-y-2 lg:sticky lg:top-24 lg:self-start">
+                  <SectionHeading as="h3">Dates to know</SectionHeading>
+                  <ul className="-mx-2" onMouseLeave={clear}>
+                    {dates.map((d) => (
+                      <li key={`${d.start}-${d.text}`}>
+                        <button
+                          type="button"
+                          onMouseEnter={() =>
+                            setHighlight({ dates: datesIn(d.start, d.end) })
+                          }
+                          onFocus={() =>
+                            setHighlight({ dates: datesIn(d.start, d.end) })
+                          }
+                          onBlur={clear}
+                          className="hover:bg-accent flex w-full items-start gap-3 rounded-lg px-2 py-1.5 text-left text-sm">
+                          <Sample
+                            category={d.category}
+                            day={Number(d.start.slice(8))}
                           />
                           <span className="min-w-0">
                             <span className="text-muted-foreground block text-xs tabular-nums">
@@ -383,17 +471,17 @@ const CalendarMonths = ({ calendars }: Props) => {
                             </span>
                             {d.text}
                           </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </aside>
-                )}
-              </div>
-            </section>
-          </TabsContent>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </aside>
+              )}
+            </div>
+          </section>
         )
       })}
-    </Tabs>
+    </div>
   )
 }
 

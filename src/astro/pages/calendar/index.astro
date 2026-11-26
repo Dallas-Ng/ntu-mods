@@ -5,7 +5,6 @@ import {
   type AcademicYearCalendar
 } from "@/lib/academic-calendar"
 import { datasetJsonLd } from "@/lib/json-ld"
-import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { cardVariants } from "@/components/ui/card"
 import {
@@ -45,12 +44,6 @@ const provisional = calendars.filter((c) => c.indicative).map(yearLabel)
 
 const { title, desc } = siteConfig.metatags.calendar
 
-const legend = [
-  { label: "Teaching week", swatch: WEEK_FILL.teaching },
-  { label: "Recess week", swatch: WEEK_FILL.recess },
-  { label: "Revision and exams", swatch: WEEK_FILL.exams }
-]
-
 const latest = calendars[0]
 const structuredData = latest
   ? datasetJsonLd({
@@ -72,15 +65,16 @@ const structuredData = latest
   size="md"
   containerClassName="space-y-8">
   <JsonLd data={structuredData} />
-  <Header
-    title="NTU academic calendar"
-    subtitle={confirmed.length > 0
-      ? `Teaching weeks, recess, exams and public holidays for ${confirmed.join(" and ")}, from NTU's official calendar.`
-      : "NTU has not published a confirmed calendar yet."}
-  />
-
-  <div>
-    <CalendarStatus client:load calendars={calendars} />
+  <div class="space-y-5">
+    <Header
+      title="NTU academic calendar"
+      subtitle={confirmed.length > 0
+        ? `Teaching weeks, recess, exams and public holidays for ${confirmed.join(" and ")}, from NTU's official calendar.`
+        : "NTU has not published a confirmed calendar yet."}
+    />
+    <div>
+      <CalendarStatus client:load calendars={calendars} />
+    </div>
   </div>
 
   {
@@ -94,31 +88,6 @@ const structuredData = latest
       </Alert>
     )
   }
-
-  <ul
-    aria-label="Legend"
-    class="text-muted-foreground flex flex-wrap gap-x-5 gap-y-2 text-sm">
-    {
-      legend.map(({ label, swatch }) => (
-        <li class="flex items-center gap-2">
-          <span aria-hidden class={cn("size-4 rounded-sm", swatch)} />
-          {label}
-        </li>
-      ))
-    }
-    <li class="flex items-center gap-2">
-      <span aria-hidden class="text-destructive w-4 text-center font-semibold"
-        >9</span
-      >
-      No classes
-    </li>
-    <li class="flex items-center gap-2">
-      <span aria-hidden class="flex size-4 items-center justify-center">
-        <span class="bg-foreground size-1 rounded-full"></span>
-      </span>
-      Tap for details
-    </li>
-  </ul>
 
   <div>
     <CalendarMonths client:load calendars={calendars} />

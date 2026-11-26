@@ -152,3 +152,30 @@ export const semesterMonths = (sem: SemesterCalendar) => {
     months.push(monthGrid(d.getFullYear(), d.getMonth() + 1))
   return months
 }
+
+/**
+ * What a day is, for colouring and for the legend's highlight. A weekday in a
+ * semester week has its week's kind; a day can also be a holiday (no classes
+ * all day), a partial day (classes end early, or a no-class window) or a key
+ * event.
+ */
+export type DayCategory = WeekKind | "holiday" | "partial" | "event"
+
+export const dayCategories = (
+  calendar: AcademicYearCalendar,
+  iso: string
+): Set<DayCategory> => {
+  const categories = new Set<DayCategory>()
+  const weekday = parseLocalDate(iso).getDay() % 6 !== 0
+  const sem = Object.values(calendar.semesters).find((s) =>
+    weekLabel(s, mondayOf(iso))
+  )
+  const week = sem && weekLabel(sem, mondayOf(iso))
+  if (week && weekday) categories.add(week.kind)
+  for (const note of dayNotes(calendar, iso)) {
+    if (note.type === "holiday") categories.add("holiday")
+    else if (note.type === "event") categories.add("event")
+    else categories.add("partial")
+  }
+  return categories
+}

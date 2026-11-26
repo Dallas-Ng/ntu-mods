@@ -71,7 +71,7 @@ Surfaces are fixed tokens:
 | `primary-subtle`                                                 | Blue callouts, active and selected items    |
 | `success`, `warning`, `destructive` (each with a `-subtle` fill) | Status: alerts, changelog tags, API status  |
 
-- The academic calendar (`/calendar`) colours weeks the way NTU's PDF does, using `WEEK_FILL` in `components/calendar/calendar-months.tsx`: teaching `warning-subtle` (yellow), recess `primary-subtle` (blue), revision and exams `destructive-subtle`. A day with no classes has `text-destructive` numbers. Use `WEEK_FILL` anywhere else that shows week types, so the colours stay the same everywhere.
+- The academic calendar (`/calendar`) colours days by meaning, from calm to loud, using `WEEK_FILL` and the constants beside it in `components/calendar/calendar-months.tsx`: teaching `primary-subtle`, recess `warning-subtle`, revision and exams `destructive-subtle` with `destructive` text, a holiday `success-subtle` with `success` text (green, as Google Calendar marks holidays). A day only partly affected has a `success` bar under its number, a key event a `primary` bar, and today is a solid `foreground` circle. The legend draws its samples with the same code, so they cannot drift from the grid.
 - No opacity tints (`bg-muted/50`, `bg-primary/10`). The exceptions are see-through glass (navbar, docs bar, the floating "On this page" button, dialog backdrop), `Skeleton`'s translucent `bg-foreground/10`, and the darker hover of solid buttons (`hover:bg-primary/90`).
 - No raw Tailwind palette colours (`emerald-500`, `slate-200`). Exceptions: the exempt areas, the yellow `NewBadge`, and the favourite heart's `rose-500` (a state colour, not an error).
 - Light and dark mode both have to work. The theme is class-based (`localStorage.theme`), not the system setting.
@@ -122,7 +122,7 @@ One hover signal per element:
 - Text-only links (`TextLink`): grey text goes black, black text goes blue, inline links dim.
 - Solid buttons: a slightly darker fill. The GitHub stars button uses the foreground colour in dark mode, with a slightly darker hover, so it stands out.
 - No lift, scale, opacity or border-colour hovers. A go-to arrow may nudge (`LinkArrow` does this).
-- A calendar day whose fill is its week type shows a `ring` on hover, for the same reason as the tile below.
+- A calendar day whose fill is its meaning shows a `ring` on hover, for the same reason as the tile below. Hovering a legend item or a date to know rings the matching days and dims the rest to `opacity-30`; that dimming is a highlight of other elements, not a hover style, and is the one opacity change allowed.
 - A tile whose fill is the thing being previewed (the six class boxes in Appearance, under granular control) shows a `ring` on hover instead of an accent fill, since an accent fill would hide the preview.
 
 Focus and cursor:

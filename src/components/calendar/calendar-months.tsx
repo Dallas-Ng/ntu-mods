@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useMemo, useState, type ReactNode } from "react"
 
 import { useHydrated } from "@/hooks/use-hydrated"
 import type {
@@ -34,13 +34,14 @@ import {
 import { singaporeToday } from "./singapore-today"
 
 /**
- * Colours by meaning, from calm to loud: an ordinary teaching day is a soft
- * blue, recess is amber (a break), revision and exams are red (what matters
- * most), and a day off is green, as Google Calendar marks holidays.
+ * Colours by meaning. An ordinary teaching day is a plain white chip, so the
+ * days that differ stand out: recess is amber (a break), revision and exams are
+ * red (what matters most), and a day off is green, as Google Calendar marks
+ * holidays. Days outside the semester have no chip at all.
  */
 export const WEEK_FILL: Record<WeekKind, string> = {
-  teaching: "bg-primary-subtle",
-  recess: "bg-warning-subtle",
+  teaching: "bg-background",
+  recess: "bg-warning-subtle text-warning font-medium",
   exams: "bg-destructive-subtle text-destructive font-semibold"
 }
 const HOLIDAY_FILL = "bg-success-subtle text-success font-semibold"
@@ -311,13 +312,16 @@ const datesIn = (start: string, end: string) => {
   return dates
 }
 
-/** A legend swatch drawn exactly like a day in the grid. */
+/** A key swatch, drawn by the same code as a day in the grid. */
 const Sample = ({
   category,
-  day = 8
+  day,
+  small = false
 }: {
   category: DayCategory | "today"
   day?: number
+  /** The key's swatch: smaller, with no number. */
+  small?: boolean
 }) => {
   const categories = new Set<DayCategory>(
     category === "today"
@@ -331,16 +335,31 @@ const Sample = ({
       aria-hidden
       className={cn(
         dayClass(categories, category === "today"),
-        "mx-0 size-7 max-w-7 shrink-0"
+        "mx-0 shrink-0",
+        small
+          ? cn("size-4 max-w-4", category !== "today" && "rounded-sm")
+          : "size-7 max-w-7",
+        // The teaching chip is white on a grey card; on the page it needs an
+        // edge to show at all.
+        small && category !== "today" && "ring-border ring-1 ring-inset"
       )}>
-      {day}
-      <Marker categories={categories} />
+      {small ? null : day}
+      {!small && <Marker categories={categories} />}
+      {small && (category === "partial" || category === "event") && (
+        <span
+          aria-hidden
+          className={cn(
+            "absolute bottom-0.5 left-1/2 h-0.5 w-2.5 -translate-x-1/2 rounded-full",
+            MARKER[category]
+          )}
+        />
+      )}
     </span>
   )
 }
 
-const LEGEND: { category: DayCategory | "today"; label: string }[] = [
-  { category: "teaching", label: "Teaching week" },
+const KEY: { category: DayCategory | "today"; label: string }[] = [
+  { category: "teaching", label: "Teaching day" },
   { category: "recess", label: "Recess week" },
   { category: "exams", label: "Revision and exams" },
   { category: "holiday", label: "Holiday, no classes" },
@@ -353,10 +372,67 @@ interface Props {
   calendars: AcademicYearCalendar[]
 }
 
+/** A row in the side card that highlights its days while hovered or focused. */
+const HighlightRow = ({
+  onHighlight,
+  onClear,
+  children
+}: {
+  onHighlight?: () => void
+  onClear: () => void
+  children: ReactNode
+}) => (
+  <button
+    type="button"
+    onMouseEnter={onHighlight}
+    onFocus={onHighlight}
+    onMouseLeave={onClear}
+    onBlur={onClear}
+    className="hover:bg-accent flex w-full items-start gap-3 rounded-lg px-2 py-1.5 text-left text-sm">
+    {children}
+  </button>
+)
+
 /**
- * Both semesters as month cards. Hovering a legend item or a date to know
- * highlights the matching days. "Today" is only known in the browser, so it is
- * marked after hydration and the prerendered HTML is the same for all.
+ * The key, as one slim line: a swatch drawn by the grid's own code and a label
+ * for each kind of day. Hovering or focusing one highlights its days.
+ */
+const Key = ({
+  onHighlight,
+  onClear
+}: {
+  onHighlight: (highlight: Highlight) => void
+  onClear: () => void
+}) => (
+  <ul
+    aria-label="Key"
+    className="text-muted-foreground -mx-1.5 flex flex-wrap gap-x-1 gap-y-1 text-xs">
+    {KEY.map(({ category, label }) => (
+      <li key={category}>
+        <button
+          type="button"
+          onMouseEnter={
+            category === "today" ? undefined : () => onHighlight({ category })
+          }
+          onFocus={
+            category === "today" ? undefined : () => onHighlight({ category })
+          }
+          onMouseLeave={onClear}
+          onBlur={onClear}
+          className="hover:bg-accent hover:text-foreground flex items-center gap-1.5 rounded-md px-1.5 py-1">
+          <Sample category={category} small />
+          {label}
+        </button>
+      </li>
+    ))}
+  </ul>
+)
+
+/**
+ * Each semester as a row: its months, and a card of its dates to know beside
+ * them in the same grid row. Hovering a key item or a date rings the matching
+ * days and dims the rest. "Today" is only known in the browser, so it is marked
+ * after hydration and the prerendered HTML is the same for everyone.
  */
 const CalendarMonths = ({ calendars }: Props) => {
   const hydrated = useHydrated()
@@ -380,55 +456,30 @@ const CalendarMonths = ({ calendars }: Props) => {
       ),
     [calendars]
   )
+  const ayOf = (c: AcademicYearCalendar) =>
+    `AY${c.academicYear}/${String(c.academicYear + 1).slice(2)}`
 
   return (
-    <div className="space-y-10">
-      <ul
-        aria-label="Legend"
-        className="flex flex-wrap gap-1"
-        onMouseLeave={clear}>
-        {LEGEND.map(({ category, label }) => (
-          <li key={category}>
-            <button
-              type="button"
-              onMouseEnter={() =>
-                category !== "today" && setHighlight({ category })
-              }
-              onFocus={() => category !== "today" && setHighlight({ category })}
-              onBlur={clear}
-              className="hover:bg-accent flex items-center gap-2 rounded-lg py-1 pr-2.5 pl-1 text-sm">
-              <Sample category={category} />
-              {label}
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className="space-y-8">
+      <Key onHighlight={setHighlight} onClear={clear} />
 
       {blocks.map(({ code, calendar, sem, months, dates }) => {
         const id = `s${code.replace(";", "-")}`
-        const ay = `AY${calendar.academicYear}/${String(calendar.academicYear + 1).slice(2)}`
+        const end = sem.revisionAndExams?.end
         return (
-          <section key={code} aria-labelledby={id} className="space-y-4">
-            <div className="space-y-1">
+          <section key={code} aria-labelledby={id} className="space-y-3">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
               <SectionHeading id={id}>
-                {semesterName(code)}
-                <span className="text-muted-foreground font-normal">
-                  {" "}
-                  {ay}
-                  {calendar.indicative ? ", provisional" : ""}
-                </span>
+                {semesterName(code)}, {ayOf(calendar)}
+                {calendar.indicative ? " (provisional)" : ""}
               </SectionHeading>
-              <p className="text-muted-foreground text-sm">
-                Teaching from {formatDayShort(sem.teachingWeeks["1"])}
-                {sem.recess
-                  ? `. Recess ${formatRange(sem.recess.start, sem.recess.end)}`
-                  : ""}
-                {sem.revisionAndExams
-                  ? `. Revision and exams ${formatRange(sem.revisionAndExams.start, sem.revisionAndExams.end)}.`
-                  : "."}
-              </p>
+              {end && (
+                <p className="text-muted-foreground text-sm tabular-nums">
+                  {formatRange(sem.teachingWeeks["1"], end)}
+                </p>
+              )}
             </div>
-            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_15rem]">
+            <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_17rem]">
               <div className="grid grid-cols-[repeat(auto-fill,minmax(14.5rem,1fr))] gap-3">
                 {months.map((grid) => (
                   <Month
@@ -444,21 +495,16 @@ const CalendarMonths = ({ calendars }: Props) => {
               {dates.length > 0 && (
                 <aside
                   aria-label={`Dates to know, ${semesterName(code)}`}
-                  className="space-y-2 lg:sticky lg:top-24 lg:self-start">
+                  className={cardVariants({ className: "space-y-2 p-4" })}>
                   <SectionHeading as="h3">Dates to know</SectionHeading>
-                  <ul className="-mx-2" onMouseLeave={clear}>
+                  <ul className="-mx-2">
                     {dates.map((d) => (
                       <li key={`${d.start}-${d.text}`}>
-                        <button
-                          type="button"
-                          onMouseEnter={() =>
+                        <HighlightRow
+                          onHighlight={() =>
                             setHighlight({ dates: datesIn(d.start, d.end) })
                           }
-                          onFocus={() =>
-                            setHighlight({ dates: datesIn(d.start, d.end) })
-                          }
-                          onBlur={clear}
-                          className="hover:bg-accent flex w-full items-start gap-3 rounded-lg px-2 py-1.5 text-left text-sm">
+                          onClear={clear}>
                           <Sample
                             category={d.category}
                             day={Number(d.start.slice(8))}
@@ -471,7 +517,7 @@ const CalendarMonths = ({ calendars }: Props) => {
                             </span>
                             {d.text}
                           </span>
-                        </button>
+                        </HighlightRow>
                       </li>
                     ))}
                   </ul>

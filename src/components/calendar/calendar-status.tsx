@@ -1,5 +1,5 @@
-import { CalendarPlus, ChevronDown, Download, Link } from "lucide-react"
-import { toast } from "sonner"
+import { useState } from "react"
+import { CalendarPlus } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { useHydrated } from "@/hooks/use-hydrated"
@@ -12,13 +12,8 @@ import {
 import { track } from "@/lib/analytics"
 import { formatDayShort } from "@/lib/calendar-format"
 import { Button } from "@/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
 import { Skeleton } from "@/components/ui/skeleton"
+import TimetableCalendarDialog from "@/components/timetable/buttons/timetable-calendar-dialog"
 
 import { singaporeToday } from "./singapore-today"
 
@@ -80,6 +75,7 @@ const describe = (status: Status, calendars: AcademicYearCalendar[]) => {
  */
 const CalendarStatus = ({ calendars }: Props) => {
   const hydrated = useHydrated()
+  const [open, setOpen] = useState(false)
   const text = hydrated
     ? describe(calendarStatus(calendars, singaporeToday()), calendars)
     : null
@@ -100,65 +96,28 @@ const CalendarStatus = ({ calendars }: Props) => {
         )}
       </div>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button size="sm" variant="outline">
-            <CalendarPlus />
-            Add to calendar
-            <ChevronDown />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-72">
-          <DropdownMenuItem asChild>
-            <a
-              href={FEED_URL.replace(/^https?:/, "webcal:")}
-              onClick={() => track("academic_calendar_subscribed")}
-              className="items-start">
-              <CalendarPlus className="mt-0.5" />
-              <span>
-                Subscribe
-                <span className="text-muted-foreground block text-xs">
-                  Apple Calendar and Outlook. Updates when NTU changes a date.
-                </span>
-              </span>
-            </a>
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="items-start"
-            onSelect={() => {
-              void navigator.clipboard.writeText(FEED_URL).then(
-                () => {
-                  track("academic_calendar_feed_copied")
-                  toast.success("Link copied")
-                },
-                () => toast.error("Could not copy the link.")
-              )
-            }}>
-            <Link className="mt-0.5" />
-            <span>
-              Copy feed link
-              <span className="text-muted-foreground block text-xs">
-                For Google Calendar: Other calendars, then From URL.
-              </span>
-            </span>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <a
-              href={FEED_PATH}
-              download="ntu_academic_calendar.ics"
-              onClick={() => track("academic_calendar_downloaded")}
-              className="items-start">
-              <Download className="mt-0.5" />
-              <span>
-                Download .ics
-                <span className="text-muted-foreground block text-xs">
-                  A one-off copy to import.
-                </span>
-              </span>
-            </a>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
+        <CalendarPlus />
+        Add to calendar
+      </Button>
+      <TimetableCalendarDialog
+        open={open}
+        onOpenChange={setOpen}
+        loading={false}
+        feedUrl={FEED_URL}
+        description="Subscribe to the NTU academic calendar in your calendar app, or download it once."
+        whatYouGet="Every teaching week, recess, the revision and exam weeks, public holidays, early finishes and key events, for every year NTU has published. A subscribed calendar updates by itself when NTU changes a date."
+        note="Subscribing is better than importing: an imported file does not change when NTU revises the calendar."
+        onSubscribe={() => track("academic_calendar_subscribed")}
+        onCopied={() => track("academic_calendar_feed_copied")}
+        onDownload={() => {
+          track("academic_calendar_downloaded")
+          const a = document.createElement("a")
+          a.href = FEED_PATH
+          a.download = "ntu_academic_calendar.ics"
+          a.click()
+        }}
+      />
     </div>
   )
 }

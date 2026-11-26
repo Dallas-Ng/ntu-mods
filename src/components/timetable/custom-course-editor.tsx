@@ -164,6 +164,7 @@ const formToCourse = (form: FormState): Omit<CustomCourse, "id"> => {
 
 interface SessionRowProps {
   session: SessionRow
+  sessionNumber: number
   canRemove: boolean
   onChange: (updates: Partial<SessionRow>) => void
   onRemove: () => void
@@ -171,6 +172,7 @@ interface SessionRowProps {
 
 const SessionRowEditor = ({
   session,
+  sessionNumber,
   canRemove,
   onChange,
   onRemove
@@ -256,7 +258,7 @@ const SessionRowEditor = ({
         <Button
           variant="ghost"
           size="icon"
-          aria-label="Remove session"
+          aria-label={`Remove session ${sessionNumber}`}
           disabled={!canRemove}
           onClick={onRemove}
           className="text-muted-foreground hover:text-destructive mt-0.5 size-8 shrink-0">
@@ -533,10 +535,11 @@ export const CourseModal = ({
           <Label>Sessions</Label>
 
           <div className="space-y-2">
-            {activeIndex.sessions.map((session) => (
+            {activeIndex.sessions.map((session, index) => (
               <SessionRowEditor
                 key={session._key}
                 session={session}
+                sessionNumber={index + 1}
                 canRemove={activeIndex.sessions.length > 1}
                 onChange={(updates) => updateSession(session._key, updates)}
                 onRemove={() => removeSession(session._key)}

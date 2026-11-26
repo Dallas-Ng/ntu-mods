@@ -150,15 +150,17 @@ export const TimetableTableCell = (props: Props) => {
   } as CSSProperties
 
   const CellBlock = onClick ? "button" : "div"
+  const hiddenSchedule = [
+    (isCustom || (!fullCell && !tableCell.day)) &&
+      TRUN_DAY_MAP[index.day as keyof typeof TRUN_DAY_MAP],
+    !fullCell && !tableCell.time && index.time
+  ]
+    .filter(Boolean)
+    .join(" ")
   const cellContent = (
     <CellBlock
       type={onClick ? "button" : undefined}
       disabled={onClick && pickerDimmed ? true : undefined}
-      aria-label={
-        onClick
-          ? `${isCustom ? index.group : (moduleKeyText ?? moduleKey)}, ${TRUN_DAY_MAP[index.day as keyof typeof TRUN_DAY_MAP] ?? ""} ${index.time}${hideIndex || !index.key ? "" : `, index ${index.key}`}`
-          : undefined
-      }
       className={cn(
         // Mobile always renders compact (0.25rem, matching the "Compact"
         // density preset) regardless of the user's chosen density — cells
@@ -229,6 +231,9 @@ export const TimetableTableCell = (props: Props) => {
               : tableCell
           }
         />
+        {onClick && hiddenSchedule && (
+          <span className="sr-only"> {hiddenSchedule}</span>
+        )}
       </span>
     </CellBlock>
   )

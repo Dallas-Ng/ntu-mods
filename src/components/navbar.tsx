@@ -216,7 +216,7 @@ const Navbar = () => {
                   <span className="font-bold">{siteConfig.name}</span>
                 </a>
                 <DrawerClose asChild>
-                  <Button size="icon" variant="ghost">
+                  <Button size="icon" variant="ghost" aria-label="Close menu">
                     <X className="size-4" />
                   </Button>
                 </DrawerClose>

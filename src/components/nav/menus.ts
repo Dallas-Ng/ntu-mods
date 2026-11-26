@@ -6,9 +6,9 @@ import {
   Calculator,
   CalendarCheck,
   CalendarDays,
-  CalendarPlus,
   ClipboardCheck,
   Compass,
+  FileText,
   Footprints,
   Github,
   GraduationCap,
@@ -121,9 +121,9 @@ const QUICK_LINK_DETAILS: Record<
     meta: "NTU login",
     guide: "/articles/ntu-degree-audit-guide"
   },
-  "Academic Calendar": {
-    icon: CalendarDays,
-    guide: "/articles/ntu-academic-calendar-ay2026"
+  Transcript: {
+    icon: FileText,
+    meta: "NTU login"
   }
 }
 
@@ -256,42 +256,6 @@ export const NAV_MENUS: Record<string, Menu> = {
           label: "How to use the map",
           href: "/articles/ntu-campus-map-guide",
           icon: BookOpen
-        }
-      ]
-    }
-  },
-  "/calendar": {
-    kind: "list",
-    title: "Academic calendar",
-    items: [
-      {
-        label: "This semester",
-        href: "/calendar",
-        desc: "Teaching weeks, recess, exams and holidays",
-        icon: CalendarDays,
-        liveWeek: true
-      },
-      {
-        label: "Add to your calendar",
-        href: "/calendar.ics",
-        desc: "Every date as an .ics file for your calendar app",
-        icon: CalendarPlus
-      },
-      {
-        label: "Plan around the calendar",
-        href: "/articles/ntu-academic-calendar-ay2026",
-        desc: "Registration, add/drop and each part of the semester",
-        icon: BookOpen
-      }
-    ],
-    aside: {
-      title: "Related",
-      items: [
-        { label: "Exam schedule", href: "/exams", icon: GraduationCap },
-        {
-          label: "NTU's official calendar",
-          href: "https://www.ntu.edu.sg/admissions/matriculation/academic-calendars",
-          external: true
         }
       ]
     }

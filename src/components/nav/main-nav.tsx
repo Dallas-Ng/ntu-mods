@@ -19,36 +19,35 @@ const EDGE = 16
 const MD = "(min-width: 768px)"
 
 const links = siteConfig.navLinks
+const menuContentClass =
+  "absolute top-0 left-0 w-max data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in-0 data-[motion^=to-]:fade-out-0 [animation-duration:200ms] motion-reduce:animate-none"
 
 /**
- * How many nav items fit before the rest move under "More". Item widths are
- * cached while each is on screen, since a hidden item measures 0.
+ * How many nav items fit before the rest move under "More". Overflow items keep
+ * their intrinsic width so measurements stay current across breakpoints.
  */
 function usePriorityNav(moreEnabled: boolean) {
   const rootRef = useRef<HTMLElement>(null)
   const itemRefs = useRef<(HTMLLIElement | null)[]>([])
   const moreRef = useRef<HTMLLIElement>(null)
-  const widths = useRef<number[]>([])
-  const moreWidth = useRef(0)
   const [visible, setVisible] = useState<number>(links.length)
   const [measured, setMeasured] = useState(false)
 
   const compute = useCallback(() => {
     const root = rootRef.current
     if (!root) return
-    itemRefs.current.forEach((el, i) => {
-      if (el && el.offsetWidth > 0) widths.current[i] = el.offsetWidth
-    })
-    if (moreRef.current && moreRef.current.offsetWidth > 0)
-      moreWidth.current = moreRef.current.offsetWidth
-
-    const available = root.clientWidth
-    const total = widths.current.reduce((sum, w) => sum + w, 0)
+    const widths = itemRefs.current.map(
+      (el) => el?.getBoundingClientRect().width ?? 0
+    )
+    const available = root.getBoundingClientRect().width
+    const total = widths.reduce((sum, w) => sum + w, 0)
     let count: number = links.length
     if (total > available) {
-      let used = moreEnabled ? moreWidth.current : 0
+      let used = moreEnabled
+        ? (moreRef.current?.getBoundingClientRect().width ?? 0)
+        : 0
       count = 0
-      for (const w of widths.current) {
+      for (const w of widths) {
         if (used + w > available) break
         used += w
         count++
@@ -63,8 +62,7 @@ function usePriorityNav(moreEnabled: boolean) {
     const observer = new ResizeObserver(compute)
     if (rootRef.current) observer.observe(rootRef.current)
     itemRefs.current.forEach((el) => el && observer.observe(el))
-    // Widths change once the web font replaces the fallback.
-    document.fonts?.ready.then(compute)
+    if (moreRef.current) observer.observe(moreRef.current)
     return () => observer.disconnect()
   }, [compute])
 
@@ -82,8 +80,10 @@ const MainNav = () => {
   const { rootRef, itemRefs, moreRef, visible, measured } =
     usePriorityNav(moreEnabled)
   const [value, setValue] = useState("")
-  const [offset, setOffset] = useState<{ x: number; animate: boolean }>({
+  const [panel, setPanel] = useState({
     x: 0,
+    width: 0,
+    height: 0,
     animate: false
   })
   const triggerRefs = useRef<Record<string, HTMLElement | null>>({})
@@ -109,29 +109,45 @@ const MainNav = () => {
   useLayoutEffect(() => {
     if (!value) return
     let frame = 0
-    const place = (tries: number) => {
+    let attempts = 5
+    const observer = new ResizeObserver(() => place(false))
+    const place = (findContent: boolean) => {
       const root = rootRef.current
       const trigger = triggerRefs.current[value]
       const content = viewportRef.current?.querySelector<HTMLElement>(
-        ':scope > :not([data-motion^="to-"])'
+        `:scope > [data-menu-route="${CSS.escape(value)}"]`
       )
       if (!root || !trigger) return
       if (!content) {
-        if (tries > 0) frame = requestAnimationFrame(() => place(tries - 1))
+        if (findContent && attempts-- > 0)
+          frame = requestAnimationFrame(() => place(true))
         return
       }
       const rootLeft = root.getBoundingClientRect().left
       const triggerLeft = trigger.getBoundingClientRect().left - rootLeft
-      const width = content.getBoundingClientRect().width
+      const { width, height } = content.getBoundingClientRect()
       const max = document.documentElement.clientWidth - EDGE - rootLeft - width
       const min = EDGE - rootLeft
-      setOffset({
-        x: Math.max(min, Math.min(triggerLeft, max)),
-        animate: switching.current
-      })
+      const x = Math.max(min, Math.min(triggerLeft, max))
+      const animate = switching.current
+      setPanel((current) =>
+        current.x === x &&
+        current.width === width &&
+        current.height === height &&
+        current.animate === animate
+          ? current
+          : { x, width, height, animate }
+      )
+      if (findContent) {
+        observer.observe(content)
+        observer.observe(root)
+      }
     }
-    place(5)
-    return () => cancelAnimationFrame(frame)
+    place(true)
+    return () => {
+      cancelAnimationFrame(frame)
+      observer.disconnect()
+    }
   }, [value, rootRef])
 
   const overflow = links.slice(visible)
@@ -169,7 +185,10 @@ const MainNav = () => {
               ref={(el) => {
                 itemRefs.current[i] = el
               }}
-              className={cn("shrink-0", i >= visible && "hidden")}>
+              className={cn(
+                "shrink-0",
+                i >= visible && "invisible absolute top-0 left-0 w-max"
+              )}>
               {menu ? (
                 <>
                   {/* The label is a link to the section; hovering opens the
@@ -208,7 +227,9 @@ const MainNav = () => {
                       {dot}
                     </a>
                   </NavigationMenu.Trigger>
-                  <NavigationMenu.Content className="data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out w-max">
+                  <NavigationMenu.Content
+                    data-menu-route={link.route}
+                    className={menuContentClass}>
                     <MegaMenu menu={menu} name={link.label} />
                   </NavigationMenu.Content>
                 </>
@@ -247,7 +268,9 @@ const MainNav = () => {
               className="size-3 transition-transform group-data-[state=open]:rotate-180 motion-reduce:transition-none"
             />
           </NavigationMenu.Trigger>
-          <NavigationMenu.Content className="data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out w-max">
+          <NavigationMenu.Content
+            data-menu-route={MORE}
+            className={menuContentClass}>
             <ul className="w-max min-w-48 p-2">
               {overflow.map((link) => (
                 <li key={link.route}>
@@ -273,13 +296,18 @@ const MainNav = () => {
       <div
         className={cn(
           "absolute top-full left-0 isolate z-50",
-          offset.animate &&
+          panel.animate &&
             "transition-transform duration-200 ease-(--ease-out-strong) motion-reduce:transition-none"
         )}
-        style={{ transform: `translateX(${offset.x}px)` }}>
+        style={{ transform: `translateX(${panel.x}px)` }}>
         <NavigationMenu.Viewport
           ref={viewportRef}
-          className="bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 relative mt-3 h-(--radix-navigation-menu-viewport-height) w-(--radix-navigation-menu-viewport-width) origin-top-left overflow-hidden rounded-2xl border shadow-lg data-[state=closed]:[animation-duration:100ms] data-[state=open]:[animation-duration:150ms] motion-reduce:animate-none"
+          className={cn(
+            "bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:slide-in-from-top-1 data-[state=closed]:slide-out-to-top-1 data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 relative mt-3 origin-top-left overflow-hidden rounded-2xl border shadow-lg data-[state=closed]:[animation-duration:100ms] data-[state=open]:[animation-duration:150ms] motion-reduce:animate-none",
+            panel.animate &&
+              "transition-[width,height] duration-200 ease-(--ease-out-strong) motion-reduce:transition-none"
+          )}
+          style={{ width: panel.width, height: panel.height }}
         />
       </div>
     </NavigationMenu.Root>

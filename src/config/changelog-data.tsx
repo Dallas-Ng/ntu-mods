@@ -70,9 +70,21 @@ export const getReleaseSlug = ({ title, date }: ChangelogRelease) => {
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
-    title: "NTU academic calendar page and calendar export",
+    title: "Navigation, academic calendar and student guides",
     date: "26 Nov 2026",
     items: [
+      {
+        category: "Improvement",
+        content: (
+          <>
+            The redesigned navigation groups related pages into menus on desktop
+            and expandable sections on phones. Calendar links directly to the
+            academic calendar, and Developers has its own menu. The semester
+            indicator shows the current teaching week, module, index and exam
+            counts, and when the data was last updated.
+          </>
+        )
+      },
       {
         category: "New Feature",
         content: (
@@ -109,6 +121,33 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
             weeks, each public holiday, and the no-class window on
             Students&apos; Union Day. Events keep their IDs, so importing again
             updates them in place.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Search engines and other tools get clearer information about the
+            campus map, modules, exams, articles and planning tools. The{" "}
+            <ChangelogLink href="/developers/data">
+              open data catalogue
+            </ChangelogLink>{" "}
+            lists downloadable NTUMods datasets.
+          </>
+        )
+      },
+      {
+        category: "Content",
+        content: (
+          <>
+            Refreshed student guides with AY2026/27 Semester 2 dates, more
+            registration guidance, sports BDEs and updated NTU sign-in links.
+            Added a{" "}
+            <ChangelogLink href="/articles/ntu-academic-calendar-ay2027">
+              provisional AY2027/28 academic calendar guide
+            </ChangelogLink>
+            .
           </>
         )
       }

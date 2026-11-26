@@ -115,6 +115,9 @@ Tool at ntumods.com/tools/fgo-optimiser that helps NTU undergraduates choose whi
 ### Wallpaper Maker
 Exports the timetable as a phone lockscreen wallpaper or shareable image at ntumods.com/screenshot. Includes presets for common screen dimensions.
 
+### Academic calendar
+The NTUMods academic calendar at ntumods.com/calendar shows the current teaching week, semester dates, recess, revision and exams, public holidays and early dismissals. The dates come from NTU's published academic calendar. Subscribe to ntumods.com/calendar.ics in Google Calendar, Apple Calendar or Outlook, or download the calendar from the page. The same page is listed under NTUMods in Student Links.
+
 ### Student Links Page
 Curated quick-links hub at ntumods.com/links. Lists every major NTU student portal organised by category: Academics (STARS, NTULearn, Degree Audit, Transcript, Class Schedule, FGO Portal, Academic Calendar, Course Content, Student Email), Library & campus (Library Booking, Facilities Booking, NTU Campus Map, NTU Library, Campus Shuttle, Housing, Student Wellbeing), Student life (Clubs & Societies, Students' Union, Health Care), Career & exchange (CareerAxis, InPlace, GEM Portal, Course Matching), Finance & admin (Financial Aid, Fee Payment, One Stop @ SAC, IT Helpdesk), and NTUMods (every NTUMods tool and page). Each link includes a short description of what the portal does and when to use it. A companion article (ntumods.com/articles/ntu-student-portal-links) gives detailed guidance on each portal.
 

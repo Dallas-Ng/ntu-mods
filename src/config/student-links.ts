@@ -223,6 +223,11 @@ export const LINK_CATEGORIES: LinkCategory[] = [
         desc: "Browse the AY 2026/2027 Sem 1 exam timetable by date or module"
       },
       {
+        name: "Academic calendar",
+        href: "/calendar",
+        desc: "See teaching weeks, recess, exams and public holidays, or subscribe in your calendar app"
+      },
+      {
         name: "CGPA Planner",
         href: "/tools/cgpa-planner",
         desc: "Find the average grade you need over your remaining AU to reach Merit, Distinction or Highest Distinction"
@@ -277,12 +282,7 @@ export const LINK_CATEGORIES: LinkCategory[] = [
 ]
 
 /** The portals students open most, shown in the navbar's Links menu. */
-const QUICK_LINK_NAMES = [
-  "STARS",
-  "NTULearn",
-  "Degree Audit",
-  "Academic Calendar"
-]
+const QUICK_LINK_NAMES = ["STARS", "NTULearn", "Degree Audit", "Transcript"]
 
 export const QUICK_LINKS: ExternalNtuLink[] = QUICK_LINK_NAMES.map((name) => {
   const link = LINK_CATEGORIES.flatMap((c) =>

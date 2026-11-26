@@ -8,6 +8,7 @@ import {
   CalendarDays,
   ClipboardCheck,
   Compass,
+  FileText,
   Footprints,
   Github,
   GraduationCap,
@@ -120,9 +121,9 @@ const QUICK_LINK_DETAILS: Record<
     meta: "NTU login",
     guide: "/articles/ntu-degree-audit-guide"
   },
-  "Academic Calendar": {
-    icon: CalendarDays,
-    guide: "/articles/ntu-academic-calendar-ay2026"
+  Transcript: {
+    icon: FileText,
+    meta: "NTU login"
   }
 }
 

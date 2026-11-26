@@ -83,9 +83,7 @@ export async function getActiveModuleCodes(): Promise<string[]> {
 }
 
 /** Each module's code and title as of its most recent offering. */
-export async function getModuleTitles(): Promise<
-  Array<{ code: string; title: string }>
-> {
+export function getModuleTitles(): Array<{ code: string; title: string }> {
   return json
     .latestOfferings()
     .map((o) => ({ code: o.code, title: o.raw.title }))

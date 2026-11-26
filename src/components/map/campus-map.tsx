@@ -113,6 +113,7 @@ interface Props {
   buildingLabels: boolean
   roomLabels: boolean
   focus: Focus | null
+  initialBounds?: Focus["bounds"]
   marker?: Marker | null
   selectedId?: string | null
   mapStyle?: "standard" | "satellite" | "hybrid"
@@ -149,6 +150,11 @@ interface Props {
 }
 
 const INTRO_KEY = "ntumods-map-fullscreen-intro"
+
+const measureCentre = (el: HTMLDivElement) => {
+  const r = el.getBoundingClientRect()
+  return { x: r.left + el.clientWidth / 2, y: r.top + el.clientHeight / 2 }
+}
 
 interface View {
   cx: number
@@ -190,6 +196,7 @@ const CampusMap = ({
   buildingLabels,
   roomLabels,
   focus,
+  initialBounds,
   marker,
   selectedId,
   mapStyle = "standard",
@@ -306,42 +313,43 @@ const CampusMap = ({
   // off) the camera shifts by the same amount, so the map stays put under the
   // finger instead of sliding to the new centre.
   const centre = useRef<{ x: number; y: number } | null>(null)
-  const relayout = useRef(false)
+  const measureBox = useCallback((preservePosition: boolean) => {
+    const el = box.current
+    if (!el) return
+    const now = measureCentre(el)
+    const was = centre.current
+    if (preservePosition && was && (now.x !== was.x || now.y !== was.y)) {
+      const v = viewRef.current
+      cancelAnimationFrame(anim.current)
+      camTarget.current = null
+      setView({
+        cx: v.cx + (now.x - was.x) * v.mpp,
+        cy: v.cy + (now.y - was.y) * v.mpp,
+        mpp: v.mpp
+      })
+    }
+    centre.current = now
+    const w = el.clientWidth
+    const h = el.clientHeight
+    setSize((previous) =>
+      previous.w === w && previous.h === h ? previous : { w, h }
+    )
+  }, [])
   useLayoutEffect(() => {
-    relayout.current = true
-  }, [pinned])
+    measureBox(true)
+  }, [pinned, measureBox])
   useEffect(() => {
     const el = box.current
     if (!el) return
-    const measure = () => {
-      const r = el.getBoundingClientRect()
-      return { x: r.left + el.clientWidth / 2, y: r.top + el.clientHeight / 2 }
-    }
-    const ro = new ResizeObserver(() => {
-      const now = measure()
-      const was = centre.current
-      if (relayout.current && was) {
-        const v = viewRef.current
-        cancelAnimationFrame(anim.current)
-        camTarget.current = null
-        setView({
-          cx: v.cx + (now.x - was.x) * v.mpp,
-          cy: v.cy + (now.y - was.y) * v.mpp,
-          mpp: v.mpp
-        })
-      }
-      relayout.current = false
-      centre.current = now
-      setSize({ w: el.clientWidth, h: el.clientHeight })
-    })
+    const ro = new ResizeObserver(() => measureBox(false))
     ro.observe(el)
-    const onScroll = () => (centre.current = measure())
+    const onScroll = () => (centre.current = measureCentre(el))
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => {
       ro.disconnect()
       window.removeEventListener("scroll", onScroll)
     }
-  }, [])
+  }, [measureBox])
 
   // --- camera ---
   const flyTo = useCallback(
@@ -386,7 +394,7 @@ const CampusMap = ({
   )
 
   const fit = useCallback(
-    (b: [number, number, number, number], pad = 56) => {
+    (b: Focus["bounds"], pad = 56, immediately = false) => {
       const w = Math.max(b[2] - b[0], 30)
       const h = Math.max(b[3] - b[1], 30)
       const availW = Math.max(size.w - insets.left - pad * 2, 100)
@@ -398,17 +406,25 @@ const CampusMap = ({
       // Put the area's centre in the middle of what is not covered by panels.
       const shiftX = (insets.left / 2) * mpp
       const shiftY = ((insets.top - insets.bottom) / 2) * mpp
-      flyTo({
+      const target = {
         cx: (b[0] + b[2]) / 2 - shiftX,
         cy: (b[1] + b[3]) / 2 - shiftY,
         mpp
-      })
+      }
+      if (immediately) setView(clampView(target))
+      else flyTo(target)
     },
-    [flyTo, size.h, size.w, insets.left, insets.bottom, insets.top]
+    [clampView, flyTo, size.h, size.w, insets.left, insets.bottom, insets.top]
   )
 
   // Frame the requested area once the map knows its own size.
   const measured = size.w > 0
+  const framed = useRef(false)
+  useLayoutEffect(() => {
+    if (!initialBounds || !measured || framed.current) return
+    framed.current = true
+    fit(initialBounds, undefined, true)
+  }, [fit, initialBounds, measured])
   useEffect(() => {
     if (focus && measured) fit(focus.bounds)
     // oxlint-disable-next-line react/exhaustive-deps
@@ -1395,6 +1411,7 @@ const CampusMap = ({
               onClick={() => {
                 const pts = pins.map((p) => [p.x, p.y])
                 if (focus) fit(focus.bounds)
+                else if (initialBounds) fit(initialBounds)
                 else if (pts.length)
                   fit([
                     Math.min(...pts.map((p) => p[0])),

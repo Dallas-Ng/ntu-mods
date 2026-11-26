@@ -174,10 +174,10 @@ const TOOL_LINKS = [
 // Server-rendered at build time (this page is prerendered, and this component
 // already reads articles off the filesystem), so it can fetch module titles
 // here rather than bundling module-map.json into the client payload.
-async function getModuleGroups() {
+function getModuleGroups() {
   const groups = new Map<string, Array<{ code: string; title: string }>>()
 
-  for (const { code, title } of await getModuleTitles()) {
+  for (const { code, title } of getModuleTitles()) {
     const prefix = getModulePrefix(code)
     const modules = groups.get(prefix) ?? []
     modules.push({ code, title: title || code })
@@ -192,7 +192,7 @@ async function getModuleGroups() {
 
 const SitemapContent = async () => {
   const articles = await getAllArticles()
-  const moduleGroups = await getModuleGroups()
+  const moduleGroups = getModuleGroups()
 
   return (
     <Container size="md" className="space-y-8">

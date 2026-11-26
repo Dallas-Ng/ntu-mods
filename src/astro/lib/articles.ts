@@ -63,12 +63,14 @@ export const getArticleBySlug = async (slug: string) => {
   return articles.find((article) => article.slug === slug)
 }
 
-export const getArticleCategories = async () => {
-  const articles = await getAllArticles()
+export const getCategoriesFromArticles = (articles: readonly Article[]) => {
   return Array.from(new Set(articles.map((article) => article.category))).sort(
     (a, b) => a.localeCompare(b)
   )
 }
+
+export const getArticleCategories = async () =>
+  getCategoriesFromArticles(await getAllArticles())
 
 export const getArticlesByCategory = async (categorySlug: string) => {
   const articles = await getAllArticles()

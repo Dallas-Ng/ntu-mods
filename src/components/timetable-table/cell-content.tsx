@@ -50,21 +50,25 @@ export const TimetableTableCellContent = (props: Props) => {
     const style = getCustomBlockStyle(index.remarks)
     return (
       <>
-        <p>
+        <span className="block">
           <span className={cn("font-bold", style.text)}>{index.group}</span>
           {sessionLabel && (
             <span className={cn(style.textAlt)}> {sessionLabel}</span>
           )}
-        </p>
-        {tableCell.time && <p className={cn(style.textAlt)}>{index.time}</p>}
-        {tableCell.venue && index.venue && <p>{index.venue}</p>}
+        </span>
+        {tableCell.time && (
+          <span className={cn("block", style.textAlt)}>{index.time}</span>
+        )}
+        {tableCell.venue && index.venue && (
+          <span className="block">{index.venue}</span>
+        )}
       </>
     )
   }
 
   return (
     <>
-      <p>
+      <span className="block">
         <span className={cn("font-bold", indexStyle.text)}>{moduleKey}</span>
 
         {tableCell.type && (
@@ -79,21 +83,23 @@ export const TimetableTableCellContent = (props: Props) => {
         ) : (
           tableCell.group && <> ({index.group})</>
         )}
-      </p>
+      </span>
 
-      <p>
+      <span className="block">
         {tableCell.time && <>{index.time}</>}
 
         {tableCell.day && index.day > 0 && (
           <> {(TRUN_DAY_MAP as Record<number, string>)[index.day]}</>
         )}
-      </p>
+      </span>
 
-      {tableCell.venue && <p>{index.venue}</p>}
+      {tableCell.venue && <span className="block">{index.venue}</span>}
 
-      {tableCell.remarks && <p>{formatRemarks(index.remarks)}</p>}
+      {tableCell.remarks && (
+        <span className="block">{formatRemarks(index.remarks)}</span>
+      )}
 
-      {tableCell.key && <p>{index.key}</p>}
+      {tableCell.key && <span className="block">{index.key}</span>}
     </>
   )
 }

@@ -10,6 +10,7 @@ import {
 } from "@/lib/custom-course-colors"
 import { getIndexColorKey } from "@/lib/get-index-type"
 import { getIndexTypeStyle } from "@/lib/get-index-type-style"
+import { TRUN_DAY_MAP } from "@/lib/module-constants"
 import {
   clampOpacity,
   getActiveOverride,
@@ -148,14 +149,26 @@ export const TimetableTableCell = (props: Props) => {
     ...(clamp ? { height: cellHeightPx } : {})
   } as CSSProperties
 
+  const CellBlock = onClick ? "button" : "div"
+  const hiddenSchedule = [
+    (isCustom || (!fullCell && !tableCell.day)) &&
+      TRUN_DAY_MAP[index.day as keyof typeof TRUN_DAY_MAP],
+    !fullCell && !tableCell.time && index.time
+  ]
+    .filter(Boolean)
+    .join(" ")
   const cellContent = (
-    <div
+    <CellBlock
+      type={onClick ? "button" : undefined}
+      disabled={onClick && pickerDimmed ? true : undefined}
       className={cn(
         // Mobile always renders compact (0.25rem, matching the "Compact"
         // density preset) regardless of the user's chosen density — cells
         // are too small on a phone screen to afford Comfortable/Spacious
         // padding. The density setting only takes effect from md: up.
-        "relative flex cursor-pointer items-center rounded-lg p-[0.25rem] break-words md:p-[var(--cell-padding)]",
+        "relative flex w-full items-center rounded-lg p-[0.25rem] text-left break-words md:p-[var(--cell-padding)]",
+        onClick &&
+          "focus-visible:outline-foreground cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-2",
         clamp ? "overflow-hidden" : "h-full",
         // The block's own opacity, composed with any dimmed state through
         // --cell-state-opacity. Values live in CSS so the dark variants stay.
@@ -189,7 +202,10 @@ export const TimetableTableCell = (props: Props) => {
         />
       )}
 
-      <div className="w-full" data-cell-fit data-duration={index.duration}>
+      <span
+        className="block w-full"
+        data-cell-fit
+        data-duration={index.duration}>
         {/*  */}
         <TimetableTableCellContent
           index={{
@@ -215,8 +231,11 @@ export const TimetableTableCell = (props: Props) => {
               : tableCell
           }
         />
-      </div>
-    </div>
+        {onClick && hiddenSchedule && (
+          <span className="sr-only"> {hiddenSchedule}</span>
+        )}
+      </span>
+    </CellBlock>
   )
 
   return (

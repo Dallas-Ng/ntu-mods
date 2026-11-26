@@ -106,3 +106,10 @@ const CREDITS = [
     </p>
   </footer>
 </BaseLayout>
+
+<style is:global>
+  /* Apply the scroll lock with the map layout, before measuring its camera. */
+  body:has([data-map-pinned]) {
+    overflow: hidden;
+  }
+</style>

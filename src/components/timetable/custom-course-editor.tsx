@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useBoundState } from "@/state/bound.state"
 import { Plus, Trash2, X } from "lucide-react"
 
@@ -164,6 +164,7 @@ const formToCourse = (form: FormState): Omit<CustomCourse, "id"> => {
 
 interface SessionRowProps {
   session: SessionRow
+  sessionNumber: number
   canRemove: boolean
   onChange: (updates: Partial<SessionRow>) => void
   onRemove: () => void
@@ -171,6 +172,7 @@ interface SessionRowProps {
 
 const SessionRowEditor = ({
   session,
+  sessionNumber,
   canRemove,
   onChange,
   onRemove
@@ -256,6 +258,7 @@ const SessionRowEditor = ({
         <Button
           variant="ghost"
           size="icon"
+          aria-label={`Remove session ${sessionNumber}`}
           disabled={!canRemove}
           onClick={onRemove}
           className="text-muted-foreground hover:text-destructive mt-0.5 size-8 shrink-0">
@@ -346,6 +349,7 @@ const SessionRowEditor = ({
 export interface CourseModalProps {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onCloseAutoFocus?: (event: Event) => void
   initial?: CustomCourse
   initialName?: string
   onSave: (data: Omit<CustomCourse, "id">) => void
@@ -354,6 +358,7 @@ export interface CourseModalProps {
 export const CourseModal = ({
   open,
   onOpenChange,
+  onCloseAutoFocus,
   initial,
   initialName,
   onSave
@@ -438,6 +443,7 @@ export const CourseModal = ({
     <ResponsiveModal
       open={open}
       onOpenChange={onOpenChange}
+      onCloseAutoFocus={onCloseAutoFocus}
       title={initial ? "Edit custom block" : "Add custom block"}
       description="Name the block, then choose its days, times and venue."
       className="max-h-[90vh] overflow-y-auto">
@@ -529,10 +535,11 @@ export const CourseModal = ({
           <Label>Sessions</Label>
 
           <div className="space-y-2">
-            {activeIndex.sessions.map((session) => (
+            {activeIndex.sessions.map((session, index) => (
               <SessionRowEditor
                 key={session._key}
                 session={session}
+                sessionNumber={index + 1}
                 canRemove={activeIndex.sessions.length > 1}
                 onChange={(updates) => updateSession(session._key, updates)}
                 onRemove={() => removeSession(session._key)}
@@ -589,6 +596,7 @@ const CustomCourseEditor = () => {
 
   const [addOpen, setAddOpen] = useState(false)
   const [editingCourse, setEditingCourse] = useState<CustomCourse | null>(null)
+  const editTrigger = useRef<HTMLButtonElement | null>(null)
 
   useEffect(() => {
     setAddOpen(false)
@@ -617,35 +625,28 @@ const CustomCourseEditor = () => {
 
           return (
             <div key={course.id}>
-              {/* Not a <button>: it holds the remove button. */}
-              <div
-                role="button"
-                tabIndex={0}
-                aria-label={`Edit ${course.name}`}
-                className="hover:bg-accent focus-visible:ring-ring/50 flex items-center justify-between pr-3 pl-4 text-sm transition-colors outline-none focus-visible:ring-[3px]"
-                onClick={() => setEditingCourse(course)}
-                onKeyDown={(e) => {
-                  if (e.target !== e.currentTarget) return
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault()
+              <div className="hover:bg-accent flex items-center pr-3 text-sm transition-colors">
+                <button
+                  type="button"
+                  aria-label={`${course.name}, edit custom block`}
+                  className="focus-visible:ring-ring/50 flex min-h-8 min-w-0 flex-1 items-center gap-1 pl-4 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-inset"
+                  onClick={(e) => {
+                    editTrigger.current = e.currentTarget
                     setEditingCourse(course)
-                  }
-                }}>
-                <div className="flex min-w-0 items-center gap-1">
+                  }}>
                   <span className="max-w-[110px] min-w-16 truncate font-medium">
                     {course.name}
                   </span>
                   <span className="text-muted-foreground shrink-0 text-sm">
                     {sessionLabels}
                   </span>
-                </div>
+                </button>
 
                 <button
                   type="button"
                   aria-label={`Remove ${course.name}`}
-                  className="flex size-8 shrink-0 items-center justify-center"
-                  onClick={(e) => {
-                    e.stopPropagation()
+                  className="focus-visible:ring-ring/50 flex size-8 shrink-0 items-center justify-center outline-none focus-visible:ring-[3px] focus-visible:ring-inset"
+                  onClick={() => {
                     removeCustomCourse(course.id)
                     if (editingCourse?.id === course.id) setEditingCourse(null)
                     track("custom_course_deleted")
@@ -709,6 +710,13 @@ const CustomCourseEditor = () => {
 
       <CourseModal
         open={!!editingCourse}
+        onCloseAutoFocus={(event) => {
+          const trigger = editTrigger.current
+          editTrigger.current = null
+          if (!trigger?.isConnected) return
+          event.preventDefault()
+          trigger.focus()
+        }}
         onOpenChange={(open) => {
           if (!open) setEditingCourse(null)
         }}

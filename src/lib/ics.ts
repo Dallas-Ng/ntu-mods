@@ -21,6 +21,11 @@ export interface IcsEvent {
   summary: string
   description?: string
   location?: string
+  /**
+   * A whole-day event, such as a public holiday. Only the dates of `start` and
+   * `end` are used, and `end` is the last day, inclusive.
+   */
+  allDay?: boolean
 }
 
 const pad = (value: number) => String(value).padStart(2, "0")
@@ -30,6 +35,10 @@ export const formatIcsDate = (date: Date) =>
   `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}T${pad(
     date.getHours()
   )}${pad(date.getMinutes())}${pad(date.getSeconds())}`
+
+/** `20270111`: a date with no time, as all-day `DTSTART`/`DTEND` take it. */
+const formatIcsDay = (date: Date) =>
+  `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}`
 
 /** `20261106T024632Z`: UTC, as `DTSTAMP` requires. */
 const formatIcsUtc = (date: Date) =>
@@ -108,8 +117,27 @@ export const createIcs = (
       "BEGIN:VEVENT",
       contentLine("UID", event.uid),
       contentLine("DTSTAMP", formatIcsUtc(stamp)),
-      contentLine("DTSTART", formatIcsDate(event.start)),
-      contentLine("DTEND", formatIcsDate(event.end)),
+      ...(event.allDay
+        ? [
+            contentLine("DTSTART;VALUE=DATE", formatIcsDay(event.start)),
+            // All-day DTEND is exclusive (RFC 5545 §3.6.1): the day after.
+            contentLine(
+              "DTEND;VALUE=DATE",
+              formatIcsDay(
+                new Date(
+                  event.end.getFullYear(),
+                  event.end.getMonth(),
+                  event.end.getDate() + 1
+                )
+              )
+            ),
+            // Free, so a holiday never shows as busy over the day.
+            "TRANSP:TRANSPARENT"
+          ]
+        : [
+            contentLine("DTSTART", formatIcsDate(event.start)),
+            contentLine("DTEND", formatIcsDate(event.end))
+          ]),
       contentLine("SUMMARY", escapeText(event.summary))
     )
     if (event.description)

@@ -83,8 +83,9 @@ const TimetableCalendarDialog = ({
       <ModalSection title="What you get">
         <p className="text-muted-foreground text-sm">
           An <InlineCode>.ics</InlineCode> file with one event for every class,
-          on each week it runs, with its venue. Recess week is skipped. It works
-          with any calendar app.
+          on each week it runs, with its venue. Dates come from the NTU academic
+          calendar: classes on public holidays are left out, and recess, exam
+          weeks and holidays are marked. It works with any calendar app.
         </p>
       </ModalSection>
 

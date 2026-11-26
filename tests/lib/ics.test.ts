@@ -93,4 +93,19 @@ describe("formatIcsDate", () => {
   it("pads every field and omits the timezone", () => {
     expect(formatIcsDate(new Date(2026, 0, 2, 3, 4, 5))).toBe("20260102T030405")
   })
+
+  it("writes all-day events as dates with an exclusive end, shown as free", () => {
+    const ics = write([
+      event({
+        allDay: true,
+        start: new Date(2027, 2, 1),
+        end: new Date(2027, 2, 5)
+      })
+    ])
+
+    expect(ics).toContain("DTSTART;VALUE=DATE:20270301\r\n")
+    expect(ics).toContain("DTEND;VALUE=DATE:20270306\r\n")
+    expect(ics).toContain("TRANSP:TRANSPARENT\r\n")
+    expect(ics).not.toContain("DTSTART:2027")
+  })
 })

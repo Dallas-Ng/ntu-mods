@@ -1,7 +1,7 @@
 import { LinkArrow } from "@/components/ui/text-link"
 
 const BANNER_TEXT =
-  "New: upload your NTU Degree Audit PDF to the CGPA Planner and FGO Optimiser"
+  "New: calendar export now follows the NTU academic calendar, with public holidays and exam weeks"
 const BANNER_HREF = "/changelog"
 
 /**

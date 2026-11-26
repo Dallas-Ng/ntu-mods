@@ -51,7 +51,15 @@ const initialModules = allModules
 const modsJsonLd = collectionPageJsonLd({
   name: siteConfig.metatags.mods.title,
   description: siteConfig.metatags.mods.desc,
-  path: "/mods"
+  path: "/mods",
+  items: directory.flatMap(([, list]) =>
+    list
+      .filter(({ code }) => modules[code].description?.trim())
+      .map(({ code, title }) => ({
+        name: title,
+        url: `${siteConfig.url}${getModuleUrl(code)}`
+      }))
+  )
 })
 ---
 

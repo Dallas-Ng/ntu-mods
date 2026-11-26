@@ -4,6 +4,7 @@
  * hand-write schema objects or <script> tags.
  */
 import { siteConfig } from "@/config/site"
+import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 
 export type JsonLd = Record<string, unknown>
 
@@ -20,11 +21,23 @@ export const absoluteUrl = (pathOrUrl: string) =>
 export const serializeJsonLd = (data: JsonLd) =>
   JSON.stringify(data).replace(/</g, "\\u003c")
 
+const organization = {
+  "@type": "Organization",
+  "@id": absoluteUrl("/#organization"),
+  name: siteConfig.name,
+  url: siteConfig.url
+}
+
+const website = {
+  "@type": "WebSite",
+  "@id": absoluteUrl("/#website"),
+  name: siteConfig.name,
+  url: siteConfig.url
+}
+
 export const organizationJsonLd = (): JsonLd => ({
   "@context": CONTEXT,
-  "@type": "Organization",
-  name: siteConfig.name,
-  url: siteConfig.url,
+  ...organization,
   logo: absoluteUrl("/logo.png"),
   description:
     "Free, independent timetable planner and module browser for Nanyang Technological University students. Not affiliated with NTU."
@@ -32,9 +45,8 @@ export const organizationJsonLd = (): JsonLd => ({
 
 export const websiteJsonLd = (): JsonLd => ({
   "@context": CONTEXT,
-  "@type": "WebSite",
-  name: siteConfig.name,
-  url: siteConfig.url,
+  ...website,
+  publisher: organization,
   description:
     "NTU timetable planner and module browser for Nanyang Technological University students."
 })
@@ -61,41 +73,69 @@ export const webApplicationJsonLd = ({
   offers: { "@type": "Offer", price: "0", priceCurrency: "SGD" },
   isAccessibleForFree: true,
   ...(featureList && { featureList }),
-  publisher: {
-    "@type": "Organization",
-    name: siteConfig.name,
-    url: siteConfig.url
-  }
+  publisher: organization
 })
 
-export const datasetJsonLd = ({
-  name,
-  description,
-  path,
-  keywords,
-  dateModified
-}: {
+interface DatasetInput {
   name: string
   description: string
   path: string
-  keywords: string[]
-  /** ISO date (YYYY-MM-DD). */
-  dateModified: string
-}): JsonLd => ({
-  "@context": CONTEXT,
+  source?: string
+  downloads: { name: string; url: string }[]
+}
+
+const dataset = ({
+  name,
+  description,
+  path,
+  source,
+  downloads
+}: DatasetInput): JsonLd => ({
   "@type": "Dataset",
+  "@id": absoluteUrl(path),
   name,
   description,
   url: absoluteUrl(path),
   isAccessibleForFree: true,
-  keywords,
-  creator: {
-    "@type": "Organization",
-    name: siteConfig.name,
-    url: siteConfig.url
-  },
-  dateModified
+  publisher: organization,
+  ...(source && { isBasedOn: source }),
+  distribution: downloads.map(({ name, url }) => ({
+    "@type": "DataDownload",
+    name,
+    contentUrl: absoluteUrl(url),
+    encodingFormat: "application/json"
+  }))
 })
+
+export const datasetJsonLd = (input: DatasetInput): JsonLd => ({
+  "@context": CONTEXT,
+  ...dataset(input)
+})
+
+export const dataCatalogJsonLd = ({
+  name,
+  description,
+  path,
+  datasets
+}: {
+  name: string
+  description: string
+  path: string
+  datasets: DatasetInput[]
+}): JsonLd =>
+  webPageJsonLd({
+    name,
+    description,
+    path,
+    mainEntity: {
+      "@type": "DataCatalog",
+      "@id": absoluteUrl(`${path}#catalog`),
+      name,
+      description,
+      publisher: organization,
+      dataset: datasets.map(dataset)
+    }
+  })
 
 interface CollectionPageInput {
   name: string
@@ -117,7 +157,7 @@ export const collectionPageJsonLd = ({
   name,
   description,
   url: absoluteUrl(path),
-  isPartOf: { "@type": "WebSite", name: siteConfig.name, url: siteConfig.url },
+  isPartOf: website,
   ...(items.length > 0 && {
     mainEntity: {
       "@type": "ItemList",
@@ -137,20 +177,51 @@ export const webPageJsonLd = ({
   name,
   description,
   path,
-  type = "WebPage"
+  type = "WebPage",
+  mainEntity
 }: {
   name: string
   description: string
   path: string
   type?: "WebPage" | "AboutPage" | "ContactPage"
+  mainEntity?: JsonLd
 }): JsonLd => ({
   "@context": CONTEXT,
   "@type": type,
   name,
   description,
   url: absoluteUrl(path),
-  isPartOf: { "@type": "WebSite", name: siteConfig.name, url: siteConfig.url }
+  isPartOf: website,
+  ...(mainEntity && { mainEntity })
 })
+
+export const campusMapJsonLd = ({
+  name,
+  description,
+  path
+}: {
+  name: string
+  description: string
+  path: string
+}): JsonLd =>
+  webPageJsonLd({
+    name,
+    description,
+    path,
+    mainEntity: {
+      "@type": "Map",
+      "@id": absoluteUrl(`${path}#map`),
+      name,
+      description,
+      url: absoluteUrl(path),
+      publisher: organization,
+      about: {
+        "@type": "Place",
+        "@id": absoluteUrl(`${path}#campus`),
+        name: "Nanyang Technological University campus"
+      }
+    }
+  })
 
 /** BreadcrumbList; href is a site-relative path or absolute URL. */
 export const breadcrumbListJsonLd = (
@@ -202,7 +273,11 @@ export const articleJsonLd = ({
   image,
   datePublished,
   dateModified,
-  author: { "@type": "Person", name: author },
+  author:
+    author === siteConfig.name
+      ? organization
+      : { "@type": "Person", name: author },
+  publisher: organization,
   mainEntityOfPage: url
 })
 
@@ -216,16 +291,58 @@ export const courseJsonLd = ({
   title: string
   description: string
   credits: string | number
-}): JsonLd => ({
-  "@context": CONTEXT,
-  "@type": "Course",
-  name: `${code} ${title}`,
-  courseCode: code,
-  description,
-  numberOfCredits: String(credits),
-  provider: {
-    "@type": "CollegeOrUniversity",
-    name: "Nanyang Technological University",
-    sameAs: "https://www.ntu.edu.sg"
+}): JsonLd => {
+  const url = absoluteUrl(getModuleUrl(code))
+  const units = Number(credits)
+  const numberOfCredits = Number.isInteger(units)
+    ? units
+    : { "@type": "QuantitativeValue", value: units, unitText: "Academic units" }
+
+  return {
+    "@context": CONTEXT,
+    "@type": "Course",
+    "@id": `${url}#course`,
+    url,
+    mainEntityOfPage: url,
+    name: title,
+    courseCode: code,
+    description,
+    ...(String(credits).trim() &&
+      Number.isFinite(units) &&
+      units >= 0 && { numberOfCredits }),
+    provider: {
+      "@type": "CollegeOrUniversity",
+      name: "Nanyang Technological University",
+      sameAs: "https://www.ntu.edu.sg"
+    }
   }
-})
+}
+
+export const courseInstanceJsonLd = ({
+  code,
+  year,
+  semester,
+  name
+}: {
+  code: string
+  year: string
+  semester: string
+  name: string
+}): JsonLd => {
+  const url = absoluteUrl(getModuleVersionUrl(code, year, semester))
+  return {
+    "@context": CONTEXT,
+    "@type": "CourseInstance",
+    "@id": `${url}#offering`,
+    url,
+    name,
+    mainEntityOfPage: url,
+    "@reverse": {
+      hasCourseInstance: {
+        "@type": "Course",
+        "@id": absoluteUrl(`${getModuleUrl(code)}#course`),
+        courseCode: code
+      }
+    }
+  }
+}

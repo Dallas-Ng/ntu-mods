@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest"
 import {
   absoluteUrl,
   breadcrumbListJsonLd,
+  campusMapJsonLd,
   collectionPageJsonLd,
+  courseJsonLd,
   faqPageJsonLd,
   serializeJsonLd,
   webPageJsonLd
@@ -25,6 +27,38 @@ describe("serializeJsonLd", () => {
 })
 
 describe("builders", () => {
+  it("describes the canonical map and the campus it covers", () => {
+    const ld = campusMapJsonLd({
+      name: "NTU Campus Map",
+      description: "Find rooms and walking routes",
+      path: "/maps"
+    })
+    expect(ld.mainEntity).toMatchObject({
+      "@type": "Map",
+      url: "https://ntumods.com/maps",
+      about: { "@type": "Place" }
+    })
+  })
+
+  it("preserves whole and fractional academic units in the supported types", () => {
+    const course = {
+      code: "SC1004",
+      title: "Linear Algebra for Computing",
+      description: "An introduction to linear algebra."
+    }
+    expect(courseJsonLd({ ...course, credits: "3.0" }).numberOfCredits).toBe(3)
+    expect(courseJsonLd({ ...course, credits: "1.5" }).numberOfCredits).toEqual(
+      {
+        "@type": "QuantitativeValue",
+        value: 1.5,
+        unitText: "Academic units"
+      }
+    )
+    expect(courseJsonLd({ ...course, credits: "" })).not.toHaveProperty(
+      "numberOfCredits"
+    )
+  })
+
   it("webPageJsonLd defaults to WebPage with an absolute url", () => {
     const ld = webPageJsonLd({ name: "N", description: "D", path: "/privacy" })
     expect(ld["@type"]).toBe("WebPage")

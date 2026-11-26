@@ -2,7 +2,7 @@
 import { TriangleAlert } from "lucide-react"
 
 import { formatTitle } from "@/lib/format"
-import { breadcrumbListJsonLd } from "@/lib/json-ld"
+import { breadcrumbListJsonLd, courseInstanceJsonLd } from "@/lib/json-ld"
 import { MODULE_CATEGORY } from "@/lib/module-constants"
 import { getModuleUrl, getModuleVersionUrl } from "@/lib/module-url"
 import { getModuleSnapshot } from "@/lib/server/edge/get-module-snapshot"
@@ -75,7 +75,19 @@ const crumbs = [
     ? getModuleUrl(code)
     : getModuleVersionUrl(code, year, semester)}
   noTitleSuffix>
-  <JsonLd data={breadcrumbListJsonLd(crumbs)} />
+  <JsonLd
+    data={[
+      breadcrumbListJsonLd(crumbs),
+      canonicalToLatest
+        ? null
+        : courseInstanceJsonLd({
+            code,
+            year,
+            semester,
+            name: `${moduleData.title} (${semLabel})`
+          })
+    ]}
+  />
   {
     !isCurrentOffering && (
       <Alert variant="warning" role="note" className="py-4 text-base">

@@ -1,10 +1,6 @@
 ---
 import { siteConfig } from "@/config/site"
-import {
-  breadcrumbListJsonLd,
-  faqPageJsonLd,
-  webApplicationJsonLd
-} from "@/lib/json-ld"
+import { breadcrumbListJsonLd, webApplicationJsonLd } from "@/lib/json-ld"
 import { cardVariants } from "@/components/ui/card"
 import { CardCta, TextLink } from "@/components/ui/text-link"
 import Breadcrumbs from "@/components/breadcrumbs"
@@ -86,13 +82,17 @@ const FAQ = [
       webApplicationJsonLd({
         name: "NTUMods CGPA Planner",
         path: "/tools/cgpa-planner",
-        description: desc
+        description: desc,
+        featureList: [
+          "Calculate the average grade needed for each honours class",
+          "Enter your CGPA and remaining academic units manually",
+          "Read an uploaded transcript in your browser"
+        ]
       }),
       breadcrumbListJsonLd([
         { name: "Tools", href: "/tools" },
         { name: "CGPA Planner", href: "/tools/cgpa-planner" }
-      ]),
-      faqPageJsonLd(FAQ)
+      ])
     ]}
   />
 

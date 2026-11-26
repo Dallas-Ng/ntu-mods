@@ -14,11 +14,6 @@ const HEADING = /^(#{2,3})\s+(.+)$/ // e.g. "## Courses" -> "##", "Courses"
 const WORD_SEPARATOR = /\s+/ // e.g. "one  two" -> "  "
 const CATEGORY_CHARS = /[^a-z0-9]+/g // e.g. "study tips" -> " "
 const EDGE_HYPHENS = /^-|-$/g // e.g. "-study-" -> leading and trailing "-"
-const IMAGE = /!\[[^\]]*\]\([^)]+\)/g // e.g. "![map](map.png)"
-const FAQ_MARKDOWN = /[`*_~>#]/g // e.g. "**answer**" -> "*"
-const H2 = /^##\s+(.+)$/
-const H3 = /^###\s+(.+)$/
-const FAQ_HEADING = /frequently asked questions|^faq$/i // e.g. "Frequently Asked Questions" or "FAQ"
 
 const slugify = (value: string) =>
   value
@@ -72,61 +67,3 @@ export const slugifyCategory = (category: string) =>
     .toLowerCase()
     .replace(CATEGORY_CHARS, "-")
     .replace(EDGE_HYPHENS, "")
-
-export const extractFaqItems = (
-  content: string
-): { question: string; answer: string }[] => {
-  const lines = content.split("\n")
-  const items: { question: string; answer: string }[] = []
-
-  let inFaqSection = false
-  let currentQuestion: string | null = null
-  const currentAnswerLines: string[] = []
-
-  const pushCurrent = () => {
-    if (currentQuestion && currentAnswerLines.length > 0) {
-      const answer = currentAnswerLines
-        .join(" ")
-        .replace(IMAGE, "")
-        .replace(LINK_WITH_TEXT, "$1")
-        .replace(FAQ_MARKDOWN, "")
-        .replace(WHITESPACE, " ")
-        .trim()
-      if (answer) items.push({ question: currentQuestion, answer })
-    }
-    currentQuestion = null
-    currentAnswerLines.length = 0
-  }
-
-  for (const line of lines) {
-    const h2 = H2.exec(line)
-    const h3 = H3.exec(line)
-
-    if (h2) {
-      if (inFaqSection) {
-        pushCurrent()
-        break
-      }
-      if (FAQ_HEADING.test(h2[1].trim())) {
-        inFaqSection = true
-      }
-      continue
-    }
-
-    if (!inFaqSection) continue
-
-    if (h3) {
-      pushCurrent()
-      currentQuestion = stripMarkdown(h3[1])
-      continue
-    }
-
-    if (currentQuestion && line.trim() && !line.startsWith("#")) {
-      currentAnswerLines.push(line.trim())
-    }
-  }
-
-  if (inFaqSection) pushCurrent()
-
-  return items
-}

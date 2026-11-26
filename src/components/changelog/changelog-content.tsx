@@ -1,10 +1,12 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { ArrowUp, Link as LinkIcon } from "lucide-react"
 
 import {
   CHANGELOG,
+  getReleaseSlug,
+  MONTHS,
   type ChangelogCategory,
   type ChangelogRelease
 } from "@/config/changelog-data"
@@ -12,6 +14,7 @@ import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 import { UNSEEN_CHANGELOG_IDS } from "@/hooks/use-changelog-unseen"
 import { useHydrated } from "@/hooks/use-hydrated"
+import { replaceSearchParams, useSearchParams } from "@/hooks/use-search-params"
 import { cardVariants } from "@/components/ui/card"
 import ArticleToc, {
   MobileSectionDropdown
@@ -35,6 +38,10 @@ const CATEGORY_STYLES: Record<ChangelogCategory, string> = {
 const CATEGORIES = Object.keys(CATEGORY_STYLES) as ChangelogCategory[]
 
 const FILTERS = ["All", ...CATEGORIES] as ChangelogFilter[]
+
+// "Bug Fix" -> "bug-fix", for /changelog?filter=bug-fix links.
+const filterSlug = (filter: ChangelogFilter) =>
+  filter.toLowerCase().replace(/\s+/g, "-")
 
 const getCategoryBadgeClassName = (category: ChangelogCategory) =>
   cn(
@@ -76,36 +83,6 @@ const ChangelogFilters = ({
     ))}
   </div>
 )
-
-const MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec"
-]
-
-// "Landing page redesign" + "17 Oct 2026" -> "landing-page-redesign-2026-10-17"
-const getReleaseSlug = ({ title, date }: ChangelogRelease) => {
-  const [day, month, year] = date.split(" ")
-  const monthNumber = String(MONTHS.indexOf(month.slice(0, 3)) + 1).padStart(
-    2,
-    "0"
-  )
-  const titleSlug = title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-
-  return `${titleSlug}-${year}-${monthNumber}-${day.padStart(2, "0")}`
-}
 
 const ChangelogReleaseSection = ({
   release,
@@ -178,7 +155,16 @@ const getQuarter = (date: string) => {
 }
 
 const ChangelogContent = () => {
-  const [activeFilter, setActiveFilter] = useState<ChangelogFilter>("All")
+  // The filter lives in the URL (?filter=data) so other pages can link to a
+  // filtered changelog, e.g. the data updates on /developers/freshness.
+  const searchParams = useSearchParams()
+  const activeFilter =
+    FILTERS.find((f) => filterSlug(f) === searchParams.get("filter")) ?? "All"
+  const setActiveFilter = (filter: ChangelogFilter) =>
+    replaceSearchParams(
+      window.location.pathname,
+      filter === "All" ? "" : `filter=${filterSlug(filter)}`
+    )
   // Unseen state is client-only, so the badges wait for hydration to avoid a mismatch.
   const hydrated = useHydrated()
 

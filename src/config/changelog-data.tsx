@@ -38,6 +38,36 @@ export const ChangelogLink = ({
   children: React.ReactNode
 }) => <TextLink href={href}>{children}</TextLink>
 
+export const MONTHS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec"
+]
+
+// "Landing page redesign" + "17 Oct 2026" -> "landing-page-redesign-2026-10-17"
+export const getReleaseSlug = ({ title, date }: ChangelogRelease) => {
+  const [day, month, year] = date.split(" ")
+  const monthNumber = String(MONTHS.indexOf(month.slice(0, 3)) + 1).padStart(
+    2,
+    "0"
+  )
+  const titleSlug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+
+  return `${titleSlug}-${year}-${monthNumber}-${day.padStart(2, "0")}`
+}
+
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
     title: "NTU academic calendar page and calendar export",

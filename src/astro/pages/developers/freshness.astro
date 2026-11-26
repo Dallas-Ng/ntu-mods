@@ -1,5 +1,11 @@
 ---
-import { getLatestExamSemester, getLatestSemester } from "@/lib/server/db/repo"
+import { getLastDataUpdate } from "@/lib/server/data-updates"
+import {
+  getCurrentYearExamSemesters,
+  getLatestSemester,
+  getSemesterExamsData
+} from "@/lib/server/db/repo"
+import DataUpdates from "@/components/developers/data-updates"
 import HeadingAnchor from "@/components/heading-anchor"
 import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
 import { getSiteFacts } from "@/astro/lib/site-facts"
@@ -8,10 +14,45 @@ export const prerender = true
 
 const facts = await getSiteFacts()
 const { year, semester } = await getLatestSemester()
-const exams = await getLatestExamSemester()
 const sem = `${year}_${semester}`
-const examSem = exams ? `${exams.year}_${exams.semester}` : null
 const n = (value: number) => value.toLocaleString("en-US")
+const termName = (s: string) =>
+  s === "S" || s === "T" ? "Special Term" : `Semester ${s}`
+
+// Exams of the newest academic year with any, so Semester 1 stays listed
+// while it is still being sat after Semester 2 is out.
+const examSemesters = await Promise.all(
+  (await getCurrentYearExamSemesters()).map(async (s) => ({
+    ...s,
+    file: `${s.year}_${s.semester}`,
+    count: Object.keys(await getSemesterExamsData(s.year, s.semester)).length
+  }))
+)
+
+const updated = getLastDataUpdate()
+const updatedLabel = updated
+  ? new Date(`${updated}T00:00:00Z`).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC"
+    })
+  : null
+
+const snapshot: [string, string, string][] = [
+  [
+    "Modules",
+    `${facts.semesterLabel} (\`${sem}\`)`,
+    `${n(facts.modules)} offered, out of ${n(facts.uniqueModuleCodes)} codes on record since AY2014 Semester 1`
+  ],
+  ["Class indexes", `${facts.semesterLabel} (\`${sem}\`)`, n(facts.indexes)],
+  ...examSemesters.map((e): [string, string, string] => [
+    "Exams",
+    `AY${e.year} ${termName(e.semester)} (\`${e.file}\`)`,
+    n(e.count)
+  ])
+]
+const code = (text: string) => text.replace(/`([^`]+)`/g, "<code>$1</code>")
 
 const delivery = [
   [
@@ -43,29 +84,58 @@ const delivery = [
     <h2 id="covered">
       What is covered<HeadingAnchor id="covered" label="What is covered" />
     </h2>
-    <ul>
-      <li>
-        <strong>{n(facts.uniqueModuleCodes)} modules</strong>, every code
-        offered since AY2014 Semester 1.
-      </li>
-      <li>
-        <strong>Class indexes</strong> for every semester since then. The latest is
-        <strong>{facts.semesterLabel}</strong> (<code>{sem}</code>), with {
-          n(facts.modules)
-        } modules and {n(facts.indexes)} indexes.
-      </li>
-      <li>
-        <strong>Exams</strong> for each semester once NTU publishes the timetable.
-        {
-          examSem && (
-            <>
-              {" "}
-              The latest is <code>{examSem}</code>, with {n(facts.exams)} exams.
-            </>
-          )
-        }
-      </li>
-    </ul>
+    <p>
+      {
+        updatedLabel ? (
+          <>
+            The data last changed on <strong>{updatedLabel}</strong>. This is
+            what this build of the site holds:
+          </>
+        ) : (
+          "This is what this build of the site holds:"
+        )
+      }
+    </p>
+    <div class="overflow-x-auto">
+      <table class="data-table text-sm!">
+        <thead>
+          <tr>
+            <th>Dataset</th>
+            <th>Semester</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            snapshot.map(([dataset, term, count]) => (
+              <tr>
+                <td>{dataset}</td>
+                <td>
+                  <Fragment set:html={code(term)} />
+                </td>
+                <td class="tabular-nums">{count}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Older semesters stay available: class indexes and exams go back to AY2014
+      Semester 1, one file per semester.
+    </p>
+
+    <h2 id="recent">
+      Recent data updates<HeadingAnchor
+        id="recent"
+        label="Recent data updates"
+      />
+    </h2>
+    <p>
+      The last refreshes, from the <a href="/changelog">changelog</a>, newest
+      first.
+    </p>
+    <DataUpdates />
 
     <h2 id="source">
       Where it comes from<HeadingAnchor
@@ -117,9 +187,7 @@ const delivery = [
             delivery.map(([source, from, caching]) => (
               <tr>
                 <td>
-                  <Fragment
-                    set:html={source.replace(/`([^`]+)`/g, "<code>$1</code>")}
-                  />
+                  <Fragment set:html={code(source)} />
                 </td>
                 <td>{from}</td>
                 <td>{caching}</td>

@@ -130,6 +130,7 @@ export const siteConfig = {
     { label: "Mods", route: "/mods" },
     { label: "Maps", route: "/maps" },
     { label: "Exams", route: "/exams" },
+    { label: "Calendar", route: "/calendar" },
     { label: "Tools", route: "/tools" },
     { label: "Articles", route: "/articles" },
     { label: "Links", route: "/links" },

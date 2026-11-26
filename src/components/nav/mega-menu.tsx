@@ -89,11 +89,7 @@ const ListPanel = ({ menu, name }: { menu: ListMenu; name: string }) => (
                   {link.label}
                   {link.isNew && <NewBadge />}
                 </span>
-                {link.desc && (
-                  <span className="text-muted-foreground block truncate text-xs">
-                    {link.desc}
-                  </span>
-                )}
+                <RowDesc link={link} />
               </span>
               {link.count && <RowCount category={link.count} />}
             </a>
@@ -103,6 +99,16 @@ const ListPanel = ({ menu, name }: { menu: ListMenu; name: string }) => (
     </ul>
   </div>
 )
+
+/** A row's line under its name: where the semester is now, if asked for. */
+const RowDesc = ({ link }: { link: MenuLink }) => {
+  const week = useSemesterWeek()
+  const text = (link.liveWeek && week) || link.desc
+  if (!text) return null
+  return (
+    <span className="text-muted-foreground block truncate text-xs">{text}</span>
+  )
+}
 
 // Its own component so only menus with counts fetch status.json.
 const RowCount = ({ category }: { category: string }) => {

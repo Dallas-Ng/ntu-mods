@@ -62,8 +62,8 @@ const termName = (code: string) => {
 
 /**
  * Where `today` falls in NTU's published calendar, as one line: "Teaching week
- * 5", "Recess week", "Exams", "S2 starts 11 Jan". Null when no calendar covers
- * it. Same source as /calendar (calendarStatus).
+ * 5", "Recess week", "S1 exams", "S2 starts 11 Jan". Null when no calendar
+ * covers it. Same source as /calendar (calendarStatus).
  */
 export const semesterWeekLabel = (today: string): string | null => {
   const status = calendarStatus(getAllAcademicYearCalendars(), today)
@@ -73,7 +73,7 @@ export const semesterWeekLabel = (today: string): string | null => {
     case "recess":
       return "Recess week"
     case "exams":
-      return "Exams"
+      return `${termName(status.semester)} exams`
     case "between":
       return status.next
         ? `${termName(status.next.semester)} starts ${formatDayMonth(status.next.start)}`

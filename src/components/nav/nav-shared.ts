@@ -5,6 +5,7 @@ export const NEW_DOTS: Record<string, string> = {
   "/tools": "seen-tools",
   "/maps": "seen-maps",
   "/exams": "seen-exams",
+  "/calendar": "seen-calendar",
   "/developers": "seen-developers"
 }
 

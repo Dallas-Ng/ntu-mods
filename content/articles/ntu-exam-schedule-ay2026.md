@@ -58,7 +58,7 @@ Before STARS opens:
 
 This is especially relevant for BDE planning. Your core modules are often fixed, but your BDE choice is flexible. If your core module exams are already clustered, choosing a BDE with an exam in the same stretch adds to the pressure. An exam-free BDE (project or attendance-based) might be a better fit. See [Easy BDEs at NTU](/articles/easy-bde-at-ntu) for a breakdown by assessment type.
 
-Check the [NTU academic calendar](https://www.ntu.edu.sg/education/academic-calendar) for official term dates alongside the exam schedule.
+Check the [NTU academic calendar](/calendar) for the revision and exam weeks, holidays and term dates alongside the exam schedule.
 
 ## What to do if you have an exam clash
 

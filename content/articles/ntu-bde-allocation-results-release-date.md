@@ -19,7 +19,7 @@ For AY2026/27 Semester 2, use **early January 2027** as the expected window. Che
 
 ## When are NTU BDE allocation results released?
 
-NTU publishes timing at month level in its [Schedule of Key Academic Activities for undergraduate programmes](https://ntu.edu.sg/academic-calendar). The rows that matter for BDE are below.
+NTU publishes timing at month level in its [Schedule of Key Academic Activities for undergraduate programmes](https://www.ntu.edu.sg/media/docs/default-source/office-of-academic-services/schedule-of-key-academic-activities-%28undergraduate-programmes%2901dfb46d-61a0-4b3b-99ce-8dbb4f59fc11.pdf?sfvrsn=df72aad4_1). The rows that matter for BDE are below.
 
 | Activity | Semester 1 | Semester 2 |
 |---|---|---|

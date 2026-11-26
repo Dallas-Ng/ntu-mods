@@ -13,7 +13,9 @@ tags: ["ntu academic calendar", "ntu academic calendar 2026", "ntu calendar 26/2
 
 Nanyang Technological University (NTU Singapore) divides its academic year 2026/2027 into two main semesters, Semester 1 (August to December) and Semester 2 (January to May), plus a Special Term over the summer. This page covers the NTU term dates for 2026/27, how the semester calendar is structured, what happens in each phase, and where to find the official dates for AY2026/2027.
 
-> **Official source:** Always confirm dates with the [NTU Academic Calendar](https://www.ntu.edu.sg/education/academic-calendar) on NTU's website. Dates are updated by NTU each academic year.
+> **Official source:** Always confirm dates with the [NTU academic calendars page](https://www.ntu.edu.sg/admissions/matriculation/academic-calendars) on NTU's website. Dates are updated by NTU each academic year.
+
+For this week's teaching week, every week's dates and a calendar you can subscribe to, see the [NTU academic calendar](/calendar) page.
 
 Looking ahead to Semester 2? Teaching starts **11 January 2027**, recess week is **1 to 5 March 2027**, and scheduled exams run **26 April to 6 May 2027**. [Find exam dates by module code](/exams) or check your assigned registration slot in the [STARS guide](/articles/ntu-stars-guide).
 
@@ -31,7 +33,7 @@ For the following year, see the [indicative NTU academic calendar for 2027/28](/
 | Teaching Week 13 ends | 13 Nov 2026 | 16 Apr 2027 |
 | Scheduled exams | 23 Nov to 3 Dec 2026 | 26 Apr to 6 May 2027 |
 
-Term dates come from the [official NTU academic calendar](https://ntu.edu.sg/academic-calendar). Scheduled exam dates come from the published [module exam timetable](/exams). Check your personal STARS schedule for exact registration and add/drop times.
+Term dates come from the [official NTU academic calendar](https://www.ntu.edu.sg/admissions/matriculation/academic-calendars). Scheduled exam dates come from the published [module exam timetable](/exams). Check your personal STARS schedule for exact registration and add/drop times.
 
 ## AY2026/2027 Semester 1
 
@@ -45,7 +47,7 @@ Term dates come from the [official NTU academic calendar](https://ntu.edu.sg/aca
 | Add/Drop period | Teaching Weeks 1 and 2 |
 | Recess Week | 28 Sep to 2 Oct 2026 |
 | Teaching Week 13 ends | 13 Nov 2026 |
-| Revision and exams | Mid November to early December 2026 |
+| Revision and exams | 16 Nov to 4 Dec 2026 |
 
 **Exam data for AY2026/2027 Semester 1** is available at [NTUMods Exam Schedule](/exams) with 385 modules scheduled from 23 November to 3 December 2026, searchable by module code.
 
@@ -63,24 +65,26 @@ The Semester 2 exam timetable is also out: 394 modules, from 26 April to 6 May 2
 | Add/Drop period | Teaching Weeks 1 and 2 |
 | Recess Week | 1 to 5 Mar 2027 |
 | Teaching Week 13 ends | 16 Apr 2027 |
-| Revision and exams | Mid April to early May 2027 |
+| Revision and exams | 19 Apr to 7 May 2027 |
 
 ## Singapore public holidays in AY2026/27
 
 NTU marks these public holidays on its calendar. A holiday on a Saturday means classes proceed normally on the following Monday, and a holiday on a Sunday makes the next Monday a replacement holiday. Classes end at 14:30 on the eve of New Year's Day, Chinese New Year, Hari Raya Puasa and Deepavali.
 
-| Holiday | Date |
-|---|---|
-| National Day | 9 Aug 2026 (Sun) |
-| Deepavali | 8 Nov 2026 (Sun) |
-| Christmas Day | 25 Dec 2026 (Fri) |
-| New Year's Day | 1 Jan 2027 (Fri) |
-| Chinese New Year | 6 to 7 Feb 2027 (Sat to Sun) |
-| Hari Raya Puasa | 10 Mar 2027 (Wed) |
-| Good Friday | 26 Mar 2027 (Fri) |
-| Labour Day | 1 May 2027 (Sat) |
-| Hari Raya Haji | 17 May 2027 (Mon) |
-| Vesak Day | 20 May 2027 (Thu) |
+| Holiday | Date | Classes |
+|---|---|---|
+| National Day | 9 Aug 2026 (Sun) | No classes on Mon 10 Aug, the replacement holiday |
+| Deepavali | 8 Nov 2026 (Sun) | No classes on Mon 9 Nov, the replacement holiday |
+| Christmas Day | 25 Dec 2026 (Fri) | Outside teaching weeks |
+| New Year's Day | 1 Jan 2027 (Fri) | Outside teaching weeks |
+| Chinese New Year | 6 to 7 Feb 2027 (Sat to Sun) | No classes on Mon 8 Feb, the replacement holiday. Classes end at 14:30 on Fri 5 Feb |
+| Hari Raya Puasa | 10 Mar 2027 (Wed) | No classes. Classes end at 14:30 on Tue 9 Mar |
+| Good Friday | 26 Mar 2027 (Fri) | No classes |
+| Labour Day | 1 May 2027 (Sat) | During the exam weeks. No replacement holiday for classes |
+| Hari Raya Haji | 17 May 2027 (Mon) | After Semester 2 |
+| Vesak Day | 20 May 2027 (Thu) | After Semester 2 |
+
+Students' Union Day on Friday 4 September 2026 has no undergraduate classes from 10:30 to 14:30.
 
 ## Special Term
 
@@ -90,22 +94,21 @@ The NTU Special Term runs over the summer (from May) and offers a limited select
 
 Each NTU semester is roughly 17 weeks long, based on the pattern below. The official calendar sets the exact dates each year:
 
-1. **Weeks 1–2** — Add/drop period. Classes begin, but you can still adjust your module registration. Modules dropped during this period do not appear on your transcript.
-2. **Weeks 3–7** — Teaching weeks. Regular lectures, tutorials, and labs.
-3. **Week 8** — Recess Week. No scheduled classes. Used for self-study, catching up on assignments, or midterm preparation.
-4. **Weeks 9–13** — Teaching weeks continue. Project submissions and midterms often fall in this window.
-5. **Reading Week (Week 14)** — No new content. Final revision period before exams.
-6. **Weeks 15–17** — Examination period. Centrally scheduled exams for modules with final exams.
+1. **Teaching Weeks 1 and 2:** the add/drop period. Classes begin, but you can still adjust your module registration. Modules dropped during this period do not appear on your transcript.
+2. **Teaching Weeks 3 to 7:** regular lectures, tutorials and labs.
+3. **Recess Week:** the week between Teaching Weeks 7 and 8. No scheduled classes. Used for self-study, catching up on assignments, or midterm preparation.
+4. **Teaching Weeks 8 to 13:** teaching continues. Project submissions and midterms often fall in this window.
+5. **Revision and examination weeks:** three weeks after Teaching Week 13. The first is for revision, and centrally scheduled exams run in the last two (23 November to 3 December 2026 in Semester 1).
 
-Not all modules have a final exam. Project-based modules and some BDEs use continuous assessment only — these do not appear in the exam schedule.
+Not all modules have a final exam. Project-based modules and some BDEs use continuous assessment only, so they do not appear in the exam schedule.
 
 ## STARS registration and the academic calendar
 
 STARS (NTU's module registration system) runs in rounds before each semester starts:
 
-- **Round 1** — Main bidding window. The most competitive modules (especially popular BDEs like Japanese, Korean, and analytics modules) can fill during Round 1. Prepare your shortlist before the window opens.
-- **Round 2** — A second window after Round 1. Seats dropped after Round 1 become available. Less oversubscribed modules are often still accessible.
-- **Add/Drop** — Continues into the first two weeks of the semester. Students who decide to drop modules free up seats that others can take.
+- **Round 1:** the main bidding window. The most competitive modules (especially popular BDEs like Japanese, Korean, and analytics modules) can fill during Round 1. Prepare your shortlist before the window opens.
+- **Round 2:** a second window after Round 1. Seats dropped after Round 1 become available. Less oversubscribed modules are often still accessible.
+- **Add/drop:** continues into the first two weeks of the semester. Students who decide to drop modules free up seats that others can take.
 
 For a detailed walkthrough of how STARS works, see [NTU STARS: How the Module Registration System Works](/articles/ntu-stars-guide).
 
@@ -115,14 +118,17 @@ For step-by-step module planning before STARS opens, see [How to Plan NTU Module
 
 NTUMods provides tools that align with each phase of the academic calendar:
 
-- **Before STARS opens** — Use the [Timetable Planner](/timetable) to build your ideal schedule and check for index clashes before you bid.
-- **During STARS** — Know exactly which index numbers you want before the window opens. The timetable planner shows timeslots, venues, and class types for all 4,846 indexes.
-- **During add/drop** — Use the [Module Browser](/mods) to check whether alternative modules still have seats.
-- **Before exam period** — Use the [Exam Schedule](/exams) to check all your exam dates, identify any clashes, and plan your revision timetable around the exam period.
+- **Before STARS opens:** use the [Timetable Planner](/timetable) to build your ideal schedule and check for index clashes before you bid.
+- **During STARS:** know exactly which index numbers you want before the window opens. The timetable planner shows timeslots, venues, and class types for all 4,846 indexes.
+- **During add/drop:** use the [Module Browser](/mods) to check whether alternative modules still have seats.
+- **Before the exam period:** use the [Exam Schedule](/exams) to check all your exam dates, identify any clashes, and plan your revision timetable around the exam period.
 
 ## Export the calendar to your phone
 
-Once your timetable is built on the [Timetable Planner](/timetable), use **Save to Calendar** to download an `.ics` file with your semester's class times, recess week gap, and exam period already mapped to the correct dates. Import it into Google Calendar, Apple Calendar, or Outlook so your NTU semester schedule shows up alongside the rest of your calendar — no manual date entry needed.
+There are two ways to get NTU dates into Google Calendar, Apple Calendar or Outlook:
+
+- **Your own timetable.** Build it on the [Timetable Planner](/timetable) and use the calendar button to download an `.ics` file. Each class appears on the weeks it runs, at the right dates for the semester. Classes on public holidays and replacement holidays are left out, and so are classes after 14:30 on the eves listed above. Recess week, the revision and exam weeks and each holiday are added as all-day events.
+- **The academic calendar alone.** Subscribe to the feed on the [NTU academic calendar](/calendar) page. It has every teaching week, recess, the exam weeks, holidays and key events, and your calendar app updates it when NTU changes a date.
 
 ## Frequently asked questions
 
@@ -140,7 +146,7 @@ NTU lists the Semester 1 course registration period as mid to end June, and the 
 
 ### When is the NTU exam period?
 
-Semester 1 revision and examinations run from mid November to early December 2026. Semester 2 runs from mid April to early May 2027. Specific exam dates for each module are listed at [NTUMods Exam Schedule](/exams), and the release timetable is in [NTU Exam Timetable and Seating](/articles/ntu-exam-timetable-seating-past-papers).
+Semester 1 revision and examination weeks run from 16 November to 4 December 2026, with scheduled exams from 23 November to 3 December. Semester 2 revision and examination weeks run from 19 April to 7 May 2027, with scheduled exams from 26 April to 6 May. Specific exam dates for each module are listed at [NTUMods Exam Schedule](/exams), and the release timetable is in [NTU Exam Timetable and Seating](/articles/ntu-exam-timetable-seating-past-papers).
 
 ### How long is each NTU semester?
 
@@ -152,11 +158,11 @@ NTU follows an academic year divided into Semester 1 (August–December) and Sem
 
 ### Is there an NTU calendar 2026/27 I can add to my phone?
 
-Yes — build your semester timetable on [NTUMods](/timetable) and use **Save to Calendar** to export an `.ics` file with your class times and semester dates already set, ready to import into Google Calendar, Apple Calendar, or Outlook.
+Yes. To add the term dates on their own, subscribe to the feed on the [NTU academic calendar](/calendar) page. To add your classes as well, build your timetable on [NTUMods](/timetable) and download it as an `.ics` file, with each class on the right dates and holidays already taken out.
 
 ### Where can I download the official NTU academic calendar PDF?
 
-NTU publishes the semester calendar as a PDF on the [official academic calendar page](https://www.ntu.edu.sg/education/academic-calendar), along with a separate trimester calendar for graduate programmes. The National Institute of Education (NIE) publishes its own calendar, so NIE students should check that one.
+NTU publishes the semester calendar as a PDF on the [official academic calendars page](https://www.ntu.edu.sg/admissions/matriculation/academic-calendars), along with a separate trimester calendar for graduate programmes. The National Institute of Education (NIE) publishes its own calendar, so NIE students should check that one.
 
 ### When are the NTU school holidays for 2026 and 2027?
 
@@ -168,4 +174,4 @@ This page covers Nanyang Technological University in Singapore. National Taiwan 
 
 ### What about the NTU academic calendar for 2027/2028?
 
-This page covers AY2026/2027 (Semester 1: August–December 2026; Semester 2: January–May 2027). NTU has published an indicative AY2027-28 calendar (10 March 2026), with Semester 1 orientation activities from 19 July to 6 August 2027 and convocation from 20 to 30 July 2027. NTU states that all dates in the indicative calendar will only be confirmed in February 2027, so treat them as provisional. The calendar is on the [official NTU academic calendar page](https://ntu.edu.sg/academic-calendar).
+This page covers AY2026/2027 (Semester 1: August–December 2026; Semester 2: January–May 2027). NTU has published an indicative AY2027-28 calendar (10 March 2026), with Semester 1 orientation activities from 19 July to 6 August 2027 and convocation from 20 to 30 July 2027. NTU states that all dates in the indicative calendar will only be confirmed in February 2027, so treat them as provisional. The details are in the [NTU Academic Calendar 2027/28](/articles/ntu-academic-calendar-ay2027) guide.

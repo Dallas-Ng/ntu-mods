@@ -11,13 +11,7 @@ import { NewDot } from "@/components/new-dot"
 
 import MegaMenu from "./mega-menu"
 import { NAV_MENUS } from "./menus"
-
-const NEW_DOTS: Record<string, string> = {
-  "/tools": "seen-tools",
-  "/maps": "seen-maps",
-  "/exams": "seen-exams",
-  "/developers": "seen-developers"
-}
+import { isActive, NEW_DOTS } from "./nav-shared"
 
 const MORE = "more"
 // The 16px page gutter a menu keeps from the window edge.
@@ -25,9 +19,6 @@ const EDGE = 16
 const MD = "(min-width: 768px)"
 
 const links = siteConfig.navLinks
-
-const isActive = (pathname: string, route: string) =>
-  pathname === route || pathname.startsWith(`${route}/`)
 
 /**
  * How many nav items fit before the rest move under "More". Item widths are
@@ -153,7 +144,7 @@ const MainNav = () => {
       value={value}
       onValueChange={onValueChange}
       delayDuration={100}
-      className="relative ml-1 min-w-0 flex-1">
+      className="relative ml-1 hidden min-w-0 flex-1 sm:block">
       <NavigationMenu.List
         className={cn("flex items-center", !measured && "overflow-hidden")}>
         {links.map((link, i) => {
@@ -181,17 +172,41 @@ const MainNav = () => {
               className={cn("shrink-0", i >= visible && "hidden")}>
               {menu ? (
                 <>
-                  <NavigationMenu.Trigger
-                    ref={(el) => {
-                      triggerRefs.current[link.route] = el
-                    }}
-                    className={cn(itemClass, "group cursor-pointer")}>
-                    {link.label}
-                    <ChevronDown
-                      aria-hidden
-                      className="size-3 transition-transform group-data-[state=open]:rotate-180 motion-reduce:transition-none"
-                    />
-                    {dot}
+                  {/* The label is a link to the section; hovering opens the
+                      menu. The chevron opens it without leaving the page, for
+                      touch screens with no hover, and Down arrow does the same
+                      from the keyboard. */}
+                  <NavigationMenu.Trigger asChild>
+                    <a
+                      href={link.route}
+                      ref={(el) => {
+                        triggerRefs.current[link.route] = el
+                      }}
+                      aria-current={active ? "page" : undefined}
+                      onClick={(e) => {
+                        if (
+                          (e.target as Element).closest("[data-menu-toggle]")
+                        ) {
+                          e.preventDefault()
+                          onValueChange(value === link.route ? "" : link.route)
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "ArrowDown" && value !== link.route) {
+                          e.preventDefault()
+                          onValueChange(link.route)
+                        }
+                      }}
+                      className={cn(itemClass, "group")}>
+                      {link.label}
+                      <span
+                        data-menu-toggle
+                        className="-m-1.5 flex p-1.5"
+                        aria-hidden>
+                        <ChevronDown className="size-3 transition-transform group-data-[state=open]:rotate-180 motion-reduce:transition-none" />
+                      </span>
+                      {dot}
+                    </a>
                   </NavigationMenu.Trigger>
                   <NavigationMenu.Content className="data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out w-max">
                     <MegaMenu menu={menu} name={link.label} />

@@ -1,33 +1,19 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Bell, Menu, MessageSquare, Moon, Sun, X } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
-import { track } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
-import { useChangelogUnseenCount } from "@/hooks/use-changelog-unseen"
 import { usePathname } from "@/hooks/use-pathname"
-import { useTheme } from "@/hooks/use-theme"
 
 import ChangelogButton from "./changelog-button"
 import NavActions from "./nav-actions"
 import MainNav from "./nav/main-nav"
+import MobileNav from "./nav/mobile-nav"
 import SemesterStatus from "./nav/semester-status"
-import { NewBadge } from "./new-dot"
-import { Button } from "./ui/button"
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerTitle,
-  DrawerTrigger
-} from "./ui/drawer"
 
 const Navbar = () => {
   const pathname = usePathname()
-  const { theme, setTheme } = useTheme()
-  const changelogUnseen = useChangelogUnseenCount()
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -63,7 +49,7 @@ const Navbar = () => {
 
             <span
               className={cn(
-                "hover:text-foreground ml-1 hidden font-bold transition-colors lg:inline-block",
+                "hover:text-foreground ml-1 inline-block font-bold transition-colors sm:hidden lg:inline-block",
                 pathname === "/" ? "text-foreground" : "text-muted-foreground"
               )}>
               {siteConfig.name}
@@ -84,105 +70,7 @@ const Navbar = () => {
             <NavActions />
           </div>
 
-          {/* Mobile drawer */}
-          <Drawer direction="right">
-            <DrawerTrigger asChild>
-              <Button
-                aria-label="Open navigation menu"
-                size="icon"
-                variant="ghost"
-                className="md:hidden">
-                <Menu className="size-4" />
-              </Button>
-            </DrawerTrigger>
-
-            <DrawerContent
-              aria-describedby={undefined}
-              className="flex flex-col p-0">
-              <DrawerTitle className="sr-only">Navigation menu</DrawerTitle>
-              {/* Header */}
-              <div className="flex h-16 shrink-0 items-center justify-between border-b px-5">
-                <a href="/" className="flex items-center gap-2">
-                  <img
-                    src="/logo.webp"
-                    alt="Logo"
-                    width={24}
-                    height={24}
-                    className="size-6 object-contain"
-                  />
-                  <span className="font-bold">{siteConfig.name}</span>
-                </a>
-                <DrawerClose asChild>
-                  <Button size="icon" variant="ghost" aria-label="Close menu">
-                    <X className="size-4" />
-                  </Button>
-                </DrawerClose>
-              </div>
-
-              {/* Nav links */}
-              <nav className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3">
-                <p className="text-muted-foreground mb-1 px-4 text-xs font-semibold tracking-widest uppercase">
-                  Menu
-                </p>
-                {siteConfig.navLinks.map((link) => (
-                  <DrawerClose key={link.route} asChild>
-                    <a
-                      href={link.route}
-                      className={cn(
-                        "hover:bg-accent flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium transition-colors",
-                        pathname.includes(link.route)
-                          ? "text-foreground"
-                          : "text-muted-foreground"
-                      )}>
-                      {link.label}
-                    </a>
-                  </DrawerClose>
-                ))}
-              </nav>
-
-              {/* Footer */}
-              <div className="shrink-0 border-t p-3">
-                <DrawerClose asChild>
-                  <a
-                    href="/changelog"
-                    onClick={() =>
-                      track("changelog_opened", {
-                        source: "navbar_mobile_menu"
-                      })
-                    }
-                    className="hover:bg-accent text-muted-foreground flex w-full items-center justify-between gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
-                    <span className="flex items-center gap-3">
-                      <Bell className="size-4" />
-                      Changelog
-                    </span>
-                    {changelogUnseen > 0 && (
-                      <NewBadge>
-                        {changelogUnseen > 9 ? "9+" : changelogUnseen}
-                      </NewBadge>
-                    )}
-                  </a>
-                </DrawerClose>
-                <DrawerClose asChild>
-                  <a
-                    href="/feedback"
-                    className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
-                    <MessageSquare className="size-4" />
-                    Feedback
-                  </a>
-                </DrawerClose>
-                <button
-                  onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                  className="hover:bg-accent text-muted-foreground flex w-full items-center gap-3 rounded-md px-4 py-2.5 text-sm font-medium transition-colors">
-                  {theme === "light" ? (
-                    <Sun className="size-4" />
-                  ) : (
-                    <Moon className="size-4" />
-                  )}
-                  Theme
-                </button>
-              </div>
-            </DrawerContent>
-          </Drawer>
+          <MobileNav />
         </div>
       </div>
     </header>

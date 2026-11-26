@@ -323,13 +323,16 @@ export const TimetableTable = (props: Props) => {
                                         ? "preview"
                                         : "current"
                                   }
-                                  onClick={() =>
-                                    handleIndexClick(
-                                      moduleKey,
-                                      index.key,
-                                      indexPickerEnabled,
-                                      previewCandidate
-                                    )
+                                  onClick={
+                                    indexPickerEnabled
+                                      ? () =>
+                                          handleIndexClick(
+                                            moduleKey,
+                                            index.key,
+                                            indexPickerEnabled,
+                                            previewCandidate
+                                          )
+                                      : undefined
                                   }
                                   onMouseOver={() => {
                                     // While picking an index for one module, the

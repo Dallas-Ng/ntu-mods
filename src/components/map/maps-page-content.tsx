@@ -756,17 +756,23 @@ const MapsPageContent = () => {
         state.fades.forEach((f) => (f.onfinish = () => f.cancel()))
         return
       }
-      state.clip = null
       state.fades.forEach((f) => f.cancel())
       setPinned(false)
       const back = fade(1, 600, 0, 40, true)
       state.fades = back
-      requestAnimationFrame(() => anim.cancel())
       state.timers.push(
         window.setTimeout(() => back.forEach((f) => f.cancel()), 900)
       )
     }
   }, [fullscreen])
+
+  useLayoutEffect(() => {
+    if (pinned) return
+    // Keep the exit clip until the shell is back in the page. Clearing it
+    // earlier can reveal the fixed fullscreen shell for a frame.
+    live.current.clip?.cancel()
+    live.current.clip = null
+  }, [pinned])
   // Second intro step, once in fullscreen on a phone: show the drawer slides.
   const [tip, setTip] = useState(false)
   useEffect(() => {

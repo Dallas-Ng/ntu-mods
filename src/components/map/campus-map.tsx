@@ -1411,6 +1411,7 @@ const CampusMap = ({
               onClick={() => {
                 const pts = pins.map((p) => [p.x, p.y])
                 if (focus) fit(focus.bounds)
+                else if (initialBounds) fit(initialBounds)
                 else if (pts.length)
                   fit([
                     Math.min(...pts.map((p) => p[0])),
@@ -1418,7 +1419,6 @@ const CampusMap = ({
                     Math.max(...pts.map((p) => p[0])),
                     Math.max(...pts.map((p) => p[1]))
                   ])
-                else if (initialBounds) fit(initialBounds)
                 else fit([0, 0, data.size.width, data.size.height], 10)
               }}>
               <LocateFixed />

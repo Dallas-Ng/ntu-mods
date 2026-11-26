@@ -104,9 +104,7 @@ const ChangelogReleaseSection = ({
         <NewBadge className="absolute top-4 right-4 md:top-6 md:right-6" />
       )}
       <p className="text-foreground text-sm">{release.date}</p>
-      <h2
-        id={release.layout === "table" ? `${slug}-title` : undefined}
-        className="mt-1 text-xl font-semibold">
+      <h2 className="mt-1 text-xl font-semibold">
         <a
           href={`#${slug}`}
           className="group/link inline-flex items-center gap-2 hover:underline hover:underline-offset-4">
@@ -124,43 +122,20 @@ const ChangelogReleaseSection = ({
         </p>
       )}
 
-      {release.layout === "table" ? (
-        <table
-          aria-labelledby={`${slug}-title`}
-          className="data-table mt-4 w-full">
-          <thead>
-            <tr>
-              <th scope="col">Category</th>
-              <th scope="col">Update</th>
-            </tr>
-          </thead>
-          <tbody>
-            {release.items.map((item, i) => (
-              <tr key={i}>
-                <td>
-                  <CategoryBadge category={item.category} />
-                </td>
-                <td className="text-muted-foreground">{item.content}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <ul className="divide-border mt-4 divide-y">
-          {release.items.map((item, i) => (
-            <li
-              key={i}
-              className="flex flex-col items-start gap-2 py-3 first:pt-0 last:pb-0 md:flex-row md:gap-4">
-              <span className="md:w-32 md:shrink-0 md:pt-0.5">
-                <CategoryBadge category={item.category} />
-              </span>
-              <span className="text-muted-foreground text-sm leading-6">
-                {item.content}
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className="divide-border mt-4 divide-y">
+        {release.items.map((item, i) => (
+          <li
+            key={i}
+            className="flex flex-col items-start gap-2 py-3 first:pt-0 last:pb-0 md:flex-row md:gap-4">
+            <span className="md:w-32 md:shrink-0 md:pt-0.5">
+              <CategoryBadge category={item.category} />
+            </span>
+            <span className="text-muted-foreground text-sm leading-6">
+              {item.content}
+            </span>
+          </li>
+        ))}
+      </ul>
     </section>
   )
 }

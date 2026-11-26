@@ -115,19 +115,27 @@ test.describe("module URL strategy", () => {
     expect(bad).toEqual([])
   })
 
-  test("Course JSON-LD only on current modules with a description", async ({
+  test("Course JSON-LD requires a current offering with a description", async ({
     request
   }) => {
     const hasCourse = async (code: string) =>
       /"@type":"Course"/.test(await (await request.get(`/mods/${code}`)).text())
-    const described = current.filter((o) => o.raw.description?.trim())
-    const undescribed = current.filter((o) => !o.raw.description?.trim())
-    for (const o of sample(described, 5, "ld-current"))
-      expect(await hasCourse(o.code), o.code).toBe(true)
-    for (const o of sample(undescribed, 5, "ld-current-undescribed"))
-      expect(await hasCourse(o.code), o.code).toBe(false)
-    for (const o of sample(past, 5, "ld-past"))
-      expect(await hasCourse(o.code), o.code).toBe(false)
+    for (const [group, modules, expected] of [
+      [
+        "current-described",
+        current.filter((o) => o.raw.description?.trim()),
+        true
+      ],
+      [
+        "current-undescribed",
+        current.filter((o) => !o.raw.description?.trim()),
+        false
+      ],
+      ["past-described", past.filter((o) => o.raw.description?.trim()), false]
+    ] as const) {
+      for (const o of sample(modules, 5, `ld-${group}`))
+        expect(await hasCourse(o.code), o.code).toBe(expected)
+    }
   })
 
   test("older semester pages are self-canonical or fold into /mods/CODE", async ({

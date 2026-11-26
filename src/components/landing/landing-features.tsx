@@ -13,6 +13,8 @@ import { cardVariants } from "@/components/ui/card"
 import { TextLink } from "@/components/ui/text-link"
 import { NewBadge } from "@/components/new-dot"
 
+import TimetableGenerationPreview from "./timetable-generation-preview"
+
 type Feature = {
   name: string
   href: string
@@ -26,8 +28,6 @@ type Feature = {
 const FEATURES: Feature[] = [
   {
     name: "Auto-generate timetable",
-    art: "/landing/auto-generate.svg",
-    artSize: [135, 128],
     href: "/timetable",
     desc: "Pick modules, set constraints like no mornings or free Fridays, and get every clash-free option."
   },
@@ -157,33 +157,23 @@ const LandingFeatures = () => (
       Everything you need to plan your semester
     </h2>
 
-    <div className="landing-reveal grid gap-3 lg:grid-cols-[5fr_7fr]">
-      <a
-        href={HERO.href}
+    <div className="grid gap-3 lg:grid-cols-[5fr_7fr]">
+      <div
         className={cn(
-          cardVariants({ interactive: true }),
-          "flex flex-col justify-between gap-6 p-5 md:p-6"
+          cardVariants(),
+          "flex min-w-0 flex-col gap-5 p-3 sm:p-4 md:p-6"
         )}>
-        <span className="bg-background flex min-h-48 flex-1 items-center justify-center rounded-lg p-6">
-          <img
-            src={HERO.art}
-            width={HERO.artSize?.[0]}
-            height={HERO.artSize?.[1]}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            className="h-40 w-full object-contain"
-          />
-        </span>
-        <span>
-          <span className="block text-2xl leading-tight font-bold tracking-tight">
+        <TimetableGenerationPreview />
+        <div>
+          <h3 className="text-2xl leading-tight font-bold tracking-tight">
             {HERO.name}
-          </span>
-          <span className="mt-2 block max-w-md text-sm md:text-base">
-            {HERO.desc}
-          </span>
-        </span>
-      </a>
+          </h3>
+          <p className="mt-2 max-w-md text-sm md:text-base">{HERO.desc}</p>
+          <TextLink href={HERO.href} variant="action" arrow className="mt-2">
+            Open timetable planner
+          </TextLink>
+        </div>
+      </div>
 
       <ul className="grid gap-3 sm:grid-cols-2">
         {CORE.map(([name, Icon]) => {

@@ -12,6 +12,7 @@
  *   public/data/api/modules.json         use-all-modules.ts
  *   public/data/api/random-samples.json  settings/table-settings.tsx
  *   public/data/api/calendar.json        open data only (/developers/data)
+ *   public/data/api/status.json          nav/semester-status.tsx, nav/mega-menu.tsx
  *   src/data/api/semesters.json          bundled by src/lib/semesters.ts and exams/index.astro
  *
  * indexes/{sem}.json and exams/{sem}.json aren't reshaped, only
@@ -28,6 +29,7 @@ import fs from "fs/promises"
 import fsSync from "fs"
 import path from "path"
 
+import { getLastDataUpdate } from "../src/lib/server/data-updates.ts"
 import * as json from "../src/lib/server/db/json-source.ts"
 
 const ROOT = path.join(import.meta.dirname, "..")
@@ -114,6 +116,54 @@ function buildRandomSamples(latestSem: string) {
 }
 
 /**
+ * What the site currently covers, for the semester popover in the navbar
+ * (semester-status.tsx). Same numbers as the FAQ's "What semester is currently
+ * available?": modules and indexes for the newest semester with offerings,
+ * exams for every semester of the newest academic year that has any.
+ * `categories` counts this semester's modules per type (BDE, core...) for the
+ * navbar's Mods menu, matching what /mods shows for that filter.
+ */
+function buildStatus(
+  latest: json.SemesterEntry,
+  modules: { categories?: string[]; isCurrentSemester?: boolean }[]
+) {
+  const categories: Record<string, number> = {}
+  for (const m of modules) {
+    if (!m.isCurrentSemester) continue
+    for (const c of m.categories ?? []) categories[c] = (categories[c] ?? 0) + 1
+  }
+  const indexFile = json.readIndexes(latest.sem) as Record<
+    string,
+    Record<string, unknown>
+  >
+  const codes = Object.keys(
+    json.getAllModuleMetadata(latest.year, latest.semester)
+  )
+  const indexes = codes.reduce(
+    (sum, code) => sum + Object.keys(indexFile[code] ?? {}).length,
+    0
+  )
+  const withExams = json.semestersWithExams()
+  const exams = withExams
+    .filter((s) => s.year === withExams[0]?.year)
+    .reverse()
+    .map((s) => ({
+      year: s.year,
+      semester: s.semester,
+      count: Object.keys(json.readExams(s.sem)).length
+    }))
+  return {
+    year: latest.year,
+    semester: latest.semester,
+    modules: codes.length,
+    indexes,
+    exams,
+    categories,
+    updated: getLastDataUpdate()
+  }
+}
+
+/**
  * The semester catalogue, newest first, restricted to semesters that
  * actually have offerings.
  *
@@ -181,6 +231,15 @@ async function main() {
   const samples = buildRandomSamples(latest.sem)
   await write(path.join(PUBLIC_DATA, "random-samples.json"), samples)
   console.log(`  Built random-samples.json (${samples.length} samples)`)
+
+  const status = buildStatus(
+    latest,
+    modules.modules as { categories?: string[]; isCurrentSemester?: boolean }[]
+  )
+  await write(path.join(PUBLIC_DATA, "status.json"), status)
+  console.log(
+    `  Built status.json (${status.modules} modules, ${status.indexes} indexes, ${status.exams.length} exam semesters)`
+  )
 
   const semesterList = buildSemesters()
   await write(path.join(SRC_DATA, "semesters.json"), semesterList)

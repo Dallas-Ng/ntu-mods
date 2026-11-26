@@ -132,7 +132,8 @@ export const siteConfig = {
     { label: "Exams", route: "/exams" },
     { label: "Tools", route: "/tools" },
     { label: "Articles", route: "/articles" },
-    { label: "Links", route: "/links" }
+    { label: "Links", route: "/links" },
+    { label: "Developers", route: "/developers" }
   ],
   tools: [
     {

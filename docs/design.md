@@ -141,6 +141,13 @@ Focus and cursor:
 - The docs layout builds "On this page" from each page's `h2`s with an `id` (`lib/html-headings.ts`), so a docs section heading needs an `id` and a `HeadingAnchor`.
 - The section name in a breadcrumb truncates first; the page name stays whole.
 
+## Navbar
+
+- Top-level items come from `siteConfig.navLinks`. A dropdown's contents live in `components/nav/menus.ts`: `list` menus (icon rows with one line each, for places to go) or `cards` menus (a 2-column grid for things you use: a name, what it does, a fact such as time or "NTU login", and a "Guide" link when a how-to article exists). Either can have a grey side list (`aside`). Every item needs context: no tile with a name alone.
+- Numbers in menus (module counts per type) and the semester popover come from `public/data/api/status.json` (built by `scripts/build-static-data.mts`), fetched the first time a menu that shows them opens. Date-dependent text ("Teaching week 5", from `lib/semester-weeks.ts`; "Updated 3 days ago") is set after mount, never during render. The "updated" date (`lib/server/data-updates.ts`, also used by `/developers/freshness`) is the newer of the data files' git date and the newest changelog release with a "Data" item; CI clones are shallow, so there only the changelog counts. A data refresh needs a "Data" changelog item for the date to move.
+- Panels size to their content. Each column has a floor and a ceiling in `mega-menu.tsx` (list columns 15 to 18rem, cards 15rem, side lists 12 to 14rem), so a short menu does not look cramped and a long description truncates. The navbar measures the open panel and places it under its trigger, 16px inside the window.
+- From `md` up, items that do not fit move under "More", in order; below `md` the menu drawer lists them. Order `navLinks` by importance, since the last items are the first to go.
+
 ## Layering
 
 | Layer   | What                                                 |

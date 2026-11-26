@@ -20,6 +20,7 @@ import {
 interface Props {
   open: boolean
   onOpenChange: (open: boolean) => void
+  onCloseAutoFocus?: (event: Event) => void
   title: React.ReactNode
   description?: React.ReactNode
   /** Show the description under the title; otherwise screen readers only. */
@@ -44,6 +45,7 @@ interface Props {
 export const ResponsiveModal = ({
   open,
   onOpenChange,
+  onCloseAutoFocus,
   title,
   description,
   showDescription = false,
@@ -58,7 +60,9 @@ export const ResponsiveModal = ({
   if (isMobile)
     return (
       <Root open={open} onOpenChange={onOpenChange}>
-        <DrawerContent className="border-primary overflow-hidden p-2 !duration-150 focus:outline-none data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[calc(100svh-6rem)] data-[vaul-drawer-direction=bottom]:rounded-t-3xl data-[vaul-drawer-direction=bottom]:border-4 data-[vaul-drawer-direction=bottom]:border-b-0">
+        <DrawerContent
+          onCloseAutoFocus={onCloseAutoFocus}
+          className="border-primary overflow-hidden p-2 !duration-150 focus:outline-none data-[vaul-drawer-direction=bottom]:mt-24 data-[vaul-drawer-direction=bottom]:max-h-[calc(100svh-6rem)] data-[vaul-drawer-direction=bottom]:rounded-t-3xl data-[vaul-drawer-direction=bottom]:border-4 data-[vaul-drawer-direction=bottom]:border-b-0">
           <DrawerTitle className="flex items-center px-3 text-left text-base font-semibold">
             {title}
           </DrawerTitle>
@@ -85,6 +89,7 @@ export const ResponsiveModal = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
+        onCloseAutoFocus={onCloseAutoFocus}
         className={cn(
           footer ? "flex flex-col overflow-hidden" : undefined,
           className

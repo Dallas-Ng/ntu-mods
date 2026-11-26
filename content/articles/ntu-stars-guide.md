@@ -1,23 +1,27 @@
 ---
-title: "NTU STARS Guide 2026: Registration Rounds, Bidding & Planner Tips"
-description: "NTU STARS planner guide — how bidding rounds work, how to prepare a shortlist before registration opens, and what to do when a module fills up. Includes a free STARS planner tool."
+title: "NTU STARS Login and Registration: Timeslots, Indexes and Add/Drop"
+description: "Open the official NTU STARS login, find your assigned registration timeslot, prepare backup indexes and check what to do during add/drop."
 date: "2026-06-08"
-updated: "2026-10-09"
+updated: "2026-11-26"
 author: "NTUMods"
 category: "STARS"
 thumbnailText: "STARS"
 tags: ["NTU STARS", "STARS NTU", "ntu stars planner", "stars planner ntu", "ntu module registration", "ntu stars system", "stars bidding ntu", "ntu stars guide", "ntu stars dates", "ntu stars registration", "ntustars", "ntu stars login", "stars ntu login", "ntu stars full form", "ntu stars waitlist", "ntu stars swap index", "ntu stars freshmen", "ntu stars add drop"]
 ---
 
-# NTU STARS: How the Module Registration System Works
+# NTU STARS Login and Registration
 
-STARS stands for Student Automated Registration System. It is the online system Nanyang Technological University (NTU Singapore) uses for module registration, where you go to register for, add, drop, and swap module indexes each semester. You reach it through StudentLink or the NTU student intranet.
+[Log in to NTU STARS](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/aus_stars_planner.main) with your NTU network account. Open **View Personalised Course Registration Information** to check your assigned date and time. For AY2026/27 Semester 2, registration takes place in December 2026. Your assigned slot depends on your registration study year and school. See the [WKWSCI registration notice](https://www.ntu.edu.sg/wkwsci/admissions/useful-links/undergraduate/course-registration-instructions) for a school-specific example.
 
-If you are new to NTU, STARS can feel confusing the first time you use it. This guide explains how the system works, what each round means, and how to prepare so you actually get the modules you want.
+## Registration-day checklist
+
+1. Confirm your personal timeslot and required modules. Keep your preferred and backup indexes ready in the [NTU timetable planner](/timetable).
+2. Submit in STARS during your slot. For example, if your preferred Tuesday tutorial fills up, switch to the Wednesday index you checked beforehand. Compare every class attached to that index and check the module's exam time before submitting.
+3. Reopen your registered courses to check what went through. Check [BDE allocation results](/articles/ntu-bde-allocation-results-release-date) separately and use [add/drop](/articles/ntu-add-drop-period-guide) for any remaining changes.
 
 ## What STARS is
 
-STARS is an open bidding window — a time period where all eligible students can register for available module indexes on a first-come, first-served basis within each round.
+STARS stands for Student Automated Registration System. It handles registration, index changes and elective requests. For electives allocated after registration, check the [allocation results](/articles/ntu-bde-allocation-results-release-date) to confirm your place.
 
 Some modules are pre-allocated by your school and will appear in your timetable without you needing to bid. These are usually compulsory core modules specific to your programme. BDEs (Broadening and Deepening Electives), most open electives, and some CC modules require active registration through STARS.
 
@@ -43,7 +47,7 @@ Less popular modules typically still have seats in Round 2. If your shortlist in
 
 ### Add/drop period
 
-Add/drop begins when the semester officially starts. Students who decide to drop modules do so throughout the early weeks, and those seats reopen immediately for anyone to take.
+Add/drop takes place around the start of semester and can open before classes begin. Check your school's notice and look for available indexes or waitlist options in STARS.
 
 Add/drop is underused by students who assume it is too late. In practice, module availability during the first week of add/drop can be significant — many students drop modules they can no longer manage once real workload sets in.
 

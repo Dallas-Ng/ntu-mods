@@ -1,18 +1,25 @@
 ---
-title: "NTU Exam Timetable, Seating Arrangement and Past Year Papers: Where to Find Each"
-description: "When NTU releases the exam timetable and seating arrangements, where to get past year exam papers from the NTU Library, and how to find your exam venue on campus."
+title: "NTU Exam Seating Arrangement: Check Your Venue, Seat and Past Papers"
+description: "Find your NTU exam venue and seat through the official student timetable, check when seating is released, and find past year papers in the NTU Library."
 date: "2026-09-02"
+updated: "2026-11-26"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "Exam papers"
 tags: ["ntu exam timetable", "ntu exam seating", "ntu past year papers", "ntu exam papers", "ntu exam hall", "ntu exam venue", "ntu exam dates", "ntu exam schedule", "ntu exam calculator registration"]
 ---
 
-# NTU Exam Timetable, Seating Arrangement and Past Year Papers: Where to Find Each
+# NTU Exam Seating Arrangement: Check Your Venue, Seat and Past Papers
 
 Exam information at Nanyang Technological University (NTU Singapore) is spread across several systems. This guide lists when each item is released and where to find it, using NTU's own Schedule of Key Academic Activities and library pages.
 
 > **Quick summary:** NTU releases the exam timetable in **mid May** (Semester 1) and **mid November** (Semester 2). Seating arrangements come out **2 weeks before exams start**. Past year papers are on the **NTU Library exam question papers site**, which needs your NTU email login.
+
+## Check your exam venue and seat
+
+1. Open the [official NTU undergraduate exam timetable](https://wis.ntu.edu.sg/webexe/owa/exam_timetable_und.main) and choose **Student Access**, or open **Assessment, Examination and Results** in the [Student Intranet](https://student-intranet.ntu.edu.sg/).
+2. Open your seating arrangement and check the venue and seat number for each paper. NTU normally releases the seating arrangement about two weeks before exams start.
+3. Use the [NTUMods campus map](/maps) to look up the venue before exam day.
 
 ## When is the NTU exam timetable released?
 
@@ -50,7 +57,13 @@ Exam venues are spread across campus, and NTU lists more than 50 examination ven
 
 ## Frequently asked questions
 
-### When is the NTU exam timetable released?
+### Check your exam venue and seat
+
+1. Open the [official NTU undergraduate exam timetable](https://wis.ntu.edu.sg/webexe/owa/exam_timetable_und.main) and choose **Student Access**, or open **Assessment, Examination and Results** in the [Student Intranet](https://student-intranet.ntu.edu.sg/).
+2. Open your seating arrangement and check the venue and seat number for each paper. NTU normally releases the seating arrangement about two weeks before exams start.
+3. Use the [NTUMods campus map](/maps) to look up the venue before exam day.
+
+## When is the NTU exam timetable released?
 
 Mid May for Semester 1, mid November for Semester 2, and mid March for Special Term. Early dates are also available in the NTUMods exam schedule.
 

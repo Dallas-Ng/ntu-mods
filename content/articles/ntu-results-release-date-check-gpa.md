@@ -1,7 +1,8 @@
 ---
 title: "NTU Results Release Date: When Grades Come Out and How to Check Your GPA"
-description: "When Nanyang Technological University releases semester results, where to check your grades, GPA and CGPA, and the short window to request a review of your results."
+description: "Check the expected NTU results release window, where to view your grades and CGPA, and how to find the deadline to request a review."
 date: "2026-09-17"
+updated: "2026-11-26"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "Results day"
@@ -10,17 +11,17 @@ tags: ["ntu results release", "ntu results release date", "ntu results release 2
 
 # NTU Results Release Date: When Grades Come Out and How to Check Your GPA
 
-Results timing at Nanyang Technological University (NTU Singapore) is one of the most searched questions each semester. This guide sets out the official release windows, where to see your grades and CGPA, and the deadline for asking for a review.
+For **AY2026/27 Semester 1**, NTU's undergraduate schedule gives an expected results window of **late December 2026 or early January 2027**. Check **Assessment, Examination and Results** in the [NTU Student Intranet](https://student-intranet.ntu.edu.sg/) for the exact release time and review deadline that apply to your results.
 
-> **Quick summary:** NTU expects to release course results in **end December or early January** for Semester 1 and **end May or early June** for Semester 2. Special Term results follow in August. A review request must be submitted through the Student Intranet within **3 calendar days** of release.
+> **Quick summary:** NTU expects to release course results in **end December or early January** for Semester 1 and **end May or early June** for Semester 2. Check the notice for your Special Term session. A review request must be submitted through the Student Intranet within **3 calendar days** of release.
 
 ## NTU results release dates
 
-These come from NTU's Schedule of Key Academic Activities for undergraduate programmes. NTU marks the course results row as an expected release, so the exact day can shift.
+These windows come from [NTU's Schedule of Key Academic Activities for undergraduate programmes](https://www.ntu.edu.sg/media/docs/default-source/office-of-academic-services/schedule-of-key-academic-activities-%28undergraduate-programmes%2901dfb46d-61a0-4b3b-99ce-8dbb4f59fc11.pdf). NTU marks the course results row as an expected release, so check the Student Intranet for the exact day.
 
 | Activity | Semester 1 | Semester 2 | Special Term |
 |---|---|---|---|
-| Expected release of course results | End December or early January | End May or early June | August |
+| Expected release of course results | End December or early January | End May or early June | Check your session notice |
 | Declaration period for Flexible Grading Option | Early January | Early June | August |
 
 The Flexible Grading Option declaration opens soon after results are out, so read your grades first, then decide. See the [NTU FGO and S/U guide](/articles/ntu-fgo-su-option-guide) and the [FGO optimiser guide](/articles/ntu-fgo-optimiser-guide) before you declare.
@@ -63,7 +64,7 @@ NTU expects to release Semester 1 course results in end December or early Januar
 
 ### When are NTU results released for Semester 2?
 
-Semester 2 results are expected at the end of May or in early June. Special Term results follow in August.
+Semester 2 results are expected at the end of May or in early June. Check the notice for your Special Term session.
 
 ### Where can I check my GPA at NTU?
 

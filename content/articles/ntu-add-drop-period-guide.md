@@ -1,7 +1,8 @@
 ---
 title: "NTU Add/Drop Period: How It Works and How to Use It"
-description: "How NTU's add/drop period works after STARS closes — when it happens, how to find seats that open up, and how to use it as a real second chance for modules that filled during bidding."
+description: "Check when NTU add/drop opens, where to confirm your STARS timeslot and what to do if a class is full, clashes or is missing from your timetable."
 date: "2026-08-06"
+updated: "2026-11-26"
 author: "NTUMods"
 category: "STARS"
 thumbnailText: "Add / Drop"
@@ -12,13 +13,21 @@ tags: ["ntu add drop period 2026 dates", "ntu add drop reddit", "ntu add drop re
 
 Add/drop is the window after STARS bidding closes and the semester begins, where students can still add or drop modules as seats reopen. Many students assume it is too late by then — in practice, it is often the best chance to get a module that was full during Round 1 and Round 2.
 
-> **Quick summary:** Add/drop begins when the semester officially starts and typically runs for the first one to two weeks of teaching. Seats reopen as other students drop modules, especially in the first few days. Check exact dates on the [NTU Academic Calendar](/articles/ntu-academic-calendar-ay2026) for your semester — add/drop dates are set each academic year.
+> **Quick summary:** Add/drop usually runs around the first two teaching weeks for full-time undergraduates. Check your school’s registration notice for exact times, as the window can open before classes begin.
 
 ## When add/drop happens
 
-Add/drop follows directly after STARS Round 2 closes and the semester begins. It is not a fixed-length window across all semesters — always confirm the exact start and end dates on the [NTU Academic Calendar](/articles/ntu-academic-calendar-ay2026), since these shift slightly each academic year.
+Add/drop follows the main course registration period. Use the [academic calendar](/articles/ntu-academic-calendar-ay2026) for term dates and your STARS schedule for registration deadlines.
 
 Unlike STARS Round 1 and Round 2, which are scheduled bidding windows before teaching starts, add/drop happens while classes are already running. You are adjusting a timetable that is already partly locked in.
+
+For AY2026/27 Semester 2, check your school's registration instructions and personalised STARS schedule for the opening and closing times. For example, [WKWSCI lists 8 to 22 January 2027](https://www.ntu.edu.sg/wkwsci/admissions/useful-links/undergraduate/course-registration-instructions) for its undergraduates.
+
+| If this happens | What to do |
+| --- | --- |
+| Your class is full | Check available indexes in STARS and keep your current place while you look for a swap. |
+| Two classes clash | Compare backup indexes in the [timetable planner](/timetable), then make the change in STARS. |
+| Your BDE is missing | Check the [allocation results](/articles/ntu-bde-allocation-results-release-date), then look for an alternative or follow your school's appeal instructions. |
 
 ## Why seats open up during add/drop
 

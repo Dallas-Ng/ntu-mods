@@ -1,8 +1,8 @@
 ---
 title: "NTU Exam Schedule AY2026/2027: Semester 1 and Semester 2 Exam Dates"
-description: "NTU exam dates for AY2026/2027 Semester 1 and Semester 2 are on NTUMods. Find your exam timetable, filter by semester, spot clashes and plan your modules around the exam period."
+description: "See the NTU exam dates for both semesters of AY2026/27. Search the timetable by module code and find the official link for your exam venue and seat."
 date: "2026-07-27"
-updated: "2026-11-18"
+updated: "2026-11-26"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "Exam schedule"
@@ -16,6 +16,15 @@ Exam dates for both semesters of AY2026/2027 are now on NTUMods. Semester 1 cove
 > **Go straight to the schedule:** [NTU Exam Schedule on NTUMods](/exams)
 >
 > **Last synced with NTU's official timetable:** 18 November 2026
+
+## AY2026/27 exam dates
+
+| Semester | Scheduled exams |
+| --- | --- |
+| Semester 1 | 23 November to 3 December 2026 |
+| Semester 2 | 26 April to 6 May 2027 |
+
+Search by module code in the [NTU exam timetable](/exams). For your assigned venue and seat, use the [exam seating guide](/articles/ntu-exam-timetable-seating-past-papers).
 
 ## What the NTUMods exam schedule shows
 
@@ -48,17 +57,6 @@ Before STARS opens:
 4. If two high-stakes modules land on the same day or consecutive days, consider whether that is a workload you are comfortable with
 
 This is especially relevant for BDE planning. Your core modules are often fixed, but your BDE choice is flexible. If your core module exams are already clustered, choosing a BDE with an exam in the same stretch adds to the pressure. An exam-free BDE (project or attendance-based) might be a better fit. See [Easy BDEs at NTU](/articles/easy-bde-at-ntu) for a breakdown by assessment type.
-
-### Know the exam period in advance
-
-The AY2026/2027 exam periods, as listed in the NTU timetable, are:
-
-| Semester | Exam period | Modules with an exam |
-| --- | --- | --- |
-| Semester 1 | 23 November to 3 December 2026 | 385 |
-| Semester 2 | 26 April to 6 May 2027 | 394 |
-
-Knowing which weeks are exam weeks helps you plan coursework deadlines, CCA commitments, and any part-time work around the intensive period.
 
 Check the [NTU academic calendar](https://www.ntu.edu.sg/education/academic-calendar) for official term dates alongside the exam schedule.
 

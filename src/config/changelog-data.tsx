@@ -15,6 +15,7 @@ export interface ChangelogRelease {
   title: string
   date: string
   note?: string
+  layout?: "table"
   items: ChangelogItem[]
 }
 
@@ -70,20 +71,32 @@ export const getReleaseSlug = ({ title, date }: ChangelogRelease) => {
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
-    title: "NTU academic calendar page and calendar export",
+    title: "Navigation, academic calendar and student guides",
     date: "26 Nov 2026",
+    layout: "table",
     items: [
+      {
+        category: "Improvement",
+        content: (
+          <>
+            The redesigned navigation groups related pages into menus on desktop
+            and expandable sections on phones. Calendar and Developers now have
+            their own menus, and the semester indicator shows the current
+            teaching week, module, index and exam counts, and when the data was
+            last updated.
+          </>
+        )
+      },
       {
         category: "New Feature",
         content: (
           <>
-            New{" "}
+            The new{" "}
             <ChangelogLink href="/calendar">academic calendar</ChangelogLink>{" "}
-            page: this week&apos;s teaching week, the dates of every week,
-            recess, the revision and exam weeks, public holidays and what each
-            one means for classes. Subscribe to it in Google Calendar, Apple
-            Calendar or Outlook, and your calendar app updates it when NTU
-            changes a date.
+            shows teaching weeks, recess, revision, exams and public holidays.
+            Subscribe in Google Calendar, Apple Calendar or Outlook, or download
+            it once. Timetable exports now use NTU&apos;s calendar dates, skip
+            classes during official no-class periods and mark key dates.
           </>
         )
       },
@@ -91,24 +104,26 @@ const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
         category: "Improvement",
         content: (
           <>
-            Calendar export now reads its dates from the official{" "}
-            <ChangelogLink href="https://www.ntu.edu.sg/admissions/matriculation/academic-calendars">
-              NTU academic calendar
-            </ChangelogLink>
-            . Classes on public holidays and replacement holidays are left out,
-            and so are classes after 2.30pm on the eves of New Year&apos;s Day,
-            Chinese New Year, Hari Raya Puasa and Deepavali.
+            Search engines and other tools get clearer information about the
+            campus map, modules, exams, articles and planning tools. The{" "}
+            <ChangelogLink href="/developers/data">
+              open data catalogue
+            </ChangelogLink>{" "}
+            lists downloadable NTUMods datasets.
           </>
         )
       },
       {
-        category: "New Feature",
+        category: "Content",
         content: (
           <>
-            The exported calendar now marks recess week, the revision and exam
-            weeks, each public holiday, and the no-class window on
-            Students&apos; Union Day. Events keep their IDs, so importing again
-            updates them in place.
+            Refreshed student guides with AY2026/27 Semester 2 dates, more
+            registration guidance, sports BDEs and updated NTU sign-in links.
+            Added a{" "}
+            <ChangelogLink href="/articles/ntu-academic-calendar-ay2027">
+              provisional AY2027/28 academic calendar guide
+            </ChangelogLink>
+            .
           </>
         )
       }

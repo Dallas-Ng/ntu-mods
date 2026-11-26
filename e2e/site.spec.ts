@@ -139,6 +139,7 @@ test.describe("machine-readable files", () => {
     expect(tools.length).toBeGreaterThan(20)
     for (const tool of tools) {
       expect(tool.name).toMatch(/^[a-z][a-z0-9_]*$/)
+      expect(tool.description).toMatch(/\S/)
       expect(tool.inputSchema.type).toBe("object")
     }
   })

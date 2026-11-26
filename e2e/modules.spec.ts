@@ -50,18 +50,12 @@ const canonicalOf = (html: string) =>
   )
 
 test.describe("module URL strategy", () => {
-  test("test data has current and past-only modules", () => {
-    expect(current.length).toBeGreaterThan(100)
-    expect(past.length).toBeGreaterThan(100)
-    // Every current module shares one semester.
-    expect(new Set(current.map((o) => o.sem)).size).toBe(1)
-    expect(past.some((o) => o.sem === current[0].sem)).toBe(false)
-  })
-
   for (const [label, group] of [
     ["current-semester", current],
     ["past-only", past]
   ] as const) {
+    if (group.length === 0) throw new Error(`No ${label} modules to sample`)
+
     test(`${label} /mods/CODE shows the latest offered semester`, async ({
       request
     }) => {

@@ -2,8 +2,7 @@
 // GA, shared by both layouts. Rendered only in production; the layouts gate
 // on IS_PROD at the call site.
 //
-// Loads only once the visitor's region allows it or they have accepted
-// (@/lib/consent), and is switched off again if they withdraw.
+// Loads only after explicit consent and switches off on withdrawal.
 //
 // The tag ran under next/script's `lazyOnload` before the migration —
 // injected after the window load event, so it never competes with hydration
@@ -34,7 +33,10 @@
     }
     w.gtag = gtag
     gtag("js", new Date())
-    gtag("config", GA_ID)
+    gtag("config", GA_ID, {
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false
+    })
   }
 
   // Withdrawing stops GA's own sending; its cookies stay until cleared.
@@ -48,7 +50,7 @@
     if (done) return
     done = true
     events.forEach((e) => window.removeEventListener(e, once))
-    void whenConsented().then(load)
+    whenConsented(load)
   }
 
   function schedule() {

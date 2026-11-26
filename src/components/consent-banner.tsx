@@ -2,63 +2,56 @@
 
 import { useEffect, useState } from "react"
 
-import { consentRequired, getStoredConsent, setConsent } from "@/lib/consent"
+import { getStoredConsent, onConsentChange, setConsent } from "@/lib/consent"
 import { Button } from "@/components/ui/button"
 import { TextLink } from "@/components/ui/text-link"
 
-const OPEN_EVENT = "ntumods:open-consent"
-
-// Shown only to visitors whose region requires opt-in and who have not
-// chosen yet. The footer's "Cookie settings" item (hidden elsewhere) reopens
-// it so the choice can be changed.
 const ConsentBanner = () => {
   const [open, setOpen] = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   useEffect(() => {
-    let alive = true
-    const settings = document.getElementById("cookie-settings")
-    const reopen = () => window.dispatchEvent(new Event(OPEN_EVENT))
-    settings?.querySelector("button")?.addEventListener("click", reopen)
-
-    void consentRequired().then((required) => {
-      if (!alive || !required) return
-      if (settings) settings.hidden = false
-      if (!getStoredConsent()) setOpen(true)
-    })
-    const onOpen = () => setOpen(true)
-    window.addEventListener(OPEN_EVENT, onOpen)
+    const settings = document.querySelector<HTMLButtonElement>(
+      "#cookie-settings button"
+    )
+    const reopen = () => setSettingsOpen(true)
+    const sync = () => setOpen(getStoredConsent() === null)
+    sync()
+    const unsubscribe = onConsentChange(sync)
+    settings?.addEventListener("click", reopen)
+    if (settings) settings.hidden = false
     return () => {
-      alive = false
-      settings?.querySelector("button")?.removeEventListener("click", reopen)
-      window.removeEventListener(OPEN_EVENT, onOpen)
+      settings?.removeEventListener("click", reopen)
+      if (settings) settings.hidden = true
+      unsubscribe()
     }
   }, [])
 
-  if (!open) return null
+  if (!open && !settingsOpen) return null
 
   const choose = (value: "granted" | "denied") => {
     setConsent(value)
-    setOpen(false)
+    setSettingsOpen(false)
   }
 
   return (
     <div
-      role="dialog"
+      role="region"
       aria-label="Analytics cookies"
       className="bg-background border-border fixed inset-x-3 bottom-3 z-50 mx-auto max-w-xl rounded-2xl border p-4 shadow-lg sm:right-4 sm:bottom-4 sm:left-auto sm:mx-0">
       <p className="text-sm font-medium">Analytics cookies</p>
       <p className="text-muted-foreground mt-1 text-sm">
-        We would like to use Google Analytics and PostHog to understand how
-        NTUMods is used. They set cookies and collect usage data. Nothing is
-        loaded unless you accept, and you can change your mind in the footer.
-        See our <TextLink href="/privacy#analytics">Privacy Policy</TextLink>.
+        Allow Google Analytics and PostHog to use cookies and measure how you
+        use NTUMods, including errors and article views. Your browser saves your
+        choice. You can change it in Cookie settings. See our{" "}
+        <TextLink href="/privacy#consent">Privacy Policy</TextLink>.
       </p>
       <div className="mt-3 flex gap-2">
         <Button size="sm" className="flex-1" onClick={() => choose("denied")}>
-          Reject
+          Reject analytics
         </Button>
         <Button size="sm" className="flex-1" onClick={() => choose("granted")}>
-          Accept
+          Accept analytics
         </Button>
       </div>
     </div>

@@ -120,8 +120,7 @@ export const POST: APIRoute = async ({ request, url: requestUrl }) => {
     )
   }
 
-  // Only with an ID from the visitor's own PostHog, which exists only once
-  // they have consented where that is required.
+  // The feedback form only sends the visitor's PostHog ID with consent.
   if (PUBLIC_POSTHOG_TOKEN && posthogDistinctId) {
     const posthog = createPostHogClient(PUBLIC_POSTHOG_TOKEN)
     posthog.capture({

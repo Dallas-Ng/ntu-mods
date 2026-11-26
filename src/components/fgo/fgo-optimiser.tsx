@@ -78,7 +78,7 @@ const SAMPLE_NAME = "Sample transcript"
 export default function FgoOptimiser() {
   const [data, setData] = useState<ParsedTranscript | null>(null)
   const [fileName, setFileName] = useState("")
-  const [share, setShare] = useState(true)
+  const [share, setShare] = useState(false)
   const [quota, setQuota] = useState("24")
   const [bde, setBde] = useState<Set<string>>(new Set())
   const [picked, setPicked] = useState<Set<string>>(new Set())

@@ -368,17 +368,15 @@ const MapsPageContent = () => {
   }
 
   // First view: the part of campus where classes are, not the empty margins.
-  useEffect(() => {
-    if (!data) return
+  const initialBounds = useMemo<Focus["bounds"] | undefined>(() => {
+    if (!data) return undefined
     const q = (a: number[], f: number) =>
       [...a].sort((x, y) => x - y)[Math.floor((a.length - 1) * f)]
     const v = Object.values(data.venues)
+    if (!v.length) return undefined
     const xs = v.map((p) => p.x)
     const ys = v.map((p) => p.y)
-    setFocus({
-      bounds: [q(xs, 0.04), q(ys, 0.04), q(xs, 0.96), q(ys, 0.96)],
-      nonce: Date.now()
-    })
+    return [q(xs, 0.04), q(ys, 0.04), q(xs, 0.96), q(ys, 0.96)]
   }, [data])
 
   // Open a shared link as it was: place or directions, category, level, map type.
@@ -651,17 +649,19 @@ const MapsPageContent = () => {
 
   // --- floating panels and the room they take ---
   const shellRef = useRef<HTMLDivElement>(null)
-  const [shellH, setShellH] = useState(640)
-  useEffect(() => {
-    const el = shellRef.current
-    if (!el) return
-    const ro = new ResizeObserver(() => setShellH(el.clientHeight))
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [data])
   const [fullscreen, setFullscreen] = useState(false)
   // The shell stays fixed while it shrinks back, so it can be clipped smoothly.
   const [pinned, setPinned] = useState(false)
+  const [shellH, setShellH] = useState(640)
+  useLayoutEffect(() => {
+    const el = shellRef.current
+    if (!el) return
+    const measure = () => setShellH(el.clientHeight)
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [pinned])
   // Desktop only: the map can be dragged taller from its bottom edge.
   const [deskH, setDeskH] = useState<number | null>(null)
   const resize = useRef<{ y: number; h: number } | null>(null)
@@ -788,16 +788,6 @@ const MapsPageContent = () => {
       localStorage.setItem(DRAWER_TIP_KEY, "1")
     } catch {}
   }
-  // Lock page scroll before paint and release it only once the shell is back in
-  // the page: the scrollbar appearing or going mid-animation resizes the map.
-  useLayoutEffect(() => {
-    if (!pinned) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-    return () => {
-      document.body.style.overflow = prev
-    }
-  }, [pinned])
   // How high the drawer stands right now, following a drag, for the controls.
   const [dragH, setDragH] = useState<number | null>(null)
   const visible = [PEEK, shellH * 0.46, shellH * SHEET_FRACTION]
@@ -832,6 +822,7 @@ const MapsPageContent = () => {
         style={desktop && deskH !== null ? { height: deskH } : undefined}>
         <div
           ref={shellRef}
+          data-map-pinned={pinned ? "" : undefined}
           className={cn(
             "bg-card overflow-hidden",
             pinned
@@ -857,6 +848,7 @@ const MapsPageContent = () => {
                 buildingLabels={buildingLabels}
                 roomLabels={roomLabels}
                 focus={focus}
+                initialBounds={initialBounds}
                 insets={insets}
                 onHelp={() => {
                   track("map_help_opened")

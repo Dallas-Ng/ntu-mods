@@ -73,7 +73,7 @@ Surfaces are fixed tokens:
 
 - The academic calendar (`/calendar`) colours days by meaning, using `WEEK_FILL` and the constants beside it in `components/calendar/calendar-months.tsx`. An ordinary teaching day is a plain `background` chip on the month card, so the days that differ stand out: recess `warning-subtle` with `warning` text, revision and exams `destructive-subtle` with `destructive` text, a holiday `success-subtle` with `success` text (green, as Google Calendar marks holidays). Days outside the semester have no chip. A day only partly affected has a `success` bar under its number, a key event a `primary` bar, and today is a solid `foreground` circle. Recess, exam and holiday cells use an inset ring in their category colour. The Dates to know card uses the same colours as the grid.
 - No opacity tints (`bg-muted/50`, `bg-primary/10`). The exceptions are see-through glass (navbar, docs bar, the floating "On this page" button, dialog backdrop), `Skeleton`'s translucent `bg-foreground/10`, and the darker hover of solid buttons (`hover:bg-primary/90`).
-- No raw Tailwind palette colours (`emerald-500`, `slate-200`). Exceptions include the exempt areas, `yellow-400` with black text for `NewBadge` and the announcement banner, and `rose-500` for the favourite heart.
+- No raw Tailwind palette colours (`emerald-500`, `slate-200`). Exceptions include the exempt areas, `yellow-400` with black text for `NewBadge` and the announcement banner, `yellow-500` on hover for the announcement dismiss button, and `rose-500` for the favourite heart.
 - Light and dark mode both have to work. The theme is class-based (`localStorage.theme`), not the system setting.
 
 ## Borders

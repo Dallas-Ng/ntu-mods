@@ -1,19 +1,23 @@
 ---
-title: "NTU Academic Calendar 2026/2027 (AY2026/27): Semester Dates & Term Breaks"
-description: "NTU academic calendar 2026/2027 — semester 1 & 2 start/end dates, recess week, exam period dates, and STARS registration rounds. Updated for AY2026/27."
+title: "NTU Academic Calendar 2026/27: Semester Dates, Recess Week and Exams"
+description: "Check NTU Singapore's AY2026/27 term dates, recess weeks and scheduled exam periods for both semesters. Find your STARS registration and exam timetable links."
 date: "2026-06-20"
-updated: "2026-11-18"
+updated: "2026-11-26"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "Academic calendar"
 tags: ["ntu academic calendar", "ntu academic calendar 2026", "ntu calendar 26/27", "ntu calendar 2026/2027", "ntu term dates", "ntu semester calendar", "ntu semester dates", "ntu exam period 2026", "ntu stars dates", "ntu recess week", "ntu semester 1 2026", "ntu ay2026 dates", "ntu timetable dates", "ntu academic year 2026", "ntu academic calendar 2027", "ntu 2027 academic calendar", "ntu academic calendar pdf", "ntu school holidays 2026", "ntu school holidays 2027", "ntu calendar 25/26", "ntu academic calendar 2027/28", "ntu public holidays 2026", "ntu recess week 2026"]
 ---
 
-# NTU Academic Calendar AY2026/2027: Key Dates for Semester 1 and 2
+# NTU Academic Calendar 2026/27: Semester Dates, Recess Week and Exams
 
 Nanyang Technological University (NTU Singapore) divides its academic year 2026/2027 into two main semesters, Semester 1 (August to December) and Semester 2 (January to May), plus a Special Term over the summer. This page covers the NTU term dates for 2026/27, how the semester calendar is structured, what happens in each phase, and where to find the official dates for AY2026/2027.
 
 > **Official source:** Always confirm dates with the [NTU Academic Calendar](https://www.ntu.edu.sg/education/academic-calendar) on NTU's website. Dates are updated by NTU each academic year.
+
+Looking ahead to Semester 2? Teaching starts **11 January 2027**, recess week is **1 to 5 March 2027**, and scheduled exams run **26 April to 6 May 2027**. [Find exam dates by module code](/exams) or check your assigned registration slot in the [STARS guide](/articles/ntu-stars-guide).
+
+For the following year, see the [indicative NTU academic calendar for 2027/28](/articles/ntu-academic-calendar-ay2027).
 
 ## NTU term dates 2026/2027 at a glance
 
@@ -25,9 +29,9 @@ Nanyang Technological University (NTU Singapore) divides its academic year 2026/
 | Add/drop period | Teaching Weeks 1 and 2 | Teaching Weeks 1 and 2 |
 | Recess Week | 28 Sep to 2 Oct 2026 | 1 to 5 Mar 2027 |
 | Teaching Week 13 ends | 13 Nov 2026 | 16 Apr 2027 |
-| Revision and examination weeks | Mid November to early December 2026 | Mid April to early May 2027 |
+| Scheduled exams | 23 Nov to 3 Dec 2026 | 26 Apr to 6 May 2027 |
 
-These dates come from the official NTU academic calendar for AY2026-27 (published 19 May 2026). NTU states that all dates are subject to change, so confirm against the [official calendar PDF](https://ntu.edu.sg/academic-calendar) before you commit to travel or leave plans.
+Term dates come from the [official NTU academic calendar](https://ntu.edu.sg/academic-calendar). Scheduled exam dates come from the published [module exam timetable](/exams). Check your personal STARS schedule for exact registration and add/drop times.
 
 ## AY2026/2027 Semester 1
 

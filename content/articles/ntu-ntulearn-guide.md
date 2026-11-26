@@ -1,15 +1,19 @@
 ---
-title: "What Is NTULearn? Login, Features & How to Use It"
-description: "NTULearn explained — what it is, how to log in, what professors post there, and how it's different from STARS and the Degree Audit."
+title: "NTULearn Login: Official Link, Sign-in Help and Course Access"
+description: "Open the official NTULearn login, check which NTU account to use and find help if you cannot sign in or see your courses."
 date: "2026-09-22"
-updated: "2026-10-09"
+updated: "2026-11-26"
 author: "NTUMods"
 category: "General"
 thumbnailText: "NTULearn"
 tags: ["ntulearn", "ntu learn", "ntulearn login", "ntu learn login", "ntulearn ultra", "ntu blackboard", "ntu lms", "what is ntulearn", "ntulearn self enrol", "ntulearn course catalogue", "ntulearn app", "ntu learn portal", "ntulearn blackboard", "ntulearn ithenticate", "ntulearn respondus", "ntulearn video"]
 ---
 
-# What Is NTULearn? Login, Features & How to Use It
+# NTULearn Login and Course Access
+
+[Open the official NTULearn login](https://ntulearn.ntu.edu.sg/ultra/institution-page). Use your NTU network account. If prompted for a full student username, use `username@student.main.ntu.edu.sg`.
+
+If sign-in fails, check your [NTU network account and password](/articles/ntu-network-account-password-reset). If you can sign in but a course is missing, confirm your registration in STARS and ask the module coordinator whether the course has opened.
 
 NTULearn is NTU's learning management system — the site where professors post lecture materials, readings, and assignments for every module you're taking. If you're new to NTU, this is the system you'll open most often, every week of the semester.
 

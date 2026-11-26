@@ -1,8 +1,8 @@
 ---
 title: "NTU STARS, NTULearn & Student Portal Links (All-in-One List)"
-description: "Direct links to every NTU student portal: STARS for course registration, NTULearn for course materials, Degree Audit for grades, CareerAxis for jobs, GEM for exchange, student email, fee payment, and more."
+description: "Open the official NTU STARS, NTULearn and Degree Audit logins. Find student links for transcripts, careers, exchange and other campus services."
 date: "2026-06-22"
-updated: "2026-10-06"
+updated: "2026-11-26"
 author: "NTUMods"
 category: "General"
 thumbnailText: "Portal links"
@@ -21,14 +21,14 @@ The core portals every NTU student uses are:
 
 | Portal | What it does |
 |--------|-------------|
-| [STARS](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/aus_stars_planner.main) | Course registration |
-| [NTULearn](https://ntulearn.ntu.edu.sg/ultra/institution-page) | Course materials and LMS |
-| [Degree Audit](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/dars_result_ro.main_display) | Grades and AU progress |
+| [STARS login](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/aus_stars_planner.main) | Course registration |
+| [NTULearn login](https://ntulearn.ntu.edu.sg/ultra/institution-page) | Course materials and LMS |
+| [Degree Audit login](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/dars_result_ro.main_display) | Grades and AU progress |
 | [Self-Help Transcript](https://wis.ntu.edu.sg/webexe/owa/request_transcript_und.LoginN?pType=SH) | Unofficial transcript |
 | [CareerAxis](https://careeraxis.ntu.edu.sg/students) | Jobs and internships |
 | [GEM Portal](https://gem.ntu.edu.sg/) | Student exchange |
 
-The sections below cover each portal in full.
+For help signing in or finding a feature, see the [STARS registration guide](/articles/ntu-stars-guide), [NTULearn login guide](/articles/ntu-ntulearn-guide) or [Degree Audit guide](/articles/ntu-degree-audit-guide).
 
 ## Academic Portals
 

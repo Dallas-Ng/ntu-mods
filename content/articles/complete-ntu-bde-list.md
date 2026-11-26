@@ -1,19 +1,19 @@
 ---
-title: "Complete NTU BDE List: Every BDE Category and Module (AY2026/2027 Semester 2)"
-description: "A complete NTU BDE list by category: languages, business, computing, humanities, arts, science, engineering, and more. Updated for AY2026/2027 Semester 2. Browse all 780+ BDE modules on NTUMods."
+title: "NTU BDE List by Category (AY2026/2027 Semester 2)"
+description: "Browse NTU BDEs for AY2026/27 Semester 2 by category, including languages and sports. Check module prerequisites, indexes and exam dates before registering."
 date: "2026-05-21"
-updated: "2026-11-18"
+updated: "2026-11-26"
 author: "NTUMods"
 category: "BDE"
 thumbnailText: "Every BDE"
 tags: ["ntu bde list", "bde list ntu", "ntu bde 2026", "all bde ntu", "bde courses ntu", "NTU BDE", "NTU electives", "NTUMods", "bde ntu", "ntu bde ay2026", "ntu bde semester 2 2026", "ntu bde ay2026 s2", "ntu bde ay2026/2027", "ntu bde list 2026"]
 ---
 
-# Complete NTU BDE List: Every BDE Category and Module (AY2026/2027 Semester 2)
+# NTU BDE List by Category (AY2026/2027 Semester 2)
 
 Updated for AY2026/2027 Semester 2 (October 2026).
 
-NTU has over 780 BDE modules available in the current semester across languages, business, computing, humanities, science, engineering, arts, and more. This page organises them by category so you can find what is available for your interests and programme.
+NTU has over 780 BDE modules available in AY2026/27 Semester 2. Browse examples by category below, or [see all BDE modules for the semester](/mods?moduleType=GLOAD) in the module browser.
 
 > **Planning around exams?** The [NTU Exam Schedule](/exams) shows AY2026/2027 Semester 1 and Semester 2 exam dates. Semester 2 exams run from 26 April to 6 May 2027. Check exam clashes before you finalise your BDE shortlist.
 
@@ -31,6 +31,7 @@ Not sure what a BDE is or how many you need? Start with [What Is a BDE at NTU](/
 | Psychology | [Go](#psychology) |
 | Humanities (Philosophy, History, Literature, Economics, Art History) | [Go](#humanities) |
 | Social Sciences & Public Policy | [Go](#social-sciences--public-policy) |
+| Sports | [Go](#sports) |
 | Education & Child Development (NIE) | [Go](#education--child-development-nie) |
 | Science & Environmental Studies | [Go](#science--environmental-studies) |
 | Engineering | [Go](#engineering) |
@@ -48,9 +49,13 @@ Each module links to its NTUMods page where you can check:
 
 Not every module is open to every student. Programme restrictions, prerequisites, and AU limits apply. Always confirm a module counts as a BDE for your specific degree before registering.
 
-For the complete live list, use the [BDE filter on NTUMods](/mods), select "BDE" under module type.
+[Browse all BDE modules](/mods?moduleType=GLOAD) with the BDE filter already selected.
 
 ---
+
+## Sports
+
+AY2026/27 Semester 2 offerings include [SS5101 Badminton](/mods/SS5101), [SS5102 Tennis](/mods/SS5102), [SS5104 Basketball](/mods/SS5104), [SS5105 Volleyball](/mods/SS5105) and [SS5107 Table Tennis](/mods/SS5107). These modules are listed at 3 AU each. Open the module page to check programme restrictions and class indexes, then confirm the assessment format with the course outline before registering.
 
 ## Languages
 

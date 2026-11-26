@@ -1,15 +1,17 @@
 ---
-title: "NTU Degree Audit: How to Check Your Graduation Requirements"
-description: "How the NTU degree audit works, where to find it, and how to read it against your programme's core, BDE, UE, and AU requirements before you register for modules."
+title: "NTU Degree Audit: Login and Graduation Requirements"
+description: "Open the official NTU Degree Audit and see how to check outstanding Academic Units and BDE requirements before registering for modules."
 date: "2026-08-06"
-updated: "2026-10-09"
+updated: "2026-11-26"
 author: "NTUMods"
 category: "Module Planning"
 thumbnailText: "Degree audit"
 tags: ["ntu degree audit", "degree audit ntu", "ntu degree audit login", "ntu audit degree", "ntu graduation requirements", "ntu curriculum structure", "ntu au requirements", "ntu student portal", "ntu degree audit results", "ntu degree audit reddit", "download ntu degree audit", "ntu transcript", "ntu intranet"]
 ---
 
-# NTU Degree Audit: How to Check Your Graduation Requirements
+# NTU Degree Audit: Login and Graduation Requirements
+
+[Open NTU Degree Audit](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/dars_result_ro.main_display) with your NTU network account. Check the outstanding AU in each requirement before planning your next semester. For example, if your audit shows **6 BDE AU outstanding**, two eligible 3 AU electives could fill that gap once you complete them. Check whether any courses in progress are already counted before adding more.
 
 The degree audit is Nanyang Technological University's (NTU Singapore) official record of what you have completed and what you still need to graduate. It is not the same as STARS, and it is not the same as your CGPA. This guide explains what it shows, where to find it, and how to actually use it when planning modules.
 

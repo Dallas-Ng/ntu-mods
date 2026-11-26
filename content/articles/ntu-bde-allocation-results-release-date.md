@@ -1,7 +1,8 @@
 ---
 title: "NTU BDE Allocation Results: Release Date, How to Check and How to Appeal"
-description: "When Nanyang Technological University releases GERPE, UE and BDE allocation results, what happens during add/drop, and how to appeal if you did not get the BDE you wanted."
+description: "Find the expected NTU BDE allocation window, check your registered electives in STARS and see what to do during add/drop or appeals."
 date: "2026-08-19"
+updated: "2026-11-26"
 author: "NTUMods"
 category: "BDE"
 thumbnailText: "BDE results"
@@ -13,6 +14,8 @@ tags: ["ntu bde release date", "ntu bde results release", "ntu bde allocation", 
 If you placed a BDE on your waitlist or bid for one during course registration, the next question is always the same: when do the results come out? This guide uses the official Schedule of Key Academic Activities from Nanyang Technological University (NTU Singapore) to answer that, and explains what to do once the results are released.
 
 > **Quick summary:** NTU releases GERPE, UE and BDE allocation results in **early August** for Semester 1 and **early January** for Semester 2. The add/drop period for full-time undergraduates then runs through **Teaching Weeks 1 and 2**. If you did not get a BDE, you can appeal through the Online Appeal System in your student intranet.
+
+For AY2026/27 Semester 2, use **early January 2027** as the expected window. Check your personalised schedule for the exact time, then [open STARS](https://wish.wis.ntu.edu.sg/pls/webexe/ldap_login.login?w_url=https://wish.wis.ntu.edu.sg/pls/webexe/aus_stars_planner.main) and look for the elective in your registered courses. If it is missing, check the [add/drop guide](/articles/ntu-add-drop-period-guide) and your school's appeal instructions.
 
 ## When are NTU BDE allocation results released?
 

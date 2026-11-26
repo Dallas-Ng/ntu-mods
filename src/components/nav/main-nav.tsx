@@ -21,34 +21,31 @@ const MD = "(min-width: 768px)"
 const links = siteConfig.navLinks
 
 /**
- * How many nav items fit before the rest move under "More". Item widths are
- * cached while each is on screen, since a hidden item measures 0.
+ * How many nav items fit before the rest move under "More". Overflow items keep
+ * their intrinsic width so measurements stay current across breakpoints.
  */
 function usePriorityNav(moreEnabled: boolean) {
   const rootRef = useRef<HTMLElement>(null)
   const itemRefs = useRef<(HTMLLIElement | null)[]>([])
   const moreRef = useRef<HTMLLIElement>(null)
-  const widths = useRef<number[]>([])
-  const moreWidth = useRef(0)
   const [visible, setVisible] = useState<number>(links.length)
   const [measured, setMeasured] = useState(false)
 
   const compute = useCallback(() => {
     const root = rootRef.current
     if (!root) return
-    itemRefs.current.forEach((el, i) => {
-      if (el && el.offsetWidth > 0) widths.current[i] = el.offsetWidth
-    })
-    if (moreRef.current && moreRef.current.offsetWidth > 0)
-      moreWidth.current = moreRef.current.offsetWidth
-
-    const available = root.clientWidth
-    const total = widths.current.reduce((sum, w) => sum + w, 0)
+    const widths = itemRefs.current.map(
+      (el) => el?.getBoundingClientRect().width ?? 0
+    )
+    const available = root.getBoundingClientRect().width
+    const total = widths.reduce((sum, w) => sum + w, 0)
     let count: number = links.length
     if (total > available) {
-      let used = moreEnabled ? moreWidth.current : 0
+      let used = moreEnabled
+        ? (moreRef.current?.getBoundingClientRect().width ?? 0)
+        : 0
       count = 0
-      for (const w of widths.current) {
+      for (const w of widths) {
         if (used + w > available) break
         used += w
         count++
@@ -59,13 +56,19 @@ function usePriorityNav(moreEnabled: boolean) {
   }, [moreEnabled])
 
   useLayoutEffect(() => {
-    compute()
+    let active = true
     const observer = new ResizeObserver(compute)
-    if (rootRef.current) observer.observe(rootRef.current)
-    itemRefs.current.forEach((el) => el && observer.observe(el))
-    // Widths change once the web font replaces the fallback.
-    document.fonts?.ready.then(compute)
-    return () => observer.disconnect()
+    // Reveal the row after measuring with the final font metrics.
+    void document.fonts.ready.then(() => {
+      if (!active) return
+      compute()
+      if (rootRef.current) observer.observe(rootRef.current)
+      itemRefs.current.forEach((el) => el && observer.observe(el))
+    })
+    return () => {
+      active = false
+      observer.disconnect()
+    }
   }, [compute])
 
   return { rootRef, itemRefs, moreRef, visible, measured }
@@ -146,7 +149,10 @@ const MainNav = () => {
       delayDuration={100}
       className="relative ml-1 hidden min-w-0 flex-1 sm:block">
       <NavigationMenu.List
-        className={cn("flex items-center", !measured && "overflow-hidden")}>
+        className={cn(
+          "flex items-center",
+          !measured && "overflow-hidden [@media(scripting:enabled)]:invisible"
+        )}>
         {links.map((link, i) => {
           const menu = NAV_MENUS[link.route]
           const active = isActive(pathname, link.route)
@@ -169,7 +175,10 @@ const MainNav = () => {
               ref={(el) => {
                 itemRefs.current[i] = el
               }}
-              className={cn("shrink-0", i >= visible && "hidden")}>
+              className={cn(
+                "shrink-0",
+                i >= visible && "invisible absolute top-0 left-0 w-max"
+              )}>
               {menu ? (
                 <>
                   {/* The label is a link to the section; hovering opens the

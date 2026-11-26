@@ -89,6 +89,11 @@ const FEATURES: Feature[] = [
     desc: "Browse exam dates, times and durations by module code for the current semester."
   },
   {
+    name: "Academic calendar",
+    href: "/calendar",
+    desc: "See teaching weeks, recess, exams and public holidays, or subscribe in your calendar app."
+  },
+  {
     name: "Campus map",
     art: "/landing/maps.svg",
     artSize: [203, 71],
@@ -135,6 +140,7 @@ const CORE: [string, ComponentType<{ className?: string }>][] = [
 const ALSO = [
   "All courses and indexes",
   "Exam schedule",
+  "Academic calendar",
   "Campus map",
   "Student links",
   "Planning guides",

@@ -7,11 +7,7 @@ Manual tasks at the start of each semester.
 ## Each semester
 
 1. **Scrape and publish the data.** See [scraper/README.md § Maintenance](../scraper/README.md#maintenance): run the pipeline, publish to D1 and `src/data/api`, add the exam timetable once released.
-2. **Update the ICS start date.** Set `MIN_DATE` in [`src/lib/get-ics.ts`](../src/lib/get-ics.ts) to the **Monday of Week 1** (see the NTU academic calendar). It drives recurring events in `.ics` exports.
-
-   ```ts
-   const MIN_DATE = new Date("YYYY-MM-DD")
-   ```
+2. **Refresh the academic calendar** once a year, when NTU confirms the next academic year's calendar (usually in February). `python3 scraper/academic_calendar.py --upsync`, then commit `src/data/api/calendar.json`. It reads the semester calendar PDF and feeds the `/calendar` page, the `/calendar.ics` feed and the timetable's `.ics` export. Subscribers get the new year the next time their calendar app refreshes the feed. See [scraper/README.md § Academic calendar](../scraper/README.md#academic-calendar).
 
 ## When fonts change
 

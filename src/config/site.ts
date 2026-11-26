@@ -56,6 +56,10 @@ export const siteConfig = {
       title: "NTU Timetable Wallpaper Maker",
       desc: "Compose your NTU timetable as a clean lockscreen wallpaper or shareable image, with presets for phone screens and simple positioning controls."
     },
+    calendar: {
+      title: "NTU Academic Calendar: Teaching Weeks, Recess and Holidays",
+      desc: "NTU teaching weeks, recess week, revision and exam weeks, public holidays and no-class days, from NTU's official academic calendar. Subscribe in your calendar app."
+    },
     changelog: {
       title: "Changelog",
       desc: "See recent NTUMods updates, including timetable planning improvements, module browser changes, article guides, data refreshes, and export fixes."

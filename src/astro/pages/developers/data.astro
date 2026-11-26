@@ -25,6 +25,11 @@ const files = [
     "/data/api/exams/{year_semester}.json",
     "The exam timetable for one semester.",
     "Module code, then one exam."
+  ],
+  [
+    "/data/api/calendar.json",
+    "The NTU academic calendar: teaching weeks, recess, exam weeks, holidays and no-class days.",
+    "Academic year, then its semesters, holidays and events. Dates are YYYY-MM-DD."
   ]
 ]
 
@@ -63,7 +68,13 @@ const catalogue = [
           url: `/data/api/exams/${exams.year}_${exams.semester}.json`
         }
       ]
-    : [])
+    : []),
+  {
+    id: "academic-calendar",
+    name: "NTU academic calendar",
+    description: files[4][1],
+    url: files[4][0]
+  }
 ]
 
 const structuredData = dataCatalogJsonLd({

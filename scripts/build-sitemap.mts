@@ -149,6 +149,7 @@ const CORE_ROUTES = [
   "/",
   "/ai-instructions",
   "/articles",
+  "/calendar",
   "/changelog",
   "/developers",
   "/developers/api",

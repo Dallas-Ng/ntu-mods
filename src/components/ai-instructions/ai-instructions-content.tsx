@@ -92,7 +92,7 @@ Users can add custom courses - non-module time blocks such as gym sessions, CCA 
 On the timetable page, a map preview under Generate Timetable opens a view for one day at a time. It lists that day's classes in order, shows them as numbered stops on the NTU campus map, gives the walking time between venues, and flags a gap that is shorter than the walk and classes that overlap. Custom blocks appear under their own names. Walks are looked up only when the view is opened, one day at a time, through the NTUMods server (which asks MazeMap), and cached so repeated pairs of venues are not requested again. Times are estimates.
 
 ### Calendar Export (.ics)
-Exports the planned timetable as an .ics file with recurring calendar events, compatible with Google Calendar, Apple Calendar, and Microsoft Outlook.
+Exports the planned timetable as an .ics file with one event per class per teaching week, compatible with Google Calendar, Apple Calendar, and Microsoft Outlook. Teaching week dates come from the official NTU academic calendar: classes on public holidays are left out, classes after an early dismissal (such as the eve of Chinese New Year) are left out, and recess week, the revision and exam weeks and public holidays are added as all-day events.
 
 ### Timetable Sharing
 Generates a shareable URL encoding the full timetable. Recipients can view the timetable and copy it into their own NTUMods planner.

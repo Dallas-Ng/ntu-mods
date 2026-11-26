@@ -260,7 +260,7 @@ See [Best CC Modules at NTU](/articles/best-cc-modules-ntu) if you are choosing 
 | Revision and examinations            | Mid April to early May 2027 |
 | BDE, UE and GERPE allocation results | Early January 2027          |
 
-NTU lists the Semester 2 course registration period as December, and your own registration time appears in your personal course registration schedule. Dates can change, so confirm against the [official academic calendar](https://ntu.edu.sg/academic-calendar). Our [NTU Academic Calendar AY2026/2027](/articles/ntu-academic-calendar-ay2026) guide has the full list, and the [add/drop guide](/articles/ntu-add-drop-period-guide) explains the first two weeks.
+NTU lists the Semester 2 course registration period as December, and your own registration time appears in your personal course registration schedule. Dates can change, so confirm against the [official academic calendar](https://www.ntu.edu.sg/admissions/matriculation/academic-calendars). Our [NTU Academic Calendar AY2026/2027](/articles/ntu-academic-calendar-ay2026) guide has the full list, and the [add/drop guide](/articles/ntu-add-drop-period-guide) explains the first two weeks.
 
 ## Semester 2 exam timetable
 

@@ -1,0 +1,168 @@
+---
+import { siteConfig } from "@/config/site"
+import {
+  getAllAcademicYearCalendars,
+  type AcademicYearCalendar
+} from "@/lib/academic-calendar"
+import { datasetJsonLd } from "@/lib/json-ld"
+import { buttonVariants } from "@/components/ui/button"
+import { cardVariants } from "@/components/ui/card"
+import {
+  ExternalLinkIcon,
+  LinkArrow,
+  TextLink
+} from "@/components/ui/text-link"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import CalendarMonths from "@/components/calendar/calendar-months"
+import Header from "@/components/header"
+import JsonLd from "@/astro/components/JsonLd.astro"
+import BaseLayout from "@/astro/layouts/BaseLayout.astro"
+
+export const prerender = true
+
+const OFFICIAL_PAGE =
+  "https://www.ntu.edu.sg/admissions/matriculation/academic-calendars"
+
+const EXTERNAL = "inline-flex items-center gap-0.5"
+
+// Each island below sits in a div: Astro's island wrapper is display:
+// contents, so the container's space-y-8 cannot space it.
+
+// Confirmed years first; a provisional year is shown after them.
+const all = getAllAcademicYearCalendars()
+const calendars = [
+  ...all.filter((c) => !c.indicative),
+  ...all.filter((c) => c.indicative)
+]
+const yearLabel = (c: AcademicYearCalendar) =>
+  `AY${c.academicYear}/${String(c.academicYear + 1).slice(2)}`
+const confirmed = calendars.filter((c) => !c.indicative).map(yearLabel)
+const provisional = calendars.filter((c) => c.indicative).map(yearLabel)
+
+const { title, desc } = siteConfig.metatags.calendar
+
+const latest = calendars[0]
+const structuredData = latest
+  ? datasetJsonLd({
+      name: `NTU academic calendar ${yearLabel(latest)}`,
+      description: `Teaching weeks, recess, revision and exam weeks, public holidays and key events for ${yearLabel(latest)} at Nanyang Technological University, read from NTU's official calendar.`,
+      path: "/calendar",
+      source: latest.source ?? OFFICIAL_PAGE,
+      downloads: [
+        { name: "NTU academic calendar (JSON)", url: "/data/api/calendar.json" }
+      ]
+    })
+  : null
+---
+
+<BaseLayout
+  title={title}
+  description={desc}
+  canonical="/calendar"
+  size="md"
+  containerClassName="space-y-8">
+  <JsonLd data={structuredData} />
+  <Header
+    title="NTU academic calendar"
+    subtitle={confirmed.length > 0
+      ? `Teaching weeks, recess, exams and public holidays for ${confirmed.join(" and ")}, from NTU's official calendar.`
+      : "NTU has not published a confirmed calendar yet."}
+  />
+
+  {
+    provisional.length > 0 && (
+      <Alert variant="warning" role="note">
+        <AlertDescription>
+          {provisional.join(" and ")} {provisional.length > 1 ? "are" : "is"}{" "}
+          provisional: NTU has only published an indicative calendar, and the
+          dates may change when NTU confirms it.
+        </AlertDescription>
+      </Alert>
+    )
+  }
+
+  <div>
+    <script is:inline>
+      // Set the current month before the calendar markup can paint.
+      const calendarMonth = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Singapore",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      })
+        .format(new Date())
+        .slice(0, 7)
+      const calendarStyle = document.createElement("style")
+      calendarStyle.textContent = `@media (width < 48rem) {
+        [data-calendar-card="${calendarMonth}"]:not([data-open]) > [data-calendar-panel] {
+          display: block;
+        }
+      }`
+      document.head.append(calendarStyle)
+    </script>
+    <CalendarMonths client:load calendars={calendars} />
+  </div>
+
+  <div
+    class:list={[
+      cardVariants(),
+      "flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6"
+    ]}>
+    <div class="min-w-0 space-y-1">
+      <p class="text-xl font-bold tracking-tight">Plan around the calendar</p>
+      <p class="text-muted-foreground text-sm text-pretty">
+        Registration, add/drop and what each part of the semester is like.
+      </p>
+    </div>
+    <a
+      href="/articles/ntu-academic-calendar-ay2026"
+      class={buttonVariants({ size: "lg", className: "group shrink-0" })}>
+      Read the guide
+      <LinkArrow />
+    </a>
+  </div>
+
+  <footer class="space-y-2 border-t pt-4 text-sm">
+    <p class="text-pretty">
+      Source:{" "}
+      <TextLink href={latest?.source ?? OFFICIAL_PAGE} className={EXTERNAL}>
+        NTU's official academic calendar{latest?.source ? " (PDF)" : ""}
+        <ExternalLinkIcon className="size-4" />
+      </TextLink>
+      . NTU states that all dates may change. There are no classes on public holidays,
+      and a Sunday holiday moves to the Monday after it.
+    </p>
+    <ul aria-label="Calendar downloads" class="flex flex-wrap gap-x-4 gap-y-2">
+      <li>
+        <TextLink href="/data/api/calendar.json"
+          >Academic calendar (JSON)</TextLink
+        >
+      </li>
+      <li>
+        <TextLink href="/calendar.ics">Academic calendar (.ics)</TextLink>
+      </li>
+      <li>
+        <TextLink href={OFFICIAL_PAGE} className={EXTERNAL}>
+          All NTU calendars
+          <ExternalLinkIcon className="size-4" />
+        </TextLink>
+      </li>
+    </ul>
+  </footer>
+</BaseLayout>
+
+<style is:global>
+  @media (width < 48rem) {
+    [data-calendar-card] > [data-calendar-panel] {
+      display: none;
+    }
+    [data-calendar-card][data-open="true"] > [data-calendar-panel] {
+      display: block;
+    }
+  }
+  @media (width < 40rem) {
+    [data-calendar-card="dates"]:not([data-open]) > [data-calendar-panel] {
+      display: block;
+    }
+  }
+</style>

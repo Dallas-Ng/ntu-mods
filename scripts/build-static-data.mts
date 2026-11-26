@@ -11,6 +11,7 @@
  *   public/data/api/exams/{sem}.json     use-season-exams.ts, timetable-overview.tsx
  *   public/data/api/modules.json         use-all-modules.ts
  *   public/data/api/random-samples.json  settings/table-settings.tsx
+ *   public/data/api/calendar.json        open data only (/developers/data)
  *   src/data/api/semesters.json          bundled by src/lib/semesters.ts and exams/index.astro
  *
  * indexes/{sem}.json and exams/{sem}.json aren't reshaped, only
@@ -169,6 +170,13 @@ async function main() {
     path.join(PUBLIC_DATA, "module-codes.json"),
     modules.modules.map((m) => m.code).sort()
   )
+
+  // The academic calendar, as open data (the /calendar page reads it from src).
+  await write(
+    path.join(PUBLIC_DATA, "calendar.json"),
+    JSON.parse(fsSync.readFileSync(path.join(SRC_DATA, "calendar.json"), "utf-8"))
+  )
+  console.log("  Wrote calendar.json")
 
   const samples = buildRandomSamples(latest.sem)
   await write(path.join(PUBLIC_DATA, "random-samples.json"), samples)

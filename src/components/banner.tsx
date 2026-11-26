@@ -1,8 +1,8 @@
 import { LinkArrow } from "@/components/ui/text-link"
 
 const BANNER_TEXT =
-  "New: upload your NTU Degree Audit PDF to the CGPA Planner and FGO Optimiser"
-const BANNER_HREF = "/changelog"
+  "New: the NTU academic calendar, with this week's teaching week and a feed for your calendar app"
+const BANNER_HREF = "/calendar"
 
 /**
  * Derived from the text, so editing the banner re-shows it to people who closed

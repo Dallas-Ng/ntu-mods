@@ -442,6 +442,10 @@ const PAGES = [
     "Module browser: search and filter every NTU module, with a page per module."
   ],
   ["/exams", "Exam schedule for the current semester."],
+  [
+    "/calendar",
+    "NTU academic calendar: teaching weeks, recess, exam weeks, public holidays and a subscribable .ics feed."
+  ],
   ["/tools", "Student tools: CGPA planner, FGO optimiser, wallpaper maker."],
   [
     "/tools/cgpa-planner",

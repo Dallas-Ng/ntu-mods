@@ -40,6 +40,51 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
+    title: "NTU academic calendar page and calendar export",
+    date: "26 Nov 2026",
+    items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            New{" "}
+            <ChangelogLink href="/calendar">academic calendar</ChangelogLink>{" "}
+            page: this week&apos;s teaching week, the dates of every week,
+            recess, the revision and exam weeks, public holidays and what each
+            one means for classes. Subscribe to it in Google Calendar, Apple
+            Calendar or Outlook, and your calendar app updates it when NTU
+            changes a date.
+          </>
+        )
+      },
+      {
+        category: "Improvement",
+        content: (
+          <>
+            Calendar export now reads its dates from the official{" "}
+            <ChangelogLink href="https://www.ntu.edu.sg/admissions/matriculation/academic-calendars">
+              NTU academic calendar
+            </ChangelogLink>
+            . Classes on public holidays and replacement holidays are left out,
+            and so are classes after 2.30pm on the eves of New Year&apos;s Day,
+            Chinese New Year, Hari Raya Puasa and Deepavali.
+          </>
+        )
+      },
+      {
+        category: "New Feature",
+        content: (
+          <>
+            The exported calendar now marks recess week, the revision and exam
+            weeks, each public holiday, and the no-class window on
+            Students&apos; Union Day. Events keep their IDs, so importing again
+            updates them in place.
+          </>
+        )
+      }
+    ]
+  },
+  {
     title: "Degree Audit PDF support for CGPA and FGO tools",
     date: "24 Nov 2026",
     items: [

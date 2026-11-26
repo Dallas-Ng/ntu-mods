@@ -2,7 +2,7 @@
 portal.py
 =========
 
-Everything that talks to NTU. Three portals:
+Everything that talks to NTU. Three portals, plus the academic calendar PDFs:
 
 - schedule portal (wish.wis.ntu.edu.sg/.../aus_schedule.*): semester list,
   programme list, per-programme class schedules
@@ -10,6 +10,8 @@ Everything that talks to NTU. Three portals:
   descriptions, grade type, restriction fields
 - exam portal (wis.ntu.edu.sg/.../exam_timetable_und.*): the released exam
   timetable, including the per-semester ``p_plan_no`` it is filed under
+- academic calendars page (www.ntu.edu.sg/.../academic-calendars): links to
+  the semester calendar PDF that ``academic_calendar.py`` parses
 
 HTTP goes through one ``requests.Session`` per thread with keep-alive, a
 timeout and retries on 5xx — the schedule scrape is ~700 programmes x 2
@@ -43,6 +45,7 @@ HEADERS = {
     "Origin": "https://wish.wis.ntu.edu.sg",
     "Referer": SCHEDULE_MAIN_URL,
 }
+CALENDAR_PAGE_URL = "https://www.ntu.edu.sg/admissions/matriculation/academic-calendars"
 TIMEOUT = 90
 
 _local = threading.local()
@@ -320,3 +323,40 @@ def fetch_exam_timetable(acadsem: str, plan_no: int | None = None) -> list[list[
     html = _fetch(EXAM_DETAIL_URL, form)
     rows = [[c.strip() for c in cells[:6]] for cells in map(_EXAM_CELL.findall, _EXAM_ROW.findall(html)) if len(cells) >= 6]
     return rows or None
+
+
+# ---------------------------------------------------------------------------
+# Academic calendar (www.ntu.edu.sg)
+# ---------------------------------------------------------------------------
+
+_CALENDAR_PDF = re.compile(
+    r'href="(?P<href>[^"]*ntu-academic-calendar-ay(?P<y>\d{4})-\d{2}-\(semester\)(?P<rest>[^"]*?)\.pdf[^"]*)"',
+    re.IGNORECASE,
+)
+
+
+def fetch_calendar_pdf_urls() -> dict[int, dict[str, str | bool]]:
+    """``{2026: {"url": ..., "indicative": False}, ...}``: the semester
+    calendar PDF the academic calendars page links for each academic year.
+    Trimester (graduate) calendars are ignored. A confirmed calendar wins over
+    an indicative one for the same year.
+    """
+    html = _fetch(CALENDAR_PAGE_URL)
+    found: dict[int, dict[str, str | bool]] = {}
+    for m in _CALENDAR_PDF.finditer(html):
+        href = m["href"].replace("&amp;", "&")
+        url = href if href.startswith("http") else f"https://www.ntu.edu.sg{href}"
+        indicative = "indicative" in m["rest"].lower()
+        year = int(m["y"])
+        if year not in found or (found[year]["indicative"] and not indicative):
+            found[year] = {"url": url, "indicative": indicative}
+    if not found:
+        raise ValueError("Academic calendars page lists no semester calendar PDF: layout changed or error page.")
+    return found
+
+
+def fetch_bytes(url: str) -> bytes:
+    """Raw GET, for PDFs."""
+    r = _session().get(url, timeout=TIMEOUT)
+    r.raise_for_status()
+    return r.content

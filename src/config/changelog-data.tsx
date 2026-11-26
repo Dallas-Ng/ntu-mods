@@ -40,9 +40,23 @@ export const ChangelogLink = ({
 
 const CHANGELOG_BASE: Omit<ChangelogRelease, "id">[] = [
   {
-    title: "Calendar export follows the NTU academic calendar",
+    title: "NTU academic calendar page and calendar export",
     date: "26 Nov 2026",
     items: [
+      {
+        category: "New Feature",
+        content: (
+          <>
+            New{" "}
+            <ChangelogLink href="/calendar">academic calendar</ChangelogLink>{" "}
+            page: this week&apos;s teaching week, the dates of every week,
+            recess, the revision and exam weeks, public holidays and what each
+            one means for classes. Subscribe to it in Google Calendar, Apple
+            Calendar or Outlook, and your calendar app updates it when NTU
+            changes a date.
+          </>
+        )
+      },
       {
         category: "Improvement",
         content: (

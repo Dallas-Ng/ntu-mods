@@ -1,8 +1,8 @@
 import { LinkArrow } from "@/components/ui/text-link"
 
 const BANNER_TEXT =
-  "New: calendar export now follows the NTU academic calendar, with public holidays and exam weeks"
-const BANNER_HREF = "/changelog"
+  "New: the NTU academic calendar, with this week's teaching week and a feed for your calendar app"
+const BANNER_HREF = "/calendar"
 
 /**
  * Derived from the text, so editing the banner re-shows it to people who closed

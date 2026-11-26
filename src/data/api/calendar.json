@@ -1,0 +1,230 @@
+{
+  "2026": {
+    "academicYear": 2026,
+    "indicative": false,
+    "source": "https://www.ntu.edu.sg/media/docs/default-source/office-of-academic-services/ntu-academic-calendar-ay2026-27-(semester)937cc0af-82d7-495d-b414-ff30dfc48421.pdf?sfvrsn=1c9ce142_1",
+    "publishedOn": "19 May",
+    "semesters": {
+      "2026;1": {
+        "teachingWeeks": {
+          "1": "2026-08-10",
+          "2": "2026-08-17",
+          "3": "2026-08-24",
+          "4": "2026-08-31",
+          "5": "2026-09-07",
+          "6": "2026-09-14",
+          "7": "2026-09-21",
+          "8": "2026-10-05",
+          "9": "2026-10-12",
+          "10": "2026-10-19",
+          "11": "2026-10-26",
+          "12": "2026-11-02",
+          "13": "2026-11-09"
+        },
+        "recess": {
+          "start": "2026-09-28",
+          "end": "2026-10-02"
+        },
+        "revisionAndExams": {
+          "start": "2026-11-16",
+          "end": "2026-12-04"
+        }
+      },
+      "2026;2": {
+        "teachingWeeks": {
+          "1": "2027-01-11",
+          "2": "2027-01-18",
+          "3": "2027-01-25",
+          "4": "2027-02-01",
+          "5": "2027-02-08",
+          "6": "2027-02-15",
+          "7": "2027-02-22",
+          "8": "2027-03-08",
+          "9": "2027-03-15",
+          "10": "2027-03-22",
+          "11": "2027-03-29",
+          "12": "2027-04-05",
+          "13": "2027-04-12"
+        },
+        "recess": {
+          "start": "2027-03-01",
+          "end": "2027-03-05"
+        },
+        "revisionAndExams": {
+          "start": "2027-04-19",
+          "end": "2027-05-07"
+        }
+      }
+    },
+    "noClassDays": [
+      {
+        "date": "2026-08-09",
+        "name": "National Day"
+      },
+      {
+        "date": "2026-08-10",
+        "name": "National Day (replacement holiday)"
+      },
+      {
+        "date": "2026-11-08",
+        "name": "Deepavali"
+      },
+      {
+        "date": "2026-11-09",
+        "name": "Deepavali (replacement holiday)"
+      },
+      {
+        "date": "2026-12-25",
+        "name": "Christmas Day"
+      },
+      {
+        "date": "2027-01-01",
+        "name": "New Year's Day"
+      },
+      {
+        "date": "2027-02-06",
+        "name": "Chinese New Year"
+      },
+      {
+        "date": "2027-02-07",
+        "name": "Chinese New Year"
+      },
+      {
+        "date": "2027-02-08",
+        "name": "Chinese New Year (replacement holiday)"
+      },
+      {
+        "date": "2027-03-10",
+        "name": "Hari Raya Puasa"
+      },
+      {
+        "date": "2027-03-26",
+        "name": "Good Friday"
+      },
+      {
+        "date": "2027-05-01",
+        "name": "Labour Day"
+      },
+      {
+        "date": "2027-05-17",
+        "name": "Hari Raya Haji"
+      },
+      {
+        "date": "2027-05-20",
+        "name": "Vesak Day"
+      }
+    ],
+    "earlyDismissals": [
+      {
+        "date": "2026-12-31",
+        "until": "14:30",
+        "name": "Eve of New Year's Day"
+      },
+      {
+        "date": "2027-02-05",
+        "until": "14:30",
+        "name": "Eve of Chinese New Year"
+      },
+      {
+        "date": "2027-03-09",
+        "until": "14:30",
+        "name": "Eve of Hari Raya Puasa"
+      }
+    ],
+    "publicHolidays": [
+      {
+        "name": "National Day",
+        "start": "2026-08-09",
+        "end": "2026-08-09"
+      },
+      {
+        "name": "Deepavali",
+        "start": "2026-11-08",
+        "end": "2026-11-08"
+      },
+      {
+        "name": "Christmas Day",
+        "start": "2026-12-25",
+        "end": "2026-12-25"
+      },
+      {
+        "name": "New Year's Day",
+        "start": "2027-01-01",
+        "end": "2027-01-01"
+      },
+      {
+        "name": "Chinese New Year",
+        "start": "2027-02-06",
+        "end": "2027-02-07"
+      },
+      {
+        "name": "Hari Raya Puasa",
+        "start": "2027-03-10",
+        "end": "2027-03-10"
+      },
+      {
+        "name": "Good Friday",
+        "start": "2027-03-26",
+        "end": "2027-03-26"
+      },
+      {
+        "name": "Labour Day",
+        "start": "2027-05-01",
+        "end": "2027-05-01"
+      },
+      {
+        "name": "Hari Raya Haji",
+        "start": "2027-05-17",
+        "end": "2027-05-17"
+      },
+      {
+        "name": "Vesak Day",
+        "start": "2027-05-20",
+        "end": "2027-05-20"
+      }
+    ],
+    "events": [
+      {
+        "name": "Convocation",
+        "start": "2026-07-21",
+        "end": "2026-08-01"
+      },
+      {
+        "name": "Orientation Activities",
+        "start": "2026-07-20",
+        "end": "2026-08-06"
+      },
+      {
+        "name": "Orientation Activities",
+        "start": "2027-01-04",
+        "end": "2027-01-08",
+        "note": "For PG Only"
+      },
+      {
+        "name": "UG Qualifying English Test",
+        "start": "2026-07-31",
+        "end": "2026-07-31"
+      },
+      {
+        "name": "University Welcome",
+        "start": "2026-08-03",
+        "end": "2026-08-04"
+      },
+      {
+        "name": "State of the University Address",
+        "start": "2026-10-12",
+        "end": "2026-10-12"
+      },
+      {
+        "name": "Students' Union Day",
+        "start": "2026-09-04",
+        "end": "2026-09-04",
+        "note": "No classes for UG programmes from 1030 to 1430 hours.",
+        "noClasses": {
+          "from": "10:30",
+          "to": "14:30"
+        }
+      }
+    ]
+  }
+}

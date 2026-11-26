@@ -54,7 +54,7 @@ Only the exam CSVs are committed (`data/.gitignore` drops the JSON).
 ## Setup
 
 Python 3.12. Deps: `pip install -r requirements.txt` (`requests`, `beautifulsoup4`;
-`anthropic` + `python-dotenv` only for `compare_agent.py`).
+`liteparse` only for `academic_calendar.py`; `anthropic` + `python-dotenv` only for `compare_agent.py`).
 
 ## Usage
 
@@ -126,6 +126,44 @@ a new semester appears once its metadata lands. Afterwards, from the repo root:
 ```bash
 pnpm db:verify   # D1 matches src/data/api exactly
 ```
+
+## Academic calendar
+
+`academic_calendar.py` reads NTU's semester calendar PDF (linked from the
+[academic calendars page](https://www.ntu.edu.sg/admissions/matriculation/academic-calendars))
+into `src/data/api/calendar.json`, keyed by academic year. The `.ics` export
+uses it for the Monday of each teaching week, recess week, the revision and
+exam weeks, holidays (classes on them are dropped), early dismissals on the
+eves of some holidays, and no-class windows such as Students' Union Day.
+
+```bash
+python3 academic_calendar.py                        # newest confirmed calendar: parse + check only
+python3 academic_calendar.py --upsync               # ...and merge into src/data/api/calendar.json
+python3 academic_calendar.py --year 2028 --indicative   # a provisional calendar (never replaces a confirmed one)
+python3 academic_calendar.py --pdf file.pdf         # a local copy
+```
+
+The PDF is a designed one-page grid, and NTU marks teaching, recess and exam
+weeks only by cell colour. [LiteParse](https://github.com/run-llama/liteparse)
+gives positioned text and the filled shapes behind it, so the script locates
+each month grid by its header bar, places every day number under a weekday
+column, reads the grey week number left of each row, and matches each cell's
+fill to the nearest legend swatch. Red day numbers are days without classes.
+
+It writes `data/06_calendar_YYYY.json`, then refuses (exit 1, `PROBLEM:`)
+unless:
+
+- every day number sits under the weekday it really falls on (this caught a
+  misprinted "23" for 24 Sep 2027 in the indicative AY2027-28 PDF)
+- weeks 1 to 13 each resolve to one Monday, 7 days apart, with a 14-day gap
+  for recess between weeks 7 and 8, and the recess-coloured days are that week
+- yellow (teaching) days all fall in weeks 1 to 13, and the exam colour is one
+  run after week 13
+- every red day is a listed holiday or the Monday after a Sunday one, and every
+  weekday holiday in term is red
+- the `^` footnote's holidays (classes end at 14:30 on their eves) are all listed
+
+Dates printed as "TBA" are left out with a `NOTE:`. Special Term is not read.
 
 ## Walking routes (D1 `walks` table)
 

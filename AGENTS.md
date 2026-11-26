@@ -57,3 +57,10 @@ git commit -m "chore(data): refresh AY2026 S1 course data"
 ```
 
 Details: [scraper/README.md](scraper/README.md).
+
+## Refresh the academic calendar (once a year)
+
+When NTU confirms a new academic year's calendar, run
+`cd scraper && python3 academic_calendar.py`, read the check, then add
+`--upsync` and commit `src/data/api/calendar.json`. Details:
+[scraper/README.md § Academic calendar](scraper/README.md#academic-calendar).

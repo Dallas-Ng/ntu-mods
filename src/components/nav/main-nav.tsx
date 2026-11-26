@@ -56,19 +56,12 @@ function usePriorityNav(moreEnabled: boolean) {
   }, [moreEnabled])
 
   useLayoutEffect(() => {
-    let active = true
+    compute()
     const observer = new ResizeObserver(compute)
-    // Reveal the row after measuring with the final font metrics.
-    void document.fonts.ready.then(() => {
-      if (!active) return
-      compute()
-      if (rootRef.current) observer.observe(rootRef.current)
-      itemRefs.current.forEach((el) => el && observer.observe(el))
-    })
-    return () => {
-      active = false
-      observer.disconnect()
-    }
+    if (rootRef.current) observer.observe(rootRef.current)
+    itemRefs.current.forEach((el) => el && observer.observe(el))
+    if (moreRef.current) observer.observe(moreRef.current)
+    return () => observer.disconnect()
   }, [compute])
 
   return { rootRef, itemRefs, moreRef, visible, measured }
@@ -149,10 +142,7 @@ const MainNav = () => {
       delayDuration={100}
       className="relative ml-1 hidden min-w-0 flex-1 sm:block">
       <NavigationMenu.List
-        className={cn(
-          "flex items-center",
-          !measured && "overflow-hidden [@media(scripting:enabled)]:invisible"
-        )}>
+        className={cn("flex items-center", !measured && "overflow-hidden")}>
         {links.map((link, i) => {
           const menu = NAV_MENUS[link.route]
           const active = isActive(pathname, link.route)

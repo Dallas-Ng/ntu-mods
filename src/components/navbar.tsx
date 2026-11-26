@@ -29,7 +29,11 @@ const Navbar = () => {
   }, [])
 
   return (
-    <header className={cn("sticky top-0 z-10 w-full", scrolled && "shadow")}>
+    <header
+      className={cn(
+        "sticky top-0 z-10 w-full [font-family:var(--font-inter-nav)]",
+        scrolled && "shadow"
+      )}>
       {/* The glass sits on an absolute child, not on the sticky header. Safari
           26 reads background-color and backdrop-filter from the sticky element
           itself for the toolbar tint, so a blur here would tint the status bar

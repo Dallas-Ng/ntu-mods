@@ -95,6 +95,14 @@ export default defineConfig({
       options: { variants: fontVariants("inter", [400, 500, 600, 700]) },
       fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"]
     },
+    {
+      provider: fontProviders.local(),
+      name: "Inter navigation",
+      cssVariable: "--font-inter-nav",
+      options: { variants: fontVariants("inter", [400, 500, 600, 700]) },
+      display: "optional",
+      fallbacks: ["ui-sans-serif", "system-ui", "sans-serif"]
+    },
     // Handwriting for the article thumbnails (src/components/articles/article-thumb.tsx).
     {
       provider: fontProviders.local(),

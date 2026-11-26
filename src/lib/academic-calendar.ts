@@ -56,3 +56,9 @@ export const getAcademicYearCalendar = (semesterCode: string) =>
 /** The semester's teaching weeks, recess and exams, if NTU has published them. */
 export const getSemesterCalendar = (semesterCode: string) =>
   getAcademicYearCalendar(semesterCode)?.semesters[semesterCode]
+
+/** Every published academic year, oldest first. */
+export const getAllAcademicYearCalendars = () =>
+  Object.keys(CALENDAR)
+    .sort()
+    .map((year) => CALENDAR[year])

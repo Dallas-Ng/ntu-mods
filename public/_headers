@@ -18,6 +18,13 @@
   Access-Control-Allow-Origin: *
   X-Robots-Tag: noindex
 
+# The academic calendar feed. Apps poll it, and it changes about once a year.
+/calendar.ics
+  ! Cache-Control
+  Cache-Control: public, max-age=3600, s-maxage=86400
+  Content-Type: text/calendar; charset=utf-8
+  Access-Control-Allow-Origin: *
+
 /debug
   ! Cache-Control
   Cache-Control: no-cache

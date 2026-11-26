@@ -6,6 +6,9 @@
 // Kept apart from analytics.ts, which imports posthog-js, so the server-side
 // feedback route can check its event name without bundling the browser SDK.
 export const ANALYTICS_EVENTS = [
+  "academic_calendar_downloaded",
+  "academic_calendar_feed_copied",
+  "academic_calendar_subscribed",
   "api_example_sent",
   "api_operation_opened",
   "article_viewed",

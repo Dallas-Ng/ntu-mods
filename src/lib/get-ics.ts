@@ -2,6 +2,14 @@ import {
   getAcademicYearCalendar,
   getSemesterCalendar
 } from "./academic-calendar"
+import {
+  academicCalendarEvents,
+  addDays,
+  atTime,
+  parseLocalDate,
+  semesterSpan,
+  toIsoDate
+} from "./academic-calendar-events"
 import { createIcs, type IcsEvent } from "./ics"
 import { parseTime } from "./parse-time"
 import { latestSemester, latestYear } from "./semesters"
@@ -14,30 +22,11 @@ const SEMESTER_CODE = `${latestYear};${latestSemester}`
 const SEMESTER_CALENDAR = getSemesterCalendar(SEMESTER_CODE)
 const YEAR_CALENDAR = getAcademicYearCalendar(SEMESTER_CODE)
 
-/**
- * "2026-08-10" -> that day at 00:00 local, not UTC (which would shift the
- * date).
- */
-const parseLocalDate = (isoDate: string) => {
-  const [year, month, day] = isoDate.split("-").map(Number)
-  return new Date(year, month - 1, day)
-}
-
-/** The local date as "2026-08-10", to compare with the calendar's dates. */
-const toIsoDate = (date: Date) =>
-  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`
-
 /** The Monday of the week containing `date`. */
 const startOfWeek = (date: Date) => {
   const monday = new Date(date.getFullYear(), date.getMonth(), date.getDate())
   monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7))
   return monday
-}
-
-const addDays = (date: Date, days: number) => {
-  const next = new Date(date)
-  next.setDate(next.getDate() + days)
-  return next
 }
 
 // Without a published calendar, assume the usual shape: Recess Week falls
@@ -54,25 +43,7 @@ const teachingWeekMonday = (weekNumber: number) => {
   return addDays(FALLBACK_WEEK_1_MONDAY, calendarWeekOffset * 7)
 }
 
-/** "14:30" on the same day as `date`. */
-const atTime = (date: Date, hhmm: string) => {
-  const [hours, minutes] = hhmm.split(":").map(Number)
-  const at = new Date(date)
-  at.setHours(hours, minutes, 0, 0)
-  return at
-}
-
-/** The semester's first and last day, so only its own holidays are exported. */
-const semesterSpan = () => {
-  const weeks = SEMESTER_CALENDAR?.teachingWeeks
-  if (!weeks?.["1"]) return undefined
-  const last =
-    SEMESTER_CALENDAR?.revisionAndExams?.end ??
-    toIsoDate(addDays(parseLocalDate(weeks["13"] ?? weeks["1"]), 6))
-  return { start: weeks["1"], end: last }
-}
-
-const SPAN = semesterSpan()
+const SPAN = SEMESTER_CALENDAR && semesterSpan(SEMESTER_CALENDAR)
 const inSemester = (isoDate: string) =>
   !!SPAN && SPAN.start <= isoDate && isoDate <= SPAN.end
 
@@ -118,57 +89,12 @@ const cancelledBecause = (start: Date, end: Date) => {
 
 /**
  * All-day events that frame the semester: holidays, recess week, and the
- * revision and exam weeks. Stable UIDs, so re-importing updates them.
+ * revision and exam weeks. Same UIDs as the /calendar.ics feed.
  */
-const calendarEvents = (): IcsEvent[] => {
-  const events: IcsEvent[] = []
-  const allDay = (
-    uid: string,
-    summary: string,
-    start: string,
-    end: string,
-    description?: string
-  ) =>
-    events.push({
-      uid: `${uid}@ntumods.com`,
-      summary,
-      start: parseLocalDate(start),
-      end: parseLocalDate(end),
-      allDay: true,
-      description
-    })
-
-  if (SEMESTER_CALENDAR?.recess) {
-    const { start, end } = SEMESTER_CALENDAR.recess
-    allDay(`recess-${start}`, "Recess week", start, end)
-  }
-  if (SEMESTER_CALENDAR?.revisionAndExams) {
-    const { start, end } = SEMESTER_CALENDAR.revisionAndExams
-    allDay(`exams-${start}`, "Revision and exam weeks", start, end)
-  }
-  for (const [date, name] of NO_CLASS_DAYS) {
-    allDay(`no-classes-${date}`, `${name}: no classes`, date, date)
-  }
-  for (const [date, early] of EARLY_DISMISSALS) {
-    allDay(
-      `early-${date}`,
-      `${early.name}: classes end at ${early.until}`,
-      date,
-      date
-    )
-  }
-  for (const event of NO_CLASS_WINDOWS) {
-    if (!event.noClasses) continue
-    events.push({
-      uid: `no-classes-${event.start}-${event.noClasses.from}@ntumods.com`,
-      summary: `${event.name}: no classes`,
-      start: atTime(parseLocalDate(event.start), event.noClasses.from),
-      end: atTime(parseLocalDate(event.start), event.noClasses.to),
-      description: event.note
-    })
-  }
-  return events
-}
+const calendarEvents = (): IcsEvent[] =>
+  YEAR_CALENDAR
+    ? academicCalendarEvents(YEAR_CALENDAR, { semester: SEMESTER_CODE })
+    : []
 
 /** Which block fields the user has chosen to show, mirrors Settings.tableCell. */
 export interface IcsTableCellSettings {

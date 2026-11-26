@@ -100,8 +100,16 @@ export const createIcs = (
   events: IcsEvent[],
   {
     prodId = "-//NTUMods//Timetable export//EN",
+    name = "NTUMods timetable",
+    refresh,
     stamp = new Date()
-  }: { prodId?: string; stamp?: Date } = {}
+  }: {
+    prodId?: string
+    name?: string
+    /** For a subscribed feed: how often apps should re-fetch, e.g. "P1D". */
+    refresh?: string
+    stamp?: Date
+  } = {}
 ) => {
   const lines = [
     "BEGIN:VCALENDAR",
@@ -109,7 +117,13 @@ export const createIcs = (
     "CALSCALE:GREGORIAN",
     contentLine("PRODID", prodId),
     "METHOD:PUBLISH",
-    contentLine("X-WR-CALNAME", "NTUMods timetable")
+    contentLine("X-WR-CALNAME", escapeText(name)),
+    ...(refresh
+      ? [
+          contentLine("REFRESH-INTERVAL;VALUE=DURATION", refresh),
+          contentLine("X-PUBLISHED-TTL", refresh)
+        ]
+      : [])
   ]
 
   for (const event of events) {

@@ -25,9 +25,9 @@ import JsonLd from "@/astro/components/JsonLd.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 import {
   getAllArticles,
-  getArticleCategories,
   getArticleImageUrl,
   getArticlesByCategory,
+  getCategoriesFromArticles,
   slugifyCategory
 } from "@/astro/lib/articles"
 
@@ -65,7 +65,7 @@ const CATEGORY_META: Record<
 
 export async function getStaticPaths() {
   const articles = await getAllArticles()
-  const categories = await getArticleCategories()
+  const categories = getCategoriesFromArticles(articles)
 
   const articleSlugs = new Set(articles.map((article) => article.slug))
 

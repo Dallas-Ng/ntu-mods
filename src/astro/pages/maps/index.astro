@@ -1,5 +1,7 @@
 ---
 import { siteConfig } from "@/config/site"
+import { campusMapJsonLd } from "@/lib/json-ld"
+import JsonLd from "@/astro/components/JsonLd.astro"
 import { cardVariants } from "@/components/ui/card"
 import { CardCta, TextLink } from "@/components/ui/text-link"
 import MapsPageContent from "@/components/map/maps-page-content"
@@ -7,6 +9,10 @@ import MapGuide from "@/astro/components/MapGuide.astro"
 import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
+
+const name = "NTU Campus Map"
+const description =
+  "Find NTU lecture theatres, tutorial rooms, halls and canteens, browse floor plans, and get estimated walking times."
 
 const CREDITS = [
   {
@@ -26,11 +32,12 @@ const CREDITS = [
 ---
 
 <BaseLayout
-  title="NTU Campus Map"
-  description="Find any NTU lecture theatre, tutorial room, hall or canteen, see which level it is on, and get walking directions with times."
+  title={name}
+  description={description}
   canonical="/maps"
   ogImage={`${siteConfig.url}/og/maps.png`}
   ogImageAlt="NTUMods campus map with North Spine pinned, floor plans and walking directions">
+  <JsonLd data={campusMapJsonLd({ name, description, path: "/maps" })} />
   <MapsPageContent client:load />
 
   <MapGuide />

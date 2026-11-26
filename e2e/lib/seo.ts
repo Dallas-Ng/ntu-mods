@@ -240,18 +240,17 @@ export function jsonLdProblems(s: SeoSnapshot, ref: PageRef): string[] {
 
   const types = items.flatMap(typesOf)
   const expect: Record<string, string[]> = {
-    module: ["Course", "BreadcrumbList"],
+    module: ["BreadcrumbList"],
     semester: ["BreadcrumbList"]
   }
-  // Course markup only belongs on modules offered this semester.
+  // Course markup requires a current offering with a published description.
   const notOffered =
     ref.kind === "module" &&
     s.text.includes("Not offered in the current semester")
+  if (notOffered && types.includes("Course")) {
+    out.push("Course JSON-LD on a not-offered module")
+  }
   for (const t of expect[ref.kind] ?? []) {
-    if (t === "Course" && notOffered) {
-      if (types.includes(t)) out.push("Course JSON-LD on a not-offered module")
-      continue
-    }
     if (!types.includes(t)) out.push(`missing JSON-LD ${t}`)
   }
   // /articles/[slug] also serves category listings, which are CollectionPages.

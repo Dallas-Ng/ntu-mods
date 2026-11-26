@@ -120,11 +120,11 @@ const sortedYears = Object.keys(offeringsByYear).sort((a, b) =>
 // Course markup says "you can take this"; leave it off modules that are not
 // offered this semester.
 const jsonLd = [
-  isCurrentOffering
+  isCurrentOffering && moduleData.description?.trim()
     ? courseJsonLd({
         code: moduleKey,
         title: moduleData.title,
-        description: moduleData.description || moduleData.title,
+        description: moduleData.description,
         credits: moduleData.au
       })
     : null,

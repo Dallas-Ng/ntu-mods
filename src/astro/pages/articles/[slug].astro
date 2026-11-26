@@ -7,10 +7,8 @@ import {
   articleJsonLd,
   breadcrumbListJsonLd,
   collectionPageJsonLd,
-  faqPageJsonLd,
   type JsonLd as JsonLdData
 } from "@/lib/json-ld"
-import { extractFaqItems } from "@/lib/server/articles"
 import { cardVariants } from "@/components/ui/card"
 import { TextLink } from "@/components/ui/text-link"
 import { ArticleThumb } from "@/components/articles/article-thumb"
@@ -106,7 +104,6 @@ let categoryLd: JsonLdData | null = null
 let article: Awaited<ReturnType<typeof getAllArticles>>[number] | undefined
 let moreArticles: Awaited<ReturnType<typeof getAllArticles>> = []
 let articleLd: JsonLdData | null = null
-let faqLd: JsonLdData | null = null
 let breadcrumbLd: JsonLdData | null = null
 // One list drives both the visible breadcrumbs and their JSON-LD.
 let articleCrumbs: { href: string; label: string; name: string }[] = []
@@ -170,9 +167,6 @@ if (kind === "category") {
         text
       })
     )
-
-    const faqItems = extractFaqItems(article.content)
-    faqLd = faqItems.length > 0 ? faqPageJsonLd(faqItems) : null
 
     articleLd = articleJsonLd({
       headline: article.title,
@@ -271,7 +265,7 @@ const pageDescription =
             <Breadcrumbs breadcrumbs={articleCrumbs} />
           </div>
 
-          <JsonLd data={[articleLd, faqLd, breadcrumbLd]} />
+          <JsonLd data={[articleLd, breadcrumbLd]} />
 
           <div class="mt-5 grid gap-8 lg:grid-cols-[minmax(0,48rem)_16rem]">
             <article class="prose dark:prose-invert max-w-full min-w-0">

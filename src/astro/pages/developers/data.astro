@@ -1,5 +1,8 @@
 ---
 import { siteConfig } from "@/config/site"
+import { dataCatalogJsonLd } from "@/lib/json-ld"
+import { getLatestExamSemester, getLatestSemester } from "@/lib/server/db/repo"
+import { TextLink } from "@/components/ui/text-link"
 import { Code } from "@/components/developers/code"
 import HeadingAnchor from "@/components/heading-anchor"
 import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
@@ -24,6 +27,56 @@ const files = [
     "Module code, then one exam."
   ]
 ]
+
+const path = "/developers/data"
+const title = "NTUMods data reference"
+const description =
+  "What the NTUMods data files contain: file layout, semester codes, how modules, class indexes and exams join, and what each field means."
+const [classes, exams] = await Promise.all([
+  getLatestSemester(),
+  getLatestExamSemester()
+])
+const academicTerm = ({ year, semester }: { year: string; semester: string }) =>
+  `AY${year} ${semester === "S" || semester === "T" ? "Special Term" : `Semester ${semester}`}`
+
+const catalogue = [
+  {
+    id: "module-summaries",
+    name: "NTU module summaries",
+    description: files[1][1],
+    url: files[1][0]
+  },
+  {
+    id: "class-indexes",
+    name: `NTU class indexes for ${academicTerm(classes)}`,
+    description:
+      "Class indexes for one semester, keyed by module code and index number, with the times and venues for each class slot.",
+    url: `/data/api/indexes/${classes.year}_${classes.semester}.json`
+  },
+  ...(exams
+    ? [
+        {
+          id: "exam-timetable",
+          name: `NTU exam timetable for ${academicTerm(exams)}`,
+          description:
+            "Exam dates, times and durations for one semester, keyed by module code.",
+          url: `/data/api/exams/${exams.year}_${exams.semester}.json`
+        }
+      ]
+    : [])
+]
+
+const structuredData = dataCatalogJsonLd({
+  name: title,
+  description,
+  path,
+  datasets: catalogue.map(({ id, name, description, url }) => ({
+    name,
+    description,
+    path: `${path}#${id}`,
+    downloads: [{ name, url }]
+  }))
+})
 
 const sample = {
   slot: `{
@@ -50,9 +103,10 @@ const sample = {
 ---
 
 <DevDocsLayout
-  title="NTUMods data reference"
-  description="What the NTUMods data files contain: file layout, semester codes, how modules, class indexes and exams join, and what each field means."
-  path="/developers/data"
+  title={title}
+  description={description}
+  path={path}
+  structuredData={structuredData}
   eyebrow="Build with the data"
   heading="Data reference"
   intro="How the files fit together and what the fields mean. The field tables themselves are in the REST API page.">
@@ -89,6 +143,21 @@ const sample = {
         >REST API reference</a
       >. All files are served from <code>{siteConfig.url}</code>.
     </p>
+
+    <h2 id="downloads">
+      JSON downloads<HeadingAnchor id="downloads" label="JSON downloads" />
+    </h2>
+    <ul>
+      {
+        catalogue.map(({ id, name, url }) => (
+          <li>
+            <TextLink id={id} href={url}>
+              {name} (JSON)
+            </TextLink>
+          </li>
+        ))
+      }
+    </ul>
 
     <h2 id="semesters">
       Semester codes<HeadingAnchor id="semesters" label="Semester codes" />

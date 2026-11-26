@@ -2,7 +2,7 @@
 import { MCP_CLIENTS } from "@/lib/developers/mcp-clients"
 import { DEV_LINKS } from "@/lib/developers/pages"
 import { htmlHeadings } from "@/lib/html-headings"
-import { webPageJsonLd } from "@/lib/json-ld"
+import { webPageJsonLd, type JsonLd as JsonLdData } from "@/lib/json-ld"
 import { SideNavDrawer } from "@/components/ui/side-nav-drawer"
 import ArticleToc, {
   MobileSectionDropdown
@@ -23,14 +23,17 @@ interface Props {
   /** Small label above the h1, e.g. the section this page sits in. */
   eyebrow?: string
   intro: string
+  structuredData?: JsonLdData
 }
 
-const { title, description, path, heading, eyebrow, intro } = Astro.props
+const { title, description, path, heading, eyebrow, intro, structuredData } =
+  Astro.props
 const currentLabel =
   DEV_LINKS.find((link) => link.href === path)?.label ??
   MCP_CLIENTS.find((c) => path === `/developers/mcp/${c.id}`)?.label ??
   "Menu"
-const jsonLd = webPageJsonLd({ name: title, description, path })
+const jsonLd =
+  structuredData ?? webPageJsonLd({ name: title, description, path })
 
 // Render the page once and list its h2s for "On this page", so each docs
 // page gets the right nav without keeping a heading list by hand. The HTML is

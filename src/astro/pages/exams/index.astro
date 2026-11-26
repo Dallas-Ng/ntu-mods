@@ -10,7 +10,7 @@ import {
 } from "@/lib/server/db/repo"
 import { buttonVariants } from "@/components/ui/button"
 import { cardVariants } from "@/components/ui/card"
-import { LinkArrow } from "@/components/ui/text-link"
+import { LinkArrow, TextLink } from "@/components/ui/text-link"
 import ExamsList, { type ListedExam } from "@/components/exams/exams-list"
 import Header from "@/components/header"
 import JsonLd from "@/astro/components/JsonLd.astro"
@@ -18,7 +18,7 @@ import BaseLayout from "@/astro/layouts/BaseLayout.astro"
 
 export const prerender = true
 
-const LAST_UPDATED = "18 November 2026"
+const source = "https://wis.ntu.edu.sg/webexe/owa/exam_timetable_und.main"
 
 // Every semester with exams in the newest academic year is listed together,
 // so semester 1 exams still running stay visible once semester 2 is released.
@@ -43,6 +43,10 @@ const examList: ListedExam[] = parts.flatMap((p) =>
   }))
 )
 const total = examList.length
+const downloads = parts.map(({ year, semester, label }) => ({
+  name: `${label} exam timetable`,
+  url: `/data/api/exams/${year}_${semester}.json`
+}))
 
 const termName = (semester: string) =>
   semester === "S" || semester === "T" ? "Special Term" : `Semester ${semester}`
@@ -79,13 +83,15 @@ const facts = parts.map((p) => ({
   size="md"
   containerClassName="space-y-8">
   <JsonLd
-    data={datasetJsonLd({
-      name: `NTU Exam Schedule ${label}`,
-      description: `${total} NTU exams for ${label}: module code, name, date, start and end time.`,
-      path: "/exams",
-      keywords: ["NTU", "exam schedule", "exam timetable", label],
-      dateModified: new Date(`${LAST_UPDATED} UTC`).toISOString().slice(0, 10)
-    })}
+    data={total > 0
+      ? datasetJsonLd({
+          name: `NTU Exam Schedule ${label}`,
+          description: `${total} NTU exams for ${label}, with module codes, names, dates, times and durations.`,
+          path: "/exams",
+          source,
+          downloads
+        })
+      : null}
   />
   <Header
     title="NTU exam schedule"
@@ -141,4 +147,23 @@ const facts = parts.map((p) => ({
   </div>
 
   <ExamsList client:load exams={examList} />
+  {
+    total > 0 && (
+      <footer class="space-y-2 border-t pt-4 text-sm">
+        <p>
+          Source:{" "}
+          <TextLink href={source}>NTU’s official exam timetable</TextLink>
+        </p>
+        <ul
+          aria-label="Exam timetable JSON downloads"
+          class="flex flex-wrap gap-x-4 gap-y-2">
+          {downloads.map(({ name, url }) => (
+            <li>
+              <TextLink href={url}>{name} (JSON)</TextLink>
+            </li>
+          ))}
+        </ul>
+      </footer>
+    )
+  }
 </BaseLayout>

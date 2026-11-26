@@ -1,10 +1,6 @@
 ---
 import { siteConfig } from "@/config/site"
-import {
-  breadcrumbListJsonLd,
-  faqPageJsonLd,
-  webApplicationJsonLd
-} from "@/lib/json-ld"
+import { breadcrumbListJsonLd, webApplicationJsonLd } from "@/lib/json-ld"
 import { cardVariants } from "@/components/ui/card"
 import { CardCta, TextLink } from "@/components/ui/text-link"
 import Breadcrumbs from "@/components/breadcrumbs"
@@ -94,13 +90,17 @@ const FAQ = [
       webApplicationJsonLd({
         name: "NTUMods FGO Optimiser",
         path: "/tools/fgo-optimiser",
-        description: desc
+        description: desc,
+        featureList: [
+          "Read an uploaded transcript in your browser",
+          "Account for Flexible Grading already used",
+          "Compare eligible module combinations within your remaining quota"
+        ]
       }),
       breadcrumbListJsonLd([
         { name: "Tools", href: "/tools" },
         { name: "FGO Optimiser", href: "/tools/fgo-optimiser" }
-      ]),
-      faqPageJsonLd(FAQ)
+      ])
     ]}
   />
 

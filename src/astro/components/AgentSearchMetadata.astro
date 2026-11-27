@@ -1,0 +1,9 @@
+---
+import { agentSearch } from "@/lib/agent-search"
+---
+
+{
+  Object.entries(agentSearch).map(([key, value]) => (
+    <meta name={`agent:${key}`} content={value} />
+  ))
+}

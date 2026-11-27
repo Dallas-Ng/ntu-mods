@@ -25,7 +25,7 @@ URLs and code samples are preserved as authored.
 
 HTML pages advertise their Markdown companion with a `rel="alternate"`
 link. Markdown frontmatter describes the canonical HTML URL and points to
-NTUMods' read-only MCP module search and `/llms.txt`. It uses an article's
+NTUMods' site search. It uses an article's
 published or modified date or a source-backed sitemap date for
 `last_updated`. A missing source date is represented as `null`.
 
@@ -33,6 +33,14 @@ The site has no public comments or other user submissions in these exports.
 Feedback and browser-local data are not exported. `robots.txt` allows
 crawling and declares `search=yes, ai-input=yes, ai-train=no`. Markdown
 responses carry the same policy in their `Content-Signal` header.
+
+## Search for Agents
+
+`GET /.well-known/search?q={query}` returns up to ten matching pages as
+Markdown, with source links and descriptions. The build indexes public
+canonical HTML pages and module offerings listed in the sitemap. Search
+weights terms in titles and descriptions above terms in page text. Both
+HTML and Markdown advertise the endpoint.
 
 ## Page renderers
 
@@ -92,6 +100,8 @@ After activation, check the following requests in both orders to verify that
 cached HTML and Markdown stay separate.
 
 ```sh
+curl -fsSI https://ntumods.com/
+curl -fsSI -H 'Accept: text/markdown' https://ntumods.com/
 curl -fsSI https://ntumods.com/mods
 curl -fsSI -H 'Accept: text/markdown' https://ntumods.com/mods
 curl -fsSI -H 'Accept: text/plain' https://ntumods.com/mods

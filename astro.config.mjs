@@ -199,42 +199,6 @@ export default defineConfig({
     // them, so they are never served from ntumods.com.
     environments: {
       client: { build: { sourcemap: "hidden" } }
-    },
-    build: {
-      rollupOptions: {
-        output: {
-          // Astro's default client output is one chunk per component/hook —
-          // dozens of sub-1KB files per page, each costing a full request.
-          // Bundle third-party deps and shared first-party building blocks
-          // (shadcn/ui primitives, hooks, lib, state) into a few cacheable
-          // chunks instead of one file per module.
-          manualChunks(id) {
-            if (id.includes("node_modules")) {
-              // One catch-all vendor chunk meant every page downloaded every
-              // dependency (pdfjs, posthog, zod...) even when it used one.
-              // Split the heavy ones so a page only pulls what it imports.
-              const pkg =
-                /node_modules\/(?:\.pnpm\/[^/]+\/node_modules\/)?((?:@[^/]+\/)?[^/]+)/.exec(
-                  id
-                )?.[1]
-              if (pkg === "react" || pkg === "react-dom" || pkg === "scheduler")
-                return "vendor-react"
-              if (pkg === "posthog-js") return "vendor-posthog"
-              if (pkg === "pdfjs-dist") return "vendor-pdfjs"
-              return "vendor"
-            }
-            // track() is imported by the PostHog init script on every page and
-            // by most islands. In the shared "lib" chunk it would make every
-            // page download all of src/lib and src/hooks just to queue events.
-            if (/\/src\/lib\/analytics(-events)?\.ts$/.test(id))
-              return "analytics"
-            if (id.includes("/src/components/ui/")) return "ui"
-            if (id.includes("/src/hooks/")) return "hooks"
-            if (id.includes("/src/state/")) return "state"
-            if (id.includes("/src/lib/")) return "lib"
-          }
-        }
-      }
     }
   }
 })

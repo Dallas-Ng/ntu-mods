@@ -1,3 +1,5 @@
+import type { CSSProperties } from "react"
+
 import { siteConfig } from "@/config/site"
 import { getModulePrefix } from "@/lib/format"
 import { getModuleTitles } from "@/lib/server/db/repo"
@@ -199,6 +201,10 @@ function getModuleGroups() {
 const SitemapContent = async () => {
   const articles = await getAllArticles()
   const moduleGroups = getModuleGroups()
+  const moduleCount = moduleGroups.reduce(
+    (count, group) => count + group.modules.length,
+    0
+  )
 
   return (
     <Container size="md" className="space-y-8">
@@ -285,7 +291,10 @@ const SitemapContent = async () => {
           ))}
         </div>
 
-        <div className="space-y-8">
+        {/* Skip initial layout of the directory while keeping its links searchable. */}
+        <div
+          className="space-y-8 [--module-row:2rem] [contain-intrinsic-block-size:auto_calc(var(--module-count)*var(--module-row))] [content-visibility:auto] sm:[--module-row:1rem] lg:[--module-row:0.67rem]"
+          style={{ "--module-count": moduleCount } as CSSProperties}>
           {moduleGroups.map((group) => (
             <section
               id={`modules-${group.prefix.toLowerCase()}`}
@@ -293,16 +302,10 @@ const SitemapContent = async () => {
               className="scroll-mt-20 border-t pt-6">
               <SectionHeading as="h3">{group.prefix}</SectionHeading>
 
-              <div className="mt-3 grid gap-x-4 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="text-muted-foreground [&>a:hover]:text-foreground [&>a>span]:text-foreground mt-3 grid gap-x-4 gap-y-2 text-sm leading-6 sm:grid-cols-2 lg:grid-cols-3 [&>a]:transition-colors [&>a>span]:font-medium">
                 {group.modules.map((moduleItem) => (
-                  <a
-                    key={moduleItem.code}
-                    href={`/mods/${moduleItem.code}`}
-                    className="text-muted-foreground hover:text-foreground text-sm leading-6 transition-colors">
-                    <span className="text-foreground font-medium">
-                      {moduleItem.code}
-                    </span>{" "}
-                    {moduleItem.title}
+                  <a key={moduleItem.code} href={`/mods/${moduleItem.code}`}>
+                    <span>{moduleItem.code}</span> {moduleItem.title}
                   </a>
                 ))}
               </div>

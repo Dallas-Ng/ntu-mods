@@ -67,6 +67,34 @@ test("answers GET with 405 and never caches", async ({ request }) => {
   expect(res.headers()["cache-control"]).toBe("no-store")
 })
 
+test("advertises the MCP endpoint through both server card URLs", async ({
+  request
+}) => {
+  const cardPath = "/mcp/server-card"
+  const res = await request.get(cardPath, { maxRedirects: 0 })
+  expect(res.status()).toBe(200)
+  expect(res.headers()["content-type"]).toContain(
+    "application/mcp-server-card+json"
+  )
+  expect(res.headers()["access-control-allow-origin"]).toBe("*")
+  const card = await res.json()
+  expect(card.remotes).toEqual([
+    { type: "streamable-http", url: "https://ntumods.com/mcp" }
+  ])
+
+  const alias = await request.get("/.well-known/mcp.json", { maxRedirects: 0 })
+  expect(alias.status()).toBe(200)
+  expect(await alias.json()).toEqual(card)
+
+  const catalog = await request.get("/.well-known/ard.json")
+  expect((await catalog.json()).entries).toContainEqual(
+    expect.objectContaining({
+      type: "application/mcp-server-card+json",
+      url: `https://ntumods.com${cardPath}`
+    })
+  )
+})
+
 test("/developers/mcp/tools documents every MCP tool", async ({ request }) => {
   const html = await (await request.get("/developers/mcp/tools")).text()
   for (const name of MCP_TOOL_NAMES) expect(html).toContain(name)

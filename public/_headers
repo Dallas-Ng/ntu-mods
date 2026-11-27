@@ -1,6 +1,6 @@
 /*
   X-Content-Type-Options: nosniff
-  Link: </.well-known/ai-catalog.json>; rel="ai-catalog"
+  Link: </.well-known/ard.json>; rel="ard", </.well-known/ai-catalog.json>; rel="ai-catalog"
   Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800
 
 # Rules that match more than one block are joined with commas, so a later
@@ -30,6 +30,31 @@
   Cache-Control: no-cache
 
 # Machine-readable discovery files: any agent or crawler may read them.
+/mcp/server-card
+  ! Cache-Control
+  Cache-Control: public, max-age=3600
+  Content-Type: application/mcp-server-card+json
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET
+  Access-Control-Allow-Headers: Content-Type, If-None-Match
+  Access-Control-Expose-Headers: ETag
+
+/.well-known/mcp.json
+  ! Cache-Control
+  Cache-Control: public, max-age=3600
+  Content-Type: application/mcp-server-card+json
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET
+  Access-Control-Allow-Headers: Content-Type, If-None-Match
+  Access-Control-Expose-Headers: ETag
+
+/.well-known/ard.json
+  ! Cache-Control
+  Cache-Control: public, max-age=3600, s-maxage=86400
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+  X-Robots-Tag: noindex
+
 /.well-known/ai-catalog.json
   ! Cache-Control
   Cache-Control: public, max-age=3600, s-maxage=86400

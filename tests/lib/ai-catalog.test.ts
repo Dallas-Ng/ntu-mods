@@ -14,10 +14,14 @@ describe("ai catalog", () => {
     expect(catalog.host.displayName).toBe("NTUMods")
   })
 
-  it("gives every entry an identifier, a type and exactly one of url or data", () => {
+  it("gives every entry an ARD identifier, a type and exactly one of url or data", () => {
     for (const entry of catalog.entries) {
-      expect(entry.identifier).toBeTruthy()
+      expect(entry.identifier).toMatch(
+        /^urn:air:ntumods\.com:catalog:[a-z0-9-]+$/
+      )
       expect(entry.type).toMatch(/^[a-z]+\/[a-z0-9.+-]+$/)
+      expect(entry.representativeQueries.length).toBeGreaterThanOrEqual(2)
+      expect(entry.representativeQueries.length).toBeLessThanOrEqual(5)
       expect("url" in entry).toBe(true)
       expect("data" in entry).toBe(false)
     }

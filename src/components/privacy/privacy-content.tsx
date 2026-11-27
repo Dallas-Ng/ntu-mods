@@ -49,8 +49,10 @@ const PrivacyContent = () => {
 
         <p>
           We use two third-party analytics services on the production site to
-          understand how the Service is used and to improve it. They stay
-          switched off until you accept analytics, wherever you visit from.
+          understand how the Service is used and to improve it. If you visit
+          from Singapore they run by default, and you can switch them off at any
+          time. Everywhere else they stay switched off until you accept
+          analytics (see Consent below).
         </p>
 
         <p>
@@ -322,10 +324,25 @@ const PrivacyContent = () => {
         <SectionHeading>Consent</SectionHeading>
 
         <p>
-          We show the analytics cookie banner worldwide. Google Analytics,
-          PostHog browser analytics and unique article view counting stay
-          switched off until you select Accept analytics. You can use the site
-          after selecting Reject analytics.
+          If you visit from Singapore, Google Analytics, PostHog browser
+          analytics and unique article view counting run by default. This policy
+          is your notice, and you can opt out at any time through{" "}
+          <strong>Cookie settings</strong> in the footer. Singapore&apos;s PDPA
+          has no cookie opt-in rule, and allows consent by notification with an
+          opt-out, so we do not show a banner there.
+        </p>
+
+        <p>
+          Everywhere else, and wherever we cannot tell where you are, we show
+          the analytics cookie banner. Those tools and unique article view
+          counting stay switched off until you select Accept analytics. You can
+          use the site after selecting Reject analytics.
+        </p>
+
+        <p>
+          We detect your country from your IP address at the edge (Cloudflare)
+          to decide which applies. The result is kept only in your browser for
+          the session.
         </p>
 
         <p>
@@ -338,10 +355,12 @@ const PrivacyContent = () => {
         </p>
 
         <p>
-          We rely on your consent for optional browser analytics. We use browser
-          storage to provide features you request, such as saving your
-          timetable, applying your display settings and remembering your
-          analytics choice.
+          Outside Singapore we rely on your consent for optional browser
+          analytics. In Singapore we rely on your deemed consent through this
+          notice, and on our legitimate interest in understanding and improving
+          a free service. We use browser storage to provide features you
+          request, such as saving your timetable, applying your display settings
+          and remembering your analytics choice.
         </p>
       </section>
 
@@ -352,7 +371,8 @@ const PrivacyContent = () => {
           We do not set our own cookies. Google Analytics sets cookies, and
           PostHog stores a random identifier in a cookie and in your
           browser&apos;s localStorage, to distinguish visitors and sessions.
-          Both are only set after you accept analytics. You can also block or
+          Both are only set after you accept analytics, except in Singapore,
+          where they are set by default until you opt out. You can also block or
           clear them through your browser settings or with an extension that
           blocks analytics trackers.
         </p>

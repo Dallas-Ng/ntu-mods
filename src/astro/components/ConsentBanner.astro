@@ -27,7 +27,11 @@ import { TextLink } from "@/components/ui/text-link"
 </div>
 
 <script>
-  import { getStoredConsent, onConsentChange, setConsent } from "@/lib/consent"
+  import {
+    needsConsentChoice,
+    onConsentChange,
+    setConsent
+  } from "@/lib/consent"
 
   const banner = document.getElementById("consent-banner")
   const settings = document.querySelector<HTMLButtonElement>(
@@ -37,7 +41,7 @@ import { TextLink } from "@/components/ui/text-link"
   if (banner) {
     let settingsOpen = false
     const sync = () => {
-      banner.hidden = !settingsOpen && getStoredConsent() !== null
+      banner.hidden = !settingsOpen && !needsConsentChoice()
     }
     settings?.addEventListener("click", () => {
       settingsOpen = true

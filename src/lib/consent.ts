@@ -3,7 +3,13 @@ const EVENT = "ntumods:consent"
 
 export type Consent = "granted" | "denied"
 
+const REGION_KEY = "ntumods-consent-default"
+
 let sessionChoice: Consent | undefined
+// Singapore visitors with no saved choice are on by default. `null` until the
+// lookup finishes, and for visitors outside Singapore.
+let regionDefault: Consent | null = null
+let regionResolved = false
 
 export function getStoredConsent(): Consent | null {
   try {
@@ -18,7 +24,39 @@ export function getStoredConsent(): Consent | null {
 }
 
 export function hasAnalyticsConsent() {
-  return getStoredConsent() === "granted"
+  return (getStoredConsent() ?? regionDefault) === "granted"
+}
+
+/** True once we know the visitor must pick, so the banner can show. */
+export function needsConsentChoice() {
+  return getStoredConsent() === null && regionResolved && regionDefault === null
+}
+
+function resolveRegion(defaultOn: boolean) {
+  regionResolved = true
+  regionDefault = defaultOn ? "granted" : null
+  window.dispatchEvent(new Event(EVENT))
+}
+
+// The pages are prerendered, so the country is only known at the edge. Asked
+// once per session, and only when the visitor has not chosen. If the lookup
+// fails, they are asked.
+if (typeof window !== "undefined" && getStoredConsent() === null) {
+  let cached: string | null = null
+  try {
+    cached = sessionStorage.getItem(REGION_KEY)
+  } catch {}
+  if (cached) queueMicrotask(() => resolveRegion(cached === "1"))
+  else
+    void fetch("/api/consent-region")
+      .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
+      .then(({ defaultOn }: { defaultOn?: boolean }) => {
+        try {
+          sessionStorage.setItem(REGION_KEY, defaultOn ? "1" : "0")
+        } catch {}
+        resolveRegion(defaultOn === true)
+      })
+      .catch(() => resolveRegion(false))
 }
 
 export function setConsent(value: Consent) {

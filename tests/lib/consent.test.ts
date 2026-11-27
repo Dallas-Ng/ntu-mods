@@ -41,3 +41,25 @@ it("updates active tabs when another tab withdraws consent", () => {
   unsubscribe()
   expect(update).toHaveBeenCalledWith(false)
 })
+
+it("defaults to on for Singapore until the visitor chooses", async () => {
+  vi.resetModules()
+  sessionStorage.setItem("ntumods-consent-default", "1")
+  const consent = await import("@/lib/consent")
+  await Promise.resolve()
+  expect(consent.hasAnalyticsConsent()).toBe(true)
+  expect(consent.needsConsentChoice()).toBe(false)
+  consent.setConsent("denied")
+  expect(consent.hasAnalyticsConsent()).toBe(false)
+  sessionStorage.clear()
+})
+
+it("asks visitors outside Singapore", async () => {
+  vi.resetModules()
+  sessionStorage.setItem("ntumods-consent-default", "0")
+  const consent = await import("@/lib/consent")
+  await Promise.resolve()
+  expect(consent.hasAnalyticsConsent()).toBe(false)
+  expect(consent.needsConsentChoice()).toBe(true)
+  sessionStorage.clear()
+})

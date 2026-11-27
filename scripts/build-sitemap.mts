@@ -233,7 +233,7 @@ async function main() {
     JSON.stringify(Object.fromEntries(indexNowRoutes))
   )
 
-  const robotsTxt = `# *\nUser-agent: *\nAllow: /\n\n# Host\nHost: ${SITE_URL}\n\n# Sitemaps\nSitemap: ${SITE_URL}/sitemap.xml\n`
+  const robotsTxt = `# *\nUser-agent: *\nAllow: /\nContent-Signal: search=yes, ai-input=yes, ai-train=no\n\n# Host\nHost: ${SITE_URL}\n\n# Sitemaps\nSitemap: ${SITE_URL}/sitemap.xml\n`
   await fs.writeFile(path.join(OUT_DIR, "robots.txt"), robotsTxt)
 
   console.log(

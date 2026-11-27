@@ -48,7 +48,7 @@ const GROUPS: [string, string[]][] = [
       "set_favourite"
     ]
   ],
-  ["Grades", ["calculate_cgpa_targets", "project_cgpa"]],
+  ["Grades", ["calculate_cgpa_targets", "project_cgpa", "optimise_fgo"]],
   ["Page-specific", ["get_current_module"]]
 ]
 

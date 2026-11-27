@@ -984,6 +984,11 @@ const handlers: Record<WebMcpToolName, ToolHandler> = {
     }
   },
 
+  optimise_fgo: async (args) => {
+    const { optimiseFgo } = await import("./optimise-fgo")
+    return optimiseFgo(args)
+  },
+
   project_cgpa: (args) => {
     const { cgpa, done, remaining } = cgpaInputs(args)
     const points = GRADES.find(([g]) => g === args.grade)?.[1]

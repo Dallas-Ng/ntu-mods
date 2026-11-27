@@ -54,7 +54,7 @@ export function buildAiCatalog({
         WEBMCP_MEDIA_TYPE,
         "/.well-known/webmcp.json",
         "NTUMods WebMCP tools",
-        "Tools the site registers with WebMCP (document.modelContext) in supporting browsers: search modules, read indexes and exams, build and generate timetables, export to calendar, and plan CGPA. This file lists their names and input schemas; calling them needs a browser tab on ntumods.com.",
+        "Tools the site registers with WebMCP (document.modelContext) in supporting browsers: search modules, read indexes and exams, build and generate timetables, export to calendar, plan CGPA and optimise FGO. This file lists their names and input schemas; calling them needs a browser tab on ntumods.com.",
         ["webmcp", "tools", "timetable", "ntu"],
         [
           "How can I build an NTU timetable with an in-browser assistant?",
@@ -143,6 +143,63 @@ export function buildAiCatalog({
         [
           "Where can I download this semester's NTU class indexes?",
           "Which dataset lists NTU class times and venues by module and index?"
+        ]
+      ),
+      entry(
+        "academic-calendar",
+        "application/json",
+        "/data/api/calendar.json",
+        "NTU academic calendar dataset",
+        "Academic year and semester dates, teaching weeks, breaks, exams and holidays. For individual module exam dates, use the exam timetable.",
+        ["dataset", "calendar", "ntu"],
+        ["When is recess week at NTU?", "What are the NTU semester dates?"]
+      ),
+      entry(
+        "academic-calendar-feed",
+        "text/calendar",
+        "/calendar.ics",
+        "NTU academic calendar subscription",
+        "Public iCalendar feed for NTU academic dates. Suitable for subscribing in calendar apps.",
+        ["calendar", "icalendar", "ntu"],
+        [
+          "Can I subscribe to the NTU academic calendar?",
+          "Where is the NTU calendar ICS feed?"
+        ]
+      ),
+      entry(
+        "campus-map",
+        "text/html",
+        "/maps",
+        "NTU campus map",
+        "Interactive campus map for finding buildings, teaching venues, halls and food. Includes indoor floor plans where available and walking directions. Use a browser to search the map.",
+        ["maps", "venues", "ntu"],
+        [
+          "Where is this NTU tutorial room?",
+          "How do I walk between two NTU buildings?"
+        ]
+      ),
+      entry(
+        "cgpa-planner",
+        "text/html",
+        "/tools/cgpa-planner",
+        "NTU CGPA planner",
+        "Browser-based CGPA projections and honours targets. In-browser agents can call calculate_cgpa_targets and project_cgpa via WebMCP using grade summaries. The planner processes transcript PDFs locally.",
+        ["cgpa", "grades", "ntu"],
+        [
+          "What grades do I need for Distinction?",
+          "What will my CGPA be if I average a B+?"
+        ]
+      ),
+      entry(
+        "fgo-optimiser",
+        "text/html",
+        "/tools/fgo-optimiser",
+        "NTU FGO optimiser",
+        "Browser-based Flexible Grading Option optimisation. In-browser agents can call optimise_fgo via WebMCP with numeric module summaries and the applicable quota. The optimiser processes transcript PDFs locally.",
+        ["fgo", "cgpa", "ntu"],
+        [
+          "Which eligible modules should I use FGO on?",
+          "How would FGO change my CGPA within my quota?"
         ]
       ),
       ...(examSemester

@@ -226,6 +226,24 @@ describe("timetable tools", () => {
 })
 
 describe("grade tools", () => {
+  it("optimises FGO using available quota and retains ineligible grades", async () => {
+    const result = await h.optimise_fgo({
+      quota: 21,
+      usedCoreAu: 12,
+      usedBdeAu: 6,
+      modules: [
+        { au: 3, gradePoints: 1, eligible: true, bde: false },
+        { au: 3, gradePoints: 2, eligible: true, bde: true },
+        { au: 3, gradePoints: 5, eligible: false, bde: false }
+      ]
+    })
+    expect(result).toMatchObject({
+      selectedModulePositions: [2],
+      projectedCgpa: 3,
+      quotaUsedAfter: { total: 21, core: 12 }
+    })
+  })
+
   it("reports which honours classes are reachable", async () => {
     const result = (await h.calculate_cgpa_targets({
       currentCgpa: 4.0,

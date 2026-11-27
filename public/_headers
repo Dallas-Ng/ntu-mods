@@ -3,6 +3,22 @@
   Link: </.well-known/ard.json>; rel="ard", </.well-known/ai-catalog.json>; rel="ai-catalog"
   Cache-Control: public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800
 
+/
+  ! Link
+  Link: </.well-known/api-catalog>; rel="api-catalog", </developers/openapi.json>; rel="service-desc"; type="application/json", </developers/api>; rel="service-doc", </.well-known/ard.json>; rel="ard", </.well-known/ai-catalog.json>; rel="ai-catalog"
+
+/.well-known/api-catalog
+  Content-Type: application/linkset+json
+  Access-Control-Allow-Origin: *
+
+/.well-known/agent-skills/index.json
+  Content-Type: application/json; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/.well-known/agent-skills/ntu-module-lookup/SKILL.md
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *
+
 # Rules that match more than one block are joined with commas, so a later
 # Cache-Control must detach the one from /* first or both end up in the
 # response (e.g. "max-age=3600, ..., no-cache").

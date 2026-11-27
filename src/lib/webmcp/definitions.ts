@@ -530,6 +530,53 @@ export const WEBMCP_TOOLS = [
     readOnly: true
   },
 
+  {
+    name: "optimise_fgo",
+    title: "FGO optimiser",
+    description:
+      "Find the CGPA-maximising Flexible Grading Option picks from all letter-graded modules. Include ineligible modules with eligible=false so they still count towards CGPA. Supply previously used FGO AU separately, including No Record modules. Runs locally with numeric grade points and module positions. Unofficial. Confirm eligibility and quota with NTU.",
+    inputSchema: object(
+      {
+        quota: { type: "integer", enum: [21, 24] },
+        usedCoreAu: {
+          type: "number",
+          minimum: 0,
+          maximum: 24,
+          multipleOf: 0.5
+        },
+        usedBdeAu: { type: "number", minimum: 0, maximum: 24, multipleOf: 0.5 },
+        modules: {
+          type: "array",
+          minItems: 1,
+          maxItems: 200,
+          items: object(
+            {
+              au: {
+                type: "number",
+                minimum: 0.5,
+                maximum: 24,
+                multipleOf: 0.5
+              },
+              gradePoints: { type: "number", minimum: 0, maximum: 5 },
+              bde: {
+                type: "boolean",
+                description: "Counts outside the 12 AU core cap."
+              },
+              eligible: {
+                type: "boolean",
+                description:
+                  "False for modules that cannot use FGO, including failing grades."
+              }
+            },
+            ["au", "gradePoints", "bde", "eligible"]
+          )
+        }
+      },
+      ["quota", "usedCoreAu", "usedBdeAu", "modules"]
+    ),
+    readOnly: true
+  },
+
   // ── Page-specific ───────────────────────────────────────────────────────
   {
     name: "get_current_module",

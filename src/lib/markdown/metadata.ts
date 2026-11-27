@@ -1,4 +1,4 @@
-import { siteConfig } from "@/config/site"
+import { agentSearch } from "@/lib/agent-search"
 
 export function markdownPath(path: string) {
   return path === "/" ? "/index.md" : `${path}.md`
@@ -26,12 +26,9 @@ export function markdownFrontmatter({
   return [
     "---",
     "agent:",
-    `  instructions: ${quote("For NTU module searches, call the search_modules tool on the read-only NTUMods MCP server. Use llms.txt to find page-level Markdown.")}`,
-    `  endpoint: ${quote(`${siteConfig.url}/mcp`)}`,
-    '  method: "POST"',
-    '  protocol: "MCP"',
-    '  tool: "search_modules"',
-    `  documentation: ${quote(`${siteConfig.url}/developers/mcp.md`)}`,
+    ...Object.entries(agentSearch).map(
+      ([key, value]) => `  ${key}: ${quote(value)}`
+    ),
     `title: ${quote(title)}`,
     `description: ${quote(description)}`,
     `url: ${quote(url)}`,

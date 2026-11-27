@@ -17,6 +17,7 @@ import MobileTracker from "@/components/mobile-tracker"
 import Navbar from "@/components/navbar"
 import WebMcpProvider from "@/components/webmcp-provider"
 import Analytics from "@/astro/components/Analytics.astro"
+import AgentSearchMetadata from "@/astro/components/AgentSearchMetadata.astro"
 import ConsentBanner from "@/astro/components/ConsentBanner.astro"
 import FontPreload from "@/astro/components/FontPreload.astro"
 import StaleChunkReload from "@/astro/components/StaleChunkReload.astro"
@@ -92,6 +93,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
 
 <html lang="en" data-scroll-behavior="smooth">
   <head>
+    <AgentSearchMetadata />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{resolvedTitle}</title>

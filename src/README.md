@@ -40,4 +40,6 @@ On-demand routes must not import `lib/server/db/repo.ts` (or `json-source.ts` be
 
 PostHog, through the `/ingest` proxy. Every custom event goes through `track()` in [`lib/analytics.ts`](lib/analytics.ts), which only accepts names listed in [`lib/analytics-events.ts`](lib/analytics-events.ts). To add an event, add its name to that list, then call `track("name", { ...props })`. No personal data in properties. Caught errors go through `reportError(feature, error)`.
 
+Consent ([`lib/consent.ts`](lib/consent.ts)): browser analytics need an explicit Accept, except in Singapore, where they run by default until the visitor opts out in Cookie settings. The country comes from `/api/consent-region` (edge header, cached per session); unknown or failed lookups ask for consent. The allowlist is in [`lib/consent-region.ts`](lib/consent-region.ts).
+
 The landing page is mostly static, so one delegated click listener in `astro/pages/index.astro` sends `landing_link_clicked` with the link's `href`.

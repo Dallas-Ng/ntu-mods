@@ -50,7 +50,9 @@ const getCategoryBadgeClassName = (category: ChangelogCategory) =>
   )
 
 const CategoryBadge = ({ category }: { category: ChangelogCategory }) => (
-  <span className={getCategoryBadgeClassName(category)}>{category}</span>
+  <span data-markdown-label className={getCategoryBadgeClassName(category)}>
+    {category}
+  </span>
 )
 
 const ChangelogFilters = ({
@@ -104,7 +106,7 @@ const ChangelogReleaseSection = ({
         <NewBadge className="absolute top-4 right-4 md:top-6 md:right-6" />
       )}
       <p className="text-foreground text-sm">{release.date}</p>
-      <h2 className="mt-1 text-xl font-semibold">
+      <h2 data-markdown-subheading className="mt-1 text-xl font-semibold">
         <a
           href={`#${slug}`}
           className="group/link inline-flex items-center gap-2 hover:underline hover:underline-offset-4">

@@ -11,3 +11,7 @@ description: Look up Nanyang Technological University modules, class indexes and
 4. Cite the [module page](https://ntumods.com/mods/SC1003), substituting the actual module code. NTUMods is an independent planning tool. Verify official exam and registration details with NTU.
 
 The API and MCP server are public and read-only. Module and index data do not include live vacancies.
+
+---
+
+Built and hosted by [NTUMods](https://ntumods.com), a free, independent timetable planner and module browser for NTU students.

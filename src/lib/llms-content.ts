@@ -12,6 +12,37 @@ const articleLines = (facts: SiteFacts) =>
     )
     .join("\n\n")
 
+export function getLlmsIndex() {
+  const { url } = siteConfig
+  return `# NTUMods
+
+> NTUMods is a free, independent timetable planner, module catalogue, and exam schedule for Nanyang Technological University students in Singapore.
+
+## Planning and academic data
+
+- [Overview](${url}/index.md): What NTUMods offers and where to start.
+- [Timetable planner](${url}/timetable.md): Build a plan, compare indexes and check for clashes.
+- [Module catalogue](${url}/mods.md): Browse modules by code and follow links to individual offerings.
+- [Exam schedule](${url}/exams.md): Officially published exam dates and times grouped by semester.
+- [Academic calendar](${url}/calendar.md): Teaching weeks, recess, exams and public holidays.
+- [Campus map](${url}/maps.md): Find venues and estimate walks between classes.
+
+## Developer and agent resources
+
+- [REST API and open data](${url}/developers/api.md): Public read-only endpoints, fields and examples.
+- [MCP server](${url}/developers/mcp.md): Read-only tools for module search, class indexes and exams.
+- [WebMCP](${url}/developers/webmcp.md): Tools available in a supporting browser.
+- [NTUMods reference](${url}/llms.md): Detailed project and data context for agents.
+
+## Optional
+
+- [Articles](${url}/articles.md): Guides to NTU registration, tools and student services.
+- [Student tools](${url}/tools.md): CGPA planning, FGO optimisation and timetable exports.
+- [FAQ](${url}/faq.md): Common questions about the site.
+- [Privacy](${url}/privacy.md): Data handling, browser storage and analytics.
+`
+}
+
 export function getLlmsContent(facts: SiteFacts): string {
   const { url } = siteConfig
   const modules = formatCount(facts.modules)
@@ -41,6 +72,7 @@ ${articleLines(facts)}
 
 ## For AI Agents
 
+- [Homepage Markdown](${url}/index.md) and [module catalogue Markdown](${url}/mods.md): To read a public page as Markdown, append .md to its path. The homepage uses /index.md.
 - [AI Catalog](${url}/.well-known/ai-catalog.json): Machine-readable list of what agents can use on this site, following the AI Catalog format.
 - [Campus Map](${url}/maps): Interactive NTU campus map. Search any lecture theatre, tutorial room, hall or canteen, see which level it is on with indoor floor plans, and get walking directions with times. Standard, hybrid and satellite views, and links that share an exact view.
 - [WebMCP tools](${url}/.well-known/webmcp.json): Search modules, read indexes and exams, build timetables, export to calendar, plan CGPA and optimise FGO in supporting browsers. The grade tools calculate from numeric summaries supplied in the visitor's tab. Use the site tools for local transcript processing.

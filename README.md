@@ -63,7 +63,7 @@
 - Free public module API and open JSON data for modules, indexes and exams, documented in the [developer docs](https://ntumods.com/developers) with an OpenAPI file
 - A public, read-only [MCP server](https://ntumods.com/developers/mcp) for Claude, ChatGPT, Claude Code and Cursor; see [docs/mcp.md](docs/mcp.md)
 - [WebMCP](https://github.com/webmachinelearning/webmcp) support (developer preview), so a supporting browser can let an assistant search modules and generate timetables from your saved plans
-- `llms.txt` for AI crawlers
+- `llms.txt` for AI crawlers and [per-page Markdown](docs/markdown.md)
 
 **Guides and community**
 
@@ -100,6 +100,7 @@ Useful commands:
 | `pnpm test`         | Unit tests (Vitest)              |
 | `pnpm test:e2e`     | End-to-end tests (Playwright)    |
 | `pnpm build`        | Production build                 |
+| `pnpm preview:build` | Build and serve locally on port 8787 |
 
 ## Project structure
 

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "pnpm data && astro build && node scripts/upload-sourcemaps.mjs && tsx scripts/build-sitemap.mts",
+    "build": "pnpm data && astro build && node scripts/upload-sourcemaps.mjs && tsx scripts/build-sitemap.mts && tsx scripts/build-markdown.mjs",
     "data": "tsx scripts/build-static-data.mts",
     "db:build": "node scripts/db/sync-db.mjs --from json",
     "db:dump": "node scripts/db/reseed-d1.mjs",
@@ -21,6 +21,7 @@
     "lint:fix": "oxlint --fix",
     "prepare": "git config core.hooksPath .githooks",
     "preview": "astro preview --port ${PORT:-4321}",
+    "preview:build": "pnpm build && wrangler dev --local --config dist/server/wrangler.json --port ${PORT:-8787}",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test"
@@ -39,6 +40,7 @@
     "@astrojs/cloudflare": "^14.4.9",
     "@astrojs/markdown-satteri": "0.4.10",
     "@astrojs/react": "^6.0.6",
+    "@mixmark-io/domino": "^2.2.0",
     "@modelcontextprotocol/server": "2.3.1",
     "@posthog/cli": "^0.18.10",
     "@tailwindcss/typography": "^0.5.20",
@@ -59,6 +61,8 @@
     "tailwindcss": "^4.2.4",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.23.1",
+    "turndown": "^7.2.5",
+    "turndown-plugin-gfm": "^1.0.2",
     "vaul": "^1.1.2",
     "wrangler": "4.164.0",
     "zustand": "^4.4.7"

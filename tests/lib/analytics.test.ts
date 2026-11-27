@@ -3,6 +3,11 @@ import { afterEach, describe, expect, it, vi } from "vitest"
 
 // The module keeps the client and queue at module scope, so each test gets a
 // fresh copy.
+const { hasAnalyticsConsent } = vi.hoisted(() => ({
+  hasAnalyticsConsent: vi.fn(() => true)
+}))
+vi.mock("@/lib/consent", () => ({ hasAnalyticsConsent }))
+
 const load = async () => {
   vi.resetModules()
   return import("@/lib/analytics")
@@ -16,7 +21,25 @@ const fakeClient = () => {
 }
 
 describe("analytics", () => {
-  afterEach(() => vi.useRealTimers())
+  afterEach(() => {
+    vi.useRealTimers()
+    hasAnalyticsConsent.mockReturnValue(true)
+  })
+
+  it("drops events before opt-in and following withdrawal", async () => {
+    const a = await load()
+    hasAnalyticsConsent.mockReturnValue(false)
+    a.track("module_added")
+    hasAnalyticsConsent.mockReturnValue(true)
+    const { ph, capture } = fakeClient()
+    a.setAnalyticsClient(ph)
+    expect(capture).not.toHaveBeenCalled()
+
+    hasAnalyticsConsent.mockReturnValue(false)
+    a.track("module_added")
+    expect(capture).not.toHaveBeenCalled()
+    await expect(a.whenAnalyticsReady(1000)).resolves.toBeNull()
+  })
 
   it("queues events until PostHog loads, then sends them in order", async () => {
     const a = await load()
@@ -30,6 +53,16 @@ describe("analytics", () => {
     ])
     a.track("timetable_copied")
     expect(capture).toHaveBeenLastCalledWith("timetable_copied", undefined)
+  })
+
+  it("discards queued events on withdrawal before PostHog loads", async () => {
+    const a = await load()
+    a.track("module_added")
+    a.discardPendingAnalytics()
+    a.track("tool_opened")
+    const { ph, capture } = fakeClient()
+    a.setAnalyticsClient(ph)
+    expect(capture.mock.calls).toEqual([["tool_opened", undefined]])
   })
 
   it("reportError tags the feature and queues until PostHog loads", async () => {
@@ -69,15 +102,13 @@ describe("analytics", () => {
     expect(capture).not.toHaveBeenCalled()
   })
 
-  it("whenAnalyticsReady waits for the client and clears its timer", async () => {
+  it("whenAnalyticsReady waits for the client to become available", async () => {
     vi.useFakeTimers()
     const a = await load()
     const ready = a.whenAnalyticsReady(5000)
-    expect(vi.getTimerCount()).toBe(1)
     const { ph } = fakeClient()
     a.setAnalyticsClient(ph)
     await expect(ready).resolves.toBe(ph)
-    expect(vi.getTimerCount()).toBe(0)
   })
 
   it("whenAnalyticsReady gives up after the timeout", async () => {

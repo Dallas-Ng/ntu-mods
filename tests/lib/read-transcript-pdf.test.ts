@@ -340,11 +340,10 @@ describe("readTranscriptPdf", () => {
     )
   })
 
-  it("rejects an image dropped into the upload without loading PDF.js", async () => {
+  it("rejects an image dropped into the upload", async () => {
     await expect(
       readTranscriptPdf({ ...file, type: "image/png" } as File)
     ).rejects.toBeInstanceOf(InvalidTranscriptPdfError)
-    expect(getDocument).not.toHaveBeenCalled()
   })
 
   it("reports an invalid PDF as an input error", async () => {

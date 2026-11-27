@@ -1,5 +1,9 @@
-import { setAnalyticsClient } from "@/lib/analytics"
-import { consentState, onConsentChange, whenConsented } from "@/lib/consent"
+import { discardPendingAnalytics, setAnalyticsClient } from "@/lib/analytics"
+import {
+  hasAnalyticsConsent,
+  onConsentChange,
+  whenConsented
+} from "@/lib/consent"
 
 const token = import.meta.env.PUBLIC_POSTHOG_TOKEN
 
@@ -181,10 +185,7 @@ export function isNoise(event: {
   )
 }
 
-async function initPosthog() {
-  // Imported here rather than at the top so the SDK is only downloaded once
-  // the page has loaded. track() calls made before then are queued.
-  const { default: posthog } = await import("posthog-js")
+function initPosthog(posthog: typeof import("posthog-js").default) {
   posthog.init(token, {
     api_host: "/ingest",
     ui_host: "https://us.posthog.com",
@@ -192,16 +193,20 @@ async function initPosthog() {
     capture_exceptions: true,
     debug: import.meta.env.DEV,
     disable_session_recording: true,
-    before_send: (event) => (event && isNoise(event) ? null : event),
+    request_batching: false,
+    opt_out_persistence_by_default: true,
+    before_send: (event) =>
+      !hasAnalyticsConsent() || (event && isNoise(event)) ? null : event,
     loaded: (ph) => {
       // Init only runs once consent is granted, but an earlier withdrawal
       // may have left PostHog's own opt-out flag set.
       ph.opt_in_capturing()
       setAnalyticsClient(ph)
       // Withdrawing (or re-accepting) in the footer takes effect at once.
-      onConsentChange((granted) =>
-        granted ? ph.opt_in_capturing() : ph.opt_out_capturing()
-      )
+      onConsentChange((granted) => {
+        if (granted) ph.opt_in_capturing()
+        else ph.opt_out_capturing()
+      })
     }
   })
 }
@@ -214,18 +219,24 @@ async function initPosthog() {
 // competes with the page's own loading, hydration or first interactions —
 // the same deferral as GA in Analytics.astro.
 //
-// Where consent is required, nothing is initialised or sent until the visitor
-// accepts, and events tracked before then are dropped, not replayed.
+// The SDK is downloaded and initialised only after explicit consent.
 if (token) {
+  onConsentChange((granted) => {
+    if (!granted) discardPendingAnalytics()
+  })
   const schedule = () => {
-    const run = () => void initPosthog().catch(() => setAnalyticsClient(null))
+    const run = () =>
+      whenConsented(() => {
+        void import("posthog-js")
+          .then(({ default: posthog }) => {
+            whenConsented(() => initPosthog(posthog))
+          })
+          .catch(() => setAnalyticsClient(null))
+      })
     if (typeof requestIdleCallback === "function") requestIdleCallback(run)
     else setTimeout(run, 0)
   }
-  void consentState().then((state) => {
-    if (state !== "granted") setAnalyticsClient(null)
-  })
-  const afterLoad = () => void whenConsented().then(schedule)
+  const afterLoad = () => whenConsented(schedule)
   if (document.readyState === "complete") afterLoad()
   else window.addEventListener("load", afterLoad, { once: true })
 } else {

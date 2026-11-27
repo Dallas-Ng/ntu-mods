@@ -117,7 +117,7 @@ const CgpaPlanner = () => {
   const [whatIf, setWhatIf] = useState<number | null>(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState("")
-  const [share, setShare] = useState(true)
+  const [share, setShare] = useState(false)
   const [source, setSource] = useState<{ sample: boolean; name: string }>()
 
   async function load(file: File | undefined) {

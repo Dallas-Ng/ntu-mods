@@ -5,47 +5,55 @@ import { TextLink } from "@/components/ui/text-link"
 
 <div
   id="consent-banner"
-  role="dialog"
+  role="region"
   aria-label="Analytics cookies"
   hidden
   class="bg-background border-border fixed inset-x-3 bottom-3 z-50 mx-auto max-w-xl rounded-2xl border p-4 shadow-lg sm:right-4 sm:bottom-4 sm:left-auto sm:mx-0">
   <p class="text-sm font-medium">Analytics cookies</p>
   <p class="text-muted-foreground mt-1 text-sm">
-    We would like to use Google Analytics and PostHog to understand how NTUMods
-    is used. They set cookies and collect usage data. Nothing is loaded unless
-    you accept, and you can change your mind in the footer. See our
-    <TextLink href="/privacy#analytics">Privacy Policy</TextLink>.
+    Allow Google Analytics and PostHog to use cookies and measure how you use
+    NTUMods, including errors and article views. Your browser saves your choice.
+    You can change it in Cookie settings. See our
+    <TextLink href="/privacy#consent">Privacy Policy</TextLink>.
   </p>
   <div class="mt-3 flex gap-2">
-    <Button size="sm" className="flex-1" data-consent="denied">Reject</Button>
-    <Button size="sm" className="flex-1" data-consent="granted">Accept</Button>
+    <Button size="sm" className="flex-1" data-consent="denied">
+      Reject analytics
+    </Button>
+    <Button size="sm" className="flex-1" data-consent="granted">
+      Accept analytics
+    </Button>
   </div>
 </div>
 
 <script>
-  import { consentRequired, getStoredConsent, setConsent } from "@/lib/consent"
+  import { getStoredConsent, onConsentChange, setConsent } from "@/lib/consent"
 
   const banner = document.getElementById("consent-banner")
-  const settings = document.getElementById("cookie-settings")
+  const settings = document.querySelector<HTMLButtonElement>(
+    "#cookie-settings button"
+  )
 
   if (banner) {
-    const open = () => (banner.hidden = false)
-    settings?.querySelector("button")?.addEventListener("click", open)
-    window.addEventListener("ntumods:open-consent", open)
+    let settingsOpen = false
+    const sync = () => {
+      banner.hidden = !settingsOpen && getStoredConsent() !== null
+    }
+    settings?.addEventListener("click", () => {
+      settingsOpen = true
+      sync()
+    })
+    if (settings) settings.hidden = false
+    onConsentChange(sync)
+    sync()
 
     for (const choice of ["denied", "granted"] as const) {
       banner
         .querySelector(`[data-consent="${choice}"]`)
         ?.addEventListener("click", () => {
+          settingsOpen = false
           setConsent(choice)
-          banner.hidden = true
         })
     }
-
-    void consentRequired().then((required) => {
-      if (!required) return
-      if (settings) settings.hidden = false
-      if (!getStoredConsent()) open()
-    })
   }
 </script>

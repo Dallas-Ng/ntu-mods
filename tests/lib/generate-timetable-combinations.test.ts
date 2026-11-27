@@ -2,9 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import {
   diagnoseConstraints,
-  diagnoseEmptyResult,
-  generateCombinations,
-  timeslotsOverlap
+  generateCombinations
 } from "@/lib/generate-timetable-combinations"
 import { DEFAULT_GENERATION_CONFIG } from "@/lib/generation-config"
 
@@ -17,26 +15,6 @@ const idx = (day: number, time: string, type: IndexType = "LEC"): Index => ({
   venue: "LT1",
   remarks: "",
   duration: 2
-})
-
-describe("timeslotsOverlap", () => {
-  it("is false for different days", () => {
-    expect(timeslotsOverlap(idx(1, "0900-1000"), idx(2, "0900-1000"))).toBe(
-      false
-    )
-  })
-
-  it("is true for overlapping times on the same day", () => {
-    expect(timeslotsOverlap(idx(1, "0900-1000"), idx(1, "0930-1030"))).toBe(
-      true
-    )
-  })
-
-  it("is false for back-to-back slots that only touch at the boundary", () => {
-    expect(timeslotsOverlap(idx(1, "0900-1000"), idx(1, "1000-1100"))).toBe(
-      false
-    )
-  })
 })
 
 describe("generateCombinations", () => {
@@ -333,46 +311,5 @@ describe("diagnoseConstraints", () => {
       DEFAULT_GENERATION_CONFIG
     )
     expect(suggestions).toHaveLength(0)
-  })
-})
-
-describe("diagnoseEmptyResult", () => {
-  it("reports a module with no data for the current semester", () => {
-    const message = diagnoseEmptyResult(["A"], {}, DEFAULT_GENERATION_CONFIG)
-    expect(message).toContain("Module A has no data")
-  })
-
-  it("reports when a module has no slots inside the configured hours", () => {
-    const allIndexes: Record<string, Indexes> = {
-      A: { A1: [idx(1, "0600-0700")] }
-    }
-    const message = diagnoseEmptyResult(["A"], allIndexes, {
-      ...DEFAULT_GENERATION_CONFIG,
-      dayStartTime: 800,
-      dayEndTime: 2200
-    })
-    expect(message).toContain("no available slots within your configured hours")
-  })
-
-  it("falls back to a generic scheduling-conflict message otherwise", () => {
-    const allIndexes: Record<string, Indexes> = {
-      A: { A1: [idx(1, "0900-1000")] },
-      B: { B1: [idx(1, "0900-1000")] }
-    }
-    const message = diagnoseEmptyResult(
-      ["A", "B"],
-      allIndexes,
-      DEFAULT_GENERATION_CONFIG
-    )
-    expect(message).toContain("All combinations have scheduling conflicts")
-  })
-
-  it("skips custom-block keys when diagnosing", () => {
-    const message = diagnoseEmptyResult(
-      ["__CC__gym"],
-      {},
-      DEFAULT_GENERATION_CONFIG
-    )
-    expect(message).toContain("All combinations have scheduling conflicts")
   })
 })

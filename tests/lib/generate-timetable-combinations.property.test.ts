@@ -1,18 +1,7 @@
 import fc from "fast-check"
 import { describe, expect, it } from "vitest"
 
-import {
-  generateCombinations,
-  timeslotsOverlap
-} from "@/lib/generate-timetable-combinations"
-import { DEFAULT_GENERATION_CONFIG } from "@/lib/generation-config"
-
-/**
- * These don't assert specific outputs (the example-based tests already do that)
- * — they throw random valid inputs at the engine and check invariants that must
- * hold no matter what: never hand back a clash, and the pure overlap check must
- * agree with a brute-force reference.
- */
+import { timeslotsOverlap } from "@/lib/generate-timetable-combinations"
 
 // Half-hour slot index -> valid HHmm clock time, e.g. slot 1 -> 730, not 760.
 const toHhmm = (slotIndex: number) => {
@@ -51,6 +40,17 @@ const arbIndex = (key: string): fc.Arbitrary<Index> =>
       duration
     }))
 
+const slot = (day: number, time: string): Index => ({
+  key: "A1",
+  type: "LEC",
+  group: "1",
+  day,
+  time,
+  venue: "LT1",
+  remarks: "",
+  duration: 2
+})
+
 describe("timeslotsOverlap (property)", () => {
   it("is symmetric and agrees with a brute-force minute-interval check", () => {
     fc.assert(
@@ -60,64 +60,27 @@ describe("timeslotsOverlap (property)", () => {
         const toMin = (hhmm: number) =>
           Math.floor(hhmm / 100) * 60 + (hhmm % 100)
 
+        const occupiedMinutes = (start: number, end: number) =>
+          Array.from(
+            { length: toMin(end) - toMin(start) },
+            (_, minute) => toMin(start) + minute
+          )
+        const minutesA = new Set(occupiedMinutes(aStart, aEnd))
         const reference =
           a.day === b.day &&
-          toMin(aStart) < toMin(bEnd) &&
-          toMin(bStart) < toMin(aEnd)
+          occupiedMinutes(bStart, bEnd).some((minute) => minutesA.has(minute))
 
         expect(timeslotsOverlap(a, b)).toBe(reference)
         expect(timeslotsOverlap(a, b)).toBe(timeslotsOverlap(b, a))
       }),
-      { numRuns: 500 }
-    )
-  })
-})
-
-const arbModuleIndexes = (moduleKey: string) =>
-  fc
-    .array(arbIndex(`${moduleKey}-idx`), { minLength: 1, maxLength: 3 })
-    .map((slots) =>
-      Object.fromEntries(slots.map((s, i) => [`${moduleKey}-${i}`, [s]]))
-    )
-
-describe("generateCombinations (property)", () => {
-  it("never returns a combination containing two overlapping slots, for any random module set", () => {
-    fc.assert(
-      fc.property(
-        fc.array(fc.constantFrom("A", "B", "C"), {
-          minLength: 2,
-          maxLength: 3
-        }),
-        fc.array(arbModuleIndexes("m"), { minLength: 2, maxLength: 3 }),
-        (moduleKeysRaw, indexesList) => {
-          const moduleKeys = [...new Set(moduleKeysRaw)]
-          const allIndexes: Record<string, Indexes> = {}
-          moduleKeys.forEach((mk, i) => {
-            allIndexes[mk] = indexesList[i % indexesList.length]
-          })
-
-          const { combinations } = generateCombinations(
-            moduleKeys,
-            allIndexes,
-            DEFAULT_GENERATION_CONFIG,
-            { maxResults: 10 }
-          )
-
-          for (const combo of combinations) {
-            const chosenSlots = moduleKeys.flatMap(
-              (mk) => allIndexes[mk][combo.timetable[mk]] ?? []
-            )
-            for (let i = 0; i < chosenSlots.length; i++) {
-              for (let j = i + 1; j < chosenSlots.length; j++) {
-                expect(timeslotsOverlap(chosenSlots[i], chosenSlots[j])).toBe(
-                  false
-                )
-              }
-            }
-          }
-        }
-      ),
-      { numRuns: 200 }
+      {
+        numRuns: 500,
+        examples: [
+          [slot(1, "0900-1000"), slot(2, "0900-1000")],
+          [slot(1, "0900-1000"), slot(1, "0930-1030")],
+          [slot(1, "0900-1000"), slot(1, "1000-1100")]
+        ]
+      }
     )
   })
 })

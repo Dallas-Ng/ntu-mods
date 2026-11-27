@@ -34,13 +34,22 @@ const parse = (body: string) =>
       : body
   )
 
-test("lists exactly the documented tools", async ({ request }) => {
+test("lists the public data tools through the deployed endpoint", async ({
+  request
+}) => {
   const res = await request.post("/mcp", rpc("tools/list"))
   expect(res.status()).toBe(200)
   const names = parse(await res.text()).result.tools.map(
     (t: { name: string }) => t.name
   )
-  expect(names).toEqual([...MCP_TOOL_NAMES])
+  expect(names.sort()).toEqual([
+    "get_exam",
+    "get_module",
+    "get_module_indexes",
+    "list_exams",
+    "list_semesters",
+    "search_modules"
+  ])
 })
 
 test("runs a tool", async ({ request }) => {

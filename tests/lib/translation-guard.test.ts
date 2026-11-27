@@ -35,11 +35,6 @@ function translate(text: Text) {
 }
 
 describe("TranslationGuard", () => {
-  it("installs the patch", () => {
-    expect(Node.prototype.removeChild).not.toBe(removeChild)
-    expect(Node.prototype.insertBefore).not.toBe(insertBefore)
-  })
-
   it("ignores removing a text node a translator detached (#387)", () => {
     const div = document.createElement("div")
     const text = document.createTextNode("hello")

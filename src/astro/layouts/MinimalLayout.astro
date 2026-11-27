@@ -99,6 +99,14 @@ const resolvedTitle =
   <body class="antialiased">
     <AppearanceStyleProvider client:load />
     <slot />
+    <footer id="cookie-settings" class="px-3 py-2 text-center">
+      <button
+        type="button"
+        hidden
+        class="text-muted-foreground hover:text-primary text-sm">
+        Cookie settings
+      </button>
+    </footer>
     <ConsentBanner />
     <MobileTracker client:idle />
     <WebMcpProvider client:idle />

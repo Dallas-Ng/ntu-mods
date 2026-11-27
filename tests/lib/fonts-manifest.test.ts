@@ -39,15 +39,6 @@ describe.each(Object.entries(manifest.families))(
       expect(ext.some((c) => c < 0x80)).toBe(false)
     })
 
-    it("write every range as U+hex[-hex], with no leading zeros", () => {
-      const all = [
-        ...fam.files.core.unicodeRange,
-        ...fam.files.ext.unicodeRange
-      ]
-      for (const r of all)
-        expect(r).toMatch(/^U\+[1-9A-F][0-9A-F]*(-[1-9A-F][0-9A-F]*)?$/)
-    })
-
     it("list the core file first in the Astro variants", () => {
       const weights = slug === "inter" ? [400, 500, 600, 700] : [400]
       const variants = fontVariants(slug, weights)

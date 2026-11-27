@@ -7,10 +7,10 @@ import { siteConfig } from "@/config/site"
 import { IS_PROD } from "@/lib/constants"
 import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
-import ConsentBanner from "@/components/consent-banner"
 import MobileTracker from "@/components/mobile-tracker"
 import WebMcpProvider from "@/components/webmcp-provider"
 import Analytics from "@/astro/components/Analytics.astro"
+import ConsentBanner from "@/astro/components/ConsentBanner.astro"
 import FontPreload from "@/astro/components/FontPreload.astro"
 import StaleChunkReload from "@/astro/components/StaleChunkReload.astro"
 import TranslationGuard from "@/astro/components/TranslationGuard.astro"
@@ -107,7 +107,7 @@ const resolvedTitle =
         Cookie settings
       </button>
     </footer>
-    <ConsentBanner client:idle />
+    <ConsentBanner />
     <MobileTracker client:idle />
     <WebMcpProvider client:idle />
     <Toaster client:idle position="top-center" />

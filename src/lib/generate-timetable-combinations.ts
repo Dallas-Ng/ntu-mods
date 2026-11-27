@@ -472,21 +472,3 @@ export function generateCombinations(
 
   return { combinations: results, truncated, duplicatesSkipped }
 }
-
-export function diagnoseEmptyResult(
-  moduleKeys: string[],
-  allIndexes: Record<string, Indexes>,
-  config: GenerationConfig
-): string {
-  for (const mk of moduleKeys) {
-    if (isCustomCourseKey(mk)) continue
-    if (!allIndexes[mk])
-      return `Module ${mk} has no data for the current semester.`
-    const hasValid = Object.values(allIndexes[mk]).some(
-      (slots) => !violatesHardConstraints(slots, config)
-    )
-    if (!hasValid)
-      return `${mk} has no available slots within your configured hours. Try extending day hours in Settings.`
-  }
-  return `All combinations have scheduling conflicts. If modules share lecture slots, use "Allow collisions" in Settings.`
-}

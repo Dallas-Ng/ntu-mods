@@ -25,13 +25,16 @@ describe("getFirstTsIndex", () => {
 })
 
 describe("generateTimetableMatrix", () => {
+  const nineAmRow = 2
+
   it("places a slot at its start row/day and extends it across its duration", () => {
     const { TABLE_MATRIX } = generateTimetableMatrix({
       A: [idx({ time: "0900-1000", duration: 2, day: 1 })]
     })
-    const startRow = getFirstTsIndex(idx({ time: "0900-1000" }))
-    expect(TABLE_MATRIX[startRow][0]).toHaveLength(1)
-    expect(TABLE_MATRIX[startRow + 1][0]).toHaveLength(1)
+    const occupiedRows = Object.entries(TABLE_MATRIX)
+      .filter(([, days]) => days[0].length > 0)
+      .map(([row]) => Number(row))
+    expect(occupiedRows).toEqual([2, 3])
   })
 
   it("collapses duplicate lectures at the same slot across different venues", () => {
@@ -40,10 +43,9 @@ describe("generateTimetableMatrix", () => {
       B: [idx({ key: "A2", venue: "LT2" })]
     }
     const { TABLE_MATRIX } = generateTimetableMatrix(moduleIndexes)
-    const row = getFirstTsIndex(idx())
     // both lectures share a slot -> collapsed to a single "Multiple Venues" entry
-    expect(TABLE_MATRIX[row][0]).toHaveLength(1)
-    expect(TABLE_MATRIX[row][0][0].venue).toBe("Multiple Venues")
+    expect(TABLE_MATRIX[nineAmRow][0]).toHaveLength(1)
+    expect(TABLE_MATRIX[nineAmRow][0][0].venue).toBe("Multiple Venues")
   })
 
   it("keeps non-lecture slots even when they share a timeslot with others", () => {
@@ -52,8 +54,7 @@ describe("generateTimetableMatrix", () => {
       B: [idx({ key: "B1", type: "TUT" })]
     }
     const { TABLE_MATRIX } = generateTimetableMatrix(moduleIndexes)
-    const row = getFirstTsIndex(idx())
-    expect(TABLE_MATRIX[row][0]).toHaveLength(2)
+    expect(TABLE_MATRIX[nineAmRow][0]).toHaveLength(2)
   })
 
   it("folds same-slot variations of one index into a single entry", () => {
@@ -75,10 +76,9 @@ describe("generateTimetableMatrix", () => {
     }
     const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS } =
       generateTimetableMatrix(moduleIndexes)
-    const row = getFirstTsIndex(idx())
-    expect(TABLE_MATRIX[row][0]).toHaveLength(1)
-    expect(TABLE_MATRIX[row][0][0].venue).toBe("S4-SR21, ONLINE")
-    expect(TABLE_MATRIX[row][0][0].remarks).toBe(
+    expect(TABLE_MATRIX[nineAmRow][0]).toHaveLength(1)
+    expect(TABLE_MATRIX[nineAmRow][0][0].venue).toBe("S4-SR21, ONLINE")
+    expect(TABLE_MATRIX[nineAmRow][0][0].remarks).toBe(
       "Teaching Wk1-9,11-13, Teaching Wk10"
     )
     expect(TABLE_MAX_DAY_COLUMNS[1]).toBe(1)
@@ -94,7 +94,7 @@ describe("generateTimetableMatrix", () => {
     }
     const { TABLE_MATRIX, TABLE_MAX_DAY_COLUMNS } =
       generateTimetableMatrix(moduleIndexes)
-    const cell = TABLE_MATRIX[getFirstTsIndex(idx())][0]
+    const cell = TABLE_MATRIX[nineAmRow][0]
     expect(cell).toHaveLength(1)
     expect(cell[0].venue).toBe("LT2A, ONLINE, LKC-LT")
     expect(TABLE_MAX_DAY_COLUMNS[1]).toBe(1)
@@ -105,7 +105,7 @@ describe("generateTimetableMatrix", () => {
       A: [idx({ key: "A1", type: "TUT" }), idx({ key: "A2", type: "TUT" })]
     }
     const { TABLE_MATRIX } = generateTimetableMatrix(moduleIndexes)
-    expect(TABLE_MATRIX[getFirstTsIndex(idx())][0]).toHaveLength(2)
+    expect(TABLE_MATRIX[nineAmRow][0]).toHaveLength(2)
   })
 
   it("skips slots with no fixed day", () => {

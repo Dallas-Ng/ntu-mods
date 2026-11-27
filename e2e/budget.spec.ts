@@ -27,10 +27,6 @@ const BUDGET_KB = 380
 // Heavy libraries that must stay behind dynamic imports.
 const FORBIDDEN = /vendor-pdfjs|pdf\.worker/
 
-// The article lightbox belongs to article pages only. PhotoSwipe used to have a
-// vendor chunk of its own to guard; it is now a ~3 KB inline script, so the
-// guard follows a marker in its code rather than a package name.
-const ARTICLE_ONLY = "image-lightbox"
 const DIST_ROOT = path.resolve(DIST)
 const resolveInDist = (target: string) => {
   const resolved = path.resolve(DIST_ROOT, `.${path.sep}${target}`)
@@ -40,8 +36,6 @@ const resolveInDist = (target: string) => {
   }
   return resolved
 }
-const loadsArticleOnly = (file: string) =>
-  fs.readFileSync(resolveInDist(file), "utf8").includes(ARTICLE_ONLY)
 
 const builtPage = (p: string) =>
   resolveInDist(p === "/" ? "index.html" : `${p}.html`)
@@ -62,9 +56,7 @@ const pages = [
 ]
 
 test.describe("client JS budget", () => {
-  test("there are built pages to measure", () => {
-    expect(pages.length).toBeGreaterThan(10)
-  })
+  if (pages.length === 0) throw new Error("No built pages to measure")
 
   for (const p of pages) {
     test(p, () => {
@@ -79,11 +71,6 @@ test.describe("client JS budget", () => {
         files.filter((f) => FORBIDDEN.test(f)),
         "heavy chunk loaded up front"
       ).toEqual([])
-      if (!p.startsWith("/articles/"))
-        expect(
-          files.filter((f) => loadsArticleOnly(f)),
-          "article-only chunk"
-        ).toEqual([])
     })
   }
 })

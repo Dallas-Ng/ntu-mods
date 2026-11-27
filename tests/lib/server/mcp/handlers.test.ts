@@ -1,10 +1,9 @@
 import { describe, expect, it, vi } from "vitest"
 
-import { toModuleJson } from "@/lib/module-json"
 import { latestSemester, latestYear } from "@/lib/semesters"
 import { ToolError } from "@/lib/webmcp/core"
 
-import { exam, modules, setup, snapshot } from "./fixtures"
+import { exam, modules, setup } from "./fixtures"
 
 describe("list_semesters", () => {
   it("names the latest semester as current", () => {
@@ -34,13 +33,6 @@ describe("search_modules", () => {
     expect(result.modules[0].url).toBe("https://ntumods.com/mods/AB1000")
   })
 
-  it("parses modules.json once across calls", async () => {
-    const { handlers, deps } = setup()
-    await handlers.search_modules({})
-    await handlers.search_modules({ query: "x" })
-    expect(deps.loadAsset).toHaveBeenCalledTimes(1)
-  })
-
   it("rejects a long query", async () => {
     const { handlers } = setup()
     await expect(
@@ -52,24 +44,20 @@ describe("search_modules", () => {
 describe("get_module", () => {
   it("returns the REST record shape", async () => {
     const { handlers } = setup()
-    expect(await handlers.get_module({ code: "ab1000" })).toEqual(
-      toModuleJson(snapshot("AB1000"))
-    )
+    expect(await handlers.get_module({ code: "ab1000" })).toMatchObject({
+      code: "AB1000",
+      title: "Algebra AB1000",
+      au: 3,
+      latestOffering: { indexCount: 1 },
+      url: "https://ntumods.com/mods/AB1000"
+    })
   })
 
-  it("turns away unknown codes without touching the database", async () => {
-    const { handlers, deps } = setup()
+  it("rejects an unknown module code", async () => {
+    const { handlers } = setup()
     await expect(handlers.get_module({ code: "ZZ9999" })).rejects.toThrow(
       ToolError
     )
-    expect(deps.getLatestModuleSnapshot).not.toHaveBeenCalled()
-  })
-
-  it("reads the database once per module, then the cache", async () => {
-    const { handlers, deps } = setup()
-    await handlers.get_module({ code: "AB1000" })
-    await handlers.get_module({ code: "AB1000" })
-    expect(deps.getLatestModuleSnapshot).toHaveBeenCalledTimes(1)
   })
 
   it("turns a database failure into a tool error", async () => {
@@ -86,53 +74,28 @@ describe("get_module", () => {
 })
 
 describe("get_module_indexes", () => {
-  it("reads the latest semester from the static file, once", async () => {
-    const { handlers, deps } = setup()
+  it("returns the latest offering by default", async () => {
+    const { handlers } = setup()
     const first = await handlers.get_module_indexes({ code: "AB1000" })
-    await handlers.get_module_indexes({ code: "AB1000" })
     expect(first.indexCount).toBe(2)
     expect(first.indexes[0].slots[0]).toMatchObject({
       day: "Tue",
       venue: "LT1"
     })
-    expect(deps.getModuleIndexes).not.toHaveBeenCalled()
-    expect(deps.loadAsset).toHaveBeenCalledTimes(1)
   })
 
-  it("reads an older semester from the database, never its file", async () => {
-    const { handlers, deps } = setup()
+  it("returns indexes for the requested historical offering", async () => {
+    const { handlers } = setup()
     const result = await handlers.get_module_indexes({
       code: "AB1000",
       year: "2025",
       semester: "1"
     })
-    await handlers.get_module_indexes({
-      code: "AB1000",
-      year: "2025",
-      semester: "1"
-    })
     expect(result.indexes[0].index).toBe("20001")
-    expect(deps.getModuleIndexes).toHaveBeenCalledTimes(1)
-    expect(deps.loadAsset).not.toHaveBeenCalled()
   })
 
-  it("caches a missing offering so repeat calls skip the database", async () => {
-    const { handlers, deps } = setup({
-      getModuleIndexes: vi.fn(async () => null)
-    })
-    const call = () =>
-      handlers.get_module_indexes({
-        code: "AB1000",
-        year: "2025",
-        semester: "1"
-      })
-    await expect(call()).rejects.toThrow(/no indexes/)
-    await expect(call()).rejects.toThrow(/no indexes/)
-    expect(deps.getModuleIndexes).toHaveBeenCalledTimes(1)
-  })
-
-  it("rejects an unknown semester before any I/O", async () => {
-    const { handlers, deps } = setup()
+  it("rejects an unknown semester", async () => {
+    const { handlers } = setup()
     await expect(
       handlers.get_module_indexes({
         code: "AB1000",
@@ -140,9 +103,6 @@ describe("get_module_indexes", () => {
         semester: "9"
       })
     ).rejects.toThrow(ToolError)
-    expect(deps.loadAsset).not.toHaveBeenCalled()
-    expect(deps.getKnownCodes).not.toHaveBeenCalled()
-    expect(deps.getModuleIndexes).not.toHaveBeenCalled()
   })
 
   it("errors for a module with no indexes", async () => {

@@ -9,7 +9,10 @@ const TermsContent = () => {
   return (
     <Container size="sm" className="space-y-8">
       <div>
-        <Header title="Terms of Use" subtitle="Last updated: 23 October 2026" />
+        <Header
+          title="Terms of Use"
+          subtitle="Last updated: 27 November 2026"
+        />
       </div>
 
       <p className="text-sm">
@@ -73,10 +76,8 @@ const TermsContent = () => {
 
         <p>
           Your timetable and settings are stored in your browser. How we handle
-          analytics, cookies and consent, including the opt-in banner shown in
-          regions that require it, is described in the{" "}
-          <TextLink href="/privacy">Privacy Policy</TextLink>, which forms part
-          of these terms.
+          analytics, cookies and your choices is described in the{" "}
+          <TextLink href="/privacy">Privacy Policy</TextLink>.
         </p>
       </section>
 

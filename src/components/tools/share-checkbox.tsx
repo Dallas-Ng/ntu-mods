@@ -15,9 +15,9 @@ export function ShareCheckbox({
         className="mt-0.5"
       />
       <span>
-        Share anonymised module codes, terms and grades to help improve NTU
-        Mods. Your name and matric number are never read or sent. Untick to opt
-        out.
+        Share module codes, terms, academic units and grades to help improve
+        NTUMods. This requires analytics consent. The shared data excludes your
+        name and matriculation number.
       </span>
     </label>
   )

@@ -10,7 +10,7 @@ const PrivacyContent = () => {
       <div>
         <Header
           title="Privacy Policy"
-          subtitle="Last updated: 23 October 2026"
+          subtitle="Last updated: 27 November 2026"
         />
       </div>
 
@@ -39,9 +39,8 @@ const PrivacyContent = () => {
           Your timetable selections, academic year/semester preferences, and
           display settings are saved in your browser&apos;s{" "}
           <strong>localStorage</strong>. This data is not transmitted to our
-          servers, except when submitting the feedback form (see below), where
-          it is attached by default to help us debug your issue. You can clear
-          it at any time by clearing your browser&apos;s site data.
+          servers unless you choose to attach it when submitting feedback. You
+          can clear it at any time by clearing your browser&apos;s site data.
         </p>
 
         <SectionHeading as="h3" id="analytics" className="mt-4">
@@ -50,9 +49,8 @@ const PrivacyContent = () => {
 
         <p>
           We use two third-party analytics services on the production site to
-          understand how the Service is used and to improve it. Where the law
-          requires your consent (see Consent below), they stay switched off
-          until you accept.
+          understand how the Service is used and to improve it. They stay
+          switched off until you accept analytics, wherever you visit from.
         </p>
 
         <p>
@@ -116,8 +114,8 @@ const PrivacyContent = () => {
           To show how many people have read an article, we store the
           article&apos;s name and a random visitor ID (the same ID PostHog uses,
           when it has one) in our own database. It is used only to count unique
-          readers. Where consent is required, the ID is only created and view
-          counts are only recorded after you accept analytics.
+          readers. We only read or create that ID and record a view after you
+          accept analytics.
         </p>
 
         <SectionHeading as="h3" className="mt-4">
@@ -126,15 +124,14 @@ const PrivacyContent = () => {
 
         <p>
           Transcript PDFs are read entirely in your browser, and the file itself
-          is never uploaded. By default, the &quot;Share anonymised module
-          codes, terms and grades&quot; box is ticked. While it is ticked, we
-          also record, via PostHog, the module code, term, AU and grade of each
-          module on your transcript. Untick the box before uploading to opt out.
-          We never read or collect your name, matriculation number, programme or
-          the PDF file name. We do not link a list of modules and grades to your
-          identity, but it could in principle identify you to someone who
-          already knows your results. If you opt out, we only record counts and
-          flags, such as how many modules were found.
+          is never uploaded. If you accept analytics and tick the box to share
+          transcript details, PostHog receives the module code, term, academic
+          units and grade for each module on your transcript. The shared data
+          excludes your name, matriculation number, programme and PDF file name.
+          We do not link a list of modules and grades to your identity, but it
+          could in principle identify you to someone who already knows your
+          results. If you accept analytics and leave the box unticked, we only
+          record counts and flags, such as how many modules were found.
         </p>
 
         <SectionHeading as="h3" className="mt-4">
@@ -207,9 +204,7 @@ const PrivacyContent = () => {
             Your email address (optional, only if you choose to provide it)
           </li>
           <li>
-            The full contents of your browser&apos;s localStorage for this site
-            (your saved timetables, settings, and favourites), included by
-            default to help us debug your issue; you can turn this off with the
+            Your timetables, settings and favourites, if you turn on the
             &quot;Include my timetable data&quot; toggle before submitting
           </li>
         </ul>
@@ -221,7 +216,8 @@ const PrivacyContent = () => {
           feedback. We do not use it for marketing or share it with third
           parties. We also record, via PostHog, that a submission happened,
           along with its length, the page it was sent from and whether an email
-          address was included, but not the message itself.
+          address was included, but not the message itself, if you accept
+          analytics. The email to the maintainer can include your PostHog ID.
         </p>
 
         <SectionHeading as="h3" className="mt-4">
@@ -287,7 +283,10 @@ const PrivacyContent = () => {
           Like most web services, our hosting provider (Cloudflare) may
           automatically collect standard server logs, including IP addresses and
           request metadata, for operational and security purposes. This includes
-          requests to the public API and open data files.
+          requests to the public API and open data files. We also send technical
+          error reports from our servers to PostHog for troubleshooting. Server
+          logs and server error reports operate independently of your browser
+          analytics choice.
         </p>
       </section>
 
@@ -323,36 +322,26 @@ const PrivacyContent = () => {
         <SectionHeading>Consent</SectionHeading>
 
         <p>
-          If you visit from the European Economic Area, the United Kingdom,
-          Switzerland, Brazil, South Korea or Quebec, where the law requires
-          your opt-in before analytics cookies or similar technologies are used,
-          we show a banner. Google Analytics and PostHog are not loaded, and
-          nothing is sent to them, until you press Accept. Reject and Accept are
-          given equal weight, and the Service works the same either way.
-        </p>
-
-        <p>
-          We detect your country from your IP address at the edge (Cloudflare)
-          to decide whether to show the banner. The result is not stored. If we
-          cannot tell where you are, we show the banner. In other places,
-          including Singapore, analytics run without a banner, on the basis
-          described in this policy.
+          We show the analytics cookie banner worldwide. Google Analytics,
+          PostHog browser analytics and unique article view counting stay
+          switched off until you select Accept analytics. You can use the site
+          after selecting Reject analytics.
         </p>
 
         <p>
           Your choice is saved in your browser&apos;s localStorage. You can
           change or withdraw it at any time through{" "}
-          <strong>Cookie settings</strong> in the footer (shown wherever consent
-          is required). Withdrawing stops further collection; cookies already
-          set stay in your browser until you clear them. Withdrawing does not
-          affect the processing done before.
+          <strong>Cookie settings</strong> in the footer. Withdrawing stops new
+          browser analytics events and article view counting. Requests already
+          started may still complete. You can clear any remaining cookies and
+          identifiers in your browser settings.
         </p>
 
         <p>
-          Our legal bases are your consent where it is required, and otherwise
-          our legitimate interest in understanding and improving a free service.
-          Operating the Service itself, such as keeping your timetable in
-          localStorage, needs no consent.
+          We rely on your consent for optional browser analytics. We use browser
+          storage to provide features you request, such as saving your
+          timetable, applying your display settings and remembering your
+          analytics choice.
         </p>
       </section>
 
@@ -363,9 +352,9 @@ const PrivacyContent = () => {
           We do not set our own cookies. Google Analytics sets cookies, and
           PostHog stores a random identifier in a cookie and in your
           browser&apos;s localStorage, to distinguish visitors and sessions.
-          Both are only set after you accept where consent is required. You can
-          also block or clear them through your browser settings or with an
-          extension that blocks analytics trackers.
+          Both are only set after you accept analytics. You can also block or
+          clear them through your browser settings or with an extension that
+          blocks analytics trackers.
         </p>
       </section>
 
@@ -373,11 +362,11 @@ const PrivacyContent = () => {
         <SectionHeading>International transfers</SectionHeading>
 
         <p>
-          Google, PostHog (United States) and Cloudflare process data in
+          Google, PostHog (United States), Cloudflare and Resend process data in
           countries that may differ from yours, including outside the EEA, the
-          UK and Switzerland. Where required, transfers rely on the safeguards
-          those providers offer, such as the EU-US Data Privacy Framework or
-          standard contractual clauses.
+          UK and Switzerland. You can ask the maintainer about international
+          transfers through the{" "}
+          <TextLink href="/feedback">feedback page</TextLink>.
         </p>
       </section>
 
@@ -454,8 +443,7 @@ const PrivacyContent = () => {
         <p>
           We may update this Privacy Policy from time to time. Changes will be
           reflected by the &quot;Last updated&quot; date at the top of this
-          page. Continued use of the Service after changes are posted
-          constitutes your acceptance of the updated policy.
+          page.
         </p>
       </section>
     </Container>

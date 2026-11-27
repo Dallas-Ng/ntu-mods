@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 
 import { reportError, track } from "@/lib/analytics"
-import { consentState } from "@/lib/consent"
+import { whenConsented } from "@/lib/consent"
 
 const VISITOR_KEY = "ntumods-visitor-id"
 const POSTHOG_STORE = `ph_${import.meta.env.PUBLIC_POSTHOG_TOKEN}_posthog`
@@ -52,17 +52,7 @@ const ArticleViewTracker = ({ slug }: { slug: string }) => {
   const [views, setViews] = useState<number | null>(null)
 
   useEffect(() => {
-    track("article_viewed", { article_slug: slug })
-
     let ignore = false
-    // The visitor ID is stored on the device, so it needs the same consent
-    // as analytics where that is required.
-    void consentState().then((state) => {
-      if (ignore || state !== "granted") return
-      const visitorId = getVisitorId()
-      if (!visitorId) return
-      count(visitorId)
-    })
 
     const count = (visitorId: string) =>
       fetch("/api/article-views", {
@@ -80,8 +70,14 @@ const ArticleViewTracker = ({ slug }: { slug: string }) => {
         .catch((e) => {
           if (!ignore) reportError("article_views_post", e, { slug })
         })
+    const unsubscribe = whenConsented(() => {
+      track("article_viewed", { article_slug: slug })
+      const visitorId = getVisitorId()
+      if (visitorId) void count(visitorId)
+    })
     return () => {
       ignore = true
+      unsubscribe()
     }
   }, [slug])
 

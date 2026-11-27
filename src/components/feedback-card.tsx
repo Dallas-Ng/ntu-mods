@@ -12,6 +12,7 @@ import {
   validateFeedback
 } from "@/lib/feedback"
 import { cn } from "@/lib/utils"
+import { useBoundState } from "@/state/bound.state"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -29,7 +30,7 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [feedback, setFeedback] = useState("")
-  const [includeLocalData, setIncludeLocalData] = useState(true)
+  const [includeLocalData, setIncludeLocalData] = useState(false)
   const [feedbackError, setFeedbackError] = useState<string>()
 
   // Stable ids so every label, description and error message is wired to its
@@ -77,21 +78,14 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
     setFeedbackError(undefined)
     setLoading(true)
 
-    const localData = values.includeLocalData
-      ? Object.fromEntries(
-          Object.keys(localStorage).map((key) => [
-            key,
-            localStorage.getItem(key)
-          ])
-        )
-      : undefined
-
     const body = {
       author: values.email || "anon",
       feedback: values.feedback,
       category: "feedback",
       url: window.location.href,
-      localData: localData ? JSON.stringify(localData) : undefined
+      localData: values.includeLocalData
+        ? JSON.stringify(useBoundState.getState())
+        : undefined
     }
 
     // fetch only rejects on network failure, a 500 (bad Resend key, say)
@@ -137,7 +131,7 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
 
       setEmail("")
       setFeedback("")
-      setIncludeLocalData(true)
+      setIncludeLocalData(false)
     } catch (e) {
       // Toast already surfaced it; keep the input so it isn't retyped.
       reportError("feedback_submit", e)
@@ -194,8 +188,8 @@ const FeedbackCard = ({ divClassName, starter }: Props) => {
             <p
               id={localDataDescriptionId}
               className="text-muted-foreground text-sm text-pretty">
-              Attaches your saved timetables and settings to help debug the
-              issue. On by default, turn off to exclude it.
+              Attaches your timetables, settings and favourites to help debug
+              the issue.
             </p>
           </div>
           <Switch

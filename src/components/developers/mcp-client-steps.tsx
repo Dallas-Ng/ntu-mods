@@ -1,12 +1,14 @@
 "use client"
 
 import { Code } from "@/components/developers/code"
+import { SectionHeading } from "@/components/header"
+import HeadingAnchor from "@/components/heading-anchor"
 
 type Block =
   | { steps: React.ReactNode[] }
   | { code: string; lang: string; title?: string }
   | { note: React.ReactNode }
-  | { heading: string }
+  | { heading: string; id: string }
 
 type Props = {
   mcpUrl: string
@@ -35,9 +37,10 @@ const Blocks = ({ blocks }: { blocks: Block[] }) => (
       ) : "code" in b ? (
         <Code key={i} code={b.code} lang={b.lang} title={b.title} />
       ) : "heading" in b ? (
-        <h3 key={i} className="pt-2">
+        <SectionHeading key={i} id={b.id} className="pt-2">
           {b.heading}
-        </h3>
+          <HeadingAnchor id={b.id} label={b.heading} />
+        </SectionHeading>
       ) : (
         <p key={i} className="text-muted-foreground text-sm">
           {b.note}
@@ -113,7 +116,7 @@ const McpClientSteps = ({ id, ...p }: Props & { id: string }) => {
       id: "chatgpt-codex",
       label: "ChatGPT & Codex",
       blocks: [
-        { heading: "ChatGPT" },
+        { heading: "ChatGPT", id: "chatgpt" },
         {
           note: "ChatGPT on the web adds a server by URL through Developer mode, which OpenAI limits to some plans."
         },
@@ -133,7 +136,7 @@ const McpClientSteps = ({ id, ...p }: Props & { id: string }) => {
         {
           note: "OpenAI renames these menus often and its own docs no longer describe this path, so look for the words above if the layout differs. If you cannot find Developer mode, use the Codex steps below, or wait for the official ChatGPT listing."
         },
-        { heading: "Codex" },
+        { heading: "Codex", id: "codex" },
         { steps: ["Run this command in your terminal."] },
         { code: p.codexCommand, lang: "bash" },
         {

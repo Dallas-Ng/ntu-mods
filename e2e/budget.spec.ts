@@ -25,7 +25,7 @@ import { DIST, sample, sitemapPaths } from "./lib/urls"
 const BUDGET_KB = 380
 
 // Heavy libraries that must stay behind dynamic imports.
-const FORBIDDEN = /vendor-pdfjs|pdf\.worker/
+const FORBIDDEN = /\/(?:pdf[.-]|pdfjs[.-]|vendor-pdfjs)/
 
 // The article lightbox belongs to article pages only. PhotoSwipe used to have a
 // vendor chunk of its own to guard; it is now a ~3 KB inline script, so the

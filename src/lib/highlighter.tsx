@@ -30,7 +30,15 @@ function getHighlighter() {
   highlighter ??= createHighlighterCore({
     themes: [
       import("shiki/themes/github-light.mjs"),
-      import("shiki/themes/github-dark.mjs")
+      import("shiki/themes/github-dark.mjs").then(({ default: theme }) => ({
+        ...theme,
+        // The default comment grey is too dark on our code block background.
+        tokenColors: theme.tokenColors?.map((rule) =>
+          rule.settings.foreground === "#6a737d"
+            ? { ...rule, settings: { ...rule.settings, foreground: "#8b949e" } }
+            : rule
+        )
+      }))
     ],
     langs: [],
     engine: createJavaScriptRegexEngine({ forgiving: true })

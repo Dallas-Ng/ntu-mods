@@ -4,6 +4,7 @@ import { useState } from "react"
 import { FileUp, Lock, Upload } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { useHydrated } from "@/hooks/use-hydrated"
 import { Button } from "@/components/ui/button"
 import { TextLink } from "@/components/ui/text-link"
 import { ShareCheckbox } from "@/components/tools/share-checkbox"
@@ -38,6 +39,8 @@ export function TranscriptDropzone({
   description
 }: Props) {
   const [dragging, setDragging] = useState(false)
+  // The server-rendered buttons are visible before the file handlers attach.
+  const hydrated = useHydrated()
 
   return (
     <div
@@ -67,10 +70,13 @@ export function TranscriptDropzone({
         </p>
       </div>
       <div className="flex flex-wrap items-center justify-center gap-3">
-        <Button disabled={busy} onClick={onChoose}>
+        <Button disabled={busy || !hydrated} onClick={onChoose}>
           <Upload /> Choose PDF
         </Button>
-        <Button variant="outline" disabled={busy} onClick={onSample}>
+        <Button
+          variant="outline"
+          disabled={busy || !hydrated}
+          onClick={onSample}>
           Try with sample data
         </Button>
       </div>

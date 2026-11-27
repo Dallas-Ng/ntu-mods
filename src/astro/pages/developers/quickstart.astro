@@ -1,8 +1,8 @@
 ---
 import { siteConfig } from "@/config/site"
 import { getLatestExamSemester, getLatestSemester } from "@/lib/server/db/repo"
-import { Code } from "@/components/developers/code"
 import HeadingAnchor from "@/components/heading-anchor"
+import StaticCode from "@/astro/components/StaticCode.astro"
 import DevDocsLayout from "@/astro/layouts/DevDocsLayout.astro"
 
 export const prerender = true
@@ -30,13 +30,12 @@ const base = siteConfig.url
     <p>
       Ask for a module by its code. Use capital letters, with no query string.
     </p>
-    <Code client:visible lang="bash" code={`curl ${base}/api/modules/SC1004`} />
+    <StaticCode lang="bash" code={`curl ${base}/api/modules/SC1004`} />
     <p>
       You get one JSON object with the title, AU, description, prerequisites,
       the semesters it was offered and its exam. Or in JavaScript:
     </p>
-    <Code
-      client:visible
+    <StaticCode
       lang="javascript"
       code={`const res = await fetch("${base}/api/modules/SC1004")
 const module = await res.json()
@@ -53,8 +52,7 @@ console.log(module.title, module.au)`}
       For many modules, download the whole list once and search it yourself. Do
       not call the module API in a loop.
     </p>
-    <Code
-      client:visible
+    <StaticCode
       lang="bash"
       code={`curl -O ${base}/data/api/modules.json
 
@@ -74,8 +72,7 @@ jq '.modules[] | select(.faculty == "CSC") | .code' modules.json`}
       >. The latest semester with classes is <code>{sem}</code>, and the latest
       with an exam timetable is <code>{examSem}</code>.
     </p>
-    <Code
-      client:visible
+    <StaticCode
       lang="bash"
       code={`# every class index of SC1004 this semester
 curl -s ${base}/data/api/indexes/${sem}.json | jq '.SC1004'

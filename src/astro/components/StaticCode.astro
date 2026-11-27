@@ -1,0 +1,42 @@
+---
+import { createElement, Fragment as ReactFragment } from "react"
+import { renderToStaticMarkup } from "react-dom/server"
+
+import { highlightCode } from "@/lib/highlighter"
+import {
+  CodeBlock,
+  CodeBlockActions,
+  CodeBlockContent,
+  CodeBlockCopyButton,
+  CodeBlockLine
+} from "@/components/ui/code-block"
+
+interface Props {
+  code: string
+  lang: string
+}
+
+const { code, lang } = Astro.props
+const source = code.replace(/\n$/, "")
+const lines = (await highlightCode(source, lang)) ?? source.split("\n")
+---
+
+<CodeBlock>
+  <CodeBlockActions className="absolute top-2 right-2 z-10">
+    <CodeBlockCopyButton client:visible value={code} />
+  </CodeBlockActions>
+  <CodeBlockContent className="max-h-96">
+    {
+      lines.map((line) => (
+        <CodeBlockLine>
+          <Fragment
+            set:html={
+              renderToStaticMarkup(createElement(ReactFragment, null, line)) ||
+              "\n"
+            }
+          />
+        </CodeBlockLine>
+      ))
+    }
+  </CodeBlockContent>
+</CodeBlock>

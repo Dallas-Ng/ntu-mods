@@ -82,7 +82,7 @@ const ScreenshotPageInner = () => {
   }
 
   return (
-    <div
+    <main
       className="bg-muted relative z-[1] flex h-[100svh] w-screen items-center justify-center overflow-hidden p-3 sm:p-6"
       onClick={() => !showControls && setShowControls(true)}>
       {!hasTimetable ? (
@@ -229,7 +229,7 @@ const ScreenshotPageInner = () => {
           </div>
         </div>
       )}
-    </div>
+    </main>
   )
 }
 

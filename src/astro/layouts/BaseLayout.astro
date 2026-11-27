@@ -9,7 +9,6 @@ import { BUILD_ENV, IS_PROD } from "@/lib/constants"
 import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import { Banner, BANNER_ID } from "@/components/banner"
-import ConsentBanner from "@/components/consent-banner"
 import Container from "@/components/container"
 import FeedbackSection from "@/components/feedback-section"
 import Footer from "@/components/footer"
@@ -17,6 +16,7 @@ import MobileTracker from "@/components/mobile-tracker"
 import Navbar from "@/components/navbar"
 import WebMcpProvider from "@/components/webmcp-provider"
 import Analytics from "@/astro/components/Analytics.astro"
+import ConsentBanner from "@/astro/components/ConsentBanner.astro"
 import FontPreload from "@/astro/components/FontPreload.astro"
 import StaleChunkReload from "@/astro/components/StaleChunkReload.astro"
 import TranslationGuard from "@/astro/components/TranslationGuard.astro"
@@ -41,8 +41,6 @@ interface Props {
   noindex?: boolean
   /** Set for articles; emits og:type=article plus article:* times. */
   article?: { publishedTime: string; modifiedTime?: string }
-  /** Tool pages with many fields: stop iOS zooming in on focus. */
-  lockZoom?: boolean
   /**
    * Pages that draw ArticleThumb: preload the handwriting font so it does not
    * swap in late.
@@ -63,7 +61,6 @@ const {
   noTitleSuffix = false,
   noindex = false,
   article,
-  lockZoom = false,
   handFont = false
 } = Astro.props
 
@@ -92,10 +89,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
 <html lang="en" data-scroll-behavior="smooth">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content={`width=device-width, initial-scale=1${lockZoom ? ", maximum-scale=1" : ""}`}
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{resolvedTitle}</title>
     <meta name="description" content={description} />
     <meta name="keywords" content={keywords} />
@@ -221,7 +215,7 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
       {showFeedback && <FeedbackSection client:visible />}
       <Footer />
     </div>
-    <ConsentBanner client:idle />
+    <ConsentBanner />
     <MobileTracker client:idle />
     <WebMcpProvider client:idle />
     <Toaster client:idle position="top-center" />

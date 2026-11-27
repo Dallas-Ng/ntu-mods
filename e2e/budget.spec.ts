@@ -25,7 +25,7 @@ import { DIST, sample, sitemapPaths } from "./lib/urls"
 const BUDGET_KB = 380
 
 // Heavy libraries that must stay behind dynamic imports.
-const FORBIDDEN = /vendor-pdfjs|pdf\.worker/
+const FORBIDDEN = /\/(?:pdf[.-]|pdfjs[.-]|vendor-pdfjs)/
 
 const DIST_ROOT = path.resolve(DIST)
 const resolveInDist = (target: string) => {

@@ -104,15 +104,6 @@ jobs:
         if: steps.changes.outputs.code == 'true' && steps.deps.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile --prefer-offline --ignore-scripts
 
-      # Cheap and fail-fast: a lint or formatting break stops the run before
-      # the browser install, build and D1 seed start. Hooks run the same
-      # commands locally, but they can be skipped with --no-verify.
-      - name: Lint and format check
-        if: steps.changes.outputs.code == 'true' && github.event_name == 'pull_request'
-        run: |
-          pnpm lint
-          pnpm format:check
-
       # Browser binaries are keyed on the Playwright version; system libs are
       # not cacheable, so install-deps still runs on a hit. Headless shell only:
       # the tests never run headed, and it is a much smaller download.
@@ -156,26 +147,31 @@ jobs:
           fi
           for p in $pids; do wait "$p"; done
 
-      # PRs: Chromium install, build, seed and vitest are independent (the build
-      # writes dist/, the seed writes .wrangler/state), so run them side by side.
-      - name: Install Chromium, build, seed D1 and run unit tests
+      # Start Chromium setup alongside lint. A failed check still prevents
+      # the build, seed and unit tests from starting.
+      - name: Check code, install Chromium, build, seed D1 and run unit tests
         if: steps.changes.outputs.code == 'true' && github.event_name == 'pull_request'
         env:
           BROWSERS_CACHED: ${{ steps.browsers.outputs.cache-hit }}
           D1_CACHED: ${{ steps.d1.outputs.cache-hit }}
         run: |
-          # The runner's Microsoft prod feed can return 403 during apt update.
-          # Chromium's system libraries come from Ubuntu's own repositories.
-          for source in /etc/apt/sources.list.d/*.{list,sources}; do
-            if [ -f "$source" ] && grep -Fq 'https://packages.microsoft.com/' "$source"; then
-              sudo mv -- "$source" "$source.disabled"
+          (
+            # The runner's Microsoft prod feed can return 403 during apt update.
+            # Chromium's system libraries come from Ubuntu's own repositories.
+            for source in /etc/apt/sources.list.d/*.{list,sources}; do
+              if [ -f "$source" ] && grep -Fq 'https://packages.microsoft.com/' "$source"; then
+                sudo mv -- "$source" "$source.disabled"
+              fi
+            done
+            if [ "$BROWSERS_CACHED" = "true" ]; then
+              npx playwright install-deps chromium
+            else
+              npx playwright install --with-deps --only-shell chromium
             fi
-          done
-          if [ "$BROWSERS_CACHED" = "true" ]; then
-            npx playwright install-deps chromium & browser=$!
-          else
-            npx playwright install --with-deps --only-shell chromium & browser=$!
-          fi
+          ) & browser=$!
+          pnpm lint
+          pnpm format:check
+
           pnpm build & build=$!
           if [ "$D1_CACHED" = "true" ]; then
             true & seed=$!
@@ -189,7 +185,7 @@ jobs:
         if: steps.changes.outputs.code == 'true' && github.event_name == 'pull_request'
         run: |
           echo "::notice title=E2E sample::SEO_SEED=$SEO_SEED SEO_SAMPLE=$SEO_SAMPLE PRERENDER_MODULE_LIMIT=$PRERENDER_MODULE_LIMIT"
-          pnpm test:e2e
+          pnpm test:e2e --fully-parallel --workers=4
 
       - name: Upload report
         if: failure()

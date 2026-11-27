@@ -17,7 +17,7 @@ export const GET: APIRoute = () =>
         name: siteConfig.name,
         url: siteConfig.url,
         api: "WebMCP: document.modelContext.registerTool (W3C Web Machine Learning Community Group draft)",
-        note: "These tools exist only inside a browser tab on this site that supports WebMCP. They act on the visitor's own saved plans. This file is for discovery.",
+        note: "These tools run inside a browser tab on this site that supports WebMCP. Timetable tools act on the visitor's saved plans. Grade tools calculate from supplied inputs in the tab. This file is for discovery.",
         tools: WEBMCP_TOOLS.map((tool) => ({
           name: tool.name,
           title: tool.title,

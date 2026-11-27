@@ -5,6 +5,7 @@ import { Font } from "astro:assets"
 
 import { siteConfig } from "@/config/site"
 import { IS_PROD } from "@/lib/constants"
+import { markdownPath } from "@/lib/markdown/metadata"
 import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import MobileTracker from "@/components/mobile-tracker"
@@ -47,6 +48,15 @@ const resolvedTitle =
     <title>{resolvedTitle}</title>
     <meta name="description" content={description} />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {
+      canonical && (
+        <link
+          rel="alternate"
+          type="text/markdown"
+          href={markdownPath(canonical)}
+        />
+      )
+    }
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteConfig.name} />

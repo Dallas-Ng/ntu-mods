@@ -74,6 +74,7 @@ const crumbs = [
   canonical={canonicalToLatest
     ? getModuleUrl(code)
     : getModuleVersionUrl(code, year, semester)}
+  markdownFor={getModuleVersionUrl(code, year, semester)}
   noTitleSuffix>
   <JsonLd
     data={[

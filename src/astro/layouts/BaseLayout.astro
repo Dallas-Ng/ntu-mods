@@ -6,6 +6,7 @@ import { X } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
 import { BUILD_ENV, IS_PROD } from "@/lib/constants"
+import { markdownPath } from "@/lib/markdown/metadata"
 import { Toaster } from "@/components/ui/sonner"
 import AppearanceStyleProvider from "@/components/appearance-style-provider"
 import { Banner, BANNER_ID } from "@/components/banner"
@@ -25,6 +26,8 @@ interface Props {
   title?: string
   description?: string
   canonical?: string
+  /** The HTML route as served, when it differs from the SEO canonical URL. */
+  markdownFor?: string
   ogImage?: string
   /** Describes the image for link previews; defaults to the site name. */
   ogImageAlt?: string
@@ -53,6 +56,7 @@ const {
   title = defaults.title,
   description = defaults.desc,
   canonical,
+  markdownFor = canonical,
   ogImage = siteConfig.ogImage,
   ogImageAlt = siteConfig.ogImageAlt,
   size = "full",
@@ -96,6 +100,15 @@ const author = defaults.authors.map(({ name }) => name).join(", ")
     <meta name="author" content={author} />
     {noindex && <meta name="robots" content="noindex, follow" />}
     {!noindex && canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    {
+      markdownFor && (
+        <link
+          rel="alternate"
+          type="text/markdown"
+          href={markdownPath(markdownFor)}
+        />
+      )
+    }
 
     <meta property="og:type" content={article ? "article" : "website"} />
     {
